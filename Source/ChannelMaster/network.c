@@ -753,7 +753,7 @@ ReadThreadMainLoop() {
 						prn->dash_in = prn->ReadBufp[0] & 0x4;
 
 						//Byte 1 - Bit [0] - ADC0  Overload 1 = active, 0 = inactive
-						//		    Bit [1] - ADC1  Overload 1 = active, 0 = inactive
+						//		   Bit [1] - ADC1  Overload 1 = active, 0 = inactive
 						//         Bit [2] - ADC2  Overload 1 = active, 0 = inactive  * ADC2-7 set to 0 for Angelia
 						//         Bit [3] - ADC3  Overload 1 = active, 0 = inactive
 						//         Bit [4] - ADC4  Overload 1 = active, 0 = inactive
@@ -777,9 +777,9 @@ ReadThreadMainLoop() {
 						//Bytes 49,50  User ADC2 [15:0]             
 						//Bytes 51,52  User ADC1 [15:0]            
 						//Bytes 53,54  User ADC0 [15:0]             
-						//prn->user_adc3 = prn->ReadBufp[47] << 8 | prn->ReadBufp[48];
-						//prn->user_adc2 = prn->ReadBufp[49] << 8 | prn->ReadBufp[50];
-						//prn->user_adc1 = prn->ReadBufp[51] << 8 | prn->ReadBufp[52];
+						prn->user_adc3 = prn->ReadBufp[47] << 8 | prn->ReadBufp[48];
+						prn->user_adc2 = prn->ReadBufp[49] << 8 | prn->ReadBufp[50];
+						prn->user_adc1 = prn->ReadBufp[51] << 8 | prn->ReadBufp[52];
 						prn->user_adc0 = prn->ReadBufp[53] << 8 | prn->ReadBufp[54];
 
 						SetAmpProtectADCValue(0, prn->user_adc0);

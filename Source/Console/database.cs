@@ -1,8 +1,8 @@
 //=================================================================
 // database.cs
 //=================================================================
-// PowerSDR is a C# implementation of a Software Defined Radio.
-// Copyright (C) 2004-2012  FlexRadio Systems Copyright (C) 2010-2014  Doug Wigley
+// Thetis is a C# implementation of a Software Defined Radio.
+// Copyright (C) 2004-2012  FlexRadio Systems Copyright (C) 2010-2017  Doug Wigley
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -65,7 +65,10 @@ namespace Thetis
                 AddBandTextTable();
 
             if (!ds.Tables.Contains("BandStack"))
+            {
                 AddBandStackTable();
+                AddBandStackSWL(); // ke9ns add
+            }
 
             if (!ds.Tables.Contains("Memory"))
                 AddMemoryTable();
@@ -833,6 +836,7 @@ namespace Thetis
 								10.000000, 10.000000, "WWV",					false,
 								15.000000, 15.000000, "WWV",					false,
 								20.000000, 20.000000, "WWV",					false,
+                                25.000000, 25.000000, "WWV Time",               false,  // ke9ns add
                                 3.330000, 3.330000, "CHU",                      false,
                                 7.850000, 7.850000, "CHU",                      false,
                                 14.670000, 14.670000, "CHU",                    false,
@@ -877,6 +881,99 @@ namespace Thetis
                 t.Rows.Add(dr);
             }
         }
+
+        //===============================================================================================
+        // ke9ns add needed to add to RevQ database
+        private static void AddBandStackSWL()
+        {
+            object[] data = {
+                                
+                                "LMF", "SAM", "F4", 0.560000, false, 150, 0.0,  
+                                "LMF", "SAM", "F4", 0.720000, false, 150, 0.0,
+                                "LMF", "SAM", "F4", 0.780000, false, 150, 0.0,
+                                "LMF", "SAM", "F4", 1.000000, false, 150, 0.0,
+                                "LMF", "SAM", "F4", 1.700000, false, 150, 0.0,
+
+                                "120M", "SAM", "F4", 2.400000, false, 150, 0.0,
+                                "120M", "SAM", "F4", 2.410000, false, 150, 0.0,
+                                "120M", "SAM", "F4", 2.420000, false, 150, 0.0,
+
+                                "90M", "SAM", "F4", 3.300000, false, 150, 0.0,
+                                "90M", "SAM", "F4", 3.310000, false, 150, 0.0,
+                                "90M", "SAM", "F4", 3.320000, false, 150, 0.0,
+
+                                "61M", "SAM", "F4", 4.700000, false, 150, 0.0,
+                                "61M", "SAM", "F4", 4.800000, false, 150, 0.0,
+                                "61M", "SAM", "F4", 4.820000, false, 150, 0.0,
+
+                                "49M", "SAM", "F4", 5.600000, false, 150, 0.0,
+                                "49M", "SAM", "F4", 5.700000, false, 150, 0.0,
+                                "49M", "SAM", "F4", 5.800000, false, 150, 0.0,
+                                "49M", "SAM", "F4", 5.900000, false, 150, 0.0,
+                                "49M", "SAM", "F4", 6.000000, false, 150, 0.0,
+                                "49M", "SAM", "F4", 6.200000, false, 150, 0.0,
+                                
+
+                                "41M", "SAM", "F4", 7.310000, false, 150, 0.0,
+                                "41M", "SAM", "F4", 7.400000, false, 150, 0.0,
+                                "41M", "SAM", "F4", 7.500000, false, 150, 0.0,
+
+
+                                "31M", "SAM", "F4", 9.100000, false, 150, 0.0,
+                                "31M", "SAM", "F4", 9.200000, false, 150, 0.0,
+                                "31M", "SAM", "F4", 9.300000, false, 150, 0.0,
+                                "31M", "SAM", "F4", 9.400000, false, 150, 0.0,
+                                "31M", "SAM", "F4", 9.500000, false, 150, 0.0,
+                                "31M", "SAM", "F4", 9.600000, false, 150, 0.0,
+
+
+                                "25M", "SAM", "F4", 11.700000, false, 150, 0.0,
+                                "25M", "SAM", "F4", 11.800000, false, 150, 0.0,
+                                "25M", "SAM", "F4", 11.900000, false, 150, 0.0,
+                                 
+                                "22M", "SAM", "F4", 13.600000, false, 150, 0.0,
+                                "22M", "SAM", "F4", 13.700000, false, 150, 0.0,
+                                "22M", "SAM", "F4", 13.800000, false, 150, 0.0,
+
+                                "19M", "SAM", "F4", 15.200000, false, 150, 0.0,
+                                "19M", "SAM", "F4", 15.300000, false, 150, 0.0,
+                                "19M", "SAM", "F4", 15.400000, false, 150, 0.0,
+
+                                "16M", "SAM", "F4", 17.500000, false, 150, 0.0,
+                                "16M", "SAM", "F4", 17.600000, false, 150, 0.0,
+                                "16M", "SAM", "F4", 17.700000, false, 150, 0.0,
+
+                                "14M", "SAM", "F4", 18.900000, false, 150, 0.0,
+                                "14M", "SAM", "F4", 19.000000, false, 150, 0.0,
+                                "14M", "SAM", "F4", 19.100000, false, 150, 0.0,
+
+                                "13M", "SAM", "F4", 21.500000, false, 150, 0.0,
+                                "13M", "SAM", "F4", 21.600000, false, 150, 0.0,
+                                "13M", "SAM", "F4", 21.700000, false, 150, 0.0,
+                                 
+                                "11M", "SAM", "F4", 25.700000, false, 150, 0.0,
+                                "11M", "SAM", "F4", 26.000000, false, 150, 0.0,
+                                "11M", "SAM", "F4", 26.500000, false, 150, 0.0,
+                                "11M", "SAM", "F4", 27.000000, false, 150, 0.0,
+                                "11M", "SAM", "F4", 27.500000, false, 150, 0.0,
+                                "11M", "SAM", "F4", 27.800000, false, 150, 0.0,
+
+            };
+
+            for (int i = 0; i < data.Length / 7; i++)
+            {
+                DataRow dr = ds.Tables["BandStack"].NewRow();
+                dr["BandName"] = (string)data[i * 7 + 0];
+                dr["Mode"] = (string)data[i * 7 + 1];
+                dr["Filter"] = (string)data[i * 7 + 2];
+                dr["Freq"] = ((double)data[i * 7 + 3]).ToString("f6");
+                dr["CTUN"] = ((bool)data[i * 7 + 4]);
+                dr["ZoomFactor"] = ((int)data[i * 7 + 5]).ToString("f6");
+                dr["CenterFreq"] = ((double)data[i * 7 + 6]).ToString("f6");
+                ds.Tables["BandStack"].Rows.Add(dr);
+            }
+
+        } //ke9ns addbandstackSWL
 
         private static void ClearBandText()
         {
@@ -1847,20 +1944,20 @@ namespace Thetis
                                 1242.025000, 1242.699999, "23cm Repeater Output",       true,
                                 1242.700000, 1242.724999, "23cm All Modes",             true,
                                 1242.725000, 1243.249999, "23cm Packet",                true,
-                                1232.250000, 1258.149999, "23cm ATV",                   true,
+                                1243.250000, 1258.149999, "23cm ATV",                   true,
                                 1258.150000, 1259.349999, "23cm Repeater Output",       true,
                                 1259.350000, 1259.999999, "23cm ATV",                   true,
                                 1260.000000, 1269.999999, "23cm Satellite",             true,
                                 1270.000000, 1270.024999, "23cm All Modes",             true,
                                 1270.025000, 1270.699999, "23cm Repeater Input",        true,
                                 1270.700000, 1270.724999, "23cm All Modes",             true,
-                                1270.725000, 1271.249000, "23cm Packet",                true,
+                                1270.725000, 1271.249999, "23cm Packet",                true,
                                 1271.250000, 1271.999999, "23cm All Modes",             true,
                                 1272.000000, 1290.993999, "23cm ATV",                   true,
                                 1290.994000, 1291.480999, "23cm NBFM Repeater Input",   true,
                                 1291.481000, 1291.493999, "23cm Deadband",              true,
                                 1291.494000, 1293.149999, "23cm All Modes",             true,
-                                1293.150000, 1993.349999, "23cm Repeater Input",        true,
+                                1293.150000, 1293.349999, "23cm Repeater Input",        true,
                                 1293.350000, 1295.999999, "23cm All Modes",             true,
                                 1296.000000, 1296.024999, "23cm CW EME",                true,
                                 1296.025000, 1296.149999, "23cm CW",                    true,
@@ -2382,6 +2479,10 @@ namespace Thetis
 								"WWV", "SAM", "F7", 10.000000, false, 150, 0.0,
 								"WWV", "SAM", "F7", 15.000000, false, 150, 0.0,
 								"WWV", "SAM", "F7", 20.000000, false, 150, 0.0,
+                                "WWV", "SAM", "F5", 25.000000, false, 150, 0.0, // ke9ns add
+                                "WWV", "USB", "F6", 3.330000, false, 150, 0.0,
+                                "WWV", "USB", "F6", 7.850000, false, 150, 0.0,
+                                "WWV", "USB", "F6", 14.670000, false, 150, 0.0,
 								"GEN", "SAM", "F5", 13.845000, false, 150, 0.0,
 								"GEN", "SAM", "F5", 9.550000, false, 150, 0.0,
                                 "GEN", "SAM", "F5", 5.975000, false, 150, 0.0,
@@ -2450,6 +2551,7 @@ namespace Thetis
 								"WWV", "SAM", "F7", 10.000000, false, 150, 0.0,
 								"WWV", "SAM", "F7", 15.000000, false, 150, 0.0,
 								"WWV", "SAM", "F7", 20.000000, false, 150, 0.0,
+                                "WWV", "SAM", "F5", 25.000000, false, 150, 0.0, // ke9ns add
 								"GEN", "SAM", "F6", 13.845000, false, 150, 0.0,
 								"GEN", "SAM", "F7", 5.975000, false, 150, 0.0,
 								"GEN", "SAM", "F7", 9.550000, false, 150, 0.0,
@@ -2541,6 +2643,75 @@ namespace Thetis
             }
         }
 
+        private static void AddRegion3BandStack()
+        {
+            ds.Tables["BandStack"].Clear();
+            DataTable t = ds.Tables["BandStack"];
+
+            object[] data = {
+								"160M", "CWL", "F1", 1.820000, false, 150, 0.0,
+								"160M", "DIGU", "F1", 1.832000, false, 150, 0.0,
+								"160M", "LSB", "F6", 1.843000, false, 150, 0.0,
+								"80M", "CWL", "F1", 3.510000, false, 150, 0.0,
+								"80M", "DIGU", "F1", 3.580000, false, 150, 0.0,
+								"80M", "LSB", "F6", 3.750000, false, 150, 0.0,
+                                "60M", "USB", "F6", 5.264000, false, 150, 0.0,
+								"60M", "USB", "F6", 5.357000, false, 150, 0.0,
+								"60M", "USB", "F6", 5.403500, false, 150, 0.0,
+                                "40M", "CWL", "F1", 7.010000, false, 150, 0.0,
+								"40M", "DIGU", "F1", 7.035000, false, 150, 0.0,
+								"40M", "LSB", "F6", 7.12000, false, 150, 0.0,
+								"30M", "CWU", "F1", 10.110000, false, 150, 0.0,
+								"30M", "CWU", "F1", 10.120000, false, 150, 0.0,
+								"30M", "DIGU", "F1", 10.140000, false, 150, 0.0,
+								"20M", "CWU", "F1", 14.010000, false, 150, 0.0,
+								"20M", "DIGU", "F1", 14.085000, false, 150, 0.0,
+								"20M", "USB", "F6", 14.225000, false, 150, 0.0,
+								"17M", "CWU", "F1", 18.078000, false, 150, 0.0,
+								"17M", "DIGU", "F1", 18.100000, false, 150, 0.0,
+								"17M", "USB", "F6", 18.140000, false, 150, 0.0,
+								"15M", "CWU", "F1", 21.010000, false, 150, 0.0,
+								"15M", "DIGU", "F1", 21.090000, false, 150, 0.0,
+								"15M", "USB", "F6", 21.300000, false, 150, 0.0,
+								"12M", "CWU", "F1", 24.900000, false, 150, 0.0,
+								"12M", "DIGU", "F1", 24.920000, false, 150, 0.0,
+								"12M", "USB", "F6", 24.940000, false, 150, 0.0,
+								"10M", "CWU", "F1", 28.010000, false, 150, 0.0,
+								"10M", "DIGU", "F1", 28.120000, false, 150, 0.0,
+								"10M", "USB", "F6", 28.400000, false, 150, 0.0,
+								"6M", "CWU", "F1", 50.090000, false, 150, 0.0,
+								"6M", "USB", "F6", 50.150000, false, 150, 0.0,
+								"6M", "DIGU", "F1", 50.250000, false, 150, 0.0,
+								"2M", "CWU", "F1", 144.050000, false, 150, 0.0,
+								"2M", "DIGU", "F1", 144.138000, false, 150, 0.0,
+								"2M", "USB", "F6", 144.200000, false, 150, 0.0,
+								"WWV", "SAM", "F5", 2.500000, false, 150, 0.0,
+								"WWV", "SAM", "F5", 5.000000, false, 150, 0.0,
+								"WWV", "SAM", "F5", 10.000000, false, 150, 0.0,
+								"WWV", "SAM", "F5", 15.000000, false, 150, 0.0,
+								"WWV", "SAM", "F5", 20.000000, false, 150, 0.0,
+                                "WWV", "SAM", "F5", 25.000000, false, 150, 0.0, // ke9ns add
+                                "WWV", "USB", "F6", 3.330000, false, 150, 0.0,
+                                "WWV", "USB", "F6", 7.850000, false, 150, 0.0,
+                                "WWV", "USB", "F6", 14.670000, false, 150, 0.0,
+								"GEN", "SAM", "F6", 13.845000, false, 150, 0.0,
+								"GEN", "SAM", "F7", 5.975000, false, 150, 0.0,
+								"GEN", "SAM", "F7", 9.550000, false, 150, 0.0,
+                                "GEN", "SAM", "F7", 3.850000, false, 150, 0.0,
+                                "GEN", "SAM", "F8", 0.590000, false, 150, 0.0,
+            };
+
+            for (int i = 0; i < data.Length / 4; i++)
+            {
+                DataRow dr = ds.Tables["BandStack"].NewRow();
+                dr["BandName"] = (string)data[i * 4 + 0];
+                dr["Mode"] = (string)data[i * 4 + 1];
+                dr["Filter"] = (string)data[i * 4 + 2];
+                dr["Freq"] = ((double)data[i * 4 + 3]).ToString("f6");
+                ds.Tables["BandStack"].Rows.Add(dr);
+            }
+        }
+        
         private static void AddRegionJapanBandStack()
         {
             ds.Tables["BandStack"].Clear();
@@ -2610,6 +2781,538 @@ namespace Thetis
                 ds.Tables["BandStack"].Rows.Add(dr);
             }
         }
+
+        #region IARU Region 3 BandText
+
+        private static void AddRegion3BandText160m()
+        {
+            DataTable t = ds.Tables["BandText"];
+            object[] data = {
+								1.800000, 1.829999, "160M CW",	                true,
+                                1.830000, 1.833999, "160M CW & NB Digital",     true,
+                                1.834000, 1.839999, "160M CW",	                true,
+								1.840000, 1.999999, "160M CW & Phone",	        true,
+                            };
+
+            for (int i = 0; i < data.Length / 4; i++)
+            {
+                DataRow dr = t.NewRow();
+                dr["Low"] = (double)data[i * 4 + 0];
+                dr["High"] = (double)data[i * 4 + 1];
+                dr["Name"] = (string)data[i * 4 + 2];
+                dr["TX"] = (bool)data[i * 4 + 3];
+                t.Rows.Add(dr);
+            }
+        }
+
+        private static void AddRegion3BandText80m()
+        {
+            DataTable t = ds.Tables["BandText"];
+            object[] data = {
+								3.500000, 3.509999, "80M CW DX",	  			true,
+                                3.510000, 3.534999, "80M CW",	    	    	true,
+                                3.535000, 3.599999, "80M Phone & CW",	    	true,
+                                3.600000, 3.600000, "80M IARU Emergency",       true,
+                                3.600001, 3.774999, "80M Phone & CW",	    	true,
+								3.775000, 3.799999, "80M DX Phone & CW",	    true,
+								3.800000, 3.899999, "80M Phone & CW",			true,
+                            };
+
+            for (int i = 0; i < data.Length / 4; i++)
+            {
+                DataRow dr = t.NewRow();
+                dr["Low"] = (double)data[i * 4 + 0];
+                dr["High"] = (double)data[i * 4 + 1];
+                dr["Name"] = (string)data[i * 4 + 2];
+                dr["TX"] = (bool)data[i * 4 + 3];
+                t.Rows.Add(dr);
+            }
+        }
+
+        private static void AddRegion3BandText60m()
+        {
+            DataTable t = ds.Tables["BandText"];
+
+            object[] data = {
+                                5.100000, 5.449999, "60M RX Only",              false,
+                            };
+
+            for (int i = 0; i < data.Length / 4; i++)
+            {
+                DataRow dr = t.NewRow();
+                dr["Low"] = (double)data[i * 4 + 0];
+                dr["High"] = (double)data[i * 4 + 1];
+                dr["Name"] = (string)data[i * 4 + 2];
+                dr["TX"] = (bool)data[i * 4 + 3];
+                t.Rows.Add(dr);
+            }
+        }
+
+        private static void AddRegion3BandText40m()
+        {
+            DataTable t = ds.Tables["BandText"];
+            object[] data = {
+								7.000000, 7.024999, "40M CW",			    	true,
+                                7.025000, 7.029999, "40M CW & NB Digital",		true,
+                                7.030000, 7.039999, "40M All Modes",	        true,
+								7.040000, 7.109999, "40M Phone & CW",       	true,
+                                7.110000, 7.110000, "40M IARU Emergency",       true,
+                                7.110001, 7.299999, "40M Phone & CW",			true,
+                            };
+
+            for (int i = 0; i < data.Length / 4; i++)
+            {
+                DataRow dr = t.NewRow();
+                dr["Low"] = (double)data[i * 4 + 0];
+                dr["High"] = (double)data[i * 4 + 1];
+                dr["Name"] = (string)data[i * 4 + 2];
+                dr["TX"] = (bool)data[i * 4 + 3];
+                t.Rows.Add(dr);
+            }
+        }
+
+        private static void AddRegion3BandText30m()
+        {
+            DataTable t = ds.Tables["BandText"];
+            object[] data = {
+								10.100000, 10.139999, "30M CW",					true,
+                                10.140000, 10.149999, "30M CW & NB Digital",	true,
+                            };
+
+            for (int i = 0; i < data.Length / 4; i++)
+            {
+                DataRow dr = t.NewRow();
+                dr["Low"] = (double)data[i * 4 + 0];
+                dr["High"] = (double)data[i * 4 + 1];
+                dr["Name"] = (string)data[i * 4 + 2];
+                dr["TX"] = (bool)data[i * 4 + 3];
+                t.Rows.Add(dr);
+            }
+        }
+
+        private static void AddRegion3BandText20m()
+        {
+            DataTable t = ds.Tables["BandText"];
+            object[] data = {
+								14.000000, 14.069999, "20M CW",		        	true,
+								14.070000, 14.094999, "20M CW & NB Digital",	true,
+                                14.095000, 14.099499, "20M Data & Packet",      true,
+								14.099500, 14.099999, "20M Beacons",		    true,
+                                14.100000, 14.100000, "20M NCDXF Beacons",  	true,
+                                14.100001, 14.100499, "20M Beacons",		    true,
+                                14.100500, 14.111999, "20M Data & Packet",      true,
+                                14.112000, 14.229999, "20M Phone & CW",         true,
+                                14.230000, 14.230000, "20M SSTV",				true,
+                                14.230001, 14.299999, "20M Phone & CW",         true,
+                                14.300000, 14.300000, "20M IARU Emergency",     true,
+                                14.300001, 14.349999, "20M All Modes",          true,
+                            };
+
+            for (int i = 0; i < data.Length / 4; i++)
+            {
+                DataRow dr = t.NewRow();
+                dr["Low"] = (double)data[i * 4 + 0];
+                dr["High"] = (double)data[i * 4 + 1];
+                dr["Name"] = (string)data[i * 4 + 2];
+                dr["TX"] = (bool)data[i * 4 + 3];
+                t.Rows.Add(dr);
+            }
+        }
+
+        private static void AddRegion3BandText17m()
+        {
+            DataTable t = ds.Tables["BandText"];
+            object[] data = {
+								18.068000, 18.099999, "17M CW",					true,
+								18.100000, 18.109499, "17M CW & NB Digital",	true,
+								18.109500, 18.109999, "17M Beacons",		    true,
+                                18.110000, 18.110000, "17M NCDXF Beacons",	    true,
+                                18.110001, 18.110499, "17M Beacons",		    true,
+								18.110500, 18.159999, "17M Phone & CW",			true,
+                                18.160000, 18.160000, "17M IARU Emergency",		true,
+                                18.160001, 18.167999, "17M All Modes",	        true,
+                            };
+
+            for (int i = 0; i < data.Length / 4; i++)
+            {
+                DataRow dr = t.NewRow();
+                dr["Low"] = (double)data[i * 4 + 0];
+                dr["High"] = (double)data[i * 4 + 1];
+                dr["Name"] = (string)data[i * 4 + 2];
+                dr["TX"] = (bool)data[i * 4 + 3];
+                t.Rows.Add(dr);
+            }
+        }
+
+        private static void AddRegion3BandText15m()
+        {
+            DataTable t = ds.Tables["BandText"];
+            object[] data = {
+								21.000000, 21.069999, "15M CW",			        true,
+								21.070000, 21.124999, "15M CW & NB Digital",	true,
+								21.125000, 21.149499, "15M Phone & CW",	        true,
+                                21.149500, 21.149999, "15M Beacons",		    true,
+                                21.150000, 21.150000, "15M NCDXF Beacons",	    true,
+                                21.150001, 21.150499, "15M Beacons",		    true,
+								21.150500, 21.339999, "15M Phone & CW",			true,
+                                21.340000, 21.340000, "15M SSTV",		        true,
+                                21.340001, 21.359999, "15M Phone & CW",			true,
+                                21.360000, 21.360000, "15M Emergency",	    	true,
+                                21.360001, 21.449999, "15M All Modes",			true,
+                            };
+
+            for (int i = 0; i < data.Length / 4; i++)
+            {
+                DataRow dr = t.NewRow();
+                dr["Low"] = (double)data[i * 4 + 0];
+                dr["High"] = (double)data[i * 4 + 1];
+                dr["Name"] = (string)data[i * 4 + 2];
+                dr["TX"] = (bool)data[i * 4 + 3];
+                t.Rows.Add(dr);
+            }
+        }
+
+        private static void AddRegion3BandText12m()
+        {
+            DataTable t = ds.Tables["BandText"];
+            object[] data = {
+								24.890000, 24.919999, "12M CW",					true,
+                                24.920000, 24.929499, "12M CW & NB Digital",	true,
+								24.929500, 24.929999, "12M Beacons",		    true,
+                                24.930000, 24.930000, "12M NCDXF Beacons",	    true,
+                                24.930001, 24.930499, "12M Beacons",		    true,
+                                24.930500, 24.989999, "12M All Modes",			true,
+                            };
+
+            for (int i = 0; i < data.Length / 4; i++)
+            {
+                DataRow dr = t.NewRow();
+                dr["Low"] = (double)data[i * 4 + 0];
+                dr["High"] = (double)data[i * 4 + 1];
+                dr["Name"] = (string)data[i * 4 + 2];
+                dr["TX"] = (bool)data[i * 4 + 3];
+                t.Rows.Add(dr);
+            }
+        }
+
+        private static void AddRegion3BandText10m()
+        {
+            DataTable t = ds.Tables["BandText"];
+            object[] data = {
+								28.000000, 28.049999, "10M CW",					true,
+                                28.050000, 28.149999, "10M CW & NB Digital",	true,
+                                28.150000, 28.189999, "10M CW",					true,
+								28.190000, 28.199999, "10M Beacons",	        true,
+                                28.200000, 28.200000, "10M NCDXF Beacons",      true,
+                                28.200001, 28.200499, "10M Beacons",	        true,
+                                28.200500, 28.679999, "10M Phone & CW",     	true,
+                                28.680000, 28.680000, "10M SSTV",	            true,
+                                28.680001, 29.299999, "10M Phone & CW",	    	true,
+                                29.300000, 29.509999, "10M Satellite & CW",     true,
+                                29.510000, 29.699999, "10M Wide Band  & CW",	true,
+                            };
+
+            for (int i = 0; i < data.Length / 4; i++)
+            {
+                DataRow dr = t.NewRow();
+                dr["Low"] = (double)data[i * 4 + 0];
+                dr["High"] = (double)data[i * 4 + 1];
+                dr["Name"] = (string)data[i * 4 + 2];
+                dr["TX"] = (bool)data[i * 4 + 3];
+                t.Rows.Add(dr);
+            }
+        }
+
+        private static void AddRegion3BandText6m()
+        {
+            DataTable t = ds.Tables["BandText"];
+            object[] data = {
+								50.000000, 50.099999, "6M CW & Beacons",		    true,
+                                50.100000, 50.499999, "6M Phone/NB Digital/CW",	    true,
+                                50.500000, 53.999999, "6M Wide Band Modes & CW",    true,
+                            };
+
+            for (int i = 0; i < data.Length / 4; i++)
+            {
+                DataRow dr = t.NewRow();
+                dr["Low"] = (double)data[i * 4 + 0];
+                dr["High"] = (double)data[i * 4 + 1];
+                dr["Name"] = (string)data[i * 4 + 2];
+                dr["TX"] = (bool)data[i * 4 + 3];
+                t.Rows.Add(dr);
+            }
+        }
+
+        private static void AddRegion3BandTextVHFplus()
+        {
+            // IARU Region 3: 2M and above Band Plan
+            DataTable t = ds.Tables["BandText"];
+            object[] data = {
+								// 144 - 146 MHz
+                                144.000000, 144.019999, "2M EME",		                true,
+                                144.020000, 144.099999, "2M CW & EME",                  true,
+                                144.100000, 144.399999, "2M CW/Phone & Image",          true,
+                                144.400000, 144.499999, "2M CW/Phone/NB Digital",       true,
+                                144.500000, 144.699999, "2M Wide Digital Modes",        true,
+                                144.700000, 145.499999, "2M FM, CW & Image",            true,
+                                145.500000, 145.500000, "2M Emergency",                 true,
+                                145.500001, 145.649999, "2M FM, CW & Image",            true,
+                                145.650000, 145.799999, "2M All Modes",                 true,
+                                145.800000, 145.999999, "2M Satellite.",                true,
+                                146.000000, 147.999999, "2M All Modes",                 true,
+                                // 430 - 440 MHz
+								430.000000, 430.099999, "70cm CW",	                    true,
+                                430.100000, 430.699999, "70cm CW/Phone & Image",        true,
+                                430.700000, 430.799999, "70cm CW/Phone/NB Digital",     true,
+                                430.800000, 431.399999, "70cm Wide Digital Modes",      true,
+                                431.400000, 431.899999, "70cm FM, CW & Image",          true,
+                                431.900000, 432.099999, "70cm EME",                     true,
+                                432.100000, 432.999999, "70cm FM, CW & Image",          true,
+                                433.000000, 433.000000, "70cm Emergency",               true,
+                                433.000001, 433.999999, "70cm FM, CW & Image",          true,
+                                434.000000, 434.999999, "70cm Repeaters",               true,
+                                435.000000, 437.999999, "70cm Satellite",               true,
+                                438.000000, 438.999999, "70cm All Modes",               true,
+                                439.000000, 439.999999, "70cm Repeaters",               true,
+                                440.000000, 449.999999, "70cm All Modes",               true,
+                                // 1240 - 1300 MHz
+								1240.000000, 1259.999999, "23cm All Modes",	            true,
+                                1260.000000, 1269.999999, "23cm Satellite",             true,
+                                1270.000000, 1295.999999, "23cm All Modes",             true,
+                                1296.700000, 1296.999999, "23cm EME - all modes",       true,
+                                1297.725000, 1299.999999, "23cm All Modes",             true,                                
+                                // 2300 -2450 MHz
+								2300.000000, 2303.999999, "13cm Sub-Regional",	        true,
+                                2304.000000, 2305.999999, "13cm Narrow Band ",	        true,
+                                2306.000000, 2307.999999, "13cm Sub-Regional",	        true,
+                                2308.000000, 2309.999999, "13cm Narrow Band ",	        true,
+                                2310.000000, 2319.999999, "13cm Sub-Regional",	        true,
+                                2320.000000, 2320.024999, "13cm CW EME",	            true,
+                                2320.025000, 2320.149999, "13cm CW",	                true,
+                                2320.150000, 2320.199999, "13cm CW & SSB",	            true,
+                                2320.200000, 2320.200000, "13cm SSB Calling",	        true,
+                                2320.200001, 2320.799999, "13cm CW & SSB",	            true,
+                                2320.800000, 2320.999999, "13cm Beacons",	            true,
+                                2321.000000, 2321.999999, "13cm NBFM Simplex",          true,
+                                2322.000000, 2354.999999, "13cm ATV",                   true,
+                                2355.000000, 2364.999999, "13cm Digital Comms",         true,
+                                2365.000000, 2369.999999, "13cm Repeaters",             true,
+                                2370.000000, 2391.999999, "13cm ATV",                   true,
+                                2392.000000, 2399.999999, "13cm Digital Comms",         true,
+                                2400.000000, 2450.000000, "13cm Satellite",             true,
+                                // 3400 -3475 MHz
+								3400.000000, 3400.099999, "9cm Narrow Band Modes",      true,
+                                3400.100000, 3400.100000, "9cm Narrow Band Calling",    true,
+                                3400.100001, 3401.999999, "9cm Narrow Band Modes",      true,
+                                3402.000000, 3419.999999, "9cm All Modes",              true,
+                                3420.000000, 3429.999999, "9cm All Modes Digital",      true,
+                                3430.000000, 3449.999999, "9cm All Modes",              true,
+                                3450.000000, 3454.999999, "9cm All Modes Digital",      true,
+                                3455.000000, 3475.000000, "9cm All Modes",              true,
+                                // 5650 - 5850 MHz
+                                5650.000000, 5667.999999, "5cm Satellite Uplink",       true,
+                                5668.000000, 5668.199999, "5cm Sat Uplink/Narrow Band", true,
+                                5668.200000, 5668.200000, "5cm Narrow Band calling",    true,
+                                5668.200001, 5669.999999, "5cm Sat Uplink/Narrow Band", true,
+                                5670.000000, 5699.999999, "5cm Digital",                true,
+                                5700.000000, 5719.999999, "5cm ATV",                    true,
+                                5720.000000, 5759.999999, "5cm All Modes",              true,
+                                5760.000000, 5760.199999, "5cm Narrow Band Modes",      true,
+                                5760.200000, 5760.200000, "5cm Narrow Band Calling",    true,
+                                5760.200001, 5761.999999, "5cm Narrow Band Modes",      true,
+                                5762.000000, 5789.999999, "5cm All Modes",              true,
+                                5790.000000, 5850.000000, "5cm Satellite Downlink",     true,
+                                // 10.000 - 10.500 GHz
+								10000.000000, 10149.999999, "3cm Digital",              true,
+                                10150.000000, 10249.999999, "3cm All Modes",            true,
+                                10250.000000, 10349.999999, "3cm Digital",              true,
+                                10350.000000, 10367.999999, "3cm All Modes",            true,
+                                10368.000000, 10368.199999, "3cm Narrow Band Modes",    true,
+                                10368.200000, 10368.200000, "3cm Narrow Band Calling",  true,
+                                10368.200001, 10369.999999, "3cm Narrow Band Modes",    true,
+                                10370.000000, 10449.999999, "3cm All Modes",            true,
+                                10450.000000, 10500.000000, "3cm Satellite/All Modes",  true,
+                                // 24.000 - 24.250 GHz
+								24000.000000, 24047.999999, "1.2cm Satellite",          true,
+                                24048.000000, 24048.199999, "1.2cm Narrow Band Modes",  true,
+                                24048.200000, 24048.200000, "1.2cm Narrow Band Calling",true,
+                                24048.200001, 24049.999999, "1.2cm Narrow Band",        true,
+                                24050.000000, 24191.999999, "1.2cm All Modes",          true,
+                                24192.000000, 24191.199999, "1.2cm All Modes",          true,
+                                24192.200000, 24192.200000, "1.2cm Narrow Band Calling",true,
+                                24192.200001, 24193.999999, "1.2cm Narrow Band",        true,
+                                24194.000000, 24250.000000, "1.2cm All Modes",          true,
+                                // 47.000 - 47.200 GHz
+                                47000.000000, 47087.999999, "6mm All Mode",             true,
+                                47088.000000, 47088.000000, "6mm Narrow Band Calling",  true,
+                                47088.000001, 47200.000000, "6mm All Mode",             true,
+                            };
+
+            for (int i = 0; i < data.Length / 4; i++)
+            {
+                DataRow dr = t.NewRow();
+                dr["Low"] = (double)data[i * 4 + 0];
+                dr["High"] = (double)data[i * 4 + 1];
+                dr["Name"] = (string)data[i * 4 + 2];
+                dr["TX"] = (bool)data[i * 4 + 3];
+                t.Rows.Add(dr);
+            }
+        }
+
+        // Region 3 specific Band Text below
+
+        private static void AddJapanBandText160m()
+        {
+            DataTable t = ds.Tables["BandText"];
+            object[] data = {
+								1.800000, 1.809999, "160M Band RX",             false,
+                                1.810000, 1.824999, "160M CW",	                true,
+                                1.825000, 1.907499, "160M Band RX",             false,
+                                1.907500, 1.912499, "160M CW & NB Digital",     true,
+                                1.912500, 1.999999, "160M Band RX",             false,
+                            };
+
+            for (int i = 0; i < data.Length / 4; i++)
+            {
+                DataRow dr = t.NewRow();
+                dr["Low"] = (double)data[i * 4 + 0];
+                dr["High"] = (double)data[i * 4 + 1];
+                dr["Name"] = (string)data[i * 4 + 2];
+                dr["TX"] = (bool)data[i * 4 + 3];
+                t.Rows.Add(dr);
+            }
+        }
+
+        private static void AddJapanBandText80m()
+        {
+            DataTable t = ds.Tables["BandText"];
+            object[] data = {
+								3.500000, 3.519999, "80M CW",	  			    true,
+                                3.520000, 3.524999, "80M CW & NB Digital",	    true,
+                                3.525000, 3.525000, "80M Emergency",            true,                                
+                                3.525001, 3.529999, "80M Phone/CW/NB Digital",	true,
+                                3.530000, 3.574999, "80M Phone/CW/Digital",     true,
+                                3.575000, 3.598999, "80M Band RX",              false,
+                                3.599000, 3.611999, "80M Phone/CW/Digital",     true,
+                                3.612000, 3.679999, "80M Band RX",              false,
+                                3.680000, 3.686999, "80M Phone/CW/Image",       true,
+                                3.687000, 3.701999, "80M Band RX",              false,
+                                3.702000, 3.715999, "80M Phone/CW/Image",       true,
+                                3.716000, 3.744999, "80M Band RX",              false,
+                                3.745000, 3.769999, "80M Phone/CW/Image",       true,
+                                3.770000, 3.790999, "80M Band RX",              false,
+                                3.791000, 3.804999, "80M Phone/CW/NB Digital",	true,
+                                3.805000, 3.899999, "80M Band RX",              false,
+                            };
+
+            for (int i = 0; i < data.Length / 4; i++)
+            {
+                DataRow dr = t.NewRow();
+                dr["Low"] = (double)data[i * 4 + 0];
+                dr["High"] = (double)data[i * 4 + 1];
+                dr["Name"] = (string)data[i * 4 + 2];
+                dr["TX"] = (bool)data[i * 4 + 3];
+                t.Rows.Add(dr);
+            }
+        }
+
+        private static void AddJapanBandText40m()
+        {
+            DataTable t = ds.Tables["BandText"];
+            object[] data = {
+								7.000000, 7.024999, "40M CW",			    	true,
+                                7.025000, 7.029999, "40M CW & NB Digital",		true,
+                                7.030000, 7.030000, "40M Emergency",            true,
+                                7.030001, 7.039999, "40M CW & NB Digital",      true,
+                                7.040000, 7.044999, "40M DX NB Digital/CW",	    true,
+                                7.045000, 7.099999, "40M CW/Phone/Image",       true,
+                                7.100000, 7.199999, "40M All Modes",            true,
+                                7.200000, 7.299999, "40M RX Only",              false,
+                            };
+
+            for (int i = 0; i < data.Length / 4; i++)
+            {
+                DataRow dr = t.NewRow();
+                dr["Low"] = (double)data[i * 4 + 0];
+                dr["High"] = (double)data[i * 4 + 1];
+                dr["Name"] = (string)data[i * 4 + 2];
+                dr["TX"] = (bool)data[i * 4 + 3];
+                t.Rows.Add(dr);
+            }
+        }
+
+        private static void AddJapanBandText10m()
+        {
+            DataTable t = ds.Tables["BandText"];
+            object[] data = {
+								28.000000, 28.069999, "10M CW",					true,
+                                28.070000, 28.149999, "10M CW & NB Digital",	true,
+                                28.150000, 28.199499, "10M CW",					true,
+								28.199500, 28.199999, "10M Beacons",		    true,
+                                28.200000, 28.200000, "10M NCDXF Beacons",	    true,
+                                28.200001, 28.200500, "10M Beacons",		    true,
+                                28.200501, 28.999999, "10M Phone/CW/NB Digital",true,
+                                29.000000, 29.299999, "10M DX Phone/CW/Digital",true,
+                                29.300000, 29.509999, "10M Satellite",          true,
+                                29.510000, 29.589999, "10M Repeater",           true,
+                                29.590000, 29.609999, "10M Wide Phone & CW",    true,
+                                29.610000, 29.699999, "10M Repeater",           true,
+                            };
+
+            for (int i = 0; i < data.Length / 4; i++)
+            {
+                DataRow dr = t.NewRow();
+                dr["Low"] = (double)data[i * 4 + 0];
+                dr["High"] = (double)data[i * 4 + 1];
+                dr["Name"] = (string)data[i * 4 + 2];
+                dr["TX"] = (bool)data[i * 4 + 3];
+                t.Rows.Add(dr);
+            }
+        }
+
+        private static void AddJapanBandText6m()
+        {
+            DataTable t = ds.Tables["BandText"];
+            object[] data = {
+								50.000000, 50.099999, "6M DX CW/EME/Beacons",	true,
+                                50.100000, 50.899999, "6M Phone/CW/Image",	    true,
+                                50.900000, 50.999999, "6M Phone/CW/NB Digital", true,
+                                51.100000, 51.999999, "6M Wide Phone/Image/CW", true,
+                                52.000000, 52.499999, "6M Phone/CW/NB Digital", true,
+                                52.500000, 52.899999, "6M Wide Digital Modes",  true,
+                                52.900000, 53.999999, "6M All Modes",           true,
+                            };
+
+            for (int i = 0; i < data.Length / 4; i++)
+            {
+                DataRow dr = t.NewRow();
+                dr["Low"] = (double)data[i * 4 + 0];
+                dr["High"] = (double)data[i * 4 + 1];
+                dr["Name"] = (string)data[i * 4 + 2];
+                dr["TX"] = (bool)data[i * 4 + 3];
+                t.Rows.Add(dr);
+            }
+        }
+
+        private static void AddJapanBandTextEmergency()
+        {
+            DataTable t = ds.Tables["BandText"];
+            object[] data = {
+								4.629995, 4.630005, "Japan Int. Emergency",	true,
+                            };
+
+            for (int i = 0; i < data.Length / 4; i++)
+            {
+                DataRow dr = t.NewRow();
+                dr["Low"] = (double)data[i * 4 + 0];
+                dr["High"] = (double)data[i * 4 + 1];
+                dr["Name"] = (string)data[i * 4 + 2];
+                dr["TX"] = (bool)data[i * 4 + 3];
+                t.Rows.Add(dr);
+            }
+        }
+
+        #endregion
         
         private static void AddUK_PlusBandStack()
         {
@@ -2666,6 +3369,7 @@ namespace Thetis
 								"WWV", "SAM", "F7", 10.000000, false, 150, 0.0,
 								"WWV", "SAM", "F7", 15.000000, false, 150, 0.0,
 								"WWV", "SAM", "F7", 20.000000, false, 150, 0.0,
+                                "WWV", "SAM", "F5", 25.000000, false, 150, 0.0, // ke9ns add
 								"GEN", "SAM", "F6", 13.845000, false, 150, 0.0,
 								"GEN", "SAM", "F7", 5.975000, false, 150, 0.0,
 								"GEN", "SAM", "F7", 9.550000, false, 150, 0.0,
@@ -2735,6 +3439,7 @@ namespace Thetis
 		  "WWV", "SAM", "F5", 10.000000, false, 150, 0.0,
 		  "WWV", "SAM","F5", 15.000000, false, 150, 0.0,
 		  "WWV", "SAM", "F5", 20.000000, false, 150, 0.0,
+          "WWV", "SAM", "F5", 25.000000, false, 150, 0.0, // ke9ns add
 		  "WWV", "USB", "F6", 3.330000, false, 150, 0.0,
 		  "WWV", "USB", "F6", 7.850000, false, 150, 0.0,
 		  "WWV", "USB", "F6", 14.670000, false, 150, 0.0,
@@ -2852,6 +3557,7 @@ namespace Thetis
             t.Columns.Add("TX_AF_Level", typeof(int));
             t.Columns.Add("AM_Carrier_Level", typeof(int));
             t.Columns.Add("Show_TX_Filter", typeof(bool));
+
             t.Columns.Add("VAC1_On", typeof(bool));
             t.Columns.Add("VAC1_Auto_On", typeof(bool));
             t.Columns.Add("VAC1_RX_Gain", typeof(int));
@@ -3596,6 +4302,195 @@ namespace Thetis
 
             #endregion
 
+            #region FHM-1
+
+            dr = t.NewRow();
+            dr["Name"] = "FHM-1";
+            dr["FilterLow"] = 150;
+            dr["FilterHigh"] = 3050;
+            dr["TXEQNumBands"] = 10;
+            dr["TXEQEnabled"] = true;
+            dr["TXEQPreamp"] = -3;
+            dr["TXEQ1"] = 0;
+            dr["TXEQ2"] = -3;
+            dr["TXEQ3"] = -7;
+            dr["TXEQ4"] = -5;
+            dr["TXEQ5"] = -3;
+            dr["TXEQ6"] = 2;
+            dr["TXEQ7"] = 6;
+            dr["TXEQ8"] = 3;
+            dr["TXEQ9"] = 0;
+            dr["TXEQ10"] = -6;
+            dr["DXOn"] = false;
+            dr["DXLevel"] = 3;
+            dr["CompanderOn"] = true;
+            dr["CompanderLevel"] = 2;
+            dr["MicGain"] = 35;
+            dr["FMMicGain"] = 10;
+            dr["Lev_On"] = true;
+            dr["Lev_Slope"] = 0;
+            dr["Lev_MaxGain"] = 5;
+            dr["Lev_Attack"] = 2;
+            dr["Lev_Decay"] = 100;
+            dr["Lev_Hang"] = 500;
+            dr["Lev_HangThreshold"] = 0;
+            dr["ALC_Slope"] = 0;
+            dr["ALC_MaxGain"] = -20;
+            dr["ALC_Attack"] = 2;
+            dr["ALC_Decay"] = 10;
+            dr["ALC_Hang"] = 500;
+            dr["ALC_HangThreshold"] = 0;
+            dr["Power"] = 50;
+            dr["Dexp_On"] = false;
+            dr["Dexp_Threshold"] = -40;
+            dr["Dexp_Attenuate"] = 80;
+            dr["VOX_On"] = false;
+            dr["VOX_Threshold"] = 100;
+            dr["VOX_HangTime"] = 250;
+            dr["Tune_Power"] = 10;
+            dr["Tune_Meter_Type"] = "Fwd Pwr";
+           // dr["TX_Limit_Slew"] = false;
+            dr["TXBlankingTime"] = 200;
+            dr["MicBoost"] = false;
+            dr["TX_AF_Level"] = 50;
+            dr["AM_Carrier_Level"] = 25;
+            dr["Show_TX_Filter"] = true;
+            dr["VAC1_On"] = false;
+            dr["VAC1_Auto_On"] = false;
+            dr["VAC1_RX_GAIN"] = 0;
+            dr["VAC1_TX_GAIN"] = 0;
+            dr["VAC1_Stereo_On"] = false;
+            dr["VAC1_Sample_Rate"] = "48000";
+            dr["VAC1_Buffer_Size"] = "2048";
+            dr["VAC1_IQ_Output"] = false;
+            dr["VAC1_IQ_Correct"] = true;
+            dr["VAC1_PTT_OverRide"] = true;
+            dr["VAC1_Combine_Input_Channels"] = false;
+            dr["VAC1_Latency_On"] = true;
+            dr["VAC1_Latency_Duration"] = 120;
+            dr["VAC2_On"] = false;
+            dr["VAC2_Auto_On"] = false;
+            dr["VAC2_RX_GAIN"] = 0;
+            dr["VAC2_TX_GAIN"] = 0;
+            dr["VAC2_Stereo_On"] = false;
+            dr["VAC2_Sample_Rate"] = "48000";
+            dr["VAC2_Buffer_Size"] = "2048";
+            dr["VAC2_IQ_Output"] = false;
+            dr["VAC2_IQ_Correct"] = true;
+            dr["VAC2_Combine_Input_Channels"] = false;
+            dr["VAC2_Latency_On"] = true;
+            dr["VAC2_Latency_Duration"] = 120;
+            dr["Phone_RX_DSP_Buffer"] = "2048";
+            dr["Phone_TX_DSP_Buffer"] = "1024";
+            dr["Digi_RX_DSP_Buffer"] = "2048";
+            dr["Digi_TX_DSP_Buffer"] = "2048";
+            dr["CW_RX_DSP_Buffer"] = "2048";
+                     dr["Mic_Input_On"] = "1";
+                     dr["Mic_Input_Boost"] = false;
+                     dr["Line_Input_On"] = false;
+                     dr["Line_Input_Level"] = 0.0;
+                     dr["CESSB_On"] = false;
+                     dr["Disable_Pure_Signal"] = true;
+             
+
+            t.Rows.Add(dr);
+
+            #endregion
+
+            #region FHM-1 DX
+
+            dr = t.NewRow();
+            dr["Name"] = "FHM-1 DX";
+            dr["FilterLow"] = 300;
+            dr["FilterHigh"] = 2400;
+            dr["TXEQNumBands"] = 10;
+            dr["TXEQEnabled"] = true;
+            dr["TXEQPreamp"] = -3;
+            dr["TXEQ1"] = 0;
+            dr["TXEQ2"] = -3;
+            dr["TXEQ3"] = -6;
+            dr["TXEQ4"] = -10;
+            dr["TXEQ5"] = -6;
+            dr["TXEQ6"] = 3;
+            dr["TXEQ7"] = 6;
+            dr["TXEQ8"] = 3;
+            dr["TXEQ9"] = 0;
+            dr["TXEQ10"] = -6;
+            dr["DXOn"] = true;
+            dr["DXLevel"] = 5;
+            dr["CompanderOn"] = false;
+            dr["CompanderLevel"] = 3;
+            dr["MicGain"] = 35;
+            dr["FMMicGain"] = 10;
+            dr["Lev_On"] = true;
+            dr["Lev_Slope"] = 0;
+            dr["Lev_MaxGain"] = 5;
+            dr["Lev_Attack"] = 2;
+            dr["Lev_Decay"] = 500;
+            dr["Lev_Hang"] = 500;
+            dr["Lev_HangThreshold"] = 0;
+            dr["ALC_Slope"] = 0;
+            dr["ALC_MaxGain"] = -20;
+            dr["ALC_Attack"] = 2;
+            dr["ALC_Decay"] = 10;
+            dr["ALC_Hang"] = 500;
+            dr["ALC_HangThreshold"] = 0;
+            dr["Power"] = 50;
+            dr["Dexp_On"] = false;
+            dr["Dexp_Threshold"] = -40;
+            dr["Dexp_Attenuate"] = 80;
+            dr["VOX_On"] = false;
+            dr["VOX_Threshold"] = 100;
+            dr["VOX_HangTime"] = 250;
+            dr["Tune_Power"] = 10;
+            dr["Tune_Meter_Type"] = "Fwd Pwr";
+           // dr["TX_Limit_Slew"] = false;
+            dr["TXBlankingTime"] = 200;
+            dr["MicBoost"] = false;
+            dr["TX_AF_Level"] = 50;
+            dr["AM_Carrier_Level"] = 25;
+            dr["Show_TX_Filter"] = true;
+            dr["VAC1_On"] = false;
+            dr["VAC1_Auto_On"] = false;
+            dr["VAC1_RX_GAIN"] = 0;
+            dr["VAC1_TX_GAIN"] = 0;
+            dr["VAC1_Stereo_On"] = false;
+            dr["VAC1_Sample_Rate"] = "48000";
+            dr["VAC1_Buffer_Size"] = "2048";
+            dr["VAC1_IQ_Output"] = false;
+            dr["VAC1_IQ_Correct"] = true;
+            dr["VAC1_PTT_OverRide"] = true;
+            dr["VAC1_Combine_Input_Channels"] = false;
+            dr["VAC1_Latency_On"] = true;
+            dr["VAC1_Latency_Duration"] = 120;
+            dr["VAC2_On"] = false;
+            dr["VAC2_Auto_On"] = false;
+            dr["VAC2_RX_GAIN"] = 0;
+            dr["VAC2_TX_GAIN"] = 0;
+            dr["VAC2_Stereo_On"] = false;
+            dr["VAC2_Sample_Rate"] = "48000";
+            dr["VAC2_Buffer_Size"] = "2048";
+            dr["VAC2_IQ_Output"] = false;
+            dr["VAC2_IQ_Correct"] = true;
+            dr["VAC2_Combine_Input_Channels"] = false;
+            dr["VAC2_Latency_On"] = true;
+            dr["VAC2_Latency_Duration"] = 120;
+            dr["Phone_RX_DSP_Buffer"] = "2048";
+            dr["Phone_TX_DSP_Buffer"] = "2048";
+            dr["Digi_RX_DSP_Buffer"] = "2048";
+            dr["Digi_TX_DSP_Buffer"] = "2048";
+            dr["CW_RX_DSP_Buffer"] = "2048";
+                    dr["Mic_Input_On"] = "1";
+                    dr["Mic_Input_Boost"] = false;
+                    dr["Line_Input_On"] = false;
+                    dr["Line_Input_Level"] = 0.0;
+                    dr["CESSB_On"] = false;
+                    dr["Disable_Pure_Signal"] = true;
+
+            t.Rows.Add(dr);
+
+            #endregion
+ 
             // W4TME
             #region DIGI 1K@2210
 
@@ -5277,7 +6172,9 @@ namespace Thetis
         {
             string[] band_list = {"160M", "80M", "60M", "40M", "30M", "20M", "17M",
 									 "15M", "12M", "10M", "6M", "2M", "WWV", "GEN",
-									 "VHF0", "VHF1", "VHF2", "VHF3", "VHF4", "VHF5",
+                                      "LMF","120M","90M","61M","49M","41M","31M","25M",
+                                     "22M","19M","16M","14M","13M","11M",
+                                     "VHF0", "VHF1", "VHF2", "VHF3", "VHF4", "VHF5",
 									 "VHF6", "VHF7", "VHF8", "VHF9", "VHF10", "VHF11",
 									 "VHF12", "VHF13" };
 
@@ -5293,7 +6190,10 @@ namespace Thetis
             return retvals;
         }
 
-        public static bool GetBandStack(string band, int index, out string mode, out string filter, out double freq, out bool CTUN, out int ZoomFactor, out double CenterFreq)
+        public static bool GetBandStack(string band, int index, out string mode, out string filter, out double freq, 
+            out bool CTUN, 
+            out int ZoomFactor, 
+            out double CenterFreq)
         {
             DataRow[] rows = ds.Tables["BandStack"].Select("'" + band + "' = BandName");
 
@@ -5334,6 +6234,7 @@ namespace Thetis
             ds.Tables["BandStack"].Rows.Add(dr);
         }
 
+        public static int filter3 = 0;
         public static void SaveBandStack(string band, int index, string mode, string filter, double freq, bool CTUN, int ZoomFactor, double CenterFreq)
         {
             DataRow[] rows = ds.Tables["BandStack"].Select("'" + band + "' = BandName");
@@ -5365,6 +6266,114 @@ namespace Thetis
             d["CenterFreq"] = CenterFreq;
 
         }
+
+        public static void GetBandStack1(string band)
+        {
+            DataRow[] rows = ds.Tables["BandStack"].Select("'" + band + "' = BandName");
+
+            if (rows.Length == 0)
+            {
+                MessageBox.Show("No Entries found for Band: " + band, "No Entry Found",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+            }
+
+        }
+
+
+        //==================================================================================================
+        // ke9ns add to delete the current bandstack entry (passed from stack.cs to console.cs)
+        public static void PurgeBandStack(int index, string band, string mode, string filter, string freq2)
+        {
+
+            if (!ds.Tables.Contains("BandStack")) return;  // dont run in no bandstack data
+
+            string temp = "Freq = '" + freq2 + "'";
+
+            try
+            {
+                DataRow[] rows = ds.Tables["BandStack"].Select(temp);   // find the identical freq in the bandstack
+
+                foreach (var row in rows)
+                {
+                    row.Delete();
+                    break;               // if there is a dup thenjust delete the first occurance
+                }
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("No Entries found to Delete for Band: " + band, "No Entry Found",
+                  MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+
+
+        } // PurgeBandStack()
+
+
+        //====================================================================================================
+        // ke9ns add  allows bubble sort routine in stack.cs to update bandstack without checking for dups
+        public static void SortBandStack(string band, int index, string mode, string filter, double freq, bool CTUN, int ZoomFactor, double CenterFreq)
+        {
+            try
+            {
+
+                DataRow[] rows = ds.Tables["BandStack"].Select("'" + band + "' = BandName");
+
+                filter3 = Console.BandStackLock;
+
+                index = index % rows.Length;
+
+                DataRow d = (DataRow)rows[index];
+                d["Mode"] = mode;
+                d["Filter"] = filter;
+                d["Freq"] = freq;
+                d["CTUN"] = CTUN;
+                d["ZoomFactor"] = ZoomFactor;
+                d["CenterFreq"] = CenterFreq;
+
+                //  Debug.WriteLine("=====BANDSTACK SORT====");
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("problem found sorting entry for Band: " + band, "No Entry Found",
+                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+
+        } //Sortbandstack
+
+        //==================================================================================================
+        // ke9ns add
+        public static void AddBandText(double freq, double freq1, string name, bool tx)
+        {
+            DataRow dr = ds.Tables["BandText"].NewRow();
+            dr["Low"] = freq;
+            dr["High"] = freq1;
+            dr["Name"] = name;
+            dr["TX"] = tx;
+            ds.Tables["BandText"].Rows.Add(dr);
+        }
+
+
+        //===========================================================
+        // ke9ns add
+        public static void WWV25()
+        {
+
+            DataTable t = ds.Tables["BandText"];
+            object[] data = {
+                                2500000, 2500000, "WWV Time",                 false,
+            };
+
+            int i = 0;
+
+            DataRow dr = t.NewRow();
+            dr["Low"] = (double)data[i * 4 + 0];
+            dr["High"] = (double)data[i * 4 + 1];
+            dr["Name"] = (string)data[i * 4 + 2];
+            dr["TX"] = (bool)data[i * 4 + 3];
+            t.Rows.Add(dr);
+
+        } // WWV25;
 
         // This removes the notches from the state database so we can rewrite all of them without
         // having one that was previously deleted staying in the database
@@ -5476,18 +6485,39 @@ namespace Thetis
                 case FRSRegion.Australia:
                 case FRSRegion.US:
                     AddRegion2BandStack();
+                    AddBandStackSWL(); // ke9ns add
                     ClearBandText();
                     AddRegion2BandText();
                     break;
 
                 case FRSRegion.Japan:
-                    AddRegionJapanBandStack();
+                    //AddRegionJapanBandStack();
+                    //AddBandStackSWL(); // ke9ns add
+                    //ClearBandText();
+                    //AddRegionJapanBandText();
+                    //AddBandTextSWB();
+                    AddRegion3BandStack();
+                    AddBandStackSWL(); // ke9ns add
                     ClearBandText();
-                    AddRegionJapanBandText();
-                    break;
+                    AddJapanBandText160m();
+                    AddJapanBandText80m();
+                    AddRegion3BandText60m();
+                    AddJapanBandTextEmergency();
+                    AddJapanBandText40m();
+                    AddRegion3BandText30m();
+                    AddRegion3BandText20m();
+                    AddRegion3BandText17m();
+                    AddRegion3BandText15m();
+                    AddRegion3BandText12m();
+                    AddJapanBandText10m();
+                    AddJapanBandText6m();
+                    AddRegion3BandTextVHFplus();
+                    AddBandTextSWB();
+                   break;
 
                 case FRSRegion.India:
                     AddRegion1BandStack();
+                    AddBandStackSWL(); // ke9ns add
                     ClearBandText();
                     AddRegionIndiaBandText160m();
                     AddRegionIndiaBandText80m();
@@ -5506,6 +6536,7 @@ namespace Thetis
                 case FRSRegion.Spain:
                 case FRSRegion.Slovakia:
                     AddRegion1BandStack();
+                    AddBandStackSWL(); // ke9ns add
                     ClearBandText();
                     AddRegion1BandText160m();
                     AddRegion1BandText80m();
@@ -5526,7 +6557,8 @@ namespace Thetis
                 case FRSRegion.Europe:
                 case FRSRegion.Italy_Plus:
                     AddRegion1BandStack();
-                    ClearBandText();
+                     AddBandStackSWL(); // ke9ns add
+                   ClearBandText();
                     AddRegion1BandText160m();
                     AddRegion1BandText80m();
                     AddRegion1BandText60m();
@@ -5545,6 +6577,7 @@ namespace Thetis
 
                 case FRSRegion.Israel:
                     AddRegion1BandStack();
+                    AddBandStackSWL(); // ke9ns add
                     ClearBandText();
                     AddRegionIsraelBandText160m();
                     AddRegionIsraelBandText80m();
@@ -5563,6 +6596,7 @@ namespace Thetis
 
                 case FRSRegion.UK:
                     AddUK_PlusBandStack();
+                    AddBandStackSWL(); // ke9ns add
                     ClearBandText();
                     AddRegion1BandText160m();
                     AddRegion1BandText80m();
@@ -5583,6 +6617,7 @@ namespace Thetis
                 case FRSRegion.Norway:
                 case FRSRegion.Denmark:
                     AddRegion1BandStack();
+                    AddBandStackSWL(); // ke9ns add
                     ClearBandText();
                     AddRegion1BandText160m();
                     AddRegion1BandText80m();
@@ -5602,6 +6637,7 @@ namespace Thetis
 
                 case FRSRegion.Latvia:
                     AddRegion1BandStack();
+                    AddBandStackSWL(); // ke9ns add
                     ClearBandText();
                     AddRegion1BandText160m();
                     AddRegion1BandText80m();
@@ -5621,6 +6657,7 @@ namespace Thetis
 
                 case FRSRegion.Bulgaria:
                     AddRegion1BandStack();
+                    AddBandStackSWL(); // ke9ns add
                     ClearBandText();
                     AddBulgariaBandText160m();
                     AddRegion1BandText80m();
@@ -5640,6 +6677,7 @@ namespace Thetis
 
                 case FRSRegion.Greece:
                     AddRegion1BandStack();
+                    AddBandStackSWL(); // ke9ns add
                     ClearBandText();
                     AddBulgariaBandText160m();
                     AddRegion1BandText80m();
@@ -5659,7 +6697,8 @@ namespace Thetis
 
                 case FRSRegion.Hungary:
                     AddRegion1BandStack();
-                    ClearBandText();
+                     AddBandStackSWL(); // ke9ns add
+                   ClearBandText();
                     AddRegion1BandText160m();
                     AddRegion1BandText80m();
                     AddRegion1BandText60m();
@@ -5678,6 +6717,7 @@ namespace Thetis
 
                 case FRSRegion.Netherlands:
                     AddRegion1BandStack();
+                    AddBandStackSWL(); // ke9ns add
                     ClearBandText();
                     AddNetherlandsBandText160m();
                     AddRegion1BandText80m();
@@ -5697,7 +6737,8 @@ namespace Thetis
 
                 case FRSRegion.France:
                     AddRegion1BandStack();
-                    ClearBandText();
+                     AddBandStackSWL(); // ke9ns add
+                   ClearBandText();
                     AddRegion1BandText160m();
                     AddRegion1BandText80m();
                     AddRegion1BandText60m();
@@ -5716,6 +6757,7 @@ namespace Thetis
 
                 case FRSRegion.Russia:
                     AddRegion1BandStack();
+                    AddBandStackSWL(); // ke9ns add
                     ClearBandText();
                     AddRegion1BandText160m();
                     AddRegion1BandText80m();
@@ -5736,6 +6778,7 @@ namespace Thetis
 
                 case FRSRegion.Sweden:
                     AddSwedenBandStack();
+                    AddBandStackSWL(); // ke9ns add
                     ClearBandText();
                     AddRegion1BandText160m();
                     AddRegion1BandText80m();

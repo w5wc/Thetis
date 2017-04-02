@@ -101,10 +101,10 @@ namespace Thetis
 
         // siphon
 
-        [DllImport("wdsp.dll", EntryPoint = "SetSiphonInsize", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("WDSP.dll", EntryPoint = "SetSiphonInsize", CallingConvention = CallingConvention.Cdecl)]
         public static extern void SetSiphonInsize (int id, int size);
 
-        [DllImport("wdsp.dll", EntryPoint = "GetaSipF1EXT", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("WDSP.dll", EntryPoint = "GetaSipF1EXT", CallingConvention = CallingConvention.Cdecl)]
         public static extern void GetaSipF1EXT (int id, float* buff, int size);     // called by console.cs
 
         // audio mixer
@@ -217,7 +217,6 @@ namespace Thetis
                     Scope.dscope[0].Condx = 0;
                 }
                 cmaster.CMSetEERRun(0);
-                cmaster.CMSetPSMox(wdsp.id(1, 0));
             }
         }
 
@@ -273,13 +272,13 @@ namespace Thetis
 
             // get transmitter idenifiers
             int txinid = cmaster.inid(1, 0);        // stream id
-            int txch = cmaster.chid(txinid, 0);     // dsp channel
+            int txch = cmaster.chid(txinid, 0);     // wdsp channel
 
             // setup transmitter input sample rate here since it is fixed
             cmaster.SetXcmInrate(txinid, 48000);
 
             // setup CFIR to run; it will always be ON with new protocol firmware
-            wdsp.SetTXACFIRRun(txch, true);
+            WDSP.SetTXACFIRRun(txch, true);
 
             // set PureSignal basic parameters
             // note:  if future models have different settings, these calls could be moved to
@@ -290,8 +289,8 @@ namespace Thetis
             puresignal.SetPSHWPeak(txch, 0.2899);
 
             // setup transmitter display
-            wdsp.TXASetSipMode(txch, 1);            // 1=>call the appropriate 'analyzer'
-            wdsp.TXASetSipDisplay(txch, txinid);    // disp = txinid = tx stream
+            WDSP.TXASetSipMode(txch, 1);            // 1=>call the appropriate 'analyzer'
+            WDSP.TXASetSipDisplay(txch, txinid);    // disp = txinid = tx stream
 
             NetworkIO.CreateRNet();
             cmaster.create_rxa();
@@ -557,13 +556,8 @@ namespace Thetis
         public static void CMSetEERRun(int id)
         {
             bool run = Audio.console.radio.GetDSPTX(0).TXEERModeRun && Audio.MOX;
-           //  wdsp.SetEERSize(id, Audio.OutCount);
-            wdsp.SetEERRun(id, run);
-        }
-
-        public static void CMSetPSMox(int channel)
-        {
-            puresignal.SetPSMox(channel, mox);
+           //  WDSP.SetEERSize(id, Audio.OutCount);
+            WDSP.SetEERRun(id, run);
         }
 
         public static void CMSetTXAVoxRun(int id)
@@ -782,7 +776,7 @@ namespace Thetis
         // initialize an array for pointers to the wave player method instances
         static WPlay[] pplay = new WPlay[nplayers];
         // initialize an array for the wave_file_readers
-        public static WaveFileReader[] wave_file_reader = new WaveFileReader[nplayers];
+        public static WaveFileReader1[] wave_file_reader = new WaveFileReader1[nplayers];
 
         unsafe public static void createWavePlayer(int id)
         {
@@ -947,8 +941,8 @@ namespace Thetis
                                 if (WaveThing.wave_file_writer[id].BaseRate != rcvr_inrate)
                                 {
                                     int outsamps;
-                                    wdsp.xresampleFV(pleft,  pltemp, rcvr_insize, &outsamps, WaveThing.wave_file_writer[id].RcvrResampL);
-                                    wdsp.xresampleFV(pright, prtemp, rcvr_insize, &outsamps, WaveThing.wave_file_writer[id].RcvrResampR);
+                                    WDSP.xresampleFV(pleft,  pltemp, rcvr_insize, &outsamps, WaveThing.wave_file_writer[id].RcvrResampL);
+                                    WDSP.xresampleFV(pright, prtemp, rcvr_insize, &outsamps, WaveThing.wave_file_writer[id].RcvrResampR);
                                     WaveThing.wave_file_writer[id].AddWriteBuffer(pltemp, prtemp, outsamps);
                                 }
                                 else
@@ -962,8 +956,8 @@ namespace Thetis
                                 if (WaveThing.wave_file_writer[id].BaseRate != xmtr_inrate)
                                 {
                                     int outsamps;
-                                    wdsp.xresampleFV(pleft,  pltemp, xmtr_insize, &outsamps, WaveThing.wave_file_writer[id].XmtrResampL);
-                                    wdsp.xresampleFV(pright, prtemp, xmtr_insize, &outsamps, WaveThing.wave_file_writer[id].XmtrResampR);
+                                    WDSP.xresampleFV(pleft,  pltemp, xmtr_insize, &outsamps, WaveThing.wave_file_writer[id].XmtrResampL);
+                                    WDSP.xresampleFV(pright, prtemp, xmtr_insize, &outsamps, WaveThing.wave_file_writer[id].XmtrResampR);
                                     WaveThing.wave_file_writer[id].AddWriteBuffer(pltemp, prtemp, outsamps);
                                 }
                                 else
@@ -980,8 +974,8 @@ namespace Thetis
                                 if (WaveThing.wave_file_writer[id].BaseRate != rcvr_outrate)
                                 {
                                     int outsamps;
-                                    wdsp.xresampleFV(pleft,  pltemp, rcvr_outsize, &outsamps, WaveThing.wave_file_writer[id].RcvrResampL);
-                                    wdsp.xresampleFV(pright, prtemp, rcvr_outsize, &outsamps, WaveThing.wave_file_writer[id].RcvrResampR);
+                                    WDSP.xresampleFV(pleft,  pltemp, rcvr_outsize, &outsamps, WaveThing.wave_file_writer[id].RcvrResampL);
+                                    WDSP.xresampleFV(pright, prtemp, rcvr_outsize, &outsamps, WaveThing.wave_file_writer[id].RcvrResampR);
                                     WaveThing.wave_file_writer[id].AddWriteBuffer(pltemp, prtemp, outsamps);
                                 }
                                 else
@@ -995,8 +989,8 @@ namespace Thetis
                                 if (WaveThing.wave_file_writer[id].BaseRate != xmtr_outrate)
                                 {
                                     int outsamps;
-                                    wdsp.xresampleFV(pleft,  pltemp, xmtr_outsize, &outsamps, WaveThing.wave_file_writer[id].XmtrResampL);
-                                    wdsp.xresampleFV(pright, prtemp, xmtr_outsize, &outsamps, WaveThing.wave_file_writer[id].XmtrResampR);
+                                    WDSP.xresampleFV(pleft,  pltemp, xmtr_outsize, &outsamps, WaveThing.wave_file_writer[id].XmtrResampL);
+                                    WDSP.xresampleFV(pright, prtemp, xmtr_outsize, &outsamps, WaveThing.wave_file_writer[id].XmtrResampR);
                                     WaveThing.wave_file_writer[id].AddWriteBuffer(pltemp, prtemp, outsamps);
                                 }
                                 else

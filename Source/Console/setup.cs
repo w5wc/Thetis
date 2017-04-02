@@ -296,9 +296,9 @@ namespace Thetis
             EventArgs e = EventArgs.Empty;
             //comboGeneralLPTAddr_LostFocus(this, e);
             //udDDSCorrection_ValueChanged(this, e);
-            udDSPCWPitch_ValueChanged(this, e);
-            udTXFilterHigh_ValueChanged(this, e);
-            udTXFilterLow_ValueChanged(this, e);
+           // udDSPCWPitch_ValueChanged(this, e);
+           // udTXFilterHigh_ValueChanged(this, e);
+           // udTXFilterLow_ValueChanged(this, e);
             tbRX1FilterAlpha_Scroll(this, e);
             tbTXFilterAlpha_Scroll(this, e);
             tbBackgroundAlpha_Scroll(this, e);
@@ -1168,6 +1168,7 @@ namespace Thetis
             clrbtnRX2WaterfallLow_Changed(this, e);
             chkRX1WaterfallAGC_CheckedChanged(this, e);
             chkRX2WaterfallAGC_CheckedChanged(this, e);
+            chkANAN8000DLEDisplayVoltsAmps_CheckedChanged(this, e);
 
             // DSP Tab
             udLMSANF_ValueChanged(this, e);
@@ -1608,6 +1609,21 @@ namespace Thetis
                     case Band.B10M: txtWaterFallBandLevel.Text = "10 meters"; break;
                     case Band.B6M: txtWaterFallBandLevel.Text = "6 meters"; break;
                     case Band.WWV: txtWaterFallBandLevel.Text = "WWV"; break;
+                    case Band.BLMF: txtWaterFallBandLevel.Text = "LW/MW bands"; break; // ke9ns add
+                    case Band.B120M: txtWaterFallBandLevel.Text = "120 meters"; break;
+                    case Band.B90M: txtWaterFallBandLevel.Text = "90 meters"; break;
+                    case Band.B61M: txtWaterFallBandLevel.Text = "60 meters"; break;
+                    case Band.B49M: txtWaterFallBandLevel.Text = "49 meters"; break;
+                    case Band.B41M: txtWaterFallBandLevel.Text = "41 meters"; break;
+                    case Band.B31M: txtWaterFallBandLevel.Text = "31 meters"; break;
+                    case Band.B25M: txtWaterFallBandLevel.Text = "25 meters"; break;
+                    case Band.B22M: txtWaterFallBandLevel.Text = "22 meters"; break;
+                    case Band.B19M: txtWaterFallBandLevel.Text = "19 meters"; break;
+                    case Band.B16M: txtWaterFallBandLevel.Text = "16 meters"; break;
+                    case Band.B14M: txtWaterFallBandLevel.Text = "14 meters"; break;
+                    case Band.B13M: txtWaterFallBandLevel.Text = "13 meters"; break;
+                    case Band.B11M: txtWaterFallBandLevel.Text = "11 meters"; break;
+
                     case Band.GEN: txtWaterFallBandLevel.Text = "General"; break;
                     default: txtWaterFallBandLevel.Text = "2M & VHF+"; break;
                 }
@@ -6004,6 +6020,8 @@ namespace Thetis
 
             if (console.path_Illustrator != null)
                 console.path_Illustrator.pi_Changed();
+
+            console.UpdatePAVoltsAmpsDisplay();
         }
 
         public void UpdateDisplayMeter()
@@ -6717,8 +6735,8 @@ namespace Thetis
             if (new_rate != old_rate || initializing)
             {
                 // turn OFF the DSP channels so they get flushed out (must do while data is flowing to get slew-down and flush)
-                wdsp.SetChannelState(wdsp.id(0, 1), 0, 0);
-                wdsp.SetChannelState(wdsp.id(0, 0), 0, 1);
+                WDSP.SetChannelState(WDSP.id(0, 1), 0, 0);
+                WDSP.SetChannelState(WDSP.id(0, 0), 0, 1);
                 Thread.Sleep(10);
 
                 // remove the RX1 main and sub audio streams from the mix set
@@ -6760,8 +6778,8 @@ namespace Thetis
                 // turn ON the DSP channels
                 int w_enable = 0;
                 if (was_enabled) w_enable = 1;
-                wdsp.SetChannelState(wdsp.id(0, 0), w_enable, 0);
-                if (console.radio.GetDSPRX(0, 1).Active) wdsp.SetChannelState(wdsp.id(0, 1), w_enable, 0);
+                WDSP.SetChannelState(WDSP.id(0, 0), w_enable, 0);
+                if (console.radio.GetDSPRX(0, 1).Active) WDSP.SetChannelState(WDSP.id(0, 1), w_enable, 0);
 
                 // calculate and display the new bin_width
                 double bin_width = (double)new_rate / (double)console.specRX.GetSpecRX(0).FFTSize;
@@ -6780,7 +6798,7 @@ namespace Thetis
             if (new_rate != old_rate || initializing)
             {
                 // turn OFF the DSP channel so it gets flushed out (must do while data is flowing to get slew-down and flush)
-                wdsp.SetChannelState(wdsp.id(2, 0), 0, 1);
+                WDSP.SetChannelState(WDSP.id(2, 0), 0, 1);
                 // remove the RX2 audio stream from the mix set
                 unsafe { cmaster.SetAAudioMixState((void*)0, 0, 2, false); }
                 // turn OFF the DDC for RX2; had to add rx2_enabled as a parameter to UpdateReceivers() to do this --- THIS IS S HACK.  BETTER WAY?
@@ -6812,7 +6830,7 @@ namespace Thetis
                 // turn ON the DSP channel if it was ON before
                 int w_enable = 0;
                 if (was_enabled) w_enable = 1;
-                wdsp.SetChannelState(wdsp.id(2, 0), w_enable, 0);
+                WDSP.SetChannelState(WDSP.id(2, 0), w_enable, 0);
                 // calculate and display the new bin_width
                 double bin_width = (double)new_rate / (double)console.specRX.GetSpecRX(1).FFTSize;
                 lblRX2DisplayBinWidth.Text = bin_width.ToString("N3");
@@ -8799,7 +8817,7 @@ namespace Thetis
             chkAudioCorrectIQ.Checked = (bool)dr["VAC1_IQ_Correct"];
             chkVACAllowBypass.Checked = (bool)dr["VAC1_PTT_OverRide"];
             chkVACCombine.Checked = (bool)dr["VAC1_Combine_Input_Channels"];
-            chkAudioLatencyManual2.Checked = true;
+            chkAudioLatencyManual2.Checked = (bool)dr["VAC1_Latency_On"];
             udAudioLatency2.Value = (int)dr["VAC1_Latency_Duration"];
 
             chkVAC2Enable.Checked = (bool)dr["VAC2_On"];
@@ -8812,7 +8830,7 @@ namespace Thetis
             chkVAC2DirectIQ.Checked = (bool)dr["VAC2_IQ_Output"];
             chkVAC2DirectIQCal.Checked = (bool)dr["VAC2_IQ_Correct"];
             chkVAC2Combine.Checked = (bool)dr["VAC2_Combine_Input_Channels"];
-            chkVAC2LatencyManual.Checked = true;
+            chkVAC2LatencyManual.Checked = (bool)dr["VAC2_Latency_On"];
             udVAC2Latency.Value = (int)dr["VAC2_Latency_Duration"];
 
             comboDSPPhoneRXBuf.Text = (string)dr["Phone_RX_DSP_Buffer"];
@@ -8946,7 +8964,7 @@ namespace Thetis
             dr["VAC1_IQ_Correct"] = (bool)chkAudioCorrectIQ.Checked;
             dr["VAC1_PTT_OverRide"] = (bool)chkVACAllowBypass.Checked;
             dr["VAC1_Combine_Input_Channels"] = (bool)chkVACCombine.Checked;
-            dr["VAC1_Latency_On"] = true;
+            dr["VAC1_Latency_On"] = (bool)chkAudioLatencyManual2.Checked;
             dr["VAC1_Latency_Duration"] = (int)udAudioLatency2.Value;
 
             dr["VAC2_On"] = (bool)chkVAC2Enable.Checked;
@@ -8959,7 +8977,7 @@ namespace Thetis
             dr["VAC2_IQ_Output"] = (bool)chkVAC2DirectIQ.Checked;
             dr["VAC2_IQ_Correct"] = (bool)chkVAC2DirectIQCal.Checked;
             dr["VAC2_Combine_Input_Channels"] = (bool)chkVAC2Combine.Checked;
-            dr["VAC2_Latency_On"] = true;
+            dr["VAC2_Latency_On"] = (bool)chkVAC2LatencyManual.Checked;
             dr["VAC2_Latency_Duration"] = (int)udVAC2Latency.Value;
 
             dr["Phone_RX_DSP_Buffer"] = (string)comboDSPPhoneRXBuf.Text;
@@ -16319,16 +16337,16 @@ namespace Thetis
 
         private void udDSPSNBThresh1_ValueChanged(object sender, EventArgs e)
         {
-            wdsp.SetRXASNBAk1(wdsp.id(0, 0), (double)udDSPSNBThresh1.Value);
-            wdsp.SetRXASNBAk1(wdsp.id(0, 1), (double)udDSPSNBThresh1.Value);
-            wdsp.SetRXASNBAk1(wdsp.id(2, 0), (double)udDSPSNBThresh1.Value);
+            WDSP.SetRXASNBAk1(WDSP.id(0, 0), (double)udDSPSNBThresh1.Value);
+            WDSP.SetRXASNBAk1(WDSP.id(0, 1), (double)udDSPSNBThresh1.Value);
+            WDSP.SetRXASNBAk1(WDSP.id(2, 0), (double)udDSPSNBThresh1.Value);
         }
 
         private void udDSPSNBThresh2_ValueChanged(object sender, EventArgs e)
         {
-            wdsp.SetRXASNBAk2(wdsp.id(0, 0), (double)udDSPSNBThresh2.Value);
-            wdsp.SetRXASNBAk2(wdsp.id(0, 1), (double)udDSPSNBThresh2.Value);
-            wdsp.SetRXASNBAk2(wdsp.id(2, 0), (double)udDSPSNBThresh2.Value);
+            WDSP.SetRXASNBAk2(WDSP.id(0, 0), (double)udDSPSNBThresh2.Value);
+            WDSP.SetRXASNBAk2(WDSP.id(0, 1), (double)udDSPSNBThresh2.Value);
+            WDSP.SetRXASNBAk2(WDSP.id(2, 0), (double)udDSPSNBThresh2.Value);
         }
 
         #region MultiNotchFilter
@@ -16346,25 +16364,25 @@ namespace Thetis
             //{
             //    RunNotches = false;
             //    btnMNFRun.Text = "OFF";
-            //    wdsp.RXANBPSetNotchesRun(wdsp.id(0, 0), RunNotches);
-            //    wdsp.RXANBPSetNotchesRun(wdsp.id(0, 1), RunNotches);
-            //    wdsp.RXANBPSetNotchesRun(wdsp.id(2, 0), RunNotches);
+            //    WDSP.RXANBPSetNotchesRun(WDSP.id(0, 0), RunNotches);
+            //    WDSP.RXANBPSetNotchesRun(WDSP.id(0, 1), RunNotches);
+            //    WDSP.RXANBPSetNotchesRun(WDSP.id(2, 0), RunNotches);
             //}
             //else
             //{
             //    RunNotches = true;
             //    btnMNFRun.Text = "ON";
-            //    wdsp.RXANBPSetNotchesRun(wdsp.id(0, 0), RunNotches);
-            //    wdsp.RXANBPSetNotchesRun(wdsp.id(0, 1), RunNotches);
-            //    wdsp.RXANBPSetNotchesRun(wdsp.id(2, 0), RunNotches);
+            //    WDSP.RXANBPSetNotchesRun(WDSP.id(0, 0), RunNotches);
+            //    WDSP.RXANBPSetNotchesRun(WDSP.id(0, 1), RunNotches);
+            //    WDSP.RXANBPSetNotchesRun(WDSP.id(2, 0), RunNotches);
             //}
         }
 
         private void chkMNFRun_CheckedChanged(object sender, EventArgs e)
         {
-            //wdsp.RXANBPSetNotchesRun(wdsp.id(0, 0), chkMNFRun.Checked);
-            //wdsp.RXANBPSetNotchesRun(wdsp.id(0, 1), chkMNFRun.Checked);
-            //wdsp.RXANBPSetNotchesRun(wdsp.id(2, 0), chkMNFRun.Checked);
+            //WDSP.RXANBPSetNotchesRun(WDSP.id(0, 0), chkMNFRun.Checked);
+            //WDSP.RXANBPSetNotchesRun(WDSP.id(0, 1), chkMNFRun.Checked);
+            //WDSP.RXANBPSetNotchesRun(WDSP.id(2, 0), chkMNFRun.Checked);
 
             //chkMNFRun.Text = "OFF";
             //chkMNFRun.Text = "ON";
@@ -16392,7 +16410,7 @@ namespace Thetis
             unsafe
             {
                 int nn;
-                wdsp.RXANBPGetNumNotches(wdsp.id(0, 0), &nn);
+                WDSP.RXANBPGetNumNotches(WDSP.id(0, 0), &nn);
                 numnotches = nn;
             }
             // if there are any notches already
@@ -16440,9 +16458,9 @@ namespace Thetis
                 udMNFFreq.BackColor = SystemColors.Control;
                 udMNFWidth.BackColor = SystemColors.Control;
                 chkMNFActive.BackColor = SystemColors.Control;
-                wdsp.RXANBPAddNotch(wdsp.id(0, 0), (int)udMNFNotch.Value, 1.0e6 * (double)udMNFFreq.Value, (double)udMNFWidth.Value, chkMNFActive.Checked);
-                wdsp.RXANBPAddNotch(wdsp.id(0, 1), (int)udMNFNotch.Value, 1.0e6 * (double)udMNFFreq.Value, (double)udMNFWidth.Value, chkMNFActive.Checked);
-                wdsp.RXANBPAddNotch(wdsp.id(2, 0), (int)udMNFNotch.Value, 1.0e6 * (double)udMNFFreq.Value, (double)udMNFWidth.Value, chkMNFActive.Checked);
+                WDSP.RXANBPAddNotch(WDSP.id(0, 0), (int)udMNFNotch.Value, 1.0e6 * (double)udMNFFreq.Value, (double)udMNFWidth.Value, chkMNFActive.Checked);
+                WDSP.RXANBPAddNotch(WDSP.id(0, 1), (int)udMNFNotch.Value, 1.0e6 * (double)udMNFFreq.Value, (double)udMNFWidth.Value, chkMNFActive.Checked);
+                WDSP.RXANBPAddNotch(WDSP.id(2, 0), (int)udMNFNotch.Value, 1.0e6 * (double)udMNFFreq.Value, (double)udMNFWidth.Value, chkMNFActive.Checked);
                 // we have at least one notch; enable the 'Delete' button
                 btnMNFDelete.Enabled = true;
             }
@@ -16454,9 +16472,9 @@ namespace Thetis
                 udMNFFreq.BackColor = SystemColors.Control;
                 udMNFWidth.BackColor = SystemColors.Control;
                 chkMNFActive.BackColor = SystemColors.Control;
-                wdsp.RXANBPEditNotch(wdsp.id(0, 0), (int)udMNFNotch.Value, 1.0e6 * (double)udMNFFreq.Value, (double)udMNFWidth.Value, chkMNFActive.Checked);
-                wdsp.RXANBPEditNotch(wdsp.id(0, 1), (int)udMNFNotch.Value, 1.0e6 * (double)udMNFFreq.Value, (double)udMNFWidth.Value, chkMNFActive.Checked);
-                wdsp.RXANBPEditNotch(wdsp.id(2, 0), (int)udMNFNotch.Value, 1.0e6 * (double)udMNFFreq.Value, (double)udMNFWidth.Value, chkMNFActive.Checked);
+                WDSP.RXANBPEditNotch(WDSP.id(0, 0), (int)udMNFNotch.Value, 1.0e6 * (double)udMNFFreq.Value, (double)udMNFWidth.Value, chkMNFActive.Checked);
+                WDSP.RXANBPEditNotch(WDSP.id(0, 1), (int)udMNFNotch.Value, 1.0e6 * (double)udMNFFreq.Value, (double)udMNFWidth.Value, chkMNFActive.Checked);
+                WDSP.RXANBPEditNotch(WDSP.id(2, 0), (int)udMNFNotch.Value, 1.0e6 * (double)udMNFFreq.Value, (double)udMNFWidth.Value, chkMNFActive.Checked);
             }
             // no longer accepting input; disable entry of values
             udMNFFreq.Enabled = false;
@@ -16470,7 +16488,7 @@ namespace Thetis
         unsafe private void btnMNFCancel_Click(object sender, EventArgs e)
         {
             int nn;
-            wdsp.RXANBPGetNumNotches(wdsp.id(0, 0), &nn);
+            WDSP.RXANBPGetNumNotches(WDSP.id(0, 0), &nn);
             numnotches = nn;
             if (AddActive)
             {
@@ -16488,7 +16506,7 @@ namespace Thetis
             {
                 double fcenter, fwidth;
                 int active;
-                wdsp.RXANBPGetNotch(wdsp.id(0, 0), (int)udMNFNotch.Value, &fcenter, &fwidth, &active);
+                WDSP.RXANBPGetNotch(WDSP.id(0, 0), (int)udMNFNotch.Value, &fcenter, &fwidth, &active);
                 udMNFFreq.Value = (decimal)(fcenter / 1.0e6);
                 udMNFWidth.Value = (decimal)fwidth;
                 if (active != 0)
@@ -16513,14 +16531,14 @@ namespace Thetis
         private void btnMNFDelete_Click(object sender, EventArgs e)
         {
             // delete the notch
-            wdsp.RXANBPDeleteNotch(wdsp.id(0, 0), (int)udMNFNotch.Value);
-            wdsp.RXANBPDeleteNotch(wdsp.id(0, 1), (int)udMNFNotch.Value);
-            wdsp.RXANBPDeleteNotch(wdsp.id(2, 0), (int)udMNFNotch.Value);
+            WDSP.RXANBPDeleteNotch(WDSP.id(0, 0), (int)udMNFNotch.Value);
+            WDSP.RXANBPDeleteNotch(WDSP.id(0, 1), (int)udMNFNotch.Value);
+            WDSP.RXANBPDeleteNotch(WDSP.id(2, 0), (int)udMNFNotch.Value);
             // get the number of remaining notches, 'numnotches'
             unsafe
             {
                 int nn;
-                wdsp.RXANBPGetNumNotches(wdsp.id(0, 0), &nn);
+                WDSP.RXANBPGetNumNotches(WDSP.id(0, 0), &nn);
                 numnotches = nn;
             }
             // if the notch number still points to a valid notch, get the notch information
@@ -16530,7 +16548,7 @@ namespace Thetis
                 {
                     double fcenter, fwidth;
                     int active;
-                    wdsp.RXANBPGetNotch(wdsp.id(0, 0), (int)udMNFNotch.Value, &fcenter, &fwidth, &active);
+                    WDSP.RXANBPGetNotch(WDSP.id(0, 0), (int)udMNFNotch.Value, &fcenter, &fwidth, &active);
                     udMNFFreq.Value = (decimal)(fcenter / 1.0e6);
                     udMNFWidth.Value = (decimal)fwidth;
                     if (active != 0)
@@ -16546,7 +16564,7 @@ namespace Thetis
                 {
                     double fcenter, fwidth;
                     int active;
-                    wdsp.RXANBPGetNotch(wdsp.id(0, 0), (int)udMNFNotch.Value - 1, &fcenter, &fwidth, &active);
+                    WDSP.RXANBPGetNotch(WDSP.id(0, 0), (int)udMNFNotch.Value - 1, &fcenter, &fwidth, &active);
                     udMNFNotch.Value -= 1;
                     udMNFFreq.Value = (decimal)(fcenter / 1.0e6);
                     udMNFWidth.Value = (decimal)fwidth;
@@ -16577,14 +16595,14 @@ namespace Thetis
             unsafe
             {
                 int nn;
-                wdsp.RXANBPGetNumNotches(wdsp.id(0, 0), &nn);
+                WDSP.RXANBPGetNumNotches(WDSP.id(0, 0), &nn);
                 numnotches = nn;
                 // if there's a valid notch at the new value, restore it
                 if ((int)udMNFNotch.Value < numnotches)
                 {
                     double fcenter, fwidth;
                     int active;
-                    wdsp.RXANBPGetNotch(wdsp.id(0, 0), (int)udMNFNotch.Value, &fcenter, &fwidth, &active);
+                    WDSP.RXANBPGetNotch(WDSP.id(0, 0), (int)udMNFNotch.Value, &fcenter, &fwidth, &active);
                     udMNFFreq.Value = (decimal)(fcenter / 1.0e6);
                     udMNFWidth.Value = (decimal)fwidth;
                     if (active != 0)
@@ -16605,16 +16623,16 @@ namespace Thetis
 
         private void chkMNFAutoIncrease_CheckedChanged(object sender, EventArgs e)
         {
-            wdsp.RXANBPSetAutoIncrease(wdsp.id(0, 0), chkMNFAutoIncrease.Checked);
-            wdsp.RXANBPSetAutoIncrease(wdsp.id(0, 1), chkMNFAutoIncrease.Checked);
-            wdsp.RXANBPSetAutoIncrease(wdsp.id(2, 0), chkMNFAutoIncrease.Checked);
+            WDSP.RXANBPSetAutoIncrease(WDSP.id(0, 0), chkMNFAutoIncrease.Checked);
+            WDSP.RXANBPSetAutoIncrease(WDSP.id(0, 1), chkMNFAutoIncrease.Checked);
+            WDSP.RXANBPSetAutoIncrease(WDSP.id(2, 0), chkMNFAutoIncrease.Checked);
         }
 
         unsafe public void SaveNotchesToDatabase()
         {
             // get the number of notches that exist
             int nn;
-            wdsp.RXANBPGetNumNotches(wdsp.id(0, 0), &nn);
+            WDSP.RXANBPGetNumNotches(WDSP.id(0, 0), &nn);
             numnotches = nn;
             // HERE:  SAVE 'numnotches', THE NUMBER OF NOTCHES, TO THE DATABASE
             MNotchDB.List.Clear();
@@ -16623,7 +16641,7 @@ namespace Thetis
                 double fcenter, fwidth;
                 int active;
                 // get fcenter, fwidth, and active for a notch
-                wdsp.RXANBPGetNotch(wdsp.id(0, 0), i, &fcenter, &fwidth, &active);
+                WDSP.RXANBPGetNotch(WDSP.id(0, 0), i, &fcenter, &fwidth, &active);
                 // HERE:  SAVE fcenter, fwidth, and active FOR THIS NOTCH TO THE DATABASE
                 MNotchDB.List.Add(new MNotch(fcenter, fwidth, Convert.ToBoolean(active)));
             }
@@ -16642,9 +16660,9 @@ namespace Thetis
                 fwidth = MNotchDB.List[i].FWidth;
                 active = MNotchDB.List[i].Active;
 
-                wdsp.RXANBPAddNotch(wdsp.id(0, 0), i, fcenter, fwidth, active);
-                wdsp.RXANBPAddNotch(wdsp.id(0, 1), i, fcenter, fwidth, active);
-                wdsp.RXANBPAddNotch(wdsp.id(2, 0), i, fcenter, fwidth, active);
+                WDSP.RXANBPAddNotch(WDSP.id(0, 0), i, fcenter, fwidth, active);
+                WDSP.RXANBPAddNotch(WDSP.id(0, 1), i, fcenter, fwidth, active);
+                WDSP.RXANBPAddNotch(WDSP.id(2, 0), i, fcenter, fwidth, active);
             }
             numnotches = MNotchDB.List.Count;
             udMNFNotch.Value = 0;
@@ -16654,7 +16672,7 @@ namespace Thetis
                 udMNFNotch.Maximum = numnotches - 1;
                 double fcenter, fwidth;
                 int active;
-                wdsp.RXANBPGetNotch(wdsp.id(0, 0), (int)udMNFNotch.Value, &fcenter, &fwidth, &active);
+                WDSP.RXANBPGetNotch(WDSP.id(0, 0), (int)udMNFNotch.Value, &fcenter, &fwidth, &active);
                 udMNFFreq.Value = (decimal)(fcenter / 1.0e6);
                 udMNFWidth.Value = (decimal)fwidth;
                 if (active != 0)
@@ -16930,6 +16948,85 @@ namespace Thetis
             console.BPF1_6BPBypass = chkBPF1_6BP.Checked;
         }
 
+        private void chkANAN8000DLEDisplayVoltsAmps_CheckedChanged(object sender, EventArgs e)
+        {
+            console.ANAN8000DLEDisplayVoltsAmps = chkANAN8000DLEDisplayVoltsAmps.Checked;
+            console.UpdatePAVoltsAmpsDisplay();
+        }
+
+        private void ud6mRx2LNAGainOffset_ValueChanged(object sender, EventArgs e)
+        {
+            console.RX6mGainOffsetRx2 = (float)ud6mRx2LNAGainOffset.Value;
+        }
+
+        private void chkBoxHTTP_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chkBoxHTTP.Checked == true)
+            {
+
+                chkBoxHttp2.Checked = false;
+
+                if (Console.m_terminated == true)
+                {
+                    Debug.WriteLine("CALL HTTPSERVER1");
+
+                    try
+                    {
+                        console.HttpServer = true;
+                    }
+                    catch (Exception e1)
+                    {
+                        Debug.WriteLine("bad call " + e1);
+                    }
+
+                }
+
+            }
+            else
+            {
+                Http.terminate();
+            }
+        }
+
+        private void chkBoxHttp2_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chkBoxHttp2.Checked == true)
+            {
+                chkBoxHTTP.Checked = false;
+               
+                Http.terminate();
+
+                console.startHttpServer((int)udHttpPort.Value);
+
+            }
+            else
+            {
+                console.stopHttpServer();
+            }
+        }
+
+        private void udHttpPort_MouseDown(object sender, MouseEventArgs e)
+        {
+            Http.terminate();
+            chkBoxHTTP.Checked = false;
+        }
+
+        private void udHttpPort_ValueChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txtHttpUser_MouseDown(object sender, MouseEventArgs e)
+        {
+            Http.terminate();
+            chkBoxHTTP.Checked = false;
+        }
+
+        private void txtHttpPass_MouseDown(object sender, MouseEventArgs e)
+        {
+            Http.terminate();
+            chkBoxHTTP.Checked = false;
+        }
 
     }
 

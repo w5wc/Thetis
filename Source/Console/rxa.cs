@@ -60,8 +60,8 @@ namespace Thetis
             cmaster.SetAAudioMixWhat((void*)0, 0, chid, true);             // add main-rcvr to mixer what
 
             // WDSP setup
-            wdsp.SetChannelState(chid + 0, 1, 0);                           // main rcvr ON
-            wdsp.SetChannelState(chid + 1, 0, 0);                           // sub-rcvr OFF
+            WDSP.SetChannelState(chid + 0, 1, 0);                           // main rcvr ON
+            WDSP.SetChannelState(chid + 1, 0, 0);                           // sub-rcvr OFF
         }
 
         private void ForceRxa()
@@ -91,12 +91,12 @@ namespace Thetis
 
         private void udRXAAGCGain_ValueChanged(object sender, EventArgs e)
         {
-            wdsp.SetRXAAGCTop(chid, (double)udRXAAGCGain.Value);
+            WDSP.SetRXAAGCTop(chid, (double)udRXAAGCGain.Value);
         }
 
         private void udRXAVolume_ValueChanged(object sender, EventArgs e)
         {
-            wdsp.SetRXAPanelGain1(chid, 0.01 * (double)udRXAVolume.Value);
+            WDSP.SetRXAPanelGain1(chid, 0.01 * (double)udRXAVolume.Value);
         }
 
         private void udRXAMode_ValueChanged(object sender, EventArgs e)
@@ -107,24 +107,24 @@ namespace Thetis
             {
                 case 0:
                     mode = DSPMode.LSB;
-                    wdsp.SetRXABandpassFreqs(chid, -3100.0, -200.0);
-                    wdsp.RXANBPSetFreqs(chid, -3100.0, -200.0);
-                    wdsp.SetRXASNBAOutputBandwidth(chid, -3100.0, -200.0);
+                    WDSP.SetRXABandpassFreqs(chid, -3100.0, -200.0);
+                    WDSP.RXANBPSetFreqs(chid, -3100.0, -200.0);
+                    WDSP.SetRXASNBAOutputBandwidth(chid, -3100.0, -200.0);
                     break;
                 case 1:
                     mode = DSPMode.USB;
-                    wdsp.SetRXABandpassFreqs(chid, +200.0, +3100.0);
-                    wdsp.RXANBPSetFreqs(chid, +200.0, +3100.0);
-                    wdsp.SetRXASNBAOutputBandwidth(chid, +200.0, +3100.0);
+                    WDSP.SetRXABandpassFreqs(chid, +200.0, +3100.0);
+                    WDSP.RXANBPSetFreqs(chid, +200.0, +3100.0);
+                    WDSP.SetRXASNBAOutputBandwidth(chid, +200.0, +3100.0);
                     break;
                 case 10:
                     mode = DSPMode.SAM;
-                    wdsp.SetRXABandpassFreqs(chid, -10000.0, +10000.0);
-                    wdsp.RXANBPSetFreqs(chid, -10000.0, +10000.0);
-                    wdsp.SetRXASNBAOutputBandwidth(chid, -10000.0, +10000.0);
+                    WDSP.SetRXABandpassFreqs(chid, -10000.0, +10000.0);
+                    WDSP.RXANBPSetFreqs(chid, -10000.0, +10000.0);
+                    WDSP.SetRXASNBAOutputBandwidth(chid, -10000.0, +10000.0);
                     break;
             }
-            wdsp.SetRXAMode(chid, (DSPMode)mode);
+            WDSP.SetRXAMode(chid, (DSPMode)mode);
         }
 
         private void rxa_FormClosing(object sender, FormClosingEventArgs e)

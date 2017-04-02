@@ -1168,6 +1168,12 @@ void SetMKIIBPF(int bpf)
 }
 
 PORT
+void SetXVTREnable(int enable)
+{
+	return;
+}
+
+PORT
 void create_rnet() {
 	int i;
 

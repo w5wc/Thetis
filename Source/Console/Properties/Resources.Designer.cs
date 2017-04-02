@@ -103,10 +103,335 @@ namespace Thetis.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap picD11 {
+            get {
+                object obj = ResourceManager.GetObject("picD11", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap picD1orig {
+            get {
+                object obj = ResourceManager.GetObject("picD1orig", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap picD2 {
+            get {
+                object obj = ResourceManager.GetObject("picD2", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap s_meter_collins3 {
+            get {
+                object obj = ResourceManager.GetObject("s_meter_collins3", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap star {
+            get {
+                object obj = ResourceManager.GetObject("star", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap sun {
             get {
                 object obj = ResourceManager.GetObject("sun", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap sun1 {
+            get {
+                object obj = ResourceManager.GetObject("sun1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] swiss {
+            get {
+                object obj = ResourceManager.GetObject("swiss", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] swissb {
+            get {
+                object obj = ResourceManager.GetObject("swissb", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] swissbi {
+            get {
+                object obj = ResourceManager.GetObject("swissbi", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] swissbo {
+            get {
+                object obj = ResourceManager.GetObject("swissbo", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] swissc {
+            get {
+                object obj = ResourceManager.GetObject("swissc", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] swisscb {
+            get {
+                object obj = ResourceManager.GetObject("swisscb", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] swisscbi {
+            get {
+                object obj = ResourceManager.GetObject("swisscbi", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] swisscbo {
+            get {
+                object obj = ResourceManager.GetObject("swisscbo", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] swissci {
+            get {
+                object obj = ResourceManager.GetObject("swissci", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] swissck {
+            get {
+                object obj = ResourceManager.GetObject("swissck", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] swisscki {
+            get {
+                object obj = ResourceManager.GetObject("swisscki", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] swisscl {
+            get {
+                object obj = ResourceManager.GetObject("swisscl", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] swisscli {
+            get {
+                object obj = ResourceManager.GetObject("swisscli", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] swisse {
+            get {
+                object obj = ResourceManager.GetObject("swisse", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] swisseb {
+            get {
+                object obj = ResourceManager.GetObject("swisseb", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] swissek {
+            get {
+                object obj = ResourceManager.GetObject("swissek", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] swissel {
+            get {
+                object obj = ResourceManager.GetObject("swissel", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] swissi {
+            get {
+                object obj = ResourceManager.GetObject("swissi", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] swissk {
+            get {
+                object obj = ResourceManager.GetObject("swissk", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] swisski {
+            get {
+                object obj = ResourceManager.GetObject("swisski", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] swissko {
+            get {
+                object obj = ResourceManager.GetObject("swissko", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] swissl {
+            get {
+                object obj = ResourceManager.GetObject("swissl", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] swissli {
+            get {
+                object obj = ResourceManager.GetObject("swissli", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;html&gt;
+        /// &lt;head&gt;
+        ///  &lt;meta charset=&quot;utf-8&quot;&gt;
+        ///  &lt;title&gt;Thetis remote console&lt;/title&gt;
+        /// &lt;style type=&quot;text/css&quot;&gt;
+        ///   .body {
+        ///     background: #363636;
+        ///   }
+        ///   .freqTextBig {
+        ///     font-size: 40px;
+        ///     font-family: Arial;
+        ///     color: #FFFF00;
+        ///     text-align: right;
+        ///     width: 200px;
+        ///     margin-right: 8px;
+        ///     float: left;
+        ///   }
+        ///   .freqTextSmall {
+        ///     font-size: 30px;
+        ///     font-family: Arial;
+        ///     color: #FF4500;
+        ///     float: left;
+        ///     padding-top: 10px;
+        ///     margin-right: 10px;
+        ///   }
+        ///   .freqPanel {    
+        ///     backg [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string template {
+            get {
+                return ResourceManager.GetString("template", resourceCulture);
             }
         }
     }

@@ -15,6 +15,9 @@ namespace Thetis
         public static extern int nativeInitMetis(String netaddr, String localaddr, int localport);
 
         [DllImport("ChannelMaster.dll", CallingConvention = CallingConvention.Cdecl)]
+        public static extern int SetXVTREnable(int enable);
+
+        [DllImport("ChannelMaster.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern void SetWBPacketsPerFrame(int pps);
 
         [DllImport("ChannelMaster.dll", CallingConvention = CallingConvention.Cdecl)]

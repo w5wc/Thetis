@@ -189,6 +189,12 @@
       <HintPath>..\..\..\..\..\..\..\..\..\Program Files\Microsoft.NET\Primary Interop Assemblies\adodb.dll</HintPath>
       <AssemblyFolderKey>hklm\primary interop assemblies</AssemblyFolderKey>
     </Reference>
+    <Reference Include="NAudio">
+      <HintPath>..\packages\NAudio.1.7.3\lib\net35\NAudio.dll</HintPath>
+    </Reference>
+    <Reference Include="NAudio.Lame">
+      <HintPath>..\packages\NAudio.Lame.1.0.4\lib\net20\NAudio.Lame.dll</HintPath>
+    </Reference>
     <Reference Include="System">
       <Name>System</Name>
     </Reference>
@@ -201,6 +207,7 @@
     <Reference Include="System.Drawing">
       <Name>System.Drawing</Name>
     </Reference>
+    <Reference Include="System.Speech" />
     <Reference Include="System.Windows.Forms">
       <Name>System.Windows.Forms</Name>
     </Reference>
@@ -225,6 +232,7 @@
     </Compile>
     <Compile Include="Channel.cs" />
     <Compile Include="cmaster.cs" />
+    <Compile Include="KE9N\conrec.cs" />
     <Compile Include="console.Designer.cs">
       <DependentUpon>console.cs</DependentUpon>
     </Compile>
@@ -343,6 +351,24 @@
     </Compile>
     <Compile Include="HPSDR\NetworkIO.cs" />
     <Compile Include="ivac.cs" />
+    <Compile Include="KE9N\Http.cs" />
+    <Compile Include="KE9N\HttpServer\GetTRXParamHandler.cs" />
+    <Compile Include="KE9N\HttpServer\HandlerFactory.cs" />
+    <Compile Include="KE9N\HttpServer\HttpServer.cs" />
+    <Compile Include="KE9N\HttpServer\IHandler.cs" />
+    <Compile Include="KE9N\HttpServer\ImageRequestHandler.cs" />
+    <Compile Include="KE9N\HttpServer\SetParamRequestHandler.cs" />
+    <Compile Include="KE9N\HttpServer\UnknownRequestHandler.cs" />
+    <Compile Include="KE9N\HttpServer\WebPageRequestHandler.cs" />
+    <Compile Include="KE9N\scan.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="KE9N\stack.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="KE9N\swl.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="keyboard.cs" />
     <Compile Include="Memory\DXMemList.cs" />
     <Compile Include="Memory\DXMemRecord.cs" />
@@ -425,7 +451,10 @@
     <Compile Include="splash.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="spot.cs">
+    <Compile Include="KE9N\spot.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="KE9N\spot_options.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="ThreadedBindingList.cs" />
@@ -455,6 +484,20 @@
     <Compile Include="xvtr.cs">
       <SubType>Form</SubType>
     </Compile>
+    <EmbeddedResource Include="KE9N\scan.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>scan.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\picD1orig.png" />
+    <Content Include="Resources\picD2.png" />
+    <EmbeddedResource Include="Resources\star.png" />
+    <EmbeddedResource Include="KE9N\HttpServer\template.html" />
+    <EmbeddedResource Include="KE9N\stack.resx">
+      <DependentUpon>stack.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="KE9N\swl.resx">
+      <DependentUpon>swl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\met3.jpg" />
     <EmbeddedResource Include="Resources\picD1.png" />
     <EmbeddedResource Include="Resources\s-meter-collins3.png" />
@@ -549,8 +592,12 @@
       <DependentUpon>splash.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="spot.resx">
+    <EmbeddedResource Include="KE9N\spot.resx">
       <DependentUpon>spot.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="KE9N\spot_options.resx">
+      <DependentUpon>spot_options.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="wave.resx">
       <DependentUpon>wave.cs</DependentUpon>
@@ -645,6 +692,7 @@
       <Name>Midi2Cat</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>

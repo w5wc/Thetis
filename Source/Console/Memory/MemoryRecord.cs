@@ -2,7 +2,7 @@
 // MemoryRecord.cs
 //=================================================================
 // PowerSDR is a C# implementation of a Software Defined Radio.
-// Copyright (C) 2004-2011  FlexRadio Systems
+// Copyright (C) 2003-2013  FlexRadio Systems
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -28,6 +28,9 @@
 
 using System;
 using System.ComponentModel;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
 namespace Thetis
 {
@@ -43,6 +46,7 @@ namespace Thetis
 
         }
 
+        /*
         public MemoryRecord(string _group, double _rxfreq, string _name, DSPMode _dsp_mode, bool _scan,
             string _tune_step, FMTXMode _repeater_mode, double _fm_tx_offset_mhz, bool _ctcss_on, double _ctcss_freq,
             int _power, int _deviation, bool _split, double _txfreq, Filter _filter, int _filterlow, int _filterhigh, 
@@ -69,6 +73,58 @@ namespace Thetis
             agc_mode = _agc_mode;
             agct = _agc_thresh;
         }
+        */
+        //=====================================================================================================================
+        // ke9ns add start/stop date and time and determine if repeating and if you want to record audio
+        public MemoryRecord(string _group, double _rxfreq, string _name, DSPMode _dsp_mode, bool _scan,
+                 string _tune_step, FMTXMode _repeater_mode, double _fm_tx_offset_mhz, bool _ctcss_on, double _ctcss_freq,
+                 int _power, int _deviation, bool _split, double _txfreq, Filter _filter, int _filterlow, int _filterhigh,
+                 string _comments, AGCMode _agc_mode, int _agc_thresh, 
+                 DateTime _StartDate, bool _ScheduleOn, int _Duration, bool _Repeating, bool _Recording, bool _Repeatingm, int _Extra) // string _StartTime, 
+        {
+            group = _group;
+            rx_freq = _rxfreq;
+            name = _name;
+            dsp_mode = _dsp_mode;
+            scan = _scan;
+            tune_step = _tune_step;
+            repeater_mode = _repeater_mode;
+            rptr_offset = _fm_tx_offset_mhz;
+            ctcss_on = _ctcss_on;
+            ctcss_freq = _ctcss_freq;
+            power = _power;
+            deviation = _deviation;
+            split = _split;
+            tx_freq = _txfreq;
+            rx_filter = _filter;
+            rx_filter_low = _filterlow;
+            rx_filter_high = _filterhigh;
+            comments = _comments;
+            agc_mode = _agc_mode;
+            agct = _agc_thresh;
+
+            startdate = _StartDate; // ke9ns add  for scheduled freq change and optional recording
+            scheduleon = _ScheduleOn; // ke9ns add  for scheduled freq change and optional recording 
+            duration = _Duration;// ke9ns add  for scheduled freq change and optional recording
+            repeating = _Repeating;// ke9ns add  for scheduled freq change and optional recording
+            recording = _Recording;// ke9ns add  for scheduled freq change and optional recording
+            repeatingm = _Repeatingm;// ke9ns add  for scheduled freq change and optional recording
+            extra = _Extra;// ke9ns add  for scheduled freq change and optional recording
+
+      /*   
+       
+            startdate = StartDate; // ke9ns add  for scheduled freq change and optional recording
+            scheduleon = ScheduleOn; // ke9ns add  for scheduled freq change and optional recording 
+            duration = Duration;// ke9ns add  for scheduled freq change and optional recording
+            repeating = Repeating;// ke9ns add  for scheduled freq change and optional recording
+            recording = Recording;// ke9ns add  for scheduled freq change and optional recording
+            repeatingm = Repeatingm;// ke9ns add  for scheduled freq change and optional recording
+            extra = Extra;// ke9ns add  for scheduled freq change and optional recording
+*/
+
+
+        } // memoryrecord
+
 
         public MemoryRecord(MemoryRecord rec)
         {
@@ -92,7 +148,19 @@ namespace Thetis
             comments = rec.comments;
             agc_mode = rec.agc_mode;
             agct = rec.agct;
-        }
+
+
+            startdate = rec.startdate; // ke9ns add  for scheduled freq change and optional recording
+            scheduleon = rec.scheduleon; // ke9ns add  for scheduled freq change and optional recording 
+            duration = rec.duration; // ke9ns add  for scheduled freq change and optional recording
+            repeating = rec.repeating;// ke9ns add  for scheduled freq change and optional recording
+            recording = rec.recording;// ke9ns add  for scheduled freq change and optional recording
+            repeatingm = rec.repeatingm;// ke9ns add  for scheduled freq change and optional recording
+            extra = rec.extra;// ke9ns add  for scheduled freq change and optional recording
+
+
+        } //  MemoryRecord(MemoryRecord rec)
+
 
         #endregion
 
@@ -132,6 +200,9 @@ namespace Thetis
             }
         }
 
+
+        //========================================================================
+        // ke9ns mod  NAME is now can be set as a hyperlink
         private string name = "";
         public string Name
         {
@@ -153,6 +224,88 @@ namespace Thetis
                 OnPropertyChanged(this, new PropertyChangedEventArgs("DSPMode"));
             }
         }
+
+
+
+
+        //================================================================================================
+        //==================================================================================================
+        // ke9ns add  also used in memoryform and CATCommands.cs
+
+        private DateTime startdate = DateTime.Now;  // ke9ns add Date and Time for schedule
+
+        public DateTime StartDate
+        {
+            get { return startdate; }
+            set
+            {
+                startdate = value;
+                OnPropertyChanged(this, new PropertyChangedEventArgs("StartDate"));
+            }
+        }
+
+      
+        private int duration = 25; // ke9ns Duration of recording if option enabled
+        public int Duration
+        {
+            get { return duration; }
+            set
+            {
+                duration = value;
+                OnPropertyChanged(this, new PropertyChangedEventArgs("Duration"));
+            }
+        }
+
+        private bool recording = false;  // ke9ns add Turn recording during schedule on/off
+        public bool Recording
+        {
+            get { return recording; }
+            set
+            {
+                recording = value;
+                OnPropertyChanged(this, new PropertyChangedEventArgs("Recording"));
+            }
+        }
+
+        private bool repeating = false;  // ke9ns add repeat schedule weekly
+        public bool Repeating
+        {
+            get { return repeating; }
+            set
+            {
+                repeating = value;
+                OnPropertyChanged(this, new PropertyChangedEventArgs("Repeating"));
+            }
+        }
+
+        private bool repeatingm = false;  // ke9ns add repeat schedule weekly
+        public bool Repeatingm
+        {
+            get { return repeatingm; }
+            set
+            {
+                repeatingm = value;
+                OnPropertyChanged(this, new PropertyChangedEventArgs("Repeatingm"));
+            }
+        }
+
+        //============================================================================
+
+
+   
+
+
+        private string comments = "";
+        public string Comments
+        {
+            get { return comments; }
+            set
+            {
+                comments = value;
+                OnPropertyChanged(this, new PropertyChangedEventArgs("Comments"));
+            }
+        }
+
 
         private bool scan = true;
         public bool Scan
@@ -299,7 +452,7 @@ namespace Thetis
                 OnPropertyChanged(this, new PropertyChangedEventArgs("FilterHigh"));
             }
         }
-
+/*
         private string comments = "";
         public string Comments
         {
@@ -310,7 +463,7 @@ namespace Thetis
                 OnPropertyChanged(this, new PropertyChangedEventArgs("Comments"));
             }
         }
-
+*/
         private AGCMode agc_mode = AGCMode.MED;
         public AGCMode AGCMode
         {
@@ -333,6 +486,39 @@ namespace Thetis
             }
         }
 
+       
+      
+
+        private bool scheduleon = false; // ke9ns add Turn Scedule ON/OFF
+        public bool ScheduleOn
+        {
+            get { return scheduleon; }
+            set
+            {
+                scheduleon = value;
+                OnPropertyChanged(this, new PropertyChangedEventArgs("ScheduleOn"));
+            }
+        }
+        private int extra = 0; // ke9ns Duration of recording if option enabled
+        public int Extra
+        {
+            get { return extra; }
+            set
+            {
+                extra = value;
+                OnPropertyChanged(this, new PropertyChangedEventArgs("Extra"));
+            }
+        }
+
+
+
+
+        // ke9ns add above
+        //================================================================================================
+        //==================================================================================================
+
+
+
         #endregion
 
         #region Routines
@@ -340,15 +526,22 @@ namespace Thetis
         public int CompareTo(object obj) // to implement the IComparable interface
         {
             MemoryRecord rec = (MemoryRecord)obj;
+
             if (this.Group != rec.Group)
+            {
                 return this.Group.CompareTo(rec.Group);
+            }
 
             if (this.RXFreq != rec.RXFreq)
+            {
                 return this.RXFreq.CompareTo(rec.RXFreq);
+            }
 
             return this.Name.CompareTo(rec.Name);
-        }
+
+        } // compareto
 
         #endregion
-    }
-}
+    } // memoryrecord
+
+} // powerSDR

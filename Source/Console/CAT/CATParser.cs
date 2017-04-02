@@ -935,7 +935,13 @@ namespace Thetis
 				case "ZZNT":
 					rtncmd = cmdlist.ZZNT(suffix);
 					break;
-				case "ZZOA":
+                case "ZZNV":
+                    rtncmd = cmdlist.ZZNV(suffix);
+                    break;
+                case "ZZNW":
+                    rtncmd = cmdlist.ZZNW(suffix);
+                    break;
+                case "ZZOA":
 					rtncmd = cmdlist.ZZOA(suffix);
 					break;
 				case "ZZOB":

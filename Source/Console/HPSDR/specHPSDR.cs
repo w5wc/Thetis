@@ -674,7 +674,7 @@ namespace Thetis
     unsafe class SpecHPSDRDLL
     {
         #region DLL Method Declarations
-        [DllImport("wdsp.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("WDSP.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern void SetAnalyzer(
                     int disp,           // display identifier
                     int n_pixout,       // number of pixel outputs per display
@@ -697,47 +697,47 @@ namespace Thetis
                     int max_w
                  );
 
-        [DllImport("wdsp.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("WDSP.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern void XCreateAnalyzer(int disp, ref int success, int m_size, int m_LO, int m_stitch, string app_data_path);
         // public static extern void XCreateAnalyzer(int disp, ref int success, int m_size, int m_LO, int m_stitch);
 
-        [DllImport("wdsp.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("WDSP.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern void DestroyAnalyzer(int disp);
 
-        [DllImport("wdsp.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("WDSP.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern void GetPixels(int disp, int pixout, IntPtr pix, ref int flag);
 
-        [DllImport("wdsp.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("WDSP.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern void GetPixels(int disp, int pixout, float* pix, ref int flag);
 
-        [DllImport("wdsp.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("WDSP.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern void Spectrum(int disp, int ss, int LO, float* pI, float* pQ);
 
-        [DllImport("wdsp.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("WDSP.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern void SetCalibration(int disp, int set, int points, IntPtr cal);
 
-        [DllImport("wdsp.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("WDSP.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern void SnapSpectrum(int disp, int ss, int LO, double* snap_buff);
 
-        [DllImport("wdsp.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("WDSP.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern void SetDisplayDetectorMode (int disp, int pixout, int mode);
 
-        [DllImport("wdsp.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("WDSP.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern void SetDisplayAverageMode (int disp, int pixout, int mode);
 
-        [DllImport("wdsp.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("WDSP.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern void SetDisplayNumAverage (int disp, int pixout, int num);
 
-        [DllImport("wdsp.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("WDSP.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern void SetDisplayAvBackmult(int disp, int pixout, double mult);
 
-        [DllImport("wdsp.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("WDSP.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern void SetDisplayNormOneHz(int disp, int pixout, bool norm);
 
-        [DllImport("wdsp.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("WDSP.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern void SetDisplaySampleRate (int disp, int rate);
 
-        [DllImport("wdsp.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("WDSP.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern void create_nobEXT(
             int id,
             int run,
@@ -751,37 +751,37 @@ namespace Thetis
             double threshold
             );
 
-        [DllImport("wdsp.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("WDSP.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern void destroy_nobEXT(int id);
 
-        [DllImport("wdsp.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("WDSP.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern void xnobEXTF(int id, float* I, float* Q);
 
-        [DllImport("wdsp.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("WDSP.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern void SetEXTNOBBuffsize(int id, int size);
 
-        [DllImport("wdsp.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("WDSP.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern void SetEXTNOBSamplerate(int id, int rate);
 
-        [DllImport("wdsp.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("WDSP.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern void SetEXTNOBTau(int id, double tau);
 
-        [DllImport("wdsp.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("WDSP.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern void SetEXTNOBHangtime(int id, double time);
 
-        [DllImport("wdsp.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("WDSP.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern void SetEXTNOBAdvtime(int id, double time);
 
-        [DllImport("wdsp.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("WDSP.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern void SetEXTNOBBacktau(int id, double tau);
 
-        [DllImport("wdsp.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("WDSP.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern void SetEXTNOBThreshold(int id, double thresh);
 
-        [DllImport("wdsp.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("WDSP.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern void SetEXTNOBMode(int id, int mode);
 
-        [DllImport("wdsp.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("WDSP.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern void create_anbEXT(
             int id,
             int run,
@@ -794,31 +794,31 @@ namespace Thetis
             double threshold
             );
 
-        [DllImport("wdsp.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("WDSP.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern void destroy_anbEXT(int id);
 
-        [DllImport("wdsp.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("WDSP.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern void xanbEXTF(int id, float* I, float* Q);
 
-        [DllImport("wdsp.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("WDSP.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern void SetEXTANBBuffsize(int id, int size);
 
-        [DllImport("wdsp.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("WDSP.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern void SetEXTANBSamplerate(int id, int rate);
 
-        [DllImport("wdsp.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("WDSP.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern void SetEXTANBTau(int id, double tau);
 
-        [DllImport("wdsp.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("WDSP.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern void SetEXTANBHangtime(int id, double time);
 
-        [DllImport("wdsp.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("WDSP.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern void SetEXTANBAdvtime(int id, double time);
 
-        [DllImport("wdsp.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("WDSP.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern void SetEXTANBBacktau(int id, double tau);
 
-        [DllImport("wdsp.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("WDSP.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern void SetEXTANBThreshold(int id, double thresh);
 
         #endregion

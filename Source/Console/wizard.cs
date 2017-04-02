@@ -195,7 +195,7 @@ namespace Thetis
 			CurPage = Page.WELCOME;
 			btnNext_Click(this, EventArgs.Empty);
 
-			openFileDialog1.Filter = "PowerSDR Database Files (*.mdb) | *.mdb";
+			openFileDialog1.Filter = "Thetis Database Files (*.mdb) | *.mdb";
 
 			comboBox3.SelectedIndex = sound_card_index;
 		}

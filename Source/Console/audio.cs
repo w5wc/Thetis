@@ -293,7 +293,7 @@ namespace Thetis
             set
             {
                 mic_preamp = value;
-                cmaster.CMSetTXAPanelGain1(wdsp.id(1, 0));
+                cmaster.CMSetTXAPanelGain1(WDSP.id(1, 0));
             }
         }
 
@@ -304,7 +304,7 @@ namespace Thetis
             set
             {
                 wave_preamp = value;
-                cmaster.CMSetTXAPanelGain1(wdsp.id(1, 0));
+                cmaster.CMSetTXAPanelGain1(WDSP.id(1, 0));
             }
         }
 
@@ -427,7 +427,7 @@ namespace Thetis
                 wave_playback = value;
                 cmaster.CMSetSRXWavePlayRun(0);
                 cmaster.CMSetSRXWavePlayRun(1);
-                cmaster.CMSetTXAPanelGain1(wdsp.id(1, 0));
+                cmaster.CMSetTXAPanelGain1(WDSP.id(1, 0));
             }
         }
 
@@ -451,8 +451,8 @@ namespace Thetis
 
         public static WaveFileWriter wave_file_writer;
         public static WaveFileWriter wave_file_writer2;
-        public static WaveFileReader wave_file_reader;
-        public static WaveFileReader wave_file_reader2;
+        public static WaveFileReader1 wave_file_reader;
+        public static WaveFileReader1 wave_file_reader2;
         public static bool two_tone;
         public static bool high_pwr_am;
         public static bool testing;
@@ -532,8 +532,8 @@ namespace Thetis
                 }
                 unsafe
                 {
-                    cmaster.SetAAudioMixVol((void*)0, 0, wdsp.id(1, 0), 0.5);
-                    cmaster.SetAAudioMixWhat((void*)0, 0, wdsp.id(1, 0), value);
+                    cmaster.SetAAudioMixVol((void*)0, 0, WDSP.id(1, 0), 0.5);
+                    cmaster.SetAAudioMixWhat((void*)0, 0, WDSP.id(1, 0), value);
                 }
             }
             get
@@ -564,7 +564,7 @@ namespace Thetis
             set
             {
                 vac_enabled = value;
-                cmaster.CMSetTXAPanelGain1(wdsp.id(1, 0));
+                cmaster.CMSetTXAPanelGain1(WDSP.id(1, 0));
                 if (console.PowerOn)
                 EnableVAC1(value);
             }
@@ -639,12 +639,12 @@ namespace Thetis
             get { return vac2_latency_pa_out_manual; }
         }
 
-        private static bool vac2_rx2 = true;
-        public static bool VAC2RX2
-        {
-            get { return vac2_rx2; }
-            set { vac2_rx2 = value; }
-        }
+        //private static bool vac2_rx2 = true;
+        //public static bool VAC2RX2
+        //{
+        //    get { return vac2_rx2; }
+        //    set { vac2_rx2 = value; }
+        //}
 
         private static bool vac_bypass = false;
         public static bool VACBypass
@@ -656,7 +656,7 @@ namespace Thetis
             set
             {
                 vac_bypass = value;
-                cmaster.CMSetTXAPanelGain1(wdsp.id(1, 0));
+                cmaster.CMSetTXAPanelGain1(WDSP.id(1, 0));
                 ivac.SetIVACbypass(0, Convert.ToInt32(value));
                 ivac.SetIVACbypass(1, Convert.ToInt32(value));
             }
@@ -691,7 +691,7 @@ namespace Thetis
             set
             {
                 vac_preamp = value;
-                cmaster.CMSetTXAPanelGain1(wdsp.id(1, 0));
+                cmaster.CMSetTXAPanelGain1(WDSP.id(1, 0));
                 ivac.SetIVACpreamp(0, value);
             }
         }
@@ -749,7 +749,7 @@ namespace Thetis
             {
                 tx_dsp_mode = value;
                 cmaster.CMSetTXAVoxRun(0);
-                cmaster.CMSetTXAPanelGain1(wdsp.id(1, 0));
+                cmaster.CMSetTXAPanelGain1(WDSP.id(1, 0));
             }
         }
 

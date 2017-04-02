@@ -906,7 +906,7 @@ namespace Thetis
 			{
 				float num = 0f;
 				if(console.PowerOn)
-					num = wdsp.CalculateRXMeter(0, 0,wdsp.MeterType.SIGNAL_STRENGTH);
+					num = WDSP.CalculateRXMeter(0, 0,WDSP.MeterType.SIGNAL_STRENGTH);
 				num = num+console.MultiMeterCalOffset+console.PreampOffset;
 
 				num = Math.Max(-140, num);
@@ -3692,10 +3692,19 @@ namespace Thetis
                 parser.nAns = 3;
                 string newCh = AddLeadingZeros(nextN);
 
+                //console.MemoryList.List.Add(new MemoryRecord("", console.VFOAFreq, "", console.RX1DSPMode, true, console.TuneStepList[console.TuneStepIndex].Name,
+                //console.CurrentFMTXMode, console.FMTXOffsetMHz, console.radio.GetDSPTX(0).CTCSSFlag, console.radio.GetDSPTX(0).CTCSSFreqHz, console.PWR,
+                //(int)console.radio.GetDSPTX(0).TXFMDeviation, console.VFOSplit, console.TXFreq, console.RX1Filter, console.RX1FilterLow,
+                //console.RX1FilterHigh, newCh + ":", console.radio.GetDSPRX(0, 0).RXAGCMode, console.RF));
+
                 console.MemoryList.List.Add(new MemoryRecord("", console.VFOAFreq, "", console.RX1DSPMode, true, console.TuneStepList[console.TuneStepIndex].Name,
-                console.CurrentFMTXMode, console.FMTXOffsetMHz, console.radio.GetDSPTX(0).CTCSSFlag, console.radio.GetDSPTX(0).CTCSSFreqHz, console.PWR,
-                (int)console.radio.GetDSPTX(0).TXFMDeviation, console.VFOSplit, console.TXFreq, console.RX1Filter, console.RX1FilterLow,
-                console.RX1FilterHigh, newCh + ":", console.radio.GetDSPRX(0, 0).RXAGCMode, console.RF));
+ console.CurrentFMTXMode, console.FMTXOffsetMHz, console.radio.GetDSPTX(0).CTCSSFlag, console.radio.GetDSPTX(0).CTCSSFreqHz, console.PWR,
+ (int)console.radio.GetDSPTX(0).TXFMDeviation, console.VFOSplit, console.TXFreq, console.RX1Filter, console.RX1FilterLow,
+ console.RX1FilterHigh, newCh + ":", console.radio.GetDSPRX(0, 0).RXAGCMode, console.RF,
+
+  DateTime.Now, false, 0, false, false, false, 0 // ke9ns add for freq scheduler
+
+ ));
 
                 parser.nAns = oldAns;
                 return "";
@@ -3978,7 +3987,53 @@ namespace Thetis
 			}
 		}
 
-		//Sets or reads the RX1 antenna
+        // Sets or reads the Noise Reduction status
+        public string ZZNV(string s)
+        {
+            int sx = 0;
+
+            if (s != "")
+                sx = Convert.ToInt32(s);
+
+            if (s.Length == parser.nSet && (s == "0" || s == "1"))
+            {
+                console.CATRX2NR = sx;
+                return "";
+            }
+            else if (s.Length == parser.nGet)
+            {
+                return console.CATRX2NR.ToString();
+            }
+            else
+            {
+                return parser.Error1;
+            }
+        }
+
+        // Sets or reads the RX2 NR2 button status
+        public string ZZNW(string s)
+        {
+            int sx = 0;
+
+            if (s != "")
+                sx = Convert.ToInt32(s);
+
+            if (s.Length == parser.nSet && (s == "0" || s == "1"))
+            {
+                console.CATRX2NR2 = sx;
+                return "";
+            }
+            else if (s.Length == parser.nGet)
+            {
+                return console.CATRX2NR2.ToString();
+            }
+            else
+            {
+                return parser.Error1;
+            }
+        }
+        
+        //Sets or reads the RX1 antenna
 		public string ZZOA(string s)
 		{
                 parser.Verbose_Error_Code = 7;
@@ -4915,49 +4970,48 @@ namespace Thetis
 				float num = 0f;
                 if (console.PowerOn)
                     if (s == "0")
-                        num = wdsp.CalculateRXMeter(0, 0, wdsp.MeterType.SIGNAL_STRENGTH);
+                        num = WDSP.CalculateRXMeter(0, 0, WDSP.MeterType.SIGNAL_STRENGTH);
                     else
-                        num = wdsp.CalculateRXMeter(2, 0, wdsp.MeterType.SIGNAL_STRENGTH);
+                        num = WDSP.CalculateRXMeter(2, 0, WDSP.MeterType.SIGNAL_STRENGTH);
 
-                switch (console.CurrentHPSDRModel)
+                switch (console.CurrentModel)
                 {
-                     case HPSDRModel.HPSDR:
-                        num = num +
-                        console.MultiMeterCalOffset +
-                        Display.RX1PreampOffset +
-                        //console.RX1FilterSizeCalOffset +
-                        console.RX1XVTRGainOffset;
-                        break;
-                    default:
-                          if (s == "0")
+                    case Model.HERMES:
+                        if (s == "0")
                         {
                             num = num +
                             console.MultiMeterCalOffset +
                             Display.RX1PreampOffset +
-                            //console.RX1FilterSizeCalOffset +
+                                //console.RX1FilterSizeCalOffset +
                             console.RX1XVTRGainOffset;
-                         }
+                        }
                         else if (s == "1")
                         {
                             num = num +
                             console.RX2MeterCalOffset +
                             Display.RX2PreampOffset +
-                            //console.RX2FilterSizeCalOffset +
+                                //console.RX2FilterSizeCalOffset +
                             console.RX2XVTRGainOffset;
-                         }
+                        }
                         break;
-                     
+                    case Model.HPSDR:
+                        num = num +
+                        console.MultiMeterCalOffset +
+                        Display.RX1PreampOffset +
+                            //console.RX1FilterSizeCalOffset +
+                        console.RX1XVTRGainOffset;
+                        break;
                 }
-				num = Math.Max(-140, num);
-				num = Math.Min(-10, num);
-				sm = ((int)num+140)*2;
-				return sm.ToString().PadLeft(3,'0');
-			}
-			else
-			{
-				return parser.Error1;
-			}
-		}
+                num = Math.Max(-140, num);
+                num = Math.Min(-10, num);
+                sm = ((int)num + 140) * 2;
+                return sm.ToString().PadLeft(3, '0');
+            }
+            else
+            {
+                return parser.Error1;
+            }
+        }
 
         //Reads the radio serial number
         public string ZZSN()

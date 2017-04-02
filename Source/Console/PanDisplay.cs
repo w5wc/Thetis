@@ -1921,15 +1921,15 @@ namespace Thetis
             //        {
             //            mode = console.RX1AGCMode;
             //            rx_agc_fixed_gain = console.SetupForm.AGCFixedGain;
-            //            wdsp.GetRXAAGCThresh(wdsp.id(0, 0), &rx_thresh, 4096.0, sample_rate);
-            //            wdsp.GetRXAAGCHangLevel(wdsp.id(0, 0), &rx_hang);
+            //            WDSP.GetRXAAGCThresh(WDSP.id(0, 0), &rx_thresh, 4096.0, sample_rate);
+            //            WDSP.GetRXAAGCHangLevel(WDSP.id(0, 0), &rx_hang);
             //        }
             //        else
             //        {
             //            mode = console.RX2AGCMode;
             //            rx_agc_fixed_gain = console.SetupForm.AGCRX2FixedGain;
-            //            wdsp.GetRXAAGCThresh(wdsp.id(2, 0), &rx_thresh, 4096.0, sample_rate);
-            //            wdsp.GetRXAAGCHangLevel(wdsp.id(2, 0), &rx_hang);
+            //            WDSP.GetRXAAGCThresh(WDSP.id(2, 0), &rx_thresh, 4096.0, sample_rate);
+            //            WDSP.GetRXAAGCHangLevel(WDSP.id(2, 0), &rx_hang);
             //        }
             //        rx_thresh = Math.Round(rx_thresh);
 

@@ -141,7 +141,7 @@ namespace Thetis
             radRxSourceRx1Rx2_CheckedChanged(this, e);
             radioButtonMerc1_CheckedChanged(this, e);
             radioButtonMerc2_CheckedChanged(this, e);
-            wdsp.SetEXTDIVNr(0, 2);
+            WDSP.SetEXTDIVNr(0, 2);
            // console.Diversity2 = true;
             chkEnableDiversity_CheckedChanged(this, e);
         }
@@ -1188,7 +1188,7 @@ namespace Thetis
                 Qrotate[1] = b_A;
                 fixed (double* Iptr = &Irotate[0])
                 fixed (double* Qptr = &Qrotate[0])
-                    wdsp.SetEXTDIVRotate(0, 2, Iptr, Qptr);
+                    WDSP.SetEXTDIVRotate(0, 2, Iptr, Qptr);
             }
             if (radioButtonMerc2.Checked)
             {
@@ -1206,7 +1206,7 @@ namespace Thetis
                 Qrotate[0] = b_A;
                 fixed (double* Iptr = &Irotate[0])
                 fixed (double* Qptr = &Qrotate[0])
-                    wdsp.SetEXTDIVRotate(0, 2, Iptr, Qptr);
+                    WDSP.SetEXTDIVRotate(0, 2, Iptr, Qptr);
             }
 
 
@@ -1727,7 +1727,7 @@ namespace Thetis
             // Audio.IQSource = 1;
             {
                 //JanusAudio.SetMercSource(1);
-                wdsp.SetEXTDIVOutput(0, 0);
+                WDSP.SetEXTDIVOutput(0, 0);
             }
         }
 
@@ -1737,7 +1737,7 @@ namespace Thetis
             // Audio.IQSource = 2;
             {
                 //JanusAudio.SetMercSource(2);
-                wdsp.SetEXTDIVOutput(0, 1);
+                WDSP.SetEXTDIVOutput(0, 1);
             }
         }
 
@@ -1747,7 +1747,7 @@ namespace Thetis
             // Audio.IQSource = 3;
             {
                 //JanusAudio.SetMercSource(3);
-                wdsp.SetEXTDIVOutput(0, 2);
+                WDSP.SetEXTDIVOutput(0, 2);
             }
         }
 

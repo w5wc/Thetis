@@ -2,7 +2,7 @@
 // MemoryList.cs
 //=================================================================
 // PowerSDR is a C# implementation of a Software Defined Radio.
-// Copyright (C) 2004-2011  FlexRadio Systems
+// Copyright (C) 2003-2013  FlexRadio Systems
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -27,8 +27,14 @@
 //=================================================================
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Threading;
+using System.Xml;
 using System.Xml.Serialization;
 using System.IO;
+using System.Text;
 using System.Diagnostics;
 
 namespace Thetis
@@ -75,13 +81,12 @@ namespace Thetis
 
         #region Routines
 
-        public void Save()
-        {
-            string path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)
-                    + "\\OpenHPSDR\\";
-            string file_name = path + "memory.xml";
 
-            TextWriter writer = new StreamWriter(file_name);
+
+        //======================================================================================================================
+        private void Save(string file_name)
+        {
+        TextWriter writer = new StreamWriter(file_name);
 
             try
             {
@@ -96,39 +101,78 @@ namespace Thetis
 
             writer.Close();
         }
-
-        public static MemoryList Restore()
+ 
+        
+        //======================================================================================================================
+        public void Save()
         {
-            string path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)
-                    + "\\OpenHPSDR\\";
+            string path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\OpenHPSDR\\";
             string file_name = path + "memory.xml";
 
-            MemoryList mem_list = new MemoryList();
-            if (!File.Exists(file_name)) return mem_list; // no file, just return an empty list
+            Save(file_name);
+        }
 
-            StreamReader reader = new StreamReader(file_name);
+
+        //======================================================================================================================
+        public static MemoryList Restore()
+        {
+            string path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\OpenHPSDR\\";
+            string file_name = path + "memory.xml";
+            string bak_file_name = path + "memory_bak.xml";
+
+            MemoryList mem_list = new MemoryList();
+
+            StreamReader reader;
 
             try
             {
-                XmlSerializer ser = new XmlSerializer(typeof(MemoryList),
-                    new Type[] { typeof(MemoryRecord), typeof(SortableBindingList<MemoryRecord>), typeof(int) });
+                if (!File.Exists(file_name))
+                {
+                    throw new FileNotFoundException();
+                }
+
+                reader = new StreamReader(file_name);
+
+                XmlSerializer ser = new XmlSerializer( typeof(MemoryList), new Type[] { typeof(MemoryRecord), typeof(SortableBindingList<MemoryRecord>), typeof(int) } );
+
                 mem_list = (MemoryList)ser.Deserialize(reader);
+
+                // save backup file
+                mem_list.Save(bak_file_name);
             }
-            catch (Exception ex)
+            catch (Exception ex1)
             {
-                Debug.WriteLine(ex);
+                Debug.WriteLine(ex1);
+                // check to see if backup file exists
+                // if so, try to deserialize it
+                if(!File.Exists(bak_file_name)) return mem_list;  // no memory, no backup
+
+                reader = new StreamReader(bak_file_name);
+
+                try
+                {
+                    XmlSerializer ser = new XmlSerializer(typeof(MemoryList),
+                    new Type[] { typeof(MemoryRecord), typeof(SortableBindingList<MemoryRecord>), typeof(int) });
+                    mem_list = (MemoryList)ser.Deserialize(reader);
+                }
+                catch (Exception ex2)
+                {
+                 Debug.WriteLine(ex2); 
+                }
             }
 
             reader.Close();
 
-            return mem_list;
-        }
+            return mem_list;  // return memory listing to memory form window datagridview1
 
+        } // restore
+
+
+
+        //======================================================================================================================
         public void CheckVersion()
         {
-            if (this.major_version == MemoryList.current_major_version &&
-                this.minor_version == MemoryList.current_minor_version)
-                return;
+            if (this.major_version == MemoryList.current_major_version && this.minor_version == MemoryList.current_minor_version)  return;
 
             if (this.major_version == 1 && this.minor_version == 0)
             {

@@ -130,7 +130,97 @@
   <data name="picD1" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\picD1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="picD11" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\picD1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="picD1orig" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\picD1orig.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="picD2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\picD2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="star" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\star.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="sun" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\sun.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="sun1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\sun.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="swiss" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\swiss.ttf;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="swissb" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\swissb.ttf;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="swissbi" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\swissbi.ttf;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="swissbo" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\swissbo.ttf;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="swissc" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\swissc.ttf;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="swisscb" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\swisscb.ttf;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="swisscbi" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\swisscbi.ttf;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="swisscbo" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\swisscbo.ttf;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="swissci" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\swissci.ttf;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="swissck" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\swissck.ttf;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="swisscki" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\swisscki.ttf;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="swisscl" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\swisscl.ttf;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="swisscli" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\swisscli.ttf;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="swisse" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\swisse.ttf;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="swisseb" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\swisseb.ttf;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="swissek" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\swissek.ttf;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="swissel" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\swissel.ttf;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="swissi" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\swissi.ttf;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="swissk" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\swissk.ttf;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="swisski" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\swisski.ttf;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="swissko" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\swissko.ttf;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="swissl" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\swissl.ttf;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="swissli" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\swissli.ttf;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="s_meter_collins3" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\s-meter-collins3.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="template" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\KE9N\HttpServer\template.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
 </root>

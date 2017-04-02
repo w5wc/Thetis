@@ -143,7 +143,7 @@ namespace Thetis
                 Application.ExitThread();
             }
             disp_setup();
-            puresignal.GetPSDisp(wdsp.id(1, 0), 
+            puresignal.GetPSDisp(WDSP.id(1, 0), 
                 hx.AddrOfPinnedObject(),
                 hym.AddrOfPinnedObject(),
                 hyc.AddrOfPinnedObject(),

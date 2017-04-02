@@ -8554,7 +8554,7 @@ namespace Thetis
                     double rx1_thresh = 0.0;
                     float rx1_agcknee_y_value = 0.0f;
                     // DttSP.GetRXAGCThresh(0, 0, &rx1_thresh);
-                    wdsp.GetRXAAGCThresh(wdsp.id(0, 0), &rx1_thresh, 4096.0, sample_rate);
+                    WDSP.GetRXAAGCThresh(WDSP.id(0, 0), &rx1_thresh, 4096.0, sample_rate);
 
                     rx1_thresh = Math.Round(rx1_thresh);
 
@@ -8562,7 +8562,7 @@ namespace Thetis
                     double rx1_hang = 0.0;
                     float rx1_agc_hang_y = 0.0f;
                     //DttSP.GetRXAGCHangLevel(0, 0, &rx1_hang);
-                    wdsp.GetRXAAGCHangLevel(wdsp.id(0, 0), &rx1_hang);
+                    WDSP.GetRXAAGCHangLevel(WDSP.id(0, 0), &rx1_hang);
                     int rx1_agc_fixed_gain = console.SetupForm.AGCFixedGain;
                     string rx1_agc = "";
                     switch (console.RX1AGCMode)
@@ -8632,11 +8632,11 @@ namespace Thetis
                     }
                     // get AGC-T level
                     // DttSP.GetRXAGCThresh(2, 0, &rx2_thresh);
-                    wdsp.GetRXAAGCThresh(wdsp.id(2, 0), &rx2_thresh, 4096.0, sample_rate);
+                    WDSP.GetRXAAGCThresh(WDSP.id(2, 0), &rx2_thresh, 4096.0, sample_rate);
                     rx2_thresh = Math.Round(rx2_thresh);
 
                     // DttSP.GetRXAGCHangLevel(2, 0, &rx2_hang);
-                    wdsp.GetRXAAGCHangLevel(wdsp.id(2, 0), &rx2_hang);
+                    WDSP.GetRXAAGCHangLevel(WDSP.id(2, 0), &rx2_hang);
                     rx2_agc_fixed_gain = console.SetupForm.AGCRX2FixedGain;
 
                     // g.DrawString("RX2HangT: " + rx2_hang.ToString("f3"),

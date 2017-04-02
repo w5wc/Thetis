@@ -38,14 +38,14 @@ namespace Thetis
 		#region Variable Declaration
 
 		private System.Windows.Forms.GroupBoxTS grpReceive;
-		private System.Windows.Forms.RadioButtonTS radRXPreProcessed;
+		public System.Windows.Forms.RadioButtonTS radRXPreProcessed;
 		private System.Windows.Forms.GroupBoxTS groupBox1;
 		private System.Windows.Forms.ToolTip toolTip1;
 		private System.Windows.Forms.RadioButtonTS radRXPostProcessed;
 		private System.Windows.Forms.RadioButtonTS radTXPostProcessed;
-		private System.Windows.Forms.RadioButtonTS radTXPreProcessed;
+		public System.Windows.Forms.RadioButtonTS radTXPreProcessed;
 		private System.Windows.Forms.GroupBoxTS grpAudioSampleRate1;
-		private System.Windows.Forms.ComboBoxTS comboSampleRate;
+		public System.Windows.Forms.ComboBoxTS comboSampleRate;
         private GroupBoxTS grpBitDepth;
         private RadioButtonTS radBitDepth8PCM;
         private RadioButtonTS radBitDepth16PCM;
@@ -371,6 +371,26 @@ namespace Thetis
 		{
 			get { return int.Parse(comboSampleRate.Text); }
 		}
+        public bool temp_record; // ke9ns add save the status of pre to put back when done
+        //-------------------------------------------------------------------------------
+        // ke9ns add  to force audio into POST mode (for quick audio and TX waterfall ID and scheduler)
+        public bool RECPLAY1
+        {
+            get { return false; }
+            set
+            {
+
+                temp_record = Audio.RecordRXPreProcessed; // save original value
+
+
+                radRXPostProcessed.Checked = value;
+                radTXPostProcessed.Checked = value;
+
+                Audio.RecordRXPreProcessed = false;
+                Audio.RecordTXPreProcessed = false;
+            }
+
+        }
 
 		#endregion
 

@@ -28,6 +28,8 @@
 
 using System;
 using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
 using System.Collections;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -35,20 +37,29 @@ using System.IO;
 using System.Threading;
 using System.Windows.Forms;
 
+//reference Nuget Package NAudio.Lame
+using NAudio;
+using NAudio.Wave;
+using NAudio.Lame;
+
 namespace Thetis
 {
 	public class WaveControl : Form
 	{
 		#region Variable Declaration
-		
-		private Console console;
-		private WaveOptions waveOptionsForm;
+
+        private static Bitmap ke9ns_bmp;                    // ke9ns add call sign waterfall tx id
+        
+        private Console console;
+		private WaveOptions WaveOptions;
 		private ArrayList file_list;
 
-		private System.Windows.Forms.OpenFileDialog openFileDialog1;
+        private string wave_folder = Environment.GetFolderPath(Environment.SpecialFolder.MyMusic) + "\\Thetis";
+
+        private System.Windows.Forms.OpenFileDialog openFileDialog1;
 		private System.Windows.Forms.CheckBoxTS checkBoxPlay;
 		private System.Windows.Forms.GroupBoxTS groupBox2;
-		private System.Windows.Forms.CheckBoxTS checkBoxRecord;
+		public System.Windows.Forms.CheckBoxTS checkBoxRecord;
 		private System.Windows.Forms.GroupBoxTS grpPlayback;
 		private System.Windows.Forms.ButtonTS btnStop;
 		private System.Windows.Forms.CheckBoxTS checkBoxPause;
@@ -72,6 +83,11 @@ namespace Thetis
 
 		#endregion
         private LabelTS labelTS1;
+        public CheckBoxTS chkBoxMP3;
+        public CheckBoxTS chkQuickAudioFolder;
+        private TextBox textBox1;
+        public CheckBoxTS createBoxTS;
+        public CheckBoxTS TXIDBoxTS;
         private IContainer components;
 
 		#region Constructor and Destructor
@@ -80,11 +96,18 @@ namespace Thetis
 		{            
 			InitializeComponent();
             console = c;
-            openFileDialog1.InitialDirectory = console.AppDataPath;
+            if (!Directory.Exists(wave_folder))
+            {
+                // create PowerSDR audio folder if it does not exist
+                Directory.CreateDirectory(wave_folder);
+            }
+            // openFileDialog1.InitialDirectory = console.AppDataPath;
+            openFileDialog1.InitialDirectory = String.Empty;
+            openFileDialog1.InitialDirectory = wave_folder;
 			
 			file_list = new ArrayList();
 			currently_playing = -1;
-			waveOptionsForm = new WaveOptions();
+			WaveOptions = new WaveOptions();
 			this.ActiveControl = btnAdd;
 			Common.RestoreForm(this, "WaveOptions", false);
 		}
@@ -113,7 +136,27 @@ namespace Thetis
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(WaveControl));
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
-            this.checkBoxPlay = new System.Windows.Forms.CheckBoxTS();
+            this.grpPlaylist = new System.Windows.Forms.GroupBox();
+            this.lstPlaylist = new System.Windows.Forms.ListBox();
+            this.mainMenu1 = new System.Windows.Forms.MainMenu(this.components);
+            this.mnuWaveOptions = new System.Windows.Forms.MenuItem();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.createBoxTS = new System.Windows.Forms.CheckBoxTS();
+            this.TXIDBoxTS = new System.Windows.Forms.CheckBoxTS();
+            this.chkBoxMP3 = new System.Windows.Forms.CheckBoxTS();
+            this.chkQuickAudioFolder = new System.Windows.Forms.CheckBoxTS();
+            this.labelTS1 = new System.Windows.Forms.LabelTS();
+            this.chkQuickPlay = new System.Windows.Forms.CheckBoxTS();
+            this.chkQuickRec = new System.Windows.Forms.CheckBoxTS();
+            this.groupBoxTS1 = new System.Windows.Forms.GroupBoxTS();
+            this.tbPreamp = new System.Windows.Forms.TrackBar();
+            this.udPreamp = new System.Windows.Forms.NumericUpDownTS();
+            this.checkBoxRandom = new System.Windows.Forms.CheckBoxTS();
+            this.checkBoxLoop = new System.Windows.Forms.CheckBoxTS();
+            this.btnAdd = new System.Windows.Forms.ButtonTS();
+            this.btnRemove = new System.Windows.Forms.ButtonTS();
+            this.groupBox2 = new System.Windows.Forms.GroupBoxTS();
+            this.checkBoxRecord = new System.Windows.Forms.CheckBoxTS();
             this.grpPlayback = new System.Windows.Forms.GroupBoxTS();
             this.txtCurrentFile = new System.Windows.Forms.TextBoxTS();
             this.lblCurrentlyPlaying = new System.Windows.Forms.LabelTS();
@@ -121,28 +164,13 @@ namespace Thetis
             this.btnPrevious = new System.Windows.Forms.ButtonTS();
             this.checkBoxPause = new System.Windows.Forms.CheckBoxTS();
             this.btnStop = new System.Windows.Forms.ButtonTS();
-            this.groupBox2 = new System.Windows.Forms.GroupBoxTS();
-            this.checkBoxRecord = new System.Windows.Forms.CheckBoxTS();
-            this.grpPlaylist = new System.Windows.Forms.GroupBox();
-            this.checkBoxRandom = new System.Windows.Forms.CheckBoxTS();
-            this.checkBoxLoop = new System.Windows.Forms.CheckBoxTS();
-            this.btnAdd = new System.Windows.Forms.ButtonTS();
-            this.lstPlaylist = new System.Windows.Forms.ListBox();
-            this.btnRemove = new System.Windows.Forms.ButtonTS();
-            this.mainMenu1 = new System.Windows.Forms.MainMenu(this.components);
-            this.mnuWaveOptions = new System.Windows.Forms.MenuItem();
-            this.udPreamp = new System.Windows.Forms.NumericUpDownTS();
-            this.groupBoxTS1 = new System.Windows.Forms.GroupBoxTS();
-            this.tbPreamp = new System.Windows.Forms.TrackBar();
-            this.chkQuickRec = new System.Windows.Forms.CheckBoxTS();
-            this.chkQuickPlay = new System.Windows.Forms.CheckBoxTS();
-            this.labelTS1 = new System.Windows.Forms.LabelTS();
-            this.grpPlayback.SuspendLayout();
-            this.groupBox2.SuspendLayout();
+            this.checkBoxPlay = new System.Windows.Forms.CheckBoxTS();
             this.grpPlaylist.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.udPreamp)).BeginInit();
             this.groupBoxTS1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tbPreamp)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udPreamp)).BeginInit();
+            this.groupBox2.SuspendLayout();
+            this.grpPlayback.SuspendLayout();
             this.SuspendLayout();
             // 
             // openFileDialog1
@@ -151,18 +179,257 @@ namespace Thetis
             this.openFileDialog1.Multiselect = true;
             this.openFileDialog1.FileOk += new System.ComponentModel.CancelEventHandler(this.openFileDialog1_FileOk);
             // 
-            // checkBoxPlay
+            // grpPlaylist
             // 
-            this.checkBoxPlay.Appearance = System.Windows.Forms.Appearance.Button;
-            this.checkBoxPlay.Enabled = false;
-            this.checkBoxPlay.Image = null;
-            this.checkBoxPlay.Location = new System.Drawing.Point(80, 56);
-            this.checkBoxPlay.Name = "checkBoxPlay";
-            this.checkBoxPlay.Size = new System.Drawing.Size(40, 23);
-            this.checkBoxPlay.TabIndex = 3;
-            this.checkBoxPlay.Text = "Play";
-            this.checkBoxPlay.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.checkBoxPlay.CheckedChanged += new System.EventHandler(this.checkBoxPlay_CheckedChanged);
+            this.grpPlaylist.Controls.Add(this.checkBoxRandom);
+            this.grpPlaylist.Controls.Add(this.checkBoxLoop);
+            this.grpPlaylist.Controls.Add(this.btnAdd);
+            this.grpPlaylist.Controls.Add(this.lstPlaylist);
+            this.grpPlaylist.Controls.Add(this.btnRemove);
+            this.grpPlaylist.Location = new System.Drawing.Point(8, 104);
+            this.grpPlaylist.Name = "grpPlaylist";
+            this.grpPlaylist.Size = new System.Drawing.Size(304, 184);
+            this.grpPlaylist.TabIndex = 6;
+            this.grpPlaylist.TabStop = false;
+            this.grpPlaylist.Text = "Playlist";
+            // 
+            // lstPlaylist
+            // 
+            this.lstPlaylist.Location = new System.Drawing.Point(16, 56);
+            this.lstPlaylist.Name = "lstPlaylist";
+            this.lstPlaylist.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
+            this.lstPlaylist.Size = new System.Drawing.Size(272, 108);
+            this.lstPlaylist.TabIndex = 0;
+            this.lstPlaylist.SelectedIndexChanged += new System.EventHandler(this.lstPlaylist_SelectedIndexChanged);
+            this.lstPlaylist.DoubleClick += new System.EventHandler(this.lstPlaylist_DoubleClick);
+            // 
+            // mainMenu1
+            // 
+            this.mainMenu1.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.mnuWaveOptions});
+            // 
+            // mnuWaveOptions
+            // 
+            this.mnuWaveOptions.Index = 0;
+            this.mnuWaveOptions.Text = "Options";
+            this.mnuWaveOptions.Click += new System.EventHandler(this.mnuWaveOptions_Click);
+            // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(8, 292);
+            this.textBox1.Multiline = true;
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(392, 62);
+            this.textBox1.TabIndex = 63;
+            // 
+            // createBoxTS
+            // 
+            this.createBoxTS.Appearance = System.Windows.Forms.Appearance.Button;
+            this.createBoxTS.Enabled = false;
+            this.createBoxTS.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.createBoxTS.Image = null;
+            this.createBoxTS.Location = new System.Drawing.Point(328, 166);
+            this.createBoxTS.Name = "createBoxTS";
+            this.createBoxTS.Size = new System.Drawing.Size(72, 24);
+            this.createBoxTS.TabIndex = 65;
+            this.createBoxTS.Text = "Create Wtr ID";
+            this.createBoxTS.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.createBoxTS.Visible = false;
+            this.createBoxTS.CheckedChanged += new System.EventHandler(this.createBoxTS_CheckedChanged);
+            // 
+            // TXIDBoxTS
+            // 
+            this.TXIDBoxTS.Appearance = System.Windows.Forms.Appearance.Button;
+            this.TXIDBoxTS.Enabled = false;
+            this.TXIDBoxTS.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.TXIDBoxTS.Image = null;
+            this.TXIDBoxTS.Location = new System.Drawing.Point(328, 194);
+            this.TXIDBoxTS.Name = "TXIDBoxTS";
+            this.TXIDBoxTS.Size = new System.Drawing.Size(72, 24);
+            this.TXIDBoxTS.TabIndex = 64;
+            this.TXIDBoxTS.Text = "WaterID Play";
+            this.TXIDBoxTS.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.TXIDBoxTS.Visible = false;
+            this.TXIDBoxTS.CheckedChanged += new System.EventHandler(this.TXIDBoxTS_CheckedChanged);
+            // 
+            // chkBoxMP3
+            // 
+            this.chkBoxMP3.Image = null;
+            this.chkBoxMP3.Location = new System.Drawing.Point(182, 362);
+            this.chkBoxMP3.Name = "chkBoxMP3";
+            this.chkBoxMP3.Size = new System.Drawing.Size(165, 26);
+            this.chkBoxMP3.TabIndex = 62;
+            this.chkBoxMP3.Text = "QuickAudio Create MP3\r\n";
+            // 
+            // chkQuickAudioFolder
+            // 
+            this.chkQuickAudioFolder.Image = null;
+            this.chkQuickAudioFolder.Location = new System.Drawing.Point(8, 362);
+            this.chkQuickAudioFolder.Name = "chkQuickAudioFolder";
+            this.chkQuickAudioFolder.Size = new System.Drawing.Size(172, 26);
+            this.chkQuickAudioFolder.TabIndex = 61;
+            this.chkQuickAudioFolder.Text = "QuickAudio Save Folder";
+            this.chkQuickAudioFolder.CheckedChanged += new System.EventHandler(this.chkQuickAudioFolder_CheckedChanged);
+            // 
+            // labelTS1
+            // 
+            this.labelTS1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelTS1.Image = null;
+            this.labelTS1.Location = new System.Drawing.Point(5, 390);
+            this.labelTS1.Name = "labelTS1";
+            this.labelTS1.Size = new System.Drawing.Size(387, 26);
+            this.labelTS1.TabIndex = 56;
+            this.labelTS1.Text = "NOTE:  In Receive, playback goes to the input of the receiver.                  I" +
+    "n Transmit, playback goes to the input of the transmitter.";
+            // 
+            // chkQuickPlay
+            // 
+            this.chkQuickPlay.Appearance = System.Windows.Forms.Appearance.Button;
+            this.chkQuickPlay.Enabled = false;
+            this.chkQuickPlay.Image = null;
+            this.chkQuickPlay.Location = new System.Drawing.Point(328, 256);
+            this.chkQuickPlay.Name = "chkQuickPlay";
+            this.chkQuickPlay.Size = new System.Drawing.Size(72, 24);
+            this.chkQuickPlay.TabIndex = 55;
+            this.chkQuickPlay.Text = "Quick Play";
+            this.chkQuickPlay.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.chkQuickPlay.CheckedChanged += new System.EventHandler(this.chkQuickPlay_CheckedChanged);
+            // 
+            // chkQuickRec
+            // 
+            this.chkQuickRec.Appearance = System.Windows.Forms.Appearance.Button;
+            this.chkQuickRec.Image = null;
+            this.chkQuickRec.Location = new System.Drawing.Point(328, 224);
+            this.chkQuickRec.Name = "chkQuickRec";
+            this.chkQuickRec.Size = new System.Drawing.Size(72, 24);
+            this.chkQuickRec.TabIndex = 54;
+            this.chkQuickRec.Text = "Quick Rec";
+            this.chkQuickRec.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.chkQuickRec.CheckedChanged += new System.EventHandler(this.chkQuickRec_CheckedChanged);
+            // 
+            // groupBoxTS1
+            // 
+            this.groupBoxTS1.Controls.Add(this.tbPreamp);
+            this.groupBoxTS1.Controls.Add(this.udPreamp);
+            this.groupBoxTS1.Location = new System.Drawing.Point(320, 80);
+            this.groupBoxTS1.Name = "groupBoxTS1";
+            this.groupBoxTS1.Size = new System.Drawing.Size(88, 80);
+            this.groupBoxTS1.TabIndex = 53;
+            this.groupBoxTS1.TabStop = false;
+            this.groupBoxTS1.Text = "TX Gain (dB)";
+            // 
+            // tbPreamp
+            // 
+            this.tbPreamp.AutoSize = false;
+            this.tbPreamp.Location = new System.Drawing.Point(8, 48);
+            this.tbPreamp.Maximum = 70;
+            this.tbPreamp.Minimum = -70;
+            this.tbPreamp.Name = "tbPreamp";
+            this.tbPreamp.Size = new System.Drawing.Size(72, 16);
+            this.tbPreamp.TabIndex = 53;
+            this.tbPreamp.TickFrequency = 35;
+            this.tbPreamp.Scroll += new System.EventHandler(this.tbPreamp_Scroll);
+            // 
+            // udPreamp
+            // 
+            this.udPreamp.BackColor = System.Drawing.SystemColors.Window;
+            this.udPreamp.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.udPreamp.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.udPreamp.Location = new System.Drawing.Point(16, 24);
+            this.udPreamp.Maximum = new decimal(new int[] {
+            70,
+            0,
+            0,
+            0});
+            this.udPreamp.Minimum = new decimal(new int[] {
+            70,
+            0,
+            0,
+            -2147483648});
+            this.udPreamp.Name = "udPreamp";
+            this.udPreamp.Size = new System.Drawing.Size(40, 20);
+            this.udPreamp.TabIndex = 52;
+            this.udPreamp.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.udPreamp.ValueChanged += new System.EventHandler(this.udPreamp_ValueChanged);
+            this.udPreamp.LostFocus += new System.EventHandler(this.udPreamp_LostFocus);
+            // 
+            // checkBoxRandom
+            // 
+            this.checkBoxRandom.Appearance = System.Windows.Forms.Appearance.Button;
+            this.checkBoxRandom.Enabled = false;
+            this.checkBoxRandom.Image = null;
+            this.checkBoxRandom.Location = new System.Drawing.Point(224, 24);
+            this.checkBoxRandom.Name = "checkBoxRandom";
+            this.checkBoxRandom.Size = new System.Drawing.Size(56, 23);
+            this.checkBoxRandom.TabIndex = 13;
+            this.checkBoxRandom.Text = "Random";
+            this.checkBoxRandom.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.checkBoxRandom.Visible = false;
+            this.checkBoxRandom.CheckedChanged += new System.EventHandler(this.checkBoxRandom_CheckedChanged);
+            // 
+            // checkBoxLoop
+            // 
+            this.checkBoxLoop.Appearance = System.Windows.Forms.Appearance.Button;
+            this.checkBoxLoop.Enabled = false;
+            this.checkBoxLoop.Image = null;
+            this.checkBoxLoop.Location = new System.Drawing.Point(176, 24);
+            this.checkBoxLoop.Name = "checkBoxLoop";
+            this.checkBoxLoop.Size = new System.Drawing.Size(40, 23);
+            this.checkBoxLoop.TabIndex = 12;
+            this.checkBoxLoop.Text = "Loop";
+            this.checkBoxLoop.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.checkBoxLoop.CheckedChanged += new System.EventHandler(this.checkBoxLoop_CheckedChanged);
+            // 
+            // btnAdd
+            // 
+            this.btnAdd.Image = null;
+            this.btnAdd.Location = new System.Drawing.Point(24, 24);
+            this.btnAdd.Name = "btnAdd";
+            this.btnAdd.Size = new System.Drawing.Size(48, 23);
+            this.btnAdd.TabIndex = 6;
+            this.btnAdd.Text = "Add...";
+            this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
+            // 
+            // btnRemove
+            // 
+            this.btnRemove.Enabled = false;
+            this.btnRemove.Image = null;
+            this.btnRemove.Location = new System.Drawing.Point(80, 24);
+            this.btnRemove.Name = "btnRemove";
+            this.btnRemove.Size = new System.Drawing.Size(56, 23);
+            this.btnRemove.TabIndex = 11;
+            this.btnRemove.Text = "Remove";
+            this.btnRemove.Click += new System.EventHandler(this.btnRemove_Click);
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.checkBoxRecord);
+            this.groupBox2.Location = new System.Drawing.Point(320, 8);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(88, 64);
+            this.groupBox2.TabIndex = 5;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Record";
+            // 
+            // checkBoxRecord
+            // 
+            this.checkBoxRecord.Appearance = System.Windows.Forms.Appearance.Button;
+            this.checkBoxRecord.Image = null;
+            this.checkBoxRecord.Location = new System.Drawing.Point(16, 24);
+            this.checkBoxRecord.Name = "checkBoxRecord";
+            this.checkBoxRecord.Size = new System.Drawing.Size(56, 24);
+            this.checkBoxRecord.TabIndex = 0;
+            this.checkBoxRecord.Text = "Record";
+            this.checkBoxRecord.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.checkBoxRecord.CheckedChanged += new System.EventHandler(this.checkBoxRecord_CheckedChanged);
             // 
             // grpPlayback
             // 
@@ -243,204 +510,27 @@ namespace Thetis
             this.btnStop.Text = "Stop";
             this.btnStop.Click += new System.EventHandler(this.btnStop_Click);
             // 
-            // groupBox2
+            // checkBoxPlay
             // 
-            this.groupBox2.Controls.Add(this.checkBoxRecord);
-            this.groupBox2.Location = new System.Drawing.Point(320, 8);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(88, 64);
-            this.groupBox2.TabIndex = 5;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Record";
-            // 
-            // checkBoxRecord
-            // 
-            this.checkBoxRecord.Appearance = System.Windows.Forms.Appearance.Button;
-            this.checkBoxRecord.Image = null;
-            this.checkBoxRecord.Location = new System.Drawing.Point(16, 24);
-            this.checkBoxRecord.Name = "checkBoxRecord";
-            this.checkBoxRecord.Size = new System.Drawing.Size(56, 24);
-            this.checkBoxRecord.TabIndex = 0;
-            this.checkBoxRecord.Text = "Record";
-            this.checkBoxRecord.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.checkBoxRecord.CheckedChanged += new System.EventHandler(this.checkBoxRecord_CheckedChanged);
-            // 
-            // grpPlaylist
-            // 
-            this.grpPlaylist.Controls.Add(this.checkBoxRandom);
-            this.grpPlaylist.Controls.Add(this.checkBoxLoop);
-            this.grpPlaylist.Controls.Add(this.btnAdd);
-            this.grpPlaylist.Controls.Add(this.lstPlaylist);
-            this.grpPlaylist.Controls.Add(this.btnRemove);
-            this.grpPlaylist.Location = new System.Drawing.Point(8, 104);
-            this.grpPlaylist.Name = "grpPlaylist";
-            this.grpPlaylist.Size = new System.Drawing.Size(304, 184);
-            this.grpPlaylist.TabIndex = 6;
-            this.grpPlaylist.TabStop = false;
-            this.grpPlaylist.Text = "Playlist";
-            // 
-            // checkBoxRandom
-            // 
-            this.checkBoxRandom.Appearance = System.Windows.Forms.Appearance.Button;
-            this.checkBoxRandom.Enabled = false;
-            this.checkBoxRandom.Image = null;
-            this.checkBoxRandom.Location = new System.Drawing.Point(224, 24);
-            this.checkBoxRandom.Name = "checkBoxRandom";
-            this.checkBoxRandom.Size = new System.Drawing.Size(56, 23);
-            this.checkBoxRandom.TabIndex = 13;
-            this.checkBoxRandom.Text = "Random";
-            this.checkBoxRandom.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.checkBoxRandom.Visible = false;
-            this.checkBoxRandom.CheckedChanged += new System.EventHandler(this.checkBoxRandom_CheckedChanged);
-            // 
-            // checkBoxLoop
-            // 
-            this.checkBoxLoop.Appearance = System.Windows.Forms.Appearance.Button;
-            this.checkBoxLoop.Enabled = false;
-            this.checkBoxLoop.Image = null;
-            this.checkBoxLoop.Location = new System.Drawing.Point(176, 24);
-            this.checkBoxLoop.Name = "checkBoxLoop";
-            this.checkBoxLoop.Size = new System.Drawing.Size(40, 23);
-            this.checkBoxLoop.TabIndex = 12;
-            this.checkBoxLoop.Text = "Loop";
-            this.checkBoxLoop.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.checkBoxLoop.CheckedChanged += new System.EventHandler(this.checkBoxLoop_CheckedChanged);
-            // 
-            // btnAdd
-            // 
-            this.btnAdd.Image = null;
-            this.btnAdd.Location = new System.Drawing.Point(24, 24);
-            this.btnAdd.Name = "btnAdd";
-            this.btnAdd.Size = new System.Drawing.Size(48, 23);
-            this.btnAdd.TabIndex = 6;
-            this.btnAdd.Text = "Add...";
-            this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
-            // 
-            // lstPlaylist
-            // 
-            this.lstPlaylist.Location = new System.Drawing.Point(16, 56);
-            this.lstPlaylist.Name = "lstPlaylist";
-            this.lstPlaylist.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-            this.lstPlaylist.Size = new System.Drawing.Size(272, 108);
-            this.lstPlaylist.TabIndex = 0;
-            this.lstPlaylist.SelectedIndexChanged += new System.EventHandler(this.lstPlaylist_SelectedIndexChanged);
-            this.lstPlaylist.DoubleClick += new System.EventHandler(this.lstPlaylist_DoubleClick);
-            // 
-            // btnRemove
-            // 
-            this.btnRemove.Enabled = false;
-            this.btnRemove.Image = null;
-            this.btnRemove.Location = new System.Drawing.Point(80, 24);
-            this.btnRemove.Name = "btnRemove";
-            this.btnRemove.Size = new System.Drawing.Size(56, 23);
-            this.btnRemove.TabIndex = 11;
-            this.btnRemove.Text = "Remove";
-            this.btnRemove.Click += new System.EventHandler(this.btnRemove_Click);
-            // 
-            // mainMenu1
-            // 
-            this.mainMenu1.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-            this.mnuWaveOptions});
-            // 
-            // mnuWaveOptions
-            // 
-            this.mnuWaveOptions.Index = 0;
-            this.mnuWaveOptions.Text = "Options";
-            this.mnuWaveOptions.Click += new System.EventHandler(this.mnuWaveOptions_Click);
-            // 
-            // udPreamp
-            // 
-            this.udPreamp.BackColor = System.Drawing.SystemColors.Window;
-            this.udPreamp.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.udPreamp.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.udPreamp.Location = new System.Drawing.Point(16, 24);
-            this.udPreamp.Maximum = new decimal(new int[] {
-            70,
-            0,
-            0,
-            0});
-            this.udPreamp.Minimum = new decimal(new int[] {
-            70,
-            0,
-            0,
-            -2147483648});
-            this.udPreamp.Name = "udPreamp";
-            this.udPreamp.Size = new System.Drawing.Size(40, 20);
-            this.udPreamp.TabIndex = 52;
-            this.udPreamp.Value = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            this.udPreamp.ValueChanged += new System.EventHandler(this.udPreamp_ValueChanged);
-            this.udPreamp.LostFocus += new System.EventHandler(this.udPreamp_LostFocus);
-            // 
-            // groupBoxTS1
-            // 
-            this.groupBoxTS1.Controls.Add(this.tbPreamp);
-            this.groupBoxTS1.Controls.Add(this.udPreamp);
-            this.groupBoxTS1.Location = new System.Drawing.Point(320, 80);
-            this.groupBoxTS1.Name = "groupBoxTS1";
-            this.groupBoxTS1.Size = new System.Drawing.Size(88, 80);
-            this.groupBoxTS1.TabIndex = 53;
-            this.groupBoxTS1.TabStop = false;
-            this.groupBoxTS1.Text = "TX Gain (dB)";
-            // 
-            // tbPreamp
-            // 
-            this.tbPreamp.AutoSize = false;
-            this.tbPreamp.Location = new System.Drawing.Point(8, 48);
-            this.tbPreamp.Maximum = 70;
-            this.tbPreamp.Minimum = -70;
-            this.tbPreamp.Name = "tbPreamp";
-            this.tbPreamp.Size = new System.Drawing.Size(72, 16);
-            this.tbPreamp.TabIndex = 53;
-            this.tbPreamp.TickFrequency = 35;
-            this.tbPreamp.Scroll += new System.EventHandler(this.tbPreamp_Scroll);
-            // 
-            // chkQuickRec
-            // 
-            this.chkQuickRec.Appearance = System.Windows.Forms.Appearance.Button;
-            this.chkQuickRec.Image = null;
-            this.chkQuickRec.Location = new System.Drawing.Point(328, 224);
-            this.chkQuickRec.Name = "chkQuickRec";
-            this.chkQuickRec.Size = new System.Drawing.Size(72, 24);
-            this.chkQuickRec.TabIndex = 54;
-            this.chkQuickRec.Text = "Quick Rec";
-            this.chkQuickRec.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.chkQuickRec.CheckedChanged += new System.EventHandler(this.chkQuickRec_CheckedChanged);
-            // 
-            // chkQuickPlay
-            // 
-            this.chkQuickPlay.Appearance = System.Windows.Forms.Appearance.Button;
-            this.chkQuickPlay.Enabled = false;
-            this.chkQuickPlay.Image = null;
-            this.chkQuickPlay.Location = new System.Drawing.Point(328, 256);
-            this.chkQuickPlay.Name = "chkQuickPlay";
-            this.chkQuickPlay.Size = new System.Drawing.Size(72, 24);
-            this.chkQuickPlay.TabIndex = 55;
-            this.chkQuickPlay.Text = "Quick Play";
-            this.chkQuickPlay.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.chkQuickPlay.CheckedChanged += new System.EventHandler(this.chkQuickPlay_CheckedChanged);
-            // 
-            // labelTS1
-            // 
-            this.labelTS1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelTS1.Image = null;
-            this.labelTS1.Location = new System.Drawing.Point(5, 302);
-            this.labelTS1.Name = "labelTS1";
-            this.labelTS1.Size = new System.Drawing.Size(387, 26);
-            this.labelTS1.TabIndex = 56;
-            this.labelTS1.Text = "NOTE:  In Receive, playback goes to the input of the receiver.                  I" +
-    "n Transmit, playback goes to the input of the transmitter.";
+            this.checkBoxPlay.Appearance = System.Windows.Forms.Appearance.Button;
+            this.checkBoxPlay.Enabled = false;
+            this.checkBoxPlay.Image = null;
+            this.checkBoxPlay.Location = new System.Drawing.Point(80, 56);
+            this.checkBoxPlay.Name = "checkBoxPlay";
+            this.checkBoxPlay.Size = new System.Drawing.Size(40, 23);
+            this.checkBoxPlay.TabIndex = 3;
+            this.checkBoxPlay.Text = "Play";
+            this.checkBoxPlay.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.checkBoxPlay.CheckedChanged += new System.EventHandler(this.checkBoxPlay_CheckedChanged);
             // 
             // WaveControl
             // 
-            this.ClientSize = new System.Drawing.Size(416, 342);
+            this.ClientSize = new System.Drawing.Size(416, 404);
+            this.Controls.Add(this.createBoxTS);
+            this.Controls.Add(this.TXIDBoxTS);
+            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.chkBoxMP3);
+            this.Controls.Add(this.chkQuickAudioFolder);
             this.Controls.Add(this.labelTS1);
             this.Controls.Add(this.chkQuickPlay);
             this.Controls.Add(this.chkQuickRec);
@@ -453,14 +543,15 @@ namespace Thetis
             this.Name = "WaveControl";
             this.Text = "Wave File Controls";
             this.Closing += new System.ComponentModel.CancelEventHandler(this.WaveControl_Closing);
-            this.grpPlayback.ResumeLayout(false);
-            this.grpPlayback.PerformLayout();
-            this.groupBox2.ResumeLayout(false);
             this.grpPlaylist.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.udPreamp)).EndInit();
             this.groupBoxTS1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.tbPreamp)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udPreamp)).EndInit();
+            this.groupBox2.ResumeLayout(false);
+            this.grpPlayback.ResumeLayout(false);
+            this.grpPlayback.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
 		}
 		#endregion
@@ -496,7 +587,62 @@ namespace Thetis
 
 		#region Misc Routines
 
-		// private bool OpenWaveFile(string filename, bool rx2)
+
+        // ke9ns add pass string from console play button right click
+        private static string QPFile = null;
+
+        public static string QPFILE
+        {
+            get { return QPFile; }
+            set { QPFile = value; }
+        }
+
+
+        //=======================================================
+        // ke9ns add   rec/playid & waterID &  scheduler turn on post audio (called from console)
+        public bool RECPLAY
+        {
+            get { return false; }
+
+            set
+            {
+                WaveOptions.RECPLAY1 = value;
+
+            }
+        } // RECPLAY
+
+        //=======================================================
+        // ke9ns add scheduler reduce file size by SR wav file reduction 
+        public bool RECPLAY2
+        {
+            get { return false; }
+
+            set
+            {
+
+                quickmp3SR = WaveOptions.comboSampleRate.Text; // save SR value before reducing
+                WaveOptions.comboSampleRate.Text = "48000"; // reduce file size
+            }
+        } // RECPLAY2
+
+
+        // ke9ns add  restore original SR back when done with scheduled recording
+        public bool RECPLAY3
+        {
+            get { return false; }
+
+            set
+            {
+
+                WaveOptions.radRXPreProcessed.Checked = WaveOptions.temp_record;
+                WaveOptions.radTXPreProcessed.Checked = WaveOptions.temp_record;
+
+                WaveOptions.comboSampleRate.Text = quickmp3SR; // restore file size SR
+
+            }
+        } // RECPLAY3
+        
+        // private bool OpenWaveFile(string filename, bool rx2)
         private bool OpenWaveFile(string filename, int id)
 		{
 			RIFFChunk riff = null;
@@ -617,7 +763,7 @@ namespace Thetis
                     ref reader);
             }*/
 
-            WaveThing.wave_file_reader[id] = new WaveFileReader(
+            WaveThing.wave_file_reader[id] = new WaveFileReader1(
                     id,
                     this,
                     (int)fmt.format,	// use floating point
@@ -762,30 +908,39 @@ namespace Thetis
 			console.WavePlayback = checkBoxPlay.Checked;			
 		}
 
-		private void checkBoxRecord_CheckedChanged(object sender, System.EventArgs e)
+        public static string scheduleName; // ke9ns add for saving file name of recording
+        public static string scheduleName1; // ke9ns add for saving file name of recording
+        public static string scheduleName2; // ke9ns add for saving file name of recording
+
+        private void checkBoxRecord_CheckedChanged(object sender, System.EventArgs e)
 		{
 			if(checkBoxRecord.Checked)
 			{
 				checkBoxRecord.BackColor = console.ButtonSelectedColor;
 				string temp = console.RX1DSPMode.ToString()+" ";
 				temp += console.VFOAFreq.ToString("f6")+"MHz [";
-                int short_sample_rate = waveOptionsForm.SampleRate / 1000;
+                int short_sample_rate = WaveOptions.SampleRate / 1000;
                 temp += Audio.BitDepth.ToString() + "bit ";
                 temp += short_sample_rate.ToString() + "k] ";
                 temp += DateTime.Now.ToString();
                 temp = temp.Replace("/", "-");
                 temp = temp.Replace(":", " ");
-                temp = console.AppDataPath + temp;
-                
+                //temp = console.AppDataPath + temp;
+
+                temp = wave_folder + "\\" + temp;
+                scheduleName2 = temp;
+                scheduleName1 = temp + ".mp3"; // ke9ns add 
                 string file_name = temp+".wav";
+                scheduleName = file_name; // ke9ns add
+
                // string file_name2 = file_name+"-rx2";				
-				WaveThing.wave_file_writer[0] = new WaveFileWriter(0, 2, waveOptionsForm.SampleRate, file_name);
+				WaveThing.wave_file_writer[0] = new WaveFileWriter(0, 2, WaveOptions.SampleRate, file_name);
  
                 if (console.RX2Enabled)
                 {
                     string temp_rx2 = console.RX2DSPMode.ToString() + " ";
                     temp_rx2 += console.VFOBFreq.ToString("f6") + "MHz [";
-                    int short_rx2_sample_rate = waveOptionsForm.SampleRate / 1000;
+                    int short_rx2_sample_rate = WaveOptions.SampleRate / 1000;
                     temp_rx2 += Audio.BitDepth.ToString() + "bit ";
                     temp_rx2 += short_sample_rate.ToString() + "k] ";
                     temp_rx2 += DateTime.Now.ToString();
@@ -794,7 +949,7 @@ namespace Thetis
                     temp_rx2 = console.AppDataPath + temp_rx2;
                     string file_name2 = temp_rx2 + "-rx2.wav";
 
-                    WaveThing.wave_file_writer[1] = new WaveFileWriter(1, 2, waveOptionsForm.SampleRate, file_name2);
+                    WaveThing.wave_file_writer[1] = new WaveFileWriter(1, 2, WaveOptions.SampleRate, file_name2);
                 }
 			}
 			
@@ -958,11 +1113,11 @@ namespace Thetis
 
 		private void mnuWaveOptions_Click(object sender, System.EventArgs e)
 		{
-			if(waveOptionsForm == null || waveOptionsForm.IsDisposed)
-				waveOptionsForm = new WaveOptions();
+			if(WaveOptions == null || WaveOptions.IsDisposed)
+				WaveOptions = new WaveOptions();
 
-			waveOptionsForm.Show();
-			waveOptionsForm.Focus();
+			WaveOptions.Show();
+			WaveOptions.Focus();
 		}
 
 		private void udPreamp_ValueChanged(object sender, System.EventArgs e)
@@ -1001,12 +1156,34 @@ namespace Thetis
 		private bool temp_record = false;
 		private bool temp_play = false;
 		private bool temp_mon = false;
-		private bool temp_txeq = false;
+        private byte temp_pre = 0; // ke9ns add for quickplay function
+        private bool temp_txeq = false;
 		private bool temp_cpdr = false;
 		private bool temp_dx = false;
+        public static int QAC = 0; // ke9ns add
+ 
 		private void chkQuickPlay_CheckedChanged(object sender, System.EventArgs e)
 		{
-            string file_name = console.AppDataPath + "\\SDRQuickAudio.wav";
+            string file_name; // = console.AppDataPath + "\\SDRQuickAudio.wav";
+
+            if (chkQuickAudioFolder.Checked == true) // ke9ns add to allow subfolder with different names to play
+            {
+                System.IO.Directory.CreateDirectory(console.AppDataPath + "QuickAudio"); // ke9ns create sub directory
+
+                if (QPFile != null)
+                {
+                    file_name = QPFile; // ke9ns check file name passed from console play button
+                }
+                else
+                {
+                    file_name = console.AppDataPath + "QuickAudio" + "\\SDRQuickAudio" + QAC.ToString() + ".wav";
+                }
+            }
+            else
+            {
+                file_name = console.AppDataPath + "SDRQuickAudio.wav";
+            }
+
 			if(chkQuickPlay.Checked)
 			{				
 				temp_txeq = console.TXEQ;
@@ -1049,30 +1226,99 @@ namespace Thetis
 			console.WavePlayback = chkQuickPlay.Checked;			
 		}
 
-		private void chkQuickRec_CheckedChanged(object sender, System.EventArgs e)
-		{
-			if(chkQuickRec.Checked)
-			{
-				//temp_record = Audio.RecordTXPreProcessed;
+        public static string quickmp3SR; // ke9ns add
+
+        public static string quickmp3; // ke9ns add
+        //============================================================================================
+        private void chkQuickRec_CheckedChanged(object sender, System.EventArgs e)
+        {
+            if (chkQuickRec.Checked)
+            {
+
                 temp_record = Audio.RecordRXPreProcessed;
-				Audio.RecordRXPreProcessed = false; // set this FALSE temporarily
-				chkQuickRec.BackColor = console.ButtonSelectedColor;
-				chkQuickPlay.Enabled = true;
-                string file_name = console.AppDataPath + "\\SDRQuickAudio.wav";
-				WaveThing.wave_file_writer[0] = new WaveFileWriter(0, 2, waveOptionsForm.SampleRate, file_name);
-			}
-			
-			Audio.WaveRecord = chkQuickRec.Checked;
+                quickmp3SR = WaveOptions.comboSampleRate.Text;
+
+                if (chkBoxMP3.Checked == true)
+                    WaveOptions.comboSampleRate.Text = "48000"; // reduce file size
+
+                Audio.RecordRXPreProcessed = false;                            //ke9ns add  set this FALSE temporarily
+
+                chkQuickRec.BackColor = console.ButtonSelectedColor;
+
+                chkQuickPlay.Enabled = true;
+
+                string file_name;
+
+                if (chkQuickAudioFolder.Checked == true)
+                {
+                    QAC++;
+                    System.IO.Directory.CreateDirectory(console.AppDataPath + "QuickAudio"); // ke9ns add create sub directory
+                    System.IO.Directory.CreateDirectory(console.AppDataPath + "QuickAudioMP3"); // ke9ns add create sub directory
+
+                    file_name = console.AppDataPath + "QuickAudio" + "\\SDRQuickAudio" + QAC.ToString() + ".wav";
+
+                    quickmp3 = console.AppDataPath + "QuickAudioMP3" + "\\SDRQuickAudio" + QAC.ToString() + ".mp3"; // ke9ns add mp3
+
+                    //   Debug.WriteLine("qac" + QAC);
+
+                }
+                else
+                {
+
+                    file_name = console.AppDataPath + "SDRQuickAudio.wav";
+
+                    quickmp3 = console.AppDataPath + "SDRQuickAudio.mp3"; // ke9ns add mp3
+
+                }
+
+                Audio.wave_file_writer = new WaveFileWriter(console.BlockSize1, 2, WaveOptions.SampleRate, file_name);
+
+            } //chkQuickRec.checked
+
+            Audio.WaveRecord = chkQuickRec.Checked;
 
             if (!chkQuickRec.Checked)
-			{
-				string file_name =WaveThing.wave_file_writer[0].Stop();
-				chkQuickRec.BackColor = SystemColors.Control;
-				MessageBox.Show("The file has been written to the following location:\n"+file_name);
-				Audio.RecordRXPreProcessed = temp_record; //return to original state
-			}		
-		}
+            {
+                string file_name = Audio.wave_file_writer.Stop();
 
+                chkQuickRec.BackColor = SystemColors.Control;
+
+                //dd if (console.checkBoxID.Checked == false) // ke9ns add
+                //{
+                //    MessageBox.Show("The 'Over the Air' Quick audio recording has been successfully created.\n" +
+                //        "Key the radio with either PTT or MOX and click on the Play button to play back the Quick audio recording over the air.");
+                //    // MessageBox.Show("The file has been written to the following location:\n"+file_name);
+                //}
+
+                Audio.RecordRXPreProcessed = temp_record; //return to original state
+                WaveOptions.comboSampleRate.Text = quickmp3SR; // restore file size
+
+                //---------------------------------------------------------
+                // ke9ns add save an MP3 to go along with the WAV file
+                if (chkBoxMP3.Checked == true)
+                {
+
+                    try
+                    {
+                        using (var reader = new WaveFileReader(file_name)) // closes reader when done using
+                        using (var writer = new LameMP3FileWriter(quickmp3, reader.WaveFormat, LAMEPreset.VBR_90)) // closes writer when done using (90=90% quality variable bit rate)
+                        {
+                            reader.CopyTo(writer);
+                        }
+                    }
+                    catch (Exception)
+                    {
+
+                    }
+                    Debug.WriteLine("DONE WITH MP3 CREATION" + quickmp3);
+
+                }
+
+            } //   if (!chkQuickRec.Checked)
+
+        } //  chkQuickRec_CheckedChanged
+
+ 
 		public bool QuickRec
 		{
 			get { return chkQuickRec.Checked; }
@@ -1084,6 +1330,677 @@ namespace Thetis
 			get { return chkQuickPlay.Checked; }
 			set	{ chkQuickPlay.Checked = value; }
 		}
+
+
+        //=========================================================================
+        public bool TXIDPlay // ke9ns ADD for TX waterfall ID
+        {
+            get { return TXIDBoxTS.Checked; }
+            set
+            {
+                TXIDBoxTS.Checked = value;
+            }
+        }
+
+
+
+
+        //=========================================================================================
+        //=========================================================================================
+        //=========================================================================================
+        // ke9ns add:  Play waterfall ID wave file here (below createBoxTS creates the wave file)
+        //=========================================================================================
+        //=========================================================================================
+        //=========================================================================================
+        public int samplesPerSecondL = 0;
+
+        private void TXIDBoxTS_CheckedChanged(object sender, EventArgs e) // ke9ns ADD TX waterfall ID
+        {
+
+
+            string file_name = console.AppDataPath + "ke9ns.wav"; // TEXT to waterfall image only
+
+
+            //=========================================================================================
+            // Determine if Sending Waterfall or not
+            //=========================================================================================
+
+            if (TXIDBoxTS.Checked)
+            {
+
+                // the wave file will have been created if the callsign text box is green. The code should prevent you coming here if its not green.
+
+
+                //=========================================================================================
+                //=========================================================================================
+                //=========================================================================================
+                // Send Digital PCM to QuickPlay Audio stream
+                //=========================================================================================
+                //=========================================================================================
+                //=========================================================================================
+
+             //d   console.TXIDMenuItem.Text = "Transmit";
+
+                //-------------------------------------------------------------------------------
+                // play ke9ns.wav file here
+                //-------------------------------------------------------------------------------
+
+
+                temp_txeq = console.TXEQ;
+                console.TXEQ = false;               // set TX Eq temporarily to OFF
+
+                temp_cpdr = console.CPDR;
+                console.CPDR = false;
+
+                temp_dx = console.DX;
+                console.DX = false;
+
+                temp_play = Audio.RecordTXPreProcessed;
+                Audio.RecordTXPreProcessed = true;  // set TRUE temporarily
+
+                temp_mon = console.MON;
+
+                //  console.MON = false;
+
+                //   Debug.WriteLine("playing ");
+
+                //dd if (!OpenWaveFile(file_name, false))
+                //{
+                //    TXIDBoxTS.Checked = false;
+
+                //    console.TXIDMenuItem.Checked = false;
+                //    console.chkMOX.Checked = false;
+                //    console.MON = temp_mon;
+                //    Audio.RecordTXPreProcessed = temp_play; //return to original state
+                //    console.TXEQ = temp_txeq;               // set TX Eq back to original state
+                //    return;
+                //}
+
+
+
+                TXIDBoxTS.BackColor = console.ButtonSelectedColor;
+
+            } // txidboxts checked
+            else// this is what signals the end of playback
+            {
+                if (Audio.wave_file_reader != null) Audio.wave_file_reader.Stop();
+
+                TXIDBoxTS.BackColor = SystemColors.Control;
+
+                //  Debug.WriteLine("DONE playing ");
+
+                console.MON = temp_mon;
+                Audio.RecordTXPreProcessed = temp_play; //return to original state
+                console.TXEQ = temp_txeq;               // set TX Eq back to original state
+                console.CPDR = temp_cpdr;
+                console.DX = temp_dx;
+
+             //d   console.TXIDMenuItem.Checked = false;  // turn off TX waterfall ID here
+
+            } //  txidboxts not checked
+
+
+            Audio.WavePlayback = TXIDBoxTS.Checked;  // this trigger audio.cs to play audio this is read in console.cs 
+            console.WavePlayback = TXIDBoxTS.Checked; // this triggers the audio playback
+
+
+
+        } // TXIDBoxTS checkchanged
+
+
+        //=========================================================================
+        public bool CreatePlay // ke9ns ADD for TX waterfall ID  (comes from console.callsignTextBox)
+        {
+            get { return createBoxTS.Checked; }
+            set
+            {
+                createBoxTS.Checked = value;
+
+
+            }
+        }
+
+        //=========================================================================================
+        //=========================================================================================
+        //=========================================================================================
+        // ke9ns ADD   this routine creates the waterfall ID (txidBoxTS plays it)
+        //             when mouse moved in/out a thread routine starts which converts image to wav
+        //=========================================================================================
+        //=========================================================================================
+        //=========================================================================================
+        public DSPMode BandL = 0;
+        private void createBoxTS_CheckedChanged(object sender, EventArgs e)
+        {
+            if (createBoxTS.Checked)
+            {
+                //  Debug.WriteLine("check create");
+
+                if ((console.Callsign != console.LastCall) || (console.RX1DSPMode != BandL))  // check if we need to create a new wave file or use the old one.
+                {
+                    Thread t = new Thread(new ThreadStart(CreateWaterfallID));
+                    t.Name = "Create Waterfall ID wave file Thread";
+                    t.IsBackground = true;
+                    t.Priority = ThreadPriority.Normal;
+                    t.Start();
+                } // console.Callsign != console.LastCall) || (console.RX1DSPMode != BandL))
+                else
+                {
+                    //dd console.callsignTextBox.BackColor = Color.MediumSpringGreen;  // green if your last callsign is still a valid wave
+                    //console.menuStrip1.Invalidate();
+                    //console.menuStrip1.Update();
+                    //createBoxTS.Checked = false;  // do only 1 time
+                }
+
+
+            } // createBoxTS.Checked)
+
+
+        }// createBoxTS_CheckedChanged
+
+        //============================================================================================
+        //============================================================================================
+        // ke9ns add   THREAD process to create wave file from text or bitmap image here
+        //============================================================================================
+        //============================================================================================
+        private void CreateWaterfallID()
+        {
+
+
+            string file_name = console.AppDataPath + "ke9ns.wav"; // TEXT to waterfall image only
+            string file_name1 = console.AppDataPath + "ke9ns.bmp"; // image file to waterfall
+
+
+            //dd console.callsignTextBox.BackColor = Color.PaleVioletRed; // let user know your creating a new wave file
+            //console.menuStrip1.Invalidate();
+            //console.menuStrip1.Update();
+
+
+            //console.LastCall = console.Callsign;        // check if changed callsign, mode, or sample rate
+            //samplesPerSecondL = console.SampleRate1;
+            //BandL = console.RX1DSPMode;
+
+            int IMAGE = 0;                      // 0=text, 1=image
+
+            //  t.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
+            //  t.CurrentUICulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
+
+            if (console.Callsign.EndsWith(".") == true)
+            {
+                IMAGE = 1; // get real image file
+
+                file_name1 = console.AppDataPath + console.Callsign + "bmp";    //    image file to waterfall
+
+            }
+
+            double bright = 400;      // was 300 amplitude factor
+
+            int n1 = 0;   // used by USB/LSB routine
+            int n2 = 0;
+            int n3 = 0;
+            int n4 = 0;
+            SizeF cl = new SizeF();  // determine left or right side of bitmap
+
+            const int fontS = 12; // was 12
+
+            int ym = 22; // height was 22
+            int xm = 80; // width was 80
+
+            long xm4 = 4 * ((xm + 3) / 4);
+
+            const float bw = .114F;   // factors to convert RGB color to grayscale
+            const float gw = .587F;
+            const float rw = .2989F;
+
+            byte[,] ap = new byte[xm + 10, ym + 10];  // get bitmap data
+
+
+            //=========================================================================================
+            //=========================================================================================
+            // Choose TEXT or BITMAP
+            //=========================================================================================
+            //=========================================================================================
+
+            if (IMAGE == 0) // text = 0
+            {
+
+
+                //=========================================================================================
+                // 24bit TEXT Bitmap Generate and SCAN
+                //=========================================================================================
+
+                ke9ns_bmp = new Bitmap(xm, ym, PixelFormat.Format24bppRgb);  // initialize bitmap for call sign insertion
+                Graphics g1 = Graphics.FromImage(ke9ns_bmp);
+
+                g1.SmoothingMode = SmoothingMode.AntiAlias;
+                g1.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                g1.PixelOffsetMode = PixelOffsetMode.HighQuality;
+
+                Pen p = new Pen(Color.AntiqueWhite, 1);                // pen color white
+                g1.DrawRectangle(p, 1, 4, xm - 1, ym - 4);      // draw box
+
+
+                n4 = 0;          //  USB 
+
+                cl = g1.MeasureString(console.Callsign, new Font("Arial", fontS)); //  temp used to determine the size of the string when in LSB and you need to reserve a certain space
+                cl.Width = (xm / 2) - (cl.Width / 2);
+                cl.Height = (ym / 2) - (cl.Height / 2) + 2;
+
+                //===========================================================================================
+                // find if USB or LSB on RX1 or RX2 ?
+
+                if (console.VFOATX)
+                {
+                    if (console.RX1DSPMode == DSPMode.LSB) n4 = 1;
+
+                }
+                else // not vfoa
+                {
+                    if (console.RX2DSPMode == DSPMode.LSB) n4 = 1;  //  for (int n = 1; n != xm; n=n+1)  // displays right to left  (LSB) 
+
+                } // vfoA
+
+
+                g1.DrawString(console.Callsign, new Font("Arial", fontS), Brushes.AntiqueWhite, cl.Width, cl.Height); // determine USB or LSB, then draw callsign into bitmap
+                g1.Flush();  // done with graphic function
+
+
+                //=======================================================================
+                // CONVERT BITMAP into ARRAY of float values for brightness x,y
+                // ap[,] = vales between 0 and 1 (0=dark, 255=white)
+
+
+                for (int y = ym - 1; y >= 0; y--) // image is saved in correct direction
+                {
+
+                    for (int n = 0; n != xm; n++)  // 
+                    {
+                        // look at picture data and pick color based on index value found, AND invert so white = BLACK (no signal) , white = full signal (thats the 255- part)
+                        // the /255 is to convert down to a 
+
+                        if (n4 == 0) // USB
+                        {
+                            Color pixel = ke9ns_bmp.GetPixel(n, y);                                  // bitmap is correct x direction but y is backwards
+                            ap[n, ym - y - 1] = (byte)(((bw * (float)pixel.B) + (gw * (float)pixel.G) + (rw * (float)pixel.R)));
+                        }
+                        else // LSB  
+                        {
+                            Color pixel = ke9ns_bmp.GetPixel(n, y);                                 // Both x and y are backwards
+                            ap[xm - n, ym - y - 1] = (byte)(((bw * (float)pixel.B) + (gw * (float)pixel.G) + (rw * (float)pixel.R)));
+                        }
+                    } // X
+
+                } // Y
+
+
+                ke9ns_bmp.Dispose(); // text image
+                g1.Dispose();
+
+
+                //===========================================================================================
+                // end TEXT  BITMAP 24bit
+
+            } // IMAGE 0=text here
+            else
+            {
+
+                //=========================================================================================
+                // Get 24bit or 8bpp Bitmap Image loaded up 
+                //=========================================================================================
+
+                if (!File.Exists(file_name1))
+                {
+                    MessageBox.Show("Filename doesn't exist. (" + file_name1 + ")",
+                        "Bad Filename",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
+                    TXIDBoxTS.Checked = false;
+
+                  //d  console.TXIDMenuItem.Checked = false;  // turn off TX waterfall ID here
+
+                    createBoxTS.Checked = false;  // do only 1 time
+
+                    return;
+                }
+
+                FileStream stream1 = new FileStream(file_name1, FileMode.Open); // open BMP  file
+                BinaryReader reader = new BinaryReader(stream1);
+
+                reader.ReadChars(10);               // ignore BM characters to start bitmap header
+                long hrdlen = reader.ReadInt32();   // offset in bitmap to first byte of image data
+                reader.ReadChars(4);                // header size ignore
+                long xm1 = reader.ReadInt32();       // width in pixels
+                long ym1 = reader.ReadInt32();       // height in pixels
+                reader.ReadBytes(2);                // color plane assumed to be 1
+                int bpp = reader.ReadInt16();       // reader.ReadBytes(2);                // bpp assumed to be 8bpp
+                reader.ReadBytes(24);               // ignore rest of header to get to color values (255 in 8bpp set)
+
+                xm = (int)xm1;                      // convert to xm 
+                ym = (int)ym1;                      // convert to ym 
+
+
+                int color24 = 1;
+
+                if (bpp == 24) color24 = 1;
+                else color24 = 0;
+
+
+                //=========================================================================================
+                // 24 bit color Image bitmap scan
+                //=========================================================================================
+
+                if (color24 == 1)  // 24bpp color grayscale (no color index needed)
+                {
+
+                    xm4 = xm;
+
+                    ap = new Byte[xm + 10, ym + 10];  // convert to grayscale
+
+
+                    //===========================================================================================
+                    // find if USB or LSB on RX1 or RX2 ?
+
+                    n4 = 0;  //  USB 
+
+                    if (console.VFOATX)
+                    {
+                        if (console.RX1DSPMode == DSPMode.LSB) n4 = 1;
+
+                    }
+                    else // not vfoa
+                    {
+                        if (console.RX2DSPMode == DSPMode.LSB) n4 = 1;
+
+                    } // vfoA
+
+
+                    //=============================================================================================
+                    // convert bitmap into grayscale bitmap corrected for sending
+                    // ap[,] = vales between 0 and 1 (0=dark, 255=white)
+
+                    for (int y = 0; y < ym; y++) // image is saved in correct direction
+                    {
+                        for (int n = 0; n != xm; n++)  // 
+                        {
+                            // look at picture data and pick color based on index value found, AND invert so white = BLACK (no signal) , white = full signal (thats the 255- part)
+                            // the /255 is to convert down to a 
+
+                            if (n4 == 0) // USB
+                            {
+                                ap[n, y] = (byte)(255 - (byte)((bw * (float)reader.ReadByte()) + (gw * (float)reader.ReadByte()) + (rw * (float)reader.ReadByte())));
+                                if (ap[n, y] < 20) ap[n, y] = 0;
+
+                            }
+                            else // LSB  
+                            {
+                                ap[xm - n, y] = (byte)(255 - (byte)((bw * (float)reader.ReadByte()) + (gw * (float)reader.ReadByte()) + (rw * (float)reader.ReadByte())));
+                                if (ap[xm - n, y] < 20) ap[xm - n, y] = 0;
+                            }
+
+                        } // X
+
+                    } // Y
+
+
+                } // color24 ==1
+
+                //=========================================================================================
+                // 256 color 8bpp Image bitmap scan
+                //=========================================================================================
+
+                else   // 8bpp 256 color grayscale
+                {
+
+                    byte[] col = new Byte[255 + 1];  // color map
+                    xm4 = 4 * ((xm + 3) / 4);
+                    byte[] ri = new byte[xm4 + 1];
+
+                    ap = new byte[xm4 + 10, ym + 10];  // get bitmap data
+                    // ap1 = new float[xm4 + 10, ym + 10];  // convert to grayscale
+
+                    // color mapping
+                    for (int n = 0; n < 256; n++)
+                    {
+                        col[n] = (byte)((bw * (float)reader.ReadByte()) + (gw * (float)reader.ReadByte()) + (rw * (float)reader.ReadByte()));
+                        reader.ReadByte(); // ignore 4th byte
+                    }
+
+                    //===========================================================================================
+                    // find if USB or LSB on RX1 or RX2 ?
+
+                    if (console.VFOATX)
+                    {
+                        if (console.RX1DSPMode == DSPMode.LSB)
+                        {
+                            n1 = 1;
+                            n2 = xm;
+                            n3 = 1;
+                            n4 = 1;
+                        }
+                        else
+                        {
+                            n2 = 0;
+                            n1 = xm;
+                            n3 = -1;
+                            n4 = 0;  //  USB must flip around here
+                        }
+                    }
+                    else // not vfoa
+                    {
+                        if (console.RX2DSPMode == DSPMode.LSB)   //  for (int n = 1; n != xm; n=n+1)  // displays right to left  (LSB) 
+                        {
+                            n1 = 1;
+                            n2 = xm;
+                            n3 = 1;
+                            n4 = 1;
+                        }
+                        else //  for (int n = (int)xm; n != 0; n--)  // displays correctly left to right (USB)
+                        {
+                            n2 = 0;
+                            n1 = xm;
+                            n3 = -1;
+                            n4 = 0;  //  USB must flip around here
+                        }
+
+                    } // vfoA
+
+                    //=============================================================================================
+                    // convert bitmap into grayscale bitmap corrected for sending
+                    // float ap[,] = vales between 0 and 1 (0=dark, 255=white)
+
+
+                    for (int y = 0; y < ym; y++) // image is saved in correct direction
+                    {
+                        ri = reader.ReadBytes((int)xm4);                // get entire line of bitmap X
+
+                        for (int n = n1; n != n2; n = n + n3)  // 
+                        {
+                            // look at picture data and pick color based on index value found, AND invert so white = BLACK (no signal), white = full signal
+
+                            if (n4 == 0) // USB
+                            {
+                                ap[n1 - n, y] = (byte)((byte)255 - col[ri[xm - n]]);  // flip
+                                if (ap[n1 - n, y] < 5) ap[n1 - n, y] = 0;
+
+                            }
+                            else // LSB
+                            {
+                                ap[n, y] = (byte)((byte)255 - col[ri[xm - n]]); // dont flip
+                                if (ap[n, y] < 5) ap[n, y] = 0;
+
+                            }
+
+                        } // X
+
+                    } // Y
+
+                } // color24 == 0 8bpp 
+
+
+                reader.Close();    // close wav file
+                stream1.Close();   // close stream
+
+                //===============================================================================
+                // end IMAGE bitmap
+
+            } // IMAGE == 1 image file
+
+
+
+            //=========================================================================================
+            // Digital PCM  setup and file creation
+            //=========================================================================================
+
+            FileStream stream = new FileStream(file_name, FileMode.Create); // create a wav file
+            BinaryWriter writer = new BinaryWriter(stream);                   // create a stream to write to the wav file
+
+            //=================================================
+            // .wav header
+            const int RIFF = 0x46464952;                      // 0x46464952  (0x52494646 big-endian form).
+            const int WAVE = 0x45564157;                      // 0x45564157  (0x57415645 big-endian form).
+            const int formatChunkSize = 16;                   // 16
+            const int headerSize = 8;                         // 8
+            const int format = 0x20746D66;                    // 0x20746D66   0x666d7420
+            const short formatType = 1;                       // 1 PCM
+            const short tracks = 1;                           // 1 Stereo = 2
+            const int samplesPerSecond = 48000;                     // console.SampleRate1;    (fixed flex routine to resample audio to correct SR)
+            const short bitsPerSample = 16;                         // 16
+
+            short frameSize = (short)(tracks * ((bitsPerSample + 7) / 8));   // tracks 2.875  @ 8000 sps
+
+            int bytesPerSecond = samplesPerSecond * frameSize;              // 23000 bytes per second
+
+            int waveSize = ym;
+
+            const int lowtx = 150;
+            const int bandpass = 2400;
+
+            int t2 = 2;                                                     // divide the time for each line (this controls how long each line takes)
+
+            if (IMAGE == 1)
+            {
+                float t3 = ((float)xm / (float)ym);         // picture ratio to maintain in waterfall (80w x 80h = 1) (200w x 150h = 1.33) (80w x 20h = 4)
+                // float t4 = ((float)bandpass / (float)xm);  // number of freqs in width of images (200w = 13hz per pixel)longer time .076pix/hz,  (80w= 30hz per pixel)shorter time.033pix/hz
+                t2 = (int)((float)xm * 2 / 20 / t3);// t2 small means long vertical , t2 big means short (20 is max)
+
+                if (t2 > 20) t2 = 20;
+            }
+
+
+            int data = 0x61746164;                                          // (0x64617461 big-endian form).
+
+            int samples = (samplesPerSecond * 2) * waveSize / t2;            // file size               //88200 * 4 = 352800
+
+            int dataChunkSize = samples * frameSize / 2;                        // 46000 
+
+            int fileSize = (waveSize) + headerSize + formatChunkSize + headerSize + dataChunkSize;
+
+
+            writer.Write(RIFF);                            // write header to file
+            writer.Write(fileSize);
+            writer.Write(WAVE);
+            writer.Write(format);
+            writer.Write(formatChunkSize);
+            writer.Write(formatType);
+            writer.Write(tracks);
+            writer.Write(samplesPerSecond);
+            writer.Write(bytesPerSecond);
+            writer.Write(frameSize);
+            writer.Write(bitsPerSample);
+            writer.Write(data);
+            writer.Write(dataChunkSize);
+
+            //==============================================================
+            // used if you want the waterfall to be as wide as your transmission bandpass
+            //  int lowtx = console.TXFilterLow;
+            //  int hightx = console.TXFilterHigh;
+            //   int tottx = hightx - lowtx; // band width
+
+
+            int hzperpixel = (int)(((float)bandpass / (float)xm) + .5);    // keep image 2khz wide always  25hz/pix
+
+
+            int sample2 = samplesPerSecond / t2;      // samples2 = the amount of time spent on each y1 line
+
+            // ap[,] = vales between 0 and 1 (0=dark, 255=white)
+
+            bright = bright / (float)xm; // correct brightness level of PCM audio by how many freq points go into each pass
+
+            //=========================================================================================
+            // Create Digital PCM Stream
+            //=========================================================================================
+
+            for (int y1 = 0; y1 < ym; y1++)   // each line (bottom of bitmap is first line out)
+            {
+
+                for (int n = 0; n < sample2; n++)           //  (generate tone) 
+                {
+                    double t = (double)n / (double)(samplesPerSecond * 2);          // used to generate a tone
+
+                    double temp7 = 0.0;
+                    int i = 0;
+
+                    //===========================================================
+                    // depending on width of bitmap, display within 150 hz to 2550hz
+
+                    for (float freq = lowtx; freq < (bandpass + lowtx); freq = freq + hzperpixel)             // add up all the frequencies from each line(row) of the bitmap into 1 signal
+                    {
+                        temp7 = temp7 + ((double)ap[i++, y1] * (Math.Sin(t * (double)freq * 2.0 * Math.PI)));  // generate individual tone 
+
+                    } // freq loop
+
+                    //============================================================
+
+
+                    short s = (short)(temp7 * bright);
+
+                    writer.Write(s);  // left 16bits
+                    //   writer.Write(s);  // right 16bits (this channel is needed by Flex Quickplay routine)
+
+                } // n  X  1 line at a time
+
+            } // Y
+
+
+            writer.Close();    // close wav file
+            stream.Close();   // close stream
+
+
+
+            //dd console.callsignTextBox.BackColor = Color.MediumSpringGreen;  // green if you created it or its still a valid wave
+            //console.menuStrip1.Invalidate();
+            //console.menuStrip1.Update();
+
+
+            createBoxTS.Checked = false;  // do only 1 time
+
+        } // CreateWaterfallID (this is run as a Thread)
+
+
+
+        //=============================================================================================
+        // ke9ns 
+        public static byte QAF = 0;
+        public void chkQuickAudioFolder_CheckedChanged(object sender, EventArgs e)
+        {
+
+            if (chkQuickAudioFolder.Checked)
+            {
+                System.IO.Directory.CreateDirectory(console.AppDataPath + "QuickAudio"); // ke9ns create sub directory
+
+            }
+            else
+            {
+
+            }
+
+        } // chkQuickAudioFolder_CheckedChanged
+
+        //================================================================================================================
+        //================================================================================================================
+        //================================================================================================================
+        //================================================================================================================
+
+
 
 		//
 		//k6jca  End Quick Record & Play
@@ -1433,13 +2350,13 @@ namespace Thetis
             // set up the rcvr and xmtr resamplers here, if they are needed
             if (sample_rate != rcvr_rate)
             {
-                rcvr_resamp_l = wdsp.create_resampleFV(rcvr_rate, sample_rate);
-                rcvr_resamp_r = wdsp.create_resampleFV(rcvr_rate, sample_rate);
+                rcvr_resamp_l = WDSP.create_resampleFV(rcvr_rate, sample_rate);
+                rcvr_resamp_r = WDSP.create_resampleFV(rcvr_rate, sample_rate);
             }
             if (sample_rate != xmtr_rate)
             {
-                xmtr_resamp_l = wdsp.create_resampleFV(xmtr_rate, sample_rate);
-                xmtr_resamp_r = wdsp.create_resampleFV(xmtr_rate, sample_rate);
+                xmtr_resamp_l = WDSP.create_resampleFV(xmtr_rate, sample_rate);
+                xmtr_resamp_r = WDSP.create_resampleFV(xmtr_rate, sample_rate);
             }
 			
             try
@@ -1506,12 +2423,12 @@ namespace Thetis
 			// {
 			// 	fixed(float* in_ptr = &in_buf_l[0])
 			// 		fixed(float* out_ptr = &out_buf_l[0])
-            //             wdsp.xresampleFV(in_ptr, out_ptr, cnt, &out_cnt, resamp_l);
+            //             WDSP.xresampleFV(in_ptr, out_ptr, cnt, &out_cnt, resamp_l);
 			// 	if(channels > 1)
 			// 	{
 			// 		fixed(float* in_ptr = &in_buf_r[0])
 			// 			fixed(float* out_ptr = &out_buf_r[0])
-            //                 wdsp.xresampleFV(in_ptr, out_ptr, cnt, &out_cnt, resamp_r);
+            //                 WDSP.xresampleFV(in_ptr, out_ptr, cnt, &out_cnt, resamp_r);
 			// 	}
 			// }
 			// else
@@ -1796,7 +2713,7 @@ namespace Thetis
 
 	#region Wave File Reader Class
 
-	unsafe public class WaveFileReader
+	unsafe public class WaveFileReader1
 	{
         private int id;
         int rcvr_rate;
@@ -1825,7 +2742,7 @@ namespace Thetis
 		unsafe private void* rcvr_resamp_l, rcvr_resamp_r;
         unsafe private void* xmtr_resamp_l, xmtr_resamp_r;
 
-		public WaveFileReader(
+		public WaveFileReader1(
             int wfr_id,
 			WaveControl form,
 			int fmt,
@@ -1893,14 +2810,14 @@ namespace Thetis
 
 			if(sample_rate != rcvr_rate)
 			{
-                rcvr_resamp_l = wdsp.create_resampleFV(sample_rate, rcvr_rate);
-                if (channels > 1) rcvr_resamp_r = wdsp.create_resampleFV(sample_rate, rcvr_rate);
+                rcvr_resamp_l = WDSP.create_resampleFV(sample_rate, rcvr_rate);
+                if (channels > 1) rcvr_resamp_r = WDSP.create_resampleFV(sample_rate, rcvr_rate);
 			}
 
             if (sample_rate != xmtr_rate)
             {
-                xmtr_resamp_l = wdsp.create_resampleFV(sample_rate, xmtr_rate);
-                if (channels > 1) xmtr_resamp_r = wdsp.create_resampleFV(sample_rate, xmtr_rate);
+                xmtr_resamp_l = WDSP.create_resampleFV(sample_rate, xmtr_rate);
+                if (channels > 1) xmtr_resamp_r = WDSP.create_resampleFV(sample_rate, xmtr_rate);
             }
 
 			io_buf = new byte[io_buf_size];
@@ -2046,11 +2963,11 @@ namespace Thetis
                 if (sample_rate != rcvr_rate)
                 {
                     fixed (float* in_ptr = &buf_l_in[0], out_ptr = &buf_l_out[0])
-                        wdsp.xresampleFV(in_ptr, out_ptr, IN_BLOCK, &out_cnt, rcvr_resamp_l);
+                        WDSP.xresampleFV(in_ptr, out_ptr, IN_BLOCK, &out_cnt, rcvr_resamp_l);
                     if (channels > 1)
                     {
                         fixed (float* in_ptr = &buf_r_in[0], out_ptr = &buf_r_out[0])
-                            wdsp.xresampleFV(in_ptr, out_ptr, IN_BLOCK, &out_cnt, rcvr_resamp_r);
+                            WDSP.xresampleFV(in_ptr, out_ptr, IN_BLOCK, &out_cnt, rcvr_resamp_r);
                     }
                 }
                 else
@@ -2064,11 +2981,11 @@ namespace Thetis
                 if (sample_rate != xmtr_rate)
                 {
                     fixed (float* in_ptr = &buf_l_in[0], out_ptr = &buf_l_out[0])
-                        wdsp.xresampleFV(in_ptr, out_ptr, IN_BLOCK, &out_cnt, xmtr_resamp_l);
+                        WDSP.xresampleFV(in_ptr, out_ptr, IN_BLOCK, &out_cnt, xmtr_resamp_l);
                     if (channels > 1)
                     {
                         fixed (float* in_ptr = &buf_r_in[0], out_ptr = &buf_r_out[0])
-                            wdsp.xresampleFV(in_ptr, out_ptr, IN_BLOCK, &out_cnt, xmtr_resamp_r);
+                            WDSP.xresampleFV(in_ptr, out_ptr, IN_BLOCK, &out_cnt, xmtr_resamp_r);
                     }
                 }
                 else
