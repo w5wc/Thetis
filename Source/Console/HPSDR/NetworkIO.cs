@@ -163,7 +163,13 @@ namespace Thetis
             return fx2_fw_version;
         }
 
-        public static float swr_protect = 1.0f;
+        private static float swr_protect = 1.0f;
+        public static float SWRProtect
+        {
+            get { return swr_protect; }
+            set { swr_protect = value; }
+        }
+
         public static void SetOutputPower(float f)
         {
             if (f < 0.0)

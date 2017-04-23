@@ -901,6 +901,9 @@ namespace Thetis
         public float calfwdpower = 0.0f;
         public float alex_swr = 0.0f;
         private float average_drivepwr = 0.0f;
+        private float average_revadc = 0.0f;
+        private float average_fwdadc = 0.0f;
+        private float average_drvadc = 0.0f;
         private float volts_138 = 0.0f;
 
         private static MemoryStream msgrab = new MemoryStream(Properties.Resources.grab);
@@ -1456,6 +1459,9 @@ namespace Thetis
                 draw_display_thread.IsBackground = true;
                 draw_display_thread.Start();
             }
+
+            rx1_meter_cal_offset = rx_meter_cal_offset_by_radio[(int)current_hpsdr_model];
+            RX1DisplayCalOffset = rx_display_cal_offset_by_radio[(int)current_hpsdr_model];
 
         }
 
@@ -6695,7 +6701,7 @@ namespace Thetis
             }*/
         }
 
-        private Band BandByFreq(double freq, int xvtr_index, bool tx, FRSRegion region)
+        private Band BandByFreq(double freq, int xvtr_index, bool tx, FRSRegion region, bool vfoa)
         {
             if (xvtr_index >= 0)
             {
@@ -6757,7 +6763,9 @@ namespace Thetis
                     else if (freq == 2.5 || freq == 5.0 || freq == 10.0 || freq == 15.0 ||
                            freq == 20.0 || freq == 25.0 || freq == 3.33 || freq == 7.85 || freq == 14.67)
                     {
-                        panelBandHF.Visible = true; panelBandGEN.Visible = false; return Band.WWV;
+                        panelBandHF.Visible = true; 
+                        panelBandGEN.Visible = false; 
+                        return Band.WWV;
                     }
 
 
@@ -6868,51 +6876,75 @@ namespace Thetis
                     // original code below 
                     else if (freq >= 0.0 && freq <= 2.75)
                     {
-                        panelBandHF.Visible = true; panelBandGEN.Visible = false; return Band.B160M;
+                        panelBandHF.Visible = true; 
+                        panelBandGEN.Visible = false; 
+                        return Band.B160M;
                     }
                     else if (freq > 2.75 && freq < 5.3305)
                     {
-                        panelBandHF.Visible = true; panelBandGEN.Visible = false; return Band.B80M;
+                        panelBandHF.Visible = true; 
+                        panelBandGEN.Visible = false; 
+                        return Band.B80M;
                     }
                     else if (freq >= 5.3305 && freq < 7.0)
                     {
-                        panelBandHF.Visible = true; panelBandGEN.Visible = false; return Band.B60M;
+                        panelBandHF.Visible = true; 
+                        panelBandGEN.Visible = false; 
+                        return Band.B60M;
                     }
                     else if (freq >= 7.0 && freq <= 8.7)
                     {
-                        panelBandHF.Visible = true; panelBandGEN.Visible = false; return Band.B40M;
+                        panelBandHF.Visible = true; 
+                        panelBandGEN.Visible = false; 
+                        return Band.B40M;
                     }
                     else if (freq >= 8.7 && freq <= 12.075)
                     {
-                        panelBandHF.Visible = true; panelBandGEN.Visible = false; return Band.B30M;
+                        panelBandHF.Visible = true; 
+                        panelBandGEN.Visible = false; 
+                        return Band.B30M;
                     }
                     else if (freq >= 12.075 && freq <= 16.209)
                     {
-                        panelBandHF.Visible = true; panelBandGEN.Visible = false; return Band.B20M;
+                        panelBandHF.Visible = true; 
+                        panelBandGEN.Visible = false; 
+                        return Band.B20M;
                     }
                     else if (freq >= 16.209 && freq <= 19.584)
                     {
-                        panelBandHF.Visible = true; panelBandGEN.Visible = false; return Band.B17M;
+                        panelBandHF.Visible = true; 
+                        panelBandGEN.Visible = false; 
+                        return Band.B17M;
                     }
                     else if (freq >= 19.584 && freq <= 23.17)
                     {
-                        panelBandHF.Visible = true; panelBandGEN.Visible = false; return Band.B15M;
+                        panelBandHF.Visible = true; 
+                        panelBandGEN.Visible = false; 
+                        return Band.B15M;
                     }
                     else if (freq >= 23.17 && freq <= 26.495)
                     {
-                        panelBandHF.Visible = true; panelBandGEN.Visible = false; return Band.B12M;
+                        panelBandHF.Visible = true; 
+                        panelBandGEN.Visible = false; 
+                        return Band.B12M;
                     }
                     else if (freq >= 26.495 && freq <= 29.7)
                     {
-                        panelBandHF.Visible = true; panelBandGEN.Visible = false; return Band.B10M;
+                        panelBandHF.Visible = true; 
+                        panelBandGEN.Visible = false; 
+                        return Band.B10M;
                     }
                     else if (freq >= 50.0 && freq <= 54.0)
                     {
-                        panelBandHF.Visible = true; panelBandGEN.Visible = false; return Band.B6M;
+                        panelBandHF.Visible = true; 
+                        panelBandGEN.Visible = false; 
+                        return Band.B6M;
                     }
                     else if (freq >= 144.0 && freq <= 148.0) // ke9ns test was 144.0 and 148.0
                     {
-                        panelBandHF.Visible = true; panelBandGEN.Visible = false; return Band.B2M;
+                        panelBandHF.Visible = true; 
+                        panelBandGEN.Visible = false; 
+                        return Band.B2M;
                     }
                     else
                         return Band.GEN;
@@ -6957,156 +6989,262 @@ namespace Thetis
                     */
                 if (freq >= 1.8 && freq <= 2.0)
                 {
-                    panelBandHF.Visible = true; panelBandGEN.Visible = false; return Band.B160M;
+                    if (vfoa)
+                    {
+                        panelBandHF.Visible = true;
+                        panelBandGEN.Visible = false;
+                    }
+                    return Band.B160M;
                 }
                 else if (freq >= 3.5 && freq <= 4.0)
                 {
-                    panelBandHF.Visible = true; panelBandGEN.Visible = false; return Band.B80M;
+                    if (vfoa)
+                    {
+                        panelBandHF.Visible = true;
+                        panelBandGEN.Visible = false;
+                    }
+                    return Band.B80M;
                 }
                 else if (freq >= 5.1 && freq <= 5.5)
                 {
-                    panelBandHF.Visible = true; panelBandGEN.Visible = false; return Band.B60M;
+                    if (vfoa)
+                    {
+                        panelBandHF.Visible = true;
+                        panelBandGEN.Visible = false;
+                    }
+                    return Band.B60M;
                 }
                 else if (freq >= 7.0 && freq <= 7.3)
                 {
-                    panelBandHF.Visible = true; panelBandGEN.Visible = false; return Band.B40M;
+                    if (vfoa)
+                    {
+                        panelBandHF.Visible = true;
+                        panelBandGEN.Visible = false;
+                    }
+                    return Band.B40M;
                 }
                 else if (freq >= 10.1 && freq <= 10.15)
                 {
-                    panelBandHF.Visible = true; panelBandGEN.Visible = false; return Band.B30M;
+                    if (vfoa)
+                    {
+                        panelBandHF.Visible = true;
+                        panelBandGEN.Visible = false;
+                    }
+                    return Band.B30M;
                 }
                 else if (freq >= 14.0 && freq <= 14.35)
                 {
-                    panelBandHF.Visible = true; panelBandGEN.Visible = false; return Band.B20M;
+                    if (vfoa)
+                    {
+                        panelBandHF.Visible = true;
+                        panelBandGEN.Visible = false;
+                    }
+                    return Band.B20M;
                 }
                 else if (freq >= 18.068 && freq <= 18.168)
                 {
-                    panelBandHF.Visible = true; panelBandGEN.Visible = false; return Band.B17M;
+                    if (vfoa)
+                    {
+                        panelBandHF.Visible = true;
+                        panelBandGEN.Visible = false;
+                    }
+                    return Band.B17M;
                 }
                 else if (freq >= 21.0 && freq <= 21.450)
                 {
-                    panelBandHF.Visible = true; panelBandGEN.Visible = false; return Band.B15M;
+                    if (vfoa)
+                    {
+                        panelBandHF.Visible = true;
+                        panelBandGEN.Visible = false;
+                    }
+                    return Band.B15M;
                 }
                 else if (freq >= 24.89 && freq <= 24.99)
                 {
-                    panelBandHF.Visible = true; panelBandGEN.Visible = false; return Band.B12M;
+                    if (vfoa)
+                    {
+                        panelBandHF.Visible = true;
+                        panelBandGEN.Visible = false;
+                    }
+                    return Band.B12M;
                 }
                 else if (freq >= 28.0 && freq <= 29.7)
                 {
-                    panelBandHF.Visible = true; panelBandGEN.Visible = false; return Band.B10M;
+                    if (vfoa)
+                    {
+                        panelBandHF.Visible = true;
+                        panelBandGEN.Visible = false;
+                    }
+                    return Band.B10M;
                 }
                 else if (freq >= 50.0 && freq <= 54.0)
                 {
-                    panelBandHF.Visible = true; panelBandGEN.Visible = false; return Band.B6M;
+                    if (vfoa)
+                    {
+                        panelBandHF.Visible = true;
+                        panelBandGEN.Visible = false;
+                    }
+                    return Band.B6M;
                 }
                 else if (freq >= 144.0 && freq <= 148.0) // ke9ns test was 144.0 148.0
                 {
-                    panelBandHF.Visible = true; panelBandGEN.Visible = false; return Band.B2M;
+                    if (vfoa)
+                    {
+                        panelBandHF.Visible = true;
+                        panelBandGEN.Visible = false;
+                    }
+                    return Band.B2M;
                 }
                 else if (freq == 2.5 || freq == 5.0 || freq == 10.0 || freq == 15.0 ||
                         freq == 20.0 || freq == 25.0 || freq == 3.33 || freq == 7.85 || freq == 14.67)
                 {
-                    panelBandHF.Visible = true; panelBandGEN.Visible = false; return Band.WWV;
+                    if (vfoa)
+                    {
+                        panelBandHF.Visible = true;
+                        panelBandGEN.Visible = false;
+                    }
+                    return Band.WWV;
                 }
 
                 // ke9ns add
                 else if (freq >= 0.20 && freq < 1.80)
                 {
-                    panelBandHF.Visible = false;
-                    panelBandGEN.Visible = true;
+                    if (vfoa)
+                    {
+                        panelBandHF.Visible = false;
+                        panelBandGEN.Visible = true;
+                    }
                     return Band.BLMF;
                 }
 
                 else if (freq >= 1.8 && freq < 3.0)
                 {
-                    panelBandHF.Visible = false;
-                    panelBandGEN.Visible = true;
+                    if (vfoa)
+                    {
+                        panelBandHF.Visible = false;
+                        panelBandGEN.Visible = true;
+                    }
                     return Band.B120M;
                 }
 
                 else if (freq >= 3.0 && freq < 4.1)
                 {
-                    panelBandHF.Visible = false;
-                    panelBandGEN.Visible = true;
+                    if (vfoa)
+                    {
+                        panelBandHF.Visible = false;
+                        panelBandGEN.Visible = true;
+                    }
                     return Band.B90M;
                 }
 
                 else if (freq >= 4.10 && freq < 5.06)
                 {
-                    panelBandHF.Visible = false;
-                    panelBandGEN.Visible = true;
+                    if (vfoa)
+                    {
+                        panelBandHF.Visible = false;
+                        panelBandGEN.Visible = true;
+                    }
                     return Band.B61M;
                 }
 
                 else if (freq >= 5.06 && freq < 7.20)
                 {
                  //   Debug.WriteLine("bandbyfreq 49");
-                    panelBandHF.Visible = false;
-                    panelBandGEN.Visible = true;
+                    if (vfoa)
+                    {
+                        panelBandHF.Visible = false;
+                        panelBandGEN.Visible = true;
+                    }
                     return Band.B49M;
                 }
 
                 else if (freq >= 7.20 && freq < 9.0)
                 {
                   //  Debug.WriteLine("bandbyfreq 41");
-                    panelBandHF.Visible = false;
-                    panelBandGEN.Visible = true;
+                    if (vfoa)
+                    {
+                        panelBandHF.Visible = false;
+                        panelBandGEN.Visible = true;
+                    }
                     return Band.B41M;
                 }
 
                 else if (freq >= 9.0 && freq < 11.6)
                 {
-                    panelBandHF.Visible = false;
-                    panelBandGEN.Visible = true;
+                    if (vfoa)
+                    {
+                        panelBandHF.Visible = false;
+                        panelBandGEN.Visible = true;
+                    }
                     return Band.B31M;
                 }
 
                 else if (freq >= 11.6 && freq < 13.57)
                 {
-                    panelBandHF.Visible = false;
-                    panelBandGEN.Visible = true;
+                    if (vfoa)
+                    {
+                        panelBandHF.Visible = false;
+                        panelBandGEN.Visible = true;
+                    }
                     return Band.B25M;
                 }
 
                 else if (freq >= 13.57 && freq < 13.87)
                 {
-                    panelBandHF.Visible = false;
-                    panelBandGEN.Visible = true;
+                    if (vfoa)
+                    {
+                        panelBandHF.Visible = false;
+                        panelBandGEN.Visible = true;
+                    }
                     return Band.B22M;
                 }
 
                 else if (freq >= 13.87 && freq < 17.0)
                 {
-                    panelBandHF.Visible = false;
-                    panelBandGEN.Visible = true;
+                    if (vfoa)
+                    {
+                        panelBandHF.Visible = false;
+                        panelBandGEN.Visible = true;
+                    }
                     return Band.B19M;
                 }
 
                 else if (freq >= 17.0 && freq < 18.0)
                 {
-
-                    panelBandHF.Visible = false;
-                    panelBandGEN.Visible = true;
+                    if (vfoa)
+                    {
+                        panelBandHF.Visible = false;
+                        panelBandGEN.Visible = true;
+                    }
                     return Band.B16M;
                 }
 
                 else if (freq >= 18.0 && freq < 21.0)
                 {
-                    panelBandHF.Visible = false;
-                    panelBandGEN.Visible = true;
+                    if (vfoa)
+                    {
+                        panelBandHF.Visible = false;
+                        panelBandGEN.Visible = true;
+                    }
                     return Band.B14M;
                 }
                 else if (freq >= 21.00 && freq < 25.0)
                 {
-                    panelBandHF.Visible = false;
-                    panelBandGEN.Visible = true;
+                    if (vfoa)
+                    {
+                        panelBandHF.Visible = false;
+                        panelBandGEN.Visible = true;
+                    }
                     return Band.B13M;
                 }
 
                 else if (freq >= 25.0 && freq < 28.0)
                 {
-                    panelBandHF.Visible = false;
-                    panelBandGEN.Visible = true;
+                    if (vfoa)
+                    {
+                        panelBandHF.Visible = false;
+                        panelBandGEN.Visible = true;
+                    }
                     return Band.B11M;
                 }
 
@@ -8898,7 +9036,7 @@ namespace Thetis
             float watts = alex_fwd;
             //********************************************************************
             // Begin with all spinners set equal to their labelled value.
-            // For each spinner, from 10W to maximum, adjust the output power
+            // For each spinner, from minimum to maximum, adjust the output power
             // such that your CALIBRATED EXTERNAL METER is equal to the spinner
             // value.  Record the values appearing in the Thetis 'Fwd Pwr' meter.
             // After completing measurements for all spinners, enter your
@@ -8906,19 +9044,7 @@ namespace Thetis
             // POWER EXCEEDING THE RATING OF YOUR RADIO!
             //********************************************************************
             const int entries = 11;                                 // number of table entries
-            float[] table = new float[entries];
-            float[] ANAN100DCal = new float[entries] {    0.0f,      // predetermined calibration factors
-                                                        11.0f,
-                                                        24.0f,
-                                                        35.0f,
-                                                        46.0f,
-                                                        57.0f,
-                                                        67.0f,
-                                                        81.0f,
-                                                        90.0f,
-                                                       103.0f,
-                                                       114.0f };
-
+            float interval = 10.0f;                                 // interval (watts) between labels
             float[] PAsets = new float[entries] { 0.0f,
                                                   SetupForm.PA10W,
                                                   SetupForm.PA20W,
@@ -8935,17 +9061,31 @@ namespace Thetis
             {
                 //case HPSDRModel.ANAN100:
                 case HPSDRModel.ANAN100D:
-                    watts = PowerKernel(watts, entries, ANAN100DCal);
+                    interval = 10.0f;
+                    float[] ANAN100DCal = new float[entries] {   0.0f,      // predetermined calibration factors
+                                                                11.0f,
+                                                                24.0f,
+                                                                35.0f,
+                                                                46.0f,
+                                                                57.0f,
+                                                                67.0f,
+                                                                81.0f,
+                                                                90.0f,
+                                                               103.0f,
+                                                               114.0f };
+                    watts = PowerKernel(watts, interval, entries, ANAN100DCal);
+                    break;
+                case HPSDRModel.ANAN8000D:
+                    interval = 20.0f;
                     break;
                 default:
-
+                    interval = 10.0f;
                     break;
             }
-
-            return PowerKernel(watts, entries, PAsets);
+            return PowerKernel(watts, interval, entries, PAsets);
         }
 
-        private float PowerKernel(float watts, int entries, float[] table)
+        private float PowerKernel(float watts, float interval, int entries, float[] table)
         {
             int idx = 0;
             if (watts > table[entries - 1])
@@ -8956,11 +9096,7 @@ namespace Thetis
                 if (idx > 0) idx--;
             }
             float frac = (watts - table[idx]) / (table[idx + 1] - table[idx]);
-            if (idx > 0)
-                watts *= 10.0f * ((1.0f - frac) * idx / table[idx] + frac * (idx + 1.0f) / table[idx + 1]);
-            else
-                watts *= 10.0f / table[idx + 1];
-            return watts;
+            return interval * ((1.0f - frac) * (float)idx + frac * (float)(idx + 1));
         }
 
         //public double FWCPAPower(int adc) // adc in, watts out
@@ -14476,6 +14612,7 @@ namespace Thetis
             set
             {
                 hf_tr_relay = value;
+                if(!initializing)
                 txtVFOAFreq_LostFocus(this, EventArgs.Empty);
             }
         }
@@ -14487,6 +14624,16 @@ namespace Thetis
             set
             {
                 bpf2_gnd = value;
+            }
+        }
+
+        private bool enable_xvtr_hf = false;
+        public bool EnableXVTRHF
+        {
+            get { return enable_xvtr_hf; }
+            set
+            {
+                enable_xvtr_hf = value;
             }
         }
 
@@ -17847,8 +17994,11 @@ namespace Thetis
                 SetComboPreampForHPSDR();
                 UpdateReceivers(rx2_enabled);
 
-                rx1_meter_cal_offset = rx_meter_cal_offset_by_radio[(int)current_hpsdr_model];
-                RX1DisplayCalOffset = rx_display_cal_offset_by_radio[(int)current_hpsdr_model];
+                if (!initializing)
+                {
+                    rx1_meter_cal_offset = rx_meter_cal_offset_by_radio[(int)current_hpsdr_model];
+                    RX1DisplayCalOffset = rx_display_cal_offset_by_radio[(int)current_hpsdr_model];
+                }
 
                 if (SetupForm != null && saved_hpsdr_model != current_hpsdr_model)
                     txtVFOAFreq_LostFocus(this, EventArgs.Empty);
@@ -17985,8 +18135,8 @@ namespace Thetis
                     //{
                     //lo_band = BandByFreq(XVTRForm.TranslateFreq(VFOAFreq), -1, false, current_region);
                     // Fix Penny O/C VHF control Vk4xv
-                    lo_band = BandByFreq(XVTRForm.TranslateFreq(VFOAFreq), rx1_xvtr_index, false, current_region);
-                    lo_bandb = BandByFreq(XVTRForm.TranslateFreq(VFOBFreq), rx2_xvtr_index, false, current_region);
+                    lo_band = BandByFreq(XVTRForm.TranslateFreq(VFOAFreq), rx1_xvtr_index, false, current_region, true);
+                    lo_bandb = BandByFreq(XVTRForm.TranslateFreq(VFOBFreq), rx2_xvtr_index, false, current_region, false);
                     // if (penny_ext_ctrl_enabled)
                     // Penny.getPenny().UpdateExtCtrl(lo_band, mox);
                     Penny.getPenny().ExtCtrlEnable(value, lo_band, lo_bandb, mox);
@@ -18020,7 +18170,7 @@ namespace Thetis
                 {
                     //lo_band = BandByFreq(XVTRForm.TranslateFreq(VFOAFreq), -1, false, current_region);
                     // Fix Penny O/C VHF control Vk4xv
-                    lo_band = BandByFreq(XVTRForm.TranslateFreq(VFOAFreq), rx1_xvtr_index, false, current_region);
+                    lo_band = BandByFreq(XVTRForm.TranslateFreq(VFOAFreq), rx1_xvtr_index, false, current_region, true);
 
                     // if (penny_ext_ctrl_enabled)
                     //   Penny.getPenny().UpdateExtCtrl(lo_band, mox);
@@ -19848,7 +19998,7 @@ namespace Thetis
                 if (rx1_xvtr_index >= 0)
                     //lo_band = BandByFreq(XVTRForm.TranslateFreq(VFOAFreq), -1, false, current_region);
                     // Fix Penny O/C VHF control Vk4xv
-                    lo_band = BandByFreq(XVTRForm.TranslateFreq(VFOAFreq), rx1_xvtr_index, false, current_region);
+                    lo_band = BandByFreq(XVTRForm.TranslateFreq(VFOAFreq), rx1_xvtr_index, false, current_region, true);
 
                 if (!initializing && rx1_preamp_mode > PreampMode.FIRST)
                 {
@@ -20149,7 +20299,7 @@ namespace Thetis
 
                 Band lo_band = Band.FIRST;
                 if (rx2_xvtr_index >= 0)
-                    lo_band = BandByFreq(XVTRForm.TranslateFreq(VFOBFreq), -1, false, current_region);
+                    lo_band = BandByFreq(XVTRForm.TranslateFreq(VFOBFreq), -1, false, current_region, false);
 
                 if (!initializing && rx2_preamp_mode > PreampMode.FIRST)
                 {
@@ -20195,7 +20345,7 @@ namespace Thetis
                 Band lo_band = Band.FIRST;
                 if (tx_xvtr_index >= 0)
                     // Fix Penny O/C VHF control Vk4xv
-                    lo_band = BandByFreq(XVTRForm.TranslateFreq(VFOAFreq), rx1_xvtr_index, false, current_region);
+                    lo_band = BandByFreq(XVTRForm.TranslateFreq(VFOAFreq), rx1_xvtr_index, false, current_region, true);
                 //lo_band = BandByFreq(XVTRForm.TranslateFreq(VFOAFreq), -1, true, current_region);
 
                 if (tx_band != old_band || initializing)
@@ -27352,26 +27502,32 @@ namespace Thetis
                             case MeterTXMode.SWR_POWER:
                                 if (alexpresent || apollopresent)
                                 {
-                                    new_meter_data = calfwdpower;
-                                    if (pa_values)
+                                    if (anan8000dpresent)
                                     {
-                                        // SetupForm.textDriveFwdADCValue.Text = new_meter_data.ToString("f1") + " W";
-                                        SetupForm.textPAFwdPower.Text = alex_fwd.ToString("f1") + " W";
-                                        SetupForm.textPARevPower.Text = alex_rev.ToString("f1") + " W";
+                                        if (tx_xvtr_index >= 0)
+                                        {
+                                            new_meter_data = drivepwr;
+                                        }
+                                        else
+                                        {
+                                            new_meter_data = calfwdpower;
+                                        }
+                                    }
+                                    else
+                                    {
+                                    new_meter_data = calfwdpower;
                                     }
                                 }
                                 else
                                     new_meter_data = drivepwr;
 
                                 if (current_meter_tx_mode == MeterTXMode.SWR_POWER) new_swrmeter_data = alex_swr;
-                                if (pa_values) SetupForm.textDrivePower.Text = average_drivepwr.ToString("f2") + " mW";
                                 break;
                             case MeterTXMode.REVERSE_POWER:
 
                                 if (alexpresent || apollopresent)
                                 {
                                     new_meter_data = (float)alex_rev;
-                                    // if (pa_values) SetupForm.txtPARevPower.Text = new_meter_data.ToString("f3");
                                 }
                                 break;
                             case MeterTXMode.SWR:
@@ -27382,6 +27538,21 @@ namespace Thetis
                                 new_meter_data = -200.0f;
                                 break;
                         }
+
+                        if (pa_values)
+                        {
+                            SetupForm.textDriveFwdADCValue.Text = average_drvadc.ToString("f0");
+                            SetupForm.textFwdADCValue.Text = average_fwdadc.ToString("f0");
+                            SetupForm.textRevADCValue.Text = average_revadc.ToString("f0");
+                            //SetupForm.textFwdVoltage.Text = fwd_volts.ToString("f2") + " V";
+                            //SetupForm.textRevVoltage.Text = rev_volts.ToString("f2") + " V";
+                            SetupForm.textDrivePower.Text = average_drivepwr.ToString("f0") + " mW";
+                            SetupForm.textPAFwdPower.Text = alex_fwd.ToString("f1") + " W";
+                            SetupForm.textPARevPower.Text = alex_rev.ToString("f1") + " W";
+                            SetupForm.textCaldFwdPower.Text = calfwdpower.ToString("f1") + " W";
+                            SetupForm.textSWR.Text = alex_swr.ToString("f2") + ":1";
+                        }
+
                     }
                     meter_data_ready = true;
                     picMultiMeterDigital.Invalidate();
@@ -27600,28 +27771,74 @@ namespace Thetis
 
         public float computeRefPower()
         {
-            float bridge_volt = 0.09f;
-            float refvoltage = 3.3f;
-            int adc_cal_offset = 10;
-            if (tx_band == Band.B6M) adc_cal_offset = 200;
-            if (current_hpsdr_model == HPSDRModel.ANAN200D ||
-                current_hpsdr_model == HPSDRModel.ORIONMKII ||
-                current_hpsdr_model == HPSDRModel.ANAN8000D) refvoltage = 5.0f;
-            if (current_hpsdr_model == HPSDRModel.ANAN100 ||
-                current_hpsdr_model == HPSDRModel.ANAN100B ||
-                current_hpsdr_model == HPSDRModel.ANAN100D) bridge_volt = 0.095f;
+            float adc = 0;
+            const float alpha = 0.90f;
 
-            if (current_hpsdr_model == HPSDRModel.ANAN200D) bridge_volt = 0.108f;
-            if (current_hpsdr_model == HPSDRModel.ANAN8000D) bridge_volt = 0.108f;
-            int adc = NetworkIO.getRevPower();
-            if (adc < adc_cal_offset) adc = adc_cal_offset = 0;
+            float bridge_volt = 0;
+            float refvoltage = 0;
+            int adc_cal_offset = 0;
+
+            switch (current_hpsdr_model)
+            {
+                case HPSDRModel.ANAN100:
+                case HPSDRModel.ANAN100B:
+                    bridge_volt = 0.095f;
+                    if (tx_band == Band.B6M)
+                        bridge_volt = 0.5f;
+                    refvoltage = 3.3f;
+                    adc_cal_offset = 3;
+                    break;
+                case HPSDRModel.ANAN100D:
+                    bridge_volt = 0.095f;
+                    if (tx_band == Band.B6M)
+                        bridge_volt = 0.5f;
+                    refvoltage = 3.3f;
+                    adc_cal_offset = 3;
+                    break;
+                case HPSDRModel.ANAN200D:
+                    bridge_volt = 0.108f;
+                    if (tx_band == Band.B6M)
+                        bridge_volt = 0.5f;
+                    refvoltage = 5.0f;
+                    adc_cal_offset = 2;
+                    break;
+                case HPSDRModel.ORIONMKII:
+                case HPSDRModel.ANAN8000D:
+                    bridge_volt = 0.08f;
+                    if (tx_band == Band.B6M)
+                        bridge_volt = 0.08f;
+                    refvoltage = 5.0f;
+                    adc_cal_offset = 16;
+                    break;
+                default:
+                    bridge_volt = 0.09f;
+                    if (tx_band == Band.B6M)
+                        bridge_volt = 0.09f;
+                    refvoltage = 3.3f;
+                    adc_cal_offset = 3;
+                    break;
+            }
+
+            //for (int count = 0; count < 50; count++)
+            //{
+            //    adc = JanusAudio.getRefPower();
+            //    addadc += adc;
+            //    Thread.Sleep(1);
+            //}
+            //adc = addadc / 50;
+            adc = NetworkIO.getRevPower();
+
+            if (adc < 0) adc = 0;
+
             float volts = (float)((adc - adc_cal_offset) / 4095.0 * refvoltage);
+            if (volts < 0) volts = 0;
             float watts = (float)(Math.Pow(volts, 2) / bridge_volt);
             if (watts < 0) watts = 0;
 
             if (PAValues)
             {
-                SetupForm.textRevADCValue.Text = adc.ToString();
+                average_revadc = alpha * average_revadc + (1.0f - alpha) * adc;
+                // SetupForm.textRevADCValue.Text = adc.ToString();
                 SetupForm.textRevVoltage.Text = volts.ToString("f2") + " V";
             }
 
@@ -27631,38 +27848,63 @@ namespace Thetis
         // private int pwr_avg_i = 0;
         public float computeAlexFwdPower()
         {
+            float adc = 0;
+            const float alpha = 0.90f;
+            float bridge_volt = 0;
+            float refvoltage = 0;
+            int adc_cal_offset = 0;
 
-            // float p_min = float.MaxValue; //32767.0f;
-            // float p_max = float.MinValue; //-32768.0f;
-
-            int adc = 0;
-            int addadc = 0;
-
-            float bridge_volt = 0.09f;
-            float refvoltage = 3.3f;
-            if (current_hpsdr_model == HPSDRModel.ANAN200D ||
-                current_hpsdr_model == HPSDRModel.ORIONMKII ||
-                current_hpsdr_model == HPSDRModel.ANAN8000D) refvoltage = 5.0f;
-            if (current_hpsdr_model == HPSDRModel.ANAN100 ||
-                current_hpsdr_model == HPSDRModel.ANAN100B ||
-                current_hpsdr_model == HPSDRModel.ANAN100D) bridge_volt = 0.095f;
-            if (current_hpsdr_model == HPSDRModel.ANAN200D) bridge_volt = 0.108f; // 0.083f;
-            if (current_hpsdr_model == HPSDRModel.ANAN8000D) bridge_volt = 0.108f;
-
-            for (int count = 0; count < 3; count++)
+            switch (current_hpsdr_model)
             {
-                Thread.Sleep(1);
-                adc = NetworkIO.getFwdPower();
-                addadc += adc;
+                case HPSDRModel.ANAN100:
+                case HPSDRModel.ANAN100B:
+                    bridge_volt = 0.095f;
+                    refvoltage = 3.3f;
+                    adc_cal_offset = 6;
+                    break;
+                case HPSDRModel.ANAN100D:
+                    bridge_volt = 0.095f;
+                    refvoltage = 3.3f;
+                    adc_cal_offset = 6;
+                    break;
+                case HPSDRModel.ANAN200D:
+                    bridge_volt = 0.108f;
+                    refvoltage = 5.0f;
+                    adc_cal_offset = 4;
+                    break;
+                case HPSDRModel.ORIONMKII:
+                case HPSDRModel.ANAN8000D:
+                    bridge_volt = 0.08f;
+                    refvoltage = 5.0f;
+                    adc_cal_offset = 18;
+                    break;
+                default:
+                    bridge_volt = 0.09f;
+                    refvoltage = 3.3f;
+                    adc_cal_offset = 6;
+                    break;
             }
-            adc = addadc / 3;
 
-            float volts = (float)(adc / 4095.0f * refvoltage);
+            //for (int count = 0; count < 50; count++)
+            //{
+            //    adc = JanusAudio.getAlexFwdPower();
+            //    addadc += adc;
+            //    Thread.Sleep(1);
+            //}
+            //adc = addadc / 50;
+            adc = NetworkIO.getFwdPower();
+
+            if (adc < 0) adc = 0;
+
+            float volts = (float)((adc - adc_cal_offset) / 4095.0f * refvoltage);
+            if (volts < 0) volts = 0;
             float watts = (float)(Math.Pow(volts, 2) / bridge_volt);
 
             if (PAValues)
             {
-                SetupForm.textFwdADCValue.Text = adc.ToString();
+                average_fwdadc = alpha * average_fwdadc + (1.0f - alpha) * adc;
+                // SetupForm.textFwdADCValue.Text = adc.ToString();
+                //fwd_volts = volts;
                 SetupForm.textFwdVoltage.Text = volts.ToString("f2") + " V";
             }
             if (watts < 0) watts = 0;
@@ -28642,6 +28884,7 @@ namespace Thetis
             }
         }
 
+        /*
         private void PollPAPWR()
         {
             const float alpha = 0.90f;
@@ -28748,6 +28991,131 @@ namespace Thetis
             calfwdpower = 0;
             alex_swr = 0;
             average_drivepwr = 0;
+        }
+        */
+
+        private void PollPAPWR()
+        {
+            const float alpha = 0.90f;
+            float rho = 0;
+            float swr = 0;
+            int high_swr_count = 0;
+            bool swr_pass = false;
+
+            while (chkPower.Checked)
+            {
+                if (mox)
+                {
+                    // computeFwdRevPower(out alex_fwd, out alex_rev);
+                    alex_fwd = computeAlexFwdPower(); //high power
+                    alex_rev = computeRefPower();
+
+                    switch (current_hpsdr_model)
+                    {
+                        case HPSDRModel.ANAN200D:
+                            drivepwr = computeOrionExciterPower();
+                            break;
+                        case HPSDRModel.ORIONMKII:
+                        case HPSDRModel.ANAN8000D:
+                            drivepwr = computeOrionMkIIExciterPower();
+                            break;
+                        default:
+                            drivepwr = computeExciterPower(); // low power
+                            break;
+                    }
+
+                    calfwdpower = CalibratedPAPower();
+                    average_drivepwr = alpha * average_drivepwr + (1.0f - alpha) * drivepwr;
+
+                    rho = (float)Math.Sqrt(alex_rev / alex_fwd);
+                    if (float.IsNaN(rho) || float.IsInfinity(rho))
+                        swr = 1.0f;
+                    else
+                        swr = (1.0f + rho) / (1.0f - rho);
+
+                    if ((alex_fwd <= 2 && alex_rev <= 2) || swr < 1.0f) swr = 1.0f;
+
+                    if (alexpresent || apollopresent)
+                    {
+                        if (swrprotection && alex_fwd > 10.0f && (alex_fwd - alex_rev) < 1.0f) // open ant condition
+                        {
+                            swr = 50.0f;
+                            NetworkIO.SWRProtect = 0.01f;
+                            chkMOX.Checked = false;
+
+                            MessageBox.Show("Please check your antenna connection.",
+                            "High SWR condition detected",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Warning,
+                            MessageBoxDefaultButton.Button1,
+                            (MessageBoxOptions)0x40000); // MB_TOPMOST
+
+                            goto end;
+                        }
+                    }
+                    else
+                    {
+                        swr = 1.0f;
+                        alex_fwd = 0;
+                        alex_rev = 0;
+                    }
+
+                    if (chkTUN.Checked && disable_swr_on_tune && (alexpresent || apollopresent))
+                    {
+                        if (alex_fwd >= 1.0 && alex_fwd <= 10.0 && ptbPWR.Value <= 20)
+                        {
+                            swr_pass = true;
+                        }
+                        else swr_pass = false;
+                    }
+
+                    if (tx_xvtr_index >= 0 || hf_tr_relay)
+                        swr_pass = true;
+
+                    if (swr > 2.25 && alex_fwd > 5.0f && swrprotection && !swr_pass)
+                    {
+                        high_swr_count++;
+                        if (high_swr_count >= 4)
+                        {
+                            high_swr_count = 0;
+                            NetworkIO.SWRProtect = 0.5f;
+                            HighSWR = true;
+                            if (swr > 3) NetworkIO.SWRProtect = 0.25f;
+
+                            if (current_display_engine == DisplayEngine.GDI_PLUS)
+                                picDisplay.Invalidate();
+                        }
+                    }
+                    else
+                    {
+                        high_swr_count = 0;
+                        NetworkIO.SWRProtect = 1.0f;
+                        HighSWR = false;
+                        if (current_display_engine == DisplayEngine.GDI_PLUS)
+                            picDisplay.Invalidate();
+                    }
+
+                end:
+                    swr_pass = false;
+                    if (float.IsNaN(swr) || float.IsInfinity(swr) || swr < 1.0f)
+                        alex_swr = 1.0f;
+                    else
+                        alex_swr = swr;
+                }
+
+                Thread.Sleep(1);
+            }
+
+            alex_fwd = 0;
+            alex_rev = 0;
+            drivepwr = 0;
+            calfwdpower = 0;
+            alex_swr = 0;
+            average_drivepwr = 0;
+            //  average_drvadc = 0;
+            // average_fwdadc = 0;
+            //  average_revadc = 0;
+
         }
 
         private double SWRScale(double ref_pow)
@@ -31338,14 +31706,14 @@ namespace Thetis
                 int power = ptbPWR.Value;
                 if (ptbPWR.Focused)
                     XVTRForm.SetPower(tx_xvtr_index, power);
-                b = BandByFreq(XVTRForm.TranslateFreq(VFOAFreq), tx_xvtr_index, true, current_region);
+                b = BandByFreq(XVTRForm.TranslateFreq(VFOAFreq), tx_xvtr_index, true, current_region, true);
             }
 
             double target_dbm = 10 * (double)Math.Log10((double)val * 1000);
             double gbb = 0.0;
             if (tx_xvtr_index >= 0)
             {
-                Band lo_band = BandByFreq(XVTRForm.TranslateFreq(VFOAFreq), tx_xvtr_index, true, current_region);
+                Band lo_band = BandByFreq(XVTRForm.TranslateFreq(VFOAFreq), tx_xvtr_index, true, current_region, true);
                 gbb = GainByBand(lo_band);
             }
             else
@@ -31721,8 +32089,8 @@ namespace Thetis
 
                 Band lo_band = Band.FIRST;
                 Band lo_bandb = Band.FIRST;
-                lo_band = BandByFreq(XVTRForm.TranslateFreq(VFOAFreq), rx1_xvtr_index, false, current_region);
-                lo_bandb = BandByFreq(XVTRForm.TranslateFreq(VFOBFreq), rx2_xvtr_index, false, current_region);
+                lo_band = BandByFreq(XVTRForm.TranslateFreq(VFOAFreq), rx1_xvtr_index, false, current_region, true);
+                lo_bandb = BandByFreq(XVTRForm.TranslateFreq(VFOBFreq), rx2_xvtr_index, false, current_region, false);
 
                 if (penny_ext_ctrl_enabled)
                     Penny.getPenny().UpdateExtCtrl(lo_band, lo_bandb, mox);
@@ -31796,8 +32164,8 @@ namespace Thetis
 
                 Band lo_band = Band.FIRST;
                 Band lo_bandb = Band.FIRST;
-                lo_band = BandByFreq(XVTRForm.TranslateFreq(VFOAFreq), rx1_xvtr_index, false, current_region);
-                lo_bandb = BandByFreq(XVTRForm.TranslateFreq(VFOBFreq), rx2_xvtr_index, false, current_region);
+                lo_band = BandByFreq(XVTRForm.TranslateFreq(VFOAFreq), rx1_xvtr_index, false, current_region, true);
+                lo_bandb = BandByFreq(XVTRForm.TranslateFreq(VFOBFreq), rx2_xvtr_index, false, current_region, false);
 
                 if (penny_ext_ctrl_enabled)
                     Penny.getPenny().UpdateExtCtrl(lo_band, lo_bandb, mox);
@@ -33919,17 +34287,16 @@ namespace Thetis
             if (rx1_xvtr_index >= 0)
             {
                 RX1XVTRGainOffset = XVTRForm.GetRXGain(rx1_xvtr_index);
-
                 VHFTRRelay = XVTRForm.GetDisablePA(tx_xvtr_index);
 
                 if (vhf_tr_relay)
                 {
-                    NetworkIO.SetXVTREnable(0);
+                    NetworkIO.SetXVTREnable(1);
                     NetworkIO.DisablePA(1);
                 }
                 else
                 {
-                    NetworkIO.SetXVTREnable(1);
+                    NetworkIO.SetXVTREnable(0);
                     NetworkIO.DisablePA(0);
                 }
             }
@@ -33940,14 +34307,19 @@ namespace Thetis
 
                 if (hf_tr_relay)
                 {
-                    NetworkIO.SetXVTREnable(0);
+                   // NetworkIO.SetXVTREnable(1);
                     NetworkIO.DisablePA(1);
                 }
                 else
                 {
-                    NetworkIO.SetXVTREnable(1);
+                    //NetworkIO.SetXVTREnable(0);
                     NetworkIO.DisablePA(0);
                 }
+
+                if (enable_xvtr_hf)
+                    NetworkIO.SetXVTREnable(1); // enable
+                else
+                    NetworkIO.SetXVTREnable(0); // disable
 
                 if (rx1_step_att_present) udRX1StepAttData_ValueChanged(this, EventArgs.Empty);
                 else comboPreamp_SelectedIndexChanged(this, EventArgs.Empty);
@@ -33987,14 +34359,14 @@ namespace Thetis
             if (!(rx2_enabled && (chkEnableMultiRX.Checked || chkVFOSplit.Checked)))
                 txtVFOABand.Text = bandInfo;
 
-            Band b = BandByFreq(freq, rx1_xvtr_index, false, current_region);
+            Band b = BandByFreq(freq, rx1_xvtr_index, false, current_region, true);
             if (b != rx1_band)
                 SetRX1Band(b);
 
             Band old_tx_band = tx_band;
             if (!chkVFOSplit.Checked && !chkVFOBTX.Checked)
             {
-                b = BandByFreq(freq, tx_xvtr_index, true, current_region);
+                b = BandByFreq(freq, tx_xvtr_index, true, current_region, true);
 
                 Band b1 = b; // ke9ns add
 
@@ -34025,8 +34397,8 @@ namespace Thetis
 
             if (chkPower.Checked)
             {
-                lo_band = BandByFreq(XVTRForm.TranslateFreq(VFOAFreq), rx1_xvtr_index, false, current_region);
-                lo_bandb = BandByFreq(XVTRForm.TranslateFreq(VFOBFreq), rx2_xvtr_index, false, current_region);
+                lo_band = BandByFreq(XVTRForm.TranslateFreq(VFOAFreq), rx1_xvtr_index, false, current_region, true);
+                lo_bandb = BandByFreq(XVTRForm.TranslateFreq(VFOBFreq), rx2_xvtr_index, false, current_region, false);
                 if (penny_ext_ctrl_enabled)
                     Penny.getPenny().UpdateExtCtrl(lo_band, lo_bandb, mox);
 
@@ -34419,7 +34791,7 @@ namespace Thetis
             {
                 tx_xvtr_index = XVTRForm.XVTRFreq(freq);
                 Band old_tx_band = tx_band;
-                Band b = BandByFreq(freq, tx_xvtr_index, true, current_region);
+                Band b = BandByFreq(freq, tx_xvtr_index, true, current_region, true);
 
                 Band b1 = b; // ke9ns add
                 if (extended) // ke9ns add if you have extended capabilities then SWL bands are really ham bands
@@ -34803,8 +35175,8 @@ namespace Thetis
                 //  if (rx2_xvtr_index >= 0)
                 //{
                 // Fix Penny O/C VHF control Vk4xv
-                lo_band = BandByFreq(XVTRForm.TranslateFreq(VFOBFreq), rx2_xvtr_index, false, current_region);
-                lo_banda = BandByFreq(XVTRForm.TranslateFreq(VFOAFreq), rx1_xvtr_index, false, current_region);
+                lo_band = BandByFreq(XVTRForm.TranslateFreq(VFOBFreq), rx2_xvtr_index, false, current_region, false);
+                lo_banda = BandByFreq(XVTRForm.TranslateFreq(VFOAFreq), rx1_xvtr_index, false, current_region, false);
 
                 if (penny_ext_ctrl_enabled)
                     Penny.getPenny().UpdateExtCtrl(lo_banda, lo_band, mox);
@@ -34835,7 +35207,7 @@ namespace Thetis
             tx_xvtr_index = rx2_xvtr_index;
             double tx_freq = freq;
             Band old_tx_band = tx_band;
-            Band b = BandByFreq(tx_freq, tx_xvtr_index, true, current_region);
+            Band b = BandByFreq(tx_freq, tx_xvtr_index, true, current_region, false);
 
             Band b1 = b; // ke9ns add
             if (extended) // ke9ns add if you have extended capabilities then SWL bands are really ham bands
@@ -34864,12 +35236,12 @@ namespace Thetis
 
                 if (XVTRForm.GetDisablePA(tx_xvtr_index))
                 {
-                    NetworkIO.SetXVTREnable(0);
+                    NetworkIO.SetXVTREnable(1);
                     NetworkIO.DisablePA(1);
                 }
                 else
                 {
-                    NetworkIO.SetXVTREnable(1);
+                    NetworkIO.SetXVTREnable(0);
                     NetworkIO.DisablePA(0);
                 }
 
@@ -34902,14 +35274,19 @@ namespace Thetis
 
                 if (hf_tr_relay)
                 {
-                    NetworkIO.SetXVTREnable(0);
+                   // NetworkIO.SetXVTREnable(1);
                     NetworkIO.DisablePA(1);
                 }
                 else
                 {
-                    NetworkIO.SetXVTREnable(1);
+                   // NetworkIO.SetXVTREnable(0);
                     NetworkIO.DisablePA(0);
                 }
+
+                if (enable_xvtr_hf)
+                    NetworkIO.SetXVTREnable(1); // enable
+                else
+                    NetworkIO.SetXVTREnable(0); // disable
             }
 
             if (old_tx_band != tx_band)
@@ -34998,7 +35375,7 @@ namespace Thetis
         set_rx2_freq:
             //rx2_xvtr_index = xvtr_index;
 
-            Band band = BandByFreq(freq, rx2_xvtr_index, false, current_region);
+            Band band = BandByFreq(freq, rx2_xvtr_index, false, current_region, false);
             if (band != rx2_band)
                 SetRX2Band(band);
 
@@ -39967,7 +40344,7 @@ namespace Thetis
                     if (saved_vfoa_sub_freq == Display.CLEAR_FLAG) saved_vfoa_sub_freq = saved_vfoa_freq;
                     txtVFOABand.Text = saved_vfoa_sub_freq.ToString("f6");
                     tx_xvtr_index = XVTRForm.XVTRFreq(VFOASubFreq);
-                    TXBand = BandByFreq(VFOASubFreq, tx_xvtr_index, true, current_region);
+                    TXBand = BandByFreq(VFOASubFreq, tx_xvtr_index, true, current_region, true);
                     if (chkPower.Checked) txtVFOABand.ForeColor = Color.Red;
                     else txtVFOABand.ForeColor = Color.DarkRed;
                     txtVFOABand.TextAlign = HorizontalAlignment.Right;
@@ -40061,7 +40438,7 @@ namespace Thetis
                 if (chkVFOSplit.Checked)
                 {
                     if (chkVFOSync.Checked) chkVFOSync.Checked = false;
-                    TXBand = BandByFreq(VFOBFreq, tx_xvtr_index, true, current_region);
+                    TXBand = BandByFreq(VFOBFreq, tx_xvtr_index, true, current_region, false);
                     grpVFOB.Font = new Font("Microsoft Sans Serif", 8.25F, FontStyle.Bold);
                     grpVFOB.ForeColor = Color.Red;
                     //grpVFOB.ForeColor = SystemColors.ControlLightLight;

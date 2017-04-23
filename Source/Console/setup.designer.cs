@@ -2248,36 +2248,11 @@
             this.tpWattMeter = new System.Windows.Forms.TabPage();
             this.btnResetWattMeterValues = new System.Windows.Forms.ButtonTS();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
-            this.grpWattMeterTrim = new System.Windows.Forms.GroupBox();
-            this.udPA10W = new System.Windows.Forms.NumericUpDownTS();
-            this.udPA100W = new System.Windows.Forms.NumericUpDownTS();
-            this.labelTS257 = new System.Windows.Forms.LabelTS();
-            this.labelTS256 = new System.Windows.Forms.LabelTS();
-            this.udPA90W = new System.Windows.Forms.NumericUpDownTS();
-            this.labelTS255 = new System.Windows.Forms.LabelTS();
-            this.labelTS258 = new System.Windows.Forms.LabelTS();
-            this.udPA110W = new System.Windows.Forms.NumericUpDownTS();
-            this.udPA80W = new System.Windows.Forms.NumericUpDownTS();
-            this.udPA120W = new System.Windows.Forms.NumericUpDownTS();
-            this.labelTS259 = new System.Windows.Forms.LabelTS();
-            this.labelTS267 = new System.Windows.Forms.LabelTS();
-            this.udPA70W = new System.Windows.Forms.NumericUpDownTS();
-            this.udPA130W = new System.Windows.Forms.NumericUpDownTS();
-            this.labelTS260 = new System.Windows.Forms.LabelTS();
-            this.labelTS265 = new System.Windows.Forms.LabelTS();
-            this.labelTS266 = new System.Windows.Forms.LabelTS();
-            this.udPA60W = new System.Windows.Forms.NumericUpDownTS();
-            this.udPA140W = new System.Windows.Forms.NumericUpDownTS();
-            this.labelTS261 = new System.Windows.Forms.LabelTS();
-            this.udPA20W = new System.Windows.Forms.NumericUpDownTS();
-            this.labelTS268 = new System.Windows.Forms.LabelTS();
-            this.udPA50W = new System.Windows.Forms.NumericUpDownTS();
-            this.labelTS264 = new System.Windows.Forms.LabelTS();
-            this.labelTS262 = new System.Windows.Forms.LabelTS();
-            this.udPA40W = new System.Windows.Forms.NumericUpDownTS();
-            this.udPA30W = new System.Windows.Forms.NumericUpDownTS();
-            this.labelTS263 = new System.Windows.Forms.LabelTS();
             this.panelPAValues = new System.Windows.Forms.PanelTS();
+            this.textSWR = new System.Windows.Forms.TextBoxTS();
+            this.labelTS256 = new System.Windows.Forms.LabelTS();
+            this.textCaldFwdPower = new System.Windows.Forms.TextBoxTS();
+            this.labelTS255 = new System.Windows.Forms.LabelTS();
             this.btnResetPAValues = new System.Windows.Forms.ButtonTS();
             this.labelTS254 = new System.Windows.Forms.LabelTS();
             this.textDCVolts = new System.Windows.Forms.TextBoxTS();
@@ -2298,6 +2273,93 @@
             this.textRevVoltage = new System.Windows.Forms.TextBoxTS();
             this.labelTS270 = new System.Windows.Forms.LabelTS();
             this.chkPAValues = new System.Windows.Forms.CheckBoxTS();
+            this.grp100WattMeterTrim = new System.Windows.Forms.GroupBox();
+            this.ud100PA10W = new System.Windows.Forms.NumericUpDownTS();
+            this.ud100PA100W = new System.Windows.Forms.NumericUpDownTS();
+            this.label100PA90W = new System.Windows.Forms.LabelTS();
+            this.label100PA100W = new System.Windows.Forms.LabelTS();
+            this.ud100PA90W = new System.Windows.Forms.NumericUpDownTS();
+            this.label100PA110W = new System.Windows.Forms.LabelTS();
+            this.label100PA80W = new System.Windows.Forms.LabelTS();
+            this.ud100PA110W = new System.Windows.Forms.NumericUpDownTS();
+            this.ud100PA80W = new System.Windows.Forms.NumericUpDownTS();
+            this.ud100PA120W = new System.Windows.Forms.NumericUpDownTS();
+            this.label100PA70W = new System.Windows.Forms.LabelTS();
+            this.label100PA120W = new System.Windows.Forms.LabelTS();
+            this.ud100PA70W = new System.Windows.Forms.NumericUpDownTS();
+            this.ud100PA130W = new System.Windows.Forms.NumericUpDownTS();
+            this.label100PA60W = new System.Windows.Forms.LabelTS();
+            this.label100PA10W = new System.Windows.Forms.LabelTS();
+            this.label100PA130W = new System.Windows.Forms.LabelTS();
+            this.ud100PA60W = new System.Windows.Forms.NumericUpDownTS();
+            this.ud100PA140W = new System.Windows.Forms.NumericUpDownTS();
+            this.label100PA50W = new System.Windows.Forms.LabelTS();
+            this.ud100PA20W = new System.Windows.Forms.NumericUpDownTS();
+            this.label100PA140W = new System.Windows.Forms.LabelTS();
+            this.ud100PA50W = new System.Windows.Forms.NumericUpDownTS();
+            this.label100PA20W = new System.Windows.Forms.LabelTS();
+            this.label100PA40W = new System.Windows.Forms.LabelTS();
+            this.ud100PA40W = new System.Windows.Forms.NumericUpDownTS();
+            this.ud100PA30W = new System.Windows.Forms.NumericUpDownTS();
+            this.label100PA30W = new System.Windows.Forms.LabelTS();
+            this.grp200WattMeterTrim = new System.Windows.Forms.GroupBox();
+            this.ud200PA20W = new System.Windows.Forms.NumericUpDownTS();
+            this.ud200PA200W = new System.Windows.Forms.NumericUpDownTS();
+            this.label200PA180W = new System.Windows.Forms.LabelTS();
+            this.label200PA200W = new System.Windows.Forms.LabelTS();
+            this.ud200PA180W = new System.Windows.Forms.NumericUpDownTS();
+            this.label200PA220W = new System.Windows.Forms.LabelTS();
+            this.label200PA160W = new System.Windows.Forms.LabelTS();
+            this.ud200PA220W = new System.Windows.Forms.NumericUpDownTS();
+            this.ud200PA160W = new System.Windows.Forms.NumericUpDownTS();
+            this.ud200PA240W = new System.Windows.Forms.NumericUpDownTS();
+            this.label200PA140W = new System.Windows.Forms.LabelTS();
+            this.label200PA240W = new System.Windows.Forms.LabelTS();
+            this.ud200PA140W = new System.Windows.Forms.NumericUpDownTS();
+            this.ud200PA260W = new System.Windows.Forms.NumericUpDownTS();
+            this.label200PA120W = new System.Windows.Forms.LabelTS();
+            this.label200PA20W = new System.Windows.Forms.LabelTS();
+            this.label200PA260W = new System.Windows.Forms.LabelTS();
+            this.ud200PA120W = new System.Windows.Forms.NumericUpDownTS();
+            this.ud200PA280W = new System.Windows.Forms.NumericUpDownTS();
+            this.label200PA100W = new System.Windows.Forms.LabelTS();
+            this.ud200PA40W = new System.Windows.Forms.NumericUpDownTS();
+            this.label200PA280W = new System.Windows.Forms.LabelTS();
+            this.ud200PA100W = new System.Windows.Forms.NumericUpDownTS();
+            this.label200PA40W = new System.Windows.Forms.LabelTS();
+            this.label200PA80W = new System.Windows.Forms.LabelTS();
+            this.ud200PA80W = new System.Windows.Forms.NumericUpDownTS();
+            this.ud200PA60W = new System.Windows.Forms.NumericUpDownTS();
+            this.label200PA60W = new System.Windows.Forms.LabelTS();
+            this.grp10WattMeterTrim = new System.Windows.Forms.GroupBox();
+            this.ud10PA1W = new System.Windows.Forms.NumericUpDownTS();
+            this.ud10PA10W = new System.Windows.Forms.NumericUpDownTS();
+            this.label10PA9W = new System.Windows.Forms.LabelTS();
+            this.label10PA10W = new System.Windows.Forms.LabelTS();
+            this.ud10PA9W = new System.Windows.Forms.NumericUpDownTS();
+            this.label10PA11W = new System.Windows.Forms.LabelTS();
+            this.label10PA8W = new System.Windows.Forms.LabelTS();
+            this.ud10PA11W = new System.Windows.Forms.NumericUpDownTS();
+            this.ud10PA8W = new System.Windows.Forms.NumericUpDownTS();
+            this.ud10PA12W = new System.Windows.Forms.NumericUpDownTS();
+            this.label10PA7W = new System.Windows.Forms.LabelTS();
+            this.label10PA12W = new System.Windows.Forms.LabelTS();
+            this.ud10PA7W = new System.Windows.Forms.NumericUpDownTS();
+            this.ud10PA13W = new System.Windows.Forms.NumericUpDownTS();
+            this.label10PA6W = new System.Windows.Forms.LabelTS();
+            this.label10PA1W = new System.Windows.Forms.LabelTS();
+            this.label10PA13W = new System.Windows.Forms.LabelTS();
+            this.ud10PA6W = new System.Windows.Forms.NumericUpDownTS();
+            this.ud10PA14W = new System.Windows.Forms.NumericUpDownTS();
+            this.label10PA5W = new System.Windows.Forms.LabelTS();
+            this.ud10PA2W = new System.Windows.Forms.NumericUpDownTS();
+            this.label10PA14W = new System.Windows.Forms.LabelTS();
+            this.ud10PA5W = new System.Windows.Forms.NumericUpDownTS();
+            this.label10PA2W = new System.Windows.Forms.LabelTS();
+            this.label10PA4W = new System.Windows.Forms.LabelTS();
+            this.ud10PA4W = new System.Windows.Forms.NumericUpDownTS();
+            this.ud10PA3W = new System.Windows.Forms.NumericUpDownTS();
+            this.label10PA3W = new System.Windows.Forms.LabelTS();
             this.tpAppearance = new System.Windows.Forms.TabPage();
             this.tcAppearance = new System.Windows.Forms.TabControl();
             this.tpAppearanceGeneral = new System.Windows.Forms.TabPage();
@@ -3447,22 +3509,52 @@
             ((System.ComponentModel.ISupportInitialize)(this.udANAN100PAGain80)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.udANAN100PAGain160)).BeginInit();
             this.tpWattMeter.SuspendLayout();
-            this.grpWattMeterTrim.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.udPA10W)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.udPA100W)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.udPA90W)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.udPA110W)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.udPA80W)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.udPA120W)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.udPA70W)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.udPA130W)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.udPA60W)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.udPA140W)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.udPA20W)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.udPA50W)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.udPA40W)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.udPA30W)).BeginInit();
             this.panelPAValues.SuspendLayout();
+            this.grp100WattMeterTrim.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.ud100PA10W)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ud100PA100W)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ud100PA90W)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ud100PA110W)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ud100PA80W)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ud100PA120W)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ud100PA70W)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ud100PA130W)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ud100PA60W)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ud100PA140W)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ud100PA20W)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ud100PA50W)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ud100PA40W)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ud100PA30W)).BeginInit();
+            this.grp200WattMeterTrim.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.ud200PA20W)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ud200PA200W)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ud200PA180W)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ud200PA220W)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ud200PA160W)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ud200PA240W)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ud200PA140W)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ud200PA260W)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ud200PA120W)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ud200PA280W)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ud200PA40W)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ud200PA100W)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ud200PA80W)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ud200PA60W)).BeginInit();
+            this.grp10WattMeterTrim.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.ud10PA1W)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ud10PA10W)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ud10PA9W)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ud10PA11W)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ud10PA8W)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ud10PA12W)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ud10PA7W)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ud10PA13W)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ud10PA6W)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ud10PA14W)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ud10PA2W)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ud10PA5W)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ud10PA4W)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ud10PA3W)).BeginInit();
             this.tpAppearance.SuspendLayout();
             this.tcAppearance.SuspendLayout();
             this.tpAppearanceGeneral.SuspendLayout();
@@ -38712,9 +38804,11 @@
             this.tpWattMeter.BackColor = System.Drawing.SystemColors.Control;
             this.tpWattMeter.Controls.Add(this.btnResetWattMeterValues);
             this.tpWattMeter.Controls.Add(this.richTextBox1);
-            this.tpWattMeter.Controls.Add(this.grpWattMeterTrim);
             this.tpWattMeter.Controls.Add(this.panelPAValues);
             this.tpWattMeter.Controls.Add(this.chkPAValues);
+            this.tpWattMeter.Controls.Add(this.grp100WattMeterTrim);
+            this.tpWattMeter.Controls.Add(this.grp200WattMeterTrim);
+            this.tpWattMeter.Controls.Add(this.grp10WattMeterTrim);
             this.tpWattMeter.Location = new System.Drawing.Point(4, 22);
             this.tpWattMeter.Name = "tpWattMeter";
             this.tpWattMeter.Padding = new System.Windows.Forms.Padding(3);
@@ -38725,7 +38819,7 @@
             // btnResetWattMeterValues
             // 
             this.btnResetWattMeterValues.Image = null;
-            this.btnResetWattMeterValues.Location = new System.Drawing.Point(107, 217);
+            this.btnResetWattMeterValues.Location = new System.Drawing.Point(100, 210);
             this.btnResetWattMeterValues.Name = "btnResetWattMeterValues";
             this.btnResetWattMeterValues.Size = new System.Drawing.Size(50, 23);
             this.btnResetWattMeterValues.TabIndex = 6;
@@ -38736,608 +38830,21 @@
             // 
             // richTextBox1
             // 
-            this.richTextBox1.Location = new System.Drawing.Point(3, 244);
+            this.richTextBox1.Location = new System.Drawing.Point(3, 235);
             this.richTextBox1.Name = "richTextBox1";
             this.richTextBox1.ReadOnly = true;
-            this.richTextBox1.Size = new System.Drawing.Size(567, 90);
+            this.richTextBox1.Size = new System.Drawing.Size(567, 101);
             this.richTextBox1.TabIndex = 3;
-            this.richTextBox1.Text = "";
-            // 
-            // grpWattMeterTrim
-            // 
-            this.grpWattMeterTrim.Controls.Add(this.udPA10W);
-            this.grpWattMeterTrim.Controls.Add(this.udPA100W);
-            this.grpWattMeterTrim.Controls.Add(this.labelTS257);
-            this.grpWattMeterTrim.Controls.Add(this.labelTS256);
-            this.grpWattMeterTrim.Controls.Add(this.udPA90W);
-            this.grpWattMeterTrim.Controls.Add(this.labelTS255);
-            this.grpWattMeterTrim.Controls.Add(this.labelTS258);
-            this.grpWattMeterTrim.Controls.Add(this.udPA110W);
-            this.grpWattMeterTrim.Controls.Add(this.udPA80W);
-            this.grpWattMeterTrim.Controls.Add(this.udPA120W);
-            this.grpWattMeterTrim.Controls.Add(this.labelTS259);
-            this.grpWattMeterTrim.Controls.Add(this.labelTS267);
-            this.grpWattMeterTrim.Controls.Add(this.udPA70W);
-            this.grpWattMeterTrim.Controls.Add(this.udPA130W);
-            this.grpWattMeterTrim.Controls.Add(this.labelTS260);
-            this.grpWattMeterTrim.Controls.Add(this.labelTS265);
-            this.grpWattMeterTrim.Controls.Add(this.labelTS266);
-            this.grpWattMeterTrim.Controls.Add(this.udPA60W);
-            this.grpWattMeterTrim.Controls.Add(this.udPA140W);
-            this.grpWattMeterTrim.Controls.Add(this.labelTS261);
-            this.grpWattMeterTrim.Controls.Add(this.udPA20W);
-            this.grpWattMeterTrim.Controls.Add(this.labelTS268);
-            this.grpWattMeterTrim.Controls.Add(this.udPA50W);
-            this.grpWattMeterTrim.Controls.Add(this.labelTS264);
-            this.grpWattMeterTrim.Controls.Add(this.labelTS262);
-            this.grpWattMeterTrim.Controls.Add(this.udPA40W);
-            this.grpWattMeterTrim.Controls.Add(this.udPA30W);
-            this.grpWattMeterTrim.Controls.Add(this.labelTS263);
-            this.grpWattMeterTrim.Location = new System.Drawing.Point(6, 13);
-            this.grpWattMeterTrim.Name = "grpWattMeterTrim";
-            this.grpWattMeterTrim.Size = new System.Drawing.Size(249, 198);
-            this.grpWattMeterTrim.TabIndex = 0;
-            this.grpWattMeterTrim.TabStop = false;
-            this.grpWattMeterTrim.Text = "Watt Meter Trim";
-            // 
-            // udPA10W
-            // 
-            this.udPA10W.DecimalPlaces = 1;
-            this.udPA10W.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            65536});
-            this.udPA10W.Location = new System.Drawing.Point(48, 24);
-            this.udPA10W.Maximum = new decimal(new int[] {
-            100,
-            0,
-            0,
-            0});
-            this.udPA10W.Minimum = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            this.udPA10W.Name = "udPA10W";
-            this.udPA10W.Size = new System.Drawing.Size(48, 20);
-            this.udPA10W.TabIndex = 87;
-            this.udPA10W.Value = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
-            // 
-            // udPA100W
-            // 
-            this.udPA100W.DecimalPlaces = 1;
-            this.udPA100W.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            65536});
-            this.udPA100W.Location = new System.Drawing.Point(184, 72);
-            this.udPA100W.Maximum = new decimal(new int[] {
-            120,
-            0,
-            0,
-            0});
-            this.udPA100W.Minimum = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            this.udPA100W.Name = "udPA100W";
-            this.udPA100W.Size = new System.Drawing.Size(48, 20);
-            this.udPA100W.TabIndex = 105;
-            this.udPA100W.Value = new decimal(new int[] {
-            100,
-            0,
-            0,
-            0});
-            // 
-            // labelTS257
-            // 
-            this.labelTS257.Image = null;
-            this.labelTS257.Location = new System.Drawing.Point(144, 48);
-            this.labelTS257.Name = "labelTS257";
-            this.labelTS257.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.labelTS257.Size = new System.Drawing.Size(40, 16);
-            this.labelTS257.TabIndex = 104;
-            this.labelTS257.Text = "90W:";
-            this.labelTS257.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // labelTS256
-            // 
-            this.labelTS256.Image = null;
-            this.labelTS256.Location = new System.Drawing.Point(144, 72);
-            this.labelTS256.Name = "labelTS256";
-            this.labelTS256.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.labelTS256.Size = new System.Drawing.Size(40, 16);
-            this.labelTS256.TabIndex = 106;
-            this.labelTS256.Text = "100W:";
-            this.labelTS256.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // udPA90W
-            // 
-            this.udPA90W.DecimalPlaces = 1;
-            this.udPA90W.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            65536});
-            this.udPA90W.Location = new System.Drawing.Point(184, 48);
-            this.udPA90W.Maximum = new decimal(new int[] {
-            110,
-            0,
-            0,
-            0});
-            this.udPA90W.Minimum = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            this.udPA90W.Name = "udPA90W";
-            this.udPA90W.Size = new System.Drawing.Size(48, 20);
-            this.udPA90W.TabIndex = 103;
-            this.udPA90W.Value = new decimal(new int[] {
-            90,
-            0,
-            0,
-            0});
-            // 
-            // labelTS255
-            // 
-            this.labelTS255.Image = null;
-            this.labelTS255.Location = new System.Drawing.Point(144, 96);
-            this.labelTS255.Name = "labelTS255";
-            this.labelTS255.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.labelTS255.Size = new System.Drawing.Size(40, 16);
-            this.labelTS255.TabIndex = 107;
-            this.labelTS255.Text = "110W:";
-            this.labelTS255.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.labelTS255.Visible = false;
-            // 
-            // labelTS258
-            // 
-            this.labelTS258.Image = null;
-            this.labelTS258.Location = new System.Drawing.Point(144, 24);
-            this.labelTS258.Name = "labelTS258";
-            this.labelTS258.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.labelTS258.Size = new System.Drawing.Size(40, 16);
-            this.labelTS258.TabIndex = 102;
-            this.labelTS258.Text = "80W:";
-            this.labelTS258.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // udPA110W
-            // 
-            this.udPA110W.DecimalPlaces = 1;
-            this.udPA110W.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            65536});
-            this.udPA110W.Location = new System.Drawing.Point(184, 96);
-            this.udPA110W.Maximum = new decimal(new int[] {
-            130,
-            0,
-            0,
-            0});
-            this.udPA110W.Minimum = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            this.udPA110W.Name = "udPA110W";
-            this.udPA110W.Size = new System.Drawing.Size(48, 20);
-            this.udPA110W.TabIndex = 108;
-            this.udPA110W.Value = new decimal(new int[] {
-            110,
-            0,
-            0,
-            0});
-            this.udPA110W.Visible = false;
-            // 
-            // udPA80W
-            // 
-            this.udPA80W.DecimalPlaces = 1;
-            this.udPA80W.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            65536});
-            this.udPA80W.Location = new System.Drawing.Point(184, 24);
-            this.udPA80W.Maximum = new decimal(new int[] {
-            100,
-            0,
-            0,
-            0});
-            this.udPA80W.Minimum = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            this.udPA80W.Name = "udPA80W";
-            this.udPA80W.Size = new System.Drawing.Size(48, 20);
-            this.udPA80W.TabIndex = 101;
-            this.udPA80W.Value = new decimal(new int[] {
-            80,
-            0,
-            0,
-            0});
-            // 
-            // udPA120W
-            // 
-            this.udPA120W.DecimalPlaces = 1;
-            this.udPA120W.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            65536});
-            this.udPA120W.Location = new System.Drawing.Point(184, 120);
-            this.udPA120W.Maximum = new decimal(new int[] {
-            140,
-            0,
-            0,
-            0});
-            this.udPA120W.Minimum = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            this.udPA120W.Name = "udPA120W";
-            this.udPA120W.Size = new System.Drawing.Size(48, 20);
-            this.udPA120W.TabIndex = 109;
-            this.udPA120W.Value = new decimal(new int[] {
-            120,
-            0,
-            0,
-            0});
-            this.udPA120W.Visible = false;
-            // 
-            // labelTS259
-            // 
-            this.labelTS259.Image = null;
-            this.labelTS259.Location = new System.Drawing.Point(8, 168);
-            this.labelTS259.Name = "labelTS259";
-            this.labelTS259.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.labelTS259.Size = new System.Drawing.Size(40, 16);
-            this.labelTS259.TabIndex = 100;
-            this.labelTS259.Text = "70W:";
-            this.labelTS259.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // labelTS267
-            // 
-            this.labelTS267.Image = null;
-            this.labelTS267.Location = new System.Drawing.Point(144, 120);
-            this.labelTS267.Name = "labelTS267";
-            this.labelTS267.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.labelTS267.Size = new System.Drawing.Size(40, 16);
-            this.labelTS267.TabIndex = 110;
-            this.labelTS267.Text = "120W:";
-            this.labelTS267.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.labelTS267.Visible = false;
-            // 
-            // udPA70W
-            // 
-            this.udPA70W.DecimalPlaces = 1;
-            this.udPA70W.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            65536});
-            this.udPA70W.Location = new System.Drawing.Point(48, 168);
-            this.udPA70W.Maximum = new decimal(new int[] {
-            100,
-            0,
-            0,
-            0});
-            this.udPA70W.Minimum = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            this.udPA70W.Name = "udPA70W";
-            this.udPA70W.Size = new System.Drawing.Size(48, 20);
-            this.udPA70W.TabIndex = 99;
-            this.udPA70W.Value = new decimal(new int[] {
-            70,
-            0,
-            0,
-            0});
-            // 
-            // udPA130W
-            // 
-            this.udPA130W.DecimalPlaces = 1;
-            this.udPA130W.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            65536});
-            this.udPA130W.Location = new System.Drawing.Point(184, 144);
-            this.udPA130W.Maximum = new decimal(new int[] {
-            150,
-            0,
-            0,
-            0});
-            this.udPA130W.Minimum = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            this.udPA130W.Name = "udPA130W";
-            this.udPA130W.Size = new System.Drawing.Size(48, 20);
-            this.udPA130W.TabIndex = 111;
-            this.udPA130W.Value = new decimal(new int[] {
-            130,
-            0,
-            0,
-            0});
-            this.udPA130W.Visible = false;
-            // 
-            // labelTS260
-            // 
-            this.labelTS260.Image = null;
-            this.labelTS260.Location = new System.Drawing.Point(8, 144);
-            this.labelTS260.Name = "labelTS260";
-            this.labelTS260.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.labelTS260.Size = new System.Drawing.Size(40, 16);
-            this.labelTS260.TabIndex = 98;
-            this.labelTS260.Text = "60W:";
-            this.labelTS260.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // labelTS265
-            // 
-            this.labelTS265.Image = null;
-            this.labelTS265.Location = new System.Drawing.Point(8, 24);
-            this.labelTS265.Name = "labelTS265";
-            this.labelTS265.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.labelTS265.Size = new System.Drawing.Size(40, 16);
-            this.labelTS265.TabIndex = 88;
-            this.labelTS265.Text = "10W:";
-            this.labelTS265.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // labelTS266
-            // 
-            this.labelTS266.Image = null;
-            this.labelTS266.Location = new System.Drawing.Point(144, 144);
-            this.labelTS266.Name = "labelTS266";
-            this.labelTS266.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.labelTS266.Size = new System.Drawing.Size(40, 16);
-            this.labelTS266.TabIndex = 112;
-            this.labelTS266.Text = "130W:";
-            this.labelTS266.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.labelTS266.Visible = false;
-            // 
-            // udPA60W
-            // 
-            this.udPA60W.DecimalPlaces = 1;
-            this.udPA60W.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            65536});
-            this.udPA60W.Location = new System.Drawing.Point(48, 144);
-            this.udPA60W.Maximum = new decimal(new int[] {
-            100,
-            0,
-            0,
-            0});
-            this.udPA60W.Minimum = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            this.udPA60W.Name = "udPA60W";
-            this.udPA60W.Size = new System.Drawing.Size(48, 20);
-            this.udPA60W.TabIndex = 97;
-            this.udPA60W.Value = new decimal(new int[] {
-            60,
-            0,
-            0,
-            0});
-            // 
-            // udPA140W
-            // 
-            this.udPA140W.DecimalPlaces = 1;
-            this.udPA140W.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            65536});
-            this.udPA140W.Location = new System.Drawing.Point(184, 168);
-            this.udPA140W.Maximum = new decimal(new int[] {
-            160,
-            0,
-            0,
-            0});
-            this.udPA140W.Minimum = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            this.udPA140W.Name = "udPA140W";
-            this.udPA140W.Size = new System.Drawing.Size(48, 20);
-            this.udPA140W.TabIndex = 113;
-            this.udPA140W.Value = new decimal(new int[] {
-            140,
-            0,
-            0,
-            0});
-            this.udPA140W.Visible = false;
-            // 
-            // labelTS261
-            // 
-            this.labelTS261.Image = null;
-            this.labelTS261.Location = new System.Drawing.Point(8, 120);
-            this.labelTS261.Name = "labelTS261";
-            this.labelTS261.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.labelTS261.Size = new System.Drawing.Size(40, 16);
-            this.labelTS261.TabIndex = 96;
-            this.labelTS261.Text = "50W:";
-            this.labelTS261.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // udPA20W
-            // 
-            this.udPA20W.DecimalPlaces = 1;
-            this.udPA20W.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            65536});
-            this.udPA20W.Location = new System.Drawing.Point(48, 48);
-            this.udPA20W.Maximum = new decimal(new int[] {
-            100,
-            0,
-            0,
-            0});
-            this.udPA20W.Minimum = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            this.udPA20W.Name = "udPA20W";
-            this.udPA20W.Size = new System.Drawing.Size(48, 20);
-            this.udPA20W.TabIndex = 89;
-            this.udPA20W.Value = new decimal(new int[] {
-            20,
-            0,
-            0,
-            0});
-            // 
-            // labelTS268
-            // 
-            this.labelTS268.Image = null;
-            this.labelTS268.Location = new System.Drawing.Point(144, 168);
-            this.labelTS268.Name = "labelTS268";
-            this.labelTS268.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.labelTS268.Size = new System.Drawing.Size(40, 16);
-            this.labelTS268.TabIndex = 114;
-            this.labelTS268.Text = "140W:";
-            this.labelTS268.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.labelTS268.Visible = false;
-            // 
-            // udPA50W
-            // 
-            this.udPA50W.DecimalPlaces = 1;
-            this.udPA50W.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            65536});
-            this.udPA50W.Location = new System.Drawing.Point(48, 120);
-            this.udPA50W.Maximum = new decimal(new int[] {
-            100,
-            0,
-            0,
-            0});
-            this.udPA50W.Minimum = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            this.udPA50W.Name = "udPA50W";
-            this.udPA50W.Size = new System.Drawing.Size(48, 20);
-            this.udPA50W.TabIndex = 95;
-            this.udPA50W.Value = new decimal(new int[] {
-            50,
-            0,
-            0,
-            0});
-            // 
-            // labelTS264
-            // 
-            this.labelTS264.Image = null;
-            this.labelTS264.Location = new System.Drawing.Point(8, 48);
-            this.labelTS264.Name = "labelTS264";
-            this.labelTS264.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.labelTS264.Size = new System.Drawing.Size(40, 16);
-            this.labelTS264.TabIndex = 90;
-            this.labelTS264.Text = "20W:";
-            this.labelTS264.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // labelTS262
-            // 
-            this.labelTS262.Image = null;
-            this.labelTS262.Location = new System.Drawing.Point(8, 96);
-            this.labelTS262.Name = "labelTS262";
-            this.labelTS262.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.labelTS262.Size = new System.Drawing.Size(40, 16);
-            this.labelTS262.TabIndex = 94;
-            this.labelTS262.Text = "40W:";
-            this.labelTS262.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // udPA40W
-            // 
-            this.udPA40W.DecimalPlaces = 1;
-            this.udPA40W.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            65536});
-            this.udPA40W.Location = new System.Drawing.Point(48, 96);
-            this.udPA40W.Maximum = new decimal(new int[] {
-            100,
-            0,
-            0,
-            0});
-            this.udPA40W.Minimum = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            this.udPA40W.Name = "udPA40W";
-            this.udPA40W.Size = new System.Drawing.Size(48, 20);
-            this.udPA40W.TabIndex = 93;
-            this.udPA40W.Value = new decimal(new int[] {
-            40,
-            0,
-            0,
-            0});
-            // 
-            // udPA30W
-            // 
-            this.udPA30W.DecimalPlaces = 1;
-            this.udPA30W.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            65536});
-            this.udPA30W.Location = new System.Drawing.Point(48, 72);
-            this.udPA30W.Maximum = new decimal(new int[] {
-            100,
-            0,
-            0,
-            0});
-            this.udPA30W.Minimum = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            this.udPA30W.Name = "udPA30W";
-            this.udPA30W.Size = new System.Drawing.Size(48, 20);
-            this.udPA30W.TabIndex = 91;
-            this.udPA30W.Value = new decimal(new int[] {
-            30,
-            0,
-            0,
-            0});
-            // 
-            // labelTS263
-            // 
-            this.labelTS263.Image = null;
-            this.labelTS263.Location = new System.Drawing.Point(8, 72);
-            this.labelTS263.Name = "labelTS263";
-            this.labelTS263.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.labelTS263.Size = new System.Drawing.Size(40, 16);
-            this.labelTS263.TabIndex = 92;
-            this.labelTS263.Text = "30W:";
-            this.labelTS263.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.richTextBox1.Text = resources.GetString("richTextBox1.Text");
             // 
             // panelPAValues
             // 
             this.panelPAValues.AutoScrollMargin = new System.Drawing.Size(0, 0);
             this.panelPAValues.AutoScrollMinSize = new System.Drawing.Size(0, 0);
+            this.panelPAValues.Controls.Add(this.textSWR);
+            this.panelPAValues.Controls.Add(this.labelTS256);
+            this.panelPAValues.Controls.Add(this.textCaldFwdPower);
+            this.panelPAValues.Controls.Add(this.labelTS255);
             this.panelPAValues.Controls.Add(this.btnResetPAValues);
             this.panelPAValues.Controls.Add(this.labelTS254);
             this.panelPAValues.Controls.Add(this.textDCVolts);
@@ -39362,6 +38869,50 @@
             this.panelPAValues.Size = new System.Drawing.Size(309, 189);
             this.panelPAValues.TabIndex = 2;
             this.panelPAValues.Visible = false;
+            // 
+            // textSWR
+            // 
+            this.textSWR.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(46)))), ((int)(((byte)(46)))));
+            this.textSWR.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold);
+            this.textSWR.ForeColor = System.Drawing.Color.White;
+            this.textSWR.Location = new System.Drawing.Point(10, 170);
+            this.textSWR.Name = "textSWR";
+            this.textSWR.ReadOnly = true;
+            this.textSWR.Size = new System.Drawing.Size(90, 20);
+            this.textSWR.TabIndex = 187;
+            // 
+            // labelTS256
+            // 
+            this.labelTS256.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelTS256.Image = null;
+            this.labelTS256.Location = new System.Drawing.Point(7, 150);
+            this.labelTS256.Name = "labelTS256";
+            this.labelTS256.Size = new System.Drawing.Size(93, 16);
+            this.labelTS256.TabIndex = 188;
+            this.labelTS256.Text = "SWR";
+            this.labelTS256.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // textCaldFwdPower
+            // 
+            this.textCaldFwdPower.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(46)))), ((int)(((byte)(46)))));
+            this.textCaldFwdPower.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold);
+            this.textCaldFwdPower.ForeColor = System.Drawing.Color.White;
+            this.textCaldFwdPower.Location = new System.Drawing.Point(106, 170);
+            this.textCaldFwdPower.Name = "textCaldFwdPower";
+            this.textCaldFwdPower.ReadOnly = true;
+            this.textCaldFwdPower.Size = new System.Drawing.Size(90, 20);
+            this.textCaldFwdPower.TabIndex = 185;
+            // 
+            // labelTS255
+            // 
+            this.labelTS255.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelTS255.Image = null;
+            this.labelTS255.Location = new System.Drawing.Point(103, 150);
+            this.labelTS255.Name = "labelTS255";
+            this.labelTS255.Size = new System.Drawing.Size(93, 16);
+            this.labelTS255.TabIndex = 186;
+            this.labelTS255.Text = "Cal\'d Fwd Power";
+            this.labelTS255.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // btnResetPAValues
             // 
@@ -39588,6 +39139,1775 @@
             this.toolTip1.SetToolTip(this.chkPAValues, "Show PA power and voltage.");
             this.chkPAValues.UseVisualStyleBackColor = true;
             this.chkPAValues.CheckedChanged += new System.EventHandler(this.chkPAValues_CheckedChanged);
+            // 
+            // grp100WattMeterTrim
+            // 
+            this.grp100WattMeterTrim.Controls.Add(this.ud100PA10W);
+            this.grp100WattMeterTrim.Controls.Add(this.ud100PA100W);
+            this.grp100WattMeterTrim.Controls.Add(this.label100PA90W);
+            this.grp100WattMeterTrim.Controls.Add(this.label100PA100W);
+            this.grp100WattMeterTrim.Controls.Add(this.ud100PA90W);
+            this.grp100WattMeterTrim.Controls.Add(this.label100PA110W);
+            this.grp100WattMeterTrim.Controls.Add(this.label100PA80W);
+            this.grp100WattMeterTrim.Controls.Add(this.ud100PA110W);
+            this.grp100WattMeterTrim.Controls.Add(this.ud100PA80W);
+            this.grp100WattMeterTrim.Controls.Add(this.ud100PA120W);
+            this.grp100WattMeterTrim.Controls.Add(this.label100PA70W);
+            this.grp100WattMeterTrim.Controls.Add(this.label100PA120W);
+            this.grp100WattMeterTrim.Controls.Add(this.ud100PA70W);
+            this.grp100WattMeterTrim.Controls.Add(this.ud100PA130W);
+            this.grp100WattMeterTrim.Controls.Add(this.label100PA60W);
+            this.grp100WattMeterTrim.Controls.Add(this.label100PA10W);
+            this.grp100WattMeterTrim.Controls.Add(this.label100PA130W);
+            this.grp100WattMeterTrim.Controls.Add(this.ud100PA60W);
+            this.grp100WattMeterTrim.Controls.Add(this.ud100PA140W);
+            this.grp100WattMeterTrim.Controls.Add(this.label100PA50W);
+            this.grp100WattMeterTrim.Controls.Add(this.ud100PA20W);
+            this.grp100WattMeterTrim.Controls.Add(this.label100PA140W);
+            this.grp100WattMeterTrim.Controls.Add(this.ud100PA50W);
+            this.grp100WattMeterTrim.Controls.Add(this.label100PA20W);
+            this.grp100WattMeterTrim.Controls.Add(this.label100PA40W);
+            this.grp100WattMeterTrim.Controls.Add(this.ud100PA40W);
+            this.grp100WattMeterTrim.Controls.Add(this.ud100PA30W);
+            this.grp100WattMeterTrim.Controls.Add(this.label100PA30W);
+            this.grp100WattMeterTrim.Location = new System.Drawing.Point(6, 13);
+            this.grp100WattMeterTrim.Name = "grp100WattMeterTrim";
+            this.grp100WattMeterTrim.Size = new System.Drawing.Size(249, 198);
+            this.grp100WattMeterTrim.TabIndex = 0;
+            this.grp100WattMeterTrim.TabStop = false;
+            this.grp100WattMeterTrim.Text = "100 Watt Meter Trim";
+            // 
+            // ud100PA10W
+            // 
+            this.ud100PA10W.DecimalPlaces = 1;
+            this.ud100PA10W.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.ud100PA10W.Location = new System.Drawing.Point(48, 24);
+            this.ud100PA10W.Maximum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+            this.ud100PA10W.Minimum = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.ud100PA10W.Name = "ud100PA10W";
+            this.ud100PA10W.Size = new System.Drawing.Size(48, 20);
+            this.ud100PA10W.TabIndex = 87;
+            this.ud100PA10W.Value = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            // 
+            // ud100PA100W
+            // 
+            this.ud100PA100W.DecimalPlaces = 1;
+            this.ud100PA100W.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.ud100PA100W.Location = new System.Drawing.Point(184, 72);
+            this.ud100PA100W.Maximum = new decimal(new int[] {
+            120,
+            0,
+            0,
+            0});
+            this.ud100PA100W.Minimum = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.ud100PA100W.Name = "ud100PA100W";
+            this.ud100PA100W.Size = new System.Drawing.Size(48, 20);
+            this.ud100PA100W.TabIndex = 105;
+            this.ud100PA100W.Value = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+            // 
+            // label100PA90W
+            // 
+            this.label100PA90W.Image = null;
+            this.label100PA90W.Location = new System.Drawing.Point(144, 48);
+            this.label100PA90W.Name = "label100PA90W";
+            this.label100PA90W.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.label100PA90W.Size = new System.Drawing.Size(40, 16);
+            this.label100PA90W.TabIndex = 104;
+            this.label100PA90W.Text = "90W:";
+            this.label100PA90W.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label100PA100W
+            // 
+            this.label100PA100W.Image = null;
+            this.label100PA100W.Location = new System.Drawing.Point(144, 72);
+            this.label100PA100W.Name = "label100PA100W";
+            this.label100PA100W.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.label100PA100W.Size = new System.Drawing.Size(40, 16);
+            this.label100PA100W.TabIndex = 106;
+            this.label100PA100W.Text = "100W:";
+            this.label100PA100W.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // ud100PA90W
+            // 
+            this.ud100PA90W.DecimalPlaces = 1;
+            this.ud100PA90W.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.ud100PA90W.Location = new System.Drawing.Point(184, 48);
+            this.ud100PA90W.Maximum = new decimal(new int[] {
+            110,
+            0,
+            0,
+            0});
+            this.ud100PA90W.Minimum = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.ud100PA90W.Name = "ud100PA90W";
+            this.ud100PA90W.Size = new System.Drawing.Size(48, 20);
+            this.ud100PA90W.TabIndex = 103;
+            this.ud100PA90W.Value = new decimal(new int[] {
+            90,
+            0,
+            0,
+            0});
+            // 
+            // label100PA110W
+            // 
+            this.label100PA110W.Image = null;
+            this.label100PA110W.Location = new System.Drawing.Point(144, 96);
+            this.label100PA110W.Name = "label100PA110W";
+            this.label100PA110W.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.label100PA110W.Size = new System.Drawing.Size(40, 16);
+            this.label100PA110W.TabIndex = 107;
+            this.label100PA110W.Text = "110W:";
+            this.label100PA110W.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.label100PA110W.Visible = false;
+            // 
+            // label100PA80W
+            // 
+            this.label100PA80W.Image = null;
+            this.label100PA80W.Location = new System.Drawing.Point(144, 24);
+            this.label100PA80W.Name = "label100PA80W";
+            this.label100PA80W.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.label100PA80W.Size = new System.Drawing.Size(40, 16);
+            this.label100PA80W.TabIndex = 102;
+            this.label100PA80W.Text = "80W:";
+            this.label100PA80W.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // ud100PA110W
+            // 
+            this.ud100PA110W.DecimalPlaces = 1;
+            this.ud100PA110W.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.ud100PA110W.Location = new System.Drawing.Point(184, 96);
+            this.ud100PA110W.Maximum = new decimal(new int[] {
+            130,
+            0,
+            0,
+            0});
+            this.ud100PA110W.Minimum = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.ud100PA110W.Name = "ud100PA110W";
+            this.ud100PA110W.Size = new System.Drawing.Size(48, 20);
+            this.ud100PA110W.TabIndex = 108;
+            this.ud100PA110W.Value = new decimal(new int[] {
+            110,
+            0,
+            0,
+            0});
+            this.ud100PA110W.Visible = false;
+            // 
+            // ud100PA80W
+            // 
+            this.ud100PA80W.DecimalPlaces = 1;
+            this.ud100PA80W.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.ud100PA80W.Location = new System.Drawing.Point(184, 24);
+            this.ud100PA80W.Maximum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+            this.ud100PA80W.Minimum = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.ud100PA80W.Name = "ud100PA80W";
+            this.ud100PA80W.Size = new System.Drawing.Size(48, 20);
+            this.ud100PA80W.TabIndex = 101;
+            this.ud100PA80W.Value = new decimal(new int[] {
+            80,
+            0,
+            0,
+            0});
+            // 
+            // ud100PA120W
+            // 
+            this.ud100PA120W.DecimalPlaces = 1;
+            this.ud100PA120W.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.ud100PA120W.Location = new System.Drawing.Point(184, 120);
+            this.ud100PA120W.Maximum = new decimal(new int[] {
+            140,
+            0,
+            0,
+            0});
+            this.ud100PA120W.Minimum = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.ud100PA120W.Name = "ud100PA120W";
+            this.ud100PA120W.Size = new System.Drawing.Size(48, 20);
+            this.ud100PA120W.TabIndex = 109;
+            this.ud100PA120W.Value = new decimal(new int[] {
+            120,
+            0,
+            0,
+            0});
+            this.ud100PA120W.Visible = false;
+            // 
+            // label100PA70W
+            // 
+            this.label100PA70W.Image = null;
+            this.label100PA70W.Location = new System.Drawing.Point(8, 168);
+            this.label100PA70W.Name = "label100PA70W";
+            this.label100PA70W.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.label100PA70W.Size = new System.Drawing.Size(40, 16);
+            this.label100PA70W.TabIndex = 100;
+            this.label100PA70W.Text = "70W:";
+            this.label100PA70W.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label100PA120W
+            // 
+            this.label100PA120W.Image = null;
+            this.label100PA120W.Location = new System.Drawing.Point(144, 120);
+            this.label100PA120W.Name = "label100PA120W";
+            this.label100PA120W.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.label100PA120W.Size = new System.Drawing.Size(40, 16);
+            this.label100PA120W.TabIndex = 110;
+            this.label100PA120W.Text = "120W:";
+            this.label100PA120W.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.label100PA120W.Visible = false;
+            // 
+            // ud100PA70W
+            // 
+            this.ud100PA70W.DecimalPlaces = 1;
+            this.ud100PA70W.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.ud100PA70W.Location = new System.Drawing.Point(48, 168);
+            this.ud100PA70W.Maximum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+            this.ud100PA70W.Minimum = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.ud100PA70W.Name = "ud100PA70W";
+            this.ud100PA70W.Size = new System.Drawing.Size(48, 20);
+            this.ud100PA70W.TabIndex = 99;
+            this.ud100PA70W.Value = new decimal(new int[] {
+            70,
+            0,
+            0,
+            0});
+            // 
+            // ud100PA130W
+            // 
+            this.ud100PA130W.DecimalPlaces = 1;
+            this.ud100PA130W.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.ud100PA130W.Location = new System.Drawing.Point(184, 144);
+            this.ud100PA130W.Maximum = new decimal(new int[] {
+            150,
+            0,
+            0,
+            0});
+            this.ud100PA130W.Minimum = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.ud100PA130W.Name = "ud100PA130W";
+            this.ud100PA130W.Size = new System.Drawing.Size(48, 20);
+            this.ud100PA130W.TabIndex = 111;
+            this.ud100PA130W.Value = new decimal(new int[] {
+            130,
+            0,
+            0,
+            0});
+            this.ud100PA130W.Visible = false;
+            // 
+            // label100PA60W
+            // 
+            this.label100PA60W.Image = null;
+            this.label100PA60W.Location = new System.Drawing.Point(8, 144);
+            this.label100PA60W.Name = "label100PA60W";
+            this.label100PA60W.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.label100PA60W.Size = new System.Drawing.Size(40, 16);
+            this.label100PA60W.TabIndex = 98;
+            this.label100PA60W.Text = "60W:";
+            this.label100PA60W.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label100PA10W
+            // 
+            this.label100PA10W.Image = null;
+            this.label100PA10W.Location = new System.Drawing.Point(8, 24);
+            this.label100PA10W.Name = "label100PA10W";
+            this.label100PA10W.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.label100PA10W.Size = new System.Drawing.Size(40, 16);
+            this.label100PA10W.TabIndex = 88;
+            this.label100PA10W.Text = "10W:";
+            this.label100PA10W.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label100PA130W
+            // 
+            this.label100PA130W.Image = null;
+            this.label100PA130W.Location = new System.Drawing.Point(144, 144);
+            this.label100PA130W.Name = "label100PA130W";
+            this.label100PA130W.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.label100PA130W.Size = new System.Drawing.Size(40, 16);
+            this.label100PA130W.TabIndex = 112;
+            this.label100PA130W.Text = "130W:";
+            this.label100PA130W.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.label100PA130W.Visible = false;
+            // 
+            // ud100PA60W
+            // 
+            this.ud100PA60W.DecimalPlaces = 1;
+            this.ud100PA60W.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.ud100PA60W.Location = new System.Drawing.Point(48, 144);
+            this.ud100PA60W.Maximum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+            this.ud100PA60W.Minimum = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.ud100PA60W.Name = "ud100PA60W";
+            this.ud100PA60W.Size = new System.Drawing.Size(48, 20);
+            this.ud100PA60W.TabIndex = 97;
+            this.ud100PA60W.Value = new decimal(new int[] {
+            60,
+            0,
+            0,
+            0});
+            // 
+            // ud100PA140W
+            // 
+            this.ud100PA140W.DecimalPlaces = 1;
+            this.ud100PA140W.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.ud100PA140W.Location = new System.Drawing.Point(184, 168);
+            this.ud100PA140W.Maximum = new decimal(new int[] {
+            160,
+            0,
+            0,
+            0});
+            this.ud100PA140W.Minimum = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.ud100PA140W.Name = "ud100PA140W";
+            this.ud100PA140W.Size = new System.Drawing.Size(48, 20);
+            this.ud100PA140W.TabIndex = 113;
+            this.ud100PA140W.Value = new decimal(new int[] {
+            140,
+            0,
+            0,
+            0});
+            this.ud100PA140W.Visible = false;
+            // 
+            // label100PA50W
+            // 
+            this.label100PA50W.Image = null;
+            this.label100PA50W.Location = new System.Drawing.Point(8, 120);
+            this.label100PA50W.Name = "label100PA50W";
+            this.label100PA50W.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.label100PA50W.Size = new System.Drawing.Size(40, 16);
+            this.label100PA50W.TabIndex = 96;
+            this.label100PA50W.Text = "50W:";
+            this.label100PA50W.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // ud100PA20W
+            // 
+            this.ud100PA20W.DecimalPlaces = 1;
+            this.ud100PA20W.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.ud100PA20W.Location = new System.Drawing.Point(48, 48);
+            this.ud100PA20W.Maximum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+            this.ud100PA20W.Minimum = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.ud100PA20W.Name = "ud100PA20W";
+            this.ud100PA20W.Size = new System.Drawing.Size(48, 20);
+            this.ud100PA20W.TabIndex = 89;
+            this.ud100PA20W.Value = new decimal(new int[] {
+            20,
+            0,
+            0,
+            0});
+            // 
+            // label100PA140W
+            // 
+            this.label100PA140W.Image = null;
+            this.label100PA140W.Location = new System.Drawing.Point(144, 168);
+            this.label100PA140W.Name = "label100PA140W";
+            this.label100PA140W.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.label100PA140W.Size = new System.Drawing.Size(40, 16);
+            this.label100PA140W.TabIndex = 114;
+            this.label100PA140W.Text = "140W:";
+            this.label100PA140W.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.label100PA140W.Visible = false;
+            // 
+            // ud100PA50W
+            // 
+            this.ud100PA50W.DecimalPlaces = 1;
+            this.ud100PA50W.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.ud100PA50W.Location = new System.Drawing.Point(48, 120);
+            this.ud100PA50W.Maximum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+            this.ud100PA50W.Minimum = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.ud100PA50W.Name = "ud100PA50W";
+            this.ud100PA50W.Size = new System.Drawing.Size(48, 20);
+            this.ud100PA50W.TabIndex = 95;
+            this.ud100PA50W.Value = new decimal(new int[] {
+            50,
+            0,
+            0,
+            0});
+            // 
+            // label100PA20W
+            // 
+            this.label100PA20W.Image = null;
+            this.label100PA20W.Location = new System.Drawing.Point(8, 48);
+            this.label100PA20W.Name = "label100PA20W";
+            this.label100PA20W.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.label100PA20W.Size = new System.Drawing.Size(40, 16);
+            this.label100PA20W.TabIndex = 90;
+            this.label100PA20W.Text = "20W:";
+            this.label100PA20W.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label100PA40W
+            // 
+            this.label100PA40W.Image = null;
+            this.label100PA40W.Location = new System.Drawing.Point(8, 96);
+            this.label100PA40W.Name = "label100PA40W";
+            this.label100PA40W.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.label100PA40W.Size = new System.Drawing.Size(40, 16);
+            this.label100PA40W.TabIndex = 94;
+            this.label100PA40W.Text = "40W:";
+            this.label100PA40W.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // ud100PA40W
+            // 
+            this.ud100PA40W.DecimalPlaces = 1;
+            this.ud100PA40W.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.ud100PA40W.Location = new System.Drawing.Point(48, 96);
+            this.ud100PA40W.Maximum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+            this.ud100PA40W.Minimum = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.ud100PA40W.Name = "ud100PA40W";
+            this.ud100PA40W.Size = new System.Drawing.Size(48, 20);
+            this.ud100PA40W.TabIndex = 93;
+            this.ud100PA40W.Value = new decimal(new int[] {
+            40,
+            0,
+            0,
+            0});
+            // 
+            // ud100PA30W
+            // 
+            this.ud100PA30W.DecimalPlaces = 1;
+            this.ud100PA30W.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.ud100PA30W.Location = new System.Drawing.Point(48, 72);
+            this.ud100PA30W.Maximum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+            this.ud100PA30W.Minimum = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.ud100PA30W.Name = "ud100PA30W";
+            this.ud100PA30W.Size = new System.Drawing.Size(48, 20);
+            this.ud100PA30W.TabIndex = 91;
+            this.ud100PA30W.Value = new decimal(new int[] {
+            30,
+            0,
+            0,
+            0});
+            // 
+            // label100PA30W
+            // 
+            this.label100PA30W.Image = null;
+            this.label100PA30W.Location = new System.Drawing.Point(8, 72);
+            this.label100PA30W.Name = "label100PA30W";
+            this.label100PA30W.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.label100PA30W.Size = new System.Drawing.Size(40, 16);
+            this.label100PA30W.TabIndex = 92;
+            this.label100PA30W.Text = "30W:";
+            this.label100PA30W.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // grp200WattMeterTrim
+            // 
+            this.grp200WattMeterTrim.Controls.Add(this.ud200PA20W);
+            this.grp200WattMeterTrim.Controls.Add(this.ud200PA200W);
+            this.grp200WattMeterTrim.Controls.Add(this.label200PA180W);
+            this.grp200WattMeterTrim.Controls.Add(this.label200PA200W);
+            this.grp200WattMeterTrim.Controls.Add(this.ud200PA180W);
+            this.grp200WattMeterTrim.Controls.Add(this.label200PA220W);
+            this.grp200WattMeterTrim.Controls.Add(this.label200PA160W);
+            this.grp200WattMeterTrim.Controls.Add(this.ud200PA220W);
+            this.grp200WattMeterTrim.Controls.Add(this.ud200PA160W);
+            this.grp200WattMeterTrim.Controls.Add(this.ud200PA240W);
+            this.grp200WattMeterTrim.Controls.Add(this.label200PA140W);
+            this.grp200WattMeterTrim.Controls.Add(this.label200PA240W);
+            this.grp200WattMeterTrim.Controls.Add(this.ud200PA140W);
+            this.grp200WattMeterTrim.Controls.Add(this.ud200PA260W);
+            this.grp200WattMeterTrim.Controls.Add(this.label200PA120W);
+            this.grp200WattMeterTrim.Controls.Add(this.label200PA20W);
+            this.grp200WattMeterTrim.Controls.Add(this.label200PA260W);
+            this.grp200WattMeterTrim.Controls.Add(this.ud200PA120W);
+            this.grp200WattMeterTrim.Controls.Add(this.ud200PA280W);
+            this.grp200WattMeterTrim.Controls.Add(this.label200PA100W);
+            this.grp200WattMeterTrim.Controls.Add(this.ud200PA40W);
+            this.grp200WattMeterTrim.Controls.Add(this.label200PA280W);
+            this.grp200WattMeterTrim.Controls.Add(this.ud200PA100W);
+            this.grp200WattMeterTrim.Controls.Add(this.label200PA40W);
+            this.grp200WattMeterTrim.Controls.Add(this.label200PA80W);
+            this.grp200WattMeterTrim.Controls.Add(this.ud200PA80W);
+            this.grp200WattMeterTrim.Controls.Add(this.ud200PA60W);
+            this.grp200WattMeterTrim.Controls.Add(this.label200PA60W);
+            this.grp200WattMeterTrim.Location = new System.Drawing.Point(6, 13);
+            this.grp200WattMeterTrim.Name = "grp200WattMeterTrim";
+            this.grp200WattMeterTrim.Size = new System.Drawing.Size(249, 198);
+            this.grp200WattMeterTrim.TabIndex = 7;
+            this.grp200WattMeterTrim.TabStop = false;
+            this.grp200WattMeterTrim.Text = "200 Watt Meter Trim";
+            // 
+            // ud200PA20W
+            // 
+            this.ud200PA20W.DecimalPlaces = 1;
+            this.ud200PA20W.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.ud200PA20W.Location = new System.Drawing.Point(48, 24);
+            this.ud200PA20W.Maximum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+            this.ud200PA20W.Minimum = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.ud200PA20W.Name = "ud200PA20W";
+            this.ud200PA20W.Size = new System.Drawing.Size(48, 20);
+            this.ud200PA20W.TabIndex = 87;
+            this.ud200PA20W.Value = new decimal(new int[] {
+            20,
+            0,
+            0,
+            0});
+            // 
+            // ud200PA200W
+            // 
+            this.ud200PA200W.DecimalPlaces = 1;
+            this.ud200PA200W.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.ud200PA200W.Location = new System.Drawing.Point(184, 72);
+            this.ud200PA200W.Maximum = new decimal(new int[] {
+            240,
+            0,
+            0,
+            0});
+            this.ud200PA200W.Minimum = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.ud200PA200W.Name = "ud200PA200W";
+            this.ud200PA200W.Size = new System.Drawing.Size(48, 20);
+            this.ud200PA200W.TabIndex = 105;
+            this.ud200PA200W.Value = new decimal(new int[] {
+            200,
+            0,
+            0,
+            0});
+            // 
+            // label200PA180W
+            // 
+            this.label200PA180W.Image = null;
+            this.label200PA180W.Location = new System.Drawing.Point(144, 48);
+            this.label200PA180W.Name = "label200PA180W";
+            this.label200PA180W.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.label200PA180W.Size = new System.Drawing.Size(40, 16);
+            this.label200PA180W.TabIndex = 104;
+            this.label200PA180W.Text = "180W:";
+            this.label200PA180W.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label200PA200W
+            // 
+            this.label200PA200W.Image = null;
+            this.label200PA200W.Location = new System.Drawing.Point(144, 72);
+            this.label200PA200W.Name = "label200PA200W";
+            this.label200PA200W.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.label200PA200W.Size = new System.Drawing.Size(40, 16);
+            this.label200PA200W.TabIndex = 106;
+            this.label200PA200W.Text = "200W:";
+            this.label200PA200W.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // ud200PA180W
+            // 
+            this.ud200PA180W.DecimalPlaces = 1;
+            this.ud200PA180W.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.ud200PA180W.Location = new System.Drawing.Point(184, 48);
+            this.ud200PA180W.Maximum = new decimal(new int[] {
+            220,
+            0,
+            0,
+            0});
+            this.ud200PA180W.Minimum = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.ud200PA180W.Name = "ud200PA180W";
+            this.ud200PA180W.Size = new System.Drawing.Size(48, 20);
+            this.ud200PA180W.TabIndex = 103;
+            this.ud200PA180W.Value = new decimal(new int[] {
+            180,
+            0,
+            0,
+            0});
+            // 
+            // label200PA220W
+            // 
+            this.label200PA220W.Image = null;
+            this.label200PA220W.Location = new System.Drawing.Point(144, 96);
+            this.label200PA220W.Name = "label200PA220W";
+            this.label200PA220W.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.label200PA220W.Size = new System.Drawing.Size(40, 16);
+            this.label200PA220W.TabIndex = 107;
+            this.label200PA220W.Text = "220W:";
+            this.label200PA220W.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.label200PA220W.Visible = false;
+            // 
+            // label200PA160W
+            // 
+            this.label200PA160W.Image = null;
+            this.label200PA160W.Location = new System.Drawing.Point(144, 24);
+            this.label200PA160W.Name = "label200PA160W";
+            this.label200PA160W.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.label200PA160W.Size = new System.Drawing.Size(40, 16);
+            this.label200PA160W.TabIndex = 102;
+            this.label200PA160W.Text = "160W:";
+            this.label200PA160W.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // ud200PA220W
+            // 
+            this.ud200PA220W.DecimalPlaces = 1;
+            this.ud200PA220W.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.ud200PA220W.Location = new System.Drawing.Point(184, 96);
+            this.ud200PA220W.Maximum = new decimal(new int[] {
+            260,
+            0,
+            0,
+            0});
+            this.ud200PA220W.Minimum = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.ud200PA220W.Name = "ud200PA220W";
+            this.ud200PA220W.Size = new System.Drawing.Size(48, 20);
+            this.ud200PA220W.TabIndex = 108;
+            this.ud200PA220W.Value = new decimal(new int[] {
+            220,
+            0,
+            0,
+            0});
+            this.ud200PA220W.Visible = false;
+            // 
+            // ud200PA160W
+            // 
+            this.ud200PA160W.DecimalPlaces = 1;
+            this.ud200PA160W.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.ud200PA160W.Location = new System.Drawing.Point(184, 24);
+            this.ud200PA160W.Maximum = new decimal(new int[] {
+            200,
+            0,
+            0,
+            0});
+            this.ud200PA160W.Minimum = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.ud200PA160W.Name = "ud200PA160W";
+            this.ud200PA160W.Size = new System.Drawing.Size(48, 20);
+            this.ud200PA160W.TabIndex = 101;
+            this.ud200PA160W.Value = new decimal(new int[] {
+            160,
+            0,
+            0,
+            0});
+            // 
+            // ud200PA240W
+            // 
+            this.ud200PA240W.DecimalPlaces = 1;
+            this.ud200PA240W.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.ud200PA240W.Location = new System.Drawing.Point(184, 120);
+            this.ud200PA240W.Maximum = new decimal(new int[] {
+            280,
+            0,
+            0,
+            0});
+            this.ud200PA240W.Minimum = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.ud200PA240W.Name = "ud200PA240W";
+            this.ud200PA240W.Size = new System.Drawing.Size(48, 20);
+            this.ud200PA240W.TabIndex = 109;
+            this.ud200PA240W.Value = new decimal(new int[] {
+            240,
+            0,
+            0,
+            0});
+            this.ud200PA240W.Visible = false;
+            // 
+            // label200PA140W
+            // 
+            this.label200PA140W.Image = null;
+            this.label200PA140W.Location = new System.Drawing.Point(8, 168);
+            this.label200PA140W.Name = "label200PA140W";
+            this.label200PA140W.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.label200PA140W.Size = new System.Drawing.Size(40, 16);
+            this.label200PA140W.TabIndex = 100;
+            this.label200PA140W.Text = "140W:";
+            this.label200PA140W.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label200PA240W
+            // 
+            this.label200PA240W.Image = null;
+            this.label200PA240W.Location = new System.Drawing.Point(144, 120);
+            this.label200PA240W.Name = "label200PA240W";
+            this.label200PA240W.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.label200PA240W.Size = new System.Drawing.Size(40, 16);
+            this.label200PA240W.TabIndex = 110;
+            this.label200PA240W.Text = "240W:";
+            this.label200PA240W.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.label200PA240W.Visible = false;
+            // 
+            // ud200PA140W
+            // 
+            this.ud200PA140W.DecimalPlaces = 1;
+            this.ud200PA140W.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.ud200PA140W.Location = new System.Drawing.Point(48, 168);
+            this.ud200PA140W.Maximum = new decimal(new int[] {
+            200,
+            0,
+            0,
+            0});
+            this.ud200PA140W.Minimum = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.ud200PA140W.Name = "ud200PA140W";
+            this.ud200PA140W.Size = new System.Drawing.Size(48, 20);
+            this.ud200PA140W.TabIndex = 99;
+            this.ud200PA140W.Value = new decimal(new int[] {
+            140,
+            0,
+            0,
+            0});
+            // 
+            // ud200PA260W
+            // 
+            this.ud200PA260W.DecimalPlaces = 1;
+            this.ud200PA260W.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.ud200PA260W.Location = new System.Drawing.Point(184, 144);
+            this.ud200PA260W.Maximum = new decimal(new int[] {
+            300,
+            0,
+            0,
+            0});
+            this.ud200PA260W.Minimum = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.ud200PA260W.Name = "ud200PA260W";
+            this.ud200PA260W.Size = new System.Drawing.Size(48, 20);
+            this.ud200PA260W.TabIndex = 111;
+            this.ud200PA260W.Value = new decimal(new int[] {
+            260,
+            0,
+            0,
+            0});
+            this.ud200PA260W.Visible = false;
+            // 
+            // label200PA120W
+            // 
+            this.label200PA120W.Image = null;
+            this.label200PA120W.Location = new System.Drawing.Point(8, 144);
+            this.label200PA120W.Name = "label200PA120W";
+            this.label200PA120W.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.label200PA120W.Size = new System.Drawing.Size(40, 16);
+            this.label200PA120W.TabIndex = 98;
+            this.label200PA120W.Text = "120W:";
+            this.label200PA120W.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label200PA20W
+            // 
+            this.label200PA20W.Image = null;
+            this.label200PA20W.Location = new System.Drawing.Point(8, 24);
+            this.label200PA20W.Name = "label200PA20W";
+            this.label200PA20W.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.label200PA20W.Size = new System.Drawing.Size(40, 16);
+            this.label200PA20W.TabIndex = 88;
+            this.label200PA20W.Text = "20W:";
+            this.label200PA20W.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label200PA260W
+            // 
+            this.label200PA260W.Image = null;
+            this.label200PA260W.Location = new System.Drawing.Point(144, 144);
+            this.label200PA260W.Name = "label200PA260W";
+            this.label200PA260W.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.label200PA260W.Size = new System.Drawing.Size(40, 16);
+            this.label200PA260W.TabIndex = 112;
+            this.label200PA260W.Text = "260W:";
+            this.label200PA260W.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.label200PA260W.Visible = false;
+            // 
+            // ud200PA120W
+            // 
+            this.ud200PA120W.DecimalPlaces = 1;
+            this.ud200PA120W.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.ud200PA120W.Location = new System.Drawing.Point(48, 144);
+            this.ud200PA120W.Maximum = new decimal(new int[] {
+            200,
+            0,
+            0,
+            0});
+            this.ud200PA120W.Minimum = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.ud200PA120W.Name = "ud200PA120W";
+            this.ud200PA120W.Size = new System.Drawing.Size(48, 20);
+            this.ud200PA120W.TabIndex = 97;
+            this.ud200PA120W.Value = new decimal(new int[] {
+            120,
+            0,
+            0,
+            0});
+            // 
+            // ud200PA280W
+            // 
+            this.ud200PA280W.DecimalPlaces = 1;
+            this.ud200PA280W.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.ud200PA280W.Location = new System.Drawing.Point(184, 168);
+            this.ud200PA280W.Maximum = new decimal(new int[] {
+            320,
+            0,
+            0,
+            0});
+            this.ud200PA280W.Minimum = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.ud200PA280W.Name = "ud200PA280W";
+            this.ud200PA280W.Size = new System.Drawing.Size(48, 20);
+            this.ud200PA280W.TabIndex = 113;
+            this.ud200PA280W.Value = new decimal(new int[] {
+            280,
+            0,
+            0,
+            0});
+            this.ud200PA280W.Visible = false;
+            // 
+            // label200PA100W
+            // 
+            this.label200PA100W.Image = null;
+            this.label200PA100W.Location = new System.Drawing.Point(8, 120);
+            this.label200PA100W.Name = "label200PA100W";
+            this.label200PA100W.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.label200PA100W.Size = new System.Drawing.Size(40, 16);
+            this.label200PA100W.TabIndex = 96;
+            this.label200PA100W.Text = "100W:";
+            this.label200PA100W.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // ud200PA40W
+            // 
+            this.ud200PA40W.DecimalPlaces = 1;
+            this.ud200PA40W.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.ud200PA40W.Location = new System.Drawing.Point(48, 48);
+            this.ud200PA40W.Maximum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+            this.ud200PA40W.Minimum = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.ud200PA40W.Name = "ud200PA40W";
+            this.ud200PA40W.Size = new System.Drawing.Size(48, 20);
+            this.ud200PA40W.TabIndex = 89;
+            this.ud200PA40W.Value = new decimal(new int[] {
+            40,
+            0,
+            0,
+            0});
+            // 
+            // label200PA280W
+            // 
+            this.label200PA280W.Image = null;
+            this.label200PA280W.Location = new System.Drawing.Point(144, 168);
+            this.label200PA280W.Name = "label200PA280W";
+            this.label200PA280W.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.label200PA280W.Size = new System.Drawing.Size(40, 16);
+            this.label200PA280W.TabIndex = 114;
+            this.label200PA280W.Text = "280W:";
+            this.label200PA280W.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.label200PA280W.Visible = false;
+            // 
+            // ud200PA100W
+            // 
+            this.ud200PA100W.DecimalPlaces = 1;
+            this.ud200PA100W.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.ud200PA100W.Location = new System.Drawing.Point(48, 120);
+            this.ud200PA100W.Maximum = new decimal(new int[] {
+            140,
+            0,
+            0,
+            0});
+            this.ud200PA100W.Minimum = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.ud200PA100W.Name = "ud200PA100W";
+            this.ud200PA100W.Size = new System.Drawing.Size(48, 20);
+            this.ud200PA100W.TabIndex = 95;
+            this.ud200PA100W.Value = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+            // 
+            // label200PA40W
+            // 
+            this.label200PA40W.Image = null;
+            this.label200PA40W.Location = new System.Drawing.Point(8, 48);
+            this.label200PA40W.Name = "label200PA40W";
+            this.label200PA40W.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.label200PA40W.Size = new System.Drawing.Size(40, 16);
+            this.label200PA40W.TabIndex = 90;
+            this.label200PA40W.Text = "40W:";
+            this.label200PA40W.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label200PA80W
+            // 
+            this.label200PA80W.Image = null;
+            this.label200PA80W.Location = new System.Drawing.Point(8, 96);
+            this.label200PA80W.Name = "label200PA80W";
+            this.label200PA80W.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.label200PA80W.Size = new System.Drawing.Size(40, 16);
+            this.label200PA80W.TabIndex = 94;
+            this.label200PA80W.Text = "80W:";
+            this.label200PA80W.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // ud200PA80W
+            // 
+            this.ud200PA80W.DecimalPlaces = 1;
+            this.ud200PA80W.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.ud200PA80W.Location = new System.Drawing.Point(48, 96);
+            this.ud200PA80W.Maximum = new decimal(new int[] {
+            120,
+            0,
+            0,
+            0});
+            this.ud200PA80W.Minimum = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.ud200PA80W.Name = "ud200PA80W";
+            this.ud200PA80W.Size = new System.Drawing.Size(48, 20);
+            this.ud200PA80W.TabIndex = 93;
+            this.ud200PA80W.Value = new decimal(new int[] {
+            80,
+            0,
+            0,
+            0});
+            // 
+            // ud200PA60W
+            // 
+            this.ud200PA60W.DecimalPlaces = 1;
+            this.ud200PA60W.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.ud200PA60W.Location = new System.Drawing.Point(48, 72);
+            this.ud200PA60W.Maximum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+            this.ud200PA60W.Minimum = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.ud200PA60W.Name = "ud200PA60W";
+            this.ud200PA60W.Size = new System.Drawing.Size(48, 20);
+            this.ud200PA60W.TabIndex = 91;
+            this.ud200PA60W.Value = new decimal(new int[] {
+            60,
+            0,
+            0,
+            0});
+            // 
+            // label200PA60W
+            // 
+            this.label200PA60W.Image = null;
+            this.label200PA60W.Location = new System.Drawing.Point(8, 72);
+            this.label200PA60W.Name = "label200PA60W";
+            this.label200PA60W.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.label200PA60W.Size = new System.Drawing.Size(40, 16);
+            this.label200PA60W.TabIndex = 92;
+            this.label200PA60W.Text = "60W:";
+            this.label200PA60W.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // grp10WattMeterTrim
+            // 
+            this.grp10WattMeterTrim.Controls.Add(this.ud10PA1W);
+            this.grp10WattMeterTrim.Controls.Add(this.ud10PA10W);
+            this.grp10WattMeterTrim.Controls.Add(this.label10PA9W);
+            this.grp10WattMeterTrim.Controls.Add(this.label10PA10W);
+            this.grp10WattMeterTrim.Controls.Add(this.ud10PA9W);
+            this.grp10WattMeterTrim.Controls.Add(this.label10PA11W);
+            this.grp10WattMeterTrim.Controls.Add(this.label10PA8W);
+            this.grp10WattMeterTrim.Controls.Add(this.ud10PA11W);
+            this.grp10WattMeterTrim.Controls.Add(this.ud10PA8W);
+            this.grp10WattMeterTrim.Controls.Add(this.ud10PA12W);
+            this.grp10WattMeterTrim.Controls.Add(this.label10PA7W);
+            this.grp10WattMeterTrim.Controls.Add(this.label10PA12W);
+            this.grp10WattMeterTrim.Controls.Add(this.ud10PA7W);
+            this.grp10WattMeterTrim.Controls.Add(this.ud10PA13W);
+            this.grp10WattMeterTrim.Controls.Add(this.label10PA6W);
+            this.grp10WattMeterTrim.Controls.Add(this.label10PA1W);
+            this.grp10WattMeterTrim.Controls.Add(this.label10PA13W);
+            this.grp10WattMeterTrim.Controls.Add(this.ud10PA6W);
+            this.grp10WattMeterTrim.Controls.Add(this.ud10PA14W);
+            this.grp10WattMeterTrim.Controls.Add(this.label10PA5W);
+            this.grp10WattMeterTrim.Controls.Add(this.ud10PA2W);
+            this.grp10WattMeterTrim.Controls.Add(this.label10PA14W);
+            this.grp10WattMeterTrim.Controls.Add(this.ud10PA5W);
+            this.grp10WattMeterTrim.Controls.Add(this.label10PA2W);
+            this.grp10WattMeterTrim.Controls.Add(this.label10PA4W);
+            this.grp10WattMeterTrim.Controls.Add(this.ud10PA4W);
+            this.grp10WattMeterTrim.Controls.Add(this.ud10PA3W);
+            this.grp10WattMeterTrim.Controls.Add(this.label10PA3W);
+            this.grp10WattMeterTrim.Location = new System.Drawing.Point(6, 13);
+            this.grp10WattMeterTrim.Name = "grp10WattMeterTrim";
+            this.grp10WattMeterTrim.Size = new System.Drawing.Size(249, 198);
+            this.grp10WattMeterTrim.TabIndex = 23;
+            this.grp10WattMeterTrim.TabStop = false;
+            this.grp10WattMeterTrim.Text = "10 Watt Meter Trim";
+            // 
+            // ud10PA1W
+            // 
+            this.ud10PA1W.DecimalPlaces = 1;
+            this.ud10PA1W.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.ud10PA1W.Location = new System.Drawing.Point(48, 24);
+            this.ud10PA1W.Maximum = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.ud10PA1W.Minimum = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.ud10PA1W.Name = "ud10PA1W";
+            this.ud10PA1W.Size = new System.Drawing.Size(48, 20);
+            this.ud10PA1W.TabIndex = 87;
+            this.ud10PA1W.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // ud10PA10W
+            // 
+            this.ud10PA10W.DecimalPlaces = 1;
+            this.ud10PA10W.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.ud10PA10W.Location = new System.Drawing.Point(184, 72);
+            this.ud10PA10W.Maximum = new decimal(new int[] {
+            12,
+            0,
+            0,
+            0});
+            this.ud10PA10W.Minimum = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.ud10PA10W.Name = "ud10PA10W";
+            this.ud10PA10W.Size = new System.Drawing.Size(48, 20);
+            this.ud10PA10W.TabIndex = 105;
+            this.ud10PA10W.Value = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            // 
+            // label10PA9W
+            // 
+            this.label10PA9W.Image = null;
+            this.label10PA9W.Location = new System.Drawing.Point(144, 48);
+            this.label10PA9W.Name = "label10PA9W";
+            this.label10PA9W.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.label10PA9W.Size = new System.Drawing.Size(40, 16);
+            this.label10PA9W.TabIndex = 104;
+            this.label10PA9W.Text = "9W:";
+            this.label10PA9W.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label10PA10W
+            // 
+            this.label10PA10W.Image = null;
+            this.label10PA10W.Location = new System.Drawing.Point(144, 72);
+            this.label10PA10W.Name = "label10PA10W";
+            this.label10PA10W.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.label10PA10W.Size = new System.Drawing.Size(40, 16);
+            this.label10PA10W.TabIndex = 106;
+            this.label10PA10W.Text = "10W:";
+            this.label10PA10W.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // ud10PA9W
+            // 
+            this.ud10PA9W.DecimalPlaces = 1;
+            this.ud10PA9W.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.ud10PA9W.Location = new System.Drawing.Point(184, 48);
+            this.ud10PA9W.Maximum = new decimal(new int[] {
+            11,
+            0,
+            0,
+            0});
+            this.ud10PA9W.Minimum = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.ud10PA9W.Name = "ud10PA9W";
+            this.ud10PA9W.Size = new System.Drawing.Size(48, 20);
+            this.ud10PA9W.TabIndex = 103;
+            this.ud10PA9W.Value = new decimal(new int[] {
+            9,
+            0,
+            0,
+            0});
+            // 
+            // label10PA11W
+            // 
+            this.label10PA11W.Image = null;
+            this.label10PA11W.Location = new System.Drawing.Point(144, 96);
+            this.label10PA11W.Name = "label10PA11W";
+            this.label10PA11W.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.label10PA11W.Size = new System.Drawing.Size(40, 16);
+            this.label10PA11W.TabIndex = 107;
+            this.label10PA11W.Text = "11W:";
+            this.label10PA11W.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.label10PA11W.Visible = false;
+            // 
+            // label10PA8W
+            // 
+            this.label10PA8W.Image = null;
+            this.label10PA8W.Location = new System.Drawing.Point(144, 24);
+            this.label10PA8W.Name = "label10PA8W";
+            this.label10PA8W.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.label10PA8W.Size = new System.Drawing.Size(40, 16);
+            this.label10PA8W.TabIndex = 102;
+            this.label10PA8W.Text = "8W:";
+            this.label10PA8W.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // ud10PA11W
+            // 
+            this.ud10PA11W.DecimalPlaces = 1;
+            this.ud10PA11W.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.ud10PA11W.Location = new System.Drawing.Point(184, 96);
+            this.ud10PA11W.Maximum = new decimal(new int[] {
+            13,
+            0,
+            0,
+            0});
+            this.ud10PA11W.Minimum = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.ud10PA11W.Name = "ud10PA11W";
+            this.ud10PA11W.Size = new System.Drawing.Size(48, 20);
+            this.ud10PA11W.TabIndex = 108;
+            this.ud10PA11W.Value = new decimal(new int[] {
+            11,
+            0,
+            0,
+            0});
+            // 
+            // ud10PA8W
+            // 
+            this.ud10PA8W.DecimalPlaces = 1;
+            this.ud10PA8W.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.ud10PA8W.Location = new System.Drawing.Point(184, 24);
+            this.ud10PA8W.Maximum = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.ud10PA8W.Minimum = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.ud10PA8W.Name = "ud10PA8W";
+            this.ud10PA8W.Size = new System.Drawing.Size(48, 20);
+            this.ud10PA8W.TabIndex = 101;
+            this.ud10PA8W.Value = new decimal(new int[] {
+            8,
+            0,
+            0,
+            0});
+            // 
+            // ud10PA12W
+            // 
+            this.ud10PA12W.DecimalPlaces = 1;
+            this.ud10PA12W.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.ud10PA12W.Location = new System.Drawing.Point(184, 120);
+            this.ud10PA12W.Maximum = new decimal(new int[] {
+            14,
+            0,
+            0,
+            0});
+            this.ud10PA12W.Minimum = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.ud10PA12W.Name = "ud10PA12W";
+            this.ud10PA12W.Size = new System.Drawing.Size(48, 20);
+            this.ud10PA12W.TabIndex = 109;
+            this.ud10PA12W.Value = new decimal(new int[] {
+            12,
+            0,
+            0,
+            0});
+            // 
+            // label10PA7W
+            // 
+            this.label10PA7W.Image = null;
+            this.label10PA7W.Location = new System.Drawing.Point(8, 168);
+            this.label10PA7W.Name = "label10PA7W";
+            this.label10PA7W.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.label10PA7W.Size = new System.Drawing.Size(40, 16);
+            this.label10PA7W.TabIndex = 100;
+            this.label10PA7W.Text = "7W:";
+            this.label10PA7W.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label10PA12W
+            // 
+            this.label10PA12W.Image = null;
+            this.label10PA12W.Location = new System.Drawing.Point(144, 120);
+            this.label10PA12W.Name = "label10PA12W";
+            this.label10PA12W.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.label10PA12W.Size = new System.Drawing.Size(40, 16);
+            this.label10PA12W.TabIndex = 110;
+            this.label10PA12W.Text = "12W:";
+            this.label10PA12W.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.label10PA12W.Visible = false;
+            // 
+            // ud10PA7W
+            // 
+            this.ud10PA7W.DecimalPlaces = 1;
+            this.ud10PA7W.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.ud10PA7W.Location = new System.Drawing.Point(48, 168);
+            this.ud10PA7W.Maximum = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.ud10PA7W.Minimum = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.ud10PA7W.Name = "ud10PA7W";
+            this.ud10PA7W.Size = new System.Drawing.Size(48, 20);
+            this.ud10PA7W.TabIndex = 99;
+            this.ud10PA7W.Value = new decimal(new int[] {
+            7,
+            0,
+            0,
+            0});
+            // 
+            // ud10PA13W
+            // 
+            this.ud10PA13W.DecimalPlaces = 1;
+            this.ud10PA13W.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.ud10PA13W.Location = new System.Drawing.Point(184, 144);
+            this.ud10PA13W.Maximum = new decimal(new int[] {
+            15,
+            0,
+            0,
+            0});
+            this.ud10PA13W.Minimum = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.ud10PA13W.Name = "ud10PA13W";
+            this.ud10PA13W.Size = new System.Drawing.Size(48, 20);
+            this.ud10PA13W.TabIndex = 111;
+            this.ud10PA13W.Value = new decimal(new int[] {
+            13,
+            0,
+            0,
+            0});
+            // 
+            // label10PA6W
+            // 
+            this.label10PA6W.Image = null;
+            this.label10PA6W.Location = new System.Drawing.Point(8, 144);
+            this.label10PA6W.Name = "label10PA6W";
+            this.label10PA6W.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.label10PA6W.Size = new System.Drawing.Size(40, 16);
+            this.label10PA6W.TabIndex = 98;
+            this.label10PA6W.Text = "6W:";
+            this.label10PA6W.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label10PA1W
+            // 
+            this.label10PA1W.Image = null;
+            this.label10PA1W.Location = new System.Drawing.Point(8, 24);
+            this.label10PA1W.Name = "label10PA1W";
+            this.label10PA1W.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.label10PA1W.Size = new System.Drawing.Size(40, 16);
+            this.label10PA1W.TabIndex = 88;
+            this.label10PA1W.Text = "1W:";
+            this.label10PA1W.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label10PA13W
+            // 
+            this.label10PA13W.Image = null;
+            this.label10PA13W.Location = new System.Drawing.Point(144, 144);
+            this.label10PA13W.Name = "label10PA13W";
+            this.label10PA13W.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.label10PA13W.Size = new System.Drawing.Size(40, 16);
+            this.label10PA13W.TabIndex = 112;
+            this.label10PA13W.Text = "13W:";
+            this.label10PA13W.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.label10PA13W.Visible = false;
+            // 
+            // ud10PA6W
+            // 
+            this.ud10PA6W.DecimalPlaces = 1;
+            this.ud10PA6W.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.ud10PA6W.Location = new System.Drawing.Point(48, 144);
+            this.ud10PA6W.Maximum = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.ud10PA6W.Minimum = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.ud10PA6W.Name = "ud10PA6W";
+            this.ud10PA6W.Size = new System.Drawing.Size(48, 20);
+            this.ud10PA6W.TabIndex = 97;
+            this.ud10PA6W.Value = new decimal(new int[] {
+            6,
+            0,
+            0,
+            0});
+            // 
+            // ud10PA14W
+            // 
+            this.ud10PA14W.DecimalPlaces = 1;
+            this.ud10PA14W.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.ud10PA14W.Location = new System.Drawing.Point(184, 168);
+            this.ud10PA14W.Maximum = new decimal(new int[] {
+            16,
+            0,
+            0,
+            0});
+            this.ud10PA14W.Minimum = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.ud10PA14W.Name = "ud10PA14W";
+            this.ud10PA14W.Size = new System.Drawing.Size(48, 20);
+            this.ud10PA14W.TabIndex = 113;
+            this.ud10PA14W.Value = new decimal(new int[] {
+            14,
+            0,
+            0,
+            0});
+            // 
+            // label10PA5W
+            // 
+            this.label10PA5W.Image = null;
+            this.label10PA5W.Location = new System.Drawing.Point(8, 120);
+            this.label10PA5W.Name = "label10PA5W";
+            this.label10PA5W.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.label10PA5W.Size = new System.Drawing.Size(40, 16);
+            this.label10PA5W.TabIndex = 96;
+            this.label10PA5W.Text = "5W:";
+            this.label10PA5W.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // ud10PA2W
+            // 
+            this.ud10PA2W.DecimalPlaces = 1;
+            this.ud10PA2W.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.ud10PA2W.Location = new System.Drawing.Point(48, 48);
+            this.ud10PA2W.Maximum = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.ud10PA2W.Minimum = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.ud10PA2W.Name = "ud10PA2W";
+            this.ud10PA2W.Size = new System.Drawing.Size(48, 20);
+            this.ud10PA2W.TabIndex = 89;
+            this.ud10PA2W.Value = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
+            // 
+            // label10PA14W
+            // 
+            this.label10PA14W.Image = null;
+            this.label10PA14W.Location = new System.Drawing.Point(144, 168);
+            this.label10PA14W.Name = "label10PA14W";
+            this.label10PA14W.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.label10PA14W.Size = new System.Drawing.Size(40, 16);
+            this.label10PA14W.TabIndex = 114;
+            this.label10PA14W.Text = "14W:";
+            this.label10PA14W.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.label10PA14W.Visible = false;
+            // 
+            // ud10PA5W
+            // 
+            this.ud10PA5W.DecimalPlaces = 1;
+            this.ud10PA5W.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.ud10PA5W.Location = new System.Drawing.Point(48, 120);
+            this.ud10PA5W.Maximum = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.ud10PA5W.Minimum = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.ud10PA5W.Name = "ud10PA5W";
+            this.ud10PA5W.Size = new System.Drawing.Size(48, 20);
+            this.ud10PA5W.TabIndex = 95;
+            this.ud10PA5W.Value = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
+            // 
+            // label10PA2W
+            // 
+            this.label10PA2W.Image = null;
+            this.label10PA2W.Location = new System.Drawing.Point(8, 48);
+            this.label10PA2W.Name = "label10PA2W";
+            this.label10PA2W.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.label10PA2W.Size = new System.Drawing.Size(40, 16);
+            this.label10PA2W.TabIndex = 90;
+            this.label10PA2W.Text = "2W:";
+            this.label10PA2W.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label10PA4W
+            // 
+            this.label10PA4W.Image = null;
+            this.label10PA4W.Location = new System.Drawing.Point(8, 96);
+            this.label10PA4W.Name = "label10PA4W";
+            this.label10PA4W.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.label10PA4W.Size = new System.Drawing.Size(40, 16);
+            this.label10PA4W.TabIndex = 94;
+            this.label10PA4W.Text = "4W:";
+            this.label10PA4W.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // ud10PA4W
+            // 
+            this.ud10PA4W.DecimalPlaces = 1;
+            this.ud10PA4W.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.ud10PA4W.Location = new System.Drawing.Point(48, 96);
+            this.ud10PA4W.Maximum = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.ud10PA4W.Minimum = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.ud10PA4W.Name = "ud10PA4W";
+            this.ud10PA4W.Size = new System.Drawing.Size(48, 20);
+            this.ud10PA4W.TabIndex = 93;
+            this.ud10PA4W.Value = new decimal(new int[] {
+            4,
+            0,
+            0,
+            0});
+            // 
+            // ud10PA3W
+            // 
+            this.ud10PA3W.DecimalPlaces = 1;
+            this.ud10PA3W.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.ud10PA3W.Location = new System.Drawing.Point(48, 72);
+            this.ud10PA3W.Maximum = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.ud10PA3W.Minimum = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.ud10PA3W.Name = "ud10PA3W";
+            this.ud10PA3W.Size = new System.Drawing.Size(48, 20);
+            this.ud10PA3W.TabIndex = 91;
+            this.ud10PA3W.Value = new decimal(new int[] {
+            3,
+            0,
+            0,
+            0});
+            // 
+            // label10PA3W
+            // 
+            this.label10PA3W.Image = null;
+            this.label10PA3W.Location = new System.Drawing.Point(8, 72);
+            this.label10PA3W.Name = "label10PA3W";
+            this.label10PA3W.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.label10PA3W.Size = new System.Drawing.Size(40, 16);
+            this.label10PA3W.TabIndex = 92;
+            this.label10PA3W.Text = "3W:";
+            this.label10PA3W.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // tpAppearance
             // 
@@ -45509,7 +46829,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(599, 439);
+            this.ClientSize = new System.Drawing.Size(604, 439);
             this.Controls.Add(this.btnExportDB);
             this.Controls.Add(this.btnImportDB);
             this.Controls.Add(this.btnResetDB);
@@ -45517,6 +46837,7 @@
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnOK);
             this.Controls.Add(this.tcSetup);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.KeyPreview = true;
             this.Menu = this.mainMenu1;
             this.Name = "Setup";
@@ -46316,23 +47637,53 @@
             ((System.ComponentModel.ISupportInitialize)(this.udANAN100PAGain160)).EndInit();
             this.tpWattMeter.ResumeLayout(false);
             this.tpWattMeter.PerformLayout();
-            this.grpWattMeterTrim.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.udPA10W)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.udPA100W)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.udPA90W)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.udPA110W)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.udPA80W)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.udPA120W)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.udPA70W)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.udPA130W)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.udPA60W)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.udPA140W)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.udPA20W)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.udPA50W)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.udPA40W)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.udPA30W)).EndInit();
             this.panelPAValues.ResumeLayout(false);
             this.panelPAValues.PerformLayout();
+            this.grp100WattMeterTrim.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.ud100PA10W)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ud100PA100W)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ud100PA90W)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ud100PA110W)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ud100PA80W)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ud100PA120W)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ud100PA70W)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ud100PA130W)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ud100PA60W)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ud100PA140W)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ud100PA20W)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ud100PA50W)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ud100PA40W)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ud100PA30W)).EndInit();
+            this.grp200WattMeterTrim.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.ud200PA20W)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ud200PA200W)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ud200PA180W)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ud200PA220W)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ud200PA160W)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ud200PA240W)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ud200PA140W)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ud200PA260W)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ud200PA120W)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ud200PA280W)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ud200PA40W)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ud200PA100W)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ud200PA80W)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ud200PA60W)).EndInit();
+            this.grp10WattMeterTrim.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.ud10PA1W)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ud10PA10W)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ud10PA9W)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ud10PA11W)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ud10PA8W)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ud10PA12W)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ud10PA7W)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ud10PA13W)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ud10PA6W)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ud10PA14W)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ud10PA2W)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ud10PA5W)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ud10PA4W)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ud10PA3W)).EndInit();
             this.tpAppearance.ResumeLayout(false);
             this.tcAppearance.ResumeLayout(false);
             this.tpAppearanceGeneral.ResumeLayout(false);
@@ -48317,34 +49668,34 @@
         private System.Windows.Forms.CheckBoxTS chkRX2WaterfallAGC;
         private System.Windows.Forms.NumericUpDownTS udATTOnTX;
         private System.Windows.Forms.LabelTS labelATTOnTX;
-        private System.Windows.Forms.NumericUpDownTS udPA110W;
-        private System.Windows.Forms.LabelTS labelTS255;
-        private System.Windows.Forms.LabelTS labelTS256;
-        private System.Windows.Forms.NumericUpDownTS udPA100W;
-        private System.Windows.Forms.LabelTS labelTS257;
-        private System.Windows.Forms.NumericUpDownTS udPA90W;
-        private System.Windows.Forms.LabelTS labelTS258;
-        private System.Windows.Forms.NumericUpDownTS udPA80W;
-        private System.Windows.Forms.LabelTS labelTS259;
-        private System.Windows.Forms.NumericUpDownTS udPA70W;
-        private System.Windows.Forms.LabelTS labelTS260;
-        private System.Windows.Forms.NumericUpDownTS udPA60W;
-        private System.Windows.Forms.LabelTS labelTS261;
-        private System.Windows.Forms.NumericUpDownTS udPA50W;
-        private System.Windows.Forms.LabelTS labelTS262;
-        private System.Windows.Forms.NumericUpDownTS udPA40W;
-        private System.Windows.Forms.LabelTS labelTS263;
-        private System.Windows.Forms.NumericUpDownTS udPA30W;
-        private System.Windows.Forms.LabelTS labelTS264;
-        private System.Windows.Forms.NumericUpDownTS udPA20W;
-        private System.Windows.Forms.LabelTS labelTS265;
-        private System.Windows.Forms.NumericUpDownTS udPA10W;
-        private System.Windows.Forms.LabelTS labelTS266;
-        private System.Windows.Forms.NumericUpDownTS udPA130W;
-        private System.Windows.Forms.LabelTS labelTS267;
-        private System.Windows.Forms.NumericUpDownTS udPA120W;
-        private System.Windows.Forms.LabelTS labelTS268;
-        private System.Windows.Forms.NumericUpDownTS udPA140W;
+        private System.Windows.Forms.NumericUpDownTS ud100PA110W;
+        private System.Windows.Forms.LabelTS label100PA110W;
+        private System.Windows.Forms.LabelTS label100PA100W;
+        private System.Windows.Forms.NumericUpDownTS ud100PA100W;
+        private System.Windows.Forms.LabelTS label100PA90W;
+        private System.Windows.Forms.NumericUpDownTS ud100PA90W;
+        private System.Windows.Forms.LabelTS label100PA80W;
+        private System.Windows.Forms.NumericUpDownTS ud100PA80W;
+        private System.Windows.Forms.LabelTS label100PA70W;
+        private System.Windows.Forms.NumericUpDownTS ud100PA70W;
+        private System.Windows.Forms.LabelTS label100PA60W;
+        private System.Windows.Forms.NumericUpDownTS ud100PA60W;
+        private System.Windows.Forms.LabelTS label100PA50W;
+        private System.Windows.Forms.NumericUpDownTS ud100PA50W;
+        private System.Windows.Forms.LabelTS label100PA40W;
+        private System.Windows.Forms.NumericUpDownTS ud100PA40W;
+        private System.Windows.Forms.LabelTS label100PA30W;
+        private System.Windows.Forms.NumericUpDownTS ud100PA30W;
+        private System.Windows.Forms.LabelTS label100PA20W;
+        private System.Windows.Forms.NumericUpDownTS ud100PA20W;
+        private System.Windows.Forms.LabelTS label100PA10W;
+        private System.Windows.Forms.NumericUpDownTS ud100PA10W;
+        private System.Windows.Forms.LabelTS label100PA130W;
+        private System.Windows.Forms.NumericUpDownTS ud100PA130W;
+        private System.Windows.Forms.LabelTS label100PA120W;
+        private System.Windows.Forms.NumericUpDownTS ud100PA120W;
+        private System.Windows.Forms.LabelTS label100PA140W;
+        private System.Windows.Forms.NumericUpDownTS ud100PA140W;
         private System.Windows.Forms.LabelTS labelTS275;
         public System.Windows.Forms.TextBoxTS textDriveFwdADCValue;
         private System.Windows.Forms.LabelTS labelTS269;
@@ -48366,7 +49717,7 @@
         private System.Windows.Forms.TabPage tpWattMeter;
         private System.Windows.Forms.PanelTS panelPAValues;
         private System.Windows.Forms.CheckBoxTS chkPAValues;
-        private System.Windows.Forms.GroupBox grpWattMeterTrim;
+        private System.Windows.Forms.GroupBox grp100WattMeterTrim;
         private System.Windows.Forms.RichTextBox richTextBox1;
         private System.Windows.Forms.LabelTS labelTS254;
         public System.Windows.Forms.TextBoxTS textDCVolts;
@@ -49204,6 +50555,68 @@
         private LabelTS labelTS468;
         public NumericUpDownTS udHttpPort;
         public CheckBoxTS chkBoxHTTP;
+        private GroupBox grp200WattMeterTrim;
+        private NumericUpDownTS ud200PA20W;
+        private NumericUpDownTS ud200PA200W;
+        private LabelTS label200PA180W;
+        private LabelTS label200PA200W;
+        private NumericUpDownTS ud200PA180W;
+        private LabelTS label200PA220W;
+        private LabelTS label200PA160W;
+        private NumericUpDownTS ud200PA220W;
+        private NumericUpDownTS ud200PA160W;
+        private NumericUpDownTS ud200PA240W;
+        private LabelTS label200PA140W;
+        private LabelTS label200PA240W;
+        private NumericUpDownTS ud200PA140W;
+        private NumericUpDownTS ud200PA260W;
+        private LabelTS label200PA120W;
+        private LabelTS label200PA20W;
+        private LabelTS label200PA260W;
+        private NumericUpDownTS ud200PA120W;
+        private NumericUpDownTS ud200PA280W;
+        private LabelTS label200PA100W;
+        private NumericUpDownTS ud200PA40W;
+        private LabelTS label200PA280W;
+        private NumericUpDownTS ud200PA100W;
+        private LabelTS label200PA40W;
+        private LabelTS label200PA80W;
+        private NumericUpDownTS ud200PA80W;
+        private NumericUpDownTS ud200PA60W;
+        private LabelTS label200PA60W;
+        private GroupBox grp10WattMeterTrim;
+        private NumericUpDownTS ud10PA1W;
+        private NumericUpDownTS ud10PA10W;
+        private LabelTS label10PA9W;
+        private LabelTS label10PA10W;
+        private NumericUpDownTS ud10PA9W;
+        private LabelTS label10PA11W;
+        private LabelTS label10PA8W;
+        private NumericUpDownTS ud10PA11W;
+        private NumericUpDownTS ud10PA8W;
+        private NumericUpDownTS ud10PA12W;
+        private LabelTS label10PA7W;
+        private LabelTS label10PA12W;
+        private NumericUpDownTS ud10PA7W;
+        private NumericUpDownTS ud10PA13W;
+        private LabelTS label10PA6W;
+        private LabelTS label10PA1W;
+        private LabelTS label10PA13W;
+        private NumericUpDownTS ud10PA6W;
+        private NumericUpDownTS ud10PA14W;
+        private LabelTS label10PA5W;
+        private NumericUpDownTS ud10PA2W;
+        private LabelTS label10PA14W;
+        private NumericUpDownTS ud10PA5W;
+        private LabelTS label10PA2W;
+        private LabelTS label10PA4W;
+        private NumericUpDownTS ud10PA4W;
+        private NumericUpDownTS ud10PA3W;
+        private LabelTS label10PA3W;
+        public TextBoxTS textSWR;
+        private LabelTS labelTS256;
+        public TextBoxTS textCaldFwdPower;
+        private LabelTS labelTS255;
 
     }
 }

@@ -305,6 +305,8 @@ DWORD WINAPI KeepAliveMain(LPVOID);
 void ReadThreadMainLoop();
 void KeepAliveLoop();
 void PrintTimeHack();
+void PeakFwdPower(float fwd);
+void PeakRevPower(float rev);
 
 void InitWinsock();
 void CreateRIOSocket();
@@ -339,52 +341,53 @@ char PennyOCBits; /* pennny open collector bits */
 
 int nreceivers;
 
-int AlexAtten;
-int Alex2Atten;
-int Alex3Atten;
-int Alex4Atten;
-int MercDither;
-int MercPreamp;
-int RX1Preamp;
-int RX2Preamp;
-int MicTipRing;
-int MicBias;
-int MicPTT;
-int Merc3Preamp;
-int Merc4Preamp;
-int MercRandom;
-int adc1_step_att_data;
-int adc2_step_att_data;
-int adc3_step_att_data;
-int tx_att_data;
-int PureSignal;
+//int AlexAtten;
+//int Alex2Atten;
+//int Alex3Atten;
+//int Alex4Atten;
+//int MercDither;
+//int MercPreamp;
+//int RX1Preamp;
+//int RX2Preamp;
+//int MicTipRing;
+//int MicBias;
+//int MicPTT;
+//int Merc3Preamp;
+//int Merc4Preamp;
+//int MercRandom;
+//int adc1_step_att_data;
+//int adc2_step_att_data;
+//int adc3_step_att_data;
+//int tx_att_data;
+//int PureSignal;
 int MercTxAtten;
 
-int enable_cw_keyer;
-int cw_sidetone_volume;
-int cw_ptt_delay;
-int cw_hang_time;
-int cw_sidetone_freq;
-int cw_speed;
-int cw_mode;
-int cw_weight;
-int enable_cw_spacing;
-int reverse_paddles;
-int cw_dash;
-int cw_dot;
-int cwx;
+//int enable_cw_keyer;
+//int cw_sidetone_volume;
+//int cw_ptt_delay;
+//int cw_hang_time;
+//int cw_sidetone_freq;
+//int cw_speed;
+//int cw_mode;
+//int cw_weight;
+//int enable_cw_spacing;
+//int reverse_paddles;
+//int cw_dash;
+//int cw_dot;
+//int cwx;
 
-int MicBoost;
-int LineIn;
-int LineBoost;
+//int MicBoost;
+//int LineIn;
+//int LineBoost;
 
 int UserOut0;
 int UserOut1;
 int UserOut2;
 int UserOut3;
+int xvtr_enable;
 
-unsigned char AlexManEnable;
-unsigned char AlexEnabled;
+//unsigned char AlexManEnable;
+//unsigned char AlexEnabled;
 int AlexHPFMask;
 int AlexLPFMask;
 int AlexTRRelay;
@@ -396,37 +399,38 @@ int Alex4HPFMask;
 int Alex4LPFMask;
 
 int mkiibpf;
-int AlexRxAnt;
-int AlexTxAnt;
-int AlexRxOut;
-int ExciterPower;
-int RevPower;
-int FwdPower;
+//int AlexRxAnt;
+//int AlexTxAnt;
+//int AlexRxOut;
+//int ExciterPower;
+float RevPower;
+float FwdPower;
 
 int ApolloFilt;
 int ApolloTuner;
 int ApolloATU;
 
-int ADC_Overload; // Single ADC
-int ADC1_Overload;
-int ADC2_Overload;
-int ADC3_Overload;
-int ADC4_Overload;
-int ADC_Overloads;
-int User_I01;
-int User_I02;
-int User_I03;
-int User_I04;
-float swr_protect;
-unsigned char pf;
+//int ADC_Overload; // Single ADC
+//int ADC1_Overload;
+//int ADC2_Overload;
+//int ADC3_Overload;
+//int ADC4_Overload;
+//int ADC_Overloads;
+//int User_I01;
+//int User_I02;
+//int User_I03;
+//int User_I04;
+//unsigned char pf;
 
-unsigned int OutputPowerFactor;
-int HermesDCV;
+//unsigned int OutputPowerFactor;
+//int HermesDCV;
 
 int CandCAddrMask;
 int CandCFwdPowerBit;
 int DotDashMask;
+
 int WSAinitialized;
 SOCKET listenSock;
 SYSTEMTIME lt;
 static const double const_1_div_2147483648_ = 1.0 / 2147483648.0;
+

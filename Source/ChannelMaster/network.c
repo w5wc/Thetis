@@ -1020,6 +1020,9 @@ void CmdHighPriority() { // port 1027
 	// TX0 drive level
 	packetbuf[345] = prn->tx[0].drive_level;
 
+	// Enable transverter T/R relay 8---DLE
+    packetbuf[1400] = (xvtr_enable << 1) & 0x02;
+
 	// Open Collector Ouputs
 	packetbuf[1401] = (prn->oc_output << 1) & 0xfe;
 

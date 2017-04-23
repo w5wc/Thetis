@@ -23,6 +23,7 @@
 #include "network.h"
 #include "obbuffs.h"
 
+#define MDECAY  0.9992f
 const int numInputBuffs = 12;
 
 //
@@ -209,17 +210,17 @@ int getExciterPower() {
 }
 
 PORT
-int getFwdPower() {
+float getFwdPower() {
 
-	return prn->tx[0].fwd_power;
-
+	PeakFwdPower((float)prn->tx[0].fwd_power);
+	return FwdPower;
 }
 
 PORT
-int getRevPower() {
+float getRevPower() {
 
-	return prn->tx[0].rev_power;
-
+	PeakRevPower((float)prn->tx[0].rev_power);
+	return RevPower;
 }
 
 PORT
@@ -405,6 +406,7 @@ void SetVFOfreq(int id, int freq, int tx) {
 PORT
 void SetOutputPowerFactor(int u) {
 
+	
 	if (prn->tx[0].drive_level = u)
 	{
 		prn->tx[0].drive_level = u;
@@ -1110,7 +1112,6 @@ void SetRxADC(int n) {
 		if (listenSock != INVALID_SOCKET)
 			CmdRx();
 	}
-
 }
 
 // wideband data display
@@ -1170,7 +1171,12 @@ void SetMKIIBPF(int bpf)
 PORT
 void SetXVTREnable(int enable)
 {
-	return;
+	if (xvtr_enable != enable)
+	{
+		xvtr_enable = enable;
+		if (listenSock != INVALID_SOCKET)
+			CmdHighPriority();
+	}
 }
 
 PORT
@@ -1334,4 +1340,20 @@ void
 PrintTimeHack() {
 	GetLocalTime(&lt);
 	printf("(%02d/%02d %02d:%02d:%02d:%03d) ", lt.wMonth, lt.wDay, lt.wHour, lt.wMinute, lt.wSecond, lt.wMilliseconds);
+}
+
+void PeakFwdPower(float fwd)
+{
+	if (fwd > FwdPower)
+		FwdPower = fwd;
+	else
+		FwdPower *= MDECAY;
+}
+
+void PeakRevPower(float rev)
+{
+	if (rev > RevPower)
+		RevPower = rev;
+	else
+		RevPower *= MDECAY;
 }

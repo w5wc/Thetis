@@ -4350,8 +4350,6 @@ namespace Thetis
             dr["Tune_Power"] = 10;
             dr["Tune_Meter_Type"] = "Fwd Pwr";
            // dr["TX_Limit_Slew"] = false;
-            dr["TXBlankingTime"] = 200;
-            dr["MicBoost"] = false;
             dr["TX_AF_Level"] = 50;
             dr["AM_Carrier_Level"] = 25;
             dr["Show_TX_Filter"] = true;
@@ -4385,14 +4383,13 @@ namespace Thetis
             dr["Digi_RX_DSP_Buffer"] = "2048";
             dr["Digi_TX_DSP_Buffer"] = "2048";
             dr["CW_RX_DSP_Buffer"] = "2048";
-                     dr["Mic_Input_On"] = "1";
-                     dr["Mic_Input_Boost"] = false;
-                     dr["Line_Input_On"] = false;
-                     dr["Line_Input_Level"] = 0.0;
-                     dr["CESSB_On"] = false;
-                     dr["Disable_Pure_Signal"] = true;
+            dr["Mic_Input_On"] = true;
+            dr["Mic_Input_Boost"] = false;
+            dr["Line_Input_On"] = false;
+            dr["Line_Input_Level"] = 0.0;
+            dr["CESSB_On"] = false;
+            dr["Disable_Pure_Signal"] = true;
              
-
             t.Rows.Add(dr);
 
             #endregion
@@ -4445,8 +4442,6 @@ namespace Thetis
             dr["Tune_Power"] = 10;
             dr["Tune_Meter_Type"] = "Fwd Pwr";
            // dr["TX_Limit_Slew"] = false;
-            dr["TXBlankingTime"] = 200;
-            dr["MicBoost"] = false;
             dr["TX_AF_Level"] = 50;
             dr["AM_Carrier_Level"] = 25;
             dr["Show_TX_Filter"] = true;
@@ -4480,12 +4475,12 @@ namespace Thetis
             dr["Digi_RX_DSP_Buffer"] = "2048";
             dr["Digi_TX_DSP_Buffer"] = "2048";
             dr["CW_RX_DSP_Buffer"] = "2048";
-                    dr["Mic_Input_On"] = "1";
-                    dr["Mic_Input_Boost"] = false;
-                    dr["Line_Input_On"] = false;
-                    dr["Line_Input_Level"] = 0.0;
-                    dr["CESSB_On"] = false;
-                    dr["Disable_Pure_Signal"] = true;
+            dr["Mic_Input_On"] = true;
+            dr["Mic_Input_Boost"] = false;
+            dr["Line_Input_On"] = false;
+            dr["Line_Input_Level"] = 0.0;
+            dr["CESSB_On"] = false;
+            dr["Disable_Pure_Signal"] = true;
 
             t.Rows.Add(dr);
 

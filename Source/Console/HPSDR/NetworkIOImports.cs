@@ -225,10 +225,10 @@ namespace Thetis
         public static extern int getExciterPower();
 
         [DllImport("ChannelMaster.dll", CallingConvention = CallingConvention.Cdecl)]
-        public static extern int getRevPower();
+        public static extern float getRevPower();
 
         [DllImport("ChannelMaster.dll", CallingConvention = CallingConvention.Cdecl)]
-        public static extern int getFwdPower();
+        public static extern float getFwdPower();
 
         [DllImport("ChannelMaster.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern int getHermesDCVoltage();
