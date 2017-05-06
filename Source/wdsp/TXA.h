@@ -2,7 +2,7 @@
 
 This file is part of a program that implements a Software-Defined Radio.
 
-Copyright (C) 2013 Warren Pratt, NR0V
+Copyright (C) 2013, 2017 Warren Pratt, NR0V
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -69,6 +69,8 @@ struct _txa
 	double* outbuff;
 	double* midbuff;
 	int mode;
+	double f_low;
+	double f_high;
 	double meter[TXA_METERTYPE_LAST];
 	CRITICAL_SECTION* pmtupdate[TXA_METERTYPE_LAST];
 	struct
@@ -93,6 +95,14 @@ struct _txa
 	} eqp;
 	struct
 	{
+		PHROT p;
+	} phrot;
+	struct
+	{
+		CFCOMP p;
+	} cfcomp;
+	struct
+	{
 		COMPRESSOR p;
 	} compressor;
 	struct
@@ -103,10 +113,6 @@ struct _txa
 	{
 		OSCTRL p;
 	} osctrl;
-	struct
-	{
-		GAIN p;
-	} pfgain0, pfgain1;
 	struct
 	{
 		WCPAGC p;
@@ -174,5 +180,7 @@ extern void setDSPBuffsize_txa (int channel);
 extern __declspec (dllexport) void SetTXAMode (int channel, int mode);
 
 extern void TXAResCheck (int channel);
+
+extern void TXASetupBPFilters (int channel);
 
 #endif

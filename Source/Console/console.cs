@@ -48789,6 +48789,11 @@ namespace Thetis
             psform.AutoCalEnabled = chkFWCATUBypass.Checked;
         }
 
+        public bool PureSignalEnabled
+        {
+            get { return chkFWCATUBypass.Checked; }
+            set { chkFWCATUBypass.Checked = value; }
+        }
 
     }
 

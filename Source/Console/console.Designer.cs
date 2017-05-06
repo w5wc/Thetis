@@ -6354,9 +6354,9 @@
             this.Controls.Add(this.panelModeSpecificPhone);
             this.Controls.Add(this.panelModeSpecificFM);
             this.Controls.Add(this.panelModeSpecificDigital);
-            this.Controls.Add(this.panelBandGEN);
             this.Controls.Add(this.panelBandHF);
             this.Controls.Add(this.panelBandVHF);
+            this.Controls.Add(this.panelBandGEN);
             this.KeyPreview = true;
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "Console";

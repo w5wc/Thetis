@@ -3623,7 +3623,7 @@ namespace Thetis
             t.Columns.Add("Line_Input_Level", typeof(decimal));
 
             t.Columns.Add("CESSB_On", typeof(bool));
-            t.Columns.Add("Disable_Pure_Signal", typeof(bool));
+            t.Columns.Add("Pure_Signal_Enabled", typeof(bool));
 
             // CFC
             t.Columns.Add("CFCEnabled", typeof(bool));
@@ -3786,7 +3786,7 @@ namespace Thetis
             dr["Line_Input_Level"] = 0.0;
 
             dr["CESSB_On"] = false;
-            dr["Disable_Pure_Signal"] = true;
+            dr["Pure_Signal_Enabled"] = true;
 
             // CFC
             dr["CFCEnabled"] = false;
@@ -3952,7 +3952,7 @@ namespace Thetis
             dr["Line_Input_On"] = false;
             dr["Line_Input_Level"] = 0.0;
             dr["CESSB_On"] = false;
-            dr["Disable_Pure_Signal"] = true;
+            dr["Pure_Signal_Enabled"] = false;
 
             // CFC
             dr["CFCEnabled"] = false;
@@ -4122,7 +4122,7 @@ namespace Thetis
             t.Columns.Add("Line_Input_Level", typeof(decimal));
 
             t.Columns.Add("CESSB_On", typeof(bool));
-            t.Columns.Add("Disable_Pure_Signal", typeof(bool));
+            t.Columns.Add("Pure_Signal_Enabled", typeof(bool));
 
             // CFC
             t.Columns.Add("CFCEnabled", typeof(bool));
@@ -4287,7 +4287,7 @@ namespace Thetis
             dr["Line_Input_On"] = false;
             dr["Line_Input_Level"] = 0.0;
             dr["CESSB_On"] = false;
-            dr["Disable_Pure_Signal"] = true;
+            dr["Pure_Signal_Enabled"] = false;
 
             // CFC
             dr["CFCEnabled"] = false;
@@ -4452,7 +4452,7 @@ namespace Thetis
             dr["Line_Input_On"] = false;
             dr["Line_Input_Level"] = 0.0;
             dr["CESSB_On"] = false;
-            dr["Disable_Pure_Signal"] = true;
+            dr["Pure_Signal_Enabled"] = false;
 
             // CFC
             dr["CFCEnabled"] = false;
@@ -4617,7 +4617,7 @@ namespace Thetis
             dr["Line_Input_On"] = false;
             dr["Line_Input_Level"] = 0.0;
             dr["CESSB_On"] = false;
-            dr["Disable_Pure_Signal"] = true;
+            dr["Pure_Signal_Enabled"] = false;
 
             // CFC
             dr["CFCEnabled"] = false;
@@ -4782,7 +4782,7 @@ namespace Thetis
             dr["Line_Input_On"] = false;
             dr["Line_Input_Level"] = 0.0;
             dr["CESSB_On"] = false;
-            dr["Disable_Pure_Signal"] = true;
+            dr["Pure_Signal_Enabled"] = false;
 
             // CFC
             dr["CFCEnabled"] = false;
@@ -4946,7 +4946,7 @@ namespace Thetis
             dr["Line_Input_On"] = false;
             dr["Line_Input_Level"] = 0.0;
             dr["CESSB_On"] = false;
-            dr["Disable_Pure_Signal"] = true;
+            dr["Pure_Signal_Enabled"] = false;
 
             // CFC
             dr["CFCEnabled"] = false;
@@ -5110,7 +5110,7 @@ namespace Thetis
             dr["Line_Input_On"] = false;
             dr["Line_Input_Level"] = 0.0;
             dr["CESSB_On"] = false;
-            dr["Disable_Pure_Signal"] = true;
+            dr["Pure_Signal_Enabled"] = false;
 
             // CFC
             dr["CFCEnabled"] = false;
@@ -5274,7 +5274,7 @@ namespace Thetis
             dr["Line_Input_On"] = false;
             dr["Line_Input_Level"] = 0.0;
             dr["CESSB_On"] = false;
-            dr["Disable_Pure_Signal"] = true;
+            dr["Pure_Signal_Enabled"] = false;
 
             // CFC
             dr["CFCEnabled"] = false;
@@ -5438,7 +5438,7 @@ namespace Thetis
             dr["Line_Input_On"] = false;
             dr["Line_Input_Level"] = 0.0;
             dr["CESSB_On"] = false;
-            dr["Disable_Pure_Signal"] = true;
+            dr["Pure_Signal_Enabled"] = false;
 
             // CFC
             dr["CFCEnabled"] = false;
@@ -5602,7 +5602,7 @@ namespace Thetis
             dr["Line_Input_On"] = false;
             dr["Line_Input_Level"] = 0.0;
             dr["CESSB_On"] = false;
-            dr["Disable_Pure_Signal"] = true;
+            dr["Pure_Signal_Enabled"] = false;
 
             // CFC
             dr["CFCEnabled"] = false;
@@ -5766,7 +5766,7 @@ namespace Thetis
             dr["Line_Input_On"] = false;
             dr["Line_Input_Level"] = 0.0;
             dr["CESSB_On"] = false;
-            dr["Disable_Pure_Signal"] = true;
+            dr["Pure_Signal_Enabled"] = false;
 
             // CFC
             dr["CFCEnabled"] = false;
@@ -5930,7 +5930,7 @@ namespace Thetis
             dr["Line_Input_On"] = false;
             dr["Line_Input_Level"] = 0.0;
             dr["CESSB_On"] = false;
-            dr["Disable_Pure_Signal"] = true;
+            dr["Pure_Signal_Enabled"] = false;
 
             // CFC
             dr["CFCEnabled"] = false;
@@ -6094,7 +6094,7 @@ namespace Thetis
             dr["Line_Input_On"] = false;
             dr["Line_Input_Level"] = 0.0;
             dr["CESSB_On"] = false;
-            dr["Disable_Pure_Signal"] = true;
+            dr["Pure_Signal_Enabled"] = false;
 
             // CFC
             dr["CFCEnabled"] = false;
@@ -6258,7 +6258,7 @@ namespace Thetis
             dr["Line_Input_On"] = false;
             dr["Line_Input_Level"] = 0.0;
             dr["CESSB_On"] = false;
-            dr["Disable_Pure_Signal"] = true;
+            dr["Pure_Signal_Enabled"] = false;
 
             // CFC
             dr["CFCEnabled"] = false;
@@ -6422,7 +6422,7 @@ namespace Thetis
             dr["Line_Input_On"] = false;
             dr["Line_Input_Level"] = 0.0;
             dr["CESSB_On"] = false;
-            dr["Disable_Pure_Signal"] = true;
+            dr["Pure_Signal_Enabled"] = false;
 
             // CFC
             dr["CFCEnabled"] = false;
@@ -6586,7 +6586,7 @@ namespace Thetis
             dr["Line_Input_On"] = false;
             dr["Line_Input_Level"] = 0.0;
             dr["CESSB_On"] = false;
-            dr["Disable_Pure_Signal"] = true;
+            dr["Pure_Signal_Enabled"] = false;
 
             // CFC
             dr["CFCEnabled"] = false;
@@ -6750,7 +6750,7 @@ namespace Thetis
             dr["Line_Input_On"] = false;
             dr["Line_Input_Level"] = 0.0;
             dr["CESSB_On"] = false;
-            dr["Disable_Pure_Signal"] = true;
+            dr["Pure_Signal_Enabled"] = false;
 
             // CFC
             dr["CFCEnabled"] = false;
@@ -6914,7 +6914,7 @@ namespace Thetis
             dr["Line_Input_On"] = false;
             dr["Line_Input_Level"] = 0.0;
             dr["CESSB_On"] = false;
-            dr["Disable_Pure_Signal"] = true;
+            dr["Pure_Signal_Enabled"] = false;
 
             // CFC
             dr["CFCEnabled"] = false;

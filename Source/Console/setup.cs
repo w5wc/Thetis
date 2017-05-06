@@ -591,14 +591,18 @@ namespace Thetis
 
             if (skin == "")
             {
-                if (comboAppSkin.Items.Contains("Default"))
-                    comboAppSkin.Text = "Default";
+                //if (comboAppSkin.Items.Contains("Default"))
+                //    comboAppSkin.Text = "Default";
+                //else
+                //    comboAppSkin.Text = "IK3VIG Special"; //"OpenHPSDR-Gray";
+                if (comboAppSkin.Items.Contains("IK3VIG Special"))
+                    comboAppSkin.Text = "IK3VIG Special";
                 else
-                    comboAppSkin.Text = "OpenHPSDR-Gray";
+                    comboAppSkin.Text = "OpenHPSDR-Gray"; //"OpenHPSDR-Gray";
             }
             else if (comboAppSkin.Items.Contains(skin))
-                comboAppSkin.Text = skin;
-            else comboAppSkin.Text = "Default";
+                     comboAppSkin.Text = skin;
+            else comboAppSkin.Text = "IK3VIG Special";
         }
 
         private void GetHosts()
@@ -1614,7 +1618,7 @@ namespace Thetis
             dr["Line_Input_Level"] = udLineInBoost.Value;
 
             dr["CESSB_On"] = chkDSPCESSB.Checked;
-           // dr["Disable_Pure_Signal"] = chkDisablePureSignal.Checked;
+            dr["Pure_Signal_Enabled"] = console.PureSignalEnabled; 
 
             //CFC
             dr["CFCEnabled"] = chkCFCEnable.Checked;
@@ -9196,7 +9200,7 @@ namespace Thetis
             radLineIn.Checked = (bool)dr["Line_Input_On"];
             udLineInBoost.Value = (decimal)dr["Line_Input_Level"];
             chkDSPCESSB.Checked = (bool)dr["CESSB_On"];
-           // chkDisablePureSignal.Checked = (bool)dr["Disable_Pure_Signal"];
+            console.PureSignalEnabled = (bool)dr["Pure_Signal_Enabled"];
 
             //CFC
             chkCFCEnable.Checked = (bool)dr["CFCEnabled"];
@@ -9370,7 +9374,7 @@ namespace Thetis
             dr["Line_Input_On"] = (bool)radLineIn.Checked;
             dr["Line_Input_Level"] = udLineInBoost.Value;
             dr["CESSB_On"] = chkDSPCESSB.Checked;
-           // dr["Disable_Pure_Signal"] = chkDisablePureSignal.Checked;
+            dr["Pure_Signal_Enabled"] = console.PureSignalEnabled;
 
             //CFC
             dr["CFCEnabled"] = chkCFCEnable.Checked;
@@ -17373,6 +17377,100 @@ namespace Thetis
         private void ud6mRx2LNAGainOffset_ValueChanged(object sender, EventArgs e)
         {
             console.RX6mGainOffsetRx2 = (float)ud6mRx2LNAGainOffset.Value;
+        }
+
+        private void chkEnableXVTRHF_CheckedChanged(object sender, EventArgs e)
+        {
+            console.EnableXVTRHF = chkEnableXVTRHF.Checked;
+        }
+
+        private void chkCFCEnable_CheckedChanged(object sender, EventArgs e)
+        {
+            int run;
+            if (chkCFCEnable.Checked) run = 1;
+            else run = 0;
+            WDSP.SetTXACFCOMPRun(WDSP.id(1, 0), run);
+        }
+
+        private void setCFCProfile(object sender, EventArgs e)
+        {
+            const int nfreqs = 10;
+            double[] F = new double[nfreqs];
+            double[] G = new double[nfreqs];
+            double[] E = new double[nfreqs];
+            F[0] = (double)udCFC0.Value;
+            F[1] = (double)udCFC1.Value;
+            F[2] = (double)udCFC2.Value;
+            F[3] = (double)udCFC3.Value;
+            F[4] = (double)udCFC4.Value;
+            F[5] = (double)udCFC5.Value;
+            F[6] = (double)udCFC6.Value;
+            F[7] = (double)udCFC7.Value;
+            F[8] = (double)udCFC8.Value;
+            F[9] = (double)udCFC9.Value;
+            G[0] = (double)tbCFC0.Value;
+            G[1] = (double)tbCFC1.Value;
+            G[2] = (double)tbCFC2.Value;
+            G[3] = (double)tbCFC3.Value;
+            G[4] = (double)tbCFC4.Value;
+            G[5] = (double)tbCFC5.Value;
+            G[6] = (double)tbCFC6.Value;
+            G[7] = (double)tbCFC7.Value;
+            G[8] = (double)tbCFC8.Value;
+            G[9] = (double)tbCFC9.Value;
+            E[0] = (double)tbCFCEQ0.Value;
+            E[1] = (double)tbCFCEQ1.Value;
+            E[2] = (double)tbCFCEQ2.Value;
+            E[3] = (double)tbCFCEQ3.Value;
+            E[4] = (double)tbCFCEQ4.Value;
+            E[5] = (double)tbCFCEQ5.Value;
+            E[6] = (double)tbCFCEQ6.Value;
+            E[7] = (double)tbCFCEQ7.Value;
+            E[8] = (double)tbCFCEQ8.Value;
+            E[9] = (double)tbCFCEQ9.Value;
+            unsafe
+            {
+                fixed (double* Fptr = &F[0], Gptr = &G[0], Eptr = &E[0])
+                {
+                    WDSP.SetTXACFCOMPprofile(WDSP.id(1, 0), nfreqs, Fptr, Gptr, Eptr);
+                }
+            }
+        }
+
+        private void tbCFCPRECOMP_Scroll(object sender, EventArgs e)
+        {
+            WDSP.SetTXACFCOMPPrecomp(WDSP.id(1, 0), (double)tbCFCPRECOMP.Value);
+        }
+
+        private void chkCFCPeqEnable_CheckedChanged(object sender, EventArgs e)
+        {
+            int run;
+            if (chkCFCPeqEnable.Checked) run = 1;
+            else run = 0;
+            WDSP.SetTXACFCOMPPeqRun(WDSP.id(1, 0), run);
+        }
+
+        private void chkPHROTEnable_CheckedChanged(object sender, EventArgs e)
+        {
+            int run;
+            if (chkPHROTEnable.Checked) run = 1;
+            else run = 0;
+            WDSP.SetTXAPHROTRun(WDSP.id(1, 0), run);
+        }
+
+        private void udPhRotFreq_ValueChanged(object sender, EventArgs e)
+        {
+            WDSP.SetTXAPHROTCorner(WDSP.id(1, 0), (double)udPhRotFreq.Value);
+        }
+
+        private void udPHROTStages_ValueChanged(object sender, EventArgs e)
+        {
+            WDSP.SetTXAPHROTNstages(WDSP.id(1, 0), (int)udPHROTStages.Value);
+        }
+
+        private void tbCFCPEG_Scroll(object sender, EventArgs e)
+        {
+            WDSP.SetTXACFCOMPPrePeq(WDSP.id(1, 0), (double)tbCFCPEQGAIN.Value);
         }
 
         private void chkBoxHTTP_CheckedChanged(object sender, EventArgs e)
