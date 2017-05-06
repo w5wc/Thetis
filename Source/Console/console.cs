@@ -27,6 +27,11 @@
 //    Austin, TX 78750
 //    USA
 //=================================================================
+// Modifications to support the Behringer Midi controllers
+// by Chris Codella, W2PA, May 2017.  Indicated by //-W2PA comment lines. 
+
+using Midi2Cat.Data; //-W2PA Necessary for Behringer MIDI changes
+
 
 namespace Thetis
 {
@@ -31743,6 +31748,11 @@ namespace Thetis
             {
                 ptbPWR.Focus();
             }
+
+            double pct = Convert.ToDouble(new_pwr) / 100.0;  //-W2PA Send LED update back to Behringer
+            if (pct <= 0.0) pct = 0.0;
+            else if (pct < 1.0 / 15.0) pct = 1.0 / 15.0; //-W2PA Don't let the last LED go out until zero
+            Midi2Cat.SendUpdateToMidi(CatCmd.DriveLevel, pct);
         }
 
         private void ptbAF_Scroll(object sender, System.EventArgs e)
@@ -31795,6 +31805,10 @@ namespace Thetis
             {
                 ptbRF.Focus();
             }
+
+            //-W2PA Update LEDs on Behringer MIDI controller
+            double pct = Convert.ToDouble(ptbRF.Value - ptbRF.Minimum) / Convert.ToDouble(ptbRF.Maximum - ptbRF.Minimum);
+            Midi2Cat.SendUpdateToMidi(CatCmd.AGCLevel_inc, pct);
         }
 
         private void chkMicMute_CheckedChanged(object sender, System.EventArgs e)
@@ -31851,6 +31865,11 @@ namespace Thetis
             {
                 ptbCWSpeed.Focus();
             }
+
+            //-W2PA Update LEDs on Behringer MIDI controller
+            double pct = Convert.ToDouble(ptbCWSpeed.Value) / Convert.ToDouble(60);
+            if (pct < 1.0 / 15.0) pct = 1.0 / 15.0;  //-W2PA Don't let the last LED go out
+            Midi2Cat.SendUpdateToMidi(CatCmd.CWSpeed_inc, pct);
         }
 
         private void chkVOX_CheckedChanged(object sender, System.EventArgs e)
@@ -40580,6 +40599,14 @@ namespace Thetis
 
             /*if(udRIT.Focused)
                 btnHidden.Focus();*/
+            setRIT_LEDs();  //-W2PA Behringer LEDs
+
+            //-W2PA Sync XIT/XIT if selected
+            //if (chkSyncIT.Checked)
+            //{
+            //    udXIT.Value = udRIT.Value;
+            //    setXIT_LEDs();
+            //}
         }
 
         private void udXIT_ValueChanged(object sender, System.EventArgs e)
@@ -40604,6 +40631,15 @@ namespace Thetis
 
             /*if(udXIT.Focused)
                 btnHidden.Focus();*/
+
+            setXIT_LEDs(); //-W2PA Behringer LEDs
+
+            //-W2PA Sync XIT/XIT if selected
+            //if (chkSyncIT.Checked)
+            //{
+            //    udRIT.Value = udXIT.Value;
+            //    setRIT_LEDs();
+            //}
         }
 
         private void btnXITReset_Click(object sender, System.EventArgs e)
@@ -40614,6 +40650,44 @@ namespace Thetis
         private void btnRITReset_Click(object sender, System.EventArgs e)
         {
             udRIT.Value = 0;
+        }
+
+        private void setRIT_LEDs()
+        {
+            //-W2PA Update LEDs on Behringer MIDI controller, within limits of +/- 2kHz.  Beyond that range the extreme L or R LED remains lit.
+            int IT_MIDIminimum = -2000; //-W2PA Change these two values to enable a broader range for the LEDs
+            int IT_MIDImaximum = 2000;  //      But when you do so, it makes them change more gradually, i.e. it takes more turns
+            double fracBetweenLEDs = 1.0 / 14.0;
+            double negTol = 0.5 - fracBetweenLEDs;
+            double posTol = 0.5 + fracBetweenLEDs;
+            double fract = Convert.ToDouble(udRIT.Value - IT_MIDIminimum) / Convert.ToDouble(IT_MIDImaximum - IT_MIDIminimum);
+
+            //-W2PA Light the center LED (#8) only if exactly at zero RIT/XIT
+            if (udRIT.Value < 0 && (fract >= negTol)) fract = negTol;
+            else if (udRIT.Value > 0 && (fract <= posTol)) fract = posTol;
+
+            //-W2PA Prevent the lowest LED from going out completely.
+            if (udRIT.Value <= IT_MIDIminimum + Convert.ToDecimal(fracBetweenLEDs * IT_MIDImaximum)) fract = fracBetweenLEDs;
+            Midi2Cat.SendUpdateToMidi(CatCmd.RIT_inc, fract);
+        }
+
+        private void setXIT_LEDs()
+        {
+            //-W2PA Update LEDs on Behringer MIDI controller, within limits of +/- 2kHz
+            int IT_MIDIminimum = -2000; //-W2PA Change these two values to enable a broader range for the LEDs
+            int IT_MIDImaximum = 2000;  //      But when you do so, it makes them change more gradually, i.e. it takes more turns
+            double fracBetweenLEDs = 1.0 / 14.0;
+            double negTol = 0.5 - fracBetweenLEDs;
+            double posTol = 0.5 + fracBetweenLEDs;
+            double fract = Convert.ToDouble(udXIT.Value - IT_MIDIminimum) / Convert.ToDouble(IT_MIDImaximum - IT_MIDIminimum);
+
+            //-W2PA Light the center LED (#8) only if exactly at zero RIT/XIT
+            if (udXIT.Value < 0 && (fract >= negTol)) fract = negTol;
+            else if (udXIT.Value > 0 && (fract <= posTol)) fract = posTol;
+
+            //-W2PA Prevent the lowest LED from going out completely.
+            if (udXIT.Value <= IT_MIDIminimum + Convert.ToDecimal(fracBetweenLEDs * IT_MIDImaximum)) fract = fracBetweenLEDs;
+            Midi2Cat.SendUpdateToMidi(CatCmd.XIT_inc, fract);
         }
 
         public void ZeroBeat()
@@ -41260,6 +41334,9 @@ namespace Thetis
                 radio.GetDSPRX(0, 0).RXOutputGain = (double)ptbRX0Gain.Value / ptbRX0Gain.Maximum;
                 ptbRX1AF.Value = ptbRX0Gain.Value;
 
+                //-W2PA Update LEDs on Behringer MIDI controller
+                double pct = Convert.ToDouble(ptbRX1AF.Value - ptbRX1AF.Minimum) / Convert.ToDouble(ptbRX1AF.Maximum - ptbRX1AF.Minimum);
+                Midi2Cat.SendUpdateToMidi(CatCmd.VolumeVfoA_inc, pct);
             }
 
             lblRX1AF.Text = "RX1 AF:  " + ptbRX0Gain.Value.ToString();
@@ -43193,6 +43270,10 @@ namespace Thetis
             {
                 ptbRX2RF.Focus();
             }
+
+            //-W2PA Update LEDs on Behringer MIDI controller
+            double pct = Convert.ToDouble(ptbRX2RF.Value - ptbRX2RF.Minimum) / Convert.ToDouble(ptbRX2RF.Maximum - ptbRX2RF.Minimum);
+            Midi2Cat.SendUpdateToMidi(CatCmd.RX2AGCLevel_inc, pct);
         }
 
         private void chkRX2Squelch_CheckedChanged(object sender, System.EventArgs e)
@@ -43316,6 +43397,10 @@ namespace Thetis
             {
                 ptbRX2Gain.Focus();
             }
+
+            //-W2PA Update LEDs on Behringer MIDI controller
+            double pct = Convert.ToDouble(ptbRX2AF.Value - ptbRX2AF.Minimum) / Convert.ToDouble(ptbRX2AF.Maximum - ptbRX2AF.Minimum);
+            Midi2Cat.SendUpdateToMidi(CatCmd.VolumeVfoB_inc, pct);
         }
 
         private void chkRX2Mute_CheckedChanged(object sender, System.EventArgs e)
