@@ -3,7 +3,7 @@
 //=================================================================
 // PowerSDR is a C# implementation of a Software Defined Radio.
 // Copyright (C) 2004-2009  FlexRadio Systems
-// Copyright (C) 2010-2016  Doug Wigley
+// Copyright (C) 2010-2017  Doug Wigley
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -1378,9 +1378,34 @@ namespace Thetis
             udDSPRX1DollyF1_ValueChanged(this, e);
             udDSPRX1SubDollyF1_ValueChanged(this, e);
             udDSPRX2DollyF1_ValueChanged(this, e);
+            // CAT
+            comboFocusMasterMode_SelectedIndexChanged(this, e);
+            // SNB
+            udDSPSNBThresh1_ValueChanged(this, e);
+            udDSPSNBThresh2_ValueChanged(this, e);
+            // MNF
+            chkMNFAutoIncrease_CheckedChanged(this, e);
+/*
+			chkEnableXVTRHF_CheckedChanged(this, e);
+
+            // CFCompressor
+            chkCFCEnable_CheckedChanged(this, e);
+            setCFCProfile(this, e);
+            tbCFCPRECOMP_Scroll(this, e);
+            chkCFCPeqEnable_CheckedChanged(this, e);
+            tbCFCPEG_Scroll(this, e);
+            // Phase Rotator
+            chkPHROTEnable_CheckedChanged(this, e);
+            udPhRotFreq_ValueChanged(this, e);
+            udPHROTStages_ValueChanged(this, e);
+        */
+            // TXEQ
+            console.EQForm.setTXEQProfile(this, e);
 
             //ADC assignment
             radDDCADC_CheckedChanged(this, e);
+
+            chkWheelReverse_CheckedChanged(this, e);
         }
 
         public string[] GetTXProfileStrings()
@@ -1441,7 +1466,7 @@ namespace Thetis
             if (console.EQForm.TXEQEnabled != (bool)rows[0]["TXEQEnabled"])
                 return true;
 
-            for (int i = 1; i < eq.Length; i++)
+            for (int i = 1; i < 11; i++)
             {
                 if (eq[i] != (int)rows[0]["TXEQ" + i])
                     return true;
@@ -1484,10 +1509,10 @@ namespace Thetis
             dr["TXEQNumBands"] = console.EQForm.NumBands;
             int[] eq = console.EQForm.TXEQ;
             dr["TXEQPreamp"] = eq[0];
-            for (int i = 1; i < eq.Length; i++)
+            for (int i = 1; i < 11; i++)
                 dr["TXEQ" + i.ToString()] = eq[i];
-            for (int i = eq.Length; i < 11; i++)
-                dr["TXEQ" + i.ToString()] = 0;
+            for (int i = 11; i < 21; i++)
+                dr["TxEqFreq" + (i - 10).ToString()] = eq[i];
 
             dr["DXOn"] = console.DX;
             dr["DXLevel"] = console.DXLevel;
@@ -1589,6 +1614,24 @@ namespace Thetis
             dr["Line_Input_Level"] = udLineInBoost.Value;
 
             dr["CESSB_On"] = chkDSPCESSB.Checked;
+           // dr["Disable_Pure_Signal"] = chkDisablePureSignal.Checked;
+
+            //CFC
+            dr["CFCEnabled"] = chkCFCEnable.Checked;
+            dr["CFCPostEqEnabled"] = chkCFCPeqEnable.Checked;
+            dr["CFCPhaseRotatorEnabled"] = chkPHROTEnable.Checked;
+            dr["CFCPhaseRotatorFreq"] = (int)udPhRotFreq.Value;
+            dr["CFCPhaseRotatorStages"] = (int)udPHROTStages.Value;
+            int[] cfceq = CFCCOMPEQ;
+            dr["CFCPreComp"] = cfceq[0];
+            for (int i = 1; i < 11; i++)
+                dr["CFCPreComp" + (i - 1).ToString()] = cfceq[i];
+            dr["CFCPostEqGain"] = cfceq[11];
+            for (int i = 12; i < 22; i++)
+                dr["CFCPostEqGain" + (i - 12).ToString()] = cfceq[i];
+            for (int i = 22; i < 32; i++)
+                dr["CFCEqFreq" + (i - 22).ToString()] = cfceq[i];
+
         }
 
         public void UpdateWaterfallBandInfo()
@@ -5138,6 +5181,97 @@ namespace Thetis
                 firmware_bypass = value;
             }
         }
+
+
+        public int[] CFCCOMPEQ
+        {
+            get
+            {
+                int[] cfceq = new int[32];
+                cfceq[0] = tbCFCPRECOMP.Value;
+                cfceq[1] = tbCFC0.Value;
+                cfceq[2] = tbCFC1.Value;
+                cfceq[3] = tbCFC2.Value;
+                cfceq[4] = tbCFC3.Value;
+                cfceq[5] = tbCFC4.Value;
+                cfceq[6] = tbCFC5.Value;
+                cfceq[7] = tbCFC6.Value;
+                cfceq[8] = tbCFC7.Value;
+                cfceq[9] = tbCFC8.Value;
+                cfceq[10] = tbCFC9.Value;
+
+                cfceq[11] = tbCFCPEQGAIN.Value;
+                cfceq[12] = tbCFCEQ0.Value;
+                cfceq[13] = tbCFCEQ1.Value;
+                cfceq[14] = tbCFCEQ2.Value;
+                cfceq[15] = tbCFCEQ3.Value;
+                cfceq[16] = tbCFCEQ4.Value;
+                cfceq[17] = tbCFCEQ5.Value;
+                cfceq[18] = tbCFCEQ6.Value;
+                cfceq[19] = tbCFCEQ7.Value;
+                cfceq[20] = tbCFCEQ8.Value;
+                cfceq[21] = tbCFCEQ9.Value;
+
+                cfceq[22] = (int)udCFC0.Value;
+                cfceq[23] = (int)udCFC1.Value;
+                cfceq[24] = (int)udCFC2.Value;
+                cfceq[25] = (int)udCFC3.Value;
+                cfceq[26] = (int)udCFC4.Value;
+                cfceq[27] = (int)udCFC5.Value;
+                cfceq[28] = (int)udCFC6.Value;
+                cfceq[29] = (int)udCFC7.Value;
+                cfceq[30] = (int)udCFC8.Value;
+                cfceq[31] = (int)udCFC9.Value;
+
+                return cfceq;
+            }
+
+            set
+            {
+                if (value.Length < 32)
+                {
+                    MessageBox.Show("Error setting CFC EQ");
+                    return;
+                }
+                tbCFCPRECOMP.Value = Math.Max(tbCFCPRECOMP.Minimum, Math.Min(tbCFCPRECOMP.Maximum, value[0]));
+                tbCFC0.Value = Math.Max(tbCFC0.Minimum, Math.Min(tbCFC0.Maximum, value[1]));
+                tbCFC1.Value = Math.Max(tbCFC1.Minimum, Math.Min(tbCFC1.Maximum, value[2]));
+                tbCFC2.Value = Math.Max(tbCFC2.Minimum, Math.Min(tbCFC2.Maximum, value[3]));
+                tbCFC3.Value = Math.Max(tbCFC3.Minimum, Math.Min(tbCFC3.Maximum, value[4]));
+                tbCFC4.Value = Math.Max(tbCFC4.Minimum, Math.Min(tbCFC4.Maximum, value[5]));
+                tbCFC5.Value = Math.Max(tbCFC5.Minimum, Math.Min(tbCFC5.Maximum, value[6]));
+                tbCFC6.Value = Math.Max(tbCFC6.Minimum, Math.Min(tbCFC6.Maximum, value[7]));
+                tbCFC7.Value = Math.Max(tbCFC7.Minimum, Math.Min(tbCFC7.Maximum, value[8]));
+                tbCFC8.Value = Math.Max(tbCFC8.Minimum, Math.Min(tbCFC8.Maximum, value[9]));
+                tbCFC9.Value = Math.Max(tbCFC9.Minimum, Math.Min(tbCFC9.Maximum, value[10]));
+                tbCFCPEQGAIN.Value = Math.Max(tbCFCPEQGAIN.Minimum, Math.Min(tbCFCPEQGAIN.Maximum, value[11]));
+                tbCFCEQ0.Value = Math.Max(tbCFCEQ0.Minimum, Math.Min(tbCFCEQ0.Maximum, value[12]));
+                tbCFCEQ1.Value = Math.Max(tbCFCEQ1.Minimum, Math.Min(tbCFCEQ1.Maximum, value[13]));
+                tbCFCEQ2.Value = Math.Max(tbCFCEQ2.Minimum, Math.Min(tbCFCEQ2.Maximum, value[14]));
+                tbCFCEQ3.Value = Math.Max(tbCFCEQ3.Minimum, Math.Min(tbCFCEQ3.Maximum, value[15]));
+                tbCFCEQ4.Value = Math.Max(tbCFCEQ4.Minimum, Math.Min(tbCFCEQ4.Maximum, value[16]));
+                tbCFCEQ5.Value = Math.Max(tbCFCEQ5.Minimum, Math.Min(tbCFCEQ5.Maximum, value[17]));
+                tbCFCEQ6.Value = Math.Max(tbCFCEQ6.Minimum, Math.Min(tbCFCEQ6.Maximum, value[18]));
+                tbCFCEQ7.Value = Math.Max(tbCFCEQ7.Minimum, Math.Min(tbCFCEQ7.Maximum, value[19]));
+                tbCFCEQ8.Value = Math.Max(tbCFCEQ8.Minimum, Math.Min(tbCFCEQ8.Maximum, value[20]));
+                tbCFCEQ9.Value = Math.Max(tbCFCEQ9.Minimum, Math.Min(tbCFCEQ9.Maximum, value[21]));
+                udCFC0.Value = Math.Max(udCFC0.Minimum, Math.Min(udCFC0.Maximum, value[22]));
+                udCFC1.Value = Math.Max(udCFC1.Minimum, Math.Min(udCFC1.Maximum, value[23]));
+                udCFC2.Value = Math.Max(udCFC2.Minimum, Math.Min(udCFC2.Maximum, value[24]));
+                udCFC3.Value = Math.Max(udCFC3.Minimum, Math.Min(udCFC3.Maximum, value[25]));
+                udCFC4.Value = Math.Max(udCFC4.Minimum, Math.Min(udCFC4.Maximum, value[26]));
+                udCFC5.Value = Math.Max(udCFC5.Minimum, Math.Min(udCFC5.Maximum, value[27]));
+                udCFC6.Value = Math.Max(udCFC6.Minimum, Math.Min(udCFC6.Maximum, value[28]));
+                udCFC7.Value = Math.Max(udCFC7.Minimum, Math.Min(udCFC7.Maximum, value[29]));
+                udCFC8.Value = Math.Max(udCFC8.Minimum, Math.Min(udCFC8.Maximum, value[30]));
+                udCFC9.Value = Math.Max(udCFC9.Minimum, Math.Min(udCFC9.Maximum, value[31]));
+
+              //  tbCFCPRECOMP_Scroll(this, EventArgs.Empty);
+              //  tbCFCPEG_Scroll(this, EventArgs.Empty);
+               // setCFCProfile(this, EventArgs.Empty);
+            }
+        }
+
 
 
         #endregion
@@ -8944,14 +9078,18 @@ namespace Thetis
 
             DataRow dr = rows[0];
             int[] eq = null;
-            eq = new int[11];
+            eq = new int[21];
+            int[] cfceq = null;
+            cfceq = new int[32];
 
             console.EQForm.TXEQEnabled = (bool)dr["TXEQEnabled"];
             console.EQForm.NumBands = (int)dr["TXEQNumBands"];
 
             eq[0] = (int)dr["TXEQPreamp"];
-            for (int i = 1; i < eq.Length; i++)
+            for (int i = 1; i < 11; i++)
                 eq[i] = (int)dr["TXEQ" + i.ToString()];
+            for (int i = 11; i < 21; i++)
+                eq[i] = (int)dr["TxEqFreq" + (i - 10).ToString()];
             console.EQForm.TXEQ = eq;
 
             udTXFilterLow.Value = Math.Min(Math.Max((int)dr["FilterLow"], udTXFilterLow.Minimum), udTXFilterLow.Maximum);
@@ -9053,6 +9191,33 @@ namespace Thetis
             comboDSPDigTXFiltType.Text = (string)dr["Digi_TX_DSP_Filter_Type"];
             comboDSPCWRXFiltType.Text = (string)dr["CW_RX_DSP_Filter_Type"];
 
+            radMicIn.Checked = (bool)dr["Mic_Input_On"];
+            chk20dbMicBoost.Checked = (bool)dr["Mic_Input_Boost"];
+            radLineIn.Checked = (bool)dr["Line_Input_On"];
+            udLineInBoost.Value = (decimal)dr["Line_Input_Level"];
+            chkDSPCESSB.Checked = (bool)dr["CESSB_On"];
+           // chkDisablePureSignal.Checked = (bool)dr["Disable_Pure_Signal"];
+
+            //CFC
+            chkCFCEnable.Checked = (bool)dr["CFCEnabled"];
+            chkCFCPeqEnable.Checked = (bool)dr["CFCPostEqEnabled"];
+            chkPHROTEnable.Checked = (bool)dr["CFCPhaseRotatorEnabled"];
+
+            udPhRotFreq.Value = Math.Min(Math.Max((int)dr["CFCPhaseRotatorFreq"], udPhRotFreq.Minimum), udPhRotFreq.Maximum);
+            udPHROTStages.Value = Math.Min(Math.Max((int)dr["CFCPhaseRotatorStages"], udPHROTStages.Minimum), udPHROTStages.Maximum);
+
+            cfceq[0] = (int)dr["CFCPreComp"];
+            for (int i = 1; i < 11; i++)
+                cfceq[i] = (int)dr["CFCPreComp" + (i - 1).ToString()];
+
+            cfceq[11] = (int)dr["CFCPostEqGain"];
+            for (int i = 12; i < 22; i++)
+                cfceq[i] = (int)dr["CFCPostEqGain" + (i - 12).ToString()];
+            for (int i = 22; i < 32; i++)
+                cfceq[i] = (int)dr["CFCEqFreq" + (i - 22).ToString()];
+
+            CFCCOMPEQ = cfceq;
+
             current_profile = comboTXProfileName.Text;
         }
 
@@ -9100,10 +9265,10 @@ namespace Thetis
             dr["TXEQNumBands"] = console.EQForm.NumBands;
             int[] eq = console.EQForm.TXEQ;
             dr["TXEQPreamp"] = eq[0];
-            for (int i = 1; i < eq.Length; i++)
+            for (int i = 1; i < 11; i++)
                 dr["TXEQ" + i.ToString()] = eq[i];
-            for (int i = eq.Length; i < 11; i++)
-                dr["TXEQ" + i.ToString()] = 0;
+            for (int i = 11; i < 21; i++)
+                dr["TxEqFreq" + (i - 10).ToString()] = eq[i];
 
             dr["DXOn"] = console.DX;
             dr["DXLevel"] = console.DXLevel;
@@ -9205,6 +9370,23 @@ namespace Thetis
             dr["Line_Input_On"] = (bool)radLineIn.Checked;
             dr["Line_Input_Level"] = udLineInBoost.Value;
             dr["CESSB_On"] = chkDSPCESSB.Checked;
+           // dr["Disable_Pure_Signal"] = chkDisablePureSignal.Checked;
+
+            //CFC
+            dr["CFCEnabled"] = chkCFCEnable.Checked;
+            dr["CFCPostEqEnabled"] = chkCFCPeqEnable.Checked;
+            dr["CFCPhaseRotatorEnabled"] = chkPHROTEnable.Checked;
+            dr["CFCPhaseRotatorFreq"] = (int)udPhRotFreq.Value;
+            dr["CFCPhaseRotatorStages"] = (int)udPHROTStages.Value;
+            int[] cfceq = CFCCOMPEQ;
+            dr["CFCPreComp"] = cfceq[0];
+            for (int i = 1; i < 11; i++)
+                dr["CFCPreComp" + (i - 1).ToString()] = cfceq[i];
+            dr["CFCPostEqGain"] = cfceq[11];
+            for (int i = 12; i < 22; i++)
+                dr["CFCPostEqGain" + (i - 12).ToString()] = cfceq[i];
+            for (int i = 22; i < 32; i++)
+                dr["CFCEqFreq" + (i - 22).ToString()] = cfceq[i];
 
             if (!comboTXProfileName.Items.Contains(name))
             {

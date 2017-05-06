@@ -3,4 +3,5 @@ build
 Source/Console/obj
 Source/Midi2Cat/obj
 Source/Midi2Cat/bin
+Source/*.suo
 lib/WinFormsUI/obj

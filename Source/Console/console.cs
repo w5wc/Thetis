@@ -29037,7 +29037,11 @@ namespace Thetis
 
                     if (alexpresent || apollopresent)
                     {
-                        if (swrprotection && alex_fwd > 10.0f && (alex_fwd - alex_rev) < 1.0f) // open ant condition
+                        // in following 'if', K2UE recommends not checking open antenna for the 8000 model
+                        // if (swrprotection && alex_fwd > 10.0f && (alex_fwd - alex_rev) < 1.0f)
+                        //-W2PA Changed to allow 35w - some amplifier tuners need about 30w to reliably start working
+                        if (swrprotection && alex_fwd > 35.0f && (alex_fwd - alex_rev) < 1.0f 
+                            && current_hpsdr_model != HPSDRModel.ANAN8000D) // open ant condition
                         {
                             swr = 50.0f;
                             NetworkIO.SWRProtect = 0.01f;
@@ -29062,7 +29066,7 @@ namespace Thetis
 
                     if (chkTUN.Checked && disable_swr_on_tune && (alexpresent || apollopresent))
                     {
-                        if (alex_fwd >= 1.0 && alex_fwd <= 10.0 && ptbPWR.Value <= 20)
+                        if (alex_fwd >= 1.0 && alex_fwd <= 35.0 && ptbPWR.Value <= 70)
                         {
                             swr_pass = true;
                         }
@@ -29072,28 +29076,26 @@ namespace Thetis
                     if (tx_xvtr_index >= 0 || hf_tr_relay)
                         swr_pass = true;
 
+                    float alex_fwd_limit = 5.0f;
+                    if (current_hpsdr_model == HPSDRModel.ANAN8000D)        // K2UE idea:  try to determine if Hi-Z or Lo-Z load
+                        alex_fwd_limit = 2.0f * (float)ptbPWR.Value;        //    by comparing alex_fwd with power setting
+
                     if (swr > 2.25 && alex_fwd > 5.0f && swrprotection && !swr_pass)
                     {
                         high_swr_count++;
                         if (high_swr_count >= 4)
                         {
                             high_swr_count = 0;
-                            NetworkIO.SWRProtect = 0.5f;
+                            NetworkIO.SWRProtect = (float)(2.0 / (swr + 1.0));
                             HighSWR = true;
-                            if (swr > 3) NetworkIO.SWRProtect = 0.25f;
-
-                            if (current_display_engine == DisplayEngine.GDI_PLUS)
-                                picDisplay.Invalidate();
-                        }
+                         }
                     }
                     else
                     {
                         high_swr_count = 0;
                         NetworkIO.SWRProtect = 1.0f;
                         HighSWR = false;
-                        if (current_display_engine == DisplayEngine.GDI_PLUS)
-                            picDisplay.Invalidate();
-                    }
+                     }
 
                 end:
                     swr_pass = false;
@@ -29102,7 +29104,7 @@ namespace Thetis
                     else
                         alex_swr = swr;
                 }
-
+                else if (high_swr) HighSWR = false;
                 Thread.Sleep(1);
             }
 
