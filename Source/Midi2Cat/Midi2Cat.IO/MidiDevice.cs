@@ -797,7 +797,7 @@ namespace Midi2Cat.IO
             string led = n.ToString("X2");
             string knobCmd = "B0" + cID + led;
             SendMsg(0x01, 0x00, 0x00, 0x00, knobCmd);
-            //Thread.Sleep(1); //-W2PA This might be necessary for the PL-1 slider, which can cause a deluge of messages while also receiving them.
+            Thread.Sleep(1); //-W2PA This is necessary for the PL-1 slider, which can cause a deluge of messages while also receiving them.
             return;
         }
 
