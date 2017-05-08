@@ -1488,6 +1488,10 @@
             this.udDSPAGCFixedGaindB = new System.Windows.Forms.NumericUpDownTS();
             this.lblDSPAGCFixed = new System.Windows.Forms.LabelTS();
             this.tpDSPAMSAM = new System.Windows.Forms.TabPage();
+            this.grpAMTX = new System.Windows.Forms.GroupBoxTS();
+            this.radTXUSB = new System.Windows.Forms.RadioButtonTS();
+            this.radTXLSB = new System.Windows.Forms.RadioButtonTS();
+            this.radTXDSB = new System.Windows.Forms.RadioButtonTS();
             this.grpAMSQMaxTail = new System.Windows.Forms.GroupBoxTS();
             this.labelTS355 = new System.Windows.Forms.LabelTS();
             this.udRXAMSQMaxTail = new System.Windows.Forms.NumericUpDownTS();
@@ -3214,6 +3218,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.udDSPAGCAttack)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.udDSPAGCFixedGaindB)).BeginInit();
             this.tpDSPAMSAM.SuspendLayout();
+            this.grpAMTX.SuspendLayout();
             this.grpAMSQMaxTail.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.udRXAMSQMaxTail)).BeginInit();
             this.grpAMSAM.SuspendLayout();
@@ -24850,6 +24855,7 @@
             // tpDSPAMSAM
             // 
             this.tpDSPAMSAM.BackColor = System.Drawing.SystemColors.Control;
+            this.tpDSPAMSAM.Controls.Add(this.grpAMTX);
             this.tpDSPAMSAM.Controls.Add(this.grpAMSQMaxTail);
             this.tpDSPAMSAM.Controls.Add(this.grpAMSAM);
             this.tpDSPAMSAM.Controls.Add(this.grpRX2AMSAM);
@@ -24859,6 +24865,56 @@
             this.tpDSPAMSAM.Size = new System.Drawing.Size(592, 338);
             this.tpDSPAMSAM.TabIndex = 4;
             this.tpDSPAMSAM.Text = "AM/SAM";
+            // 
+            // grpAMTX
+            // 
+            this.grpAMTX.Controls.Add(this.radTXUSB);
+            this.grpAMTX.Controls.Add(this.radTXLSB);
+            this.grpAMTX.Controls.Add(this.radTXDSB);
+            this.grpAMTX.Location = new System.Drawing.Point(330, 175);
+            this.grpAMTX.Name = "grpAMTX";
+            this.grpAMTX.Size = new System.Drawing.Size(172, 92);
+            this.grpAMTX.TabIndex = 44;
+            this.grpAMTX.TabStop = false;
+            this.grpAMTX.Text = "AM Transmit Sideband Select";
+            // 
+            // radTXUSB
+            // 
+            this.radTXUSB.AutoSize = true;
+            this.radTXUSB.Image = null;
+            this.radTXUSB.Location = new System.Drawing.Point(6, 65);
+            this.radTXUSB.Name = "radTXUSB";
+            this.radTXUSB.Size = new System.Drawing.Size(47, 17);
+            this.radTXUSB.TabIndex = 2;
+            this.radTXUSB.Text = "USB";
+            this.radTXUSB.UseVisualStyleBackColor = true;
+            this.radTXUSB.CheckedChanged += new System.EventHandler(this.radTXDSB_CheckedChanged);
+            // 
+            // radTXLSB
+            // 
+            this.radTXLSB.AutoSize = true;
+            this.radTXLSB.Image = null;
+            this.radTXLSB.Location = new System.Drawing.Point(6, 42);
+            this.radTXLSB.Name = "radTXLSB";
+            this.radTXLSB.Size = new System.Drawing.Size(45, 17);
+            this.radTXLSB.TabIndex = 1;
+            this.radTXLSB.Text = "LSB";
+            this.radTXLSB.UseVisualStyleBackColor = true;
+            this.radTXLSB.CheckedChanged += new System.EventHandler(this.radTXDSB_CheckedChanged);
+            // 
+            // radTXDSB
+            // 
+            this.radTXDSB.AutoSize = true;
+            this.radTXDSB.Checked = true;
+            this.radTXDSB.Image = null;
+            this.radTXDSB.Location = new System.Drawing.Point(6, 19);
+            this.radTXDSB.Name = "radTXDSB";
+            this.radTXDSB.Size = new System.Drawing.Size(73, 17);
+            this.radTXDSB.TabIndex = 0;
+            this.radTXDSB.TabStop = true;
+            this.radTXDSB.Text = "LSB+USB";
+            this.radTXDSB.UseVisualStyleBackColor = true;
+            this.radTXDSB.CheckedChanged += new System.EventHandler(this.radTXDSB_CheckedChanged);
             // 
             // grpAMSQMaxTail
             // 
@@ -48265,6 +48321,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.udDSPAGCAttack)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.udDSPAGCFixedGaindB)).EndInit();
             this.tpDSPAMSAM.ResumeLayout(false);
+            this.grpAMTX.ResumeLayout(false);
+            this.grpAMTX.PerformLayout();
             this.grpAMSQMaxTail.ResumeLayout(false);
             this.grpAMSQMaxTail.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.udRXAMSQMaxTail)).EndInit();
@@ -51717,6 +51775,10 @@
         private TrackBarTS tbCFC1;
         private TrackBarTS tbCFC2;
         private CheckBoxTS chkEnableXVTRHF;
+        private System.Windows.Forms.GroupBoxTS grpAMTX;
+        private System.Windows.Forms.RadioButtonTS radTXUSB;
+        private System.Windows.Forms.RadioButtonTS radTXLSB;
+        private System.Windows.Forms.RadioButtonTS radTXDSB;
 
     }
 }

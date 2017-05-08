@@ -41,7 +41,9 @@ enum txaMode
 	TXA_SPEC,
 	TXA_DIGL,
 	TXA_SAM,
-	TXA_DRM
+	TXA_DRM,
+	TXA_AM_LSB,
+	TXA_AM_USB
 };
 
 enum txaMeterType

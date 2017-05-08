@@ -132,7 +132,7 @@ void create_txa (int channel)
 		0);											// pointer for gain computation
 
 	txa[channel].preemph.p = create_emphp (
-		1,											// run
+		0,											// run
 		1,											// position
 		ch[channel].dsp_size,						// size
 		2048,										// number of filter coefficients
@@ -745,6 +745,11 @@ void SetTXAMode (int channel, int mode)
 			txa[channel].ammod.p->run   = 1;
 			txa[channel].ammod.p->mode  = 1;
 			break;
+		case TXA_AM_LSB:
+		case TXA_AM_USB:
+			txa[channel].ammod.p->run   = 1;
+			txa[channel].ammod.p->mode  = 2;
+			break;
 		case TXA_FM:
 			txa[channel].fmmod.p->run   = 1;
 			txa[channel].preemph.p->run = 1;
@@ -839,6 +844,32 @@ void TXASetupBPFilters (int channel)
 		else
 		{
 			CalcBandpassFilter (txa[channel].bp0.p, txa[channel].f_low, txa[channel].f_high, 1.0);
+		}
+		break;
+	case TXA_AM_LSB:
+		CalcBandpassFilter (txa[channel].bp0.p, -txa[channel].f_high, 0.0, 2.0);
+		if (txa[channel].compressor.p->run)
+		{
+			CalcBandpassFilter (txa[channel].bp1.p, -txa[channel].f_high, 0.0, 2.0);
+			txa[channel].bp1.p->run = 1;
+			if (txa[channel].osctrl.p->run)
+			{
+				CalcBandpassFilter (txa[channel].bp2.p, -txa[channel].f_high, 0.0, 1.0);
+				txa[channel].bp2.p->run = 1;
+			}
+		}
+		break;
+	case TXA_AM_USB:
+		CalcBandpassFilter (txa[channel].bp0.p, 0.0, txa[channel].f_high, 2.0);
+		if (txa[channel].compressor.p->run)
+		{
+			CalcBandpassFilter (txa[channel].bp1.p, 0.0, txa[channel].f_high, 2.0);
+			txa[channel].bp1.p->run = 1;
+			if (txa[channel].osctrl.p->run)
+			{
+				CalcBandpassFilter (txa[channel].bp2.p, 0.0, txa[channel].f_high, 1.0);
+				txa[channel].bp2.p->run = 1;
+			}
 		}
 		break;
 	}

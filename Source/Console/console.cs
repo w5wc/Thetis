@@ -400,6 +400,8 @@ namespace Thetis
         DIGL,
         SAM,
         DRM,
+        AM_LSB,
+        AM_USB,
         LAST,
     }
 
