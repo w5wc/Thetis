@@ -971,25 +971,50 @@ namespace Thetis
         }
 
         //-W2PA  Routine to implement variable speed tuning using the Behringer CMD PL-1 (and others) MIDI controller main wheel
-        private void ProcessPL1MainWheelAsVFO(int direction, int step, bool RoundToStepSize, long freq, int mode, string vfo)
+        private void ProcessBehringerMainWheelAsVFO(int direction, int step, bool RoundToStepSize, long freq, int mode, string vfo, string deviceName)
         {
             int stepMult = 1;
-            if ((direction <= 58 && direction >= 10) || (direction >= 70 && direction <= 117)) //-W2PA Fast spin of Behringer PL-1 wheel, multiply steps
+
+            // Handle the PL-1 and Micro slightly different due to the different behavior of their large wheels
+            if (deviceName == "CMD PL-1")
             {
-                stepMult = 3;
+                if ((direction <= 58 && direction >= 10) || (direction >= 70 && direction <= 117)) //-W2PA Fast spin of Behringer wheel, multiply steps
+                {
+                    stepMult = 3;
+                }
+                if ((direction <= 57 && direction >= 10) || (direction >= 71 && direction <= 117)) //-W2PA Faster spin of Behringer wheel, multiply steps
+                {
+                    stepMult = 7;
+                }
+                if ((direction <= 56 && direction >= 10) || (direction >= 72 && direction <= 117)) //-W2PA Faster spin of Behringer wheel, multiply steps
+                {
+                    stepMult = 11;
+                }
+                if ((direction <= 52 && direction >= 10) || (direction >= 76 && direction <= 117)) //-W2PA Fastest spin of Behringer wheel, multiply steps more
+                {
+                    stepMult = 200;
+                }
             }
-            if ((direction <= 57 && direction >= 10) || (direction >= 71 && direction <= 117)) //-W2PA Fast spin of Behringer PL-1 wheel, multiply steps
+            else if (deviceName == "CMD Micro")  // The Micro's large week needs more spinning to get to higher numbers than the PL-1, so start increasing earlier.
             {
-                stepMult = 7;
+                if ((direction <= 62 && direction >= 10) || (direction >= 66 && direction <= 117)) //-W2PA Fast spin of Behringer wheel, multiply steps
+                {
+                    stepMult = 3;
+                }
+                if ((direction <= 61 && direction >= 10) || (direction >= 67 && direction <= 117)) //-W2PA Faster spin of Behringer wheel, multiply steps
+                {
+                    stepMult = 7;
+                }
+                if ((direction <= 60 && direction >= 10) || (direction >= 68 && direction <= 117)) //-W2PA Faster spin of Behringer wheel, multiply steps
+                {
+                    stepMult = 11;
+                }
+                if ((direction <= 58 && direction >= 10) || (direction >= 70 && direction <= 117)) //-W2PA Fastest spin of Behringer PL-1 wheel, multiply steps more
+                {
+                    stepMult = 200;
+                }
             }
-            if ((direction <= 56 && direction >= 10) || (direction >= 72 && direction <= 117)) //-W2PA Fast spin of Behringer PL-1 wheel, multiply steps
-            {
-                stepMult = 11;
-            }
-            if ((direction <= 52 && direction >= 10) || (direction >= 76 && direction <= 117)) //-W2PA Faster spin of Behringer PL-1 wheel, multiply steps more
-            {
-                stepMult = 200;
-            }
+            else return;         
 
             int ico;
             if (vfo == "a") ico = Convert.ToInt16(commands.ZZRA("")); else ico = Convert.ToInt16(commands.ZZRB(""));
@@ -1198,7 +1223,7 @@ namespace Thetis
         //}
 
 
-        //-W2PA Modified to select Behringer PL-1 or original code
+        //-W2PA Modified to select Behringer PL-1, Micro, or original code
         private void ChangeFreqVfoA(int direction, int step, bool RoundToStepSize, MidiDevice device)  
         {
 
@@ -1211,13 +1236,17 @@ namespace Thetis
             //System.Diagnostics.Debug.WriteLine("Msg=" + msg);
 
             string devName = device.GetDeviceName();
-            if (devName == "CMD PL-1" || devName == "CMD Micro")  
+            if (devName == "CMD PL-1")  
             {
-                ProcessPL1MainWheelAsVFO(direction, step, RoundToStepSize, freq, mode, "a");
+                ProcessBehringerMainWheelAsVFO(direction, step, RoundToStepSize, freq, mode, "a", "CMD PL-1");
+            }
+            else if (devName == "CMD Micro")
+            {
+                ProcessBehringerMainWheelAsVFO(direction, step, RoundToStepSize, freq, mode, "a", "CMD Micro");
             }
             else
             {
-                ProcessStdMIDIWheelAsVFO(direction, step, RoundToStepSize, freq, mode, "a");
+                ProcessStdMIDIWheelAsVFO(direction, step, RoundToStepSize, freq, mode, "a");  // Original handler
             }
 
             commands.isMidi = false;
@@ -1362,7 +1391,7 @@ namespace Thetis
         //    commands.isMidi2 = false;
         //}
 
-        //-W2PA Modified to select Behringer PL-1 or original code
+        //-W2PA Modified to select Behringer PL-1, Micro, or original code
         public void ChangeFreqVfoB(int msg, MidiDevice device)
         {
             bool RoundToStepSize = true;
@@ -1380,9 +1409,13 @@ namespace Thetis
             commands.isMidi2 = true;
 
             string devName = device.GetDeviceName();
-            if (devName == "CMD PL-1" || devName == "CMD Micro")  //W2PA- Special handling for Behringer 
+            if (devName == "CMD PL-1")  //W2PA- Special handling for Behringer 
             {
-                ProcessPL1MainWheelAsVFO(direction, step, RoundToStepSize, freq, mode, "b");
+                ProcessBehringerMainWheelAsVFO(direction, step, RoundToStepSize, freq, mode, "b", "CMD PL-1");
+            }
+            else if (devName == "CMD Micro")
+            {
+                ProcessBehringerMainWheelAsVFO(direction, step, RoundToStepSize, freq, mode, "b", "CMD Micro");
             }
             else
             {
