@@ -19,6 +19,10 @@
 //
 // You may contact the author via email at: k5kdn@arrl.net
 //=================================================================
+/*
+Modifications to support the Behringer Midi controllers
+by Chris Codella, W2PA, April 2017.  Indicated by //-W2PA comment lines.
+*/
 
 
 using System;
@@ -1141,7 +1145,7 @@ namespace Thetis
 				n = Math.Min(120, n);
 			}
 
-			if(s.Length == parser.nSet)
+            if (s.Length >= parser.nSet)  //-W2PA changed to allow for 2, 3, 4 digits for Midi2Cat
 			{
 				console.RF = n;
 				return "";
@@ -1177,7 +1181,7 @@ namespace Thetis
                     n = Math.Min(120, n);
                 }
 
-                if (s.Length == parser.nSet)
+            if (s.Length >= parser.nSet)  //-W2PA changed to allow for 2, 3, 4 digits for Midi2Cat
                 {
                     console.RX2RF = n;
                     return "";
@@ -1931,56 +1935,56 @@ namespace Thetis
             string status = "";
 
             parser.nAns = 1;
-            status += ZZSW("") + sep; 
-            status += ZZSP("") + sep;
-            status += ZZTU("") + sep;
-            status += ZZTX("") + sep;
+            status += ZZSW("") + sep; // swap VFOA/B
+            status += ZZSP("") + sep; // VFO Split status
+            status += ZZTU("") + sep; // TUN button status
+            status += ZZTX("") + sep; // MOX button status
            // status += ZZOA("") + sep;
            // status += ZZOB("") + sep;
            // status += ZZOC("") + sep;
             status += "0:0:0:";
 
-            status += ZZRS("") + sep;
-            status += ZZRT("") + sep;
-            status += ZZDM("") + sep;
-            status += ZZGT("") + sep;
-            status += ZZMU("") + sep;
-            status += ZZXS("") + sep;
+            status += ZZRS("") + sep; // RX2 button status
+            status += ZZRT("") + sep; // RIT button status
+            status += ZZDM("") + sep; // current display mode
+            status += ZZGT("") + sep; // AGC constant
+            status += ZZMU("") + sep; // MultiRx status
+            status += ZZXS("") + sep; // XIT status
 
             parser.nAns = 2;
-            status += ZZAC("") + sep;
-            status += ZZMD("") + sep;
-            status += ZZME("") + sep;
-            status += ZZFJ("") + sep;
-            status += ZZFI("") + sep;
+            status += ZZAC("") + sep; // tuning step size
+            status += ZZMD("") + sep; // RX1 DSP mode
+            status += ZZME("") + sep; // RX2 DSP mode
+            status += ZZFJ("") + sep; // RX2 DSP filter
+            status += ZZFI("") + sep; // RX1 filter index
 
             parser.nAns = 3;
            // status += ZZOF("") + sep;
             status += "000:";
-            status += ZZBT("") + sep;
-            status += ZZPC("") + sep;
-            status += ZZBS("") + sep;
-            status += ZZAG("") + sep;
-            status += ZZKS("") + sep;
-            status += ZZTO("") + sep;
+            status += ZZBT("") + sep; // RX2 band
+            status += ZZPC("") + sep; // Drive level
+            status += ZZBS("") + sep; // current band Rx1
+            status += ZZAG("") + sep; // AF gain control
+            status += ZZKS("") + sep; // CWX CW speed
+            status += ZZTO("") + sep; // Tune power level
           
             parser.nAns = 4;
            // status += ZZRV() + sep;
             status += "0000:";
-            status += ZZSM("0") + sep;
+            status += ZZSM("0") + sep; // S meter value
 
             parser.nAns = 5;
-            status += ZZRF("") + sep;
+            status += ZZRF("") + sep; // RIT frequency
            // status += ZZTS() + sep;
             status += "00000:";
-            status += ZZXF("") + sep;
+            status += ZZXF("") + sep; // XIT frequency
 
             parser.nAns = 6;
-            status += ZZCU() + sep;
+            status += ZZCU() + sep; // CPU usage
 
             parser.nAns = 11;
-            status += ZZFA("") + sep;
-            status += ZZFB("");
+            status += ZZFA("") + sep; // VFOA frequency
+            status += ZZFB(""); // VFOB frequency
             parser.nAns = old;
             return status;
         } 
@@ -2430,10 +2434,10 @@ namespace Thetis
                 else return "0";
             }
 
-            else if (radio == "ANAN10")
+            else if (radio == "ANAN10" || radio == "ANAN10E")
                 return "0";
 
-            else if (radio == "ANAN100" || radio == "ANAN100D")
+            else if (radio == "ANAN100" || radio == "ANAN100B" || radio == "ANAN100D" || radio == "ANAN200D" || radio == "ANAN8000D")
                 return "1";
             else
                 return parser.Error1;
@@ -3318,6 +3322,33 @@ namespace Thetis
                     return parser.Error1;
         }
         
+        // Sets or reads the PS-A button on/off status
+        public string ZZLI(string s)
+        {
+            if (s.Length == parser.nSet && (s == "0" || s == "1"))
+            {
+                if (s == "0")
+                    console.PSA = false;
+                else if (s == "1")
+                    console.PSA = true;
+
+                return "";
+            }
+            else if (s.Length == parser.nGet)
+            {
+                bool retval = console.PSA;
+                if (retval)
+                    return "1";
+                else
+                    return "0";
+            }
+            else
+            {
+                return parser.Error1;
+            }
+
+        }
+
         // Sets or reads the MUT button on/off status
 		public string ZZMA(string s)
 		{
@@ -3826,14 +3857,12 @@ namespace Thetis
         {
                 if (s.Length == parser.nSet && (s == "0" || s == "1"))
                 {
-                    //console.CATRX2NB2 = Convert.ToInt32(s);
-                    //return "";
-                    return parser.Error1;
+                    console.CATRX2NB2 = Convert.ToInt32(s);
+                    return "";
                 }
                 else if (s.Length == parser.nGet)
                 {
-                    //return console.CATRX2NB2.ToString();
-                    return parser.Error1;
+                    return console.CATRX2NB2.ToString();
                 }
                 else
                 {
@@ -3918,13 +3947,7 @@ namespace Thetis
             }
         }
         
-        // Sets or reads the Noise Reduction status
-		//		public string ZZNR()
-		//		{
-		//			int nr = console.CATNR;
-		//			return nr.ToString();
-		//		}
-
+        // Sets or reads the RX1 Noise Reduction status
 		public string ZZNR(string s)
 		{
 			int sx = 0;
@@ -3947,6 +3970,7 @@ namespace Thetis
 			}
 		}
 
+        // Sets or reads the RX1 NR2 button status
         public string ZZNS(string s)
         {
             int sx = 0;
@@ -4611,19 +4635,20 @@ namespace Thetis
 			{
 				return ZZRF(s);
 			}
-			else if(s.Length == parser.nGet && console.RITOn)
+            else if (s.Length == parser.nGet) // && console.RITOn)  //-W2PA Want to be able to change RIT value even if it's off
 			{
-				switch(console.RX1DSPMode)
-				{
-					case DSPMode.CWL:
-					case DSPMode.CWU:
-						console.RITValue -= 10;
-						break;
-					case DSPMode.LSB:
-					case DSPMode.USB:
-						console.RITValue -= 50;
-						break;
-				}
+                //switch(console.RX1DSPMode)
+                //{
+                //	case DSPMode.CWL:
+                //	case DSPMode.CWU:
+                //		console.RITValue -= 10;
+                //		break;
+                //	case DSPMode.LSB:
+                //	case DSPMode.USB:
+                //		console.RITValue -= 50;  
+                //                    break;
+                //            }
+                console.RITValue -= 10;  //-W2PA Changed to be same step in all modes.
 				return "";
 			}
 			else
@@ -4840,19 +4865,21 @@ namespace Thetis
 			{
 				return ZZRF(s);
 			}
-			else if(s.Length == parser.nGet && console.RITOn)
+			else if(s.Length == parser.nGet) // && console.RITOn)  //-W2PA Want to be able to change RIT value even if it's off
+
 			{
-				switch(console.RX1DSPMode)
-				{
-					case DSPMode.CWL:
-					case DSPMode.CWU:
-						console.RITValue += 10;
-						break;
-					case DSPMode.LSB:
-					case DSPMode.USB:
-						console.RITValue += 50;
-						break;
-				}
+                //switch(console.RX1DSPMode)
+                //{
+                //	case DSPMode.CWL:
+                //	case DSPMode.CWU:
+                //		console.RITValue += 10;
+                //		break;
+                //	case DSPMode.LSB:
+                //	case DSPMode.USB:
+                //		console.RITValue += 50;  
+                //		break;
+                //            }
+                console.RITValue += 10;  //-W2PA Changed to operate in all modes.
 				return "";
 			}
 			else

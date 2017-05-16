@@ -9085,6 +9085,10 @@ namespace Thetis
                 case HPSDRModel.ANAN8000D:
                     interval = 20.0f;
                     break;
+                case HPSDRModel.ANAN10:
+                case HPSDRModel.ANAN10E:
+                    interval = 1.0f;
+                    break;
                 default:
                     interval = 10.0f;
                     break;
@@ -21472,6 +21476,13 @@ namespace Thetis
             {
                 //USBHID.WriteI2C2Value(0x30, 0x25, 0xC0);
             }
+        }
+
+        // Sets or reads the PS-A button
+        public bool PSA
+        {
+            get { return chkFWCATUBypass.Checked; }
+            set { chkFWCATUBypass.Checked = value; }
         }
 
         public bool MOX
