@@ -1710,8 +1710,8 @@ namespace Thetis
                 {
                     case HPSDRModel.ANAN8000D:
                     case HPSDRModel.ORIONMKII:
-                        rx_meter_cal_offset_by_radio[i] = 3.00f;
-                        rx_display_cal_offset_by_radio[i] = 3.36f;
+                        rx_meter_cal_offset_by_radio[i] = 8.4725f;
+                        rx_display_cal_offset_by_radio[i] = 8.6965f;
                         break;
                     default:
                         rx_meter_cal_offset_by_radio[i] = 0.98f;
