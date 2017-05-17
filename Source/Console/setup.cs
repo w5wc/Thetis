@@ -6282,21 +6282,24 @@ namespace Thetis
             if (radGenModelANAN10.Checked || radGenModelANAN10E.Checked)
             {
                 chkRxOutOnTx.Checked = false;
-                chkRxOutOnTx.Enabled = false;
+                chkRxOutOnTx.Visible = false;
                 chkEXT1OutOnTx.Checked = false;
-                chkEXT1OutOnTx.Enabled = false;
+                chkEXT1OutOnTx.Visible = false;
                 chkEXT2OutOnTx.Checked = false;
-                chkEXT2OutOnTx.Enabled = false;
+                chkEXT2OutOnTx.Visible = false;
                 panelAlex1HPFControl.Visible = false;
                 tpAlexFilterControl.Text = "LPF";
                 panelAlexRXXVRTControl.Visible = false;
                 labelAlexFilterActive.Location = new Point(298, 0);
                 grp10WattMeterTrim.BringToFront();
+                chkEnableXVTRHF.Visible = false;
             }
             else if (radGenModelORIONMKII.Checked || radGenModelANAN8000D.Checked)
             {
-                chkRxOutOnTx.Enabled = true;
-                chkEXT1OutOnTx.Enabled = true;
+                chkRxOutOnTx.Checked = false;
+                chkRxOutOnTx.Visible = false;
+                chkEXT1OutOnTx.Checked = false;
+                chkEXT1OutOnTx.Visible = false;
                 chkEXT2OutOnTx.Checked = false;
                 chkEXT2OutOnTx.Visible = false;
                 // panelAlex1HPFControl.Visible = true;
@@ -6305,17 +6308,21 @@ namespace Thetis
                 labelAlex1FilterHPF.Text = "BPF1";
                 chkAlexHPFBypass.Text = "ByPass/55 MHz BPF";
                 chkDisableHPFonTX.Text = "BPF ByPass on TX";
-                panelAlexRXXVRTControl.Visible = true;
+                panelAlexRXXVRTControl.Visible = false;
                 labelAlexFilterActive.Location = new Point(275, 0);
                 ud6mRx2LNAGainOffset.Visible = true;
                 lblRx26mLNA.Visible = true;
                 grp200WattMeterTrim.BringToFront();
+                chkEnableXVTRHF.Visible = true;
             }
             else
             {
                 chkRxOutOnTx.Enabled = true;
+                chkRxOutOnTx.Visible = true;
                 chkEXT1OutOnTx.Enabled = true;
+                chkEXT1OutOnTx.Visible = true;
                 chkEXT2OutOnTx.Enabled = true;
+                chkEXT2OutOnTx.Visible = true;
                 panelAlex1HPFControl.Visible = true;
                 tpAlexFilterControl.Text = "HPF/LPF";
                 labelAlex1FilterHPF.Text = "HPF";
@@ -6326,6 +6333,7 @@ namespace Thetis
                 ud6mRx2LNAGainOffset.Visible = false;
                 lblRx26mLNA.Visible = false;
                 grp100WattMeterTrim.BringToFront();
+                chkEnableXVTRHF.Visible = false;
             }
 
             if (radGenModelHermes.Checked || radGenModelHPSDR.Checked)
