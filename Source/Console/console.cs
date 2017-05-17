@@ -24403,10 +24403,10 @@ namespace Thetis
             {
                 case DisplayEngine.GDI_PLUS:
                     // e.Graphics.Clear(BackColor);
-                    e.Graphics.CompositingMode = CompositingMode.SourceOver;
-                    e.Graphics.CompositingQuality = CompositingQuality.Default;
-                    e.Graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
-                    e.Graphics.SmoothingMode = SmoothingMode.HighQuality;
+                    //e.Graphics.CompositingMode = CompositingMode.SourceOver;
+                    //e.Graphics.CompositingQuality = CompositingQuality.Default;
+                    //e.Graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
+                    //e.Graphics.SmoothingMode = SmoothingMode.HighQuality;
                     Display.RenderGDIPlus(ref e);
                     break;
                 case DisplayEngine.DIRECT_X:
