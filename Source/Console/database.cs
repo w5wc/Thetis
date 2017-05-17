@@ -3786,7 +3786,7 @@ namespace Thetis
             dr["Line_Input_Level"] = 0.0;
 
             dr["CESSB_On"] = false;
-            dr["Pure_Signal_Enabled"] = true;
+            dr["Pure_Signal_Enabled"] = false;
 
             // CFC
             dr["CFCEnabled"] = false;
