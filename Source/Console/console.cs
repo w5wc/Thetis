@@ -54,6 +54,7 @@ namespace Thetis
     using System.Text;
     using System.Windows.Forms;
     using System.Xml;
+    using System.Xml.Linq;
     using System.Timers;
     using System.Linq;
     using System.Speech.Synthesis;
@@ -683,8 +684,8 @@ namespace Thetis
         public DiversityForm diversityForm;
         public RAForm raForm;
         public Path_Illustrator path_Illustrator;
-        public RadioInfo radio_info;
-        public ContactInfo contact_info;
+       // public RadioInfo radio_info;
+       // public ContactInfo contact_info;
         public MemoryForm memoryForm;
         public MemoryList MemoryList { get; private set; }
         public WaveControl WaveForm;
@@ -7260,616 +7261,5636 @@ namespace Thetis
                 
 
                 case FRSRegion.India:
-                    if (freq >= 1.81 && freq <= 2.0)
-                        return Band.B160M;
-                    else if (freq >= 3.5 && freq <= 3.9)
-                        return Band.B80M;
-                    else if (freq >= 5.0 && freq < 7.0)
-                        return Band.B60M;
-                    else if (freq >= 7.0 && freq <= 7.2)
-                        return Band.B40M;
-                    else if (freq >= 10.1 && freq <= 10.15)
-                        return Band.B30M;
-                    else if (freq >= 14.0 && freq <= 14.35)
-                        return Band.B20M;
-                    else if (freq >= 18.068 && freq <= 18.168)
-                        return Band.B17M;
-                    else if (freq >= 21.0 && freq <= 21.45)
-                        return Band.B15M;
-                    else if (freq >= 24.89 && freq <= 24.99)
-                        return Band.B12M;
-                    else if (freq >= 28.0 && freq <= 29.7)
-                        return Band.B10M;
-                    else if (freq >= 50.0 && freq <= 54.0)
-                        return Band.B6M;
-                    else if (freq >= 144.0 && freq <= 148.0)
-                        return Band.B2M;
-                    else if (freq == 2.5 || freq == 5.0 ||
-                        freq == 10.0 || freq == 15.0 ||
-                        freq == 20.0)
-                        return Band.WWV;
-                    else
-                        return Band.GEN;
+                    //if (freq >= 1.81 && freq <= 2.0)
+                    //    return Band.B160M;
+                    //else if (freq >= 3.5 && freq <= 3.9)
+                    //    return Band.B80M;
+                    //else if (freq >= 5.0 && freq < 7.0)
+                    //    return Band.B60M;
+                    //else if (freq >= 7.0 && freq <= 7.2)
+                    //    return Band.B40M;
+                    //else if (freq >= 10.1 && freq <= 10.15)
+                    //    return Band.B30M;
+                    //else if (freq >= 14.0 && freq <= 14.35)
+                    //    return Band.B20M;
+                    //else if (freq >= 18.068 && freq <= 18.168)
+                    //    return Band.B17M;
+                    //else if (freq >= 21.0 && freq <= 21.45)
+                    //    return Band.B15M;
+                    //else if (freq >= 24.89 && freq <= 24.99)
+                    //    return Band.B12M;
+                    //else if (freq >= 28.0 && freq <= 29.7)
+                    //    return Band.B10M;
+                    //else if (freq >= 50.0 && freq <= 54.0)
+                    //    return Band.B6M;
+                    //else if (freq >= 144.0 && freq <= 148.0)
+                    //    return Band.B2M;
+                    //else if (freq == 2.5 || freq == 5.0 ||
+                    //    freq == 10.0 || freq == 15.0 ||
+                    //    freq == 20.0)
+                    //    return Band.WWV;
+                    //else
+                    //    return Band.GEN;
+
+                if (freq >= 1.81 && freq <= 2.0)
+                {
+                    if (vfoa)
+                    {
+                        panelBandHF.Visible = true;
+                        panelBandGEN.Visible = false;
+                    }
+                    return Band.B160M;
+                }
+                else if (freq >= 3.5 && freq <= 3.9)
+                {
+                    if (vfoa)
+                    {
+                        panelBandHF.Visible = true;
+                        panelBandGEN.Visible = false;
+                    }
+                    return Band.B80M;
+                }
+                else if (freq >= 5.0 && freq <= 7.0)
+                {
+                    if (vfoa)
+                    {
+                        panelBandHF.Visible = true;
+                        panelBandGEN.Visible = false;
+                    }
+                    return Band.B60M;
+                }
+                else if (freq >= 7.0 && freq <= 7.2)
+                {
+                    if (vfoa)
+                    {
+                        panelBandHF.Visible = true;
+                        panelBandGEN.Visible = false;
+                    }
+                    return Band.B40M;
+                }
+                else if (freq >= 10.1 && freq <= 10.15)
+                {
+                    if (vfoa)
+                    {
+                        panelBandHF.Visible = true;
+                        panelBandGEN.Visible = false;
+                    }
+                    return Band.B30M;
+                }
+                else if (freq >= 14.0 && freq <= 14.35)
+                {
+                    if (vfoa)
+                    {
+                        panelBandHF.Visible = true;
+                        panelBandGEN.Visible = false;
+                    }
+                    return Band.B20M;
+                }
+                else if (freq >= 18.068 && freq <= 18.168)
+                {
+                    if (vfoa)
+                    {
+                        panelBandHF.Visible = true;
+                        panelBandGEN.Visible = false;
+                    }
+                    return Band.B17M;
+                }
+                else if (freq >= 21.0 && freq <= 21.450)
+                {
+                    if (vfoa)
+                    {
+                        panelBandHF.Visible = true;
+                        panelBandGEN.Visible = false;
+                    }
+                    return Band.B15M;
+                }
+                else if (freq >= 24.89 && freq <= 24.99)
+                {
+                    if (vfoa)
+                    {
+                        panelBandHF.Visible = true;
+                        panelBandGEN.Visible = false;
+                    }
+                    return Band.B12M;
+                }
+                else if (freq >= 28.0 && freq <= 29.7)
+                {
+                    if (vfoa)
+                    {
+                        panelBandHF.Visible = true;
+                        panelBandGEN.Visible = false;
+                    }
+                    return Band.B10M;
+                }
+                else if (freq >= 50.0 && freq <= 54.0)
+                {
+                    if (vfoa)
+                    {
+                        panelBandHF.Visible = true;
+                        panelBandGEN.Visible = false;
+                    }
+                    return Band.B6M;
+                }
+                else if (freq >= 144.0 && freq <= 148.0)
+                {
+                    if (vfoa)
+                    {
+                        panelBandHF.Visible = true;
+                        panelBandGEN.Visible = false;
+                    }
+                    return Band.B2M;
+                }
+                else if (freq == 2.5 || freq == 5.0 || freq == 10.0 || freq == 15.0 ||
+                        freq == 20.0 || freq == 25.0 || freq == 3.33 || freq == 7.85 || freq == 14.67)
+                {
+                    if (vfoa)
+                    {
+                        panelBandHF.Visible = true;
+                        panelBandGEN.Visible = false;
+                    }
+                    return Band.WWV;
+                }
+
+                // ke9ns add
+                else if (freq >= 0.20 && freq < 1.80)
+                {
+                    if (vfoa)
+                    {
+                        panelBandHF.Visible = false;
+                        panelBandGEN.Visible = true;
+                    }
+                    return Band.BLMF;
+                }
+
+                else if (freq >= 2.3 && freq < 3.0)
+                {
+                    if (vfoa)
+                    {
+                        panelBandHF.Visible = false;
+                        panelBandGEN.Visible = true;
+                    }
+                    return Band.B120M;
+                }
+
+                else if (freq >= 3.0 && freq < 3.5)
+                {
+                    if (vfoa)
+                    {
+                        panelBandHF.Visible = false;
+                        panelBandGEN.Visible = true;
+                    }
+                    return Band.B90M;
+                }
+
+                else if (freq >= 4.10 && freq < 5.06)
+                {
+                    if (vfoa)
+                    {
+                        panelBandHF.Visible = false;
+                        panelBandGEN.Visible = true;
+                    }
+                    return Band.B61M;
+                }
+
+                else if (freq >= 5.06 && freq < 7.20)
+                {
+                    //   Debug.WriteLine("bandbyfreq 49");
+                    if (vfoa)
+                    {
+                        panelBandHF.Visible = false;
+                        panelBandGEN.Visible = true;
+                    }
+                    return Band.B49M;
+                }
+
+                else if (freq >= 7.20 && freq < 9.0)
+                {
+                    //  Debug.WriteLine("bandbyfreq 41");
+                    if (vfoa)
+                    {
+                        panelBandHF.Visible = false;
+                        panelBandGEN.Visible = true;
+                    }
+                    return Band.B41M;
+                }
+
+                else if (freq >= 9.0 && freq < 9.99)
+                {
+                    if (vfoa)
+                    {
+                        panelBandHF.Visible = false;
+                        panelBandGEN.Visible = true;
+                    }
+                    return Band.B31M;
+                }
+
+                else if (freq >= 11.6 && freq < 13.57)
+                {
+                    if (vfoa)
+                    {
+                        panelBandHF.Visible = false;
+                        panelBandGEN.Visible = true;
+                    }
+                    return Band.B25M;
+                }
+
+                else if (freq >= 13.57 && freq < 13.87)
+                {
+                    if (vfoa)
+                    {
+                        panelBandHF.Visible = false;
+                        panelBandGEN.Visible = true;
+                    }
+                    return Band.B22M;
+                }
+
+                else if (freq >= 15.1 && freq < 17.0)
+                {
+                    if (vfoa)
+                    {
+                        panelBandHF.Visible = false;
+                        panelBandGEN.Visible = true;
+                    }
+                    return Band.B19M;
+                }
+
+                else if (freq >= 17.0 && freq < 18.0)
+                {
+                    if (vfoa)
+                    {
+                        panelBandHF.Visible = false;
+                        panelBandGEN.Visible = true;
+                    }
+                    return Band.B16M;
+                }
+
+                else if (freq >= 18.0 && freq < 21.0)
+                {
+                    if (vfoa)
+                    {
+                        panelBandHF.Visible = false;
+                        panelBandGEN.Visible = true;
+                    }
+                    return Band.B14M;
+                }
+                else if (freq >= 21.00 && freq < 25.0)
+                {
+                    if (vfoa)
+                    {
+                        panelBandHF.Visible = false;
+                        panelBandGEN.Visible = true;
+                    }
+                    return Band.B13M;
+                }
+
+                else if (freq >= 25.0 && freq < 28.0)
+                {
+                    if (vfoa)
+                    {
+                        panelBandHF.Visible = false;
+                        panelBandGEN.Visible = true;
+                    }
+                    return Band.B11M;
+                }
+
+                else
+                    return Band.GEN;
 
                 case FRSRegion.Spain:
+                    //if (freq >= 1.81 && freq <= 2.0)
+                    //    return Band.B160M;
+                    //else if (freq >= 3.5 && freq <= 3.8)
+                    //    return Band.B80M;
+                    //else if (freq >= 5.0 && freq < 7.0)
+                    //    return Band.B60M;
+                    //else if (freq >= 7.0 && freq <= 7.2)
+                    //    return Band.B40M;
+                    //else if (freq >= 10.1 && freq <= 10.15)
+                    //    return Band.B30M;
+                    //else if (freq >= 14.0 && freq <= 14.35)
+                    //    return Band.B20M;
+                    //else if (freq >= 18.068 && freq <= 18.168)
+                    //    return Band.B17M;
+                    //else if (freq >= 21.0 && freq <= 21.45)
+                    //    return Band.B15M;
+                    //else if (freq >= 24.89 && freq <= 24.99)
+                    //    return Band.B12M;
+                    //else if (freq >= 28.0 && freq <= 29.7)
+                    //    return Band.B10M;
+                    //else if (freq >= 50.0 && freq <= 54.0)
+                    //    return Band.B6M;
+                    //else if (freq >= 144.0 && freq <= 148.0)
+                    //    return Band.B2M;
+                    //else if (freq == 2.5 || freq == 5.0 ||
+                    //    freq == 10.0 || freq == 15.0 ||
+                    //    freq == 20.0)
+                    //    return Band.WWV;
+                    //else
+                    //    return Band.GEN;
+
                     if (freq >= 1.81 && freq <= 2.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B160M;
+                    }
                     else if (freq >= 3.5 && freq <= 3.8)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B80M;
-                    else if (freq >= 5.0 && freq < 7.0)
+                    }
+                    else if (freq >= 5.1 && freq <= 5.5)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B60M;
+                    }
                     else if (freq >= 7.0 && freq <= 7.2)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B40M;
+                    }
                     else if (freq >= 10.1 && freq <= 10.15)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B30M;
+                    }
                     else if (freq >= 14.0 && freq <= 14.35)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B20M;
+                    }
                     else if (freq >= 18.068 && freq <= 18.168)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B17M;
-                    else if (freq >= 21.0 && freq <= 21.45)
+                    }
+                    else if (freq >= 21.0 && freq <= 21.450)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B15M;
+                    }
                     else if (freq >= 24.89 && freq <= 24.99)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B12M;
+                    }
                     else if (freq >= 28.0 && freq <= 29.7)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B10M;
-                    else if (freq >= 50.0 && freq <= 54.0)
+                    }
+                    else if (freq >= 50.0 && freq <= 52.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B6M;
+                    }
                     else if (freq >= 144.0 && freq <= 148.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B2M;
-                    else if (freq == 2.5 || freq == 5.0 ||
-                        freq == 10.0 || freq == 15.0 ||
-                        freq == 20.0)
+                    }
+                    else if (freq == 2.5 || freq == 5.0 || freq == 10.0 || freq == 15.0 ||
+                            freq == 20.0 || freq == 25.0 || freq == 3.33 || freq == 7.85 || freq == 14.67)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.WWV;
+                    }
+
+                    // ke9ns add
+                    else if (freq >= 0.20 && freq < 1.80)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.BLMF;
+                    }
+
+                    else if (freq >= 2.3 && freq < 3.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B120M;
+                    }
+
+                    else if (freq >= 3.0 && freq < 3.5)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B90M;
+                    }
+
+                    else if (freq >= 4.10 && freq < 5.06)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B61M;
+                    }
+
+                    else if (freq >= 5.06 && freq < 7.20)
+                    {
+                        //   Debug.WriteLine("bandbyfreq 49");
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B49M;
+                    }
+
+                    else if (freq >= 7.20 && freq < 9.0)
+                    {
+                        //  Debug.WriteLine("bandbyfreq 41");
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B41M;
+                    }
+
+                    else if (freq >= 9.0 && freq < 9.99)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B31M;
+                    }
+
+                    else if (freq >= 11.6 && freq < 13.57)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B25M;
+                    }
+
+                    else if (freq >= 13.57 && freq < 13.87)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B22M;
+                    }
+
+                    else if (freq >= 15.1 && freq < 17.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B19M;
+                    }
+
+                    else if (freq >= 17.0 && freq < 18.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B16M;
+                    }
+
+                    else if (freq >= 18.0 && freq < 21.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B14M;
+                    }
+                    else if (freq >= 21.00 && freq < 25.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B13M;
+                    }
+
+                    else if (freq >= 25.0 && freq < 28.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B11M;
+                    }
+
                     else
                         return Band.GEN;
-
+                
                 case FRSRegion.Europe:
+                    //if (freq >= 1.81 && freq <= 2.0)
+                    //    return Band.B160M;
+                    //else if (freq >= 3.5 && freq <= 3.8)
+                    //    return Band.B80M;
+                    //else if (freq >= 5.0 && freq < 7.0)
+                    //    return Band.B60M;
+                    //else if (freq >= 7.0 && freq <= 7.2)
+                    //    return Band.B40M;
+                    //else if (freq >= 10.1 && freq <= 10.15)
+                    //    return Band.B30M;
+                    //else if (freq >= 14.0 && freq <= 14.35)
+                    //    return Band.B20M;
+                    //else if (freq >= 18.068 && freq <= 18.168)
+                    //    return Band.B17M;
+                    //else if (freq >= 21.0 && freq <= 21.45)
+                    //    return Band.B15M;
+                    //else if (freq >= 24.89 && freq <= 24.99)
+                    //    return Band.B12M;
+                    //else if (freq >= 28.0 && freq <= 29.7)
+                    //    return Band.B10M;
+                    //else if (freq >= 50.08 && freq <= 51.0)
+                    //    return Band.B6M;
+                    //else if (freq >= 144.0 && freq <= 148.0)
+                    //    return Band.B2M;
+                    //else if (freq == 2.5 || freq == 5.0 ||
+                    //    freq == 10.0 || freq == 15.0 ||
+                    //    freq == 20.0)
+                    //    return Band.WWV;
+                    //else
+                    //    return Band.GEN;
+
                     if (freq >= 1.81 && freq <= 2.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B160M;
+                    }
                     else if (freq >= 3.5 && freq <= 3.8)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B80M;
-                    else if (freq >= 5.0 && freq < 7.0)
+                    }
+                    else if (freq >= 5.1 && freq <= 5.5)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B60M;
+                    }
                     else if (freq >= 7.0 && freq <= 7.2)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B40M;
+                    }
                     else if (freq >= 10.1 && freq <= 10.15)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B30M;
+                    }
                     else if (freq >= 14.0 && freq <= 14.35)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B20M;
+                    }
                     else if (freq >= 18.068 && freq <= 18.168)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B17M;
-                    else if (freq >= 21.0 && freq <= 21.45)
+                    }
+                    else if (freq >= 21.0 && freq <= 21.450)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B15M;
+                    }
                     else if (freq >= 24.89 && freq <= 24.99)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B12M;
+                    }
                     else if (freq >= 28.0 && freq <= 29.7)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B10M;
-                    else if (freq >= 50.08 && freq <= 51.0)
+                    }
+                    else if (freq >= 50.03 && freq <= 51.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B6M;
+                    }
                     else if (freq >= 144.0 && freq <= 148.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B2M;
-                    else if (freq == 2.5 || freq == 5.0 ||
-                        freq == 10.0 || freq == 15.0 ||
-                        freq == 20.0)
+                    }
+                    else if (freq == 2.5 || freq == 5.0 || freq == 10.0 || freq == 15.0 ||
+                            freq == 20.0 || freq == 25.0 || freq == 3.33 || freq == 7.85 || freq == 14.67)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.WWV;
+                    }
+
+                    // ke9ns add
+                    else if (freq >= 0.20 && freq < 1.80)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.BLMF;
+                    }
+
+                    else if (freq >= 2.3 && freq < 3.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B120M;
+                    }
+
+                    else if (freq >= 3.0 && freq < 3.5)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B90M;
+                    }
+
+                    else if (freq >= 4.10 && freq < 5.06)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B61M;
+                    }
+
+                    else if (freq >= 5.06 && freq < 7.20)
+                    {
+                        //   Debug.WriteLine("bandbyfreq 49");
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B49M;
+                    }
+
+                    else if (freq >= 7.20 && freq < 9.0)
+                    {
+                        //  Debug.WriteLine("bandbyfreq 41");
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B41M;
+                    }
+
+                    else if (freq >= 9.0 && freq < 9.99)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B31M;
+                    }
+
+                    else if (freq >= 11.6 && freq < 13.57)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B25M;
+                    }
+
+                    else if (freq >= 13.57 && freq < 13.87)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B22M;
+                    }
+
+                    else if (freq >= 15.1 && freq < 17.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B19M;
+                    }
+
+                    else if (freq >= 17.0 && freq < 18.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B16M;
+                    }
+
+                    else if (freq >= 18.0 && freq < 21.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B14M;
+                    }
+                    else if (freq >= 21.00 && freq < 25.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B13M;
+                    }
+
+                    else if (freq >= 25.0 && freq < 28.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B11M;
+                    }
+
                     else
                         return Band.GEN;
 
                 case FRSRegion.Israel:
+                    //if (freq >= 1.81 && freq <= 2.0)
+                    //    return Band.B160M;
+                    //else if (freq >= 3.5 && freq <= 3.8)
+                    //    return Band.B80M;
+                    //else if (freq >= 5.0 && freq < 7.0)
+                    //    return Band.B60M;
+                    //else if (freq >= 7.0 && freq <= 7.2)
+                    //    return Band.B40M;
+                    //else if (freq >= 10.1 && freq <= 10.15)
+                    //    return Band.B30M;
+                    //else if (freq >= 14.0 && freq <= 14.35)
+                    //    return Band.B20M;
+                    //else if (freq >= 18.068 && freq <= 18.168)
+                    //    return Band.B17M;
+                    //else if (freq >= 21.0 && freq <= 21.45)
+                    //    return Band.B15M;
+                    //else if (freq >= 24.89 && freq <= 24.99)
+                    //    return Band.B12M;
+                    //else if (freq >= 28.0 && freq <= 29.7)
+                    //    return Band.B10M;
+                    //else if (freq >= 50.0 && freq <= 50.2)
+                    //    return Band.B6M;
+                    //else if (freq >= 144.0 && freq <= 146.0)
+                    //    return Band.B2M;
+                    //else if (freq == 2.5 || freq == 5.0 ||
+                    //    freq == 10.0 || freq == 15.0 ||
+                    //    freq == 20.0)
+                    //    return Band.WWV;
+                    //else
+                    //    return Band.GEN;
+
                     if (freq >= 1.81 && freq <= 2.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B160M;
+                    }
                     else if (freq >= 3.5 && freq <= 3.8)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B80M;
-                    else if (freq >= 5.0 && freq < 7.0)
+                    }
+                    else if (freq >= 5.0 && freq <= 7.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B60M;
+                    }
                     else if (freq >= 7.0 && freq <= 7.2)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B40M;
+                    }
                     else if (freq >= 10.1 && freq <= 10.15)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B30M;
+                    }
                     else if (freq >= 14.0 && freq <= 14.35)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B20M;
+                    }
                     else if (freq >= 18.068 && freq <= 18.168)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B17M;
-                    else if (freq >= 21.0 && freq <= 21.45)
+                    }
+                    else if (freq >= 21.0 && freq <= 21.450)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B15M;
+                    }
                     else if (freq >= 24.89 && freq <= 24.99)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B12M;
+                    }
                     else if (freq >= 28.0 && freq <= 29.7)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B10M;
+                    }
                     else if (freq >= 50.0 && freq <= 50.2)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B6M;
+                    }
                     else if (freq >= 144.0 && freq <= 146.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B2M;
-                    else if (freq == 2.5 || freq == 5.0 ||
-                        freq == 10.0 || freq == 15.0 ||
-                        freq == 20.0)
+                    }
+                    else if (freq == 2.5 || freq == 5.0 || freq == 10.0 || freq == 15.0 ||
+                            freq == 20.0 || freq == 25.0 || freq == 3.33 || freq == 7.85 || freq == 14.67)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.WWV;
+                    }
+
+                    // ke9ns add
+                    else if (freq >= 0.20 && freq < 1.80)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.BLMF;
+                    }
+
+                    else if (freq >= 2.3 && freq < 3.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B120M;
+                    }
+
+                    else if (freq >= 3.0 && freq < 3.5)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B90M;
+                    }
+
+                    else if (freq >= 4.10 && freq < 5.06)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B61M;
+                    }
+
+                    else if (freq >= 5.06 && freq < 7.20)
+                    {
+                        //   Debug.WriteLine("bandbyfreq 49");
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B49M;
+                    }
+
+                    else if (freq >= 7.20 && freq < 9.0)
+                    {
+                        //  Debug.WriteLine("bandbyfreq 41");
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B41M;
+                    }
+
+                    else if (freq >= 9.0 && freq < 9.99)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B31M;
+                    }
+
+                    else if (freq >= 11.6 && freq < 13.57)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B25M;
+                    }
+
+                    else if (freq >= 13.57 && freq < 13.87)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B22M;
+                    }
+
+                    else if (freq >= 15.1 && freq < 17.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B19M;
+                    }
+
+                    else if (freq >= 17.0 && freq < 18.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B16M;
+                    }
+
+                    else if (freq >= 18.0 && freq < 21.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B14M;
+                    }
+                    else if (freq >= 21.00 && freq < 25.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B13M;
+                    }
+
+                    else if (freq >= 25.0 && freq < 28.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B11M;
+                    }
+
                     else
                         return Band.GEN;
 
                 case FRSRegion.UK:
+                    //if ((freq >= 0.472 && freq <= 0.479) ||
+                    //    (freq >= 1.8 && freq <= 2.0))
+                    //    return Band.B160M;
+                    //else if (freq >= 3.5 && freq <= 3.8)
+                    //    return Band.B80M;
+                    //else if (freq >= 5.25 && freq <= 5.41)
+                    //    return Band.B60M;
+                    //else if (freq >= 7.0 && freq <= 7.2)
+                    //    return Band.B40M;
+                    //else if (freq >= 10.1 && freq <= 10.15)
+                    //    return Band.B30M;
+                    //else if (freq >= 14.0 && freq <= 14.35)
+                    //    return Band.B20M;
+                    //else if (freq >= 18.068 && freq <= 18.168)
+                    //    return Band.B17M;
+                    //else if (freq >= 21.0 && freq <= 21.45)
+                    //    return Band.B15M;
+                    //else if (freq >= 24.89 && freq <= 24.99)
+                    //    return Band.B12M;
+                    //else if (freq >= 28.0 && freq <= 29.7)
+                    //    return Band.B10M;
+                    //else if (freq >= 50.0 && freq <= 52.0)
+                    //    return Band.B6M;
+                    //else if (freq >= 144.0 && freq <= 148.0)
+                    //    return Band.B2M;
+                    //else if (freq == 2.5 || freq == 5.0 ||
+                    //    freq == 10.0 || freq == 15.0 ||
+                    //    freq == 20.0)
+                    //    return Band.WWV;
+                    //else
+                    //    return Band.GEN;
+
                     if ((freq >= 0.472 && freq <= 0.479) ||
                         (freq >= 1.8 && freq <= 2.0))
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B160M;
+                    }
                     else if (freq >= 3.5 && freq <= 3.8)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B80M;
+                    }
                     else if (freq >= 5.25 && freq <= 5.41)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B60M;
+                    }
                     else if (freq >= 7.0 && freq <= 7.2)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B40M;
+                    }
                     else if (freq >= 10.1 && freq <= 10.15)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B30M;
+                    }
                     else if (freq >= 14.0 && freq <= 14.35)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B20M;
+                    }
                     else if (freq >= 18.068 && freq <= 18.168)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B17M;
-                    else if (freq >= 21.0 && freq <= 21.45)
+                    }
+                    else if (freq >= 21.0 && freq <= 21.450)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B15M;
+                    }
                     else if (freq >= 24.89 && freq <= 24.99)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B12M;
+                    }
                     else if (freq >= 28.0 && freq <= 29.7)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B10M;
-                    else if (freq >= 50.0 && freq <= 52.0)
+                    }
+                    else if (freq >= 50.03 && freq <= 51.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B6M;
+                    }
                     else if (freq >= 144.0 && freq <= 148.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B2M;
-                    else if (freq == 2.5 || freq == 5.0 ||
-                        freq == 10.0 || freq == 15.0 ||
-                        freq == 20.0)
+                    }
+                    else if (freq == 2.5 || freq == 5.0 || freq == 10.0 || freq == 15.0 ||
+                            freq == 20.0 || freq == 25.0 || freq == 3.33 || freq == 7.85 || freq == 14.67)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.WWV;
+                    }
+
+                    // ke9ns add
+                    else if (freq >= 0.20 && freq < 1.80)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.BLMF;
+                    }
+
+                    else if (freq >= 2.3 && freq < 3.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B120M;
+                    }
+
+                    else if (freq >= 3.0 && freq < 3.5)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B90M;
+                    }
+
+                    else if (freq >= 4.10 && freq < 5.06)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B61M;
+                    }
+
+                    else if (freq >= 5.06 && freq < 7.20)
+                    {
+                        //   Debug.WriteLine("bandbyfreq 49");
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B49M;
+                    }
+
+                    else if (freq >= 7.20 && freq < 9.0)
+                    {
+                        //  Debug.WriteLine("bandbyfreq 41");
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B41M;
+                    }
+
+                    else if (freq >= 9.0 && freq < 9.99)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B31M;
+                    }
+
+                    else if (freq >= 11.6 && freq < 13.57)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B25M;
+                    }
+
+                    else if (freq >= 13.57 && freq < 13.87)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B22M;
+                    }
+
+                    else if (freq >= 15.1 && freq < 17.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B19M;
+                    }
+
+                    else if (freq >= 17.0 && freq < 18.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B16M;
+                    }
+
+                    else if (freq >= 18.0 && freq < 21.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B14M;
+                    }
+                    else if (freq >= 21.00 && freq < 25.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B13M;
+                    }
+
+                    else if (freq >= 25.0 && freq < 28.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B11M;
+                    }
+
                     else
                         return Band.GEN;
 
                 case FRSRegion.Italy_Plus:
+                    //if (freq >= 1.83 && freq <= 1.85)
+                    //    return Band.B160M;
+                    //else if (freq >= 3.5 && freq <= 3.8)
+                    //    return Band.B80M;
+                    //else if (freq >= 5.0 && freq < 6.975)
+                    //    return Band.B60M;
+                    //else if (freq >= 6.975 && freq <= 7.2)
+                    //    return Band.B40M;
+                    //else if (freq >= 10.1 && freq <= 10.15)
+                    //    return Band.B30M;
+                    //else if (freq >= 14.0 && freq <= 14.35)
+                    //    return Band.B20M;
+                    //else if (freq >= 18.068 && freq <= 18.168)
+                    //    return Band.B17M;
+                    //else if (freq >= 21.0 && freq <= 21.45)
+                    //    return Band.B15M;
+                    //else if (freq >= 24.89 && freq <= 24.99)
+                    //    return Band.B12M;
+                    //else if (freq >= 28.0 && freq <= 29.7)
+                    //    return Band.B10M;
+                    //else if (freq >= 50.08 && freq <= 51.0)
+                    //    return Band.B6M;
+                    //else if (freq >= 144.0 && freq <= 148.0)
+                    //    return Band.B2M;
+                    //else if (freq == 2.5 || freq == 5.0 ||
+                    //    freq == 10.0 || freq == 15.0 ||
+                    //    freq == 20.0)
+                    //    return Band.WWV;
+                    //else
+                    //    return Band.GEN;
+
                     if (freq >= 1.83 && freq <= 1.85)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B160M;
+                    }
                     else if (freq >= 3.5 && freq <= 3.8)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B80M;
-                    else if (freq >= 5.0 && freq < 7.0)
+                    }
+                    else if (freq >= 5.0 && freq <= 6.975)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B60M;
+                    }
                     else if (freq >= 6.975 && freq <= 7.2)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B40M;
+                    }
                     else if (freq >= 10.1 && freq <= 10.15)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B30M;
+                    }
                     else if (freq >= 14.0 && freq <= 14.35)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B20M;
+                    }
                     else if (freq >= 18.068 && freq <= 18.168)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B17M;
-                    else if (freq >= 21.0 && freq <= 21.45)
+                    }
+                    else if (freq >= 21.0 && freq <= 21.450)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B15M;
+                    }
                     else if (freq >= 24.89 && freq <= 24.99)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B12M;
+                    }
                     else if (freq >= 28.0 && freq <= 29.7)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B10M;
+                    }
                     else if (freq >= 50.08 && freq <= 51.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B6M;
+                    }
                     else if (freq >= 144.0 && freq <= 148.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B2M;
-                    else if (freq == 2.5 || freq == 5.0 ||
-                        freq == 10.0 || freq == 15.0 ||
-                        freq == 20.0)
+                    }
+                    else if (freq == 2.5 || freq == 5.0 || freq == 10.0 || freq == 15.0 ||
+                            freq == 20.0 || freq == 25.0 || freq == 3.33 || freq == 7.85 || freq == 14.67)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.WWV;
+                    }
+
+                    // ke9ns add
+                    else if (freq >= 0.20 && freq < 1.80)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.BLMF;
+                    }
+
+                    else if (freq >= 2.3 && freq < 3.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B120M;
+                    }
+
+                    else if (freq >= 3.0 && freq < 3.5)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B90M;
+                    }
+
+                    else if (freq >= 4.10 && freq < 5.06)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B61M;
+                    }
+
+                    else if (freq >= 5.06 && freq < 7.20)
+                    {
+                        //   Debug.WriteLine("bandbyfreq 49");
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B49M;
+                    }
+
+                    else if (freq >= 7.20 && freq < 9.0)
+                    {
+                        //  Debug.WriteLine("bandbyfreq 41");
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B41M;
+                    }
+
+                    else if (freq >= 9.0 && freq < 9.99)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B31M;
+                    }
+
+                    else if (freq >= 11.6 && freq < 13.57)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B25M;
+                    }
+
+                    else if (freq >= 13.57 && freq < 13.87)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B22M;
+                    }
+
+                    else if (freq >= 15.1 && freq < 17.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B19M;
+                    }
+
+                    else if (freq >= 17.0 && freq < 18.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B16M;
+                    }
+
+                    else if (freq >= 18.0 && freq < 21.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B14M;
+                    }
+                    else if (freq >= 21.00 && freq < 25.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B13M;
+                    }
+
+                    else if (freq >= 25.0 && freq < 28.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B11M;
+                    }
+
                     else
                         return Band.GEN;
 
                 case FRSRegion.Japan:
-                    if ((freq >= 0.1357 && freq <= 0.1378) ||
+                    //if ((freq >= 0.1357 && freq <= 0.1378) ||
+                    //    (freq >= 1.81 && freq <= 1.9125))
+                    //    return Band.B160M;
+                    //else if (freq >= 3.5 && freq <= 3.805)
+                    //    return Band.B80M;
+                    //else if (freq >= 5.1 && freq <= 5.5)
+                    //    return Band.B60M;
+                    //else if (freq >= 7.0 && freq <= 7.2)
+                    //    return Band.B40M;
+                    //else if (freq >= 10.1 && freq <= 10.15)
+                    //    return Band.B30M;
+                    //else if (freq >= 14.0 && freq <= 14.35)
+                    //    return Band.B20M;
+                    //else if (freq >= 18.068 && freq <= 18.168)
+                    //    return Band.B17M;
+                    //else if (freq >= 21.0 && freq <= 21.45)
+                    //    return Band.B15M;
+                    //else if (freq >= 24.89 && freq <= 24.99)
+                    //    return Band.B12M;
+                    //else if (freq >= 28.0 && freq <= 29.7)
+                    //    return Band.B10M;
+                    //else if (freq >= 50.0 && freq <= 54.0)
+                    //    return Band.B6M;
+                    //else if (freq >= 144.0 && freq <= 148.0)
+                    //    return Band.B2M;
+                    //else if (freq == 2.5 || freq == 5.0 || freq == 8.0 ||
+                    //    freq == 10.0 || freq == 15.0 ||
+                    //    freq == 20.0)
+                    //    return Band.WWV;
+                    //else
+                    //    return Band.GEN;
+
+                   if ((freq >= 0.1357 && freq <= 0.1378) ||
                         (freq >= 1.81 && freq <= 1.9125))
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B160M;
+                    }
                     else if (freq >= 3.5 && freq <= 3.805)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B80M;
-                    else if (freq >= 5.1 && freq <= 5.5)
+                    }
+                    else if (freq >= 4.629995 && freq <= 4.630005)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B60M;
+                    }
                     else if (freq >= 7.0 && freq <= 7.2)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B40M;
+                    }
                     else if (freq >= 10.1 && freq <= 10.15)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B30M;
+                    }
                     else if (freq >= 14.0 && freq <= 14.35)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B20M;
+                    }
                     else if (freq >= 18.068 && freq <= 18.168)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B17M;
-                    else if (freq >= 21.0 && freq <= 21.45)
+                    }
+                    else if (freq >= 21.0 && freq <= 21.450)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B15M;
+                    }
                     else if (freq >= 24.89 && freq <= 24.99)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B12M;
+                    }
                     else if (freq >= 28.0 && freq <= 29.7)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B10M;
-                    else if (freq >= 50.0 && freq <= 54.0)
+                    }
+                    else if (freq >= 50.0 && freq <= 52.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B6M;
+                    }
                     else if (freq >= 144.0 && freq <= 148.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B2M;
-                    else if (freq == 2.5 || freq == 5.0 || freq == 8.0 ||
-                        freq == 10.0 || freq == 15.0 ||
-                        freq == 20.0)
+                    }
+                    else if (freq == 2.5 || freq == 5.0 || freq == 10.0 || freq == 15.0 ||
+                            freq == 20.0 || freq == 25.0 || freq == 3.33 || freq == 7.85 || freq == 14.67)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.WWV;
+                    }
+
+                    // ke9ns add
+                    else if (freq >= 0.20 && freq < 1.80)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.BLMF;
+                    }
+
+                    else if (freq >= 2.3 && freq < 3.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B120M;
+                    }
+
+                    else if (freq >= 3.0 && freq < 3.5)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B90M;
+                    }
+
+                    else if (freq >= 4.10 && freq < 5.06)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B61M;
+                    }
+
+                    else if (freq >= 5.06 && freq < 7.20)
+                    {
+                        //   Debug.WriteLine("bandbyfreq 49");
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B49M;
+                    }
+
+                    else if (freq >= 7.20 && freq < 9.0)
+                    {
+                        //  Debug.WriteLine("bandbyfreq 41");
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B41M;
+                    }
+
+                    else if (freq >= 9.0 && freq < 9.99)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B31M;
+                    }
+
+                    else if (freq >= 11.6 && freq < 13.57)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B25M;
+                    }
+
+                    else if (freq >= 13.57 && freq < 13.87)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B22M;
+                    }
+
+                    else if (freq >= 15.1 && freq < 17.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B19M;
+                    }
+
+                    else if (freq >= 17.0 && freq < 18.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B16M;
+                    }
+
+                    else if (freq >= 18.0 && freq < 21.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B14M;
+                    }
+                    else if (freq >= 21.00 && freq < 25.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B13M;
+                    }
+
+                    else if (freq >= 25.0 && freq < 28.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B11M;
+                    }
+
                     else
                         return Band.GEN;
 
                 case FRSRegion.Australia:
-                    if ((freq >= 0.1357 && freq <= 0.1378) ||
-                        (freq >= 0.472 && freq <= 0.479) ||
-                        freq >= 1.8 && freq <= 1.875)
-                        return Band.B160M;
-                    else if (freq >= 3.5 && freq <= 3.8)
-                        return Band.B80M;
-                    else if (freq >= 5.0 && freq < 7.0)
-                        return Band.B60M;
-                    else if (freq >= 7.0 && freq <= 7.3)
-                        return Band.B40M;
-                    else if (freq >= 10.1 && freq <= 10.15)
-                        return Band.B30M;
-                    else if (freq >= 14.0 && freq <= 14.35)
-                        return Band.B20M;
-                    else if (freq >= 18.068 && freq <= 18.168)
-                        return Band.B17M;
-                    else if (freq >= 21.0 && freq <= 21.45)
-                        return Band.B15M;
-                    else if (freq >= 24.89 && freq <= 24.99)
-                        return Band.B12M;
-                    else if (freq >= 28.0 && freq <= 29.7)
-                        return Band.B10M;
-                    else if (freq >= 50.0 && freq <= 54.0)
-                        return Band.B6M;
-                    else if (freq >= 144.0 && freq <= 148.0)
-                        return Band.B2M;
-                    else if (freq == 2.5 || freq == 5.0 ||
-                        freq == 10.0 || freq == 15.0 ||
-                        freq == 20.0)
-                        return Band.WWV;
-                    else
-                        return Band.GEN;
+                    //if ((freq >= 0.1357 && freq <= 0.1378) ||
+                    //    (freq >= 0.472 && freq <= 0.479) ||
+                    //    freq >= 1.8 && freq <= 1.875)
+                    //    return Band.B160M;
+                    //else if (freq >= 3.5 && freq <= 3.8)
+                    //    return Band.B80M;
+                    //else if (freq >= 5.0 && freq < 7.0)
+                    //    return Band.B60M;
+                    //else if (freq >= 7.0 && freq <= 7.3)
+                    //    return Band.B40M;
+                    //else if (freq >= 10.1 && freq <= 10.15)
+                    //    return Band.B30M;
+                    //else if (freq >= 14.0 && freq <= 14.35)
+                    //    return Band.B20M;
+                    //else if (freq >= 18.068 && freq <= 18.168)
+                    //    return Band.B17M;
+                    //else if (freq >= 21.0 && freq <= 21.45)
+                    //    return Band.B15M;
+                    //else if (freq >= 24.89 && freq <= 24.99)
+                    //    return Band.B12M;
+                    //else if (freq >= 28.0 && freq <= 29.7)
+                    //    return Band.B10M;
+                    //else if (freq >= 50.0 && freq <= 54.0)
+                    //    return Band.B6M;
+                    //else if (freq >= 144.0 && freq <= 148.0)
+                    //    return Band.B2M;
+                    //else if (freq == 2.5 || freq == 5.0 ||
+                    //    freq == 10.0 || freq == 15.0 ||
+                    //    freq == 20.0)
+                    //    return Band.WWV;
+                    //else
+                    //    return Band.GEN;
+
+                     if ((freq >= 0.1357 && freq <= 0.1378) ||
+                         (freq >= 0.472 && freq <= 0.479) ||
+                          freq >= 1.8 && freq <= 1.875)
+                   {
+                       if (vfoa)
+                       {
+                           panelBandHF.Visible = true;
+                           panelBandGEN.Visible = false;
+                       }
+                       return Band.B160M;
+                   }
+                   else if (freq >= 3.5 && freq <= 3.8)
+                   {
+                       if (vfoa)
+                       {
+                           panelBandHF.Visible = true;
+                           panelBandGEN.Visible = false;
+                       }
+                       return Band.B80M;
+                   }
+                   else if (freq >= 5.0 && freq <= 7.0)
+                   {
+                       if (vfoa)
+                       {
+                           panelBandHF.Visible = true;
+                           panelBandGEN.Visible = false;
+                       }
+                       return Band.B60M;
+                   }
+                   else if (freq >= 7.0 && freq <= 7.3)
+                   {
+                       if (vfoa)
+                       {
+                           panelBandHF.Visible = true;
+                           panelBandGEN.Visible = false;
+                       }
+                       return Band.B40M;
+                   }
+                   else if (freq >= 10.1 && freq <= 10.15)
+                   {
+                       if (vfoa)
+                       {
+                           panelBandHF.Visible = true;
+                           panelBandGEN.Visible = false;
+                       }
+                       return Band.B30M;
+                   }
+                   else if (freq >= 14.0 && freq <= 14.35)
+                   {
+                       if (vfoa)
+                       {
+                           panelBandHF.Visible = true;
+                           panelBandGEN.Visible = false;
+                       }
+                       return Band.B20M;
+                   }
+                   else if (freq >= 18.068 && freq <= 18.168)
+                   {
+                       if (vfoa)
+                       {
+                           panelBandHF.Visible = true;
+                           panelBandGEN.Visible = false;
+                       }
+                       return Band.B17M;
+                   }
+                   else if (freq >= 21.0 && freq <= 21.450)
+                   {
+                       if (vfoa)
+                       {
+                           panelBandHF.Visible = true;
+                           panelBandGEN.Visible = false;
+                       }
+                       return Band.B15M;
+                   }
+                   else if (freq >= 24.89 && freq <= 24.99)
+                   {
+                       if (vfoa)
+                       {
+                           panelBandHF.Visible = true;
+                           panelBandGEN.Visible = false;
+                       }
+                       return Band.B12M;
+                   }
+                   else if (freq >= 28.0 && freq <= 29.7)
+                   {
+                       if (vfoa)
+                       {
+                           panelBandHF.Visible = true;
+                           panelBandGEN.Visible = false;
+                       }
+                       return Band.B10M;
+                   }
+                   else if (freq >= 50.0 && freq <= 54.0)
+                   {
+                       if (vfoa)
+                       {
+                           panelBandHF.Visible = true;
+                           panelBandGEN.Visible = false;
+                       }
+                       return Band.B6M;
+                   }
+                   else if (freq >= 144.0 && freq <= 148.0)
+                   {
+                       if (vfoa)
+                       {
+                           panelBandHF.Visible = true;
+                           panelBandGEN.Visible = false;
+                       }
+                       return Band.B2M;
+                   }
+                   else if (freq == 2.5 || freq == 5.0 || freq == 10.0 || freq == 15.0 ||
+                           freq == 20.0 || freq == 25.0 || freq == 3.33 || freq == 7.85 || freq == 14.67)
+                   {
+                       if (vfoa)
+                       {
+                           panelBandHF.Visible = true;
+                           panelBandGEN.Visible = false;
+                       }
+                       return Band.WWV;
+                   }
+
+                   // ke9ns add
+                   else if (freq >= 0.20 && freq < 1.80)
+                   {
+                       if (vfoa)
+                       {
+                           panelBandHF.Visible = false;
+                           panelBandGEN.Visible = true;
+                       }
+                       return Band.BLMF;
+                   }
+
+                   else if (freq >= 2.3 && freq < 3.0)
+                   {
+                       if (vfoa)
+                       {
+                           panelBandHF.Visible = false;
+                           panelBandGEN.Visible = true;
+                       }
+                       return Band.B120M;
+                   }
+
+                   else if (freq >= 3.0 && freq < 3.5)
+                   {
+                       if (vfoa)
+                       {
+                           panelBandHF.Visible = false;
+                           panelBandGEN.Visible = true;
+                       }
+                       return Band.B90M;
+                   }
+
+                   else if (freq >= 4.10 && freq < 5.06)
+                   {
+                       if (vfoa)
+                       {
+                           panelBandHF.Visible = false;
+                           panelBandGEN.Visible = true;
+                       }
+                       return Band.B61M;
+                   }
+
+                   else if (freq >= 5.06 && freq < 7.20)
+                   {
+                       //   Debug.WriteLine("bandbyfreq 49");
+                       if (vfoa)
+                       {
+                           panelBandHF.Visible = false;
+                           panelBandGEN.Visible = true;
+                       }
+                       return Band.B49M;
+                   }
+
+                   else if (freq >= 7.20 && freq < 9.0)
+                   {
+                       //  Debug.WriteLine("bandbyfreq 41");
+                       if (vfoa)
+                       {
+                           panelBandHF.Visible = false;
+                           panelBandGEN.Visible = true;
+                       }
+                       return Band.B41M;
+                   }
+
+                   else if (freq >= 9.0 && freq < 9.99)
+                   {
+                       if (vfoa)
+                       {
+                           panelBandHF.Visible = false;
+                           panelBandGEN.Visible = true;
+                       }
+                       return Band.B31M;
+                   }
+
+                   else if (freq >= 11.6 && freq < 13.57)
+                   {
+                       if (vfoa)
+                       {
+                           panelBandHF.Visible = false;
+                           panelBandGEN.Visible = true;
+                       }
+                       return Band.B25M;
+                   }
+
+                   else if (freq >= 13.57 && freq < 13.87)
+                   {
+                       if (vfoa)
+                       {
+                           panelBandHF.Visible = false;
+                           panelBandGEN.Visible = true;
+                       }
+                       return Band.B22M;
+                   }
+
+                   else if (freq >= 15.1 && freq < 17.0)
+                   {
+                       if (vfoa)
+                       {
+                           panelBandHF.Visible = false;
+                           panelBandGEN.Visible = true;
+                       }
+                       return Band.B19M;
+                   }
+
+                   else if (freq >= 17.0 && freq < 18.0)
+                   {
+                       if (vfoa)
+                       {
+                           panelBandHF.Visible = false;
+                           panelBandGEN.Visible = true;
+                       }
+                       return Band.B16M;
+                   }
+
+                   else if (freq >= 18.0 && freq < 21.0)
+                   {
+                       if (vfoa)
+                       {
+                           panelBandHF.Visible = false;
+                           panelBandGEN.Visible = true;
+                       }
+                       return Band.B14M;
+                   }
+                   else if (freq >= 21.00 && freq < 25.0)
+                   {
+                       if (vfoa)
+                       {
+                           panelBandHF.Visible = false;
+                           panelBandGEN.Visible = true;
+                       }
+                       return Band.B13M;
+                   }
+
+                   else if (freq >= 25.0 && freq < 28.0)
+                   {
+                       if (vfoa)
+                       {
+                           panelBandHF.Visible = false;
+                           panelBandGEN.Visible = true;
+                       }
+                       return Band.B11M;
+                   }
+
+                   else
+                       return Band.GEN;
 
                 case FRSRegion.Norway:
-                    if (freq >= 1.81 && freq <= 2.0)
-                        return Band.B160M;
-                    else if (freq >= 3.5 && freq <= 3.8)
-                        return Band.B80M;
-                    else if (freq >= 5.25 && freq <= 5.45)
-                        return Band.B60M;
-                    else if (freq >= 7.0 && freq <= 7.2)
-                        return Band.B40M;
-                    else if (freq >= 10.1 && freq <= 10.15)
-                        return Band.B30M;
-                    else if (freq >= 14.0 && freq <= 14.35)
-                        return Band.B20M;
-                    else if (freq >= 18.068 && freq <= 18.168)
-                        return Band.B17M;
-                    else if (freq >= 21.0 && freq <= 21.45)
-                        return Band.B15M;
-                    else if (freq >= 24.89 && freq <= 24.99)
-                        return Band.B12M;
-                    else if (freq >= 28.0 && freq <= 29.7)
-                        return Band.B10M;
-                    else if (freq >= 50.0 && freq <= 52.0)
-                        return Band.B6M;
-                    else if (freq >= 144.0 && freq <= 148.0)
-                        return Band.B2M;
-                    else if (freq == 2.5 || freq == 5.0 ||
-                        freq == 10.0 || freq == 15.0 ||
-                        freq == 20.0)
-                        return Band.WWV;
-                    else
-                        return Band.GEN;
+                    //if (freq >= 1.81 && freq <= 2.0)
+                    //    return Band.B160M;
+                    //else if (freq >= 3.5 && freq <= 3.8)
+                    //    return Band.B80M;
+                    //else if (freq >= 5.25 && freq <= 5.45)
+                    //    return Band.B60M;
+                    //else if (freq >= 7.0 && freq <= 7.2)
+                    //    return Band.B40M;
+                    //else if (freq >= 10.1 && freq <= 10.15)
+                    //    return Band.B30M;
+                    //else if (freq >= 14.0 && freq <= 14.35)
+                    //    return Band.B20M;
+                    //else if (freq >= 18.068 && freq <= 18.168)
+                    //    return Band.B17M;
+                    //else if (freq >= 21.0 && freq <= 21.45)
+                    //    return Band.B15M;
+                    //else if (freq >= 24.89 && freq <= 24.99)
+                    //    return Band.B12M;
+                    //else if (freq >= 28.0 && freq <= 29.7)
+                    //    return Band.B10M;
+                    //else if (freq >= 50.0 && freq <= 52.0)
+                    //    return Band.B6M;
+                    //else if (freq >= 144.0 && freq <= 148.0)
+                    //    return Band.B2M;
+                    //else if (freq == 2.5 || freq == 5.0 ||
+                    //    freq == 10.0 || freq == 15.0 ||
+                    //    freq == 20.0)
+                    //    return Band.WWV;
+                    //else
+                    //    return Band.GEN;
+
+                     if (freq >= 1.8 && freq <= 2.0)
+                     {
+                         if (vfoa)
+                         {
+                             panelBandHF.Visible = true;
+                             panelBandGEN.Visible = false;
+                         }
+                         return Band.B160M;
+                     }
+                     else if (freq >= 3.5 && freq <= 3.8)
+                     {
+                         if (vfoa)
+                         {
+                             panelBandHF.Visible = true;
+                             panelBandGEN.Visible = false;
+                         }
+                         return Band.B80M;
+                     }
+                     else if (freq >= 5.25 && freq <= 5.45)
+                     {
+                         if (vfoa)
+                         {
+                             panelBandHF.Visible = true;
+                             panelBandGEN.Visible = false;
+                         }
+                         return Band.B60M;
+                     }
+                     else if (freq >= 7.0 && freq <= 7.2)
+                     {
+                         if (vfoa)
+                         {
+                             panelBandHF.Visible = true;
+                             panelBandGEN.Visible = false;
+                         }
+                         return Band.B40M;
+                     }
+                     else if (freq >= 10.1 && freq <= 10.15)
+                     {
+                         if (vfoa)
+                         {
+                             panelBandHF.Visible = true;
+                             panelBandGEN.Visible = false;
+                         }
+                         return Band.B30M;
+                     }
+                     else if (freq >= 14.0 && freq <= 14.35)
+                     {
+                         if (vfoa)
+                         {
+                             panelBandHF.Visible = true;
+                             panelBandGEN.Visible = false;
+                         }
+                         return Band.B20M;
+                     }
+                     else if (freq >= 18.068 && freq <= 18.168)
+                     {
+                         if (vfoa)
+                         {
+                             panelBandHF.Visible = true;
+                             panelBandGEN.Visible = false;
+                         }
+                         return Band.B17M;
+                     }
+                     else if (freq >= 21.0 && freq <= 21.450)
+                     {
+                         if (vfoa)
+                         {
+                             panelBandHF.Visible = true;
+                             panelBandGEN.Visible = false;
+                         }
+                         return Band.B15M;
+                     }
+                     else if (freq >= 24.89 && freq <= 24.99)
+                     {
+                         if (vfoa)
+                         {
+                             panelBandHF.Visible = true;
+                             panelBandGEN.Visible = false;
+                         }
+                         return Band.B12M;
+                     }
+                     else if (freq >= 28.0 && freq <= 29.7)
+                     {
+                         if (vfoa)
+                         {
+                             panelBandHF.Visible = true;
+                             panelBandGEN.Visible = false;
+                         }
+                         return Band.B10M;
+                     }
+                     else if (freq >= 50.0 && freq <= 52.0)
+                     {
+                         if (vfoa)
+                         {
+                             panelBandHF.Visible = true;
+                             panelBandGEN.Visible = false;
+                         }
+                         return Band.B6M;
+                     }
+                     else if (freq >= 144.0 && freq <= 148.0)
+                     {
+                         if (vfoa)
+                         {
+                             panelBandHF.Visible = true;
+                             panelBandGEN.Visible = false;
+                         }
+                         return Band.B2M;
+                     }
+                     else if (freq == 2.5 || freq == 5.0 || freq == 10.0 || freq == 15.0 ||
+                             freq == 20.0 || freq == 25.0 || freq == 3.33 || freq == 7.85 || freq == 14.67)
+                     {
+                         if (vfoa)
+                         {
+                             panelBandHF.Visible = true;
+                             panelBandGEN.Visible = false;
+                         }
+                         return Band.WWV;
+                     }
+
+                     // ke9ns add
+                     else if (freq >= 0.20 && freq < 1.80)
+                     {
+                         if (vfoa)
+                         {
+                             panelBandHF.Visible = false;
+                             panelBandGEN.Visible = true;
+                         }
+                         return Band.BLMF;
+                     }
+
+                     else if (freq >= 2.3 && freq < 3.0)
+                     {
+                         if (vfoa)
+                         {
+                             panelBandHF.Visible = false;
+                             panelBandGEN.Visible = true;
+                         }
+                         return Band.B120M;
+                     }
+
+                     else if (freq >= 3.0 && freq < 3.5)
+                     {
+                         if (vfoa)
+                         {
+                             panelBandHF.Visible = false;
+                             panelBandGEN.Visible = true;
+                         }
+                         return Band.B90M;
+                     }
+
+                     else if (freq >= 4.10 && freq < 5.06)
+                     {
+                         if (vfoa)
+                         {
+                             panelBandHF.Visible = false;
+                             panelBandGEN.Visible = true;
+                         }
+                         return Band.B61M;
+                     }
+
+                     else if (freq >= 5.06 && freq < 7.20)
+                     {
+                         //   Debug.WriteLine("bandbyfreq 49");
+                         if (vfoa)
+                         {
+                             panelBandHF.Visible = false;
+                             panelBandGEN.Visible = true;
+                         }
+                         return Band.B49M;
+                     }
+
+                     else if (freq >= 7.20 && freq < 9.0)
+                     {
+                         //  Debug.WriteLine("bandbyfreq 41");
+                         if (vfoa)
+                         {
+                             panelBandHF.Visible = false;
+                             panelBandGEN.Visible = true;
+                         }
+                         return Band.B41M;
+                     }
+
+                     else if (freq >= 9.0 && freq < 9.99)
+                     {
+                         if (vfoa)
+                         {
+                             panelBandHF.Visible = false;
+                             panelBandGEN.Visible = true;
+                         }
+                         return Band.B31M;
+                     }
+
+                     else if (freq >= 11.6 && freq < 13.57)
+                     {
+                         if (vfoa)
+                         {
+                             panelBandHF.Visible = false;
+                             panelBandGEN.Visible = true;
+                         }
+                         return Band.B25M;
+                     }
+
+                     else if (freq >= 13.57 && freq < 13.87)
+                     {
+                         if (vfoa)
+                         {
+                             panelBandHF.Visible = false;
+                             panelBandGEN.Visible = true;
+                         }
+                         return Band.B22M;
+                     }
+
+                     else if (freq >= 15.1 && freq < 17.0)
+                     {
+                         if (vfoa)
+                         {
+                             panelBandHF.Visible = false;
+                             panelBandGEN.Visible = true;
+                         }
+                         return Band.B19M;
+                     }
+
+                     else if (freq >= 17.0 && freq < 18.0)
+                     {
+                         if (vfoa)
+                         {
+                             panelBandHF.Visible = false;
+                             panelBandGEN.Visible = true;
+                         }
+                         return Band.B16M;
+                     }
+
+                     else if (freq >= 18.0 && freq < 21.0)
+                     {
+                         if (vfoa)
+                         {
+                             panelBandHF.Visible = false;
+                             panelBandGEN.Visible = true;
+                         }
+                         return Band.B14M;
+                     }
+                     else if (freq >= 21.00 && freq < 25.0)
+                     {
+                         if (vfoa)
+                         {
+                             panelBandHF.Visible = false;
+                             panelBandGEN.Visible = true;
+                         }
+                         return Band.B13M;
+                     }
+
+                     else if (freq >= 25.0 && freq < 28.0)
+                     {
+                         if (vfoa)
+                         {
+                             panelBandHF.Visible = false;
+                             panelBandGEN.Visible = true;
+                         }
+                         return Band.B11M;
+                     }
+
+                     else
+                         return Band.GEN;
 
                 case FRSRegion.Denmark:
+                    //if (freq >= 1.81 && freq <= 2.0)
+                    //    return Band.B160M;
+                    //else if (freq >= 3.5 && freq <= 3.8)
+                    //    return Band.B80M;
+                    //else if (freq >= 5.25 && freq <= 5.45)
+                    //    return Band.B60M;
+                    //else if (freq >= 7.0 && freq <= 7.2)
+                    //    return Band.B40M;
+                    //else if (freq >= 10.1 && freq <= 10.15)
+                    //    return Band.B30M;
+                    //else if (freq >= 14.0 && freq <= 14.35)
+                    //    return Band.B20M;
+                    //else if (freq >= 18.068 && freq <= 18.168)
+                    //    return Band.B17M;
+                    //else if (freq >= 21.0 && freq <= 21.45)
+                    //    return Band.B15M;
+                    //else if (freq >= 24.89 && freq <= 24.99)
+                    //    return Band.B12M;
+                    //else if (freq >= 28.0 && freq <= 29.7)
+                    //    return Band.B10M;
+                    //else if (freq >= 50.0 && freq <= 52.0)
+                    //    return Band.B6M;
+                    //else if (freq >= 144.0 && freq <= 148.0)
+                    //    return Band.B2M;
+                    //else if (freq == 2.5 || freq == 5.0 ||
+                    //    freq == 10.0 || freq == 15.0 ||
+                    //    freq == 20.0)
+                    //    return Band.WWV;
+                    //else
+                    //    return Band.GEN;
+
                     if (freq >= 1.81 && freq <= 2.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B160M;
+                    }
                     else if (freq >= 3.5 && freq <= 3.8)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B80M;
+                    }
                     else if (freq >= 5.25 && freq <= 5.45)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B60M;
+                    }
                     else if (freq >= 7.0 && freq <= 7.2)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B40M;
+                    }
                     else if (freq >= 10.1 && freq <= 10.15)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B30M;
+                    }
                     else if (freq >= 14.0 && freq <= 14.35)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B20M;
+                    }
                     else if (freq >= 18.068 && freq <= 18.168)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B17M;
-                    else if (freq >= 21.0 && freq <= 21.45)
+                    }
+                    else if (freq >= 21.0 && freq <= 21.450)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B15M;
+                    }
                     else if (freq >= 24.89 && freq <= 24.99)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B12M;
+                    }
                     else if (freq >= 28.0 && freq <= 29.7)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B10M;
+                    }
                     else if (freq >= 50.0 && freq <= 52.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B6M;
+                    }
                     else if (freq >= 144.0 && freq <= 148.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B2M;
-                    else if (freq == 2.5 || freq == 5.0 ||
-                        freq == 10.0 || freq == 15.0 ||
-                        freq == 20.0)
+                    }
+                    else if (freq == 2.5 || freq == 5.0 || freq == 10.0 || freq == 15.0 ||
+                            freq == 20.0 || freq == 25.0 || freq == 3.33 || freq == 7.85 || freq == 14.67)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.WWV;
+                    }
+
+                    // ke9ns add
+                    else if (freq >= 0.20 && freq < 1.80)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.BLMF;
+                    }
+
+                    else if (freq >= 2.3 && freq < 3.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B120M;
+                    }
+
+                    else if (freq >= 3.0 && freq < 3.5)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B90M;
+                    }
+
+                    else if (freq >= 4.10 && freq < 5.06)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B61M;
+                    }
+
+                    else if (freq >= 5.06 && freq < 7.20)
+                    {
+                        //   Debug.WriteLine("bandbyfreq 49");
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B49M;
+                    }
+
+                    else if (freq >= 7.20 && freq < 9.0)
+                    {
+                        //  Debug.WriteLine("bandbyfreq 41");
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B41M;
+                    }
+
+                    else if (freq >= 9.0 && freq < 9.99)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B31M;
+                    }
+
+                    else if (freq >= 11.6 && freq < 13.57)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B25M;
+                    }
+
+                    else if (freq >= 13.57 && freq < 13.87)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B22M;
+                    }
+
+                    else if (freq >= 15.1 && freq < 17.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B19M;
+                    }
+
+                    else if (freq >= 17.0 && freq < 18.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B16M;
+                    }
+
+                    else if (freq >= 18.0 && freq < 21.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B14M;
+                    }
+                    else if (freq >= 21.00 && freq < 25.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B13M;
+                    }
+
+                    else if (freq >= 25.0 && freq < 28.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B11M;
+                    }
+
                     else
                         return Band.GEN;
 
                 case FRSRegion.Latvia:
+                    //if (freq >= 1.81 && freq <= 2.0)
+                    //    return Band.B160M;
+                    //else if (freq >= 3.5 && freq <= 3.8)
+                    //    return Band.B80M;
+                    //else if (freq >= 5.0 && freq < 7.0)
+                    //    return Band.B60M;
+                    //else if (freq >= 7.0 && freq <= 7.2)
+                    //    return Band.B40M;
+                    //else if (freq >= 10.1 && freq <= 10.15)
+                    //    return Band.B30M;
+                    //else if (freq >= 14.0 && freq <= 14.35)
+                    //    return Band.B20M;
+                    //else if (freq >= 18.068 && freq <= 18.168)
+                    //    return Band.B17M;
+                    //else if (freq >= 21.0 && freq <= 21.45)
+                    //    return Band.B15M;
+                    //else if (freq >= 24.89 && freq <= 24.99)
+                    //    return Band.B12M;
+                    //else if (freq >= 28.0 && freq <= 29.7)
+                    //    return Band.B10M;
+                    //else if (freq >= 50.0 && freq <= 51.0)
+                    //    return Band.B6M;
+                    //else if (freq >= 144.0 && freq <= 148.0)
+                    //    return Band.B2M;
+                    //else if (freq == 2.5 || freq == 5.0 ||
+                    //    freq == 10.0 || freq == 15.0 ||
+                    //    freq == 20.0)
+                    //    return Band.WWV;
+                    //else
+                    //    return Band.GEN;
+
                     if (freq >= 1.81 && freq <= 2.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B160M;
+                    }
                     else if (freq >= 3.5 && freq <= 3.8)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B80M;
-                    else if (freq >= 5.0 && freq < 7.0)
+                    }
+                    else if (freq >= 5.0 && freq <= 7.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B60M;
+                    }
                     else if (freq >= 7.0 && freq <= 7.2)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B40M;
+                    }
                     else if (freq >= 10.1 && freq <= 10.15)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B30M;
+                    }
                     else if (freq >= 14.0 && freq <= 14.35)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B20M;
+                    }
                     else if (freq >= 18.068 && freq <= 18.168)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B17M;
-                    else if (freq >= 21.0 && freq <= 21.45)
+                    }
+                    else if (freq >= 21.0 && freq <= 21.450)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B15M;
+                    }
                     else if (freq >= 24.89 && freq <= 24.99)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B12M;
+                    }
                     else if (freq >= 28.0 && freq <= 29.7)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B10M;
-                    else if (freq >= 50.0 && freq <= 51.0)
+                    }
+                    else if (freq >= 50.0 && freq <= 52.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B6M;
+                    }
                     else if (freq >= 144.0 && freq <= 148.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B2M;
-                    else if (freq == 2.5 || freq == 5.0 ||
-                        freq == 10.0 || freq == 15.0 ||
-                        freq == 20.0)
+                    }
+                    else if (freq == 2.5 || freq == 5.0 || freq == 10.0 || freq == 15.0 ||
+                            freq == 20.0 || freq == 25.0 || freq == 3.33 || freq == 7.85 || freq == 14.67)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.WWV;
+                    }
+
+                    // ke9ns add
+                    else if (freq >= 0.20 && freq < 1.80)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.BLMF;
+                    }
+
+                    else if (freq >= 2.3 && freq < 3.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B120M;
+                    }
+
+                    else if (freq >= 3.0 && freq < 3.5)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B90M;
+                    }
+
+                    else if (freq >= 4.10 && freq < 5.06)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B61M;
+                    }
+
+                    else if (freq >= 5.06 && freq < 7.20)
+                    {
+                        //   Debug.WriteLine("bandbyfreq 49");
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B49M;
+                    }
+
+                    else if (freq >= 7.20 && freq < 9.0)
+                    {
+                        //  Debug.WriteLine("bandbyfreq 41");
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B41M;
+                    }
+
+                    else if (freq >= 9.0 && freq < 9.99)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B31M;
+                    }
+
+                    else if (freq >= 11.6 && freq < 13.57)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B25M;
+                    }
+
+                    else if (freq >= 13.57 && freq < 13.87)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B22M;
+                    }
+
+                    else if (freq >= 15.1 && freq < 17.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B19M;
+                    }
+
+                    else if (freq >= 17.0 && freq < 18.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B16M;
+                    }
+
+                    else if (freq >= 18.0 && freq < 21.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B14M;
+                    }
+                    else if (freq >= 21.00 && freq < 25.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B13M;
+                    }
+
+                    else if (freq >= 25.0 && freq < 28.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B11M;
+                    }
+
                     else
                         return Band.GEN;
 
                 case FRSRegion.Slovakia:
+                    //if (freq >= 1.81 && freq <= 2.0)
+                    //    return Band.B160M;
+                    //else if (freq >= 3.5 && freq <= 3.8)
+                    //    return Band.B80M;
+                    //else if (freq >= 5.0 && freq < 7.0)
+                    //    return Band.B60M;
+                    //else if (freq >= 7.0 && freq <= 7.2)
+                    //    return Band.B40M;
+                    //else if (freq >= 10.1 && freq <= 10.15)
+                    //    return Band.B30M;
+                    //else if (freq >= 14.0 && freq <= 14.35)
+                    //    return Band.B20M;
+                    //else if (freq >= 18.068 && freq <= 18.168)
+                    //    return Band.B17M;
+                    //else if (freq >= 21.0 && freq <= 21.45)
+                    //    return Band.B15M;
+                    //else if (freq >= 24.89 && freq <= 24.99)
+                    //    return Band.B12M;
+                    //else if (freq >= 28.0 && freq <= 29.7)
+                    //    return Band.B10M;
+                    //else if (freq >= 50.0 && freq <= 52.0)
+                    //    return Band.B6M;
+                    //else if (freq >= 144.0 && freq <= 148.0)
+                    //    return Band.B2M;
+                    //else if (freq == 2.5 || freq == 5.0 ||
+                    //    freq == 10.0 || freq == 15.0 ||
+                    //    freq == 20.0)
+                    //    return Band.WWV;
+                    //else
+                    //    return Band.GEN;
+
                     if (freq >= 1.81 && freq <= 2.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B160M;
+                    }
                     else if (freq >= 3.5 && freq <= 3.8)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B80M;
-                    else if (freq >= 5.0 && freq < 7.0)
+                    }
+                    else if (freq >= 5.0 && freq <= 7.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B60M;
+                    }
                     else if (freq >= 7.0 && freq <= 7.2)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B40M;
+                    }
                     else if (freq >= 10.1 && freq <= 10.15)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B30M;
+                    }
                     else if (freq >= 14.0 && freq <= 14.35)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B20M;
+                    }
                     else if (freq >= 18.068 && freq <= 18.168)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B17M;
-                    else if (freq >= 21.0 && freq <= 21.45)
+                    }
+                    else if (freq >= 21.0 && freq <= 21.450)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B15M;
+                    }
                     else if (freq >= 24.89 && freq <= 24.99)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B12M;
+                    }
                     else if (freq >= 28.0 && freq <= 29.7)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B10M;
+                    }
                     else if (freq >= 50.0 && freq <= 52.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B6M;
+                    }
                     else if (freq >= 144.0 && freq <= 148.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B2M;
-                    else if (freq == 2.5 || freq == 5.0 ||
-                        freq == 10.0 || freq == 15.0 ||
-                        freq == 20.0)
+                    }
+                    else if (freq == 2.5 || freq == 5.0 || freq == 10.0 || freq == 15.0 ||
+                            freq == 20.0 || freq == 25.0 || freq == 3.33 || freq == 7.85 || freq == 14.67)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.WWV;
+                    }
+
+                    // ke9ns add
+                    else if (freq >= 0.20 && freq < 1.80)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.BLMF;
+                    }
+
+                    else if (freq >= 2.3 && freq < 3.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B120M;
+                    }
+
+                    else if (freq >= 3.0 && freq < 3.5)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B90M;
+                    }
+
+                    else if (freq >= 4.10 && freq < 5.06)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B61M;
+                    }
+
+                    else if (freq >= 5.06 && freq < 7.20)
+                    {
+                        //   Debug.WriteLine("bandbyfreq 49");
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B49M;
+                    }
+
+                    else if (freq >= 7.20 && freq < 9.0)
+                    {
+                        //  Debug.WriteLine("bandbyfreq 41");
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B41M;
+                    }
+
+                    else if (freq >= 9.0 && freq < 9.99)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B31M;
+                    }
+
+                    else if (freq >= 11.6 && freq < 13.57)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B25M;
+                    }
+
+                    else if (freq >= 13.57 && freq < 13.87)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B22M;
+                    }
+
+                    else if (freq >= 15.1 && freq < 17.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B19M;
+                    }
+
+                    else if (freq >= 17.0 && freq < 18.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B16M;
+                    }
+
+                    else if (freq >= 18.0 && freq < 21.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B14M;
+                    }
+                    else if (freq >= 21.00 && freq < 25.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B13M;
+                    }
+
+                    else if (freq >= 25.0 && freq < 28.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B11M;
+                    }
+
                     else
                         return Band.GEN;
 
                 case FRSRegion.Bulgaria:
-                    if (freq >= 1.81 && freq <= 1.85)
+                    //if (freq >= 1.81 && freq <= 1.85)
+                    //    return Band.B160M;
+                    //else if (freq >= 3.5 && freq <= 3.8)
+                    //    return Band.B80M;
+                    //else if (freq >= 5.0 && freq < 7.0)
+                    //    return Band.B60M;
+                    //else if (freq >= 7.0 && freq <= 7.2)
+                    //    return Band.B40M;
+                    //else if (freq >= 10.1 && freq <= 10.15)
+                    //    return Band.B30M;
+                    //else if (freq >= 14.0 && freq <= 14.35)
+                    //    return Band.B20M;
+                    //else if (freq >= 18.068 && freq <= 18.168)
+                    //    return Band.B17M;
+                    //else if (freq >= 21.0 && freq <= 21.45)
+                    //    return Band.B15M;
+                    //else if (freq >= 24.89 && freq <= 24.99)
+                    //    return Band.B12M;
+                    //else if (freq >= 28.0 && freq <= 29.7)
+                    //    return Band.B10M;
+                    //else if (freq >= 50.05 && freq <= 50.2)
+                    //    return Band.B6M;
+                    //else if (freq >= 144.0 && freq <= 148.0)
+                    //    return Band.B2M;
+                    //else if (freq == 2.5 || freq == 5.0 ||
+                    //    freq == 10.0 || freq == 15.0 ||
+                    //    freq == 20.0)
+                    //    return Band.WWV;
+                    //else
+                    //    return Band.GEN;
+
+                    if (freq >= 1.81 && freq <= 2.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B160M;
+                    }
                     else if (freq >= 3.5 && freq <= 3.8)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B80M;
-                    else if (freq >= 5.0 && freq < 7.0)
+                    }
+                    else if (freq >= 5.0 && freq <= 7.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B60M;
+                    }
                     else if (freq >= 7.0 && freq <= 7.2)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B40M;
+                    }
                     else if (freq >= 10.1 && freq <= 10.15)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B30M;
+                    }
                     else if (freq >= 14.0 && freq <= 14.35)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B20M;
+                    }
                     else if (freq >= 18.068 && freq <= 18.168)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B17M;
-                    else if (freq >= 21.0 && freq <= 21.45)
+                    }
+                    else if (freq >= 21.0 && freq <= 21.450)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B15M;
+                    }
                     else if (freq >= 24.89 && freq <= 24.99)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B12M;
+                    }
                     else if (freq >= 28.0 && freq <= 29.7)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B10M;
-                    else if (freq >= 50.05 && freq <= 50.2)
+                    }
+                    else if (freq >= 50.0 && freq <= 52.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B6M;
+                    }
                     else if (freq >= 144.0 && freq <= 148.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B2M;
-                    else if (freq == 2.5 || freq == 5.0 ||
-                        freq == 10.0 || freq == 15.0 ||
-                        freq == 20.0)
+                    }
+                    else if (freq == 2.5 || freq == 5.0 || freq == 10.0 || freq == 15.0 ||
+                            freq == 20.0 || freq == 25.0 || freq == 3.33 || freq == 7.85 || freq == 14.67)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.WWV;
+                    }
+
+                    // ke9ns add
+                    else if (freq >= 0.20 && freq < 1.80)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.BLMF;
+                    }
+
+                    else if (freq >= 2.3 && freq < 3.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B120M;
+                    }
+
+                    else if (freq >= 3.0 && freq < 3.5)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B90M;
+                    }
+
+                    else if (freq >= 4.10 && freq < 5.06)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B61M;
+                    }
+
+                    else if (freq >= 5.06 && freq < 7.20)
+                    {
+                        //   Debug.WriteLine("bandbyfreq 49");
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B49M;
+                    }
+
+                    else if (freq >= 7.20 && freq < 9.0)
+                    {
+                        //  Debug.WriteLine("bandbyfreq 41");
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B41M;
+                    }
+
+                    else if (freq >= 9.0 && freq < 9.99)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B31M;
+                    }
+
+                    else if (freq >= 11.6 && freq < 13.57)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B25M;
+                    }
+
+                    else if (freq >= 13.57 && freq < 13.87)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B22M;
+                    }
+
+                    else if (freq >= 15.1 && freq < 17.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B19M;
+                    }
+
+                    else if (freq >= 17.0 && freq < 18.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B16M;
+                    }
+
+                    else if (freq >= 18.0 && freq < 21.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B14M;
+                    }
+                    else if (freq >= 21.00 && freq < 25.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B13M;
+                    }
+
+                    else if (freq >= 25.0 && freq < 28.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B11M;
+                    }
+
                     else
                         return Band.GEN;
 
                 case FRSRegion.Greece:
+                    //if (freq >= 1.81 && freq <= 1.85)
+                    //    return Band.B160M;
+                    //else if (freq >= 3.5 && freq <= 3.8)
+                    //    return Band.B80M;
+                    //else if (freq >= 5.0 && freq < 7.0)
+                    //    return Band.B60M;
+                    //else if (freq >= 7.0 && freq <= 7.2)
+                    //    return Band.B40M;
+                    //else if (freq >= 10.1 && freq <= 10.15)
+                    //    return Band.B30M;
+                    //else if (freq >= 14.0 && freq <= 14.35)
+                    //    return Band.B20M;
+                    //else if (freq >= 18.068 && freq <= 18.168)
+                    //    return Band.B17M;
+                    //else if (freq >= 21.0 && freq <= 21.45)
+                    //    return Band.B15M;
+                    //else if (freq >= 24.89 && freq <= 24.99)
+                    //    return Band.B12M;
+                    //else if (freq >= 28.0 && freq <= 29.7)
+                    //    return Band.B10M;
+                    //else if (freq >= 50.0 && freq <= 52.0)
+                    //    return Band.B6M;
+                    //else if (freq >= 144.0 && freq <= 148.0)
+                    //    return Band.B2M;
+                    //else if (freq == 2.5 || freq == 5.0 ||
+                    //    freq == 10.0 || freq == 15.0 ||
+                    //    freq == 20.0)
+                    //    return Band.WWV;
+                    //else
+                    //    return Band.GEN;
+
                     if (freq >= 1.81 && freq <= 1.85)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B160M;
+                    }
                     else if (freq >= 3.5 && freq <= 3.8)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B80M;
-                    else if (freq >= 5.0 && freq < 7.0)
+                    }
+                    else if (freq >= 5.0 && freq <= 7.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B60M;
+                    }
                     else if (freq >= 7.0 && freq <= 7.2)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B40M;
+                    }
                     else if (freq >= 10.1 && freq <= 10.15)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B30M;
+                    }
                     else if (freq >= 14.0 && freq <= 14.35)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B20M;
+                    }
                     else if (freq >= 18.068 && freq <= 18.168)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B17M;
-                    else if (freq >= 21.0 && freq <= 21.45)
+                    }
+                    else if (freq >= 21.0 && freq <= 21.450)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B15M;
+                    }
                     else if (freq >= 24.89 && freq <= 24.99)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B12M;
+                    }
                     else if (freq >= 28.0 && freq <= 29.7)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B10M;
+                    }
                     else if (freq >= 50.0 && freq <= 52.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B6M;
+                    }
                     else if (freq >= 144.0 && freq <= 148.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B2M;
-                    else if (freq == 2.5 || freq == 5.0 ||
-                        freq == 10.0 || freq == 15.0 ||
-                        freq == 20.0)
+                    }
+                    else if (freq == 2.5 || freq == 5.0 || freq == 10.0 || freq == 15.0 ||
+                            freq == 20.0 || freq == 25.0 || freq == 3.33 || freq == 7.85 || freq == 14.67)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.WWV;
+                    }
+
+                    // ke9ns add
+                    else if (freq >= 0.20 && freq < 1.80)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.BLMF;
+                    }
+
+                    else if (freq >= 2.3 && freq < 3.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B120M;
+                    }
+
+                    else if (freq >= 3.0 && freq < 3.5)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B90M;
+                    }
+
+                    else if (freq >= 4.10 && freq < 5.06)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B61M;
+                    }
+
+                    else if (freq >= 5.06 && freq < 7.20)
+                    {
+                        //   Debug.WriteLine("bandbyfreq 49");
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B49M;
+                    }
+
+                    else if (freq >= 7.20 && freq < 9.0)
+                    {
+                        //  Debug.WriteLine("bandbyfreq 41");
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B41M;
+                    }
+
+                    else if (freq >= 9.0 && freq < 9.99)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B31M;
+                    }
+
+                    else if (freq >= 11.6 && freq < 13.57)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B25M;
+                    }
+
+                    else if (freq >= 13.57 && freq < 13.87)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B22M;
+                    }
+
+                    else if (freq >= 15.1 && freq < 17.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B19M;
+                    }
+
+                    else if (freq >= 17.0 && freq < 18.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B16M;
+                    }
+
+                    else if (freq >= 18.0 && freq < 21.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B14M;
+                    }
+                    else if (freq >= 21.00 && freq < 25.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B13M;
+                    }
+
+                    else if (freq >= 25.0 && freq < 28.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B11M;
+                    }
+
                     else
                         return Band.GEN;
 
                 case FRSRegion.Hungary:
+                    //if (freq >= 1.81 && freq <= 2.0)
+                    //    return Band.B160M;
+                    //else if (freq >= 3.5 && freq <= 3.8)
+                    //    return Band.B80M;
+                    //else if (freq >= 5.0 && freq < 7.0)
+                    //    return Band.B60M;
+                    //else if (freq >= 7.0 && freq <= 7.1)
+                    //    return Band.B40M;
+                    //else if (freq >= 10.1 && freq <= 10.15)
+                    //    return Band.B30M;
+                    //else if (freq >= 14.0 && freq <= 14.35)
+                    //    return Band.B20M;
+                    //else if (freq >= 18.068 && freq <= 18.168)
+                    //    return Band.B17M;
+                    //else if (freq >= 21.0 && freq <= 21.45)
+                    //    return Band.B15M;
+                    //else if (freq >= 24.89 && freq <= 24.99)
+                    //    return Band.B12M;
+                    //else if (freq >= 28.0 && freq <= 29.7)
+                    //    return Band.B10M;
+                    //else if (freq >= 50.0 && freq <= 52.0)
+                    //    return Band.B10M;
+                    //else if (freq >= 144.0 && freq <= 148.0)
+                    //    return Band.B2M;
+                    //else if (freq == 2.5 || freq == 5.0 ||
+                    //    freq == 10.0 || freq == 15.0 ||
+                    //    freq == 20.0)
+                    //    return Band.WWV;
+                    //else
+                    //    return Band.GEN;
+
                     if (freq >= 1.81 && freq <= 2.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B160M;
+                    }
                     else if (freq >= 3.5 && freq <= 3.8)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B80M;
-                    else if (freq >= 5.0 && freq < 7.0)
+                    }
+                    else if (freq >= 5.0 && freq <= 7.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B60M;
+                    }
                     else if (freq >= 7.0 && freq <= 7.1)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B40M;
+                    }
                     else if (freq >= 10.1 && freq <= 10.15)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B30M;
+                    }
                     else if (freq >= 14.0 && freq <= 14.35)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B20M;
+                    }
                     else if (freq >= 18.068 && freq <= 18.168)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B17M;
-                    else if (freq >= 21.0 && freq <= 21.45)
+                    }
+                    else if (freq >= 21.0 && freq <= 21.450)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B15M;
+                    }
                     else if (freq >= 24.89 && freq <= 24.99)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B12M;
+                    }
                     else if (freq >= 28.0 && freq <= 29.7)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B10M;
+                    }
                     else if (freq >= 50.0 && freq <= 52.0)
-                        return Band.B10M;
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
+                        return Band.B6M;
+                    }
                     else if (freq >= 144.0 && freq <= 148.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B2M;
-                    else if (freq == 2.5 || freq == 5.0 ||
-                        freq == 10.0 || freq == 15.0 ||
-                        freq == 20.0)
+                    }
+                    else if (freq == 2.5 || freq == 5.0 || freq == 10.0 || freq == 15.0 ||
+                            freq == 20.0 || freq == 25.0 || freq == 3.33 || freq == 7.85 || freq == 14.67)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.WWV;
+                    }
+
+                    // ke9ns add
+                    else if (freq >= 0.20 && freq < 1.80)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.BLMF;
+                    }
+
+                    else if (freq >= 2.3 && freq < 3.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B120M;
+                    }
+
+                    else if (freq >= 3.0 && freq < 3.5)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B90M;
+                    }
+
+                    else if (freq >= 4.10 && freq < 5.06)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B61M;
+                    }
+
+                    else if (freq >= 5.06 && freq < 7.20)
+                    {
+                        //   Debug.WriteLine("bandbyfreq 49");
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B49M;
+                    }
+
+                    else if (freq >= 7.20 && freq < 9.0)
+                    {
+                        //  Debug.WriteLine("bandbyfreq 41");
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B41M;
+                    }
+
+                    else if (freq >= 9.0 && freq < 9.99)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B31M;
+                    }
+
+                    else if (freq >= 11.6 && freq < 13.57)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B25M;
+                    }
+
+                    else if (freq >= 13.57 && freq < 13.87)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B22M;
+                    }
+
+                    else if (freq >= 15.1 && freq < 17.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B19M;
+                    }
+
+                    else if (freq >= 17.0 && freq < 18.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B16M;
+                    }
+
+                    else if (freq >= 18.0 && freq < 21.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B14M;
+                    }
+                    else if (freq >= 21.00 && freq < 25.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B13M;
+                    }
+
+                    else if (freq >= 25.0 && freq < 28.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B11M;
+                    }
+
                     else
                         return Band.GEN;
 
                 case FRSRegion.Netherlands:
+                    //if (freq >= 1.81 && freq <= 1.88)
+                    //    return Band.B160M;
+                    //else if (freq >= 3.5 && freq <= 3.8)
+                    //    return Band.B80M;
+                    //else if (freq >= 5.0 && freq < 7.0)
+                    //    return Band.B60M;
+                    //else if (freq >= 7.0 && freq <= 7.2)
+                    //    return Band.B40M;
+                    //else if (freq >= 10.1 && freq <= 10.15)
+                    //    return Band.B30M;
+                    //else if (freq >= 14.0 && freq <= 14.35)
+                    //    return Band.B20M;
+                    //else if (freq >= 18.068 && freq <= 18.168)
+                    //    return Band.B17M;
+                    //else if (freq >= 21.0 && freq <= 21.45)
+                    //    return Band.B15M;
+                    //else if (freq >= 24.89 && freq <= 24.99)
+                    //    return Band.B12M;
+                    //else if (freq >= 28.0 && freq <= 29.7)
+                    //    return Band.B10M;
+                    //else if (freq >= 50.0 && freq <= 52.0)
+                    //    return Band.B6M;
+                    //else if (freq >= 144.0 && freq <= 148.0)
+                    //    return Band.B2M;
+                    //else if (freq == 2.5 || freq == 5.0 ||
+                    //    freq == 10.0 || freq == 15.0 ||
+                    //    freq == 20.0)
+                    //    return Band.WWV;
+                    //else
+                    //    return Band.GEN;
+
                     if (freq >= 1.81 && freq <= 1.88)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B160M;
+                    }
                     else if (freq >= 3.5 && freq <= 3.8)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B80M;
-                    else if (freq >= 5.0 && freq < 7.0)
+                    }
+                    else if (freq >= 5.0 && freq <= 7.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B60M;
+                    }
                     else if (freq >= 7.0 && freq <= 7.2)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B40M;
+                    }
                     else if (freq >= 10.1 && freq <= 10.15)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B30M;
+                    }
                     else if (freq >= 14.0 && freq <= 14.35)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B20M;
+                    }
                     else if (freq >= 18.068 && freq <= 18.168)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B17M;
-                    else if (freq >= 21.0 && freq <= 21.45)
+                    }
+                    else if (freq >= 21.0 && freq <= 21.450)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B15M;
+                    }
                     else if (freq >= 24.89 && freq <= 24.99)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B12M;
+                    }
                     else if (freq >= 28.0 && freq <= 29.7)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B10M;
+                    }
                     else if (freq >= 50.0 && freq <= 52.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B6M;
+                    }
                     else if (freq >= 144.0 && freq <= 148.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B2M;
-                    else if (freq == 2.5 || freq == 5.0 ||
-                        freq == 10.0 || freq == 15.0 ||
-                        freq == 20.0)
+                    }
+                    else if (freq == 2.5 || freq == 5.0 || freq == 10.0 || freq == 15.0 ||
+                            freq == 20.0 || freq == 25.0 || freq == 3.33 || freq == 7.85 || freq == 14.67)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.WWV;
+                    }
+
+                    // ke9ns add
+                    else if (freq >= 0.20 && freq < 1.80)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.BLMF;
+                    }
+
+                    else if (freq >= 2.3 && freq < 3.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B120M;
+                    }
+
+                    else if (freq >= 3.0 && freq < 3.5)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B90M;
+                    }
+
+                    else if (freq >= 4.10 && freq < 5.06)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B61M;
+                    }
+
+                    else if (freq >= 5.06 && freq < 7.20)
+                    {
+                        //   Debug.WriteLine("bandbyfreq 49");
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B49M;
+                    }
+
+                    else if (freq >= 7.20 && freq < 9.0)
+                    {
+                        //  Debug.WriteLine("bandbyfreq 41");
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B41M;
+                    }
+
+                    else if (freq >= 9.0 && freq < 9.99)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B31M;
+                    }
+
+                    else if (freq >= 11.6 && freq < 13.57)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B25M;
+                    }
+
+                    else if (freq >= 13.57 && freq < 13.87)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B22M;
+                    }
+
+                    else if (freq >= 15.1 && freq < 17.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B19M;
+                    }
+
+                    else if (freq >= 17.0 && freq < 18.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B16M;
+                    }
+
+                    else if (freq >= 18.0 && freq < 21.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B14M;
+                    }
+                    else if (freq >= 21.00 && freq < 25.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B13M;
+                    }
+
+                    else if (freq >= 25.0 && freq < 28.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B11M;
+                    }
+
                     else
                         return Band.GEN;
 
                 case FRSRegion.France:
+                    //if (freq >= 1.81 && freq <= 2.0)
+                    //    return Band.B160M;
+                    //else if (freq >= 3.5 && freq <= 3.8)
+                    //    return Band.B80M;
+                    //else if (freq >= 5.0 && freq < 7.0)
+                    //    return Band.B60M;
+                    //else if (freq >= 7.0 && freq <= 7.2)
+                    //    return Band.B40M;
+                    //else if (freq >= 10.1 && freq <= 10.15)
+                    //    return Band.B30M;
+                    //else if (freq >= 14.0 && freq <= 14.35)
+                    //    return Band.B20M;
+                    //else if (freq >= 18.068 && freq <= 18.168)
+                    //    return Band.B17M;
+                    //else if (freq >= 21.0 && freq <= 21.45)
+                    //    return Band.B15M;
+                    //else if (freq >= 24.89 && freq <= 24.99)
+                    //    return Band.B12M;
+                    //else if (freq >= 28.0 && freq <= 29.7)
+                    //    return Band.B10M;
+                    //else if (freq >= 50.0 && freq <= 52)
+                    //    return Band.B6M;
+                    //else if (freq >= 144.0 && freq <= 148.0)
+                    //    return Band.B2M;
+                    //else if (freq == 2.5 || freq == 5.0 ||
+                    //    freq == 10.0 || freq == 15.0 ||
+                    //    freq == 20.0)
+                    //    return Band.WWV;
+                    //else
+                    //    return Band.GEN;
+
                     if (freq >= 1.81 && freq <= 2.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B160M;
+                    }
                     else if (freq >= 3.5 && freq <= 3.8)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B80M;
-                    else if (freq >= 5.0 && freq < 7.0)
+                    }
+                    else if (freq >= 5.0 && freq <= 7.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B60M;
+                    }
                     else if (freq >= 7.0 && freq <= 7.2)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B40M;
+                    }
                     else if (freq >= 10.1 && freq <= 10.15)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B30M;
+                    }
                     else if (freq >= 14.0 && freq <= 14.35)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B20M;
+                    }
                     else if (freq >= 18.068 && freq <= 18.168)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B17M;
-                    else if (freq >= 21.0 && freq <= 21.45)
+                    }
+                    else if (freq >= 21.0 && freq <= 21.450)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B15M;
+                    }
                     else if (freq >= 24.89 && freq <= 24.99)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B12M;
+                    }
                     else if (freq >= 28.0 && freq <= 29.7)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B10M;
-                    else if (freq >= 50.0 && freq <= 52)
+                    }
+                    else if (freq >= 50.0 && freq <= 52.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B6M;
+                    }
                     else if (freq >= 144.0 && freq <= 148.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B2M;
-                    else if (freq == 2.5 || freq == 5.0 ||
-                        freq == 10.0 || freq == 15.0 ||
-                        freq == 20.0)
+                    }
+                    else if (freq == 2.5 || freq == 5.0 || freq == 10.0 || freq == 15.0 ||
+                            freq == 20.0 || freq == 25.0 || freq == 3.33 || freq == 7.85 || freq == 14.67)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.WWV;
+                    }
+
+                    // ke9ns add
+                    else if (freq >= 0.20 && freq < 1.80)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.BLMF;
+                    }
+
+                    else if (freq >= 2.3 && freq < 3.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B120M;
+                    }
+
+                    else if (freq >= 3.0 && freq < 3.5)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B90M;
+                    }
+
+                    else if (freq >= 4.10 && freq < 5.06)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B61M;
+                    }
+
+                    else if (freq >= 5.06 && freq < 7.20)
+                    {
+                        //   Debug.WriteLine("bandbyfreq 49");
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B49M;
+                    }
+
+                    else if (freq >= 7.20 && freq < 9.0)
+                    {
+                        //  Debug.WriteLine("bandbyfreq 41");
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B41M;
+                    }
+
+                    else if (freq >= 9.0 && freq < 9.99)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B31M;
+                    }
+
+                    else if (freq >= 11.6 && freq < 13.57)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B25M;
+                    }
+
+                    else if (freq >= 13.57 && freq < 13.87)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B22M;
+                    }
+
+                    else if (freq >= 15.1 && freq < 17.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B19M;
+                    }
+
+                    else if (freq >= 17.0 && freq < 18.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B16M;
+                    }
+
+                    else if (freq >= 18.0 && freq < 21.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B14M;
+                    }
+                    else if (freq >= 21.00 && freq < 25.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B13M;
+                    }
+
+                    else if (freq >= 25.0 && freq < 28.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B11M;
+                    }
+
                     else
                         return Band.GEN;
 
                 case FRSRegion.Russia:
+                    //if (freq >= 1.81 && freq <= 2.0)
+                    //    return Band.B160M;
+                    //else if (freq >= 3.5 && freq <= 3.8)
+                    //    return Band.B80M;
+                    //else if (freq >= 5.0 && freq < 7.0)
+                    //    return Band.B60M;
+                    //else if (freq >= 7.0 && freq <= 7.2)
+                    //    return Band.B40M;
+                    //else if (freq >= 10.1 && freq <= 10.15)
+                    //    return Band.B30M;
+                    //else if (freq >= 14.0 && freq <= 14.35)
+                    //    return Band.B20M;
+                    //else if (freq >= 18.068 && freq <= 18.168)
+                    //    return Band.B17M;
+                    //else if (freq >= 21.0 && freq <= 21.45)
+                    //    return Band.B15M;
+                    //else if (freq >= 24.89 && freq <= 25.14)
+                    //    return Band.B12M;
+                    //else if (freq >= 26.97 && freq <= 29.7)
+                    //    return Band.B10M;
+                    //else if (freq >= 50.0 && freq <= 54.0)
+                    //    return Band.B6M;
+                    //else if (freq >= 144.0 && freq <= 148.0)
+                    //    return Band.B2M;
+                    //else if (freq == 2.5 || freq == 5.0 ||
+                    //    freq == 10.0 || freq == 15.0 ||
+                    //    freq == 20.0)
+                    //    return Band.WWV;
+                    //else
+                    //    return Band.GEN;
+
                     if (freq >= 1.81 && freq <= 2.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B160M;
+                    }
                     else if (freq >= 3.5 && freq <= 3.8)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B80M;
-                    else if (freq >= 5.0 && freq < 7.0)
+                    }
+                    else if (freq >= 5.0 && freq <= 7.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B60M;
+                    }
                     else if (freq >= 7.0 && freq <= 7.2)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B40M;
+                    }
                     else if (freq >= 10.1 && freq <= 10.15)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B30M;
+                    }
                     else if (freq >= 14.0 && freq <= 14.35)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B20M;
+                    }
                     else if (freq >= 18.068 && freq <= 18.168)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B17M;
-                    else if (freq >= 21.0 && freq <= 21.45)
+                    }
+                    else if (freq >= 21.0 && freq <= 21.450)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B15M;
+                    }
                     else if (freq >= 24.89 && freq <= 25.14)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B12M;
-                    else if (freq >= 26.97 && freq <= 29.7)
+                    }
+                    else if (freq >= 28.0 && freq <= 29.7)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B10M;
-                    else if (freq >= 50.0 && freq <= 54.0)
+                    }
+                    else if (freq >= 50.0 && freq <= 52.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B6M;
+                    }
                     else if (freq >= 144.0 && freq <= 148.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B2M;
-                    else if (freq == 2.5 || freq == 5.0 ||
-                        freq == 10.0 || freq == 15.0 ||
-                        freq == 20.0)
+                    }
+                    else if (freq == 2.5 || freq == 5.0 || freq == 10.0 || freq == 15.0 ||
+                            freq == 20.0 || freq == 25.0 || freq == 3.33 || freq == 7.85 || freq == 14.67)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.WWV;
+                    }
+
+                    // ke9ns add
+                    else if (freq >= 0.20 && freq < 1.80)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.BLMF;
+                    }
+
+                    else if (freq >= 2.3 && freq < 3.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B120M;
+                    }
+
+                    else if (freq >= 3.0 && freq < 3.5)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B90M;
+                    }
+
+                    else if (freq >= 4.10 && freq < 5.06)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B61M;
+                    }
+
+                    else if (freq >= 5.06 && freq < 7.20)
+                    {
+                        //   Debug.WriteLine("bandbyfreq 49");
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B49M;
+                    }
+
+                    else if (freq >= 7.20 && freq < 9.0)
+                    {
+                        //  Debug.WriteLine("bandbyfreq 41");
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B41M;
+                    }
+
+                    else if (freq >= 9.0 && freq < 9.99)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B31M;
+                    }
+
+                    else if (freq >= 11.6 && freq < 13.57)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B25M;
+                    }
+
+                    else if (freq >= 13.57 && freq < 13.87)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B22M;
+                    }
+
+                    else if (freq >= 15.1 && freq < 17.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B19M;
+                    }
+
+                    else if (freq >= 17.0 && freq < 18.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B16M;
+                    }
+
+                    else if (freq >= 18.0 && freq < 21.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B14M;
+                    }
+                    else if (freq >= 21.00 && freq < 25.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B13M;
+                    }
+
+                    else if (freq >= 25.0 && freq < 28.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B11M;
+                    }
+
                     else
                         return Band.GEN;
 
                 case FRSRegion.Sweden:
+            //        if (freq >= 1.81 && freq <= 2.0)
+            //            return Band.B160M;
+            //        else if (freq >= 3.5 && freq <= 3.8)
+            //            return Band.B80M;
+            //        else if (freq >= 5.31 && freq < 5.93)
+            //            return Band.B60M;
+            //        else if (freq >= 7.0 && freq <= 7.2)
+            //            return Band.B40M;
+            //        else if (freq >= 10.1 && freq <= 10.15)
+            //            return Band.B30M;
+            //        else if (freq >= 14.0 && freq <= 14.35)
+            //            return Band.B20M;
+            //        else if (freq >= 18.068 && freq <= 18.168)
+            //            return Band.B17M;
+            //        else if (freq >= 21.0 && freq <= 21.45)
+            //            return Band.B15M;
+            //        else if (freq >= 24.89 && freq <= 24.99)
+            //            return Band.B12M;
+            //        else if (freq >= 28 && freq <= 29.7)
+            //            return Band.B10M;
+            //        else if (freq >= 50.0 && freq <= 52.0)
+            //            return Band.B6M;
+            //        else if (freq >= 144.0 && freq <= 148.0)
+            //            return Band.B2M;
+            //        else if (freq == 2.5 || freq == 5.0 ||
+            //            freq == 10.0 || freq == 15.0 ||
+            //            freq == 20.0)
+            //            return Band.WWV;
+            //        else
+            //            return Band.GEN;
                     if (freq >= 1.81 && freq <= 2.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B160M;
+                    }
                     else if (freq >= 3.5 && freq <= 3.8)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B80M;
-                    else if (freq >= 5.31 && freq < 5.93)
+                    }
+                    else if (freq >= 5.31 && freq <= 5.93)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B60M;
+                    }
                     else if (freq >= 7.0 && freq <= 7.2)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B40M;
+                    }
                     else if (freq >= 10.1 && freq <= 10.15)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B30M;
+                    }
                     else if (freq >= 14.0 && freq <= 14.35)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B20M;
+                    }
                     else if (freq >= 18.068 && freq <= 18.168)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B17M;
-                    else if (freq >= 21.0 && freq <= 21.45)
+                    }
+                    else if (freq >= 21.0 && freq <= 21.450)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B15M;
+                    }
                     else if (freq >= 24.89 && freq <= 24.99)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B12M;
-                    else if (freq >= 28 && freq <= 29.7)
+                    }
+                    else if (freq >= 28.0 && freq <= 29.7)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B10M;
+                    }
                     else if (freq >= 50.0 && freq <= 52.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B6M;
+                    }
                     else if (freq >= 144.0 && freq <= 148.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.B2M;
-                    else if (freq == 2.5 || freq == 5.0 ||
-                        freq == 10.0 || freq == 15.0 ||
-                        freq == 20.0)
+                    }
+                    else if (freq == 2.5 || freq == 5.0 || freq == 10.0 || freq == 15.0 ||
+                            freq == 20.0 || freq == 25.0 || freq == 3.33 || freq == 7.85 || freq == 14.67)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
                         return Band.WWV;
+                    }
+
+                    // ke9ns add
+                    else if (freq >= 0.20 && freq < 1.80)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.BLMF;
+                    }
+
+                    else if (freq >= 2.3 && freq < 3.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B120M;
+                    }
+
+                    else if (freq >= 3.0 && freq < 3.5)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B90M;
+                    }
+
+                    else if (freq >= 4.10 && freq < 5.06)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B61M;
+                    }
+
+                    else if (freq >= 5.06 && freq < 7.20)
+                    {
+                        //   Debug.WriteLine("bandbyfreq 49");
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B49M;
+                    }
+
+                    else if (freq >= 7.20 && freq < 9.0)
+                    {
+                        //  Debug.WriteLine("bandbyfreq 41");
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B41M;
+                    }
+
+                    else if (freq >= 9.0 && freq < 9.99)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B31M;
+                    }
+
+                    else if (freq >= 11.6 && freq < 13.57)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B25M;
+                    }
+
+                    else if (freq >= 13.57 && freq < 13.87)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B22M;
+                    }
+
+                    else if (freq >= 15.1 && freq < 17.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B19M;
+                    }
+
+                    else if (freq >= 17.0 && freq < 18.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B16M;
+                    }
+
+                    else if (freq >= 18.0 && freq < 21.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B14M;
+                    }
+                    else if (freq >= 21.00 && freq < 25.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B13M;
+                    }
+
+                    else if (freq >= 25.0 && freq < 28.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B11M;
+                    }
+
                     else
                         return Band.GEN;
+
             }
 
 
@@ -19097,6 +24118,21 @@ namespace Thetis
                 //     chkBCI.Checked = false;
             }
         }
+
+        //-W2PA Added to enable CAT control of APF
+        private int cat_apf_status = 0;
+        public int CATAPF
+        {
+            get { return cat_apf_status; }
+            set
+            {
+                if (value == 0)
+                    chkCWAPFEnabled.CheckState = CheckState.Unchecked;
+                else if (value == 1)
+                    chkCWAPFEnabled.CheckState = CheckState.Checked;
+            }
+        }
+
         // Added 06/20/05 BT for CAT commands
         private int cat_nr_status = 0;
         public int CATNR
@@ -28570,9 +33606,9 @@ namespace Thetis
         private UdpClient n1mm_udp_client;
         private void PollN1MMPacket()
         {
-            radio_info = new RadioInfo();
-            contact_info = new ContactInfo();
-
+          //  radio_info = new RadioInfo();
+          //  contact_info = new ContactInfo();
+            
             if (n1mm_udp_client != null) n1mm_udp_client.Close();
             IPEndPoint udp_ep = new IPEndPoint(IPAddress.Any, focus_master_udp_port);
             n1mm_udp_client = new UdpClient(udp_ep);
@@ -28639,257 +33675,302 @@ namespace Thetis
             }
         }
 
-        public struct RadioInfo
-        {
-            public string RadioNr;
-            public string Freq;
-            public string TXFreq;
-            public string Mode;
-            public string OpCall;
-            public string IsRunning;
-            public string FocusEntry;
-            public string Antenna;
-            public string Rotors;
-        }
-
-        public struct ContactInfo
-        {
-            public string contestname;
-            public string contestnr;
-            public string timestamp;
-            public string mycall;
-            public string band;
-            public string rxfreq;
-            public string txfreq;
-            public string opr;
-            public string mode;
-            public string call;
-            public string countryprefix;
-            public string wpxprefix;
-            public string stationprefix;
-            public string continent;
-            public string snt;
-            public string sntnr;
-            public string rcv;
-            public string rcvnr;
-            public string gridsquare;
-            public string exchange1;
-            public string section;
-            public string comment;
-            public string qth;
-            public string name;
-            public string power;
-            public string misctext;
-            public string zone;
-            public string prec;
-            public string ck;
-            public string ismultiplier1;
-            public string ismultiplier2;
-            public string ismultiplier3;
-            public string points;
-            public string radionr;
-            public string RoverLocation;
-            public string RadioInterfaced;
-            public string NetBiosName;
-            public string IsRunQSO;
-        }
+        /*
+                public struct RadioInfo
+                {
+                    public string StationName;
+                    public string RadioNr;
+                    public string Freq;
+                    public string TXFreq;
+                    public string Mode;
+                    public string OpCall;
+                    public string IsRunning;
+                    public string FocusEntry;
+                    public string Antenna;
+                    public string Rotors;
+                    public string FocusRadioNr;
+                    public string IsStereo;
+                    public string ActiveRadioNr;
+                }
+        
+                public struct ContactInfo
+                {
+                    public string contestname;
+                    public string contestnr;
+                    public string timestamp;
+                    public string mycall;
+                    public string band;
+                    public string rxfreq;
+                    public string txfreq;
+                    public string oprerator;
+                    public string mode;
+                    public string call;
+                    public string countryprefix;
+                    public string wpxprefix;
+                    public string stationprefix;
+                    public string continent;
+                    public string snt;
+                    public string sntnr;
+                    public string rcv;
+                    public string rcvnr;
+                    public string gridsquare;
+                    public string exchange1;
+                    public string section;
+                    public string comment;
+                    public string qth;
+                    public string name;
+                    public string power;
+                    public string misctext;
+                    public string zone;
+                    public string prec;
+                    public string ck;
+                    public string ismultiplier1;
+                    public string ismultiplier2;
+                    public string ismultiplier3;
+                    public string points;
+                    public string radionr;
+                    public string RoverLocation;
+                    public string RadioInterfaced;
+                    public string NetworkedCompNr;
+                    public string IsOriginal;
+                    public string NetBiosName;
+                    public string IsRunQSO;
+                    public string Run1Run2;
+                    public string ContactType;
+                    public string StationName;
+                }
+                */
 
         void HandleXml(string str)
         {
-            int textCount = 0;
-            bool valid_data = true;
-            string element = "";
+            // int textCount = 0;
+            // bool valid_data = true;
+            //  string element = "";
             StringReader stream = new StringReader(str);
-            XmlTextReader tr = new XmlTextReader(stream);
-            while (tr.Read() && valid_data)
-            {
-                switch (tr.NodeType)
-                {
-                    case XmlNodeType.XmlDeclaration:
-                    case XmlNodeType.EndElement:
-                    case XmlNodeType.Whitespace:
-                        break;
-                    case XmlNodeType.Element:
-                        switch (tr.Name)
-                        {
-                            case "appinfo":
-                            case "N1MMRotor":
-                                valid_data = false;
-                                break;
-                            case "contactinfo":
-                                //element = "contactinfo";
-                                valid_data = false;
-                                break;
-                            case "RadioInfo":
-                                element = "RadioInfo";
-                                break;
-                        }
-                        break;
-                    case XmlNodeType.Text:
-                        switch (element)
-                        {
-                            case "RadioInfo":
-                                switch (++textCount)
-                                {
-                                    case 1:
-                                        radio_info.RadioNr = tr.Value;
-                                        break;
-                                    case 2:
-                                        radio_info.Freq = tr.Value;
-                                        break;
-                                    case 3:
-                                        radio_info.TXFreq = tr.Value;
-                                        break;
-                                    case 4:
-                                        radio_info.Mode = tr.Value;
-                                        break;
-                                    case 5:
-                                        radio_info.OpCall = tr.Value;
-                                        break;
-                                    case 6:
-                                        radio_info.IsRunning = tr.Value;
-                                        break;
-                                    case 7:
-                                        radio_info.FocusEntry = tr.Value;
-                                        break;
-                                    case 8:
-                                        radio_info.Antenna = tr.Value;
-                                        break;
-                                    case 9:
-                                        radio_info.Rotors = tr.Value;
-                                        break;
-                                }
-                                break;
-                            case "contactinfo":
-                                switch (++textCount)
-                                {
-                                    case 1:
-                                        contact_info.contestname = tr.Value;
-                                        break;
-                                    case 2:
-                                        contact_info.contestnr = tr.Value;
-                                        break;
-                                    case 3:
-                                        contact_info.timestamp = tr.Value;
-                                        break;
-                                    case 4:
-                                        contact_info.mycall = tr.Value;
-                                        break;
-                                    case 5:
-                                        contact_info.band = tr.Value;
-                                        break;
-                                    case 6:
-                                        contact_info.rxfreq = tr.Value;
-                                        break;
-                                    case 7:
-                                        contact_info.txfreq = tr.Value;
-                                        break;
-                                    case 8:
-                                        contact_info.opr = tr.Value;
-                                        break;
-                                    case 9:
-                                        contact_info.mode = tr.Value;
-                                        break;
-                                    case 10:
-                                        contact_info.call = tr.Value;
-                                        break;
-                                    case 11:
-                                        contact_info.countryprefix = tr.Value;
-                                        break;
-                                    case 12:
-                                        contact_info.wpxprefix = tr.Value;
-                                        break;
-                                    case 13:
-                                        contact_info.stationprefix = tr.Value;
-                                        break;
-                                    case 14:
-                                        contact_info.continent = tr.Value;
-                                        break;
-                                    case 15:
-                                        contact_info.snt = tr.Value;
-                                        break;
-                                    case 16:
-                                        contact_info.sntnr = tr.Value;
-                                        break;
-                                    case 17:
-                                        contact_info.rcv = tr.Value;
-                                        break;
-                                    case 18:
-                                        contact_info.rcvnr = tr.Value;
-                                        break;
-                                    case 19:
-                                        contact_info.gridsquare = tr.Value;
-                                        break;
-                                    case 20:
-                                        contact_info.exchange1 = tr.Value;
-                                        break;
-                                    case 21:
-                                        contact_info.section = tr.Value;
-                                        break;
-                                    case 22:
-                                        contact_info.comment = tr.Value;
-                                        break;
-                                    case 23:
-                                        contact_info.qth = tr.Value;
-                                        break;
-                                    case 24:
-                                        contact_info.name = tr.Value;
-                                        break;
-                                    case 25:
-                                        contact_info.power = tr.Value;
-                                        break;
-                                    case 26:
-                                        contact_info.misctext = tr.Value;
-                                        break;
-                                    case 27:
-                                        contact_info.zone = tr.Value;
-                                        break;
-                                    case 28:
-                                        contact_info.prec = tr.Value;
-                                        break;
-                                    case 29:
-                                        contact_info.ck = tr.Value;
-                                        break;
-                                    case 30:
-                                        contact_info.ismultiplier1 = tr.Value;
-                                        break;
-                                    case 31:
-                                        contact_info.ismultiplier2 = tr.Value;
-                                        break;
-                                    case 32:
-                                        contact_info.ismultiplier3 = tr.Value;
-                                        break;
-                                    case 33:
-                                        contact_info.points = tr.Value;
-                                        break;
-                                    case 34:
-                                        contact_info.radionr = tr.Value;
-                                        break;
-                                    case 35:
-                                        contact_info.RoverLocation = tr.Value;
-                                        break;
-                                    case 36:
-                                        contact_info.RadioInterfaced = tr.Value;
-                                        break;
-                                    case 37:
-                                        contact_info.NetBiosName = tr.Value;
-                                        break;
-                                    case 38:
-                                        contact_info.IsRunQSO = tr.Value;
-                                        break;
-                                }
-                                break;
-                        }
-                        break;
-                }
+            //  XmlTextReader tr = new XmlTextReader(stream);
 
-            }
+            var elem = XElement.Parse(str);
+            if (elem.Name == "RadioInfo")
+                n1mm_handle = (IntPtr)Int32.Parse(elem.Element("FocusEntry").Value);
+            /*
+                        while (tr.Read() && valid_data)
+                        {
+                            switch (tr.NodeType)
+                            {
+                                case XmlNodeType.XmlDeclaration:
+                                case XmlNodeType.EndElement:
+                                case XmlNodeType.Whitespace:
+                                    break;
+                                case XmlNodeType.Element:
+                                    switch (tr.Name)
+                                    {
+                                        case "appinfo":
+                                        case "N1MMRotor":
+                                            valid_data = false;
+                                            break;
+                                        case "contactinfo":
+                                            //element = "contactinfo";
+                                            valid_data = false;
+                                            break;
+                                        case "RadioInfo":
+                                            element = "RadioInfo";
+                                            //focus_entry = elem.Element("FocusEntry").Value;
+                                            break;
+                                    }
+                                    break;
+                                case XmlNodeType.Text:
+                                    switch (element)
+                                    {
+                                        case "RadioInfo":
+                                            switch (++textCount)
+                                            {
+                                                case 1:
+                                                    radio_info.StationName = tr.Value;
+                                                    break;
+                                                case 2:
+                                                    radio_info.RadioNr = tr.Value;
+                                                    break;
+                                                case 3:
+                                                    radio_info.Freq = tr.Value;
+                                                    break;
+                                                case 4:
+                                                    radio_info.TXFreq = tr.Value;
+                                                    break;
+                                                case 5:
+                                                    radio_info.Mode = tr.Value;
+                                                    break;
+                                                case 6:
+                                                    radio_info.OpCall = tr.Value;
+                                                    break;
+                                                case 7:
+                                                    radio_info.IsRunning = tr.Value;
+                                                    break;
+                                                case 8:
+                                                    radio_info.FocusEntry = tr.Value;
+                                                    break;
+                                                case 9:
+                                                    radio_info.Antenna = tr.Value;
+                                                    break;
+                                                case 10:
+                                                    radio_info.Rotors = tr.Value;
+                                                    break;
+                                                case 11:
+                                                    radio_info.FocusRadioNr = tr.Value;
+                                                    break;
+                                                case 12:
+                                                    radio_info.IsStereo = tr.Value;
+                                                    break;
+                                                case 13:
+                                                    radio_info.ActiveRadioNr = tr.Value;
+                                                    break;
+                                            }
+                                            break;
+                                        case "contactinfo":
+                                            switch (++textCount)
+                                            {
+                                                case 1:
+                                                    contact_info.contestname = tr.Value;
+                                                    break;
+                                                case 2:
+                                                    contact_info.contestnr = tr.Value;
+                                                    break;
+                                                case 3:
+                                                    contact_info.timestamp = tr.Value;
+                                                    break;
+                                                case 4:
+                                                    contact_info.mycall = tr.Value;
+                                                    break;
+                                                case 5:
+                                                    contact_info.band = tr.Value;
+                                                    break;
+                                                case 6:
+                                                    contact_info.rxfreq = tr.Value;
+                                                    break;
+                                                case 7:
+                                                    contact_info.txfreq = tr.Value;
+                                                    break;
+                                                case 8:
+                                                    contact_info.oprerator = tr.Value;
+                                                    break;
+                                                case 9:
+                                                    contact_info.mode = tr.Value;
+                                                    break;
+                                                case 10:
+                                                    contact_info.call = tr.Value;
+                                                    break;
+                                                case 11:
+                                                    contact_info.countryprefix = tr.Value;
+                                                    break;
+                                                case 12:
+                                                    contact_info.wpxprefix = tr.Value;
+                                                    break;
+                                                case 13:
+                                                    contact_info.stationprefix = tr.Value;
+                                                    break;
+                                                case 14:
+                                                    contact_info.continent = tr.Value;
+                                                    break;
+                                                case 15:
+                                                    contact_info.snt = tr.Value;
+                                                    break;
+                                                case 16:
+                                                    contact_info.sntnr = tr.Value;
+                                                    break;
+                                                case 17:
+                                                    contact_info.rcv = tr.Value;
+                                                    break;
+                                                case 18:
+                                                    contact_info.rcvnr = tr.Value;
+                                                    break;
+                                                case 19:
+                                                    contact_info.gridsquare = tr.Value;
+                                                    break;
+                                                case 20:
+                                                    contact_info.exchange1 = tr.Value;
+                                                    break;
+                                                case 21:
+                                                    contact_info.section = tr.Value;
+                                                    break;
+                                                case 22:
+                                                    contact_info.comment = tr.Value;
+                                                    break;
+                                                case 23:
+                                                    contact_info.qth = tr.Value;
+                                                    break;
+                                                case 24:
+                                                    contact_info.name = tr.Value;
+                                                    break;
+                                                case 25:
+                                                    contact_info.power = tr.Value;
+                                                    break;
+                                                case 26:
+                                                    contact_info.misctext = tr.Value;
+                                                    break;
+                                                case 27:
+                                                    contact_info.zone = tr.Value;
+                                                    break;
+                                                case 28:
+                                                    contact_info.prec = tr.Value;
+                                                    break;
+                                                case 29:
+                                                    contact_info.ck = tr.Value;
+                                                    break;
+                                                case 30:
+                                                    contact_info.ismultiplier1 = tr.Value;
+                                                    break;
+                                                case 31:
+                                                    contact_info.ismultiplier2 = tr.Value;
+                                                    break;
+                                                case 32:
+                                                    contact_info.ismultiplier3 = tr.Value;
+                                                    break;
+                                                case 33:
+                                                    contact_info.points = tr.Value;
+                                                    break;
+                                                case 34:
+                                                    contact_info.radionr = tr.Value;
+                                                    break;
+                                                case 35:
+                                                    contact_info.RoverLocation = tr.Value;
+                                                    break;
+                                                case 36:
+                                                    contact_info.RadioInterfaced = tr.Value;
+                                                    break;
+                                                case 38:
+                                                    contact_info.NetworkedCompNr = tr.Value;
+                                                    break;
+                                                case 39:
+                                                    contact_info.IsOriginal = tr.Value;
+                                                    break;
+                                                case 40:
+                                                    contact_info.NetBiosName = tr.Value;
+                                                    break;
+                                                case 41:
+                                                    contact_info.IsRunQSO = tr.Value;
+                                                    break;
+                                                case 42:
+                                                    contact_info.Run1Run2 = tr.Value;
+                                                    break;
+                                                case 43:
+                                                    contact_info.ContactType = tr.Value;
+                                                    break;
+                                                case 44:
+                                                    contact_info.StationName = tr.Value;
+                                                    break;
+                                            }
+                                            break;
+                                    }
+                                    break;
+                            }
 
-            if (element == "RadioInfo")
-            {
-                int handle = Int32.Parse(radio_info.FocusEntry);
-                n1mm_handle = (IntPtr)handle;
-            }
+                        }
+
+                        if (element == "RadioInfo")
+                        {
+                            int handle = Int32.Parse(radio_info.FocusEntry);
+                            n1mm_handle = (IntPtr)handle;
+                        }
+                        */
         }
 
         private void ToggleFocusMasterTimer()

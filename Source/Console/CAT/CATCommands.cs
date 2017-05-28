@@ -22,6 +22,7 @@
 /*
 Modifications to support the Behringer Midi controllers
 by Chris Codella, W2PA, April 2017.  Indicated by //-W2PA comment lines.
+Added extended CAT commands for APF funtions - May 2017.
 */
 
 
@@ -1038,6 +1039,78 @@ namespace Thetis
 		#region Extended CAT Methods ZZA-ZZF
 
 
+        //-W2PA Sets or reads the APF gain (A for amplitude since G is taken)
+        public string ZZAA(string s)
+        {
+            int n = 0;
+            int x = 0;
+            string sign;
+
+            if (s != "")
+            {
+                n = Convert.ToInt32(s);
+                n = Math.Max(0, n);
+                n = Math.Min(100, n);
+            }
+
+            if (s.Length >= parser.nSet)  //-W2PA changed to allow for 2, 3, 4 digits for Midi2Cat
+            {
+                console.APFGain = n;
+                return "";
+            }
+            else if (s.Length == parser.nGet)
+            {
+                x = console.APFGain;
+                if (x >= 0)
+                    sign = "+";
+                else
+                    sign = "-";
+                // we have to remove the leading zero and replace it with the sign.
+                return sign + AddLeadingZeros(Math.Abs(x)).Substring(1);
+            }
+            else
+            {
+                return parser.Error1;
+            }
+
+        }
+
+        //-W2PA Sets or reads the APF bandwidth
+        public string ZZAB(string s)
+        {
+            int n = 0;
+            int x = 0;
+            string sign;
+
+            if (s != "")
+            {
+                n = Convert.ToInt32(s);
+                n = Math.Max(10, n);
+                n = Math.Min(150, n);
+            }
+
+            if (s.Length >= parser.nSet)  //-W2PA changed to allow for 2, 3, 4 digits for Midi2Cat
+            {
+                console.APFBandwidth = n;
+                return "";
+            }
+            else if (s.Length == parser.nGet)
+            {
+                x = console.APFBandwidth;
+                if (x >= 0)
+                    sign = "+";
+                else
+                    sign = "-";
+                // we have to remove the leading zero and replace it with the sign.
+                return sign + AddLeadingZeros(Math.Abs(x)).Substring(1);
+            }
+            else
+            {
+                return parser.Error1;
+            }
+
+        }
+
         //Sets or reads the console step size (also see zzst(read only)
         public string ZZAC(string s)
         {
@@ -1131,6 +1204,29 @@ namespace Thetis
 				return parser.Error1;
 		}
 
+        //-W2PA Sets or reads the APF button on/off status
+        public string ZZAP(string s)
+        {
+            if (s.Length == parser.nSet && (s == "0" || s == "1"))
+            {
+                if (s == "0")
+                    console.CATAPF = 0;
+                else if (s == "1")
+                    console.CATAPF = 1;
+                return "";
+            }
+            else if (s.Length == parser.nGet)
+            {
+                //return console.APFbtn;
+                if (console.CATAPF == 1) return "1";
+                else return "0";
+            }
+            else
+            {
+                return parser.Error1;
+            }
+        }
+
 		//Sets or reads the AGC RF gain
 		public string ZZAR(string s)
 		{
@@ -1198,6 +1294,42 @@ namespace Thetis
                 }
                 else
                     return parser.Error1;
+        }
+
+        //-W2PA Sets or reads the APF tune
+        public string ZZAT(string s)
+        {
+            int n = 0;
+            int x = 0;
+            string sign;
+
+            if (s != "")
+            {
+                n = Convert.ToInt32(s);
+                n = Math.Max(-250, n);
+                n = Math.Min(250, n);
+            }
+
+            if (s.Length >= parser.nSet)  //-W2PA changed to allow for 2, 3, 4 digits for Midi2Cat
+            {
+                console.APFFreq = n;
+                return "";
+            }
+            else if (s.Length == parser.nGet)
+            {
+                x = console.APFFreq;
+                if (x >= 0)
+                    sign = "+";
+                else
+                    sign = "-";
+                // we have to remove the leading zero and replace it with the sign.
+                return sign + AddLeadingZeros(Math.Abs(x)).Substring(1);
+            }
+            else
+            {
+                return parser.Error1;
+            }
+
         }
 
         //Sets VFO A up nn Tune Steps

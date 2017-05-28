@@ -1462,7 +1462,7 @@
     <value>3</value>
   </data>
   <data name="udCWBreakInDelay.Location" type="System.Drawing.Point, System.Drawing">
-    <value>147, 16</value>
+    <value>163, 16</value>
   </data>
   <data name="udCWBreakInDelay.Size" type="System.Drawing.Size, System.Drawing">
     <value>48, 20</value>
@@ -1501,13 +1501,13 @@
     <value>11, 18</value>
   </data>
   <data name="chkCWBreakInEnabled.Size" type="System.Drawing.Size, System.Drawing">
-    <value>80, 16</value>
+    <value>96, 16</value>
   </data>
   <data name="chkCWBreakInEnabled.TabIndex" type="System.Int32, mscorlib">
     <value>36</value>
   </data>
   <data name="chkCWBreakInEnabled.Text" xml:space="preserve">
-    <value>Enabled</value>
+    <value>Semi Break-In</value>
   </data>
   <data name="chkCWBreakInEnabled.ToolTip" xml:space="preserve">
     <value>Enables Semi Break In operation.</value>
@@ -2797,7 +2797,7 @@
     <value>Off</value>
   </data>
   <data name="btnRITReset.Location" type="System.Drawing.Point, System.Drawing">
-    <value>108, 83</value>
+    <value>52, 83</value>
   </data>
   <data name="btnRITReset.Size" type="System.Drawing.Size, System.Drawing">
     <value>16, 20</value>
@@ -2833,7 +2833,7 @@
     <value>Off</value>
   </data>
   <data name="btnXITReset.Location" type="System.Drawing.Point, System.Drawing">
-    <value>52, 83</value>
+    <value>108, 83</value>
   </data>
   <data name="btnXITReset.Size" type="System.Drawing.Size, System.Drawing">
     <value>16, 20</value>
@@ -2860,7 +2860,7 @@
     <value>4</value>
   </data>
   <data name="udRIT.Location" type="System.Drawing.Point, System.Drawing">
-    <value>76, 103</value>
+    <value>20, 103</value>
   </data>
   <data name="udRIT.Size" type="System.Drawing.Size, System.Drawing">
     <value>56, 20</value>
@@ -2935,7 +2935,7 @@
     <value>Off</value>
   </data>
   <data name="chkRIT.Location" type="System.Drawing.Point, System.Drawing">
-    <value>76, 83</value>
+    <value>20, 83</value>
   </data>
   <data name="chkRIT.Size" type="System.Drawing.Size, System.Drawing">
     <value>32, 20</value>
@@ -3016,7 +3016,7 @@
     <value>Off</value>
   </data>
   <data name="chkXIT.Location" type="System.Drawing.Point, System.Drawing">
-    <value>20, 83</value>
+    <value>76, 83</value>
   </data>
   <data name="chkXIT.Size" type="System.Drawing.Size, System.Drawing">
     <value>32, 20</value>
@@ -3043,7 +3043,7 @@
     <value>panelVFO</value>
   </data>
   <data name="&gt;&gt;chkXIT.ZOrder" xml:space="preserve">
-    <value>9</value>
+    <value>11</value>
   </data>
   <data name="btnVFOBtoA.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
     <value>Flat</value>
@@ -3082,10 +3082,10 @@
     <value>panelVFO</value>
   </data>
   <data name="&gt;&gt;btnVFOBtoA.ZOrder" xml:space="preserve">
-    <value>10</value>
+    <value>9</value>
   </data>
   <data name="udXIT.Location" type="System.Drawing.Point, System.Drawing">
-    <value>12, 103</value>
+    <value>76, 103</value>
   </data>
   <data name="udXIT.Size" type="System.Drawing.Size, System.Drawing">
     <value>56, 20</value>
@@ -3106,7 +3106,7 @@
     <value>panelVFO</value>
   </data>
   <data name="&gt;&gt;udXIT.ZOrder" xml:space="preserve">
-    <value>11</value>
+    <value>13</value>
   </data>
   <data name="btnVFOAtoB.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
     <value>Flat</value>
@@ -3145,7 +3145,7 @@
     <value>panelVFO</value>
   </data>
   <data name="&gt;&gt;btnVFOAtoB.ZOrder" xml:space="preserve">
-    <value>12</value>
+    <value>10</value>
   </data>
   <data name="chkRX1Preamp.Appearance" type="System.Windows.Forms.Appearance, System.Windows.Forms">
     <value>Button</value>
@@ -3619,7 +3619,7 @@
     <value>panelVFO</value>
   </data>
   <data name="&gt;&gt;chkVAC1.ZOrder" xml:space="preserve">
-    <value>13</value>
+    <value>12</value>
   </data>
   <data name="chkVOX.Appearance" type="System.Windows.Forms.Appearance, System.Windows.Forms">
     <value>Button</value>
@@ -10476,7 +10476,7 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
     <value>Off</value>
   </data>
   <data name="lblCWBreakInDelay.Location" type="System.Drawing.Point, System.Drawing">
-    <value>83, 18</value>
+    <value>105, 18</value>
   </data>
   <data name="lblCWBreakInDelay.Size" type="System.Drawing.Size, System.Drawing">
     <value>64, 16</value>
@@ -10509,7 +10509,7 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
     <value>77</value>
   </data>
   <data name="grpSemiBreakIn.Text" xml:space="preserve">
-    <value>Break In</value>
+    <value>CW Break-In</value>
   </data>
   <data name="&gt;&gt;grpSemiBreakIn.Name" xml:space="preserve">
     <value>grpSemiBreakIn</value>

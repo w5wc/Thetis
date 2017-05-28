@@ -23651,19 +23651,20 @@
             this.grpDSPKeyerSemiBreakIn.Size = new System.Drawing.Size(136, 76);
             this.grpDSPKeyerSemiBreakIn.TabIndex = 38;
             this.grpDSPKeyerSemiBreakIn.TabStop = false;
-            this.grpDSPKeyerSemiBreakIn.Text = "Break In";
+            this.grpDSPKeyerSemiBreakIn.Text = "CW Break-In";
             // 
             // chkCWBreakInEnabled
             // 
+            this.chkCWBreakInEnabled.AutoSize = true;
             this.chkCWBreakInEnabled.Checked = true;
             this.chkCWBreakInEnabled.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkCWBreakInEnabled.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.chkCWBreakInEnabled.Image = null;
             this.chkCWBreakInEnabled.Location = new System.Drawing.Point(16, 24);
             this.chkCWBreakInEnabled.Name = "chkCWBreakInEnabled";
-            this.chkCWBreakInEnabled.Size = new System.Drawing.Size(80, 16);
+            this.chkCWBreakInEnabled.Size = new System.Drawing.Size(92, 17);
             this.chkCWBreakInEnabled.TabIndex = 36;
-            this.chkCWBreakInEnabled.Text = "Enabled";
+            this.chkCWBreakInEnabled.Text = "Semi Break-In";
             this.toolTip1.SetToolTip(this.chkCWBreakInEnabled, "Enables Semi Break In operation.");
             this.chkCWBreakInEnabled.CheckedChanged += new System.EventHandler(this.chkDSPKeyerSemiBreakInEnabled_CheckedChanged);
             // 
@@ -23933,7 +23934,7 @@
             0,
             0});
             this.udDSPLevelerDecay.Minimum = new decimal(new int[] {
-            10,
+            1,
             0,
             0,
             0});
@@ -48289,6 +48290,7 @@
             this.grpDSPKeyerOptions.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.udCWKeyerWeight)).EndInit();
             this.grpDSPKeyerSemiBreakIn.ResumeLayout(false);
+            this.grpDSPKeyerSemiBreakIn.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.udCWBreakInDelay)).EndInit();
             this.tpDSPAGCALC.ResumeLayout(false);
             this.grpDSPLeveler.ResumeLayout(false);

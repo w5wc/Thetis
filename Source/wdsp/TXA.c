@@ -66,6 +66,15 @@ void create_txa (int channel)
 		2,											// 1 to use Q, 2 to use I for input
 		0);											// 0, no copy
 
+	txa[channel].phrot.p = create_phrot (
+		0,											// run
+		ch[channel].dsp_size,						// size
+		txa[channel].midbuff,						// input buffer
+		txa[channel].midbuff,						// output buffer
+		ch[channel].dsp_rate,						// samplerate
+		338.0,										// 1/2 of phase frequency
+		8);											// number of stages
+
 	txa[channel].micmeter.p = create_meter (
 		1,											// run
 		0,											// optional pointer to another 'run'
@@ -183,15 +192,6 @@ void create_txa (int channel)
 		TXA_LVLR_PK,								// index for peak value
 		TXA_LVLR_GAIN,								// index for gain value
 		&txa[channel].leveler.p->gain);				// pointer for gain computation
-
-	txa[channel].phrot.p = create_phrot (
-		0,											// run
-		ch[channel].dsp_size,						// size
-		txa[channel].midbuff,						// input buffer
-		txa[channel].midbuff,						// output buffer
-		ch[channel].dsp_rate,						// samplerate
-		338.0,										// 1/2 of phase frequency
-		8);											// number of stages
 
 	{
 	double default_F[5] = {200.0, 1000.0, 2000.0, 3000.0, 4000.0};
@@ -481,7 +481,6 @@ void destroy_txa (int channel)
 	destroy_compressor (txa[channel].compressor.p);
 	destroy_bandpass (txa[channel].bp0.p);
 	destroy_cfcomp (txa[channel].cfcomp.p);
-	destroy_phrot (txa[channel].phrot.p);
 	destroy_meter (txa[channel].lvlrmeter.p);
 	destroy_wcpagc (txa[channel].leveler.p);
 	destroy_emphp (txa[channel].preemph.p);
@@ -489,6 +488,7 @@ void destroy_txa (int channel)
 	destroy_eqp (txa[channel].eqp.p);
 	destroy_amsq (txa[channel].amsq.p);
 	destroy_meter (txa[channel].micmeter.p);
+	destroy_phrot (txa[channel].phrot.p);
 	destroy_panel (txa[channel].panel.p);
 	destroy_gen (txa[channel].gen0.p);
 	destroy_resample (txa[channel].rsmpin.p);
@@ -505,6 +505,7 @@ void flush_txa (int channel)
 	flush_resample (txa[channel].rsmpin.p);
 	flush_gen (txa[channel].gen0.p);
 	flush_panel (txa[channel].panel.p);
+	flush_phrot (txa[channel].phrot.p);
 	flush_meter (txa[channel].micmeter.p);
 	flush_amsq (txa[channel].amsq.p);
 	flush_eqp (txa[channel].eqp.p);
@@ -512,7 +513,6 @@ void flush_txa (int channel)
 	flush_emphp (txa[channel].preemph.p);
 	flush_wcpagc (txa[channel].leveler.p);
 	flush_meter (txa[channel].lvlrmeter.p);
-	flush_phrot (txa[channel].phrot.p);
 	flush_cfcomp (txa[channel].cfcomp.p);
 	flush_bandpass (txa[channel].bp0.p);
 	flush_compressor (txa[channel].compressor.p);
@@ -538,6 +538,7 @@ void xtxa (int channel)
 	xresample (txa[channel].rsmpin.p);
 	xgen (txa[channel].gen0.p);
 	xpanel (txa[channel].panel.p);
+	xphrot (txa[channel].phrot.p);
 	xmeter (txa[channel].micmeter.p);
 	xamsqcap (txa[channel].amsq.p);
 	xamsq (txa[channel].amsq.p);
@@ -546,7 +547,6 @@ void xtxa (int channel)
 	xemphp (txa[channel].preemph.p, 0);
 	xwcpagc (txa[channel].leveler.p);
 	xmeter (txa[channel].lvlrmeter.p);
-	xphrot (txa[channel].phrot.p);
 	xcfcomp (txa[channel].cfcomp.p, 0);
 	xbandpass (txa[channel].bp0.p, 0);
 	xcompressor (txa[channel].compressor.p);
@@ -612,6 +612,7 @@ void setDSPSamplerate_txa (int channel)
 	// dsp_rate blocks
 	setSamplerate_gen (txa[channel].gen0.p, ch[channel].dsp_rate);
 	setSamplerate_panel (txa[channel].panel.p, ch[channel].dsp_rate);
+	setSamplerate_phrot (txa[channel].phrot.p, ch[channel].dsp_rate);
 	setSamplerate_meter (txa[channel].micmeter.p, ch[channel].dsp_rate);
 	setSamplerate_amsq (txa[channel].amsq.p, ch[channel].dsp_rate);
 	setSamplerate_eqp (txa[channel].eqp.p, ch[channel].dsp_rate);
@@ -619,7 +620,6 @@ void setDSPSamplerate_txa (int channel)
 	setSamplerate_emphp (txa[channel].preemph.p, ch[channel].dsp_rate);
 	setSamplerate_wcpagc (txa[channel].leveler.p, ch[channel].dsp_rate);
 	setSamplerate_meter (txa[channel].lvlrmeter.p, ch[channel].dsp_rate);
-	setSamplerate_phrot (txa[channel].phrot.p, ch[channel].dsp_rate);
 	setSamplerate_cfcomp (txa[channel].cfcomp.p, ch[channel].dsp_rate);
 	setSamplerate_bandpass (txa[channel].bp0.p, ch[channel].dsp_rate);
 	setSamplerate_compressor (txa[channel].compressor.p, ch[channel].dsp_rate);
@@ -662,6 +662,8 @@ void setDSPBuffsize_txa (int channel)
 	setSize_gen (txa[channel].gen0.p, ch[channel].dsp_size);
 	setBuffers_panel (txa[channel].panel.p, txa[channel].midbuff, txa[channel].midbuff);
 	setSize_panel (txa[channel].panel.p, ch[channel].dsp_size);
+	setBuffers_phrot (txa[channel].phrot.p, txa[channel].midbuff, txa[channel].midbuff);
+	setSize_phrot (txa[channel].phrot.p, ch[channel].dsp_size);
 	setBuffers_meter (txa[channel].micmeter.p, txa[channel].midbuff);
 	setSize_meter (txa[channel].micmeter.p, ch[channel].dsp_size);
 	setBuffers_amsq (txa[channel].amsq.p, txa[channel].midbuff, txa[channel].midbuff, txa[channel].midbuff);
@@ -676,8 +678,6 @@ void setDSPBuffsize_txa (int channel)
 	setSize_wcpagc (txa[channel].leveler.p, ch[channel].dsp_size);
 	setBuffers_meter (txa[channel].lvlrmeter.p, txa[channel].midbuff);
 	setSize_meter (txa[channel].lvlrmeter.p, ch[channel].dsp_size);
-	setBuffers_phrot (txa[channel].phrot.p, txa[channel].midbuff, txa[channel].midbuff);
-	setSize_phrot (txa[channel].phrot.p, ch[channel].dsp_size);
 	setBuffers_cfcomp (txa[channel].cfcomp.p, txa[channel].midbuff, txa[channel].midbuff);
 	setSize_cfcomp (txa[channel].cfcomp.p, ch[channel].dsp_size);
 	setBuffers_bandpass (txa[channel].bp0.p, txa[channel].midbuff, txa[channel].midbuff);
