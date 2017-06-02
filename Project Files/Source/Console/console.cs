@@ -29,6 +29,7 @@
 //=================================================================
 // Modifications to support the Behringer Midi controllers
 // by Chris Codella, W2PA, May 2017.  Indicated by //-W2PA comment lines. 
+// Modifications for using the new database import function.  W2PA, 29 May 2017
 
 using Midi2Cat.Data; //-W2PA Necessary for Behringer MIDI changes
 
@@ -297,8 +298,9 @@ namespace Thetis
         EQ,
         LEVELER,
         LVL_G,
+        CFC_PK,
+        CFC_G,
         COMP,
-        CPDR,
         ALC,
         ALC_G,
         SWR,
@@ -351,10 +353,6 @@ namespace Thetis
     public enum PreampMode
     {
         FIRST = -1,
-        // OFF,
-        // LOW,
-        // MED,
-        // HIGH,
         HPSDR_OFF,
         HPSDR_ON,
         HPSDR_MINUS10,
@@ -718,6 +716,7 @@ namespace Thetis
         private bool whatisGEN = false;   //w3sz true if SWL panel is being displayed
         private bool iscollapsed = false;  //w3sz true if collapsed panel is being displayed
         private bool isexpanded = true;   //w3sz true if expanded panel is being displayed
+        public bool resetForAutoMerge = false;
 
         public int band_160m_index;						// These band indexes are used to keep track of which
         public int band_80m_index;				    	// location in the bandstack was last saved/recalled
@@ -919,6 +918,7 @@ namespace Thetis
         NumberFormatInfo nfi = NumberFormatInfo.InvariantInfo;  // so we are region independent in terms of ',' and '.' for floats
 
         // BT 11/05/2007
+       // public Thetis.RemoteProfiles ProfileForm;
         private string machineName = System.Environment.MachineName;
 
         //EHR 25Mar08
@@ -1189,6 +1189,8 @@ namespace Thetis
             if (db_file_name == "")
                 DBFileName = AppDataPath + "database.xml";
 
+            string autoMergeFileName = AppDataPath + "databaseToMerge.xml"; //-W2PA A legacy database candidate for automatic merging
+
             if (File.Exists(db_file_name))
             {
                 if (Keyboard.IsKeyDown(Keys.LShiftKey) || Keyboard.IsKeyDown(Keys.RShiftKey))
@@ -1197,12 +1199,12 @@ namespace Thetis
                     if (Keyboard.IsKeyDown(Keys.LShiftKey) || Keyboard.IsKeyDown(Keys.RShiftKey))
                     {
                         DialogResult dr = MessageBox.Show(
-                            "The database reset function has been tiggered.  Would you like to reset your database?\n\n" +
-                            "If so, a copy of the current database will be placed on the desktop with\n" +
-                            "a date and time stamp in the file name before creating a brand new\n" +
-                            "database for active use.",
-                            "Reset Database?",
-                            MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                             "The database reset function has been tiggered.  Would you like to reset your database?\n\n" +
+                             "If so, a copy of the current database will be placed in the DB_Archive folder with\n" +
+                             "a date and time stamp in the file name, before creating a brand new\n" +
+                             "database for active use.",
+                             "Reset Database?",
+                             MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
 
                         if (dr == DialogResult.Yes)
                         {
@@ -1215,16 +1217,16 @@ namespace Thetis
                             if (!Directory.Exists(AppDataPath + "\\DB_Archive\\"))
                                 Directory.CreateDirectory(AppDataPath + "\\DB_Archive\\");
 
-                            File.Copy(db_file_name, AppDataPath + "\\DB_Archive\\Thetis_" + file + "_" + datetime + ".xml");
+                            File.Copy(db_file_name, AppDataPath + "\\DB_Archive\\Thetis_" + file + "_" + datetime + ".xml", true);
                             File.Delete(db_file_name);
                             Thread.Sleep(100);
                         }
                     }
                 }
-
+/*
                 if (File.Exists(db_file_name))
                 {
-                    DB.Init();
+                    DB.Init(this);
 
                     string DBVersion = "";
                     string version = getVersion();
@@ -1272,6 +1274,100 @@ namespace Thetis
                             Thread.Sleep(100);
                         }
                     }
+                }
+*/
+                if (File.Exists(db_file_name))
+                {
+                    if (!DB.Init(this)) // Init throws an exception on reading XML files that are too corrupted for DataSet.ReadXml to handle.
+                    {
+                        string desktop = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+                        string datetime = DateTime.Now.ToShortDateString().Replace("/", "-") + "_" +
+                            DateTime.Now.ToShortTimeString().Replace(":", ".");
+
+                        string file = db_file_name.Substring(db_file_name.LastIndexOf("\\") + 1);
+                        file = file.Substring(0, file.Length - 4);
+                        if (!Directory.Exists(AppDataPath + "\\DB_Archive\\"))
+                            Directory.CreateDirectory(AppDataPath + "\\DB_Archive\\");
+
+                        File.Copy(db_file_name, AppDataPath + "\\DB_Archive\\Thetis" + file + "_" + datetime + ".xml", true);
+                        File.Delete(db_file_name);
+                        MessageBox.Show("The database file could not be read. It has been copied to the DB_Archive folder\n\n"
+                                    + "Current database has been reset and initialized.  After the reset, "
+                                    + "you can try importing another working database file using Setup - Import Database.", "Database Read Failure",
+                                     MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    }
+                    else
+                    {
+                        string DBVersion = "";
+                        string version = getVersion();
+                        ArrayList a = DB.GetVars("State");
+                        a.Sort();
+                        foreach (string s in a)
+                        {
+                            string[] vals = s.Split('/');
+                            string name = vals[0];
+                            string val = vals[1];
+
+                            switch (name)
+                            {
+                                case "VersionNumber":
+                                    DBVersion = val;
+                                    break;
+                            }
+                        }
+
+                        if (DBVersion != "" && DBVersion != version || File.Exists(autoMergeFileName)) // Back-level DB detected
+                        {
+                            //-W2PA Automatically reset, shut down, and import the old database file if possible
+
+                            if (File.Exists(autoMergeFileName)) // We have already reset and are ready for trying a merge
+                            {
+                                //-W2PA Import carefully, allowing use of DB files created by previous versions so as to retain settings and options   
+                                if (DB.ImportAndMergeDatabase(autoMergeFileName, AppDataPath))
+                                {
+                                    string versionName = TitleBar.GetString();
+                                    versionName = versionName.Remove(versionName.LastIndexOf("("));  // strip off date                                    
+                                    File.Delete(autoMergeFileName);
+                                    DB.WriteCurrentDB(db_file_name);
+                                    DB.Init(this);
+                                    MessageBox.Show("Your database from a previous version was imported successfully into a new one.\n\n"
+                                        + versionName + " will now start.", "Success!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                }
+                                else
+                                {
+                                    File.Delete(db_file_name);
+                                    File.Delete(autoMergeFileName);
+                                    Thread.Sleep(100);
+                                    MessageBox.Show("A previous version database file could not be imported. It has been copied to the DB_Archive folder\n\n. "
+                                        + "The current database has been reset and initialized.\n"
+                                        + "You can try importing another working database file using Setup - Import Database.", "Database Import Failure",
+                                        MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                                }
+                                resetForAutoMerge = false;
+                            }
+                            else  // Not yet ready for trying an automatic merge - get set up for it
+                            {
+                                // Archive the old database file and reset database
+                                string desktop = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+                                string datetime = DateTime.Now.ToShortDateString().Replace("/", "-") + "_" +
+                                    DateTime.Now.ToShortTimeString().Replace(":", ".");
+
+                                string file = db_file_name.Substring(db_file_name.LastIndexOf("\\") + 1);
+                                file = file.Substring(0, file.Length - 4);
+                                if (!Directory.Exists(AppDataPath + "\\DB_Archive\\"))
+                                    Directory.CreateDirectory(AppDataPath + "\\DB_Archive\\");
+                                File.Copy(db_file_name, AppDataPath + "\\DB_Archive\\Thetis" + file + "_" + datetime + ".xml", true);
+                                File.Copy(db_file_name, autoMergeFileName, true); // After reset and restart, this will be a flag to attempt to merge
+                                File.Delete(db_file_name);
+                                resetForAutoMerge = true;  // a flag to main()
+
+                                MessageBox.Show("Your database file is from a previous version.\nMerging it into a new reset database will now be attempted.\n\n"
+                                    + "Please RE-START when the reset finishes.", "Note", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                            }
+
+                        }
+                    }
+
                 }
 
             }
@@ -1323,7 +1419,7 @@ namespace Thetis
             MinimumSize = this.Size;
 
             Splash.SetStatus("Initializing Database");			// Set progress point
-            DB.Init();											// Initialize the database
+            DB.Init(this);											// Initialize the database
 
             InitCTCSS();
             Splash.SetStatus("Initializing Hardware");			// Set progress point
@@ -1350,22 +1446,6 @@ namespace Thetis
                             break;
                     }
                 }
-
-                /*   ArrayList b = DB.GetVars("Options");
-                   b.Sort();
-                   foreach (string o in b)
-                   {
-                       string[] valsb = o.Split('/');
-                       string nameb = valsb[0];
-                       string valb = valsb[1];
-                       switch (nameb)
-                       {
-                           case "comboFRSRegion":
-                               SetupForm.comboFRSRegion.Text = valb;
-                               break;
-                       }
-                   } */
-
             }
 
             Application.DoEvents();
@@ -1470,6 +1550,10 @@ namespace Thetis
 
             rx1_meter_cal_offset = rx_meter_cal_offset_by_radio[(int)current_hpsdr_model];
             RX1DisplayCalOffset = rx_display_cal_offset_by_radio[(int)current_hpsdr_model];
+            if (resetForAutoMerge)
+            {
+                MessageBox.Show("Please RE-START now.", "Note", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
 
         }
 
@@ -1586,7 +1670,11 @@ namespace Thetis
                 Application.DoEvents();
 
                 theConsole = new Console(args);
-                Application.Run(theConsole);
+                if (theConsole.resetForAutoMerge)
+                {
+                    Application.Exit();
+                }
+                else Application.Run(theConsole);
             }
             catch (Exception ex)
             {
@@ -1604,6 +1692,13 @@ namespace Thetis
         // ======================================================
         // Misc Routines
         // ======================================================
+
+        private bool just_imported_initial_db = false;
+        public bool JustImportedInitialDB
+        {
+            get { return just_imported_initial_db; }
+            set { just_imported_initial_db = value; }
+        }
 
         private bool spec_display = true;
         public bool SpecDisplay
@@ -2451,6 +2546,8 @@ namespace Thetis
             a.Add("chkRX2NR_checkstate/" + chkRX2NR.CheckState.ToString());
             a.Add("chkNB_checkstate/" + chkNB.CheckState.ToString());
             a.Add("chkRX2NB_checkstate/" + chkRX2NB.CheckState.ToString());
+           // a.Add("chkSyncIT_checkstate/" + chkSyncIT.CheckState.ToString());  //-W2PA Checkbox for synched RIT/XIT
+
             a.Add("current_datetime_mode/" + (int)current_datetime_mode);
             a.Add("rx1_display_cal_offset/" + rx1_display_cal_offset.ToString("f3"));
             a.Add("rx1_meter_cal_offset/" + rx1_meter_cal_offset);
@@ -3732,6 +3829,9 @@ namespace Thetis
                     case "chkRX2NB_checkstate":
                         chkRX2NB.CheckState = (CheckState)(Enum.Parse(typeof(CheckState), val));
                         break;
+                    //case "chkSyncIT_checkstate":  //-W2PA Checkbox for synched RIT/XIT
+                    //    chkSyncIT.CheckState = (CheckState)(Enum.Parse(typeof(CheckState), val));
+                    //    break;
                     case "band_160m_index":
                         band_160m_index = Int32.Parse(val);
                         break;
@@ -5245,9 +5345,11 @@ namespace Thetis
             comboMeterTXMode.Items.Add("EQ");
             comboMeterTXMode.Items.Add("Leveler");
             comboMeterTXMode.Items.Add("Lev Gain");
+            comboMeterTXMode.Items.Add("CFC");
+            comboMeterTXMode.Items.Add("CFC Comp");
+            comboMeterTXMode.Items.Add("COMP");
             comboMeterTXMode.Items.Add("ALC");
             comboMeterTXMode.Items.Add("ALC Comp");
-            comboMeterTXMode.Items.Add("CPDR");
             comboMeterTXMode.Items.Add("Off");
         }
 
@@ -26019,8 +26121,14 @@ namespace Thetis
                     case MeterTXMode.LVL_G:
                         text = "Lvl Gain";
                         break;
-                    case MeterTXMode.CPDR:
-                        text = "CPDR";
+                    case MeterTXMode.CFC_PK:
+                        text = "CFC";
+                        break;
+                    case MeterTXMode.CFC_G:
+                        text = "CFC Comp";
+                        break;
+                    case MeterTXMode.COMP:
+                        text = "COMP";
                         break;
                     case MeterTXMode.ALC:
                         text = "ALC";
@@ -29605,7 +29713,8 @@ namespace Thetis
                             case MeterTXMode.MIC:
                             case MeterTXMode.EQ:
                             case MeterTXMode.LEVELER:
-                            case MeterTXMode.CPDR:
+                            case MeterTXMode.CFC_PK:
+                            case MeterTXMode.COMP:
                             case MeterTXMode.ALC:
                                 //num += 3.0;  // number no longer has fudge factor added in the wdsp, must be remove
                                 switch ((int)g.DpiX)
@@ -29621,14 +29730,14 @@ namespace Thetis
                                                 pixel_x = (int)(72 + (num + 10.0) / 5.0 * 54);
                                             else if (num <= 0.0f)
                                                 pixel_x = (int)(126 + (num + 5.0) / 5.0 * 48);
-                                            else if (num <= 1.0f)
-                                                pixel_x = (int)(174 + (num - 0.0) / 1.0 * 30);
-                                            else if (num <= 2.0f)
-                                                pixel_x = (int)(204 + (num - 1.0) / 1.0 * 30);
-                                            else if (num <= 3.0f)
-                                                pixel_x = (int)(234 + (num - 2.0) / 1.0 * 30);
+                                            else if (num <= 4.0f)
+                                                pixel_x = (int)(174 + (num - 0.0) / 4.0 * 30);
+                                            else if (num <= 8.0f)
+                                                pixel_x = (int)(204 + (num - 4.0) / 4.0 * 30);
+                                            else if (num <= 12.0f)
+                                                pixel_x = (int)(234 + (num - 8.0) / 4.0 * 30);
                                             else
-                                                pixel_x = (int)(264 + (num - 3.0) / 0.5 * 16);
+                                                pixel_x = (int)(264 + (num - 12.0) / 0.5 * 16);
                                         }
                                         else
                                         {
@@ -29640,14 +29749,14 @@ namespace Thetis
                                                 pixel_x = (int)(36 + (num + 10.0) / 5.0 * 27);
                                             else if (num <= 0.0f)
                                                 pixel_x = (int)(63 + (num + 5.0) / 5.0 * 24);
-                                            else if (num <= 1.0f)
-                                                pixel_x = (int)(87 + (num - 0.0) / 1.0 * 15);
-                                            else if (num <= 2.0f)
-                                                pixel_x = (int)(102 + (num - 1.0) / 1.0 * 15);
-                                            else if (num <= 3.0f)
-                                                pixel_x = (int)(117 + (num - 2.0) / 1.0 * 15);
+                                            else if (num <= 4.0f)
+                                                pixel_x = (int)(87 + (num - 0.0) / 4.0 * 15);
+                                            else if (num <= 8.0f)
+                                                pixel_x = (int)(102 + (num - 4.0) / 4.0 * 15);
+                                            else if (num <= 12.0f)
+                                                pixel_x = (int)(117 + (num - 8.0) / 4.0 * 15);
                                             else
-                                                pixel_x = (int)(132 + (num - 3.0) / 0.5 * 8);
+                                                pixel_x = (int)(132 + (num - 12.0) / 0.5 * 8);
                                         }
                                         break;
                                     case 120:
@@ -29659,14 +29768,14 @@ namespace Thetis
                                             pixel_x = (int)(40 + (num + 10.0) / 5.0 * 30);
                                         else if (num <= 0.0f)
                                             pixel_x = (int)(70 + (num + 5.0) / 5.0 * 27);
-                                        else if (num <= 1.0f)
-                                            pixel_x = (int)(97 + (num - 0.0) / 1.0 * 17);
-                                        else if (num <= 2.0f)
-                                            pixel_x = (int)(114 + (num - 1.0) / 1.0 * 17);
-                                        else if (num <= 3.0f)
-                                            pixel_x = (int)(131 + (num - 2.0) / 1.0 * 17);
+                                        else if (num <= 4.0f)
+                                            pixel_x = (int)(97 + (num - 0.0) / 4.0 * 17);
+                                        else if (num <= 8.0f)
+                                            pixel_x = (int)(114 + (num - 4.0) / 4.0 * 17);
+                                        else if (num <= 12.0f)
+                                            pixel_x = (int)(131 + (num - 8.0) / 4.0 * 17);
                                         else
-                                            pixel_x = (int)(148 + (num - 3.0) / 0.5 * 23);
+                                            pixel_x = (int)(148 + (num - 12.0) / 0.5 * 23);
                                         break;
                                 }
                                 break;
@@ -29909,6 +30018,7 @@ namespace Thetis
                                 break;
                             case MeterTXMode.ALC_G:
                             case MeterTXMode.LVL_G:
+                            case MeterTXMode.CFC_G:
                                 switch ((int)g.DpiX)
                                 {
                                     case 96:
@@ -30098,7 +30208,9 @@ namespace Thetis
                                 case MeterTXMode.LEVELER:
                                 case MeterTXMode.LVL_G:
                                 case MeterTXMode.EQ:
-                                case MeterTXMode.CPDR:
+                                case MeterTXMode.CFC_PK:
+                                case MeterTXMode.CFC_G:
+                                case MeterTXMode.COMP:
                                 case MeterTXMode.ALC:
                                 case MeterTXMode.ALC_G:
                                     output = num.ToString(format) + " dB";
@@ -30257,7 +30369,8 @@ namespace Thetis
                             case MeterTXMode.MIC:
                             case MeterTXMode.EQ:
                             case MeterTXMode.LEVELER:
-                            case MeterTXMode.CPDR:
+                            case MeterTXMode.CFC_PK:
+                            case MeterTXMode.COMP:
                             case MeterTXMode.ALC:
                                 g.FillRectangle(low_brush, 0, H - 4, (int)(W * 0.665), 2);
                                 g.FillRectangle(high_brush, (int)(W * 0.665), H - 4, (int)(W * 0.335) - 2, 2);
@@ -30280,22 +30393,22 @@ namespace Thetis
                                     //g.SmoothingMode = SmoothingMode.None;
                                 }
                                 spacing = (W * 0.335 - 2.0 - 3.0) / 3.0;
-                                for (int i = 1; i < 4; i++)
+                                 for (int i = 1; i < 4; i++)
                                 {
                                     g.FillRectangle(high_brush, (int)((double)W * 0.665 + i * spacing - spacing * 0.5), H - 4 - 3, 1, 3);
                                     g.FillRectangle(high_brush, (int)((double)W * 0.665 + i * spacing), H - 4 - 6, 2, 6);
-
+                                    string s = (i * 4).ToString();
                                     //Font f = new Font("Arial", 7.0f, FontStyle.Bold);
-                                    SizeF size = g.MeasureString(i.ToString(), font7, 3, StringFormat.GenericTypographic);
+                                    SizeF size = g.MeasureString(s, font7, 3, StringFormat.GenericTypographic);
                                     double string_width = size.Width - 2.0;
 
                                     g.TextRenderingHint = TextRenderingHint.SystemDefault;
-                                    g.DrawString(i.ToString(), font7, high_brush, (int)(W * 0.665 + i * spacing - (int)string_width), (int)(H - 4 - 8 - string_height));
+                                    g.DrawString(s, font7, high_brush, (int)(W * 0.665 + i * spacing - (int)string_width * s.Length), (int)(H - 4 - 8 - string_height));
                                 }
 
                                 if (num > 0.0) // high area
                                 {
-                                    pixel_x = (int)(W * 0.665 + num / 3.0 * (W * 0.335 - 4));
+                                    pixel_x = (int)(W * 0.665 + num / 12.0 * (W * 0.335 - 4));
                                 }
                                 else
                                 {
@@ -31187,6 +31300,7 @@ namespace Thetis
                              */
                             case MeterTXMode.ALC_G:
                             case MeterTXMode.LVL_G:
+                            case MeterTXMode.CFC_G:
                                 g.FillRectangle(low_brush, 0, H - 4, (int)(W * 0.75), 2);
                                 g.FillRectangle(high_brush, (int)(W * 0.75), H - 4, (int)(W * 0.25) - 9, 2);
                                 spacing = (W * 0.75 - 2.0) / 4.0;
@@ -31371,7 +31485,9 @@ namespace Thetis
                                 case MeterTXMode.LEVELER:
                                 case MeterTXMode.LVL_G:
                                 case MeterTXMode.EQ:
-                                case MeterTXMode.CPDR:
+                                case MeterTXMode.CFC_PK:
+                                case MeterTXMode.CFC_G:
+                                case MeterTXMode.COMP:
                                 case MeterTXMode.ALC:
                                 case MeterTXMode.ALC_G:
                                     output = num.ToString(format) + " dB";
@@ -32538,7 +32654,15 @@ namespace Thetis
                                 num = (float)Math.Max(0, WDSP.CalculateTXMeter(1, WDSP.MeterType.LVL_G));
                                 new_meter_data = num;
                                 break;
-                            case MeterTXMode.CPDR:
+                            case MeterTXMode.CFC_PK:
+                                num = (float)Math.Max(-30.0f, -WDSP.CalculateTXMeter(1, WDSP.MeterType.CFC_PK));
+                                new_meter_data = num;
+                                break;
+                            case MeterTXMode.CFC_G:
+                                num = (float)Math.Max(0, -WDSP.CalculateTXMeter(1, WDSP.MeterType.CFC_G));
+                                new_meter_data = num;
+                                break;
+                            case MeterTXMode.COMP:
                                 if (peak_tx_meter) num = (float)Math.Max(-30.0f, -WDSP.CalculateTXMeter(1, WDSP.MeterType.CPDR_PK));
                                 else num = (float)Math.Max(-30.0f, -WDSP.CalculateTXMeter(1, WDSP.MeterType.CPDR));
                                 new_meter_data = num;
@@ -37900,8 +38024,14 @@ namespace Thetis
                     case "Lev Gain":
                         mode = MeterTXMode.LVL_G;
                         break;
-                    case "CPDR":
-                        mode = MeterTXMode.CPDR;
+                    case "CFC":
+                        mode = MeterTXMode.CFC_PK;
+                        break;
+                    case "CFC Comp":
+                        mode = MeterTXMode.CFC_G;
+                        break;
+                    case "COMP":
+                        mode = MeterTXMode.COMP;
                         break;
                     case "ALC":
                         mode = MeterTXMode.ALC;
@@ -37937,9 +38067,11 @@ namespace Thetis
                         case MeterTXMode.MIC:
                         case MeterTXMode.EQ:
                         case MeterTXMode.LEVELER:
-                        case MeterTXMode.CPDR:
+                        case MeterTXMode.CFC_PK:
+                        case MeterTXMode.COMP:
                         case MeterTXMode.ALC:
-                            lblMultiSMeter.Text = "-20    -10     -5      0   1   2   3";
+                            lblMultiSMeter.Text = "   -20            -10               -5              0        4        8       12";
+                            // lblMultiSMeter.Text = "   -20            -10               -5              0        1        2        3";
                             break;
                         case MeterTXMode.FORWARD_POWER:
                         case MeterTXMode.REVERSE_POWER:
@@ -37976,9 +38108,11 @@ namespace Thetis
                         case MeterTXMode.MIC:
                         case MeterTXMode.EQ:
                         case MeterTXMode.LEVELER:
-                        case MeterTXMode.CPDR:
+                        case MeterTXMode.CFC_PK:
+                        case MeterTXMode.COMP:
                         case MeterTXMode.ALC:
-                            lblMultiSMeter.Text = "-20    -10     -5      0   1   2   3";
+                            lblMultiSMeter.Text = "-20    -10     -5      0   4   8  12";
+                            // lblMultiSMeter.Text = "-20    -10     -5      0   1   2   3";
                             break;
                         case MeterTXMode.FORWARD_POWER:
                         case MeterTXMode.REVERSE_POWER:
@@ -38000,6 +38134,7 @@ namespace Thetis
                             lblMultiSMeter.Text = "";
                             break;
                         case MeterTXMode.LVL_G:
+                        case MeterTXMode.CFC_G:
                         case MeterTXMode.ALC_G:
                             lblMultiSMeter.Text = "0       5       10      15      20";
                             break;
@@ -38845,6 +38980,9 @@ namespace Thetis
                 if (SetupForm.RX2APFControls)
                     SetupForm.RX2APFEnable = chkCWAPFEnabled.Checked;
                 else SetupForm.RX2APFEnable = SetupForm.RX2APFEnable;
+
+                if (chkCWAPFEnabled.Checked) cat_apf_status = 1; //-W2PA Added to enable extended CAT control
+                else cat_apf_status = 0;
             }
         }
 

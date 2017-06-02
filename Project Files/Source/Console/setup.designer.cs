@@ -1449,7 +1449,7 @@
             this.tbDSPALCHangThreshold = new System.Windows.Forms.TrackBarTS();
             this.udDSPALCHangTime = new System.Windows.Forms.NumericUpDownTS();
             this.lblDSPALCHangTime = new System.Windows.Forms.LabelTS();
-            this.udDSPALCThreshold = new System.Windows.Forms.NumericUpDownTS();
+            this.udDSPALCMaximumGain = new System.Windows.Forms.NumericUpDownTS();
             this.udDSPALCSlope = new System.Windows.Forms.NumericUpDownTS();
             this.udDSPALCDecay = new System.Windows.Forms.NumericUpDownTS();
             this.lblDSPALCSlope = new System.Windows.Forms.LabelTS();
@@ -1745,6 +1745,7 @@
             this.tbCFC1 = new System.Windows.Forms.TrackBarTS();
             this.tbCFC2 = new System.Windows.Forms.TrackBarTS();
             this.tpTransmit = new System.Windows.Forms.TabPage();
+            this.btnExportCurrentTXProfile = new System.Windows.Forms.Button();
             this.chkDSPTXMeterPeak = new System.Windows.Forms.CheckBoxTS();
             this.chkLimitExtAmpOnOverload = new System.Windows.Forms.CheckBoxTS();
             this.grpDSPSpeechProcessor = new System.Windows.Forms.GroupBoxTS();
@@ -3198,7 +3199,7 @@
             this.grpDSPALC.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tbDSPALCHangThreshold)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.udDSPALCHangTime)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.udDSPALCThreshold)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udDSPALCMaximumGain)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.udDSPALCSlope)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.udDSPALCDecay)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.udDSPALCAttack)).BeginInit();
@@ -24037,7 +24038,7 @@
             this.grpDSPALC.Controls.Add(this.tbDSPALCHangThreshold);
             this.grpDSPALC.Controls.Add(this.udDSPALCHangTime);
             this.grpDSPALC.Controls.Add(this.lblDSPALCHangTime);
-            this.grpDSPALC.Controls.Add(this.udDSPALCThreshold);
+            this.grpDSPALC.Controls.Add(this.udDSPALCMaximumGain);
             this.grpDSPALC.Controls.Add(this.udDSPALCSlope);
             this.grpDSPALC.Controls.Add(this.udDSPALCDecay);
             this.grpDSPALC.Controls.Add(this.lblDSPALCSlope);
@@ -24115,37 +24116,36 @@
             this.lblDSPALCHangTime.Text = "Hang (ms):";
             this.lblDSPALCHangTime.Visible = false;
             // 
-            // udDSPALCThreshold
+            // udDSPALCMaximumGain
             // 
-            this.udDSPALCThreshold.Increment = new decimal(new int[] {
+            this.udDSPALCMaximumGain.Increment = new decimal(new int[] {
             1,
             0,
             0,
             0});
-            this.udDSPALCThreshold.Location = new System.Drawing.Point(88, 72);
-            this.udDSPALCThreshold.Maximum = new decimal(new int[] {
+            this.udDSPALCMaximumGain.Location = new System.Drawing.Point(88, 72);
+            this.udDSPALCMaximumGain.Maximum = new decimal(new int[] {
             120,
             0,
             0,
             0});
-            this.udDSPALCThreshold.Minimum = new decimal(new int[] {
-            120,
+            this.udDSPALCMaximumGain.Minimum = new decimal(new int[] {
             0,
             0,
-            -2147483648});
-            this.udDSPALCThreshold.Name = "udDSPALCThreshold";
-            this.udDSPALCThreshold.Size = new System.Drawing.Size(48, 20);
-            this.udDSPALCThreshold.TabIndex = 6;
-            this.toolTip1.SetToolTip(this.udDSPALCThreshold, "This provides for a “threshold” AGC.  Irrespective of how weak a signal is, no ga" +
+            0,
+            0});
+            this.udDSPALCMaximumGain.Name = "udDSPALCMaximumGain";
+            this.udDSPALCMaximumGain.Size = new System.Drawing.Size(48, 20);
+            this.udDSPALCMaximumGain.TabIndex = 6;
+            this.toolTip1.SetToolTip(this.udDSPALCMaximumGain, "This provides for a “threshold” AGC.  Irrespective of how weak a signal is, no ga" +
         "in over this Max Gain is applied.");
-            this.udDSPALCThreshold.Value = new decimal(new int[] {
-            120,
+            this.udDSPALCMaximumGain.Value = new decimal(new int[] {
             0,
             0,
-            -2147483648});
-            this.udDSPALCThreshold.Visible = false;
-            this.udDSPALCThreshold.ValueChanged += new System.EventHandler(this.udDSPALCThreshold_ValueChanged);
-            this.udDSPALCThreshold.LostFocus += new System.EventHandler(this.udDSPALCThreshold_LostFocus);
+            0,
+            0});
+            this.udDSPALCMaximumGain.ValueChanged += new System.EventHandler(this.udDSPALCMaximumGain_ValueChanged);
+            this.udDSPALCMaximumGain.LostFocus += new System.EventHandler(this.udDSPALCThreshold_LostFocus);
             // 
             // udDSPALCSlope
             // 
@@ -24272,8 +24272,8 @@
             this.lblDSPALCThreshold.Name = "lblDSPALCThreshold";
             this.lblDSPALCThreshold.Size = new System.Drawing.Size(88, 24);
             this.lblDSPALCThreshold.TabIndex = 7;
-            this.lblDSPALCThreshold.Text = "Neg. Gain (dB):";
-            this.lblDSPALCThreshold.Visible = false;
+            this.lblDSPALCThreshold.Text = "Max Gain (dB):";
+            this.lblDSPALCThreshold.VisibleChanged += new System.EventHandler(this.udDSPALCMaximumGain_ValueChanged);
             // 
             // grpDSPAGC
             // 
@@ -28053,7 +28053,7 @@
             this.lblCFCPEG0.Name = "lblCFCPEG0";
             this.lblCFCPEG0.Size = new System.Drawing.Size(38, 13);
             this.lblCFCPEG0.TabIndex = 172;
-            this.lblCFCPEG0.Text = "-10 dB";
+            this.lblCFCPEG0.Text = "-16 dB";
             // 
             // tbCFCPEQGAIN
             // 
@@ -28061,12 +28061,13 @@
             this.tbCFCPEQGAIN.BackColor = System.Drawing.Color.Black;
             this.tbCFCPEQGAIN.LargeChange = 2;
             this.tbCFCPEQGAIN.Location = new System.Drawing.Point(189, 190);
-            this.tbCFCPEQGAIN.Minimum = -10;
+            this.tbCFCPEQGAIN.Minimum = -16;
             this.tbCFCPEQGAIN.Name = "tbCFCPEQGAIN";
             this.tbCFCPEQGAIN.Orientation = System.Windows.Forms.Orientation.Vertical;
             this.tbCFCPEQGAIN.Size = new System.Drawing.Size(20, 128);
             this.tbCFCPEQGAIN.TabIndex = 171;
             this.tbCFCPEQGAIN.TickFrequency = 2;
+            this.tbCFCPEQGAIN.Scroll += new System.EventHandler(this.tbCFCPEG_Scroll);
             // 
             // grpPhRot
             // 
@@ -28203,7 +28204,7 @@
             this.lblCFCPC15.Name = "lblCFCPC15";
             this.lblCFCPC15.Size = new System.Drawing.Size(35, 13);
             this.lblCFCPC15.TabIndex = 167;
-            this.lblCFCPC15.Text = "10 dB";
+            this.lblCFCPC15.Text = "16 dB";
             // 
             // lblCFCPC0
             // 
@@ -28222,6 +28223,7 @@
             this.tbCFCPRECOMP.BackColor = System.Drawing.Color.Black;
             this.tbCFCPRECOMP.LargeChange = 2;
             this.tbCFCPRECOMP.Location = new System.Drawing.Point(189, 6);
+            this.tbCFCPRECOMP.Maximum = 16;
             this.tbCFCPRECOMP.Name = "tbCFCPRECOMP";
             this.tbCFCPRECOMP.Orientation = System.Windows.Forms.Orientation.Vertical;
             this.tbCFCPRECOMP.Size = new System.Drawing.Size(20, 128);
@@ -28868,6 +28870,7 @@
             // 
             // tpTransmit
             // 
+            this.tpTransmit.Controls.Add(this.btnExportCurrentTXProfile);
             this.tpTransmit.Controls.Add(this.chkDSPTXMeterPeak);
             this.tpTransmit.Controls.Add(this.chkLimitExtAmpOnOverload);
             this.tpTransmit.Controls.Add(this.grpDSPSpeechProcessor);
@@ -28891,6 +28894,17 @@
             this.tpTransmit.Size = new System.Drawing.Size(584, 364);
             this.tpTransmit.TabIndex = 5;
             this.tpTransmit.Text = "Transmit";
+            // 
+            // btnExportCurrentTXProfile
+            // 
+            this.btnExportCurrentTXProfile.Location = new System.Drawing.Point(477, 182);
+            this.btnExportCurrentTXProfile.Name = "btnExportCurrentTXProfile";
+            this.btnExportCurrentTXProfile.Size = new System.Drawing.Size(64, 54);
+            this.btnExportCurrentTXProfile.TabIndex = 73;
+            this.btnExportCurrentTXProfile.Text = "Export Current Profile";
+            this.toolTip1.SetToolTip(this.btnExportCurrentTXProfile, "Export the curent profile and save to a file.");
+            this.btnExportCurrentTXProfile.UseVisualStyleBackColor = true;
+            this.btnExportCurrentTXProfile.Click += new System.EventHandler(this.btnExportCurrentTXProfile_Click);
             // 
             // chkDSPTXMeterPeak
             // 
@@ -29262,8 +29276,8 @@
             this.btnTXProfileDefImport.Name = "btnTXProfileDefImport";
             this.btnTXProfileDefImport.Size = new System.Drawing.Size(64, 24);
             this.btnTXProfileDefImport.TabIndex = 54;
-            this.btnTXProfileDefImport.Text = "Import";
-            this.toolTip1.SetToolTip(this.btnTXProfileDefImport, "Click to save the current settings to a TX Profile.");
+            this.btnTXProfileDefImport.Text = "Include";
+            this.toolTip1.SetToolTip(this.btnTXProfileDefImport, "Include the selected profile from the above list into my own list of profiles.");
             this.btnTXProfileDefImport.Click += new System.EventHandler(this.btnTXProfileDefImport_Click);
             // 
             // lstTXProfileDef
@@ -46834,7 +46848,7 @@
             this.btnImportDB.Size = new System.Drawing.Size(112, 23);
             this.btnImportDB.TabIndex = 21;
             this.btnImportDB.Text = "Import Database...";
-            this.toolTip1.SetToolTip(this.btnImportDB, "Import a saved Thetis Database file.");
+            this.toolTip1.SetToolTip(this.btnImportDB, "Import a database file, or partial database file such as an exported TX Profile");
             this.btnImportDB.Click += new System.EventHandler(this.btnImportDB_Click);
             // 
             // btnResetDB
@@ -48303,7 +48317,7 @@
             this.grpDSPALC.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.tbDSPALCHangThreshold)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.udDSPALCHangTime)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.udDSPALCThreshold)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udDSPALCMaximumGain)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.udDSPALCSlope)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.udDSPALCDecay)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.udDSPALCAttack)).EndInit();
@@ -51133,7 +51147,7 @@
         private System.Windows.Forms.TrackBarTS tbDSPALCHangThreshold;
         private System.Windows.Forms.NumericUpDownTS udDSPALCHangTime;
         private System.Windows.Forms.LabelTS lblDSPALCHangTime;
-        private System.Windows.Forms.NumericUpDownTS udDSPALCThreshold;
+        private System.Windows.Forms.NumericUpDownTS udDSPALCMaximumGain;
         private System.Windows.Forms.NumericUpDownTS udDSPALCSlope;
         private System.Windows.Forms.NumericUpDownTS udDSPALCDecay;
         private System.Windows.Forms.LabelTS lblDSPALCSlope;
@@ -51781,6 +51795,7 @@
         private System.Windows.Forms.RadioButtonTS radTXUSB;
         private System.Windows.Forms.RadioButtonTS radTXLSB;
         private System.Windows.Forms.RadioButtonTS radTXDSB;
+        private System.Windows.Forms.Button btnExportCurrentTXProfile;
 
     }
 }

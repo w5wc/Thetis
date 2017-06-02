@@ -113,13 +113,13 @@ namespace Thetis
             comboDSPDigRXBuf.Text = "1024";
             comboDSPDigTXBuf.Text = "1024";
 
-            comboDSPPhoneRXFiltSize.Text = "1024";
-            comboDSPPhoneTXFiltSize.Text = "1024";
-            comboDSPFMRXFiltSize.Text = "1024";
-            comboDSPFMTXFiltSize.Text = "1024";
-            comboDSPCWRXFiltSize.Text = "1024";
-            comboDSPDigRXFiltSize.Text = "1024";
-            comboDSPDigTXFiltSize.Text = "1024";
+            comboDSPPhoneRXFiltSize.Text = "4096";
+            comboDSPPhoneTXFiltSize.Text = "4096";
+            comboDSPFMRXFiltSize.Text = "4096";
+            comboDSPFMTXFiltSize.Text = "4096";
+            comboDSPCWRXFiltSize.Text = "4096";
+            comboDSPDigRXFiltSize.Text = "4096";
+            comboDSPDigTXFiltSize.Text = "4096";
 
             comboDSPPhoneRXFiltType.SelectedIndex = 0;
             comboDSPPhoneTXFiltType.SelectedIndex = 0;
@@ -157,6 +157,7 @@ namespace Thetis
             comboCATdatabits.Text = "8";
             comboCATstopbits.Text = "1";
             comboCATRigType.Text = "TS-2000";
+            comboFocusMasterMode.Text = "None";
 
             if (comboCAT2Port.Items.Count > 0) comboCAT2Port.SelectedIndex = 0;
             // if (comboCATPTTPort.Items.Count > 0) comboCATPTTPort.SelectedIndex = 0;
@@ -664,11 +665,6 @@ namespace Thetis
                 foreach (Control c2 in c.Controls)
                     ControlList(c2, ref a);
             }
-
-            //if (c.Name.StartsWith("rad"))
-            //{
-            //    Debug.WriteLine(c.Name);
-            //}
 
             if (c.GetType() == typeof(CheckBoxTS) || c.GetType() == typeof(CheckBox) ||
                 c.GetType() == typeof(ComboBoxTS) || c.GetType() == typeof(ComboBox) ||
@@ -1218,7 +1214,7 @@ namespace Thetis
             udDSPLevelerThreshold_ValueChanged(this, e);
             udDSPLevelerDecay_ValueChanged(this, e);
             //ALC
-            udDSPALCThreshold_ValueChanged(this, e);
+            udDSPALCMaximumGain_ValueChanged(this, e);
             udDSPALCDecay_ValueChanged(this, e);
             // AM/SAM Tab
             chkLevelFades_CheckedChanged(this, e);
@@ -1260,6 +1256,7 @@ namespace Thetis
             udTXFilterHigh_ValueChanged(this, e);
             udTXFilterLow_ValueChanged(this, e);
             udTransmitTunePower_ValueChanged(this, e);
+            chkTXTunePower_CheckedChanged(this, e);
             udPAGain_ValueChanged(this, e);
             radMicIn_CheckedChanged(this, e);
             radLineIn_CheckedChanged(this, e);
@@ -1268,6 +1265,7 @@ namespace Thetis
             udLineInBoost_ValueChanged(this, e);
             udTXAMCarrierLevel_ValueChanged(this, e);
             chkLimitExtAmpOnOverload_CheckedChanged(this, e);
+            chkBPF2Gnd_CheckedChanged(this, e);
             // Keyboard Tab
             comboKBTuneUp1_SelectedIndexChanged(this, e);
             comboKBTuneUp2_SelectedIndexChanged(this, e);
@@ -1536,7 +1534,7 @@ namespace Thetis
             dr["Lev_HangThreshold"] = tbDSPLevelerHangThreshold.Value;
 
             dr["ALC_Slope"] = (int)udDSPALCSlope.Value;
-            dr["ALC_MaxGain"] = (int)udDSPALCThreshold.Value;
+            dr["ALC_MaximumGain"] = (int)udDSPALCMaximumGain.Value;
             dr["ALC_Attack"] = (int)udDSPALCAttack.Value;
             dr["ALC_Decay"] = (int)udDSPALCDecay.Value;
             dr["ALC_Hang"] = (int)udDSPALCHangTime.Value;
@@ -2993,6 +2991,10 @@ namespace Thetis
                     case Model.ANAN200D:
                         force_model = true;
                         radGenModelANAN200D.Checked = true;
+                        break;
+                    case Model.ANAN8000D:
+                        force_model = true;
+                        radGenModelANAN8000D.Checked = true;
                         break;
 
                 }
@@ -8973,9 +8975,10 @@ namespace Thetis
 
         #region ALC
 
-        private void udDSPALCThreshold_ValueChanged(object sender, System.EventArgs e)
+        private void udDSPALCMaximumGain_ValueChanged(object sender, System.EventArgs e)
         {
-            //DttSP.SetTXALCBot((double)udDSPALCThreshold.Value);
+            WDSP.SetTXAALCMaxGain(WDSP.id(1, 0), (double)udDSPALCMaximumGain.Value);
+            WDSP.ALCGain = (double)udDSPALCMaximumGain.Value;
         }
 
         private void udDSPALCDecay_ValueChanged(object sender, System.EventArgs e)
@@ -9126,7 +9129,7 @@ namespace Thetis
             tbDSPLevelerHangThreshold.Value = (int)dr["Lev_HangThreshold"];
 
             udDSPALCSlope.Value = (int)dr["ALC_Slope"];
-            udDSPALCThreshold.Value = (int)dr["ALC_MaxGain"];
+            udDSPALCMaximumGain.Value = (int)dr["ALC_MaximumGain"];
             udDSPALCAttack.Value = (int)dr["ALC_Attack"];
             udDSPALCDecay.Value = (int)dr["ALC_Decay"];
             udDSPALCHangTime.Value = (int)dr["ALC_Hang"];
@@ -9299,7 +9302,7 @@ namespace Thetis
             dr["Lev_HangThreshold"] = tbDSPLevelerHangThreshold.Value;
 
             dr["ALC_Slope"] = (int)udDSPALCSlope.Value;
-            dr["ALC_MaxGain"] = (int)udDSPALCThreshold.Value;
+            dr["ALC_MaximumGain"] = (int)udDSPALCMaximumGain.Value;
             dr["ALC_Attack"] = (int)udDSPALCAttack.Value;
             dr["ALC_Decay"] = (int)udDSPALCDecay.Value;
             dr["ALC_Hang"] = (int)udDSPALCHangTime.Value;
@@ -11351,35 +11354,84 @@ namespace Thetis
             path = path.Substring(0, path.LastIndexOf("\\"));
             openFileDialog1.InitialDirectory = path;
             openFileDialog1.ShowDialog();
+            bool ok = false;
+            if (openFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                ok = CompleteImport();
+            }
+            if (ok) console.Close();  // Save everything 
         }
 
         private void openFileDialog1_FileOk(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            CompleteImport();
+           // CompleteImport();
         }
 
-        private void CompleteImport()
+        private bool CompleteImport()
         {
-            if (DB.ImportDatabase(openFileDialog1.FileName))
-                MessageBox.Show("Database Imported Successfully");
+            bool success;
+            //if (DB.ImportDatabase(openFileDialog1.FileName))
+            //    MessageBox.Show("Database Imported Successfully");
 
-            GetTxProfiles();
-            console.UpdateTXProfile(TXProfile);
+            //-W2PA Import more carefully, allowing DBs created by previous versions to retain settings and options
+            if (DB.ImportAndMergeDatabase(openFileDialog1.FileName, console.AppDataPath))
+            {
+                MessageBox.Show("Database Imported Successfully. Thetis will now close.\n\nPlease RE-START.");
+                success = true;
+            }
+            else
+            {
+                MessageBox.Show("Database could not be imported. Previous database has been kept.");
+                success = false;
+            }
 
-            GetOptions();					// load all database values
-            console.GetState();
-            if (console.EQForm != null) Common.RestoreForm(console.EQForm, "EQForm", false);
-            if (console.XVTRForm != null) Common.RestoreForm(console.XVTRForm, "XVTR", false);
-            // if (console.ProdTestForm != null) Common.RestoreForm(console.ProdTestForm, "ProdTest", false);
+            // Archive old database file write a new one.
+            if (success)
+            {
+                string archivePath = console.AppDataPath + "DB_Archive\\";
+                if (!Directory.Exists(archivePath)) Directory.CreateDirectory(archivePath);
+                string justFileName = console.DBFileName.Substring(console.DBFileName.LastIndexOf("\\") + 1);
+                string datetime = DateTime.Now.ToShortDateString().Replace("/", "-") + "_" + DateTime.Now.ToShortTimeString().Replace(":", ".");
+                File.Copy(console.DBFileName, archivePath + "Thetis_database_" + datetime + ".xml");
+                File.Delete(console.DBFileName);
+                DB.WriteCurrentDB(console.DBFileName);
 
-            SaveOptions();					// save all database values
-            console.SaveState();
-            if (console.EQForm != null) Common.SaveForm(console.EQForm, "EQForm");
-            if (console.XVTRForm != null) Common.SaveForm(console.XVTRForm, "XVTR");
-            // if (console.ProdTestForm != null) Common.SaveForm(console.ProdTestForm, "ProdTest");
+                //// Unnecessary to do this applicationof new settings since we close after import and preserve the newly merged database
+                //// Also, not closing would allow changes to the configuration that would be overwritten
+                //// Saving for later consideration
+                //GetTxProfiles();  // load new database values
+                //GetOptions();
+                //console.GetState();
+                //GetTxProfiles();
+                //GetTxProfileDefs();
+                //if (console.EQForm != null) Common.RestoreForm(console.EQForm, "EQForm", false);
+                //if (console.XVTRForm != null) Common.RestoreForm(console.XVTRForm, "XVTR", false);
+                //if (console.memoryForm != null) Common.RestoreForm(console.memoryForm, "MemoryForm", false);
+                //if (console.diversityForm != null) Common.RestoreForm(console.diversityForm, "DiversityForm", false);
+                //if (console.psform != null) Common.RestoreForm(console.psform, "PureSignal", false);
+                ////if (console.ampView != null) Common.RestoreForm(console.XVTRForm, "AmpView", false);  //handled by PSform?
+            }
 
-            udTransmitTunePower_ValueChanged(this, EventArgs.Empty);
-            //console.ResetMemForm();
+            return success;
+
+            ////Old code
+            //GetTxProfiles();
+            //console.UpdateTXProfile(TXProfile);
+
+            //GetOptions();					// load all database values
+            //console.GetState();
+            //if (console.EQForm != null) Common.RestoreForm(console.EQForm, "EQForm", false);
+            //if (console.XVTRForm != null) Common.RestoreForm(console.XVTRForm, "XVTR", false);
+            //// if (console.ProdTestForm != null) Common.RestoreForm(console.ProdTestForm, "ProdTest", false);
+
+            //SaveOptions();					// save all database values
+            //console.SaveState();
+            //if (console.EQForm != null) Common.SaveForm(console.EQForm, "EQForm");
+            //if (console.XVTRForm != null) Common.SaveForm(console.XVTRForm, "XVTR");
+            //// if (console.ProdTestForm != null) Common.SaveForm(console.ProdTestForm, "ProdTest");
+
+            //udTransmitTunePower_ValueChanged(this, EventArgs.Empty);
+            ////console.ResetMemForm();
         }
 
         #endregion
@@ -11722,7 +11774,7 @@ namespace Thetis
 
         private void udDSPALCThreshold_LostFocus(object sender, EventArgs e)
         {
-            udDSPALCThreshold.Value = udDSPALCThreshold.Value;
+            udDSPALCMaximumGain.Value = udDSPALCMaximumGain.Value;
         }
 
         private void udDSPALCSlope_LostFocus(object sender, EventArgs e)
@@ -12595,6 +12647,51 @@ namespace Thetis
             }
 
             console.UpdateTXProfile(name);
+        }
+
+        //-W2PA Export a single TX Profile to send to someone else for importing.
+        private void ExportCurrentTxProfile()
+        {
+            string fileName = console.AppDataPath + current_profile + ".xml";
+
+            DataRow[] rows = DB.ds.Tables["TxProfile"].Select(
+                "'" + current_profile + "' = Name");
+            DataRow exportRow = null;
+            if (rows.Length > 0)
+            {
+                exportRow = rows[0];
+            }
+            else
+            {
+                MessageBox.Show("Can not locate " + current_profile + ".",  // This should never happen.
+                    "Profile error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+                return;
+            }
+
+            DataSet exDS = DB.ds.Clone();
+            DataTable pTable = pTable = DB.ds.Tables["TxProfile"].Clone();
+            pTable.ImportRow(exportRow);
+            exDS.Merge(pTable);
+
+            try
+            {
+                exDS.WriteXml(fileName, XmlWriteMode.WriteSchema); // Writing with schema isn't necessary for import?
+            }
+            catch
+            {
+                MessageBox.Show("Can not write " + fileName + ".",
+                    "Export error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+                return;
+            }
+
+            MessageBox.Show("Profile" + current_profile + " has been saved in file " + fileName,
+                    "Done",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
         }
 
         private void Setup_KeyDown(object sender, System.Windows.Forms.KeyEventArgs e)
@@ -17562,7 +17659,12 @@ namespace Thetis
                 value = 2;
             console.radio.GetDSPTX(0).SubAMMode = value;
         }
-  }
+
+        private void btnExportCurrentTXProfile_Click(object sender, EventArgs e)
+        {
+            ExportCurrentTxProfile();
+        }
+    }
 
     #region PADeviceInfo Helper Class
 
