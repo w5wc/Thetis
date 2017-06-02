@@ -1,7 +1,7 @@
-bin
-build
-Source/Console/obj
-Source/Midi2Cat/obj
-Source/Midi2Cat/bin
-Source/*.suo
-lib/WinFormsUI/obj
+Project Files/bin
+Project Files/build
+Project Files/Source/Console/obj
+Project Files/Source/Midi2Cat/obj
+Project Files/Source/Midi2Cat/bin
+Project Files/Source/*.suo
+Project Files/lib/WinFormsUI/obj
