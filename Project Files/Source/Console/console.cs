@@ -1223,59 +1223,7 @@ namespace Thetis
                         }
                     }
                 }
-/*
-                if (File.Exists(db_file_name))
-                {
-                    DB.Init(this);
 
-                    string DBVersion = "";
-                    string version = getVersion();
-                    ArrayList a = DB.GetVars("State");
-                    a.Sort();
-                    foreach (string s in a)
-                    {
-                        string[] vals = s.Split('/');
-                        string name = vals[0];
-                        string val = vals[1];
-
-                        switch (name)
-                        {
-                            case "VersionNumber":
-                                DBVersion = val;
-                                break;
-                        }
-                    }
-
-                    if (DBVersion != "" && DBVersion != version)
-                    {
-                        DialogResult dr = MessageBox.Show(
-                            "The database was created by a different version of Thetis.\n" +
-                            "This can result in an undesirable behavior of your radio.\n\n\n" +
-                            "Would you like to reset the database to default values?",
-                            "Wrong Database Detected!",
-                            MessageBoxButtons.YesNo,
-                            MessageBoxIcon.Warning,
-                            MessageBoxDefaultButton.Button1,
-                            (MessageBoxOptions)0x40000);
-
-                        if (dr == DialogResult.Yes)
-                        {
-                            string desktop = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-                            string datetime = DateTime.Now.ToShortDateString().Replace("/", "-") + "_" +
-                                DateTime.Now.ToShortTimeString().Replace(":", ".");
-
-                            string file = db_file_name.Substring(db_file_name.LastIndexOf("\\") + 1);
-                            file = file.Substring(0, file.Length - 4);
-                            if (!Directory.Exists(AppDataPath + "\\DB_Archive\\"))
-                                Directory.CreateDirectory(AppDataPath + "\\DB_Archive\\");
-
-                            File.Copy(db_file_name, AppDataPath + "\\DB_Archive\\Thetis_" + file + "_" + datetime + ".xml");
-                            File.Delete(db_file_name);
-                            Thread.Sleep(100);
-                        }
-                    }
-                }
-*/
                 if (File.Exists(db_file_name))
                 {
                     if (!DB.Init(this)) // Init throws an exception on reading XML files that are too corrupted for DataSet.ReadXml to handle.
@@ -1362,6 +1310,7 @@ namespace Thetis
                                 resetForAutoMerge = true;  // a flag to main()
 
                                 MessageBox.Show("Your database file is from a previous version.\nMerging it into a new reset database will now be attempted.\n\n"
+                                    +"First your old database will be saved in DB_Archive folder,\nand a database reset will happen.\n\n"
                                     + "Please RE-START when the reset finishes.", "Note", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                             }
 
@@ -2378,6 +2327,10 @@ namespace Thetis
               {
 
               }*/
+
+            if (n1mm_udp_client != null)
+                n1mm_udp_client.Close();
+
             if (SaveTXProfileOnExit == true)    // save the tx profile
             {
                 SetupForm.SaveTXProfileData();
@@ -26157,39 +26110,49 @@ namespace Thetis
             {
                 int diff = cw_pitch - value;
                 cw_pitch = value;
-
-                // Audio.SineFreq1 = cw_pitch;
+                if (cw_pitch <= 0) cw_pitch = 0;  //-W2PA
                 udCWPitch.Value = cw_pitch;
                 Display.CWPitch = cw_pitch;
                 NetworkIO.SetCWSidetoneFreq(cw_pitch);
 
+                //-W2PA June 2017
+                //      This centers the passband of the CW filters on the pitch frequency, but if CWPitch setter is called by mode buttons,  
+                //      it prevents filter setting from persisting when the mode changes or band changes, since band changes trigger mode changes.
+                //      This happened because of a line:  CWPitch = cw_pitch;  in SetRX1Mode and SetRX2Mode.  
+                //      Those are now commented out. This should only be called by the CW Pitch control in the UI and Setup, or by a CAT command.
                 for (Filter f = Filter.F1; f < Filter.LAST; f++)
                 {
+                    // Adjust CWL filters
                     int low = rx1_filters[(int)DSPMode.CWL].GetLow(f);
                     int high = rx1_filters[(int)DSPMode.CWL].GetHigh(f);
                     string name = rx1_filters[(int)DSPMode.CWL].GetName(f);
 
                     int bw = high - low;
+                    low = -cw_pitch - bw / 2;
+                    high = -cw_pitch + bw / 2;
 
-                    if (f != Filter.VAR1 && f != Filter.VAR2)
+                    if (high > 0) // stop shifting the passband when it hits the image limit, while allowing pitch to continue to decrease
                     {
-                        low = -cw_pitch - bw / 2;
-                        high = -cw_pitch + bw / 2;
+                        low = low - high;  // slide the passband down to put its edge at zero
+                        high = 0;
                     }
 
                     rx1_filters[(int)DSPMode.CWL].SetFilter(f, low, high, name);
                     rx2_filters[(int)DSPMode.CWL].SetFilter(f, low, high, name); // n6vl
 
+                    // Adjust CWU filters
                     low = rx1_filters[(int)DSPMode.CWU].GetLow(f);
                     high = rx1_filters[(int)DSPMode.CWU].GetHigh(f);
                     name = rx1_filters[(int)DSPMode.CWU].GetName(f);
 
                     bw = high - low;
+                    low = cw_pitch - bw / 2;
+                    high = cw_pitch + bw / 2;
 
-                    if (f != Filter.VAR1 && f != Filter.VAR2)
+                    if (low < 0) // stop adjusting the passband when it hits the image limit, while allowing pitch to continue to decrease
                     {
-                        low = cw_pitch - bw / 2;
-                        high = cw_pitch + bw / 2;
+                        high = high - low;  // slide the passband up to put its edge at zero
+                        low = 0;
                     }
 
                     rx1_filters[(int)DSPMode.CWU].SetFilter(f, low, high, name);
@@ -45273,6 +45236,21 @@ namespace Thetis
             ptbFilterWidth.Value = new_val;
         }
 
+        //-W2PA Remember the width when the Width slider last hit the image limit.  Used by ptbFilterWidth_Scroll.
+        private int var1WdithAtLimit = 0;
+        private int Var1WidthAtLimit
+        {
+            get
+            {
+                return var1WdithAtLimit;
+            }
+            set
+            {
+                var1WdithAtLimit = value;
+            }
+        }
+
+        private Boolean beyondLimit = false;
         private void ptbFilterWidth_Scroll(object sender, System.EventArgs e)
         {
             if (rx1_dsp_mode == DSPMode.DRM || rx1_dsp_mode == DSPMode.SPEC)
@@ -45332,14 +45310,46 @@ namespace Thetis
                     break;
                 case DSPMode.CWL:
                 case DSPMode.DIGL:
-                    low = current_center - new_bw / 2;
-                    high = current_center + new_bw / 2;
-                    /*if(high > -default_low_cut && (int)udFilterHigh.Value <= -default_low_cut)
+                    if ((int)udFilterHigh.Value > 0) // If we're already starting out of bounds, suspend trying to stay on the correct side.
                     {
-                        high = -default_low_cut;
-                        low = high - new_bw;
+                        low = current_center - new_bw / 2;
+                        high = current_center + new_bw / 2;
+                        beyondLimit = true;
                     }
-                    else*/
+                    else
+                    {
+                        //-W2PA Stop shifting the passband when it hits the image limit, while allowing width to continue to increa                   
+                        if (!beyondLimit)
+                        {
+                            if ((current_center + new_bw / 2) < 0) // new bw doesn't put us beyond limit
+                            {
+                                low = current_center - new_bw / 2;
+                                high = current_center + new_bw / 2;
+                            }
+                            else  // new bw puts us beyond limit
+                            {
+                                Var1WidthAtLimit = Math.Abs(-current_center) * 2;
+                                beyondLimit = true;
+                                high = 0;
+                                low = -new_bw;
+                            }
+                        }
+                        else  // currently beyond limit
+                        {
+                            if (new_bw < Var1WidthAtLimit)  // new bw will go below limit
+                            {
+                                beyondLimit = false;
+                                low = current_center - new_bw / 2;
+                                high = current_center + new_bw / 2;
+                            }
+                            else  // new bw will still be above limit
+                            {
+                                high = 0;
+                                low = -new_bw;
+                            }
+                        }
+                    }
+
                     if (low < -9999)
                     {
                         low = -9999;
@@ -45352,14 +45362,46 @@ namespace Thetis
                     break;
                 case DSPMode.CWU:
                 case DSPMode.DIGU:
-                    low = current_center - new_bw / 2;
-                    high = current_center + new_bw / 2;
-                    /*if(low < default_low_cut && (int)udFilterLow.Value >= default_low_cut)
+                     if ((int)udFilterLow.Value < 0) // If we're already starting out of bounds, suspend trying to stay on the correct side.
                     {
-                        low = default_low_cut;
-                        high = low + new_bw;
+                        low = current_center - new_bw / 2;
+                        high = current_center + new_bw / 2;
+                        beyondLimit = true;
                     }
-                    else*/
+                    else
+                    {
+                        //-W2PA Stop shifting the passband when it hits the image limit, while allowing width to continue to increa                   
+                        if (!beyondLimit)
+                        {
+                            if ((current_center - new_bw / 2) > 0) // new bw doesn't put us beyond limit
+                            {
+                                low = current_center - new_bw / 2;
+                                high = current_center + new_bw / 2;
+                            }
+                            else  // new bw puts us beyond limit
+                            {
+                                Var1WidthAtLimit = Math.Abs(current_center) * 2;
+                                beyondLimit = true;
+                                low = 0;
+                                high = new_bw;
+                            }
+                        }
+                        else  // currently beyond limit
+                        {
+                            if (new_bw < Var1WidthAtLimit)  // new bw will go below limit
+                            {
+                                beyondLimit = false;
+                                low = current_center - new_bw / 2;
+                                high = current_center + new_bw / 2;
+                            }
+                            else  // new bw will still be above limit
+                            {
+                                low = 0;
+                                high = new_bw;
+                            }
+                        }
+                    }                    
+
                     if (high > 9999)
                     {
                         high = 9999;
