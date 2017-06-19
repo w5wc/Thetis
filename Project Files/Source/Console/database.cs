@@ -7209,7 +7209,7 @@ namespace Thetis
             dr["CW_RX_DSP_Buffer"] = "64";
 
             dr["Phone_RX_DSP_Filter_Size"] = "2048";
-            dr["Phone_TX_DSP_Filter_Size"] = "16384";
+            dr["Phone_TX_DSP_Filter_Size"] = "2048";
             dr["FM_RX_DSP_Filter_Size"] = "4096";
             dr["FM_TX_DSP_Filter_Size"] = "2048";
             dr["Digi_RX_DSP_Filter_Size"] = "2048";
@@ -7373,7 +7373,7 @@ namespace Thetis
             dr["CW_RX_DSP_Buffer"] = "64";
 
             dr["Phone_RX_DSP_Filter_Size"] = "2048";
-            dr["Phone_TX_DSP_Filter_Size"] = "16384";
+            dr["Phone_TX_DSP_Filter_Size"] = "2048";
             dr["FM_RX_DSP_Filter_Size"] = "4096";
             dr["FM_TX_DSP_Filter_Size"] = "2048";
             dr["Digi_RX_DSP_Filter_Size"] = "2048";
@@ -7537,7 +7537,7 @@ namespace Thetis
             dr["CW_RX_DSP_Buffer"] = "64";
 
             dr["Phone_RX_DSP_Filter_Size"] = "2048";
-            dr["Phone_TX_DSP_Filter_Size"] = "16384";
+            dr["Phone_TX_DSP_Filter_Size"] = "2048";
             dr["FM_RX_DSP_Filter_Size"] = "4096";
             dr["FM_TX_DSP_Filter_Size"] = "2048";
             dr["Digi_RX_DSP_Filter_Size"] = "2048";
@@ -7701,7 +7701,7 @@ namespace Thetis
             dr["CW_RX_DSP_Buffer"] = "64";
 
             dr["Phone_RX_DSP_Filter_Size"] = "2048";
-            dr["Phone_TX_DSP_Filter_Size"] = "16384";
+            dr["Phone_TX_DSP_Filter_Size"] = "2048";
             dr["FM_RX_DSP_Filter_Size"] = "4096";
             dr["FM_TX_DSP_Filter_Size"] = "2048";
             dr["Digi_RX_DSP_Filter_Size"] = "2048";
