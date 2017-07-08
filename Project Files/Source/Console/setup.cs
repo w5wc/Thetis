@@ -1388,7 +1388,7 @@ namespace Thetis
             udDSPSNBThresh2_ValueChanged(this, e);
             // MNF
             chkMNFAutoIncrease_CheckedChanged(this, e);
-/*
+
 			chkEnableXVTRHF_CheckedChanged(this, e);
 
             // CFCompressor
@@ -1397,11 +1397,12 @@ namespace Thetis
             tbCFCPRECOMP_Scroll(this, e);
             chkCFCPeqEnable_CheckedChanged(this, e);
             tbCFCPEG_Scroll(this, e);
+
             // Phase Rotator
             chkPHROTEnable_CheckedChanged(this, e);
             udPhRotFreq_ValueChanged(this, e);
             udPHROTStages_ValueChanged(this, e);
-        */
+        
             // TXEQ
             console.EQForm.setTXEQProfile(this, e);
 
@@ -5273,9 +5274,9 @@ namespace Thetis
                 udCFC8.Value = Math.Max(udCFC8.Minimum, Math.Min(udCFC8.Maximum, value[30]));
                 udCFC9.Value = Math.Max(udCFC9.Minimum, Math.Min(udCFC9.Maximum, value[31]));
 
-              //  tbCFCPRECOMP_Scroll(this, EventArgs.Empty);
-              //  tbCFCPEG_Scroll(this, EventArgs.Empty);
-               // setCFCProfile(this, EventArgs.Empty);
+                tbCFCPRECOMP_Scroll(this, EventArgs.Empty);
+                tbCFCPEG_Scroll(this, EventArgs.Empty);
+                setCFCProfile(this, EventArgs.Empty);
             }
         }
 
