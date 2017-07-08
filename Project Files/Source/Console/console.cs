@@ -718,6 +718,8 @@ namespace Thetis
         private bool isexpanded = true;   //w3sz true if expanded panel is being displayed
         public bool resetForAutoMerge = false;
 
+        private bool run_setup_wizard = false;
+
         public int band_160m_index;						// These band indexes are used to keep track of which
         public int band_80m_index;				    	// location in the bandstack was last saved/recalled
         public int band_60m_index;
@@ -1447,11 +1449,12 @@ namespace Thetis
             this.Text = TitleBar.GetString();
             SetupForm.UpdateCustomTitle();
 
-            //if (run_setup_wizard)
-            //{
-            //    var w = new SetupWizard(this, 0);
-            //    w.ShowDialog();
-            //}
+            //-W2PA Need to do this if first time during database import process
+            if (run_setup_wizard)
+            {
+                var w = new SetupWizard(this, 0);
+                w.ShowDialog();
+            }
 
             if (rx1_meter_cal_offset == 0.0f)
             {
@@ -1913,7 +1916,8 @@ namespace Thetis
 
             tune_power = 0;
             calibrating = false;
-            // run_setup_wizard = true;
+            //-W2PA Need this for DB import
+            run_setup_wizard = true;
 
             // get culture specific decimal separator
             separator = CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
@@ -2347,6 +2351,7 @@ namespace Thetis
             DB.Exit();					// close and save database
             NetworkIO.DestroyRNet();
             Win32.TimeEndPeriod(1); // return to previous timing precision
+            Thread.Sleep(100);
         }
 
         public void SaveState()
@@ -4033,10 +4038,10 @@ namespace Thetis
                                 num = 0;
                             MemForm.Left = num;
                             break; */
-                    //case "SetupWizard":
-                    //    if (val == "1")
-                    //        run_setup_wizard = false;
-                    //    break;
+                    case "SetupWizard":
+                        if (val == "1")
+                            run_setup_wizard = false;
+                        break;
                     //case "show_alpha_warning":
                     //	show_alpha_warning = bool.Parse(val);
                     //	break;
@@ -39403,15 +39408,32 @@ namespace Thetis
             {
                 double rx1_osc = Math.Round(-(VFOAFreq - center_frequency) * 1e6);
 
-                if (rx1_osc < -sample_rate1 / 2)
+                //if (rx1_osc < -sample_rate1 / 2)
+                //{
+                //    VFOAFreq = center_frequency + ((sample_rate1 / 2) - 1) * 0.0000010; 
+                //    return;
+                //}
+                //else if (rx1_osc > sample_rate1 / 2)
+                //{
+                //    VFOAFreq = center_frequency + ((-sample_rate1 / 2) + 1) * 0.0000010;
+                //    return;
+                //}
+
+                //-W2PA If we tune beyond the display limits, re-center and keep going.  Original code above just stops tuning at edges.
+                double Lmargin = Convert.ToDouble( -Display.RX1FilterLow );
+                double Hmargin = Convert.ToDouble( Display.RX1FilterHigh );
+                if (Lmargin < 0.0) Lmargin = 0.0;
+                if (Hmargin < 0.0) Hmargin = 0.0;
+                //double Lmargin = 50.0;
+                //double Hmargin = 50.0;
+                double Ldisp = Convert.ToDouble(Display.RXDisplayLow);
+                double Hdisp = Convert.ToDouble(Display.RXDisplayHigh);
+                if ( ( (-rx1_osc) - Lmargin) < Ldisp || ( (-rx1_osc) + Hmargin) > Hdisp)
                 {
-                    VFOAFreq = center_frequency + ((sample_rate1 / 2) - 1) * 0.0000010;
-                    return;
-                }
-                else if (rx1_osc > sample_rate1 / 2)
-                {
-                    VFOAFreq = center_frequency + ((-sample_rate1 / 2) + 1) * 0.0000010;
-                    return;
+                    center_frequency = freq;
+                    update_centerfreq = false;
+                    VFOAFreq = freq;
+                    rx1_osc = 0.0;
                 }
 
                 if (chkRIT.Checked)
@@ -39785,12 +39807,23 @@ namespace Thetis
                     if (!click_tune_display)
                         FWCDDSFreq = rx_freq; // update rx freq
 
-                    if (click_tune_display && rx1_spectrum_tune_drag)
+                    if (click_tune_display) //&& rx1_spectrum_tune_drag) //-W2PA This was preventing proper receiver adjustment
                     {
                         if (rx1_xvtr_index >= 0)
                             FWCDDSFreq = XVTRForm.TranslateFreq(center_frequency);
                         else
+                        {
                             FWCDDSFreq = center_frequency;
+                            switch (RX1DSPMode)  //-W2PA Account for offset when in CW modes.
+                            {
+                                case DSPMode.CWL:
+                                    FWCDDSFreq += CWPitch * 1.0e-6;
+                                    break;
+                                case DSPMode.CWU:
+                                    FWCDDSFreq -= CWPitch * 1.0e-6;
+                                    break;
+                            }
+                        }
                     }
 
                     if (chkEnableMultiRX.Checked)
@@ -40164,15 +40197,32 @@ namespace Thetis
             {
                 double rx2_osc = Math.Round(-(VFOBFreq - center_rx2_frequency) * 1e6);
 
-                if (rx2_osc < -sample_rate1 / 2)
+                //if (rx2_osc < -sample_rate1 / 2)
+                //{
+                //    VFOBFreq = center_rx2_frequency + ((sample_rate1 / 2) - 1) * 0.0000010;
+                //    return;
+                //}
+                //else if (rx2_osc > sample_rate1 / 2)
+                //{
+                //    VFOBFreq = center_rx2_frequency + ((-sample_rate1 / 2) + 1) * 0.0000010;
+                //    return;
+                //}
+
+                //-W2PA If we tune beyond the display limits, re-center and keep going.  Original code above just stops tuning at edges.
+                double Lmargin = Convert.ToDouble(-Display.RX2FilterLow);
+                double Hmargin = Convert.ToDouble(Display.RX2FilterHigh);
+                if (Lmargin < 0.0) Lmargin = 0.0;
+                if (Hmargin < 0.0) Hmargin = 0.0;
+                //double Lmargin = 50.0;
+                //double Hmargin = 50.0;
+                double Ldisp = Convert.ToDouble(Display.RX2DisplayLow);
+                double Hdisp = Convert.ToDouble(Display.RX2DisplayHigh);
+                if (((-rx2_osc) - Lmargin) < Ldisp || ((-rx2_osc) + Hmargin) > Hdisp)
                 {
-                    VFOBFreq = center_rx2_frequency + ((sample_rate1 / 2) - 1) * 0.0000010;
-                    return;
-                }
-                else if (rx2_osc > sample_rate1 / 2)
-                {
-                    VFOBFreq = center_rx2_frequency + ((-sample_rate1 / 2) + 1) * 0.0000010;
-                    return;
+                    center_rx2_frequency = freq;
+                    update_rx2_centerfreq = false;
+                    VFOBFreq = freq;
+                    rx2_osc = 0.0;
                 }
 
                 if (chkRIT.Checked && VFOSync)
@@ -40629,8 +40679,19 @@ namespace Thetis
                 if (!click_tune_rx2_display || set_rx2_freq)
                     RX2DDSFreq = freq;
 
-                if (click_tune_rx2_display && rx2_spectrum_tune_drag)
+                if (click_tune_rx2_display) //&& rx2_spectrum_tune_drag) //-W2PA This was preventing proper receiver adjustment
+                {
                     RX2DDSFreq = center_rx2_frequency;
+                    switch (RX2DSPMode)  //-W2PA Account for offset when in CW modes.
+                    {
+                        case DSPMode.CWL:
+                            RX2DDSFreq += CWPitch * 1.0e-6;
+                            break;
+                        case DSPMode.CWU:
+                            RX2DDSFreq -= CWPitch * 1.0e-6;
+                            break;
+                    }
+                }
             }
 
             set_rx2_freq = false;
@@ -42999,6 +43060,8 @@ namespace Thetis
             ptbDisplayPan_Scroll(btnDisplayPanCenter, EventArgs.Empty);
         }
 
+        private double lastZoom = 1.0;
+
         private void ptbDisplayZoom_Scroll(object sender, System.EventArgs e)
         {
             specRX.GetSpecRX(0).ZoomSlider = ((double)ptbDisplayZoom.Value - 10.0) / 230.0;
@@ -43024,7 +43087,17 @@ namespace Thetis
             CalcRX2DisplayFreq();
             CalcTXDisplayFreq();
 
-            //if (ptbDisplayZoom.Focused) btnHidden.Focus();
+ 
+            if (initializing) lastZoom = zoom_factor;
+            Boolean zoomingIn = (zoom_factor > lastZoom);
+            if (ClickTuneDisplay && zoomingIn)  //-W2PA Force centering display when zooming in with CTUN on, to keep the vfo within the display
+            {
+                center_frequency = VFOAFreq; 
+                txtVFOAFreq_LostFocus(this, EventArgs.Empty);
+            }
+            lastZoom = zoom_factor; 
+
+           //if (ptbDisplayZoom.Focused) btnHidden.Focus();
             if (sender.GetType() == typeof(PrettyTrackBar))
             {
                 ptbDisplayZoom.Focus();
@@ -52657,14 +52730,14 @@ namespace Thetis
         private void chkFWCATU_CheckedChanged(object sender, EventArgs e)
         {
             // if (SetupForm != null) SetupForm.X2TR = chkX2TR.Checked;
-            //  if (chkFWCATU.Checked)
+            if (chkFWCATU.Checked)
             {
                 bool rit_on = chkRIT.Checked;
                 chkRIT.Checked = false;
                 ClickTuneDisplay = chkFWCATU.Checked;
                 chkRIT.Checked = rit_on;
             }
-            //  else ClickTuneDisplay = false;
+            else ClickTuneDisplay = false;
 
             if (chkFWCATU.Checked && chkVFOSync.Checked)
             {

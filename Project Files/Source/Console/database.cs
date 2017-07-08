@@ -8464,6 +8464,26 @@ namespace Thetis
                                 row["Value"] = VersionString;
                                 tempMergedTable.ImportRow(row);
                             }
+                            else if (thisKey.Contains("_by_band")) // Exception: expand an old per-band string into a new, longer one
+                            {
+                                DataRow newSettingsRow = row;
+                                DataRow oldSettingsRow;
+                                string selector = "Key = '" + row["Key"] + "'";
+                                DataRow[] foundRow = tempTable.Select(selector);
+                                if (foundRow.Length != 0)
+                                {
+                                    oldSettingsRow = foundRow[0];
+                                    string oldSettingsValue = Convert.ToString(oldSettingsRow["Value"]);
+                                    string newSettingsValue = oldSettingsValue;
+                                    int newSettingsLength = (Convert.ToString(newSettingsRow["Value"])).Length;
+                                    string paddingDefault = "|" + oldSettingsValue[oldSettingsValue.Length - 1];
+                                    for (int i = (oldSettingsValue.Length); i < newSettingsLength; i += 2)  // if new length is shorter, do nothing
+                                        newSettingsValue += paddingDefault;  // expand old string into larger new string
+                                    newSettingsRow["Value"] = newSettingsValue;
+                                    tempMergedTable.ImportRow(newSettingsRow);
+                                }
+                                else tempMergedTable.ImportRow(row);
+                            }
                             else
                             {
                                 string selector = "Key = '" + row["Key"] + "'";
