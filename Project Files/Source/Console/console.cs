@@ -228,23 +228,6 @@ namespace Thetis
         NONE,			// For Elecraft or similar XVTR
     }
 
-    public enum SoundCard
-    {
-        FIRST = -1,
-        UNSUPPORTED_CARD,
-        DELTA_44,
-        FIREBOX,
-        EDIROL_FA_66,
-        AUDIGY,
-        AUDIGY_2,
-        AUDIGY_2_ZS,
-        EXTIGY,
-        MP3_PLUS,
-        SANTA_CRUZ,
-        HPSDR,
-        LAST,
-    }
-
     public enum DisplayMode
     {
         FIRST = -1,
