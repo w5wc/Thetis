@@ -1452,8 +1452,15 @@ namespace Thetis
             //-W2PA Need to do this if first time during database import process
             if (run_setup_wizard)
             {
-                var w = new SetupWizard(this, 0);
-                w.ShowDialog();
+               // var w = new SetupWizard(this, 0);
+                //w.ShowDialog();
+
+                ArrayList a = new ArrayList();
+                a.Add("SetupWizard/1");
+                DB.SaveVars("State", ref a);
+
+                SetupForm.SaveOptions();
+                SaveState();
             }
 
             if (rx1_meter_cal_offset == 0.0f)
