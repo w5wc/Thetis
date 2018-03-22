@@ -1,6 +1,6 @@
 /*
  * network.c
- * Copyright (C) 2015-2016 Doug Wigley (W5WC)
+ * Copyright (C) 2015-2018 Doug Wigley (W5WC)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -503,7 +503,7 @@ int ReadUDPFrame(unsigned char *bufp) {
 
 	switch (rc = ntohs(fromaddr.sin_port))
 	{
-	case 1025: // 60 bytes - High Priority C&C data
+	case HPCCPort: //1025: // 60 bytes - High Priority C&C data
 		if (seqnum != (1 + prn->cc_seq_no))  {
 			prn->cc_seq_err += 1;
 			//PrintTimeHack();
@@ -514,7 +514,7 @@ int ReadUDPFrame(unsigned char *bufp) {
 		prn->cc_seq_no = seqnum;
 		memcpy(bufp, readbuf + 4, 60);
 		break;
-	case 1026: // 1440 bytes - 16-bit mic samples (48ksps)
+	case  RxMicSampPort: //1026: // 1440 bytes - 16-bit mic samples (48ksps)
 		//mic_samples_buf++;
 		if (seqnum != (1 + prn->tx[0].mic_in_seq_no))  {
 			prn->tx[0].mic_in_seq_err += 1;
@@ -526,7 +526,7 @@ int ReadUDPFrame(unsigned char *bufp) {
 		prn->tx[0].mic_in_seq_no = seqnum;
 		memcpy(bufp, readbuf + 4, 1440);
 		break;
-	case 1027: // 1040 bytes - 16-bit raw ADC (default values)
+	case WB0Port: //1027: // 1040 bytes - 16-bit raw ADC (default values)
 	case 1028:
 	case 1029:
 	case 1030:
@@ -716,7 +716,7 @@ ReadThreadMainLoop() {
 		fflush(stdout);
 
 	while (io_keep_running != 0) {
-			DWORD retVal = WSAWaitForMultipleEvents(1, &prn->hDataEvent, FALSE, 1000, FALSE);
+		DWORD retVal = WSAWaitForMultipleEvents(1, &prn->hDataEvent, FALSE, prn->wdt ? 3000 : WSA_INFINITE, FALSE);
 			if ((retVal == WSA_WAIT_FAILED) || (retVal == WSA_WAIT_TIMEOUT))
 			{
 				HaveSync = 0; //send console LOS
@@ -1055,6 +1055,7 @@ void CmdHighPriority() { // port 1027
 
 }
 
+PORT
 void CmdRx() { // port 1025
 
 	char packetbuf[BUFLEN];
@@ -1165,7 +1166,8 @@ void CmdRx() { // port 1025
 	// packetbuff[1443] = 1;	// FOR TESTING MUX MODE
 
 	// sendto port 1025
-	sendPacket(listenSock, packetbuf, BUFLEN, 1025);
+	if (listenSock != INVALID_SOCKET)
+		sendPacket(listenSock, packetbuf, BUFLEN, 1025);
 	// prn->run = 0;
 	// CmdHighPriority();
 	// prn->run = 1;

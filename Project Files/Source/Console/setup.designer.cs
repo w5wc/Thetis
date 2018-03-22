@@ -1067,6 +1067,25 @@
             this.tpAudio = new System.Windows.Forms.TabPage();
             this.tcAudio = new System.Windows.Forms.TabControl();
             this.tpVAC = new System.Windows.Forms.TabPage();
+            this.grpVAC1monitor = new System.Windows.Forms.GroupBoxTS();
+            this.udVAC1_Force2 = new System.Windows.Forms.NumericUpDownTS();
+            this.chkVAC1_Force2 = new System.Windows.Forms.CheckBoxTS();
+            this.lblVAC1_FROMVAC = new System.Windows.Forms.LabelTS();
+            this.lblVAC1var2 = new System.Windows.Forms.LabelTS();
+            this.lblVAC1VarRatio2 = new System.Windows.Forms.LabelTS();
+            this.lblVAC1unfl2 = new System.Windows.Forms.LabelTS();
+            this.lblVAC1ovfl2 = new System.Windows.Forms.LabelTS();
+            this.lblVAC1underflows2 = new System.Windows.Forms.LabelTS();
+            this.lblVAC1overflows2 = new System.Windows.Forms.LabelTS();
+            this.udVAC1_Force = new System.Windows.Forms.NumericUpDownTS();
+            this.chkVAC1_Force = new System.Windows.Forms.CheckBoxTS();
+            this.lblVAC1_TOVAC = new System.Windows.Forms.LabelTS();
+            this.lblVAC1var = new System.Windows.Forms.LabelTS();
+            this.lblVAC1varratio = new System.Windows.Forms.LabelTS();
+            this.lblVAC1unfl = new System.Windows.Forms.LabelTS();
+            this.lblVAC1ovfl = new System.Windows.Forms.LabelTS();
+            this.lblVAC1underflows = new System.Windows.Forms.LabelTS();
+            this.lblVAC1overflows = new System.Windows.Forms.LabelTS();
             this.chkMOXAllowBypass = new System.Windows.Forms.CheckBoxTS();
             this.chkSPACEAllowBypass = new System.Windows.Forms.CheckBoxTS();
             this.grpDirectIQOutput = new System.Windows.Forms.GroupBoxTS();
@@ -1112,6 +1131,25 @@
             this.comboAudioDriver2 = new System.Windows.Forms.ComboBoxTS();
             this.chkAudioEnableVAC = new System.Windows.Forms.CheckBoxTS();
             this.tpVAC2 = new System.Windows.Forms.TabPage();
+            this.grpVAC2monitor = new System.Windows.Forms.GroupBoxTS();
+            this.udVAC2_Force2 = new System.Windows.Forms.NumericUpDownTS();
+            this.chkVAC2_Force2 = new System.Windows.Forms.CheckBoxTS();
+            this.lblVAC2_FROMVAC = new System.Windows.Forms.LabelTS();
+            this.lblVAC2var2 = new System.Windows.Forms.LabelTS();
+            this.lblVAC2varratio2 = new System.Windows.Forms.LabelTS();
+            this.lblVAC2unfl2 = new System.Windows.Forms.LabelTS();
+            this.lblVAC2ovfl2 = new System.Windows.Forms.LabelTS();
+            this.lblVAC2underflows2 = new System.Windows.Forms.LabelTS();
+            this.lblVAC2overflows2 = new System.Windows.Forms.LabelTS();
+            this.udVAC2_Force = new System.Windows.Forms.NumericUpDownTS();
+            this.chkVAC2_Force = new System.Windows.Forms.CheckBoxTS();
+            this.lblVAC2_TOVAC = new System.Windows.Forms.LabelTS();
+            this.lblVAC2var = new System.Windows.Forms.LabelTS();
+            this.lblVAC2varratio = new System.Windows.Forms.LabelTS();
+            this.lblVAC2unfl = new System.Windows.Forms.LabelTS();
+            this.lblVAC2ovfl = new System.Windows.Forms.LabelTS();
+            this.lblVAC2underflows = new System.Windows.Forms.LabelTS();
+            this.lblVAC2overflows = new System.Windows.Forms.LabelTS();
             this.chkVAC2UseRX2 = new System.Windows.Forms.CheckBoxTS();
             this.grpVAC2DirectIQ = new System.Windows.Forms.GroupBoxTS();
             this.chkVAC2DirectIQCal = new System.Windows.Forms.CheckBoxTS();
@@ -2806,6 +2844,7 @@
             this.chkEnableRFEPATR = new System.Windows.Forms.CheckBoxTS();
             this.mainMenu1 = new System.Windows.Forms.MainMenu(this.components);
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
+            this.timer_VAC_Monitor = new System.Windows.Forms.Timer(this.components);
             this.grpDiagInfo = new System.Windows.Forms.GroupBoxTS();
             this.lblSyncData = new System.Windows.Forms.LabelTS();
             this.numericUpDownTS5 = new System.Windows.Forms.NumericUpDownTS();
@@ -3071,6 +3110,9 @@
             this.tpAudio.SuspendLayout();
             this.tcAudio.SuspendLayout();
             this.tpVAC.SuspendLayout();
+            this.grpVAC1monitor.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.udVAC1_Force2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udVAC1_Force)).BeginInit();
             this.grpDirectIQOutput.SuspendLayout();
             this.grpAudioVACAutoEnable.SuspendLayout();
             this.grpAudioVACGain.SuspendLayout();
@@ -3086,6 +3128,9 @@
             this.grpAudioBuffer2.SuspendLayout();
             this.grpAudioDetails2.SuspendLayout();
             this.tpVAC2.SuspendLayout();
+            this.grpVAC2monitor.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.udVAC2_Force2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udVAC2_Force)).BeginInit();
             this.grpVAC2DirectIQ.SuspendLayout();
             this.grpVAC2AutoEnable.SuspendLayout();
             this.grpVAC2Gain.SuspendLayout();
@@ -18419,6 +18464,7 @@
             // 
             // tpVAC
             // 
+            this.tpVAC.Controls.Add(this.grpVAC1monitor);
             this.tpVAC.Controls.Add(this.chkMOXAllowBypass);
             this.tpVAC.Controls.Add(this.chkSPACEAllowBypass);
             this.tpVAC.Controls.Add(this.grpDirectIQOutput);
@@ -18438,12 +18484,279 @@
             this.tpVAC.TabIndex = 1;
             this.tpVAC.Text = "VAC 1";
             // 
+            // grpVAC1monitor
+            // 
+            this.grpVAC1monitor.Controls.Add(this.udVAC1_Force2);
+            this.grpVAC1monitor.Controls.Add(this.chkVAC1_Force2);
+            this.grpVAC1monitor.Controls.Add(this.lblVAC1_FROMVAC);
+            this.grpVAC1monitor.Controls.Add(this.lblVAC1var2);
+            this.grpVAC1monitor.Controls.Add(this.lblVAC1VarRatio2);
+            this.grpVAC1monitor.Controls.Add(this.lblVAC1unfl2);
+            this.grpVAC1monitor.Controls.Add(this.lblVAC1ovfl2);
+            this.grpVAC1monitor.Controls.Add(this.lblVAC1underflows2);
+            this.grpVAC1monitor.Controls.Add(this.lblVAC1overflows2);
+            this.grpVAC1monitor.Controls.Add(this.udVAC1_Force);
+            this.grpVAC1monitor.Controls.Add(this.chkVAC1_Force);
+            this.grpVAC1monitor.Controls.Add(this.lblVAC1_TOVAC);
+            this.grpVAC1monitor.Controls.Add(this.lblVAC1var);
+            this.grpVAC1monitor.Controls.Add(this.lblVAC1varratio);
+            this.grpVAC1monitor.Controls.Add(this.lblVAC1unfl);
+            this.grpVAC1monitor.Controls.Add(this.lblVAC1ovfl);
+            this.grpVAC1monitor.Controls.Add(this.lblVAC1underflows);
+            this.grpVAC1monitor.Controls.Add(this.lblVAC1overflows);
+            this.grpVAC1monitor.Location = new System.Drawing.Point(8, 216);
+            this.grpVAC1monitor.Name = "grpVAC1monitor";
+            this.grpVAC1monitor.Size = new System.Drawing.Size(413, 99);
+            this.grpVAC1monitor.TabIndex = 83;
+            this.grpVAC1monitor.TabStop = false;
+            this.grpVAC1monitor.Text = "VAC1 Monitor";
+            // 
+            // udVAC1_Force2
+            // 
+            this.udVAC1_Force2.DecimalPlaces = 6;
+            this.udVAC1_Force2.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            393216});
+            this.udVAC1_Force2.Location = new System.Drawing.Point(332, 44);
+            this.udVAC1_Force2.Maximum = new decimal(new int[] {
+            102,
+            0,
+            0,
+            131072});
+            this.udVAC1_Force2.Minimum = new decimal(new int[] {
+            98,
+            0,
+            0,
+            131072});
+            this.udVAC1_Force2.Name = "udVAC1_Force2";
+            this.udVAC1_Force2.Size = new System.Drawing.Size(72, 20);
+            this.udVAC1_Force2.TabIndex = 17;
+            this.udVAC1_Force2.Value = new decimal(new int[] {
+            10,
+            0,
+            0,
+            65536});
+            this.udVAC1_Force2.ValueChanged += new System.EventHandler(this.chkVAC1_Force2_CheckedChanged);
+            // 
+            // chkVAC1_Force2
+            // 
+            this.chkVAC1_Force2.AutoSize = true;
+            this.chkVAC1_Force2.Image = null;
+            this.chkVAC1_Force2.Location = new System.Drawing.Point(332, 21);
+            this.chkVAC1_Force2.Name = "chkVAC1_Force2";
+            this.chkVAC1_Force2.Size = new System.Drawing.Size(53, 17);
+            this.chkVAC1_Force2.TabIndex = 16;
+            this.chkVAC1_Force2.Text = "Force";
+            this.chkVAC1_Force2.UseVisualStyleBackColor = true;
+            this.chkVAC1_Force2.CheckedChanged += new System.EventHandler(this.chkVAC1_Force2_CheckedChanged);
+            // 
+            // lblVAC1_FROMVAC
+            // 
+            this.lblVAC1_FROMVAC.AutoSize = true;
+            this.lblVAC1_FROMVAC.Image = null;
+            this.lblVAC1_FROMVAC.Location = new System.Drawing.Point(229, 19);
+            this.lblVAC1_FROMVAC.Name = "lblVAC1_FROMVAC";
+            this.lblVAC1_FROMVAC.Size = new System.Drawing.Size(65, 13);
+            this.lblVAC1_FROMVAC.TabIndex = 15;
+            this.lblVAC1_FROMVAC.Text = "FROM VAC:";
+            // 
+            // lblVAC1var2
+            // 
+            this.lblVAC1var2.AutoSize = true;
+            this.lblVAC1var2.BackColor = System.Drawing.Color.LightCoral;
+            this.lblVAC1var2.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.lblVAC1var2.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.lblVAC1var2.Image = null;
+            this.lblVAC1var2.Location = new System.Drawing.Point(295, 76);
+            this.lblVAC1var2.Name = "lblVAC1var2";
+            this.lblVAC1var2.Size = new System.Drawing.Size(24, 15);
+            this.lblVAC1var2.TabIndex = 14;
+            this.lblVAC1var2.Text = "var";
+            // 
+            // lblVAC1VarRatio2
+            // 
+            this.lblVAC1VarRatio2.AutoSize = true;
+            this.lblVAC1VarRatio2.Image = null;
+            this.lblVAC1VarRatio2.Location = new System.Drawing.Point(231, 76);
+            this.lblVAC1VarRatio2.Name = "lblVAC1VarRatio2";
+            this.lblVAC1VarRatio2.Size = new System.Drawing.Size(51, 13);
+            this.lblVAC1VarRatio2.TabIndex = 13;
+            this.lblVAC1VarRatio2.Text = "Var Ratio";
+            // 
+            // lblVAC1unfl2
+            // 
+            this.lblVAC1unfl2.AutoSize = true;
+            this.lblVAC1unfl2.BackColor = System.Drawing.Color.LightCoral;
+            this.lblVAC1unfl2.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.lblVAC1unfl2.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.lblVAC1unfl2.Image = null;
+            this.lblVAC1unfl2.Location = new System.Drawing.Point(295, 57);
+            this.lblVAC1unfl2.Name = "lblVAC1unfl2";
+            this.lblVAC1unfl2.Size = new System.Drawing.Size(26, 15);
+            this.lblVAC1unfl2.TabIndex = 12;
+            this.lblVAC1unfl2.Text = "unfl";
+            // 
+            // lblVAC1ovfl2
+            // 
+            this.lblVAC1ovfl2.AutoSize = true;
+            this.lblVAC1ovfl2.BackColor = System.Drawing.Color.LightCoral;
+            this.lblVAC1ovfl2.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.lblVAC1ovfl2.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.lblVAC1ovfl2.Image = null;
+            this.lblVAC1ovfl2.Location = new System.Drawing.Point(295, 38);
+            this.lblVAC1ovfl2.Name = "lblVAC1ovfl2";
+            this.lblVAC1ovfl2.Size = new System.Drawing.Size(26, 15);
+            this.lblVAC1ovfl2.TabIndex = 11;
+            this.lblVAC1ovfl2.Text = "ovfl";
+            // 
+            // lblVAC1underflows2
+            // 
+            this.lblVAC1underflows2.AutoSize = true;
+            this.lblVAC1underflows2.Image = null;
+            this.lblVAC1underflows2.Location = new System.Drawing.Point(229, 57);
+            this.lblVAC1underflows2.Name = "lblVAC1underflows2";
+            this.lblVAC1underflows2.Size = new System.Drawing.Size(60, 13);
+            this.lblVAC1underflows2.TabIndex = 10;
+            this.lblVAC1underflows2.Text = "Underflows";
+            // 
+            // lblVAC1overflows2
+            // 
+            this.lblVAC1overflows2.AutoSize = true;
+            this.lblVAC1overflows2.Image = null;
+            this.lblVAC1overflows2.Location = new System.Drawing.Point(229, 38);
+            this.lblVAC1overflows2.Name = "lblVAC1overflows2";
+            this.lblVAC1overflows2.Size = new System.Drawing.Size(54, 13);
+            this.lblVAC1overflows2.TabIndex = 9;
+            this.lblVAC1overflows2.Text = "Overflows";
+            // 
+            // udVAC1_Force
+            // 
+            this.udVAC1_Force.DecimalPlaces = 6;
+            this.udVAC1_Force.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            393216});
+            this.udVAC1_Force.Location = new System.Drawing.Point(109, 44);
+            this.udVAC1_Force.Maximum = new decimal(new int[] {
+            102,
+            0,
+            0,
+            131072});
+            this.udVAC1_Force.Minimum = new decimal(new int[] {
+            98,
+            0,
+            0,
+            131072});
+            this.udVAC1_Force.Name = "udVAC1_Force";
+            this.udVAC1_Force.Size = new System.Drawing.Size(72, 20);
+            this.udVAC1_Force.TabIndex = 8;
+            this.udVAC1_Force.Value = new decimal(new int[] {
+            10,
+            0,
+            0,
+            65536});
+            this.udVAC1_Force.ValueChanged += new System.EventHandler(this.chkVAC1_Force_CheckedChanged);
+            // 
+            // chkVAC1_Force
+            // 
+            this.chkVAC1_Force.AutoSize = true;
+            this.chkVAC1_Force.Image = null;
+            this.chkVAC1_Force.Location = new System.Drawing.Point(109, 21);
+            this.chkVAC1_Force.Name = "chkVAC1_Force";
+            this.chkVAC1_Force.Size = new System.Drawing.Size(53, 17);
+            this.chkVAC1_Force.TabIndex = 7;
+            this.chkVAC1_Force.Text = "Force";
+            this.chkVAC1_Force.UseVisualStyleBackColor = true;
+            this.chkVAC1_Force.CheckedChanged += new System.EventHandler(this.chkVAC1_Force_CheckedChanged);
+            // 
+            // lblVAC1_TOVAC
+            // 
+            this.lblVAC1_TOVAC.AutoSize = true;
+            this.lblVAC1_TOVAC.Image = null;
+            this.lblVAC1_TOVAC.Location = new System.Drawing.Point(6, 19);
+            this.lblVAC1_TOVAC.Name = "lblVAC1_TOVAC";
+            this.lblVAC1_TOVAC.Size = new System.Drawing.Size(49, 13);
+            this.lblVAC1_TOVAC.TabIndex = 6;
+            this.lblVAC1_TOVAC.Text = "TO VAC:";
+            // 
+            // lblVAC1var
+            // 
+            this.lblVAC1var.AutoSize = true;
+            this.lblVAC1var.BackColor = System.Drawing.Color.LightCoral;
+            this.lblVAC1var.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.lblVAC1var.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.lblVAC1var.Image = null;
+            this.lblVAC1var.Location = new System.Drawing.Point(72, 76);
+            this.lblVAC1var.Name = "lblVAC1var";
+            this.lblVAC1var.Size = new System.Drawing.Size(24, 15);
+            this.lblVAC1var.TabIndex = 5;
+            this.lblVAC1var.Text = "var";
+            // 
+            // lblVAC1varratio
+            // 
+            this.lblVAC1varratio.AutoSize = true;
+            this.lblVAC1varratio.Image = null;
+            this.lblVAC1varratio.Location = new System.Drawing.Point(8, 76);
+            this.lblVAC1varratio.Name = "lblVAC1varratio";
+            this.lblVAC1varratio.Size = new System.Drawing.Size(51, 13);
+            this.lblVAC1varratio.TabIndex = 4;
+            this.lblVAC1varratio.Text = "Var Ratio";
+            // 
+            // lblVAC1unfl
+            // 
+            this.lblVAC1unfl.AutoSize = true;
+            this.lblVAC1unfl.BackColor = System.Drawing.Color.LightCoral;
+            this.lblVAC1unfl.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.lblVAC1unfl.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.lblVAC1unfl.Image = null;
+            this.lblVAC1unfl.Location = new System.Drawing.Point(72, 57);
+            this.lblVAC1unfl.Name = "lblVAC1unfl";
+            this.lblVAC1unfl.Size = new System.Drawing.Size(26, 15);
+            this.lblVAC1unfl.TabIndex = 3;
+            this.lblVAC1unfl.Text = "unfl";
+            // 
+            // lblVAC1ovfl
+            // 
+            this.lblVAC1ovfl.AutoSize = true;
+            this.lblVAC1ovfl.BackColor = System.Drawing.Color.LightCoral;
+            this.lblVAC1ovfl.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.lblVAC1ovfl.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.lblVAC1ovfl.Image = null;
+            this.lblVAC1ovfl.Location = new System.Drawing.Point(72, 38);
+            this.lblVAC1ovfl.Name = "lblVAC1ovfl";
+            this.lblVAC1ovfl.Size = new System.Drawing.Size(26, 15);
+            this.lblVAC1ovfl.TabIndex = 2;
+            this.lblVAC1ovfl.Text = "ovfl";
+            // 
+            // lblVAC1underflows
+            // 
+            this.lblVAC1underflows.AutoSize = true;
+            this.lblVAC1underflows.Image = null;
+            this.lblVAC1underflows.Location = new System.Drawing.Point(6, 57);
+            this.lblVAC1underflows.Name = "lblVAC1underflows";
+            this.lblVAC1underflows.Size = new System.Drawing.Size(60, 13);
+            this.lblVAC1underflows.TabIndex = 1;
+            this.lblVAC1underflows.Text = "Underflows";
+            // 
+            // lblVAC1overflows
+            // 
+            this.lblVAC1overflows.AutoSize = true;
+            this.lblVAC1overflows.Image = null;
+            this.lblVAC1overflows.Location = new System.Drawing.Point(6, 38);
+            this.lblVAC1overflows.Name = "lblVAC1overflows";
+            this.lblVAC1overflows.Size = new System.Drawing.Size(54, 13);
+            this.lblVAC1overflows.TabIndex = 0;
+            this.lblVAC1overflows.Text = "Overflows";
+            // 
             // chkMOXAllowBypass
             // 
             this.chkMOXAllowBypass.Image = null;
-            this.chkMOXAllowBypass.Location = new System.Drawing.Point(250, 232);
+            this.chkMOXAllowBypass.Location = new System.Drawing.Point(242, 178);
             this.chkMOXAllowBypass.Name = "chkMOXAllowBypass";
-            this.chkMOXAllowBypass.Size = new System.Drawing.Size(184, 37);
+            this.chkMOXAllowBypass.Size = new System.Drawing.Size(174, 42);
             this.chkMOXAllowBypass.TabIndex = 82;
             this.chkMOXAllowBypass.Text = "Allow MOX to override/bypass VAC for Phone";
             this.toolTip1.SetToolTip(this.chkMOXAllowBypass, "Using the MOX control will override the PTT input to allow for easy phone operati" +
@@ -18453,9 +18766,9 @@
             // chkSPACEAllowBypass
             // 
             this.chkSPACEAllowBypass.Image = null;
-            this.chkSPACEAllowBypass.Location = new System.Drawing.Point(250, 195);
+            this.chkSPACEAllowBypass.Location = new System.Drawing.Point(242, 147);
             this.chkSPACEAllowBypass.Name = "chkSPACEAllowBypass";
-            this.chkSPACEAllowBypass.Size = new System.Drawing.Size(182, 37);
+            this.chkSPACEAllowBypass.Size = new System.Drawing.Size(182, 42);
             this.chkSPACEAllowBypass.TabIndex = 81;
             this.chkSPACEAllowBypass.Text = "Allow SPACE to override/bypass VAC for Phone";
             this.toolTip1.SetToolTip(this.chkSPACEAllowBypass, "Using theSPACE BAR will override the PTT input to allow for easy phone operation " +
@@ -18525,9 +18838,9 @@
             this.chkVACAllowBypass.Checked = true;
             this.chkVACAllowBypass.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkVACAllowBypass.Image = null;
-            this.chkVACAllowBypass.Location = new System.Drawing.Point(250, 158);
+            this.chkVACAllowBypass.Location = new System.Drawing.Point(242, 119);
             this.chkVACAllowBypass.Name = "chkVACAllowBypass";
-            this.chkVACAllowBypass.Size = new System.Drawing.Size(184, 32);
+            this.chkVACAllowBypass.Size = new System.Drawing.Size(174, 37);
             this.chkVACAllowBypass.TabIndex = 75;
             this.chkVACAllowBypass.Text = "Allow PTT to override/bypass VAC for Phone";
             this.toolTip1.SetToolTip(this.chkVACAllowBypass, "Using the hardware PTT inputs will override the PTT input to allow for easy phone" +
@@ -18537,9 +18850,9 @@
             // grpAudioVACAutoEnable
             // 
             this.grpAudioVACAutoEnable.Controls.Add(this.chkAudioVACAutoEnable);
-            this.grpAudioVACAutoEnable.Location = new System.Drawing.Point(8, 168);
+            this.grpAudioVACAutoEnable.Location = new System.Drawing.Point(8, 138);
             this.grpAudioVACAutoEnable.Name = "grpAudioVACAutoEnable";
-            this.grpAudioVACAutoEnable.Size = new System.Drawing.Size(224, 64);
+            this.grpAudioVACAutoEnable.Size = new System.Drawing.Size(224, 56);
             this.grpAudioVACAutoEnable.TabIndex = 74;
             this.grpAudioVACAutoEnable.TabStop = false;
             this.grpAudioVACAutoEnable.Text = "Auto Enable";
@@ -18547,7 +18860,7 @@
             // chkAudioVACAutoEnable
             // 
             this.chkAudioVACAutoEnable.Image = null;
-            this.chkAudioVACAutoEnable.Location = new System.Drawing.Point(16, 24);
+            this.chkAudioVACAutoEnable.Location = new System.Drawing.Point(16, 16);
             this.chkAudioVACAutoEnable.Name = "chkAudioVACAutoEnable";
             this.chkAudioVACAutoEnable.Size = new System.Drawing.Size(200, 32);
             this.chkAudioVACAutoEnable.TabIndex = 0;
@@ -18562,9 +18875,9 @@
             this.grpAudioVACGain.Controls.Add(this.udAudioVACGainTX);
             this.grpAudioVACGain.Controls.Add(this.lblAudioVACGainRX);
             this.grpAudioVACGain.Controls.Add(this.udAudioVACGainRX);
-            this.grpAudioVACGain.Location = new System.Drawing.Point(344, 8);
+            this.grpAudioVACGain.Location = new System.Drawing.Point(344, 4);
             this.grpAudioVACGain.Name = "grpAudioVACGain";
-            this.grpAudioVACGain.Size = new System.Drawing.Size(96, 80);
+            this.grpAudioVACGain.Size = new System.Drawing.Size(96, 72);
             this.grpAudioVACGain.TabIndex = 72;
             this.grpAudioVACGain.TabStop = false;
             this.grpAudioVACGain.Text = "Gain (dB)";
@@ -18572,7 +18885,7 @@
             // lblAudioVACGainTX
             // 
             this.lblAudioVACGainTX.Image = null;
-            this.lblAudioVACGainTX.Location = new System.Drawing.Point(16, 48);
+            this.lblAudioVACGainTX.Location = new System.Drawing.Point(16, 42);
             this.lblAudioVACGainTX.Name = "lblAudioVACGainTX";
             this.lblAudioVACGainTX.Size = new System.Drawing.Size(32, 16);
             this.lblAudioVACGainTX.TabIndex = 39;
@@ -18585,7 +18898,7 @@
             0,
             0,
             0});
-            this.udAudioVACGainTX.Location = new System.Drawing.Point(48, 48);
+            this.udAudioVACGainTX.Location = new System.Drawing.Point(48, 42);
             this.udAudioVACGainTX.Maximum = new decimal(new int[] {
             40,
             0,
@@ -18611,7 +18924,7 @@
             // lblAudioVACGainRX
             // 
             this.lblAudioVACGainRX.Image = null;
-            this.lblAudioVACGainRX.Location = new System.Drawing.Point(16, 24);
+            this.lblAudioVACGainRX.Location = new System.Drawing.Point(16, 19);
             this.lblAudioVACGainRX.Name = "lblAudioVACGainRX";
             this.lblAudioVACGainRX.Size = new System.Drawing.Size(24, 16);
             this.lblAudioVACGainRX.TabIndex = 37;
@@ -18624,7 +18937,7 @@
             0,
             0,
             0});
-            this.udAudioVACGainRX.Location = new System.Drawing.Point(48, 24);
+            this.udAudioVACGainRX.Location = new System.Drawing.Point(48, 19);
             this.udAudioVACGainRX.Maximum = new decimal(new int[] {
             40,
             0,
@@ -18651,9 +18964,9 @@
             // grpAudio2Stereo
             // 
             this.grpAudio2Stereo.Controls.Add(this.chkAudio2Stereo);
-            this.grpAudio2Stereo.Location = new System.Drawing.Point(344, 96);
+            this.grpAudio2Stereo.Location = new System.Drawing.Point(344, 78);
             this.grpAudio2Stereo.Name = "grpAudio2Stereo";
-            this.grpAudio2Stereo.Size = new System.Drawing.Size(96, 56);
+            this.grpAudio2Stereo.Size = new System.Drawing.Size(96, 39);
             this.grpAudio2Stereo.TabIndex = 71;
             this.grpAudio2Stereo.TabStop = false;
             this.grpAudio2Stereo.Text = "Mono/Stereo";
@@ -18661,7 +18974,7 @@
             // chkAudio2Stereo
             // 
             this.chkAudio2Stereo.Image = null;
-            this.chkAudio2Stereo.Location = new System.Drawing.Point(16, 24);
+            this.chkAudio2Stereo.Location = new System.Drawing.Point(16, 16);
             this.chkAudio2Stereo.Name = "chkAudio2Stereo";
             this.chkAudio2Stereo.Size = new System.Drawing.Size(64, 16);
             this.chkAudio2Stereo.TabIndex = 0;
@@ -18702,7 +19015,6 @@
             this.labelTS364.Size = new System.Drawing.Size(27, 13);
             this.labelTS364.TabIndex = 48;
             this.labelTS364.Text = "Out:";
-            this.labelTS364.Visible = false;
             // 
             // labelTS365
             // 
@@ -18713,17 +19025,15 @@
             this.labelTS365.Size = new System.Drawing.Size(19, 13);
             this.labelTS365.TabIndex = 47;
             this.labelTS365.Text = "In:";
-            this.labelTS365.Visible = false;
             // 
             // chkAudioLatencyPAOutManual
             // 
             this.chkAudioLatencyPAOutManual.Image = null;
-            this.chkAudioLatencyPAOutManual.Location = new System.Drawing.Point(86, 124);
+            this.chkAudioLatencyPAOutManual.Location = new System.Drawing.Point(84, 124);
             this.chkAudioLatencyPAOutManual.Name = "chkAudioLatencyPAOutManual";
             this.chkAudioLatencyPAOutManual.Size = new System.Drawing.Size(64, 16);
             this.chkAudioLatencyPAOutManual.TabIndex = 46;
             this.chkAudioLatencyPAOutManual.Text = "Manual";
-            this.chkAudioLatencyPAOutManual.Visible = false;
             this.chkAudioLatencyPAOutManual.CheckedChanged += new System.EventHandler(this.chkAudioLatencyPAOutManual_CheckedChanged);
             // 
             // udAudioLatencyPAOut
@@ -18753,13 +19063,12 @@
             0,
             0,
             0});
-            this.udAudioLatencyPAOut.Visible = false;
             this.udAudioLatencyPAOut.ValueChanged += new System.EventHandler(this.udAudioLatencyPAOut_ValueChanged);
             // 
             // chkAudioLatencyPAInManual
             // 
             this.chkAudioLatencyPAInManual.Image = null;
-            this.chkAudioLatencyPAInManual.Location = new System.Drawing.Point(13, 124);
+            this.chkAudioLatencyPAInManual.Location = new System.Drawing.Point(11, 124);
             this.chkAudioLatencyPAInManual.Name = "chkAudioLatencyPAInManual";
             this.chkAudioLatencyPAInManual.Size = new System.Drawing.Size(64, 16);
             this.chkAudioLatencyPAInManual.TabIndex = 43;
@@ -18824,7 +19133,6 @@
             this.labelTS361.Size = new System.Drawing.Size(27, 13);
             this.labelTS361.TabIndex = 40;
             this.labelTS361.Text = "Out:";
-            this.labelTS361.Visible = false;
             // 
             // labelTS360
             // 
@@ -18835,17 +19143,15 @@
             this.labelTS360.Size = new System.Drawing.Size(19, 13);
             this.labelTS360.TabIndex = 39;
             this.labelTS360.Text = "In:";
-            this.labelTS360.Visible = false;
             // 
             // chkAudioLatencyManual2_Out
             // 
             this.chkAudioLatencyManual2_Out.Image = null;
-            this.chkAudioLatencyManual2_Out.Location = new System.Drawing.Point(86, 56);
+            this.chkAudioLatencyManual2_Out.Location = new System.Drawing.Point(84, 56);
             this.chkAudioLatencyManual2_Out.Name = "chkAudioLatencyManual2_Out";
             this.chkAudioLatencyManual2_Out.Size = new System.Drawing.Size(64, 16);
             this.chkAudioLatencyManual2_Out.TabIndex = 38;
             this.chkAudioLatencyManual2_Out.Text = "Manual";
-            this.chkAudioLatencyManual2_Out.Visible = false;
             this.chkAudioLatencyManual2_Out.CheckedChanged += new System.EventHandler(this.chkAudioLatencyManual2_Out_CheckedChanged);
             // 
             // udAudioLatency2_Out
@@ -18875,13 +19181,12 @@
             0,
             0,
             0});
-            this.udAudioLatency2_Out.Visible = false;
             this.udAudioLatency2_Out.ValueChanged += new System.EventHandler(this.udAudioLatency2_Out_ValueChanged);
             // 
             // chkAudioLatencyManual2
             // 
             this.chkAudioLatencyManual2.Image = null;
-            this.chkAudioLatencyManual2.Location = new System.Drawing.Point(13, 56);
+            this.chkAudioLatencyManual2.Location = new System.Drawing.Point(11, 56);
             this.chkAudioLatencyManual2.Name = "chkAudioLatencyManual2";
             this.chkAudioLatencyManual2.Size = new System.Drawing.Size(64, 16);
             this.chkAudioLatencyManual2.TabIndex = 5;
@@ -18921,7 +19226,7 @@
             // grpAudioSampleRate2
             // 
             this.grpAudioSampleRate2.Controls.Add(this.comboAudioSampleRate2);
-            this.grpAudioSampleRate2.Location = new System.Drawing.Point(240, 72);
+            this.grpAudioSampleRate2.Location = new System.Drawing.Point(240, 62);
             this.grpAudioSampleRate2.Name = "grpAudioSampleRate2";
             this.grpAudioSampleRate2.Size = new System.Drawing.Size(96, 56);
             this.grpAudioSampleRate2.TabIndex = 66;
@@ -18953,7 +19258,7 @@
             // grpAudioBuffer2
             // 
             this.grpAudioBuffer2.Controls.Add(this.comboAudioBuffer2);
-            this.grpAudioBuffer2.Location = new System.Drawing.Point(240, 8);
+            this.grpAudioBuffer2.Location = new System.Drawing.Point(240, 4);
             this.grpAudioBuffer2.Name = "grpAudioBuffer2";
             this.grpAudioBuffer2.Size = new System.Drawing.Size(96, 56);
             this.grpAudioBuffer2.TabIndex = 65;
@@ -18985,9 +19290,9 @@
             this.grpAudioDetails2.Controls.Add(this.lblAudioDriver2);
             this.grpAudioDetails2.Controls.Add(this.comboAudioInput2);
             this.grpAudioDetails2.Controls.Add(this.comboAudioDriver2);
-            this.grpAudioDetails2.Location = new System.Drawing.Point(8, 40);
+            this.grpAudioDetails2.Location = new System.Drawing.Point(8, 28);
             this.grpAudioDetails2.Name = "grpAudioDetails2";
-            this.grpAudioDetails2.Size = new System.Drawing.Size(224, 120);
+            this.grpAudioDetails2.Size = new System.Drawing.Size(224, 100);
             this.grpAudioDetails2.TabIndex = 35;
             this.grpAudioDetails2.TabStop = false;
             this.grpAudioDetails2.Text = "Virtual Audio Cable Setup";
@@ -18995,7 +19300,7 @@
             // lblAudioOutput2
             // 
             this.lblAudioOutput2.Image = null;
-            this.lblAudioOutput2.Location = new System.Drawing.Point(8, 88);
+            this.lblAudioOutput2.Location = new System.Drawing.Point(8, 70);
             this.lblAudioOutput2.Name = "lblAudioOutput2";
             this.lblAudioOutput2.Size = new System.Drawing.Size(48, 16);
             this.lblAudioOutput2.TabIndex = 35;
@@ -19007,7 +19312,7 @@
             this.comboAudioOutput2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboAudioOutput2.DropDownWidth = 160;
             this.comboAudioOutput2.ItemHeight = 13;
-            this.comboAudioOutput2.Location = new System.Drawing.Point(56, 88);
+            this.comboAudioOutput2.Location = new System.Drawing.Point(56, 70);
             this.comboAudioOutput2.Name = "comboAudioOutput2";
             this.comboAudioOutput2.Size = new System.Drawing.Size(160, 21);
             this.comboAudioOutput2.TabIndex = 34;
@@ -19017,7 +19322,7 @@
             // lblAudioInput2
             // 
             this.lblAudioInput2.Image = null;
-            this.lblAudioInput2.Location = new System.Drawing.Point(8, 56);
+            this.lblAudioInput2.Location = new System.Drawing.Point(8, 44);
             this.lblAudioInput2.Name = "lblAudioInput2";
             this.lblAudioInput2.Size = new System.Drawing.Size(40, 16);
             this.lblAudioInput2.TabIndex = 33;
@@ -19026,7 +19331,7 @@
             // lblAudioDriver2
             // 
             this.lblAudioDriver2.Image = null;
-            this.lblAudioDriver2.Location = new System.Drawing.Point(8, 24);
+            this.lblAudioDriver2.Location = new System.Drawing.Point(8, 18);
             this.lblAudioDriver2.Name = "lblAudioDriver2";
             this.lblAudioDriver2.Size = new System.Drawing.Size(40, 16);
             this.lblAudioDriver2.TabIndex = 32;
@@ -19037,7 +19342,7 @@
             this.comboAudioInput2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboAudioInput2.DropDownWidth = 160;
             this.comboAudioInput2.ItemHeight = 13;
-            this.comboAudioInput2.Location = new System.Drawing.Point(56, 56);
+            this.comboAudioInput2.Location = new System.Drawing.Point(56, 44);
             this.comboAudioInput2.Name = "comboAudioInput2";
             this.comboAudioInput2.Size = new System.Drawing.Size(160, 21);
             this.comboAudioInput2.TabIndex = 28;
@@ -19049,7 +19354,7 @@
             this.comboAudioDriver2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboAudioDriver2.DropDownWidth = 160;
             this.comboAudioDriver2.ItemHeight = 13;
-            this.comboAudioDriver2.Location = new System.Drawing.Point(56, 24);
+            this.comboAudioDriver2.Location = new System.Drawing.Point(56, 18);
             this.comboAudioDriver2.Name = "comboAudioDriver2";
             this.comboAudioDriver2.Size = new System.Drawing.Size(160, 21);
             this.comboAudioDriver2.TabIndex = 26;
@@ -19059,7 +19364,7 @@
             // chkAudioEnableVAC
             // 
             this.chkAudioEnableVAC.Image = null;
-            this.chkAudioEnableVAC.Location = new System.Drawing.Point(16, 8);
+            this.chkAudioEnableVAC.Location = new System.Drawing.Point(16, 4);
             this.chkAudioEnableVAC.Name = "chkAudioEnableVAC";
             this.chkAudioEnableVAC.Size = new System.Drawing.Size(99, 24);
             this.chkAudioEnableVAC.TabIndex = 25;
@@ -19070,6 +19375,7 @@
             // tpVAC2
             // 
             this.tpVAC2.BackColor = System.Drawing.SystemColors.Control;
+            this.tpVAC2.Controls.Add(this.grpVAC2monitor);
             this.tpVAC2.Controls.Add(this.chkVAC2UseRX2);
             this.tpVAC2.Controls.Add(this.grpVAC2DirectIQ);
             this.tpVAC2.Controls.Add(this.chkVAC2Combine);
@@ -19088,13 +19394,280 @@
             this.tpVAC2.TabIndex = 2;
             this.tpVAC2.Text = "VAC 2";
             // 
+            // grpVAC2monitor
+            // 
+            this.grpVAC2monitor.Controls.Add(this.udVAC2_Force2);
+            this.grpVAC2monitor.Controls.Add(this.chkVAC2_Force2);
+            this.grpVAC2monitor.Controls.Add(this.lblVAC2_FROMVAC);
+            this.grpVAC2monitor.Controls.Add(this.lblVAC2var2);
+            this.grpVAC2monitor.Controls.Add(this.lblVAC2varratio2);
+            this.grpVAC2monitor.Controls.Add(this.lblVAC2unfl2);
+            this.grpVAC2monitor.Controls.Add(this.lblVAC2ovfl2);
+            this.grpVAC2monitor.Controls.Add(this.lblVAC2underflows2);
+            this.grpVAC2monitor.Controls.Add(this.lblVAC2overflows2);
+            this.grpVAC2monitor.Controls.Add(this.udVAC2_Force);
+            this.grpVAC2monitor.Controls.Add(this.chkVAC2_Force);
+            this.grpVAC2monitor.Controls.Add(this.lblVAC2_TOVAC);
+            this.grpVAC2monitor.Controls.Add(this.lblVAC2var);
+            this.grpVAC2monitor.Controls.Add(this.lblVAC2varratio);
+            this.grpVAC2monitor.Controls.Add(this.lblVAC2unfl);
+            this.grpVAC2monitor.Controls.Add(this.lblVAC2ovfl);
+            this.grpVAC2monitor.Controls.Add(this.lblVAC2underflows);
+            this.grpVAC2monitor.Controls.Add(this.lblVAC2overflows);
+            this.grpVAC2monitor.Location = new System.Drawing.Point(8, 216);
+            this.grpVAC2monitor.Name = "grpVAC2monitor";
+            this.grpVAC2monitor.Size = new System.Drawing.Size(413, 99);
+            this.grpVAC2monitor.TabIndex = 90;
+            this.grpVAC2monitor.TabStop = false;
+            this.grpVAC2monitor.Text = "VAC2 Monitor";
+            // 
+            // udVAC2_Force2
+            // 
+            this.udVAC2_Force2.DecimalPlaces = 6;
+            this.udVAC2_Force2.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            393216});
+            this.udVAC2_Force2.Location = new System.Drawing.Point(332, 44);
+            this.udVAC2_Force2.Maximum = new decimal(new int[] {
+            102,
+            0,
+            0,
+            131072});
+            this.udVAC2_Force2.Minimum = new decimal(new int[] {
+            98,
+            0,
+            0,
+            131072});
+            this.udVAC2_Force2.Name = "udVAC2_Force2";
+            this.udVAC2_Force2.Size = new System.Drawing.Size(72, 20);
+            this.udVAC2_Force2.TabIndex = 17;
+            this.udVAC2_Force2.Value = new decimal(new int[] {
+            10,
+            0,
+            0,
+            65536});
+            this.udVAC2_Force2.ValueChanged += new System.EventHandler(this.chkVAC2_Force2_CheckedChanged);
+            // 
+            // chkVAC2_Force2
+            // 
+            this.chkVAC2_Force2.AutoSize = true;
+            this.chkVAC2_Force2.Image = null;
+            this.chkVAC2_Force2.Location = new System.Drawing.Point(332, 21);
+            this.chkVAC2_Force2.Name = "chkVAC2_Force2";
+            this.chkVAC2_Force2.Size = new System.Drawing.Size(53, 17);
+            this.chkVAC2_Force2.TabIndex = 16;
+            this.chkVAC2_Force2.Text = "Force";
+            this.chkVAC2_Force2.UseVisualStyleBackColor = true;
+            this.chkVAC2_Force2.CheckedChanged += new System.EventHandler(this.chkVAC2_Force2_CheckedChanged);
+            // 
+            // lblVAC2_FROMVAC
+            // 
+            this.lblVAC2_FROMVAC.AutoSize = true;
+            this.lblVAC2_FROMVAC.Image = null;
+            this.lblVAC2_FROMVAC.Location = new System.Drawing.Point(229, 19);
+            this.lblVAC2_FROMVAC.Name = "lblVAC2_FROMVAC";
+            this.lblVAC2_FROMVAC.Size = new System.Drawing.Size(65, 13);
+            this.lblVAC2_FROMVAC.TabIndex = 15;
+            this.lblVAC2_FROMVAC.Text = "FROM VAC:";
+            // 
+            // lblVAC2var2
+            // 
+            this.lblVAC2var2.AutoSize = true;
+            this.lblVAC2var2.BackColor = System.Drawing.Color.LightCoral;
+            this.lblVAC2var2.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.lblVAC2var2.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.lblVAC2var2.Image = null;
+            this.lblVAC2var2.Location = new System.Drawing.Point(295, 76);
+            this.lblVAC2var2.Name = "lblVAC2var2";
+            this.lblVAC2var2.Size = new System.Drawing.Size(24, 15);
+            this.lblVAC2var2.TabIndex = 14;
+            this.lblVAC2var2.Text = "var";
+            // 
+            // lblVAC2varratio2
+            // 
+            this.lblVAC2varratio2.AutoSize = true;
+            this.lblVAC2varratio2.Image = null;
+            this.lblVAC2varratio2.Location = new System.Drawing.Point(231, 76);
+            this.lblVAC2varratio2.Name = "lblVAC2varratio2";
+            this.lblVAC2varratio2.Size = new System.Drawing.Size(51, 13);
+            this.lblVAC2varratio2.TabIndex = 13;
+            this.lblVAC2varratio2.Text = "Var Ratio";
+            // 
+            // lblVAC2unfl2
+            // 
+            this.lblVAC2unfl2.AutoSize = true;
+            this.lblVAC2unfl2.BackColor = System.Drawing.Color.LightCoral;
+            this.lblVAC2unfl2.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.lblVAC2unfl2.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.lblVAC2unfl2.Image = null;
+            this.lblVAC2unfl2.Location = new System.Drawing.Point(295, 57);
+            this.lblVAC2unfl2.Name = "lblVAC2unfl2";
+            this.lblVAC2unfl2.Size = new System.Drawing.Size(26, 15);
+            this.lblVAC2unfl2.TabIndex = 12;
+            this.lblVAC2unfl2.Text = "unfl";
+            // 
+            // lblVAC2ovfl2
+            // 
+            this.lblVAC2ovfl2.AutoSize = true;
+            this.lblVAC2ovfl2.BackColor = System.Drawing.Color.LightCoral;
+            this.lblVAC2ovfl2.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.lblVAC2ovfl2.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.lblVAC2ovfl2.Image = null;
+            this.lblVAC2ovfl2.Location = new System.Drawing.Point(295, 38);
+            this.lblVAC2ovfl2.Name = "lblVAC2ovfl2";
+            this.lblVAC2ovfl2.Size = new System.Drawing.Size(26, 15);
+            this.lblVAC2ovfl2.TabIndex = 11;
+            this.lblVAC2ovfl2.Text = "ovfl";
+            // 
+            // lblVAC2underflows2
+            // 
+            this.lblVAC2underflows2.AutoSize = true;
+            this.lblVAC2underflows2.Image = null;
+            this.lblVAC2underflows2.Location = new System.Drawing.Point(229, 57);
+            this.lblVAC2underflows2.Name = "lblVAC2underflows2";
+            this.lblVAC2underflows2.Size = new System.Drawing.Size(60, 13);
+            this.lblVAC2underflows2.TabIndex = 10;
+            this.lblVAC2underflows2.Text = "Underflows";
+            // 
+            // lblVAC2overflows2
+            // 
+            this.lblVAC2overflows2.AutoSize = true;
+            this.lblVAC2overflows2.Image = null;
+            this.lblVAC2overflows2.Location = new System.Drawing.Point(229, 38);
+            this.lblVAC2overflows2.Name = "lblVAC2overflows2";
+            this.lblVAC2overflows2.Size = new System.Drawing.Size(54, 13);
+            this.lblVAC2overflows2.TabIndex = 9;
+            this.lblVAC2overflows2.Text = "Overflows";
+            // 
+            // udVAC2_Force
+            // 
+            this.udVAC2_Force.DecimalPlaces = 6;
+            this.udVAC2_Force.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            393216});
+            this.udVAC2_Force.Location = new System.Drawing.Point(109, 44);
+            this.udVAC2_Force.Maximum = new decimal(new int[] {
+            102,
+            0,
+            0,
+            131072});
+            this.udVAC2_Force.Minimum = new decimal(new int[] {
+            98,
+            0,
+            0,
+            131072});
+            this.udVAC2_Force.Name = "udVAC2_Force";
+            this.udVAC2_Force.Size = new System.Drawing.Size(72, 20);
+            this.udVAC2_Force.TabIndex = 8;
+            this.udVAC2_Force.Value = new decimal(new int[] {
+            10,
+            0,
+            0,
+            65536});
+            this.udVAC2_Force.ValueChanged += new System.EventHandler(this.chkVAC2_Force_CheckedChanged);
+            // 
+            // chkVAC2_Force
+            // 
+            this.chkVAC2_Force.AutoSize = true;
+            this.chkVAC2_Force.Image = null;
+            this.chkVAC2_Force.Location = new System.Drawing.Point(109, 21);
+            this.chkVAC2_Force.Name = "chkVAC2_Force";
+            this.chkVAC2_Force.Size = new System.Drawing.Size(53, 17);
+            this.chkVAC2_Force.TabIndex = 7;
+            this.chkVAC2_Force.Text = "Force";
+            this.chkVAC2_Force.UseVisualStyleBackColor = true;
+            this.chkVAC2_Force.CheckedChanged += new System.EventHandler(this.chkVAC2_Force_CheckedChanged);
+            // 
+            // lblVAC2_TOVAC
+            // 
+            this.lblVAC2_TOVAC.AutoSize = true;
+            this.lblVAC2_TOVAC.Image = null;
+            this.lblVAC2_TOVAC.Location = new System.Drawing.Point(6, 19);
+            this.lblVAC2_TOVAC.Name = "lblVAC2_TOVAC";
+            this.lblVAC2_TOVAC.Size = new System.Drawing.Size(49, 13);
+            this.lblVAC2_TOVAC.TabIndex = 6;
+            this.lblVAC2_TOVAC.Text = "TO VAC:";
+            // 
+            // lblVAC2var
+            // 
+            this.lblVAC2var.AutoSize = true;
+            this.lblVAC2var.BackColor = System.Drawing.Color.LightCoral;
+            this.lblVAC2var.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.lblVAC2var.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.lblVAC2var.Image = null;
+            this.lblVAC2var.Location = new System.Drawing.Point(72, 76);
+            this.lblVAC2var.Name = "lblVAC2var";
+            this.lblVAC2var.Size = new System.Drawing.Size(24, 15);
+            this.lblVAC2var.TabIndex = 5;
+            this.lblVAC2var.Text = "var";
+            // 
+            // lblVAC2varratio
+            // 
+            this.lblVAC2varratio.AutoSize = true;
+            this.lblVAC2varratio.Image = null;
+            this.lblVAC2varratio.Location = new System.Drawing.Point(8, 76);
+            this.lblVAC2varratio.Name = "lblVAC2varratio";
+            this.lblVAC2varratio.Size = new System.Drawing.Size(51, 13);
+            this.lblVAC2varratio.TabIndex = 4;
+            this.lblVAC2varratio.Text = "Var Ratio";
+            // 
+            // lblVAC2unfl
+            // 
+            this.lblVAC2unfl.AutoSize = true;
+            this.lblVAC2unfl.BackColor = System.Drawing.Color.LightCoral;
+            this.lblVAC2unfl.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.lblVAC2unfl.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.lblVAC2unfl.Image = null;
+            this.lblVAC2unfl.Location = new System.Drawing.Point(72, 57);
+            this.lblVAC2unfl.Name = "lblVAC2unfl";
+            this.lblVAC2unfl.Size = new System.Drawing.Size(26, 15);
+            this.lblVAC2unfl.TabIndex = 3;
+            this.lblVAC2unfl.Text = "unfl";
+            // 
+            // lblVAC2ovfl
+            // 
+            this.lblVAC2ovfl.AutoSize = true;
+            this.lblVAC2ovfl.BackColor = System.Drawing.Color.LightCoral;
+            this.lblVAC2ovfl.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.lblVAC2ovfl.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.lblVAC2ovfl.Image = null;
+            this.lblVAC2ovfl.Location = new System.Drawing.Point(72, 38);
+            this.lblVAC2ovfl.Name = "lblVAC2ovfl";
+            this.lblVAC2ovfl.Size = new System.Drawing.Size(26, 15);
+            this.lblVAC2ovfl.TabIndex = 2;
+            this.lblVAC2ovfl.Text = "ovfl";
+            // 
+            // lblVAC2underflows
+            // 
+            this.lblVAC2underflows.AutoSize = true;
+            this.lblVAC2underflows.Image = null;
+            this.lblVAC2underflows.Location = new System.Drawing.Point(6, 57);
+            this.lblVAC2underflows.Name = "lblVAC2underflows";
+            this.lblVAC2underflows.Size = new System.Drawing.Size(60, 13);
+            this.lblVAC2underflows.TabIndex = 1;
+            this.lblVAC2underflows.Text = "Underflows";
+            // 
+            // lblVAC2overflows
+            // 
+            this.lblVAC2overflows.AutoSize = true;
+            this.lblVAC2overflows.Image = null;
+            this.lblVAC2overflows.Location = new System.Drawing.Point(6, 38);
+            this.lblVAC2overflows.Name = "lblVAC2overflows";
+            this.lblVAC2overflows.Size = new System.Drawing.Size(54, 13);
+            this.lblVAC2overflows.TabIndex = 0;
+            this.lblVAC2overflows.Text = "Overflows";
+            // 
             // chkVAC2UseRX2
             // 
             this.chkVAC2UseRX2.Checked = true;
             this.chkVAC2UseRX2.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkVAC2UseRX2.Enabled = false;
             this.chkVAC2UseRX2.Image = null;
-            this.chkVAC2UseRX2.Location = new System.Drawing.Point(116, 12);
+            this.chkVAC2UseRX2.Location = new System.Drawing.Point(116, 8);
             this.chkVAC2UseRX2.Name = "chkVAC2UseRX2";
             this.chkVAC2UseRX2.Size = new System.Drawing.Size(88, 16);
             this.chkVAC2UseRX2.TabIndex = 2;
@@ -19151,9 +19724,9 @@
             // grpVAC2AutoEnable
             // 
             this.grpVAC2AutoEnable.Controls.Add(this.chkVAC2AutoEnable);
-            this.grpVAC2AutoEnable.Location = new System.Drawing.Point(8, 168);
+            this.grpVAC2AutoEnable.Location = new System.Drawing.Point(8, 138);
             this.grpVAC2AutoEnable.Name = "grpVAC2AutoEnable";
-            this.grpVAC2AutoEnable.Size = new System.Drawing.Size(224, 64);
+            this.grpVAC2AutoEnable.Size = new System.Drawing.Size(224, 56);
             this.grpVAC2AutoEnable.TabIndex = 86;
             this.grpVAC2AutoEnable.TabStop = false;
             this.grpVAC2AutoEnable.Text = "Auto Enable";
@@ -19161,7 +19734,7 @@
             // chkVAC2AutoEnable
             // 
             this.chkVAC2AutoEnable.Image = null;
-            this.chkVAC2AutoEnable.Location = new System.Drawing.Point(16, 24);
+            this.chkVAC2AutoEnable.Location = new System.Drawing.Point(16, 16);
             this.chkVAC2AutoEnable.Name = "chkVAC2AutoEnable";
             this.chkVAC2AutoEnable.Size = new System.Drawing.Size(200, 32);
             this.chkVAC2AutoEnable.TabIndex = 0;
@@ -19263,7 +19836,7 @@
             // grpAudioStereo3
             // 
             this.grpAudioStereo3.Controls.Add(this.chkAudioStereo3);
-            this.grpAudioStereo3.Location = new System.Drawing.Point(240, 136);
+            this.grpAudioStereo3.Location = new System.Drawing.Point(240, 138);
             this.grpAudioStereo3.Name = "grpAudioStereo3";
             this.grpAudioStereo3.Size = new System.Drawing.Size(96, 56);
             this.grpAudioStereo3.TabIndex = 84;
@@ -19597,9 +20170,9 @@
             this.grpAudioDetails3.Controls.Add(this.lblAudioDriver3);
             this.grpAudioDetails3.Controls.Add(this.comboAudioInput3);
             this.grpAudioDetails3.Controls.Add(this.comboAudioDriver3);
-            this.grpAudioDetails3.Location = new System.Drawing.Point(8, 40);
+            this.grpAudioDetails3.Location = new System.Drawing.Point(8, 28);
             this.grpAudioDetails3.Name = "grpAudioDetails3";
-            this.grpAudioDetails3.Size = new System.Drawing.Size(224, 120);
+            this.grpAudioDetails3.Size = new System.Drawing.Size(224, 100);
             this.grpAudioDetails3.TabIndex = 80;
             this.grpAudioDetails3.TabStop = false;
             this.grpAudioDetails3.Text = "Virtual Audio Cable Setup";
@@ -19607,7 +20180,7 @@
             // lblAudioOutput3
             // 
             this.lblAudioOutput3.Image = null;
-            this.lblAudioOutput3.Location = new System.Drawing.Point(8, 88);
+            this.lblAudioOutput3.Location = new System.Drawing.Point(8, 70);
             this.lblAudioOutput3.Name = "lblAudioOutput3";
             this.lblAudioOutput3.Size = new System.Drawing.Size(48, 16);
             this.lblAudioOutput3.TabIndex = 35;
@@ -19619,7 +20192,7 @@
             this.comboAudioOutput3.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboAudioOutput3.DropDownWidth = 160;
             this.comboAudioOutput3.ItemHeight = 13;
-            this.comboAudioOutput3.Location = new System.Drawing.Point(56, 88);
+            this.comboAudioOutput3.Location = new System.Drawing.Point(56, 70);
             this.comboAudioOutput3.Name = "comboAudioOutput3";
             this.comboAudioOutput3.Size = new System.Drawing.Size(160, 21);
             this.comboAudioOutput3.TabIndex = 34;
@@ -19629,7 +20202,7 @@
             // lblAudioInput3
             // 
             this.lblAudioInput3.Image = null;
-            this.lblAudioInput3.Location = new System.Drawing.Point(8, 56);
+            this.lblAudioInput3.Location = new System.Drawing.Point(8, 44);
             this.lblAudioInput3.Name = "lblAudioInput3";
             this.lblAudioInput3.Size = new System.Drawing.Size(40, 16);
             this.lblAudioInput3.TabIndex = 33;
@@ -19638,7 +20211,7 @@
             // lblAudioDriver3
             // 
             this.lblAudioDriver3.Image = null;
-            this.lblAudioDriver3.Location = new System.Drawing.Point(8, 24);
+            this.lblAudioDriver3.Location = new System.Drawing.Point(8, 18);
             this.lblAudioDriver3.Name = "lblAudioDriver3";
             this.lblAudioDriver3.Size = new System.Drawing.Size(40, 16);
             this.lblAudioDriver3.TabIndex = 32;
@@ -19649,7 +20222,7 @@
             this.comboAudioInput3.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboAudioInput3.DropDownWidth = 160;
             this.comboAudioInput3.ItemHeight = 13;
-            this.comboAudioInput3.Location = new System.Drawing.Point(56, 56);
+            this.comboAudioInput3.Location = new System.Drawing.Point(56, 44);
             this.comboAudioInput3.Name = "comboAudioInput3";
             this.comboAudioInput3.Size = new System.Drawing.Size(160, 21);
             this.comboAudioInput3.TabIndex = 28;
@@ -19661,7 +20234,7 @@
             this.comboAudioDriver3.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboAudioDriver3.DropDownWidth = 160;
             this.comboAudioDriver3.ItemHeight = 13;
-            this.comboAudioDriver3.Location = new System.Drawing.Point(56, 24);
+            this.comboAudioDriver3.Location = new System.Drawing.Point(56, 18);
             this.comboAudioDriver3.Name = "comboAudioDriver3";
             this.comboAudioDriver3.Size = new System.Drawing.Size(160, 21);
             this.comboAudioDriver3.TabIndex = 26;
@@ -19671,7 +20244,7 @@
             // chkVAC2Enable
             // 
             this.chkVAC2Enable.Image = null;
-            this.chkVAC2Enable.Location = new System.Drawing.Point(16, 8);
+            this.chkVAC2Enable.Location = new System.Drawing.Point(16, 4);
             this.chkVAC2Enable.Name = "chkVAC2Enable";
             this.chkVAC2Enable.Size = new System.Drawing.Size(113, 24);
             this.chkVAC2Enable.TabIndex = 79;
@@ -46913,6 +47486,11 @@
             this.saveFileDialog1.InitialDirectory = "Environment.GetFolderPath(Environment.SpecialFolder.Desktop)";
             this.saveFileDialog1.FileOk += new System.ComponentModel.CancelEventHandler(this.saveFileDialog1_FileOk);
             // 
+            // timer_VAC_Monitor
+            // 
+            this.timer_VAC_Monitor.Enabled = true;
+            this.timer_VAC_Monitor.Tick += new System.EventHandler(this.timer_VAC_Monitor_Tick);
+            // 
             // grpDiagInfo
             // 
             this.grpDiagInfo.Controls.Add(this.lblSyncData);
@@ -48173,6 +48751,10 @@
             this.tpAudio.ResumeLayout(false);
             this.tcAudio.ResumeLayout(false);
             this.tpVAC.ResumeLayout(false);
+            this.grpVAC1monitor.ResumeLayout(false);
+            this.grpVAC1monitor.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.udVAC1_Force2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udVAC1_Force)).EndInit();
             this.grpDirectIQOutput.ResumeLayout(false);
             this.grpAudioVACAutoEnable.ResumeLayout(false);
             this.grpAudioVACGain.ResumeLayout(false);
@@ -48189,6 +48771,10 @@
             this.grpAudioBuffer2.ResumeLayout(false);
             this.grpAudioDetails2.ResumeLayout(false);
             this.tpVAC2.ResumeLayout(false);
+            this.grpVAC2monitor.ResumeLayout(false);
+            this.grpVAC2monitor.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.udVAC2_Force2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udVAC2_Force)).EndInit();
             this.grpVAC2DirectIQ.ResumeLayout(false);
             this.grpVAC2AutoEnable.ResumeLayout(false);
             this.grpVAC2Gain.ResumeLayout(false);
@@ -51796,6 +52382,45 @@
         private System.Windows.Forms.RadioButtonTS radTXLSB;
         private System.Windows.Forms.RadioButtonTS radTXDSB;
         private System.Windows.Forms.Button btnExportCurrentTXProfile;
+        private GroupBoxTS grpVAC1monitor;
+        private LabelTS lblVAC1unfl;
+        private LabelTS lblVAC1ovfl;
+        private LabelTS lblVAC1underflows;
+        private LabelTS lblVAC1overflows;
+        private Timer timer_VAC_Monitor;
+        private LabelTS lblVAC1var;
+        private LabelTS lblVAC1varratio;
+        private LabelTS lblVAC1_TOVAC;
+        private NumericUpDownTS udVAC1_Force;
+        private CheckBoxTS chkVAC1_Force;
+        private NumericUpDownTS udVAC1_Force2;
+        private CheckBoxTS chkVAC1_Force2;
+        private LabelTS lblVAC1_FROMVAC;
+        private LabelTS lblVAC1var2;
+        private LabelTS lblVAC1VarRatio2;
+        private LabelTS lblVAC1unfl2;
+        private LabelTS lblVAC1ovfl2;
+        private LabelTS lblVAC1underflows2;
+        private LabelTS lblVAC1overflows2;
+        private GroupBoxTS grpVAC2monitor;
+        private NumericUpDownTS udVAC2_Force2;
+        private CheckBoxTS chkVAC2_Force2;
+        private LabelTS lblVAC2_FROMVAC;
+        private LabelTS lblVAC2var2;
+        private LabelTS lblVAC2varratio2;
+        private LabelTS lblVAC2unfl2;
+        private LabelTS lblVAC2ovfl2;
+        private LabelTS lblVAC2underflows2;
+        private LabelTS lblVAC2overflows2;
+        private NumericUpDownTS udVAC2_Force;
+        private CheckBoxTS chkVAC2_Force;
+        private LabelTS lblVAC2_TOVAC;
+        private LabelTS lblVAC2var;
+        private LabelTS lblVAC2varratio;
+        private LabelTS lblVAC2unfl;
+        private LabelTS lblVAC2ovfl;
+        private LabelTS lblVAC2underflows;
+        private LabelTS lblVAC2overflows;
 
     }
 }

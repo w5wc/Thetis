@@ -2,7 +2,7 @@
 
 This file is part of a program that implements a Software-Defined Radio.
 
-Copyright (C) 2015-2016 Doug Wigley, W5WC
+Copyright (C) 2015-2018 Doug Wigley, W5WC
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -298,7 +298,7 @@ void WriteUDPFrame(int id, char *bufp, int buflen);
 void sendPacket(SOCKET sock, char *data, int length, int port);
 void CmdGeneral(void);
 void CmdHighPriority(void);
-void CmdRx(void);
+extern __declspec(dllexport) void CmdRx(void);
 void CmdTx(void);
 DWORD WINAPI ReadThreadMain(LPVOID);
 DWORD WINAPI KeepAliveMain(LPVOID);
@@ -433,4 +433,16 @@ int WSAinitialized;
 SOCKET listenSock;
 SYSTEMTIME lt;
 static const double const_1_div_2147483648_ = 1.0 / 2147483648.0;
+
+enum _TXPort
+{
+
+};
+
+enum _RXPort
+{
+	HPCCPort = 1025, // High Priority C&C Data
+	RxMicSampPort = 1026, // 16-bit Mic Samples
+	WB0Port = 1027, // 16-Raw ADC Samples
+};
 
