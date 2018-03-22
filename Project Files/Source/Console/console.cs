@@ -15967,11 +15967,17 @@ namespace Thetis
             if (name != "") comboTXProfile.Text = name;
         }
 
-        public void UpdateReceivers(bool rx2_enabled)
+        // Diversity operation is on RX1; therefore, the 'rx1_rate' will be used as the diversity rate;
+        public void UpdateDDCs (bool rx2_enabled)
         {
-            int rxs = 0;
-            int Rx0 = 1, Rx1 = 2, Rx2 = 4, Rx3 = 8, enablesync = 0;
-
+            int DDCEnable = 0;
+            int DDC0 = 1, DDC1 = 2, DDC2 = 4, DDC3 = 8;
+            int SyncEnable = 0;
+            int[] Rate = new int[8];
+            int i;
+            int rx1_rate = SampleRate1;
+            int rx2_rate = SampleRateRX2;
+            int ps_rate = cmaster.PSrate;
             switch (current_hpsdr_model)
             {
                 case HPSDRModel.ANAN100D:
@@ -15982,41 +15988,56 @@ namespace Thetis
                     {
                         if (diversity2)
                         {
-                            rxs = Rx0;// +Rx1;
-                            enablesync = Rx1;
+                            DDCEnable = DDC0;
+                            SyncEnable = DDC1;
+                            Rate[0] = rx1_rate;
+                            Rate[1] = rx1_rate;
                         }
                         else
                         {
-                            rxs = Rx2;
-                            enablesync = 0;
+                            DDCEnable = DDC2;
+                            SyncEnable = 0;
+                            Rate[2] = rx1_rate;
                         }
                     }
                     else
                     {
                         if (!diversity2 && !psform.PSEnabled)
                         {
-                            rxs = Rx2;
-                            enablesync = 0;
+                            DDCEnable = DDC2;
+                            SyncEnable = 0;
+                            Rate[2] = rx1_rate;
                         }
                         else if (!diversity2 && psform.PSEnabled)
                         {
-                            rxs = Rx0 /*+ Rx1*/ + Rx2;
-                            enablesync = Rx1;
+                            DDCEnable = DDC0 + DDC2;
+                            SyncEnable = DDC1;
+                            Rate[0] = ps_rate;
+                            Rate[1] = ps_rate;
+                            Rate[2] = rx1_rate;
                         }
                         else if (diversity2 && psform.PSEnabled)
                         {
-                            rxs = Rx0 /*+ Rx1*/ + Rx2;
-                            enablesync = Rx1;
+                            DDCEnable = DDC0 + DDC2;
+                            SyncEnable = DDC1;
+                            Rate[0] = ps_rate;
+                            Rate[1] = ps_rate;
+                            Rate[2] = rx1_rate;
                         }
                         else
                         {
-                            rxs = Rx0;// +Rx1;
-                            enablesync = Rx1;
+                            DDCEnable = DDC0;
+                            SyncEnable = DDC1;
+                            Rate[0] = rx1_rate;
+                            Rate[1] = rx1_rate;
                         }
                     }
 
                     if (rx2_enabled)
-                        rxs += Rx3;
+                    {
+                        DDCEnable += DDC3;
+                        Rate[3] = rx2_rate;
+                    }
                     break;
                 case HPSDRModel.HERMES:
                 case HPSDRModel.ANAN10:
@@ -16027,42 +16048,160 @@ namespace Thetis
                     {
                         if (!diversity2)
                         {
-                            rxs = Rx0;
-                            enablesync = 0;
+                            DDCEnable = DDC0;
+                            SyncEnable = 0;
+                            Rate[0] = rx1_rate;
 
                             if (rx2_enabled)
-                                rxs += Rx1;
+                            {
+                                DDCEnable += DDC1;
+                                Rate[1] = rx2_rate;
+                            }
                         }
                         else
                         {
-                            rxs = Rx0;// +Rx1;//
-                            enablesync = Rx1;//
+                            DDCEnable = DDC0;
+                            SyncEnable = DDC1;
+                            Rate[0] = rx1_rate;
+                            Rate[1] = rx1_rate;
                         }
                     }
                     else
                     {
                         if (!diversity2 && !psform.PSEnabled)
                         {
-                            rxs = Rx0;
-                            enablesync = 0;
+                            DDCEnable = DDC0;
+                            SyncEnable = 0;
+                            Rate[0] = rx1_rate;
 
                             if (rx2_enabled)
-                                rxs += Rx1;
+                            {
+                                DDCEnable += DDC1;
+                                Rate[1] = rx2_rate;
+                            }
                         }
-                        else
+                        else if (diversity2 && !psform.PSEnabled)
                         {
-                            rxs = Rx0;// +Rx1;//
-                            enablesync = Rx1;//
+                            DDCEnable = DDC0;
+                            SyncEnable = DDC1;
+                            Rate[0] = rx1_rate;
+                            Rate[1] = rx1_rate;
+                        }
+                        else // transmitting and PS is ON
+                        {
+                            DDCEnable = DDC0;
+                            SyncEnable = DDC1;
+                            Rate[0] = ps_rate;
+                            Rate[1] = ps_rate;
                         }
                     }
                     break;
                 case HPSDRModel.HPSDR:
                     break;
             }
-            NetworkIO.EnableRxs(rxs);
-            NetworkIO.EnableRxSync(0, enablesync);
-
+            NetworkIO.EnableRxs(DDCEnable);
+            NetworkIO.EnableRxSync(0, SyncEnable);
+            for (i = 0; i < 4; i++)
+                NetworkIO.SetDDCRate(i, Rate[i]);
+            NetworkIO.CmdRx();
         }
+
+        //public void UpdateReceivers(bool rx2_enabled)
+        //{
+        //    int rxs = 0;
+        //    int Rx0 = 1, Rx1 = 2, Rx2 = 4, Rx3 = 8, enablesync = 0;
+
+        //    switch (current_hpsdr_model)
+        //    {
+        //        case HPSDRModel.ANAN100D:
+        //        case HPSDRModel.ANAN200D:
+        //        case HPSDRModel.ORIONMKII:
+        //        case HPSDRModel.ANAN8000D:
+        //            if (!mox)
+        //            {
+        //                if (diversity2)
+        //                {
+        //                    rxs = Rx0;// +Rx1;
+        //                    enablesync = Rx1;
+        //                }
+        //                else
+        //                {
+        //                    rxs = Rx2;
+        //                    enablesync = 0;
+        //                }
+        //            }
+        //            else
+        //            {
+        //                if (!diversity2 && !psform.PSEnabled)
+        //                {
+        //                    rxs = Rx2;
+        //                    enablesync = 0;
+        //                }
+        //                else if (!diversity2 && psform.PSEnabled)
+        //                {
+        //                    rxs = Rx0 /*+ Rx1*/ + Rx2;
+        //                    enablesync = Rx1;
+        //                }
+        //                else if (diversity2 && psform.PSEnabled)
+        //                {
+        //                    rxs = Rx0 /*+ Rx1*/ + Rx2;
+        //                    enablesync = Rx1;
+        //                }
+        //                else
+        //                {
+        //                    rxs = Rx0;// +Rx1;
+        //                    enablesync = Rx1;
+        //                }
+        //            }
+
+        //            if (rx2_enabled)
+        //                rxs += Rx3;
+        //            break;
+        //        case HPSDRModel.HERMES:
+        //        case HPSDRModel.ANAN10:
+        //        case HPSDRModel.ANAN10E:
+        //        case HPSDRModel.ANAN100:
+        //        case HPSDRModel.ANAN100B:
+        //            if (!mox)
+        //            {
+        //                if (!diversity2)
+        //                {
+        //                    rxs = Rx0;
+        //                    enablesync = 0;
+
+        //                    if (rx2_enabled)
+        //                        rxs += Rx1;
+        //                }
+        //                else
+        //                {
+        //                    rxs = Rx0;// +Rx1;//
+        //                    enablesync = Rx1;//
+        //                }
+        //            }
+        //            else
+        //            {
+        //                if (!diversity2 && !psform.PSEnabled)
+        //                {
+        //                    rxs = Rx0;
+        //                    enablesync = 0;
+
+        //                    if (rx2_enabled)
+        //                        rxs += Rx1;
+        //                }
+        //                else
+        //                {
+        //                    rxs = Rx0;// +Rx1;//
+        //                    enablesync = Rx1;//
+        //                }
+        //            }
+        //            break;
+        //        case HPSDRModel.HPSDR:
+        //            break;
+        //    }
+        //    NetworkIO.EnableRxs(rxs);
+        //    NetworkIO.EnableRxSync(0, enablesync);
+
+        //}
 
         private void UpdateDiversityValues()
         {
@@ -19644,7 +19783,7 @@ namespace Thetis
                 {
                     txtVFOAFreq_LostFocus(this, EventArgs.Empty);
                     UpdateAAudioMixerStates();
-                    UpdateReceivers(rx2_enabled);
+                    UpdateDDCs(rx2_enabled);
                     if (RX1StepAttPresent) udRX1StepAttData_ValueChanged(this, EventArgs.Empty);
                     else comboPreamp_SelectedIndexChanged(this, EventArgs.Empty);
                     WDSP.SetEXTDIVRun(0, 1);
@@ -19652,7 +19791,7 @@ namespace Thetis
                 }
                 else
                 {
-                    UpdateReceivers(rx2_enabled);
+                    UpdateDDCs(rx2_enabled);
                     if (RX2StepAttPresent) udRX2StepAttData_ValueChanged(this, EventArgs.Empty);
                     else comboRX2Preamp_SelectedIndexChanged(this, EventArgs.Empty);
                     WDSP.SetEXTDIVRun(0, 0);
@@ -23136,7 +23275,7 @@ namespace Thetis
                 }
 
                 SetComboPreampForHPSDR();
-                UpdateReceivers(rx2_enabled);
+                UpdateDDCs(rx2_enabled);
 
                 if (!initializing)
                 {
@@ -27991,8 +28130,8 @@ namespace Thetis
                 RadioDSP.SampleRate = value;
                 Audio.SampleRate1 = value;
                 Display.SampleRateRX1 = value;
-                NetworkIO.SetSampleRate(0, value);
-                NetworkIO.SetSampleRate(2, value);
+                // NetworkIO.SetSampleRate(0, value);
+                // NetworkIO.SetSampleRate(2, value);
                 //CWSynth.SampleRate = value;
                 switch (rx1_dsp_mode)
                 {
@@ -28029,8 +28168,8 @@ namespace Thetis
 
                 Audio.SampleRateRX2 = value;
                 Display.SampleRateRX2 = value;
-                NetworkIO.SetSampleRate(1, value);
-                NetworkIO.SetSampleRate(3, value);
+                // NetworkIO.SetSampleRate(1, value);
+                // NetworkIO.SetSampleRate(3, value);
                 switch (rx1_dsp_mode)
                 {
                     case DSPMode.SPEC:
@@ -35976,7 +36115,7 @@ namespace Thetis
                 txtVFOALSD.ForeColor = small_vfo_color;
                 // cmaster.CMSetAudioMixerRX2();
                 UpdateRXADCCtrl();
-                UpdateReceivers(rx2_enabled);
+                UpdateDDCs(rx2_enabled);
                 UpdateVFOASub();
 
                 if (rx2_enabled)
@@ -36139,7 +36278,7 @@ namespace Thetis
                 chkVFOLock.Enabled = true;
                 timer_peak_text.Enabled = true;
                 CurrentHPSDRHardware = NetworkIO.BoardID;
-                UpdateReceivers(rx2_enabled);
+                UpdateDDCs(rx2_enabled);
                 UpdateAAudioMixerStates();
                 // cmaster.SetAAudioMixState((void*)0, 0, 0, true);
                 // cmaster.SetAAudioMixState((void*)0, 0, 2, radio.GetDSPRX(1, 0).Active);
@@ -36167,7 +36306,7 @@ namespace Thetis
                 // cmaster.SetAAudioMixState((void*)0, 0, 2, false);
                 // cmaster.SetAAudioMixState((void*)0, 0, 0, false);
                 UpdateAAudioMixerStates();
-                UpdateReceivers(rx2_enabled);
+                UpdateDDCs(rx2_enabled);
 
                 chkMOX.Checked = false;
                 chkMOX.Enabled = false;
@@ -37821,7 +37960,7 @@ namespace Thetis
                 }
                 else NetworkIO.SetTxAttenData(0);
                 UpdateAAudioMixerStates();
-                UpdateReceivers(rx2_enabled);
+                UpdateDDCs(rx2_enabled);
                 UpdateRXADCCtrl();
                 // AudioMOXChanged(tx);    // set MOX in audio.cs
                 HdwMOXChanged(tx, freq);// flip the hardware
@@ -37856,7 +37995,7 @@ namespace Thetis
                 {
                     if (mox_delay > 0) Thread.Sleep(mox_delay); // default 10
                 }
-                UpdateReceivers(rx2_enabled);
+                UpdateDDCs(rx2_enabled);
                 UpdateAAudioMixerStates();
                 UpdateRXADCCtrl();
                 AudioMOXChanged(tx);    // set audio.cs to RX
@@ -47336,12 +47475,12 @@ namespace Thetis
                 {
                     if (rx2_enabled)
                     {
-                        UpdateReceivers(rx2_enabled);
+                        UpdateDDCs(rx2_enabled);
                         // Thread.Sleep(20);
                     }
                     // cmaster.SetAAudioMixState((void*)0, 0, 2, rx2_enabled);
                     UpdateAAudioMixerStates();          // What is the 'DataFlowing' thing all about????
-                    if (!rx2_enabled) UpdateReceivers(rx2_enabled);
+                    if (!rx2_enabled) UpdateDDCs(rx2_enabled);
                 }
                 cmaster.CMSetFRXNBRun(1);
                 cmaster.CMSetFRXNB2Run(1);

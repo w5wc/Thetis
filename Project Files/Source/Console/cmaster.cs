@@ -230,9 +230,7 @@ namespace Thetis
             }
         }
 
-        #endregion
-
-        #region logic calls
+       
 
         // number of software receivers
         private static int cmRCVR = 5;  
@@ -247,6 +245,17 @@ namespace Thetis
         {
             get { return cmSubRCVR; }
         }
+
+        private static int ps_rate = 192000;
+        public static int PSrate
+        {
+            get { return ps_rate; }
+            set { ps_rate = value; }
+        }
+
+        #endregion
+
+        #region logic calls
 
         public static void CMCreateCMaster()
         {
@@ -285,7 +294,7 @@ namespace Thetis
             //      CMLoadRouterAll() which is called each time the receiver model changes.
             SetPSRxIdx(0, 0);   // txid = 0, all current models use Stream0 for RX feedback
             SetPSTxIdx(0, 1);   // txid = 0, all current models use Stream1 for TX feedback
-            puresignal.SetPSFeedbackRate(txch, 192000);
+            puresignal.SetPSFeedbackRate(txch, ps_rate);
             puresignal.SetPSHWPeak(txch, 0.2899);
 
             // setup transmitter display

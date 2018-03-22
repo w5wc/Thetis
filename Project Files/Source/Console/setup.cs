@@ -1410,6 +1410,9 @@ namespace Thetis
             radDDCADC_CheckedChanged(this, e);
 
             chkWheelReverse_CheckedChanged(this, e);
+            // IVAC
+            chkVAC1_Force_CheckedChanged(this, e);
+            chkVAC1_Force2_CheckedChanged(this, e);
         }
 
         public string[] GetTXProfileStrings()
@@ -7114,7 +7117,7 @@ namespace Thetis
                 if (was_enabled)
                 {
                     // turn on the DDC(s)
-                    console.UpdateReceivers(true);
+                    console.UpdateDDCs(true);
                     // wait for samples at the new rate to be received
                     Thread.Sleep(1);
                     // add the audio streams to the mix set
@@ -7148,7 +7151,7 @@ namespace Thetis
                 // remove the RX2 audio stream from the mix set
                 unsafe { cmaster.SetAAudioMixState((void*)0, 0, 2, false); }
                 // turn OFF the DDC for RX2; had to add rx2_enabled as a parameter to UpdateReceivers() to do this --- THIS IS S HACK.  BETTER WAY?
-                console.UpdateReceivers(false);
+                console.UpdateDDCs(false);
                 // wait for all inflight packets to arrive
                 Thread.Sleep(20);   // need to experiment with this time
 
@@ -7167,7 +7170,7 @@ namespace Thetis
                 // turn the DDC for RX2 back ON; had to add rx2_enabled as a parameter to UpdateReceivers() to do this
                 if (was_enabled)
                 {
-                    console.UpdateReceivers(true);
+                    console.UpdateDDCs(true);
                     // wait for samples at the new rate to be received
                     Thread.Sleep(1);   // need to experiment with this time
                     // add the RX2 audio stream to the mix set
@@ -17680,6 +17683,69 @@ namespace Thetis
         private void btnExportCurrentTXProfile_Click(object sender, EventArgs e)
         {
             ExportCurrentTxProfile();
+        }
+
+        private void timer_VAC_Monitor_Tick(object sender, EventArgs e)
+        {
+            int underflows, overflows, ringsize;
+            double var;
+            unsafe
+            {
+                ivac.getIVACdiags(0, 0, &underflows, &overflows, &var, &ringsize);
+            }
+            lblVAC1ovfl.Text = overflows.ToString();
+            lblVAC1unfl.Text = underflows.ToString();
+            lblVAC1var.Text = var.ToString("F6");
+            unsafe
+            {
+                ivac.getIVACdiags(0, 1, &underflows, &overflows, &var, &ringsize);
+            }
+            lblVAC1ovfl2.Text = overflows.ToString();
+            lblVAC1unfl2.Text = underflows.ToString();
+            lblVAC1var2.Text = var.ToString("F6");
+
+            unsafe
+            {
+                ivac.getIVACdiags(1, 0, &underflows, &overflows, &var, &ringsize);
+            }
+            lblVAC2ovfl.Text = overflows.ToString();
+            lblVAC2unfl.Text = underflows.ToString();
+            lblVAC2var.Text = var.ToString("F6");
+            unsafe
+            {
+                ivac.getIVACdiags(1, 1, &underflows, &overflows, &var, &ringsize);
+            }
+            lblVAC2ovfl2.Text = overflows.ToString();
+            lblVAC2unfl2.Text = underflows.ToString();
+            lblVAC2var2.Text = var.ToString("F6");
+        }
+
+        private void chkVAC1_Force_CheckedChanged(object sender, EventArgs e)
+        {
+            bool force = chkVAC1_Force.Checked;
+            double fvar = (double)udVAC1_Force.Value;
+            ivac.forceIVACvar(0, 0, force, fvar);
+        }
+
+        private void chkVAC1_Force2_CheckedChanged(object sender, EventArgs e)
+        {
+            bool force = chkVAC1_Force2.Checked;
+            double fvar = (double)udVAC1_Force2.Value;
+            ivac.forceIVACvar(0, 1, force, fvar);
+        }
+
+        private void chkVAC2_Force_CheckedChanged(object sender, EventArgs e)
+        {
+            bool force = chkVAC2_Force.Checked;
+            double fvar = (double)udVAC2_Force.Value;
+            ivac.forceIVACvar(1, 0, force, fvar);
+        }
+
+        private void chkVAC2_Force2_CheckedChanged(object sender, EventArgs e)
+        {
+            bool force = chkVAC2_Force2.Checked;
+            double fvar = (double)udVAC2_Force2.Value;
+            ivac.forceIVACvar(1, 1, force, fvar);
         }
     }
 
