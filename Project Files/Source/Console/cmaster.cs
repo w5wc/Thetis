@@ -328,6 +328,7 @@ namespace Thetis
                     case HPSDRModel.ANAN100D:
                     case HPSDRModel.ANAN200D:
                     case HPSDRModel.ORIONMKII:
+                    case HPSDRModel.ANAN7000D:
                     case HPSDRModel.ANAN8000D:
                         // This ANGELIA table is for test purposes and it routes Rx0 and Rx1 to RX1 and RX2, 
                         //      respectively, (as well as to PureSignal) when transmitting with PureSignal 
@@ -417,6 +418,7 @@ namespace Thetis
                     case HPSDRModel.ANAN100D:
                     case HPSDRModel.ANAN200D:
                     case HPSDRModel.ORIONMKII:
+                    case HPSDRModel.ANAN7000D:
                     case HPSDRModel.ANAN8000D:
                         // control bits are { MOX, Diversity_Enabled, PureSignal_Enabled }
                         int[] Angelia_Function = new int[56] 

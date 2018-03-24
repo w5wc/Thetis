@@ -1027,6 +1027,7 @@
             this.lblFMMic = new System.Windows.Forms.LabelTS();
             this.panelBandGEN = new System.Windows.Forms.PanelTS();
             this.btnBandHF1 = new System.Windows.Forms.ButtonTS();
+            this.chkRxAnt = new System.Windows.Forms.CheckBoxTS();
             ((System.ComponentModel.ISupportInitialize)(this.ptbRX2RF)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ptbFilterShift)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ptbFilterWidth)).BeginInit();
@@ -5933,6 +5934,7 @@
             // grpVFOBetween
             // 
             this.grpVFOBetween.BackColor = System.Drawing.Color.Transparent;
+            this.grpVFOBetween.Controls.Add(this.chkRxAnt);
             this.grpVFOBetween.Controls.Add(this.labelTS5);
             this.grpVFOBetween.Controls.Add(this.regBox1);
             this.grpVFOBetween.Controls.Add(this.regBox);
@@ -6311,6 +6313,15 @@
             this.btnBandHF1.Name = "btnBandHF1";
             this.btnBandHF1.Click += new System.EventHandler(this.btnBandHF_Click);
             // 
+            // chkRxAnt
+            // 
+            resources.ApplyResources(this.chkRxAnt, "chkRxAnt");
+            this.chkRxAnt.FlatAppearance.BorderSize = 0;
+            this.chkRxAnt.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.chkRxAnt.Name = "chkRxAnt";
+            this.toolTip1.SetToolTip(this.chkRxAnt, resources.GetString("chkRxAnt.ToolTip"));
+            this.chkRxAnt.CheckedChanged += new System.EventHandler(this.chkRxAnt_CheckedChanged);
+            // 
             // Console
             // 
             resources.ApplyResources(this, "$this");
@@ -6499,6 +6510,7 @@
         private LabelTS labelTS3;
         public NumericUpDownTS udTXFilterLow;
         public NumericUpDownTS udTXFilterHigh;
+        private CheckBoxTS chkRxAnt;
 
     }
 }
