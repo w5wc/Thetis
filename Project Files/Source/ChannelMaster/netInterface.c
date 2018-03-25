@@ -212,14 +212,14 @@ int getExciterPower() {
 PORT
 float getFwdPower() {
 
-	PeakFwdPower((float)prn->tx[0].fwd_power);
+	// PeakFwdPower((float)prn->tx[0].fwd_power);
 	return FwdPower;
 }
 
 PORT
 float getRevPower() {
 
-	PeakRevPower((float)prn->tx[0].rev_power);
+	// PeakRevPower((float)prn->tx[0].rev_power);
 	return RevPower;
 }
 

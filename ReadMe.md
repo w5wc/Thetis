@@ -1,7 +1,11 @@
 # Thetis beta releases
 # Official Releases are located at https://github.com/tapr
 
-Latest Beta Release v2.5.6 March 25, 2018
+Latest Beta Release v2.5.7 March 25, 2018
+# 2.5.7 (2018-3-25)
+- spectrum roll-off adjusted to clip 4%
+- calls to PeakFwdPower(…) and PeakRevPower(…) moved from netInterface.c to network.c
+- skin graphics added for chkRxAnt and chkVFOBLock controls
 
 # 2.5.6 (2018-3-25)
 - added MIDI/CAT updates
