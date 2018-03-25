@@ -19085,7 +19085,7 @@ namespace Thetis
 
             DisableAllFilters();
             DisableAllModes();
-            VFOLock = true;
+            VFOLock = CheckState.Indeterminate;
 
             calibration_mutex.WaitOne();
             //fixed (float* ptr = &a[0])
@@ -19208,7 +19208,7 @@ namespace Thetis
             progress.Hide();
             EnableAllFilters();
             EnableAllModes();
-            VFOLock = false;
+            VFOLock = CheckState.Unchecked;
             chkRX1Preamp.Enabled = true;
             chkRX2Preamp.Enabled = true;
             comboDisplayMode.Enabled = true;
@@ -19292,7 +19292,7 @@ namespace Thetis
 
             DisableAllFilters();
             DisableAllModes();
-            VFOLock = true;
+            VFOLock = CheckState.Checked;
             comboPreamp.Enabled = false;
             comboDisplayMode.Enabled = false;
 
@@ -19334,9 +19334,9 @@ namespace Thetis
                 if (run[i])
                 {
                     int error_count = 0;
-                    VFOLock = false;
+                    VFOLock = CheckState.Unchecked;
                     VFOAFreq = band_freqs[i];				// set frequency
-                    VFOLock = true;
+                    VFOLock = CheckState.Checked;
                     ptbPWR.Value = Math.Min(target_watts, max_pwr[i]);
                     int target = ptbPWR.Value;
 
@@ -19517,7 +19517,7 @@ namespace Thetis
 
             EnableAllFilters();
             EnableAllModes();
-            VFOLock = false;
+            VFOLock = CheckState.Unchecked;
             comboPreamp.Enabled = true;
             comboDisplayMode.Enabled = true;
 
@@ -19988,6 +19988,11 @@ namespace Thetis
             set { chkFWCATU.Checked = value; }
         }
 
+        public bool CTuneRX2Display
+        {
+            get { return chkX2TR.Checked; }
+            set { chkX2TR.Checked = value; }
+        }
 
         private bool click_tune_display = false;
         public bool ClickTuneDisplay
@@ -23738,15 +23743,96 @@ namespace Thetis
             }
         }
 
-        private bool vfo_lock = false;
-        public bool VFOLock
+        private CheckState vfo_lock = CheckState.Unchecked;
+        public CheckState VFOLock
         {
             get { return vfo_lock; }
+            set { vfo_lock = value; }
+        }
+
+        //private bool vfo_lock = false;
+        //public bool VFOLock
+        //{
+        //    get { return vfo_lock; }
+        //    set
+        //    {
+        //        vfo_lock = value;
+        //        bool enabled = !value;
+        //        txtVFOAFreq.Enabled = enabled;
+        //        radBand160.Enabled = enabled;
+        //        radBand80.Enabled = enabled;
+        //        radBand60.Enabled = enabled;
+        //        radBand40.Enabled = enabled;
+        //        radBand30.Enabled = enabled;
+        //        radBand20.Enabled = enabled;
+        //        radBand17.Enabled = enabled;
+        //        radBand15.Enabled = enabled;
+        //        radBand12.Enabled = enabled;
+        //        radBand10.Enabled = enabled;
+        //        radBand6.Enabled = enabled;
+        //        radBand2.Enabled = enabled;
+        //        radBandWWV.Enabled = enabled;
+        //        radBandGEN.Enabled = enabled;
+        //        btnBandHF.Enabled = enabled;
+        //        btnBandVHF.Enabled = enabled;
+        //        radBandVHF0.Enabled = enabled;
+        //        radBandVHF1.Enabled = enabled;
+        //        radBandVHF2.Enabled = enabled;
+        //        radBandVHF3.Enabled = enabled;
+        //        radBandVHF4.Enabled = enabled;
+        //        radBandVHF5.Enabled = enabled;
+        //        radBandVHF6.Enabled = enabled;
+        //        radBandVHF7.Enabled = enabled;
+        //        radBandVHF8.Enabled = enabled;
+        //        radBandVHF5.Enabled = enabled;
+        //        radBandVHF9.Enabled = enabled;
+        //        radBandVHF10.Enabled = enabled;
+        //        radBandVHF11.Enabled = enabled;
+        //        radBandVHF12.Enabled = enabled;
+        //        radBandVHF13.Enabled = enabled;
+
+        //        radModeLSB.Enabled = enabled;
+        //        radModeUSB.Enabled = enabled;
+        //        radModeDSB.Enabled = enabled;
+        //        radModeCWL.Enabled = enabled;
+        //        radModeCWU.Enabled = enabled;
+        //        radModeFMN.Enabled = enabled;
+        //        radModeAM.Enabled = enabled;
+        //        radModeSAM.Enabled = enabled;
+        //        radModeSPEC.Enabled = enabled;
+        //        radModeDIGL.Enabled = enabled;
+        //        radModeDIGU.Enabled = enabled;
+        //        radModeDRM.Enabled = enabled;
+
+        //        btnVFOBtoA.Enabled = enabled;
+        //        btnVFOSwap.Enabled = enabled;
+
+        //        btnMemoryQuickRestore.Enabled = enabled;
+        //    }
+        //}
+
+        //-W2PA Separate locking functions for VFOA and B
+
+        //-W2PA VFOA's individual lock not yet used
+        private bool vfoA_lock = false;
+        public bool VFOALock
+        {
+            get { return vfoA_lock; }
             set
             {
-                vfo_lock = value;
-                bool enabled = !value;
-                txtVFOAFreq.Enabled = enabled;
+                bool enabled = true;
+                vfoA_lock = value;
+                switch (vfoA_lock)
+                {
+                    case false:
+                        txtVFOAFreq.Enabled = true;
+                        break;
+                    case true:
+                        enabled = false;
+                        txtVFOAFreq.Enabled = false;
+                        break;
+                }
+
                 radBand160.Enabled = enabled;
                 radBand80.Enabled = enabled;
                 radBand60.Enabled = enabled;
@@ -23797,6 +23883,46 @@ namespace Thetis
 
                 btnMemoryQuickRestore.Enabled = enabled;
             }
+        }
+
+        private bool vfoB_lock = false;
+        public bool VFOBLock
+        {
+            get { return vfoB_lock; }
+            set
+            {
+                bool enabled = true;
+                vfoB_lock = value;
+                switch (vfoB_lock)
+                {
+                    case false:
+                        txtVFOBFreq.Enabled = true;
+                        break;
+                    case true:
+                        enabled = false;
+                        txtVFOBFreq.Enabled = false;
+                        chkVFOSync.Checked = false;
+                        break;
+                }
+
+                comboRX2Band.Enabled = enabled;
+                btnVFOAtoB.Enabled = enabled;
+                chkVFOSync.Enabled = enabled;
+                radRX2ModeLSB.Enabled = enabled;
+                radRX2ModeUSB.Enabled = enabled;
+                radRX2ModeDSB.Enabled = enabled;
+                radRX2ModeCWL.Enabled = enabled;
+                radRX2ModeCWU.Enabled = enabled;
+                radRX2ModeFMN.Enabled = enabled;
+                radRX2ModeAM.Enabled = enabled;
+                radRX2ModeSAM.Enabled = enabled;
+                radRX2ModeSPEC.Enabled = enabled;
+                radRX2ModeDIGL.Enabled = enabled;
+                radRX2ModeDIGU.Enabled = enabled;
+                radRX2ModeDRM.Enabled = enabled;
+
+            }
+
         }
 
         private double wave_freq = 0.0;
@@ -24319,6 +24445,21 @@ namespace Thetis
             get { return saved_vfob_freq; }
         }
 
+        //-W2PA Added three new functions to make CAT functions match behavior of equivalent console functions.
+        //   i.e. not just copy frequency alone
+        public void CATVFOAtoB()
+        {
+            btnVFOAtoB_Click(this, EventArgs.Empty);
+        }
+        public void CATVFOBtoA()
+        {
+            btnVFOBtoA_Click(this, EventArgs.Empty);
+        }
+        public void CATVFOABSwap()
+        {
+            btnVFOSwap_Click(this, EventArgs.Empty);
+        }
+
         public int CATTXProfileCount
         {
             get
@@ -24514,6 +24655,73 @@ namespace Thetis
             ChangeTuneStepDown();
         }
 
+        //-W2PA This specifies the number of MIDI messages that cause a single tune step increment
+        // It is useful when using coarse increments, such as 100kHz, and wanting more wheel rotation for each one
+        // so that tuning isn't so critical. Midi2Cat support functions follow.
+        private int midi_messages_per_tune_step = 1;
+        public int MidiMessagesPerTuneStep
+        {
+            get
+            {
+                return midi_messages_per_tune_step;                
+            }
+            set
+            {
+                if ((value <= max_midi_messages_per_tune_step) && (value > 0))
+                    midi_messages_per_tune_step = value;
+            }
+        }
+        
+        private int max_midi_messages_per_tune_step = 64;  // Upper limit 
+        public int MaxMIDIMessagesPerTuneStep
+        {
+            get
+            {
+                return max_midi_messages_per_tune_step;
+            }
+            set
+            {
+                if (value <= 64 && value > 1)
+                {
+                    max_midi_messages_per_tune_step = value;
+                }
+            }
+        }
+
+        private int min_midi_messages_per_tune_step = 1;  // Lower limit 
+        public int MinMIDIMessagesPerTuneStep
+        {
+            get
+            {
+                return min_midi_messages_per_tune_step;
+            }
+            set
+            {
+                if (value <= 9 && value > 0)
+                {
+                    min_midi_messages_per_tune_step = value;
+                }
+            }
+        }
+
+        //-W2PA These are the methods called by Midi2Cat
+        public void CATMidiMessagesPerTuneStepUp()
+        {
+            int oldM = MidiMessagesPerTuneStep;
+            MidiMessagesPerTuneStep = oldM * 2;  // Increment by 2x
+        }
+        public void CATMidiMessagesPerTuneStepDown() 
+        {
+            int oldM = MidiMessagesPerTuneStep;
+            MidiMessagesPerTuneStep = oldM / 2;  // Decrement by half
+        }
+        public void CATMidiMessagesPerTuneStepToggle()
+        {
+            if (midi_messages_per_tune_step == min_midi_messages_per_tune_step)
+                midi_messages_per_tune_step = max_midi_messages_per_tune_step;
+            else
+                midi_messages_per_tune_step = min_midi_messages_per_tune_step;
+        }
 
         //Added 03/18/07 BT BCI Reject
         private int cat_bci_reject = 0;
@@ -24548,6 +24756,37 @@ namespace Thetis
                 else if (value == 1)
                     chkCWAPFEnabled.CheckState = CheckState.Checked;
             }
+        }
+
+        //-W2PA Added to enable CAT control of two-tone test
+        private int cat_TTT_status = 0;
+        public int CATTTTest
+        {
+            get
+            {
+                cat_TTT_status = Convert.ToInt32(SetupForm.TTgenrun);
+                return cat_TTT_status;
+            }
+            set
+            {
+                if (value == 0)
+                {
+                    SetupForm.TTgenrun = false;
+                    cat_TTT_status = 0;
+                }
+                else if (value == 1)
+                {
+                    SetupForm.TTgenrun = true;
+                    cat_TTT_status = 1;
+                }
+                    
+            }
+        }
+
+        //-W2PA Added to enable CAT control of PS Single Cal
+        public void CATSingleCal()
+        {
+            //psform.SingleCalrun();           
         }
 
         // Added 06/20/05 BT for CAT commands
@@ -24616,6 +24855,21 @@ namespace Thetis
                     chkANF.Checked = true;
             }
         }
+
+        // Added 01/13/17 BT for CAT commands
+        private int catrx2_anf_status = 0;
+        public int CATRX2ANF
+        {
+            get { return catrx2_anf_status; }
+            set
+            {
+                if (value == 0)
+                    chkRX2ANF.Checked = false;
+                else if (value == 1)
+                    chkRX2ANF.Checked = true;
+            }
+        }
+
 
         // Added 06/21/05 BT for CAT Commands
         private int cat_nb1_status = 0;
@@ -25863,6 +26117,16 @@ namespace Thetis
             set { chkVFOLock.Checked = value; }
         }
 
+        public bool CATVFOBLock
+        {
+            get { return false; } // chkVFOBLock.Checked; }
+            set {; } // chkVFOBLock.Checked = value; }
+        }
+
+
+
+
+
         public string CATGetVersion()
         {
             Assembly assembly = Assembly.GetExecutingAssembly();
@@ -26587,7 +26851,7 @@ namespace Thetis
             }
             set
             {
-                if (vfo_lock || SetupForm == null) return;
+                if (vfo_lock == CheckState.Checked || SetupForm == null) return;
                 if (!this.InvokeRequired)
                 {
                     // UpdateVFOAFreq(value.ToString("f6"));
@@ -26627,7 +26891,7 @@ namespace Thetis
 
             set
             {
-                if (vfo_lock || SetupForm == null) return;
+                if (vfo_lock == CheckState.Checked || SetupForm == null) return;
                 txtVFOABand.Text = value.ToString("f6");
                 txtVFOABand_LostFocus(this, EventArgs.Empty);
             }
@@ -35863,7 +36127,7 @@ namespace Thetis
                             break;
                     }
                 }
-                else if (e.KeyCode == key_band_up && !vfo_lock)
+                else if (e.KeyCode == key_band_up && !(vfo_lock == CheckState.Checked))
                 {
                     switch (rx1_band)
                     {
@@ -36031,7 +36295,7 @@ namespace Thetis
                             break;
                     }
                 }
-                else if (e.KeyCode == key_band_down && !vfo_lock)
+                else if (e.KeyCode == key_band_down && vfo_lock != CheckState.Checked)
                 {
                     switch (rx1_band)
                     {
@@ -36236,7 +36500,7 @@ namespace Thetis
                 {
 
                 }
-                else if (vfo_lock || !quick_qsy)
+                else if (vfo_lock == CheckState.Checked || !quick_qsy)
                 {
                     return;
                 }
@@ -37307,6 +37571,10 @@ namespace Thetis
             if (pct <= 0.0) pct = 0.0;
             else if (pct < 1.0 / 15.0) pct = 1.0 / 15.0; //-W2PA Don't let the last LED go out until zero
             Midi2Cat.SendUpdateToMidi(CatCmd.DriveLevel, pct);
+
+            //-W2PA Update LEDs on Behringer MIDI controller mini wheel
+            pct = Convert.ToDouble(ptbPWR.Value - ptbPWR.Minimum) / Convert.ToDouble(ptbPWR.Maximum - ptbPWR.Minimum);
+            Midi2Cat.SendUpdateToMidi(CatCmd.DriveLevel_inc, pct);
         }
 
         private void ptbAF_Scroll(object sender, System.EventArgs e)
@@ -38979,11 +39247,12 @@ namespace Thetis
 
         private void chkVFOLock_CheckedChanged(object sender, System.EventArgs e)
         {
-            VFOLock = chkVFOLock.Checked;
-            if (chkVFOLock.Checked)
-                chkVFOLock.BackColor = button_selected_color;
-            else
-                chkVFOLock.BackColor = SystemColors.Control;
+            VFOALock = chkVFOLock.Checked; 
+        }
+
+        private void chkVFOBLock_CheckedChanged(object sender, EventArgs e)
+        {
+            VFOBLock = chkVFOBLock.Checked;
         }
 
         private void btnBandVHF_Click(object sender, System.EventArgs e)
@@ -39803,7 +40072,7 @@ namespace Thetis
                 {
                     center_frequency = freq;
                     update_centerfreq = false;
-                    VFOAFreq = freq;
+                    //VFOAFreq = freq;
                     rx1_osc = 0.0;
                 }
 
