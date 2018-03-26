@@ -1964,6 +1964,7 @@ namespace Thetis
             tune_step_list.Add(new TuneStep(250, "250Hz"));
             tune_step_list.Add(new TuneStep(500, "500Hz"));
             tune_step_list.Add(new TuneStep(1000, "1kHz"));
+            tune_step_list.Add(new TuneStep(2000, "2kHz"));
             tune_step_list.Add(new TuneStep(2500, "2.5kHz"));
             tune_step_list.Add(new TuneStep(5000, "5kHz"));
             tune_step_list.Add(new TuneStep(6250, "6.25kHz"));
@@ -5022,20 +5023,23 @@ namespace Thetis
                                 case Filter.F2:
                                     preset[m].SetFilter(f, -cw_pitch - 400, -cw_pitch + 400, "800");
                                     break;
+                                //case Filter.F3:
+                                //    preset[m].SetFilter(f, -cw_pitch - 375, -cw_pitch + 375, "750");
+                                //    break;
                                 case Filter.F3:
-                                    preset[m].SetFilter(f, -cw_pitch - 375, -cw_pitch + 375, "750");
-                                    break;
-                                case Filter.F4:
                                     preset[m].SetFilter(f, -cw_pitch - 300, -cw_pitch + 300, "600");
                                     break;
-                                case Filter.F5:
+                                case Filter.F4:
                                     preset[m].SetFilter(f, -cw_pitch - 250, -cw_pitch + 250, "500");
                                     break;
-                                case Filter.F6:
+                                case Filter.F5:
                                     preset[m].SetFilter(f, -cw_pitch - 200, -cw_pitch + 200, "400");
                                     break;
-                                case Filter.F7:
+                                case Filter.F6:
                                     preset[m].SetFilter(f, -cw_pitch - 125, -cw_pitch + 125, "250");
+                                    break;
+                                case Filter.F7:
+                                    preset[m].SetFilter(f, -cw_pitch - 75, -cw_pitch + 75, "150");
                                     break;
                                 case Filter.F8:
                                     preset[m].SetFilter(f, -cw_pitch - 50, -cw_pitch + 50, "100");
@@ -5064,20 +5068,23 @@ namespace Thetis
                                 case Filter.F2:
                                     preset[m].SetFilter(f, cw_pitch - 400, cw_pitch + 400, "800");
                                     break;
+                                //case Filter.F3:
+                                //    preset[m].SetFilter(f, cw_pitch - 375, cw_pitch + 375, "750");
+                                //    break;
                                 case Filter.F3:
-                                    preset[m].SetFilter(f, cw_pitch - 375, cw_pitch + 375, "750");
-                                    break;
-                                case Filter.F4:
                                     preset[m].SetFilter(f, cw_pitch - 300, cw_pitch + 300, "600");
                                     break;
-                                case Filter.F5:
+                                case Filter.F4:
                                     preset[m].SetFilter(f, cw_pitch - 250, cw_pitch + 250, "500");
                                     break;
-                                case Filter.F6:
+                                case Filter.F5:
                                     preset[m].SetFilter(f, cw_pitch - 200, cw_pitch + 200, "400");
                                     break;
-                                case Filter.F7:
+                                case Filter.F6:
                                     preset[m].SetFilter(f, cw_pitch - 125, cw_pitch + 125, "250");
+                                    break;
+                                case Filter.F7:
+                                    preset[m].SetFilter(f, cw_pitch - 75, cw_pitch + 75, "150");
                                     break;
                                 case Filter.F8:
                                     preset[m].SetFilter(f, cw_pitch - 50, cw_pitch + 50, "100");
@@ -26119,13 +26126,9 @@ namespace Thetis
 
         public bool CATVFOBLock
         {
-            get { return false; } // chkVFOBLock.Checked; }
-            set {; } // chkVFOBLock.Checked = value; }
+            get { return chkVFOBLock.Checked; }
+            set { chkVFOBLock.Checked = value; }
         }
-
-
-
-
 
         public string CATGetVersion()
         {
@@ -26851,7 +26854,7 @@ namespace Thetis
             }
             set
             {
-                if (vfo_lock == CheckState.Checked || SetupForm == null) return;
+                if ((vfo_lock != CheckState.Unchecked) || vfoA_lock == true || SetupForm == null) return;
                 if (!this.InvokeRequired)
                 {
                     // UpdateVFOAFreq(value.ToString("f6"));
@@ -26891,7 +26894,7 @@ namespace Thetis
 
             set
             {
-                if (vfo_lock == CheckState.Checked || SetupForm == null) return;
+                if ((vfo_lock != CheckState.Unchecked) || vfoA_lock == true || SetupForm == null) return;
                 txtVFOABand.Text = value.ToString("f6");
                 txtVFOABand_LostFocus(this, EventArgs.Empty);
             }
@@ -26912,6 +26915,7 @@ namespace Thetis
             }
             set
             {
+                if ((vfo_lock == CheckState.Indeterminate) || SetupForm == null || vfoB_lock == true) return;
                 value = Math.Max(0, value);
                 txtVFOBFreq.Text = value.ToString("f6");
                 txtVFOBFreq_LostFocus(this, EventArgs.Empty);
@@ -35810,8 +35814,16 @@ namespace Thetis
             }
             else if (!e.Alt && !e.Control)
             {
-                if (this.ActiveControl is TextBoxTS) return;
-                if (this.ActiveControl is NumericUpDownTS) return;
+                if (this.ActiveControl is TextBoxTS || this.ActiveControl is NumericUpDownTS)
+                {
+                    if (e.KeyCode == Keys.Space)
+                    {
+                        btnHidden.Focus();
+                        e.SuppressKeyPress = true;
+                    }
+                    else
+                        return;
+                }
 
                 switch (e.KeyCode)
                 {
@@ -36716,6 +36728,7 @@ namespace Thetis
                     chkTUN.Enabled = true;
                 }
                 chkVFOLock.Enabled = true;
+                chkVFOBLock.Enabled = true;
                 timer_peak_text.Enabled = true;
                 CurrentHPSDRHardware = NetworkIO.BoardID;
                 UpdateDDCs(rx2_enabled);
@@ -38042,23 +38055,13 @@ namespace Thetis
             }
         }
 
+        private CheckState NB_CheckState;
         private void UIMOXChangedTrue()
         {
             Display.MOX = true;
+            NB_CheckState = chkNB.CheckState; // save current state of NB
+            if (display_duplex) chkNB.CheckState = CheckState.Unchecked; // turn off NB/NB2 while transmitting with DUP enabled
             meter_peak_count = multimeter_peak_hold_samples;		// reset multimeter peak
-
-            //switch (Display.CurrentDisplayMode)
-            //{
-            //    case DisplayMode.PANADAPTER:
-            //    case DisplayMode.SPECTRUM:
-            //    case DisplayMode.HISTOGRAM:
-            //    case DisplayMode.WATERFALL:
-            //    case DisplayMode.PANAFALL:
-            //    case DisplayMode.PANASCOPE:
-            //    case DisplayMode.SPECTRASCOPE:
-            //        // Display.DrawBackground();
-            //        break;
-            //}
 
             comboMeterRXMode.ForeColor = Color.Gray;
             comboMeterTXMode.ForeColor = Color.White;
@@ -38085,30 +38088,13 @@ namespace Thetis
             //chkMOX.BackColor = button_selected_color;
 
             picSquelch.Invalidate();
-
-            /*Thread t = new Thread(new ThreadStart(DelayedDisplayReset));
-            t.Name = "Display Reset";
-            t.Priority = ThreadPriority.BelowNormal;
-            t.IsBackground = true;
-            t.Start();*/
-        }
+         }
 
         private void UIMOXChangedFalse()
         {
             Display.MOX = false;
-            //switch (Display.CurrentDisplayMode)
-            //{
-            //    case DisplayMode.PANADAPTER:
-            //    case DisplayMode.SPECTRUM:
-            //    case DisplayMode.HISTOGRAM:
-            //    case DisplayMode.WATERFALL:
-            //    case DisplayMode.PANAFALL:
-            //    case DisplayMode.PANASCOPE:
-            //    case DisplayMode.SPECTRASCOPE:
-            //        //  Display.DrawBackground();
-            //        break;
-            //}
-
+            if (display_duplex) chkNB.CheckState = NB_CheckState; // restore saved state of NB
+ 
             if (!disable_ui_mox_changes)
             {
                 //  SetupForm.SpurRedEnabled = true;
@@ -44480,6 +44466,10 @@ namespace Thetis
                     radio.GetDSPRX(0, 1).RXAPFRun = false;
                     SetupForm.EnableRX1APFControl = false;
                     lblRX1APF.Hide();
+                    // enable ANF
+                    chkANF.Enabled = true;
+                    chkANF_CheckedChanged(this, EventArgs.Empty);
+
 
                     if (!RX1IsOn60mChannel())
                     {
@@ -44514,6 +44504,9 @@ namespace Thetis
                     radio.GetDSPRX(0, 1).RXAPFRun = false;
                     SetupForm.EnableRX1APFControl = false;
                     lblRX1APF.Hide();
+                    // enable ANF
+                    chkANF.Enabled = true;
+                    chkANF_CheckedChanged(this, EventArgs.Empty);
 
                     if (!RX1IsOn60mChannel())
                     {
@@ -44731,8 +44724,14 @@ namespace Thetis
                         txtVFOAFreq.Text = rx1_freq.ToString("f6");
                     }
 
+                    // enable APF
                     SetupForm.EnableRX1APFControl = true;
                     lblRX1APF.Show();
+                    // turn off ANF
+                    radio.GetDSPRX(0, 0).AutoNotchFilter = false;
+                    radio.GetDSPRX(0, 1).AutoNotchFilter = false;
+                    chkANF.Enabled = false;
+
                     chkCWFWKeyer_CheckedChanged(this, EventArgs.Empty);
                     // chkCWAPFEnabled_CheckedChanged(this, EventArgs.Empty);
                     panelModeSpecificCW.BringToFront();
@@ -44777,8 +44776,14 @@ namespace Thetis
                         txtVFOAFreq.Text = rx1_freq.ToString("f6");
                     }
 
+                    // enable APF
                     SetupForm.EnableRX1APFControl = true;
+                    chkANF.Enabled = false;
                     lblRX1APF.Show();
+                    // turn off ANF
+                    radio.GetDSPRX(0, 0).AutoNotchFilter = false;
+                    radio.GetDSPRX(0, 1).AutoNotchFilter = false;
+
                     chkCWFWKeyer_CheckedChanged(this, EventArgs.Empty);
                     // chkCWAPFEnabled_CheckedChanged(this, EventArgs.Empty);
                     panelModeSpecificCW.BringToFront();

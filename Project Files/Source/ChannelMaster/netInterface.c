@@ -23,7 +23,7 @@
 #include "network.h"
 #include "obbuffs.h"
 
-#define MDECAY  0.9992f
+#define MDECAY 0.9f; // 0.9992f
 const int numInputBuffs = 12;
 
 //
