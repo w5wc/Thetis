@@ -1,7 +1,15 @@
 # Thetis beta releases
 # Official Releases are located at https://github.com/tapr
 
-Latest Beta Release v2.5.8 March 25, 2018
+Latest Beta Release v2.5.9 March 29, 2018
+# 2.5.9 (2018-3-29)
+- changed "MDECAY" constant to 0.99 in netInterface.c
+- added 2Hz step tune choice
+- corrected duplicate db import dialogs
+- modified behavior of sequence errors so that sequence errors are ignored for seq 0
+- changes to VAC includes tooltips for various controls, fix for the Output Ringbuffer latency Monitor control not working, and added the ability to reset the diagnostics
+- forced BPF1 into ByPass during transmit if PureSignal is enabled for Orion MkII boards only
+
 # 2.5.8 (2018-3-25)
 - changed "MDECAY" constant to 0.9 in netInterface.c
 - fixes for VFO A&B Lock 

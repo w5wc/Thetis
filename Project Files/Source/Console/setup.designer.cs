@@ -18655,6 +18655,7 @@
             this.udVAC1_Force2.Name = "udVAC1_Force2";
             this.udVAC1_Force2.Size = new System.Drawing.Size(72, 20);
             this.udVAC1_Force2.TabIndex = 17;
+            this.toolTip1.SetToolTip(this.udVAC1_Force2, "Rate conversion ratio imposed when \"Force\" is checked");
             this.udVAC1_Force2.Value = new decimal(new int[] {
             10,
             0,
@@ -18671,6 +18672,7 @@
             this.chkVAC1_Force2.Size = new System.Drawing.Size(53, 17);
             this.chkVAC1_Force2.TabIndex = 16;
             this.chkVAC1_Force2.Text = "Force";
+            this.toolTip1.SetToolTip(this.chkVAC1_Force2, "Disable resampler matching loop and force to ratio setting below");
             this.chkVAC1_Force2.UseVisualStyleBackColor = true;
             this.chkVAC1_Force2.CheckedChanged += new System.EventHandler(this.chkVAC1_Force2_CheckedChanged);
             // 
@@ -18683,6 +18685,7 @@
             this.lblVAC1_FROMVAC.Size = new System.Drawing.Size(65, 13);
             this.lblVAC1_FROMVAC.TabIndex = 15;
             this.lblVAC1_FROMVAC.Text = "FROM VAC:";
+            this.toolTip1.SetToolTip(this.lblVAC1_FROMVAC, "Transmit audio stream");
             // 
             // lblVAC1var2
             // 
@@ -18696,6 +18699,7 @@
             this.lblVAC1var2.Size = new System.Drawing.Size(24, 15);
             this.lblVAC1var2.TabIndex = 14;
             this.lblVAC1var2.Text = "var";
+            this.toolTip1.SetToolTip(this.lblVAC1var2, "Sampling rate conversion ratio being applied by matching loop");
             // 
             // lblVAC1VarRatio2
             // 
@@ -18719,6 +18723,8 @@
             this.lblVAC1unfl2.Size = new System.Drawing.Size(26, 15);
             this.lblVAC1unfl2.TabIndex = 12;
             this.lblVAC1unfl2.Text = "unfl";
+            this.toolTip1.SetToolTip(this.lblVAC1unfl2, "Ringbuffer underflow counter (click to reset)");
+            this.lblVAC1unfl2.Click += new System.EventHandler(this.lblVAC1unfl2_Click);
             // 
             // lblVAC1ovfl2
             // 
@@ -18732,6 +18738,8 @@
             this.lblVAC1ovfl2.Size = new System.Drawing.Size(26, 15);
             this.lblVAC1ovfl2.TabIndex = 11;
             this.lblVAC1ovfl2.Text = "ovfl";
+            this.toolTip1.SetToolTip(this.lblVAC1ovfl2, "Ringbuffer overflow counter (click to reset)");
+            this.lblVAC1ovfl2.Click += new System.EventHandler(this.lblVAC1ovfl2_Click);
             // 
             // lblVAC1underflows2
             // 
@@ -18775,6 +18783,7 @@
             this.udVAC1_Force.Name = "udVAC1_Force";
             this.udVAC1_Force.Size = new System.Drawing.Size(72, 20);
             this.udVAC1_Force.TabIndex = 8;
+            this.toolTip1.SetToolTip(this.udVAC1_Force, "Rate conversion ratio imposed when \"Force\" is checked");
             this.udVAC1_Force.Value = new decimal(new int[] {
             10,
             0,
@@ -18791,6 +18800,7 @@
             this.chkVAC1_Force.Size = new System.Drawing.Size(53, 17);
             this.chkVAC1_Force.TabIndex = 7;
             this.chkVAC1_Force.Text = "Force";
+            this.toolTip1.SetToolTip(this.chkVAC1_Force, "Disable resampler matching loop and force to ratio setting below");
             this.chkVAC1_Force.UseVisualStyleBackColor = true;
             this.chkVAC1_Force.CheckedChanged += new System.EventHandler(this.chkVAC1_Force_CheckedChanged);
             // 
@@ -18803,6 +18813,7 @@
             this.lblVAC1_TOVAC.Size = new System.Drawing.Size(49, 13);
             this.lblVAC1_TOVAC.TabIndex = 6;
             this.lblVAC1_TOVAC.Text = "TO VAC:";
+            this.toolTip1.SetToolTip(this.lblVAC1_TOVAC, "Receive audio stream");
             // 
             // lblVAC1var
             // 
@@ -18816,6 +18827,7 @@
             this.lblVAC1var.Size = new System.Drawing.Size(24, 15);
             this.lblVAC1var.TabIndex = 5;
             this.lblVAC1var.Text = "var";
+            this.toolTip1.SetToolTip(this.lblVAC1var, "Sampling rate conversion ratio being applied by matching loop");
             // 
             // lblVAC1varratio
             // 
@@ -18839,6 +18851,8 @@
             this.lblVAC1unfl.Size = new System.Drawing.Size(26, 15);
             this.lblVAC1unfl.TabIndex = 3;
             this.lblVAC1unfl.Text = "unfl";
+            this.toolTip1.SetToolTip(this.lblVAC1unfl, "Ringbuffer underflow counter (click to reset)");
+            this.lblVAC1unfl.Click += new System.EventHandler(this.lblVAC1unfl_Click);
             // 
             // lblVAC1ovfl
             // 
@@ -18852,6 +18866,8 @@
             this.lblVAC1ovfl.Size = new System.Drawing.Size(26, 15);
             this.lblVAC1ovfl.TabIndex = 2;
             this.lblVAC1ovfl.Text = "ovfl";
+            this.toolTip1.SetToolTip(this.lblVAC1ovfl, "Ringbuffer overflow counter (click to reset)");
+            this.lblVAC1ovfl.Click += new System.EventHandler(this.lblVAC1ovfl_Click);
             // 
             // lblVAC1underflows
             // 
@@ -19565,6 +19581,7 @@
             this.udVAC2_Force2.Name = "udVAC2_Force2";
             this.udVAC2_Force2.Size = new System.Drawing.Size(72, 20);
             this.udVAC2_Force2.TabIndex = 17;
+            this.toolTip1.SetToolTip(this.udVAC2_Force2, "Rate conversion ratio imposed when \"Force\" is checked");
             this.udVAC2_Force2.Value = new decimal(new int[] {
             10,
             0,
@@ -19581,6 +19598,7 @@
             this.chkVAC2_Force2.Size = new System.Drawing.Size(53, 17);
             this.chkVAC2_Force2.TabIndex = 16;
             this.chkVAC2_Force2.Text = "Force";
+            this.toolTip1.SetToolTip(this.chkVAC2_Force2, "Disable resampler matching loop and force to ratio setting below");
             this.chkVAC2_Force2.UseVisualStyleBackColor = true;
             this.chkVAC2_Force2.CheckedChanged += new System.EventHandler(this.chkVAC2_Force2_CheckedChanged);
             // 
@@ -19593,6 +19611,7 @@
             this.lblVAC2_FROMVAC.Size = new System.Drawing.Size(65, 13);
             this.lblVAC2_FROMVAC.TabIndex = 15;
             this.lblVAC2_FROMVAC.Text = "FROM VAC:";
+            this.toolTip1.SetToolTip(this.lblVAC2_FROMVAC, "Transmit audio stream");
             // 
             // lblVAC2var2
             // 
@@ -19606,6 +19625,7 @@
             this.lblVAC2var2.Size = new System.Drawing.Size(24, 15);
             this.lblVAC2var2.TabIndex = 14;
             this.lblVAC2var2.Text = "var";
+            this.toolTip1.SetToolTip(this.lblVAC2var2, "Sampling rate conversion ratio being applied by matching loop");
             // 
             // lblVAC2varratio2
             // 
@@ -19629,6 +19649,8 @@
             this.lblVAC2unfl2.Size = new System.Drawing.Size(26, 15);
             this.lblVAC2unfl2.TabIndex = 12;
             this.lblVAC2unfl2.Text = "unfl";
+            this.toolTip1.SetToolTip(this.lblVAC2unfl2, "Ringbuffer underflow counter (click to reset)");
+            this.lblVAC2unfl2.Click += new System.EventHandler(this.lblVAC2unfl2_Click);
             // 
             // lblVAC2ovfl2
             // 
@@ -19642,6 +19664,8 @@
             this.lblVAC2ovfl2.Size = new System.Drawing.Size(26, 15);
             this.lblVAC2ovfl2.TabIndex = 11;
             this.lblVAC2ovfl2.Text = "ovfl";
+            this.toolTip1.SetToolTip(this.lblVAC2ovfl2, "Ringbuffer overflow counter (click to reset)");
+            this.lblVAC2ovfl2.Click += new System.EventHandler(this.lblVAC2ovfl2_Click);
             // 
             // lblVAC2underflows2
             // 
@@ -19685,6 +19709,7 @@
             this.udVAC2_Force.Name = "udVAC2_Force";
             this.udVAC2_Force.Size = new System.Drawing.Size(72, 20);
             this.udVAC2_Force.TabIndex = 8;
+            this.toolTip1.SetToolTip(this.udVAC2_Force, "Rate conversion ratio imposed when \"Force\" is checked");
             this.udVAC2_Force.Value = new decimal(new int[] {
             10,
             0,
@@ -19701,6 +19726,7 @@
             this.chkVAC2_Force.Size = new System.Drawing.Size(53, 17);
             this.chkVAC2_Force.TabIndex = 7;
             this.chkVAC2_Force.Text = "Force";
+            this.toolTip1.SetToolTip(this.chkVAC2_Force, "Disable resampler matching loop and force to ratio setting below");
             this.chkVAC2_Force.UseVisualStyleBackColor = true;
             this.chkVAC2_Force.CheckedChanged += new System.EventHandler(this.chkVAC2_Force_CheckedChanged);
             // 
@@ -19713,6 +19739,7 @@
             this.lblVAC2_TOVAC.Size = new System.Drawing.Size(49, 13);
             this.lblVAC2_TOVAC.TabIndex = 6;
             this.lblVAC2_TOVAC.Text = "TO VAC:";
+            this.toolTip1.SetToolTip(this.lblVAC2_TOVAC, "Receive audio stream");
             // 
             // lblVAC2var
             // 
@@ -19726,6 +19753,7 @@
             this.lblVAC2var.Size = new System.Drawing.Size(24, 15);
             this.lblVAC2var.TabIndex = 5;
             this.lblVAC2var.Text = "var";
+            this.toolTip1.SetToolTip(this.lblVAC2var, "Sampling rate conversion ratio being applied by matching loop");
             // 
             // lblVAC2varratio
             // 
@@ -19749,6 +19777,8 @@
             this.lblVAC2unfl.Size = new System.Drawing.Size(26, 15);
             this.lblVAC2unfl.TabIndex = 3;
             this.lblVAC2unfl.Text = "unfl";
+            this.toolTip1.SetToolTip(this.lblVAC2unfl, "Ringbuffer underflow counter (click to reset)");
+            this.lblVAC2unfl.Click += new System.EventHandler(this.lblVAC2unfl_Click);
             // 
             // lblVAC2ovfl
             // 
@@ -19762,6 +19792,8 @@
             this.lblVAC2ovfl.Size = new System.Drawing.Size(26, 15);
             this.lblVAC2ovfl.TabIndex = 2;
             this.lblVAC2ovfl.Text = "ovfl";
+            this.toolTip1.SetToolTip(this.lblVAC2ovfl, "Ringbuffer overflow counter (click to reset)");
+            this.lblVAC2ovfl.Click += new System.EventHandler(this.lblVAC2ovfl_Click);
             // 
             // lblVAC2underflows
             // 

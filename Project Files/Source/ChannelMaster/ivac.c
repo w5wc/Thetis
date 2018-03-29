@@ -533,3 +533,14 @@ void forceIVACvar (int id, int type, int force, double fvar)
 	}
 	forceRMatchVar (a, force, fvar);
 }
+PORT
+void resetIVACdiags(int id, int type)
+{
+	// type:  0 - From VAC; 1 - To VAC
+	void* a;
+	if (type == 0)
+		a = pvac[id]->rmatchOUT;
+	else
+		a = pvac[id]->rmatchIN;
+	resetRMatchDiags(a);
+}

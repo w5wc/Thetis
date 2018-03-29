@@ -11682,7 +11682,6 @@ namespace Thetis
             string path = console.AppDataPath;
             path = path.Substring(0, path.LastIndexOf("\\"));
             openFileDialog1.InitialDirectory = path;
-            openFileDialog1.ShowDialog();
             bool ok = false;
             if (openFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
@@ -18348,6 +18347,46 @@ namespace Thetis
         private void chkLPFBypass_CheckedChanged(object sender, EventArgs e)
         {
             console.LPFBypass = chkLPFBypass.Checked;
+        }
+
+        private void lblVAC1ovfl_Click(object sender, EventArgs e)
+        {
+            ivac.resetIVACdiags(0, 0);
+        }
+
+        private void lblVAC1unfl_Click(object sender, EventArgs e)
+        {
+            ivac.resetIVACdiags(0, 0);
+        }
+
+        private void lblVAC1ovfl2_Click(object sender, EventArgs e)
+        {
+            ivac.resetIVACdiags(0, 1);
+        }
+
+        private void lblVAC1unfl2_Click(object sender, EventArgs e)
+        {
+            ivac.resetIVACdiags(0, 1);
+        }
+
+        private void lblVAC2ovfl_Click(object sender, EventArgs e)
+        {
+            ivac.resetIVACdiags(1, 0);
+        }
+
+        private void lblVAC2unfl_Click(object sender, EventArgs e)
+        {
+            ivac.resetIVACdiags(1, 0);
+        }
+
+        private void lblVAC2ovfl2_Click(object sender, EventArgs e)
+        {
+            ivac.resetIVACdiags(1, 1);
+        }
+
+        private void lblVAC2unfl2_Click(object sender, EventArgs e)
+        {
+            ivac.resetIVACdiags(1, 1);
         }
     }
 

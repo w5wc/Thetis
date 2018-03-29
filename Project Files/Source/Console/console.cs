@@ -1957,6 +1957,7 @@ namespace Thetis
 
             tune_step_list = new List<TuneStep>();  // initialize wheel tuning list array
             tune_step_list.Add(new TuneStep(1, "1Hz"));
+            tune_step_list.Add(new TuneStep(2, "2Hz"));
             tune_step_list.Add(new TuneStep(10, "10Hz"));
             tune_step_list.Add(new TuneStep(25, "25Hz"));
             tune_step_list.Add(new TuneStep(50, "50Hz"));
@@ -14941,7 +14942,7 @@ namespace Thetis
         {
             if (alexpresent && !initializing)
             {
-                if (mox && disable_hpf_on_tx)
+                if (mox && (disable_hpf_on_tx || PureSignalEnabled))
                 {
                     NetworkIO.SetAlexHPFBits(0x20);
                     SetupForm.BPF1BPTXled = true;

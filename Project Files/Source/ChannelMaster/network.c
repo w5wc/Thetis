@@ -504,7 +504,7 @@ int ReadUDPFrame(unsigned char *bufp) {
 	switch (rc = ntohs(fromaddr.sin_port))
 	{
 	case HPCCPort: //1025: // 60 bytes - High Priority C&C data
-		if (seqnum != (1 + prn->cc_seq_no))  {
+		if (seqnum != (1 + prn->cc_seq_no) && seqnum != 0)  {
 			prn->cc_seq_err += 1;
 			//PrintTimeHack();
 			printf("- Rx High Priority C&C: seq error this: %d last: %d\n", seqnum, prn->cc_seq_no);
@@ -516,7 +516,7 @@ int ReadUDPFrame(unsigned char *bufp) {
 		break;
 	case  RxMicSampPort: //1026: // 1440 bytes - 16-bit mic samples (48ksps)
 		//mic_samples_buf++;
-		if (seqnum != (1 + prn->tx[0].mic_in_seq_no))  {
+		if (seqnum != (1 + prn->tx[0].mic_in_seq_no) && seqnum != 0)  {
 			prn->tx[0].mic_in_seq_err += 1;
 			//PrintTimeHack();
 			printf("- Mic samples: seq error this: %d last: %d\n", seqnum, prn->tx[0].mic_in_seq_no);
@@ -620,7 +620,7 @@ int ReadUDPFrame(unsigned char *bufp) {
 	}
 	case 1035: // 1428 bytes - 24-bit DDC0 I/Q data
 		//rx_samples_buf++;
-		if (seqnum != (1 + prn->rx[0].rx_in_seq_no))  {
+		if (seqnum != (1 + prn->rx[0].rx_in_seq_no) && seqnum != 0)  {
 			prn->rx[0].rx_in_seq_err += 1;
 			//PrintTimeHack();
 			printf("- Rx0 I/Q: seq error this: %d last: %d\n", seqnum, prn->rx[0].rx_in_seq_no);
@@ -631,7 +631,7 @@ int ReadUDPFrame(unsigned char *bufp) {
 		memcpy(bufp, readbuf + 16, 1428);
 		break;
 	case 1036: // 1428 bytes - 24-bit DDC1 I/Q data
-		if (seqnum != (1 + prn->rx[1].rx_in_seq_no))  {
+		if (seqnum != (1 + prn->rx[1].rx_in_seq_no) && seqnum != 0)  {
 			prn->rx[1].rx_in_seq_err += 1;
 			//PrintTimeHack();
 			printf("- Rx1 I/Q: seq error this: %d last: %d\n", seqnum, prn->rx[1].rx_in_seq_no);
@@ -643,7 +643,7 @@ int ReadUDPFrame(unsigned char *bufp) {
 		break;
 	case 1037: // 1428 bytes - 24-bit DDC2 I/Q data
 		//rx_samples_buf++;
-		if (seqnum != (1 + prn->rx[2].rx_in_seq_no))  {
+		if (seqnum != (1 + prn->rx[2].rx_in_seq_no) && seqnum != 0)  {
 			prn->rx[2].rx_in_seq_err += 1;
 			//PrintTimeHack();
 			printf("- Rx2 I/Q: seq error this: %d last: %d\n", seqnum, prn->rx[2].rx_in_seq_no);
@@ -654,7 +654,7 @@ int ReadUDPFrame(unsigned char *bufp) {
 		memcpy(bufp, readbuf + 16, 1428);
 		break;
 	case 1038: // 1428 bytes - 24-bit DDC3 I/Q data
-		if (seqnum != (1 + prn->rx[3].rx_in_seq_no))  {
+		if (seqnum != (1 + prn->rx[3].rx_in_seq_no) && seqnum != 0)  {
 			prn->rx[3].rx_in_seq_err += 1;
 			//PrintTimeHack();
 			printf("- Rx3 I/Q: seq error this: %d last: %d\n", seqnum, prn->rx[3].rx_in_seq_no);
@@ -665,7 +665,7 @@ int ReadUDPFrame(unsigned char *bufp) {
 		memcpy(bufp, readbuf + 16, 1428);
 		break;
 	case 1039: // 1428 bytes - 24-bit DDC4 I/Q data
-		if (seqnum != (1 + prn->rx[4].rx_in_seq_no))  {
+		if (seqnum != (1 + prn->rx[4].rx_in_seq_no) && seqnum != 0)  {
 			prn->rx[4].rx_in_seq_err += 1;
 			//PrintTimeHack();
 			printf("- Rx4 I/Q: seq error this: %d last: %d\n", seqnum, prn->rx[4].rx_in_seq_no);
@@ -676,7 +676,7 @@ int ReadUDPFrame(unsigned char *bufp) {
 		memcpy(bufp, readbuf + 16, 1428);
 		break;
 	case 1040: // 1428 bytes - 24-bit DDC5 I/Q data
-		if (seqnum != (1 + prn->rx[5].rx_in_seq_no))  {
+		if (seqnum != (1 + prn->rx[5].rx_in_seq_no) && seqnum != 0)  {
 			prn->rx[5].rx_in_seq_err += 1;
 			//PrintTimeHack();
 			printf("- Rx5 I/Q: seq error this: %d last: %d\n", seqnum, prn->rx[5].rx_in_seq_no);
@@ -687,7 +687,7 @@ int ReadUDPFrame(unsigned char *bufp) {
 		memcpy(bufp, readbuf + 16, 1428);
 		break;
 	case 1041: // 1428 bytes - 24-bit DDC6 I/Q data
-		if (seqnum != (1 + prn->rx[6].rx_in_seq_no))  {
+		if (seqnum != (1 + prn->rx[6].rx_in_seq_no) && seqnum != 0)  {
 			prn->rx[6].rx_in_seq_err += 1;
 			//PrintTimeHack();
 			printf("- Rx6 I/Q: seq error this: %d last: %d\n", seqnum, prn->rx[6].rx_in_seq_no);
