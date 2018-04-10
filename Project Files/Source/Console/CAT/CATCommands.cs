@@ -1133,7 +1133,7 @@ namespace Thetis
             if (s.Length == parser.nSet)
             {
                 step = Convert.ToInt32(s);
-                if (step >= 0 || step <= 14)
+                if (step >= 0 || step <= 25)
                 {
                     console.TuneStepIndex = step;
                     return "";
@@ -1157,7 +1157,7 @@ namespace Thetis
             if (s.Length == parser.nSet)
             {
                 step = Convert.ToInt32(s);
-                if (step >= 0 || step <= 14)
+                if (step >= 0 || step <= 25)
                 {
                     console.VFOAFreq = console.CATVFOA - Step2Freq(step);
                     return "";

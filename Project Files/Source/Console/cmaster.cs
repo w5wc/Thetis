@@ -186,6 +186,11 @@ namespace Thetis
         [DllImport("ChannelMaster.dll", EntryPoint = "SetADCSupply", CallingConvention = CallingConvention.Cdecl)]
         extern public static void SetADCSupply(int txid, int v);
 
+        // monitoring & debugging
+
+        [DllImport("ChannelMaster.dll", EntryPoint = "getLEDs", CallingConvention = CallingConvention.Cdecl)]
+        extern public static int getLEDs();
+
         #endregion
 
         #region properties

@@ -503,7 +503,7 @@ int ReadUDPFrame(unsigned char *bufp) {
 
 	switch (rc = ntohs(fromaddr.sin_port))
 	{
-	case HPCCPort: //1025: // 60 bytes - High Priority C&C data
+	case HPCCPort: //1025: // 62 bytes - High Priority C&C data
 		if (seqnum != (1 + prn->cc_seq_no) && seqnum != 0)  {
 			prn->cc_seq_err += 1;
 			//PrintTimeHack();
@@ -512,7 +512,7 @@ int ReadUDPFrame(unsigned char *bufp) {
 		}
 
 		prn->cc_seq_no = seqnum;
-		memcpy(bufp, readbuf + 4, 60);
+		memcpy(bufp, readbuf + 4, 62);
 		break;
 	case  RxMicSampPort: //1026: // 1440 bytes - 16-bit mic samples (48ksps)
 		//mic_samples_buf++;
@@ -790,6 +790,8 @@ ReadThreadMainLoop() {
 						//          Bit [2] - User I/O (IO6) 1 = active, 0 = inactive
 						//          Bit [3] - User I/O (IO8) 1 = active, 0 = inactive
 						prn->user_io = prn->ReadBufp[55];
+
+						prn->hardware_LEDs = prn->ReadBufp[26] << 8 | prn->ReadBufp[27];
 
 						break;
 					case 1026: // 1440 bytes 16-bit mic samples

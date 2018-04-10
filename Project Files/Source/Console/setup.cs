@@ -6661,7 +6661,7 @@ namespace Thetis
             if (radGenModelHPSDR.Checked) tpPennyCtrl.Text = "Penny Ctrl";
             else if (radGenModelHermes.Checked) tpPennyCtrl.Text = "Hermes Ctrl";
             // else if (radGenModelOrion.Checked) tpPennyCtrl.Text = "Orion Ctrl";
-            else tpPennyCtrl.Text = "ANAN Ctrl";
+            else tpPennyCtrl.Text = "OC Control";
 
             if (!console.RX2PreampPresent &&
                 console.diversityForm != null)
@@ -7393,6 +7393,9 @@ namespace Thetis
                 // remove the RX1 main and sub audio streams from the mix set
                 unsafe { cmaster.SetAAudioMixStates((void*)0, 0, 3, 0); }
 
+                // disable VAC
+                if (console.VACEnabled) Audio.EnableVAC1(false);
+
                 // turn OFF the DDC(s) 
                 NetworkIO.EnableRx(0, 0);
                 NetworkIO.EnableRx(1, 0);
@@ -7426,6 +7429,9 @@ namespace Thetis
                     unsafe { cmaster.SetAAudioMixStates((void*)0, 0, 3, 3); }
                 }
 
+                // enable VAC
+                if (console.VACEnabled) Audio.EnableVAC1(true);
+
                 // turn ON the DSP channels
                 int w_enable = 0;
                 if (was_enabled) w_enable = 1;
@@ -7452,6 +7458,8 @@ namespace Thetis
                 WDSP.SetChannelState(WDSP.id(2, 0), 0, 1);
                 // remove the RX2 audio stream from the mix set
                 unsafe { cmaster.SetAAudioMixState((void*)0, 0, 2, false); }
+                // disable VAC
+                if (console.VAC2Enabled) Audio.EnableVAC2(false);
                 // turn OFF the DDC for RX2; had to add rx2_enabled as a parameter to UpdateReceivers() to do this --- THIS IS S HACK.  BETTER WAY?
                 console.UpdateDDCs(false);
                 // wait for all inflight packets to arrive
@@ -7478,6 +7486,8 @@ namespace Thetis
                     // add the RX2 audio stream to the mix set
                     unsafe { cmaster.SetAAudioMixState((void*)0, 0, 2, true); }
                 }
+                // enable VAC2
+                if (console.VAC2Enabled) Audio.EnableVAC2(true);
                 // turn ON the DSP channel if it was ON before
                 int w_enable = 0;
                 if (was_enabled) w_enable = 1;
@@ -13921,6 +13931,7 @@ namespace Thetis
         {
             grpPennyExtCtrl.Enabled = chkPennyExtCtrl.Checked;
             grpPennyExtCtrlVHF.Enabled = chkPennyExtCtrl.Checked;
+            grpExtCtrlSWL.Enabled = chkPennyExtCtrl.Checked;
             console.PennyExtCtrlEnabled = chkPennyExtCtrl.Checked;
 
 #if false 		
@@ -14759,6 +14770,17 @@ namespace Thetis
             }
         }
 
+        private void btnCtrlSWLReset_Click(object sender, EventArgs e)
+        {
+            foreach (Control c in grpExtCtrlSWL.Controls)
+            {
+                if (c.Name.StartsWith("chkOC"))
+                {
+                    ((CheckBoxTS)c).Checked = false;
+                }
+            }
+        }
+
         private void comboFRSRegion_SelectedIndexChanged(object sender, EventArgs e) //w5wc
         {
             if (comboFRSRegion.Text == "") return;
@@ -15480,6 +15502,454 @@ namespace Thetis
             Penny.getPenny().setBandABitMask(Band.VHF11, (byte)val, true);
             console.PennyExtCtrlEnabled = chkPennyExtCtrl.Checked;  // need side effect of this to push change to native code
         }
+        
+        private void chkOCrcvLMW_CheckedChanged(object sender, EventArgs e)
+        {
+            int val = 0;
+            if (chkOCrcvLMW1.Checked) val += 1 << 0;
+            if (chkOCrcvLMW2.Checked) val += 1 << 1;
+            if (chkOCrcvLMW3.Checked) val += 1 << 2;
+            if (chkOCrcvLMW4.Checked) val += 1 << 3;
+            if (chkOCrcvLMW5.Checked) val += 1 << 4;
+            if (chkOCrcvLMW6.Checked) val += 1 << 5;
+            if (chkOCrcvLMW7.Checked) val += 1 << 6;
+
+            Penny.getPenny().setBandBBitMask(Band.BLMF, (byte)(val & 0x70), false); // 0000xxx
+            Penny.getPenny().setBandABitMask(Band.BLMF, (byte)val, false);
+            console.PennyExtCtrlEnabled = chkPennyExtCtrl.Checked;  // need side effect of this to push change to native code 
+        }
+
+        private void chkOCrcv120_CheckedChanged(object sender, EventArgs e)
+        {
+            int val = 0;
+            if (chkOCrcv1201.Checked) val += 1 << 0;
+            if (chkOCrcv1202.Checked) val += 1 << 1;
+            if (chkOCrcv1203.Checked) val += 1 << 2;
+            if (chkOCrcv1204.Checked) val += 1 << 3;
+            if (chkOCrcv1205.Checked) val += 1 << 4;
+            if (chkOCrcv1206.Checked) val += 1 << 5;
+            if (chkOCrcv1207.Checked) val += 1 << 6;
+
+            Penny.getPenny().setBandBBitMask(Band.B120M, (byte)(val & 0x70), false);
+            Penny.getPenny().setBandABitMask(Band.B120M, (byte)val, false);
+            console.PennyExtCtrlEnabled = chkPennyExtCtrl.Checked;  // need side effect of this to push change to native code 
+        }
+
+        private void chkOCrcv90_CheckedChanged(object sender, EventArgs e)
+        {
+            int val = 0;
+            if (chkOCrcv901.Checked) val += 1 << 0;
+            if (chkOCrcv902.Checked) val += 1 << 1;
+            if (chkOCrcv903.Checked) val += 1 << 2;
+            if (chkOCrcv904.Checked) val += 1 << 3;
+            if (chkOCrcv905.Checked) val += 1 << 4;
+            if (chkOCrcv906.Checked) val += 1 << 5;
+            if (chkOCrcv907.Checked) val += 1 << 6;
+
+            Penny.getPenny().setBandBBitMask(Band.B90M, (byte)(val & 0x70), false);
+            Penny.getPenny().setBandABitMask(Band.B90M, (byte)val, false);
+            console.PennyExtCtrlEnabled = chkPennyExtCtrl.Checked;  // need side effect of this to push change to native code 
+        }
+
+        private void chkOCrcv61_CheckedChanged(object sender, EventArgs e)
+        {
+            int val = 0;
+            if (chkOCrcv611.Checked) val += 1 << 0;
+            if (chkOCrcv612.Checked) val += 1 << 1;
+            if (chkOCrcv613.Checked) val += 1 << 2;
+            if (chkOCrcv614.Checked) val += 1 << 3;
+            if (chkOCrcv615.Checked) val += 1 << 4;
+            if (chkOCrcv616.Checked) val += 1 << 5;
+            if (chkOCrcv617.Checked) val += 1 << 6;
+
+            Penny.getPenny().setBandBBitMask(Band.B61M, (byte)(val & 0x70), false);
+            Penny.getPenny().setBandABitMask(Band.B61M, (byte)val, false);
+            console.PennyExtCtrlEnabled = chkPennyExtCtrl.Checked;  // need side effect of this to push change to native code 
+        }
+
+        private void chkOCrcv49_CheckedChanged(object sender, EventArgs e)
+        {
+            int val = 0;
+            if (chkOCrcv491.Checked) val += 1 << 0;
+            if (chkOCrcv492.Checked) val += 1 << 1;
+            if (chkOCrcv493.Checked) val += 1 << 2;
+            if (chkOCrcv494.Checked) val += 1 << 3;
+            if (chkOCrcv495.Checked) val += 1 << 4;
+            if (chkOCrcv496.Checked) val += 1 << 5;
+            if (chkOCrcv497.Checked) val += 1 << 6;
+
+            Penny.getPenny().setBandBBitMask(Band.B49M, (byte)(val & 0x70), false);
+            Penny.getPenny().setBandABitMask(Band.B49M, (byte)val, false);
+            console.PennyExtCtrlEnabled = chkPennyExtCtrl.Checked;  // need side effect of this to push change to native code 
+        }
+
+        private void chkOCrcv41_CheckedChanged(object sender, EventArgs e)
+        {
+            int val = 0;
+            if (chkOCrcv411.Checked) val += 1 << 0;
+            if (chkOCrcv412.Checked) val += 1 << 1;
+            if (chkOCrcv413.Checked) val += 1 << 2;
+            if (chkOCrcv414.Checked) val += 1 << 3;
+            if (chkOCrcv415.Checked) val += 1 << 4;
+            if (chkOCrcv416.Checked) val += 1 << 5;
+            if (chkOCrcv417.Checked) val += 1 << 6;
+
+            Penny.getPenny().setBandBBitMask(Band.B41M, (byte)(val & 0x70), false);
+            Penny.getPenny().setBandABitMask(Band.B41M, (byte)val, false);
+            console.PennyExtCtrlEnabled = chkPennyExtCtrl.Checked;  // need side effect of this to push change to native code 
+        }
+
+        private void chkOCrcv31_CheckedChanged(object sender, EventArgs e)
+        {
+            int val = 0;
+            if (chkOCrcv311.Checked) val += 1 << 0;
+            if (chkOCrcv312.Checked) val += 1 << 1;
+            if (chkOCrcv313.Checked) val += 1 << 2;
+            if (chkOCrcv314.Checked) val += 1 << 3;
+            if (chkOCrcv315.Checked) val += 1 << 4;
+            if (chkOCrcv316.Checked) val += 1 << 5;
+            if (chkOCrcv317.Checked) val += 1 << 6;
+
+            Penny.getPenny().setBandBBitMask(Band.B31M, (byte)(val & 0x70), false);
+            Penny.getPenny().setBandABitMask(Band.B31M, (byte)val, false);
+            console.PennyExtCtrlEnabled = chkPennyExtCtrl.Checked;  // need side effect of this to push change to native code 
+        }
+
+        private void chkOCrcv25_CheckedChanged(object sender, EventArgs e)
+        {
+            int val = 0;
+            if (chkOCrcv251.Checked) val += 1 << 0;
+            if (chkOCrcv252.Checked) val += 1 << 1;
+            if (chkOCrcv253.Checked) val += 1 << 2;
+            if (chkOCrcv254.Checked) val += 1 << 3;
+            if (chkOCrcv255.Checked) val += 1 << 4;
+            if (chkOCrcv256.Checked) val += 1 << 5;
+            if (chkOCrcv257.Checked) val += 1 << 6;
+
+            Penny.getPenny().setBandBBitMask(Band.B25M, (byte)(val & 0x70), false);
+            Penny.getPenny().setBandABitMask(Band.B25M, (byte)val, false);
+            console.PennyExtCtrlEnabled = chkPennyExtCtrl.Checked;  // need side effect of this to push change to native code 
+        }
+
+        private void chkOCrcv22_CheckedChanged(object sender, EventArgs e)
+        {
+            int val = 0;
+            if (chkOCrcv221.Checked) val += 1 << 0;
+            if (chkOCrcv222.Checked) val += 1 << 1;
+            if (chkOCrcv223.Checked) val += 1 << 2;
+            if (chkOCrcv224.Checked) val += 1 << 3;
+            if (chkOCrcv225.Checked) val += 1 << 4;
+            if (chkOCrcv226.Checked) val += 1 << 5;
+            if (chkOCrcv227.Checked) val += 1 << 6;
+
+            Penny.getPenny().setBandBBitMask(Band.B22M, (byte)(val & 0x70), false);
+            Penny.getPenny().setBandABitMask(Band.B22M, (byte)val, false);
+            console.PennyExtCtrlEnabled = chkPennyExtCtrl.Checked;  // need side effect of this to push change to native code  
+        }
+
+        private void chkOCrcv19_CheckedChanged(object sender, EventArgs e)
+        {
+            int val = 0;
+            if (chkOCrcv191.Checked) val += 1 << 0;
+            if (chkOCrcv192.Checked) val += 1 << 1;
+            if (chkOCrcv193.Checked) val += 1 << 2;
+            if (chkOCrcv194.Checked) val += 1 << 3;
+            if (chkOCrcv195.Checked) val += 1 << 4;
+            if (chkOCrcv196.Checked) val += 1 << 5;
+            if (chkOCrcv197.Checked) val += 1 << 6;
+
+            Penny.getPenny().setBandBBitMask(Band.B19M, (byte)(val & 0x70), false);
+            Penny.getPenny().setBandABitMask(Band.B19M, (byte)val, false);
+            console.PennyExtCtrlEnabled = chkPennyExtCtrl.Checked;  // need side effect of this to push change to native code  
+        }
+
+        private void chkOCrcv16_CheckedChanged(object sender, EventArgs e)
+        {
+            int val = 0;
+            if (chkOCrcv161.Checked) val += 1 << 0;
+            if (chkOCrcv162.Checked) val += 1 << 1;
+            if (chkOCrcv163.Checked) val += 1 << 2;
+            if (chkOCrcv164.Checked) val += 1 << 3;
+            if (chkOCrcv165.Checked) val += 1 << 4;
+            if (chkOCrcv166.Checked) val += 1 << 5;
+            if (chkOCrcv167.Checked) val += 1 << 6;
+
+            Penny.getPenny().setBandBBitMask(Band.B16M, (byte)(val & 0x70), false);
+            Penny.getPenny().setBandABitMask(Band.B16M, (byte)val, false);
+            console.PennyExtCtrlEnabled = chkPennyExtCtrl.Checked;  // need side effect of this to push change to native code  
+        }
+
+        private void chkOCrcv14_CheckedChanged(object sender, EventArgs e)
+        {
+            int val = 0;
+            if (chkOCrcv141.Checked) val += 1 << 0;
+            if (chkOCrcv142.Checked) val += 1 << 1;
+            if (chkOCrcv143.Checked) val += 1 << 2;
+            if (chkOCrcv144.Checked) val += 1 << 3;
+            if (chkOCrcv145.Checked) val += 1 << 4;
+            if (chkOCrcv146.Checked) val += 1 << 5;
+            if (chkOCrcv147.Checked) val += 1 << 6;
+
+            Penny.getPenny().setBandBBitMask(Band.B14M, (byte)(val & 0x70), false);
+            Penny.getPenny().setBandABitMask(Band.B14M, (byte)val, false);
+            console.PennyExtCtrlEnabled = chkPennyExtCtrl.Checked;  // need side effect of this to push change to native code 
+        }
+
+        private void chkOCrcv13_CheckedChanged(object sender, EventArgs e)
+        {
+            int val = 0;
+            if (chkOCrcv131.Checked) val += 1 << 0;
+            if (chkOCrcv132.Checked) val += 1 << 1;
+            if (chkOCrcv133.Checked) val += 1 << 2;
+            if (chkOCrcv134.Checked) val += 1 << 3;
+            if (chkOCrcv135.Checked) val += 1 << 4;
+            if (chkOCrcv136.Checked) val += 1 << 5;
+            if (chkOCrcv137.Checked) val += 1 << 6;
+
+            Penny.getPenny().setBandBBitMask(Band.B13M, (byte)(val & 0x70), false);
+            Penny.getPenny().setBandABitMask(Band.B13M, (byte)val, false);
+            console.PennyExtCtrlEnabled = chkPennyExtCtrl.Checked;  // need side effect of this to push change to native code  
+        }
+
+        private void chkOCrcv11_CheckedChanged(object sender, EventArgs e)
+        {
+            int val = 0;
+            if (chkOCrcv111.Checked) val += 1 << 0;
+            if (chkOCrcv112.Checked) val += 1 << 1;
+            if (chkOCrcv113.Checked) val += 1 << 2;
+            if (chkOCrcv114.Checked) val += 1 << 3;
+            if (chkOCrcv115.Checked) val += 1 << 4;
+            if (chkOCrcv116.Checked) val += 1 << 5;
+            if (chkOCrcv117.Checked) val += 1 << 6;
+
+            Penny.getPenny().setBandBBitMask(Band.B11M, (byte)(val & 0x70), false);
+            Penny.getPenny().setBandABitMask(Band.B11M, (byte)val, false);
+            console.PennyExtCtrlEnabled = chkPennyExtCtrl.Checked;  // need side effect of this to push change to native code 
+        }
+        
+        private void chkOCxmitLMW_CheckedChanged(object sender, EventArgs e)
+        {
+            int val = 0;
+            if (chkOCxmitLMW1.Checked) val += 1 << 0;
+            if (chkOCxmitLMW2.Checked) val += 1 << 1;
+            if (chkOCxmitLMW3.Checked) val += 1 << 2;
+            if (chkOCxmitLMW4.Checked) val += 1 << 3;
+            if (chkOCxmitLMW5.Checked) val += 1 << 4;
+            if (chkOCxmitLMW6.Checked) val += 1 << 5;
+            if (chkOCxmitLMW7.Checked) val += 1 << 6;
+
+            Penny.getPenny().setBandBBitMask(Band.BLMF, (byte)(val & 0x70), true);
+            Penny.getPenny().setBandABitMask(Band.BLMF, (byte)val, true);
+            console.PennyExtCtrlEnabled = chkPennyExtCtrl.Checked;  // need side effect of this to push change to native code
+        }
+
+        private void chkOCxmit120_CheckedChanged(object sender, EventArgs e)
+        {
+            int val = 0;
+            if (chkOCxmit1201.Checked) val += 1 << 0;
+            if (chkOCxmit1202.Checked) val += 1 << 1;
+            if (chkOCxmit1203.Checked) val += 1 << 2;
+            if (chkOCxmit1204.Checked) val += 1 << 3;
+            if (chkOCxmit1205.Checked) val += 1 << 4;
+            if (chkOCxmit1206.Checked) val += 1 << 5;
+            if (chkOCxmit1207.Checked) val += 1 << 6;
+
+            Penny.getPenny().setBandBBitMask(Band.B120M, (byte)(val & 0x70), true);
+            Penny.getPenny().setBandABitMask(Band.B120M, (byte)val, true);
+            console.PennyExtCtrlEnabled = chkPennyExtCtrl.Checked;  // need side effect of this to push change to native code
+        }
+
+        private void chkOCxmit90_CheckedChanged(object sender, EventArgs e)
+        {
+            int val = 0;
+            if (chkOCxmit901.Checked) val += 1 << 0;
+            if (chkOCxmit902.Checked) val += 1 << 1;
+            if (chkOCxmit903.Checked) val += 1 << 2;
+            if (chkOCxmit904.Checked) val += 1 << 3;
+            if (chkOCxmit905.Checked) val += 1 << 4;
+            if (chkOCxmit906.Checked) val += 1 << 5;
+            if (chkOCxmit907.Checked) val += 1 << 6;
+
+            Penny.getPenny().setBandBBitMask(Band.B90M, (byte)(val & 0x70), true);
+            Penny.getPenny().setBandABitMask(Band.B90M, (byte)val, true);
+            console.PennyExtCtrlEnabled = chkPennyExtCtrl.Checked;  // need side effect of this to push change to native code
+        }
+
+        private void chkOCxmit61_CheckedChanged(object sender, EventArgs e)
+        {
+            int val = 0;
+            if (chkOCxmit611.Checked) val += 1 << 0;
+            if (chkOCxmit612.Checked) val += 1 << 1;
+            if (chkOCxmit613.Checked) val += 1 << 2;
+            if (chkOCxmit614.Checked) val += 1 << 3;
+            if (chkOCxmit615.Checked) val += 1 << 4;
+            if (chkOCxmit616.Checked) val += 1 << 5;
+            if (chkOCxmit617.Checked) val += 1 << 6;
+
+            Penny.getPenny().setBandBBitMask(Band.B61M, (byte)(val & 0x70), true);
+            Penny.getPenny().setBandABitMask(Band.B61M, (byte)val, true);
+            console.PennyExtCtrlEnabled = chkPennyExtCtrl.Checked;  // need side effect of this to push change to native code
+        }
+
+        private void chkOCxmit49_CheckedChanged(object sender, EventArgs e)
+        {
+            int val = 0;
+            if (chkOCxmit491.Checked) val += 1 << 0;
+            if (chkOCxmit492.Checked) val += 1 << 1;
+            if (chkOCxmit493.Checked) val += 1 << 2;
+            if (chkOCxmit494.Checked) val += 1 << 3;
+            if (chkOCxmit495.Checked) val += 1 << 4;
+            if (chkOCxmit496.Checked) val += 1 << 5;
+            if (chkOCxmit497.Checked) val += 1 << 6;
+
+            Penny.getPenny().setBandBBitMask(Band.B49M, (byte)(val & 0x70), true);
+            Penny.getPenny().setBandABitMask(Band.B49M, (byte)val, true);
+            console.PennyExtCtrlEnabled = chkPennyExtCtrl.Checked;  // need side effect of this to push change to native code
+        }
+
+        private void chkOCxmit41_CheckedChanged(object sender, EventArgs e)
+        {
+            int val = 0;
+            if (chkOCxmit411.Checked) val += 1 << 0;
+            if (chkOCxmit412.Checked) val += 1 << 1;
+            if (chkOCxmit413.Checked) val += 1 << 2;
+            if (chkOCxmit414.Checked) val += 1 << 3;
+            if (chkOCxmit415.Checked) val += 1 << 4;
+            if (chkOCxmit416.Checked) val += 1 << 5;
+            if (chkOCxmit417.Checked) val += 1 << 6;
+
+            Penny.getPenny().setBandBBitMask(Band.B41M, (byte)(val & 0x70), true);
+            Penny.getPenny().setBandABitMask(Band.B41M, (byte)val, true);
+            console.PennyExtCtrlEnabled = chkPennyExtCtrl.Checked;  // need side effect of this to push change to native code
+        }
+
+        private void chkOCxmit31_CheckedChanged(object sender, EventArgs e)
+        {
+            int val = 0;
+            if (chkOCxmit311.Checked) val += 1 << 0;
+            if (chkOCxmit312.Checked) val += 1 << 1;
+            if (chkOCxmit313.Checked) val += 1 << 2;
+            if (chkOCxmit314.Checked) val += 1 << 3;
+            if (chkOCxmit315.Checked) val += 1 << 4;
+            if (chkOCxmit316.Checked) val += 1 << 5;
+            if (chkOCxmit317.Checked) val += 1 << 6;
+
+            Penny.getPenny().setBandBBitMask(Band.B31M, (byte)(val & 0x70), true);
+            Penny.getPenny().setBandABitMask(Band.B31M, (byte)val, true);
+            console.PennyExtCtrlEnabled = chkPennyExtCtrl.Checked;  // need side effect of this to push change to native code
+        }
+
+        private void chkOCxmit25_CheckedChanged(object sender, EventArgs e)
+        {
+            int val = 0;
+            if (chkOCxmit251.Checked) val += 1 << 0;
+            if (chkOCxmit252.Checked) val += 1 << 1;
+            if (chkOCxmit253.Checked) val += 1 << 2;
+            if (chkOCxmit254.Checked) val += 1 << 3;
+            if (chkOCxmit255.Checked) val += 1 << 4;
+            if (chkOCxmit256.Checked) val += 1 << 5;
+            if (chkOCxmit257.Checked) val += 1 << 6;
+
+            Penny.getPenny().setBandBBitMask(Band.B25M, (byte)(val & 0x70), true);
+            Penny.getPenny().setBandABitMask(Band.B25M, (byte)val, true);
+            console.PennyExtCtrlEnabled = chkPennyExtCtrl.Checked;  // need side effect of this to push change to native code
+        }
+
+        private void chkOCxmit22_CheckedChanged(object sender, EventArgs e)
+        {
+            int val = 0;
+            if (chkOCxmit221.Checked) val += 1 << 0;
+            if (chkOCxmit222.Checked) val += 1 << 1;
+            if (chkOCxmit223.Checked) val += 1 << 2;
+            if (chkOCxmit224.Checked) val += 1 << 3;
+            if (chkOCxmit225.Checked) val += 1 << 4;
+            if (chkOCxmit226.Checked) val += 1 << 5;
+            if (chkOCxmit227.Checked) val += 1 << 6;
+
+            Penny.getPenny().setBandBBitMask(Band.B22M, (byte)(val & 0x70), true);
+            Penny.getPenny().setBandABitMask(Band.B22M, (byte)val, true);
+            console.PennyExtCtrlEnabled = chkPennyExtCtrl.Checked;  // need side effect of this to push change to native code
+        }
+
+        private void chkOCxmit19_CheckedChanged(object sender, EventArgs e)
+        {
+            int val = 0;
+            if (chkOCxmit191.Checked) val += 1 << 0;
+            if (chkOCxmit192.Checked) val += 1 << 1;
+            if (chkOCxmit193.Checked) val += 1 << 2;
+            if (chkOCxmit194.Checked) val += 1 << 3;
+            if (chkOCxmit195.Checked) val += 1 << 4;
+            if (chkOCxmit196.Checked) val += 1 << 5;
+            if (chkOCxmit197.Checked) val += 1 << 6;
+
+            Penny.getPenny().setBandBBitMask(Band.B19M, (byte)(val & 0x70), true);
+            Penny.getPenny().setBandABitMask(Band.B19M, (byte)val, true);
+            console.PennyExtCtrlEnabled = chkPennyExtCtrl.Checked;  // need side effect of this to push change to native code
+        }
+
+        private void chkOCxmit16_CheckedChanged(object sender, EventArgs e)
+        {
+            int val = 0;
+            if (chkOCxmit161.Checked) val += 1 << 0;
+            if (chkOCxmit162.Checked) val += 1 << 1;
+            if (chkOCxmit163.Checked) val += 1 << 2;
+            if (chkOCxmit164.Checked) val += 1 << 3;
+            if (chkOCxmit165.Checked) val += 1 << 4;
+            if (chkOCxmit166.Checked) val += 1 << 5;
+            if (chkOCxmit167.Checked) val += 1 << 6;
+
+            Penny.getPenny().setBandBBitMask(Band.B16M, (byte)(val & 0x70), true);
+            Penny.getPenny().setBandABitMask(Band.B16M, (byte)val, true);
+            console.PennyExtCtrlEnabled = chkPennyExtCtrl.Checked;  // need side effect of this to push change to native code
+        }
+
+        private void chkOCxmit14_CheckedChanged(object sender, EventArgs e)
+        {
+            int val = 0;
+            if (chkOCxmit141.Checked) val += 1 << 0;
+            if (chkOCxmit142.Checked) val += 1 << 1;
+            if (chkOCxmit143.Checked) val += 1 << 2;
+            if (chkOCxmit144.Checked) val += 1 << 3;
+            if (chkOCxmit145.Checked) val += 1 << 4;
+            if (chkOCxmit146.Checked) val += 1 << 5;
+            if (chkOCxmit147.Checked) val += 1 << 6;
+
+            Penny.getPenny().setBandBBitMask(Band.B14M, (byte)(val & 0x70), true);
+            Penny.getPenny().setBandABitMask(Band.B14M, (byte)val, true);
+            console.PennyExtCtrlEnabled = chkPennyExtCtrl.Checked;  // need side effect of this to push change to native code
+        }
+
+        private void chkOCxmit13_CheckedChanged(object sender, EventArgs e)
+        {
+            int val = 0;
+            if (chkOCxmit131.Checked) val += 1 << 0;
+            if (chkOCxmit132.Checked) val += 1 << 1;
+            if (chkOCxmit133.Checked) val += 1 << 2;
+            if (chkOCxmit134.Checked) val += 1 << 3;
+            if (chkOCxmit135.Checked) val += 1 << 4;
+            if (chkOCxmit136.Checked) val += 1 << 5;
+            if (chkOCxmit137.Checked) val += 1 << 6;
+
+            Penny.getPenny().setBandBBitMask(Band.B13M, (byte)(val & 0x70), true);
+            Penny.getPenny().setBandABitMask(Band.B13M, (byte)val, true);
+            console.PennyExtCtrlEnabled = chkPennyExtCtrl.Checked;  // need side effect of this to push change to native code
+        }
+
+        private void chkOCxmit11_CheckedChanged(object sender, EventArgs e)
+        {
+            int val = 0;
+            if (chkOCxmit111.Checked) val += 1 << 0;
+            if (chkOCxmit112.Checked) val += 1 << 1;
+            if (chkOCxmit113.Checked) val += 1 << 2;
+            if (chkOCxmit114.Checked) val += 1 << 3;
+            if (chkOCxmit115.Checked) val += 1 << 4;
+            if (chkOCxmit116.Checked) val += 1 << 5;
+            if (chkOCxmit117.Checked) val += 1 << 6;
+
+            Penny.getPenny().setBandBBitMask(Band.B11M, (byte)(val & 0x70), true);
+            Penny.getPenny().setBandABitMask(Band.B11M, (byte)val, true);
+            console.PennyExtCtrlEnabled = chkPennyExtCtrl.Checked;  // need side effect of this to push change to native code
+        }
 
         private void chkDisable6mLNAonTX_CheckedChanged(object sender, EventArgs e)
         {
@@ -15666,19 +16136,26 @@ namespace Thetis
                     lblHFTxControl.Text = "J6 Transmit Pins";
                     lblVHFRxControl.Text = "J6 Receive Pins";
                     lblVHFTxControl.Text = "J6 Transmit Pins";
+                    lblSWLRxControl.Text = "J6 Receive Pins";
+                    lblSWLTxControl.Text = "J6 Transmit Pins";
+                    break;
+                case HPSDRModel.ANAN7000D:
+                case HPSDRModel.ANAN8000D:
+                    lblHFRxControl.Text = "OC Receive Pins";
+                    lblHFTxControl.Text = "OC Transmit Pins";
+                    lblVHFRxControl.Text = "OC Receive Pins";
+                    lblVHFTxControl.Text = "OC Transmit Pins";
+                    lblSWLRxControl.Text = "OC Receive Pins";
+                    lblSWLTxControl.Text = "OC Transmit Pins";
                     break;
                 default:
                     lblHFRxControl.Text = "J16 Receive Pins";
                     lblHFTxControl.Text = "J16 Transmit Pins";
                     lblVHFRxControl.Text = "J16 Receive Pins";
                     lblVHFTxControl.Text = "J16 Transmit Pins";
+                    lblSWLRxControl.Text = "J16 Receive Pins";
+                    lblSWLTxControl.Text = "J16 Transmit Pins";
                     break;
-                //default:
-                //    lblHFRxControl.Text = "J6 Receive Pins";
-                //    lblHFTxControl.Text = "J6 Transmit Pins";
-                //    lblVHFRxControl.Text = "J6 Receive Pins";
-                //    lblVHFTxControl.Text = "J6 Transmit Pins";
-                //    break;
             }
         }
 
@@ -18387,6 +18864,28 @@ namespace Thetis
         private void lblVAC2unfl2_Click(object sender, EventArgs e)
         {
             ivac.resetIVACdiags(1, 1);
+        }
+
+        private void timer_LED_Mirror_Tick(object sender, EventArgs e)
+        {
+            int LED_data = 0;
+            LED_data = cmaster.getLEDs();
+            Color[] LEDColor = new Color[10];
+            for (int i = 0; i < 10; i++)
+                if (((LED_data >> i) & 1) == 1)
+                    LEDColor[i] = Color.Red;
+                else
+                    LEDColor[i] = Color.Black;
+            lblLED01.BackColor = LEDColor[0];
+            lblLED02.BackColor = LEDColor[1];
+            lblLED03.BackColor = LEDColor[2];
+            lblLED04.BackColor = LEDColor[3];
+            lblLED05.BackColor = LEDColor[4];
+            lblLED06.BackColor = LEDColor[5];
+            lblLED07.BackColor = LEDColor[6];
+            lblLED08.BackColor = LEDColor[7];
+            lblLED09.BackColor = LEDColor[8];
+            lblLED10.BackColor = LEDColor[9];
         }
     }
 

@@ -590,24 +590,24 @@ namespace Thetis
 
         private TimeProc timeProcPeriodic;   // ke9ns add to use windows based multimedia timer
         SpeechSynthesizer speaker = new SpeechSynthesizer(); // ke9ns add 
-       // HidDevice.PowerMate powerMate = new HidDevice.PowerMate();  // ke9ns add link back to PowerMate.cpp and PowerMate.h
+        // HidDevice.PowerMate powerMate = new HidDevice.PowerMate();  // ke9ns add link back to PowerMate.cpp and PowerMate.h
         public int KBON = 0; // ke9ns add 1=knob present 0=knob not present
         public int speed = 0; // ke9ns add speed of knob freq change
         public int lastvalue = 0; // ke9ns add knob
 
         public CheckBoxTS chkRX1MUTE;  // ke9ns add allow RX1 mute of flex radio audio but not vac stream audio
-      //  private Label label2;    // ke9ns add label for chkrx1mute
+        //  private Label label2;    // ke9ns add label for chkrx1mute
 
 
         private TextBoxTS txtNOAA2;    // ke9ns add for space weather on main console screen
         private TextBoxTS txtNOAA;    // ke9ns add for space weather on main console screen
-      //  private LabelTS labelTS2;
-      //  private LabelTS labelTS1;
-     //   public NumericUpDownTS udTXFilterLow;
-       // public NumericUpDownTS udTXFilterHigh;
+        //  private LabelTS labelTS2;
+        //  private LabelTS labelTS1;
+        //   public NumericUpDownTS udTXFilterLow;
+        // public NumericUpDownTS udTXFilterHigh;
         public CheckBoxTS chkBoxMuteSpk;
         public CheckBoxTS chkBoxDrive;
-      //  private LabelTS labelTS5;
+        //  private LabelTS labelTS5;
 
         //   Stopwatch WATCH1 = new Stopwatch();
         //    Stopwatch WATCH2 = new Stopwatch();
@@ -667,8 +667,8 @@ namespace Thetis
         public DiversityForm diversityForm;
         public RAForm raForm;
         public Path_Illustrator path_Illustrator;
-       // public RadioInfo radio_info;
-       // public ContactInfo contact_info;
+        // public RadioInfo radio_info;
+        // public ContactInfo contact_info;
         public MemoryForm memoryForm;
         public MemoryList MemoryList { get; private set; }
         public WaveControl WaveForm;
@@ -905,7 +905,7 @@ namespace Thetis
         NumberFormatInfo nfi = NumberFormatInfo.InvariantInfo;  // so we are region independent in terms of ',' and '.' for floats
 
         // BT 11/05/2007
-       // public Thetis.RemoteProfiles ProfileForm;
+        // public Thetis.RemoteProfiles ProfileForm;
         private string machineName = System.Environment.MachineName;
 
         //EHR 25Mar08
@@ -924,7 +924,7 @@ namespace Thetis
         private Point gr_filter_basis_location = new Point(100, 100);		//k6jca
         private Point gr_Multimeter_basis_location = new Point(100, 100);		//k6jca
         private Point gr_BandHF_basis_location = new Point(100, 100);		//k6jca
-        private Point gr_BandGEN_basis_location = new Point(100, 100);		
+        private Point gr_BandGEN_basis_location = new Point(100, 100);
         private Point gr_BandVHF_basis_location = new Point(100, 100);		//k6jca
         private Point gr_Mode_basis_location = new Point(100, 100);		//k6jca
         private Point gr_VFOB_basis_location = new Point(100, 100);		//k6jca
@@ -1084,21 +1084,21 @@ namespace Thetis
         private Point rad_bandVHF13_basis = new Point(100, 100);//w3sz added
         private Point btn_bandVHF_basis = new Point(100, 100);//w3sz added
         private Point btn_bandHF_basis = new Point(100, 100);//w3sz added
-        private Point rad_bandGEN0_basis = new Point(100, 100); 
-        private Point rad_bandGEN1_basis = new Point(100, 100); 
-        private Point rad_bandGEN2_basis = new Point(100, 100); 
-        private Point rad_bandGEN3_basis = new Point(100, 100); 
-        private Point rad_bandGEN4_basis = new Point(100, 100); 
-        private Point rad_bandGEN5_basis = new Point(100, 100); 
-        private Point rad_bandGEN6_basis = new Point(100, 100); 
-        private Point rad_bandGEN7_basis = new Point(100, 100); 
-        private Point rad_bandGEN8_basis = new Point(100, 100); 
-        private Point rad_bandGEN9_basis = new Point(100, 100); 
-        private Point rad_bandGEN10_basis = new Point(100, 100); 
-        private Point rad_bandGEN11_basis = new Point(100, 100); 
-        private Point rad_bandGEN12_basis = new Point(100, 100); 
-        private Point rad_bandGEN13_basis = new Point(100, 100); 
-        private Point btn_bandHF1_basis = new Point(100, 100); 
+        private Point rad_bandGEN0_basis = new Point(100, 100);
+        private Point rad_bandGEN1_basis = new Point(100, 100);
+        private Point rad_bandGEN2_basis = new Point(100, 100);
+        private Point rad_bandGEN3_basis = new Point(100, 100);
+        private Point rad_bandGEN4_basis = new Point(100, 100);
+        private Point rad_bandGEN5_basis = new Point(100, 100);
+        private Point rad_bandGEN6_basis = new Point(100, 100);
+        private Point rad_bandGEN7_basis = new Point(100, 100);
+        private Point rad_bandGEN8_basis = new Point(100, 100);
+        private Point rad_bandGEN9_basis = new Point(100, 100);
+        private Point rad_bandGEN10_basis = new Point(100, 100);
+        private Point rad_bandGEN11_basis = new Point(100, 100);
+        private Point rad_bandGEN12_basis = new Point(100, 100);
+        private Point rad_bandGEN13_basis = new Point(100, 100);
+        private Point btn_bandHF1_basis = new Point(100, 100);
         private Point rad_mode_lsb_basis = new Point(100, 100);
         private Point rad_mode_usb_basis = new Point(100, 100);
         private Point rad_mode_dsb_basis = new Point(100, 100);
@@ -1314,7 +1314,7 @@ namespace Thetis
                                 resetForAutoMerge = true;  // a flag to main()
 
                                 MessageBox.Show("Your database file is from a previous version.\nMerging it into a new reset database will now be attempted.\n\n"
-                                    +"First your old database will be saved in DB_Archive folder,\nand a database reset will happen.\n\n"
+                                    + "First your old database will be saved in DB_Archive folder,\nand a database reset will happen.\n\n"
                                     + "Please RE-START when the reset finishes.", "Note", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                             }
 
@@ -1454,7 +1454,7 @@ namespace Thetis
             //-W2PA Need to do this if first time during database import process
             if (run_setup_wizard)
             {
-               // var w = new SetupWizard(this, 0);
+                // var w = new SetupWizard(this, 0);
                 //w.ShowDialog();
 
                 ArrayList a = new ArrayList();
@@ -1484,7 +1484,7 @@ namespace Thetis
 
             if (rx1_display_cal_offset == 0.0f)
             {
-                 switch (current_hpsdr_model)
+                switch (current_hpsdr_model)
                 {
                     case HPSDRModel.ORIONMKII:
                     case HPSDRModel.ANAN7000D:
@@ -1789,8 +1789,8 @@ namespace Thetis
                     case HPSDRModel.ANAN7000D:
                     case HPSDRModel.ANAN8000D:
                     case HPSDRModel.ORIONMKII:
-                        rx_meter_cal_offset_by_radio[i] = 0.9449f; 
-                        rx_display_cal_offset_by_radio[i] = 0.9468f; 
+                        rx_meter_cal_offset_by_radio[i] = 0.9449f;
+                        rx_display_cal_offset_by_radio[i] = 0.9468f;
                         break;
                     default:
                         rx_meter_cal_offset_by_radio[i] = 0.98f;
@@ -1798,7 +1798,7 @@ namespace Thetis
                         break;
                 }
             }
-            
+
             rx1_preamp_by_band = new PreampMode[(int)Band.LAST];
             rx2_preamp_by_band = new PreampMode[(int)Band.LAST];
             rx1_step_attenuator_by_band = new int[(int)Band.LAST];
@@ -2406,19 +2406,19 @@ namespace Thetis
             //    if (Audio.MON_PRE == 1) Debug.WriteLine("Saving PRE = 1");
             //    else Debug.WriteLine("Saving PRE = 0");
 
-          //  writer2.Write((double)WaterfallLowThresholdMic);      // TX low level waterfall threshold
-           // writer2.Write(SetupForm.checkWaterMoveSize.Checked);  // large waterfall move
+            //  writer2.Write((double)WaterfallLowThresholdMic);      // TX low level waterfall threshold
+            // writer2.Write(SetupForm.checkWaterMoveSize.Checked);  // large waterfall move
             writer2.Write(Display.GrayScale);                    // color or grayscale watetfall
-           // writer2.Write((byte)WaveForm.BandL);                 // save mode for check of valid waterfall ID later  // RX1DSPMode != BandL
-           // writer2.Write(Display.PW_AVG);                       // save avgP or avgB  RX1
-           // writer2.Write(Display.PW_AVG2);                      // save avgp or avgB RX2
-           // writer2.Write(Audio.MON_PRE);                        // save MONitor pre or post audio
+            // writer2.Write((byte)WaveForm.BandL);                 // save mode for check of valid waterfall ID later  // RX1DSPMode != BandL
+            // writer2.Write(Display.PW_AVG);                       // save avgP or avgB  RX1
+            // writer2.Write(Display.PW_AVG2);                      // save avgp or avgB RX2
+            // writer2.Write(Audio.MON_PRE);                        // save MONitor pre or post audio
 
-           // if (SetupForm.gridBoxTS.Checked == true) Display.GridOff = 1; // gridlines OFF
-           // else Display.GridOff = 0; // gridlines ON
+            // if (SetupForm.gridBoxTS.Checked == true) Display.GridOff = 1; // gridlines OFF
+            // else Display.GridOff = 0; // gridlines ON
 
             writer2.Write(Display.GridOff);                      // save panadapter grid on/off
-          //  writer2.Write(WaveControl.QAC);                      // QUickaudio file #
+            //  writer2.Write(WaveControl.QAC);                      // QUickaudio file #
 
             writer2.Write(SpotControl.nameB);               // name for dx spotter
             writer2.Write(SpotControl.callB);               // call sign for dx spotter
@@ -2428,10 +2428,10 @@ namespace Thetis
             writer2.Write(callsign);                             // callsign for waterfall ID
             writer2.Write(lastcallsign);                         // last callsign test for valid waterfall ID
 
-          //  writer2.Write((byte)PAON);                           // temp/volts on/off console display
+            //  writer2.Write((byte)PAON);                           // temp/volts on/off console display
             writer2.Write((byte)noaaON);                          // space weather console display
 
-           // writer2.Write((byte)SetupForm.tune_step_index2);      // save Powermate knob index
+            // writer2.Write((byte)SetupForm.tune_step_index2);      // save Powermate knob index
 
             writer2.Write("end");
 
@@ -2443,9 +2443,9 @@ namespace Thetis
             stream2.Close();   // close stream
             //   Debug.WriteLine("save database file on exit");
 
-           // PAON = 0;       // shut down PAON thread
+            // PAON = 0;       // shut down PAON thread
             //--------------------------------------------------------------------
-            
+
             ArrayList a = new ArrayList();
 
             foreach (Control c in this.Controls)			// For each control
@@ -2537,7 +2537,7 @@ namespace Thetis
             a.Add("chkRX2NR_checkstate/" + chkRX2NR.CheckState.ToString());
             a.Add("chkNB_checkstate/" + chkNB.CheckState.ToString());
             a.Add("chkRX2NB_checkstate/" + chkRX2NB.CheckState.ToString());
-           // a.Add("chkSyncIT_checkstate/" + chkSyncIT.CheckState.ToString());  //-W2PA Checkbox for synched RIT/XIT
+            // a.Add("chkSyncIT_checkstate/" + chkSyncIT.CheckState.ToString());  //-W2PA Checkbox for synched RIT/XIT
 
             a.Add("current_datetime_mode/" + (int)current_datetime_mode);
             a.Add("rx1_display_cal_offset/" + rx1_display_cal_offset.ToString("f3"));
@@ -3156,15 +3156,15 @@ namespace Thetis
                 FileStream stream2 = new FileStream(file_name2, FileMode.Create); // open BMP  file
                 BinaryWriter writer2 = new BinaryWriter(stream2);
 
-              //  writer2.Write((double)WaterfallLowThresholdMic);      // TX low level waterfall threshold
-               // writer2.Write(SetupForm.checkWaterMoveSize.Checked);  // large waterfall move
+                //  writer2.Write((double)WaterfallLowThresholdMic);      // TX low level waterfall threshold
+                // writer2.Write(SetupForm.checkWaterMoveSize.Checked);  // large waterfall move
                 writer2.Write(Display.GrayScale);                    // color or grayscale watetfall
-              //  writer2.Write((byte)WaveForm.BandL);                 // save mode for check of valid waterfall ID later  // RX1DSPMode != BandL
-              //  writer2.Write(Display.PW_AVG);                       // save avgP or avgB  RX1
-              //  writer2.Write(Display.PW_AVG2);                      // save avgp or avgB RX2
-               // writer2.Write(Audio.MON_PRE);                        // save MONitor pre or post audio
+                //  writer2.Write((byte)WaveForm.BandL);                 // save mode for check of valid waterfall ID later  // RX1DSPMode != BandL
+                //  writer2.Write(Display.PW_AVG);                       // save avgP or avgB  RX1
+                //  writer2.Write(Display.PW_AVG2);                      // save avgp or avgB RX2
+                // writer2.Write(Audio.MON_PRE);                        // save MONitor pre or post audio
                 writer2.Write(Display.GridOff);                      // save panadapter grid on/off
-              //  writer2.Write(WaveControl.QAC);                      // QUickaudio file #
+                //  writer2.Write(WaveControl.QAC);                      // QUickaudio file #
 
                 writer2.Write(SpotControl.nameB);               // name for dx spotter
                 writer2.Write(SpotControl.callB);               // call sign for dx spotter
@@ -3175,10 +3175,10 @@ namespace Thetis
                 writer2.Write(callsign);                             // callsign for waterfall ID
                 writer2.Write(lastcallsign);                         // last callsign test for valid waterfall ID
 
-              //  writer2.Write((byte)PAON);                           // temp/volts on/off console display
+                //  writer2.Write((byte)PAON);                           // temp/volts on/off console display
                 writer2.Write((byte)noaaON);                          // space weather console display
 
-              //  writer2.Write((byte)SetupForm.tune_step_index2);      // save Powermate knob index
+                //  writer2.Write((byte)SetupForm.tune_step_index2);      // save Powermate knob index
 
                 writer2.Write("end");
 
@@ -3194,15 +3194,15 @@ namespace Thetis
                 FileStream stream2 = new FileStream(file_name2, FileMode.Open); // open BMP  file
                 BinaryReader reader2 = new BinaryReader(stream2);
 
-             //   WaterfallLowThresholdMic = (float)reader2.ReadDouble();            //  TX low level waterfall threshold
-             //   SetupForm.checkWaterMoveSize.Checked = reader2.ReadBoolean();      // large waterfall move
+                //   WaterfallLowThresholdMic = (float)reader2.ReadDouble();            //  TX low level waterfall threshold
+                //   SetupForm.checkWaterMoveSize.Checked = reader2.ReadBoolean();      // large waterfall move
                 Display.GrayScale = reader2.ReadByte();                            // color or grayscale waterfall 
-              //  WaveForm.BandL = (DSPMode)reader2.ReadByte();                      // for check of valid waterfall id
-              //  Display.PW_AVG = reader2.ReadByte();                               // avgP or avgB RX1
-              //  Display.PW_AVG2 = reader2.ReadByte();                              // avgP or avgB RX2
-               // Audio.MON_PRE = reader2.ReadByte();                                // MONitor pre or post
+                //  WaveForm.BandL = (DSPMode)reader2.ReadByte();                      // for check of valid waterfall id
+                //  Display.PW_AVG = reader2.ReadByte();                               // avgP or avgB RX1
+                //  Display.PW_AVG2 = reader2.ReadByte();                              // avgP or avgB RX2
+                // Audio.MON_PRE = reader2.ReadByte();                                // MONitor pre or post
                 Display.GridOff = reader2.ReadByte();                              // panadapter grid on / off
-               // WaveControl.QAC = reader2.ReadInt32();                             // QUickaudio file #
+                // WaveControl.QAC = reader2.ReadInt32();                             // QUickaudio file #
 
                 SpotControl.DXNAME = reader2.ReadString();                     // name for dx spotter
                 SpotControl.DXCALL = reader2.ReadString();                     // call sign for dx spotter
@@ -3213,7 +3213,7 @@ namespace Thetis
                 callsign = reader2.ReadString();                                   // callsign for waterfall ID
                 lastcallsign = reader2.ReadString();                               // last callsign test of waterfall ID valid
 
-              //  PAON = reader2.ReadByte();                                       // temp/volt on/off display
+                //  PAON = reader2.ReadByte();                                       // temp/volt on/off display
                 noaaON = reader2.ReadByte();                                // space weather console display
 
                 //try
@@ -3254,9 +3254,9 @@ namespace Thetis
 
             if (Display.GridOff == 1)
             {
-               // SetupForm.gridBoxTS.CheckedChanged -= SetupForm.gridBoxTS_CheckedChanged;  // ke9ns turn off checkchanged temporarily    // ke9ns turn off valuechanged temporarily 
-               // SetupForm.gridBoxTS.Checked = true;
-               // SetupForm.gridBoxTS.CheckedChanged += SetupForm.gridBoxTS_CheckedChanged;
+                // SetupForm.gridBoxTS.CheckedChanged -= SetupForm.gridBoxTS_CheckedChanged;  // ke9ns turn off checkchanged temporarily    // ke9ns turn off valuechanged temporarily 
+                // SetupForm.gridBoxTS.Checked = true;
+                // SetupForm.gridBoxTS.CheckedChanged += SetupForm.gridBoxTS_CheckedChanged;
 
 
             }
@@ -3383,7 +3383,7 @@ namespace Thetis
                 {
                     // Debug.WriteLine("val======= " + val);
 
-                  //  if (val.Contains("True")) WaveForm.chkQuickAudioFolder.Checked = true;
+                    //  if (val.Contains("True")) WaveForm.chkQuickAudioFolder.Checked = true;
 
 
                 }
@@ -4004,11 +4004,11 @@ namespace Thetis
                         if (panelBandVHF.Visible) //added by w3sz
                             btnBandVHF_Click(btnBandVHF, EventArgs.Empty); //added by w3sz
                         break;  //added by w3sz
-                    case "panelBandGEN.Visible": 
-                        whatisGEN = bool.Parse(val); 
-                        panelBandGEN.Visible = whatisGEN; 
-                        if (panelBandGEN.Visible) 
-                            btnBandGEN_Click(radBandGEN, EventArgs.Empty); 
+                    case "panelBandGEN.Visible":
+                        whatisGEN = bool.Parse(val);
+                        panelBandGEN.Visible = whatisGEN;
+                        if (panelBandGEN.Visible)
+                            btnBandGEN_Click(radBandGEN, EventArgs.Empty);
                         break;  //added by w3sz
                     case "iscollapsed":  //added by w3sz
                         iscollapsed = bool.Parse(val);    //added by w3sz
@@ -5886,7 +5886,7 @@ namespace Thetis
             {
                 filter = filter.Substring(0, (filter.Length) - 1); // ke9ns add for bandstack lockout
             }
- 
+
             // Set mode, filter, and frequency according to passed parameters
             RX1DSPMode = (DSPMode)Enum.Parse(typeof(DSPMode), mode, true);
 
@@ -6112,8 +6112,8 @@ namespace Thetis
                     break;
                 case Band.B2M:
                     last_band = "2M";// ke9ns add
-                //    SpotControl.VFOLOW = 144000000; // 
-                //    SpotControl.VFOHIGH = 146000000; // 
+                    //    SpotControl.VFOLOW = 144000000; // 
+                    //    SpotControl.VFOHIGH = 146000000; // 
                     radBand2.Checked = true;
                     regBox.Text = band_2m_register.ToString();
                     regBox1.Text = (band_2m_index + 1).ToString();
@@ -6139,8 +6139,8 @@ namespace Thetis
 
                 case Band.VHF0:
                     last_band = "VHF0";// ke9ns add
-                //    SpotControl.VFOLOW = 144000000; // 
-                //    SpotControl.VFOHIGH = 146000000; // 
+                    //    SpotControl.VFOLOW = 144000000; // 
+                    //    SpotControl.VFOHIGH = 146000000; // 
                     radBandVHF0.Checked = true;
                     regBox.Text = band_vhf0_register.ToString();
                     regBox1.Text = (band_vhf0_index + 1).ToString();
@@ -6149,8 +6149,8 @@ namespace Thetis
                     break;
                 case Band.VHF1:
                     last_band = "VHF1";// ke9ns add
-                //    SpotControl.VFOLOW = 430000000; // 
-                //    SpotControl.VFOHIGH = 445000000; // 
+                    //    SpotControl.VFOLOW = 430000000; // 
+                    //    SpotControl.VFOHIGH = 445000000; // 
                     radBandVHF1.Checked = true;
                     regBox.Text = band_vhf1_register.ToString();
                     regBox1.Text = (band_vhf1_index + 1).ToString();
@@ -6159,8 +6159,8 @@ namespace Thetis
                     break;
                 case Band.VHF2:
                     last_band = "VHF2";// ke9ns add
-                 //   SpotControl.VFOLOW = 445000000; // 
-                //    SpotControl.VFOHIGH = 990000000; //
+                    //   SpotControl.VFOLOW = 445000000; // 
+                    //    SpotControl.VFOHIGH = 990000000; //
                     radBandVHF2.Checked = true;
                     regBox.Text = band_vhf2_register.ToString();
                     regBox1.Text = (band_vhf2_index + 1).ToString();
@@ -6169,8 +6169,8 @@ namespace Thetis
                     break;
                 case Band.VHF3:
                     last_band = "VHF3";// ke9ns add
-                 //   SpotControl.VFOLOW = 445000000; // 
-                 //   SpotControl.VFOHIGH = 990000000; //
+                    //   SpotControl.VFOLOW = 445000000; // 
+                    //   SpotControl.VFOHIGH = 990000000; //
                     radBandVHF3.Checked = true;
                     regBox.Text = band_vhf3_register.ToString();
                     regBox1.Text = (band_vhf3_index + 1).ToString();
@@ -6179,8 +6179,8 @@ namespace Thetis
                     break;
                 case Band.VHF4:
                     last_band = "VHF4";// ke9ns add
-                 //   SpotControl.VFOLOW = 445000000; // 
-                 //   SpotControl.VFOHIGH = 990000000; //
+                    //   SpotControl.VFOLOW = 445000000; // 
+                    //   SpotControl.VFOHIGH = 990000000; //
                     radBandVHF4.Checked = true;
                     regBox.Text = band_vhf4_register.ToString();
                     regBox1.Text = (band_vhf4_index + 1).ToString();
@@ -6189,8 +6189,8 @@ namespace Thetis
                     break;
                 case Band.VHF5:
                     last_band = "VHF5";// ke9ns add
-                 //   SpotControl.VFOLOW = 445000000; // 
-                  //  SpotControl.VFOHIGH = 990000000; //
+                    //   SpotControl.VFOLOW = 445000000; // 
+                    //  SpotControl.VFOHIGH = 990000000; //
                     radBandVHF5.Checked = true;
                     regBox.Text = band_vhf5_register.ToString();
                     regBox1.Text = (band_vhf5_index + 1).ToString();
@@ -6199,8 +6199,8 @@ namespace Thetis
                     break;
                 case Band.VHF6:
                     last_band = "VHF6";// ke9ns add
-                 //   SpotControl.VFOLOW = 445000000; // 
-                 //   SpotControl.VFOHIGH = 990000000; //
+                    //   SpotControl.VFOLOW = 445000000; // 
+                    //   SpotControl.VFOHIGH = 990000000; //
                     radBandVHF6.Checked = true;
                     regBox.Text = band_vhf6_register.ToString();
                     regBox1.Text = (band_vhf6_index + 1).ToString();
@@ -6209,8 +6209,8 @@ namespace Thetis
                     break;
                 case Band.VHF7:
                     last_band = "VHF7";// ke9ns add
-                  //  SpotControl.VFOLOW = 445000000; // 
-                  //  SpotControl.VFOHIGH = 990000000; //
+                    //  SpotControl.VFOLOW = 445000000; // 
+                    //  SpotControl.VFOHIGH = 990000000; //
                     radBandVHF7.Checked = true;
                     regBox.Text = band_vhf7_register.ToString();
                     regBox1.Text = (band_vhf7_index + 1).ToString();
@@ -6219,8 +6219,8 @@ namespace Thetis
                     break;
                 case Band.VHF8:
                     last_band = "VHF8";// ke9ns add
-                 //   SpotControl.VFOLOW = 445000000; // 
-                  //  SpotControl.VFOHIGH = 990000000; //
+                    //   SpotControl.VFOLOW = 445000000; // 
+                    //  SpotControl.VFOHIGH = 990000000; //
                     radBandVHF8.Checked = true;
                     regBox.Text = band_vhf8_register.ToString();
                     regBox1.Text = (band_vhf8_index + 1).ToString();
@@ -6229,8 +6229,8 @@ namespace Thetis
                     break;
                 case Band.VHF9:
                     last_band = "VHF9";// ke9ns add 
-                  //  SpotControl.VFOLOW = 445000000; // 
-                  //  SpotControl.VFOHIGH = 990000000; //
+                    //  SpotControl.VFOLOW = 445000000; // 
+                    //  SpotControl.VFOHIGH = 990000000; //
                     radBandVHF9.Checked = true;
                     regBox.Text = band_vhf9_register.ToString();
                     regBox1.Text = (band_vhf9_index + 1).ToString();
@@ -6239,8 +6239,8 @@ namespace Thetis
                     break;
                 case Band.VHF10:
                     last_band = "VHF10";// ke9ns add
-                  //  SpotControl.VFOLOW = 445000000; // 
-                  //  SpotControl.VFOHIGH = 990000000; //
+                    //  SpotControl.VFOLOW = 445000000; // 
+                    //  SpotControl.VFOHIGH = 990000000; //
                     radBandVHF10.Checked = true;
                     regBox.Text = band_vhf10_register.ToString();
                     regBox1.Text = (band_vhf10_index + 1).ToString();
@@ -6249,8 +6249,8 @@ namespace Thetis
                     break;
                 case Band.VHF11:
                     last_band = "VHF11";// ke9ns add
-                 //   SpotControl.VFOLOW = 445000000; // 
-                 //   SpotControl.VFOHIGH = 990000000; //
+                    //   SpotControl.VFOLOW = 445000000; // 
+                    //   SpotControl.VFOHIGH = 990000000; //
                     radBandVHF11.Checked = true;
                     regBox.Text = band_vhf11_register.ToString();
                     regBox1.Text = (band_vhf11_index + 1).ToString();
@@ -6259,8 +6259,8 @@ namespace Thetis
                     break;
                 case Band.VHF12:
                     last_band = "VHF12";// ke9ns add
-                 //   SpotControl.VFOLOW = 445000000; // 
-                 //   SpotControl.VFOHIGH = 990000000; //
+                    //   SpotControl.VFOLOW = 445000000; // 
+                    //   SpotControl.VFOHIGH = 990000000; //
                     radBandVHF12.Checked = true;
                     regBox.Text = band_vhf12_register.ToString();
                     regBox1.Text = (band_vhf12_index + 1).ToString();
@@ -6269,8 +6269,8 @@ namespace Thetis
                     break;
                 case Band.VHF13:
                     last_band = "VHF13";// ke9ns add 
-                   // SpotControl.VFOLOW = 445000000; // 
-                   // SpotControl.VFOHIGH = 990000000; //
+                    // SpotControl.VFOLOW = 445000000; // 
+                    // SpotControl.VFOHIGH = 990000000; //
                     radBandVHF13.Checked = true;
                     regBox.Text = band_vhf13_register.ToString();
                     regBox1.Text = (band_vhf13_index + 1).ToString();
@@ -6869,250 +6869,253 @@ namespace Thetis
         {
             if (xvtr_index >= 0)
             {
-                panelBandGEN.Visible = false;
-                panelBandHF.Visible = false;
-                panelBandVHF.Visible = true; // ke9ns add keep VHF panel open when VHF button selected
+                if (vfoa)
+                {
+                    panelBandGEN.Visible = false;
+                    panelBandHF.Visible = false;
+                    panelBandVHF.Visible = true; // ke9ns add keep VHF panel open when VHF button selected
+                }
                 return (Band)(Band.VHF0 + xvtr_index);
             }
-/*
+            /*
+                        if (extended)
+                        {
+                            if (freq >= 0.0 && freq <= 2.75)
+                                return Band.B160M;
+                            else if (freq > 2.75 && freq < 5.0)
+                                return Band.B80M;
+                            else if (freq >= 5.0 && freq < 7.0)
+                                return Band.B60M;
+                            else if (freq >= 7.0 && freq <= 8.7)
+                                return Band.B40M;
+                            else if (freq >= 8.7 && freq <= 12.075)
+                                return Band.B30M;
+                            else if (freq >= 12.075 && freq <= 16.209)
+                                return Band.B20M;
+                            else if (freq >= 16.209 && freq <= 19.584)
+                                return Band.B17M;
+                            else if (freq >= 19.584 && freq <= 23.17)
+                                return Band.B15M;
+                            else if (freq >= 23.17 && freq <= 26.495)
+                                return Band.B12M;
+                            else if (freq >= 26.495 && freq <= 29.7)
+                                return Band.B10M;
+                            else if (freq >= 29.7 && freq <= 50.0)
+                                return Band.B10M;
+                            else if (freq >= 50.0 && freq <= 54.0)
+                                return Band.B6M;
+                            else if (freq >= 54.0 && freq <= 61.44)
+                                return Band.B6M;
+                            else if (freq >= 144.0 && freq <= 148.0)
+                                return Band.B2M;
+                            else if (freq == 2.5 || freq == 5.0 ||
+                                freq == 10.0 || freq == 15.0 ||
+                                freq == 20.0)
+                                return Band.WWV;
+                            else
+                                return Band.GEN;
+                        }
+                        */
+
             if (extended)
             {
-                if (freq >= 0.0 && freq <= 2.75)
-                    return Band.B160M;
-                else if (freq > 2.75 && freq < 5.0)
-                    return Band.B80M;
-                else if (freq >= 5.0 && freq < 7.0)
-                    return Band.B60M;
-                else if (freq >= 7.0 && freq <= 8.7)
-                    return Band.B40M;
-                else if (freq >= 8.7 && freq <= 12.075)
-                    return Band.B30M;
-                else if (freq >= 12.075 && freq <= 16.209)
-                    return Band.B20M;
-                else if (freq >= 16.209 && freq <= 19.584)
-                    return Band.B17M;
-                else if (freq >= 19.584 && freq <= 23.17)
-                    return Band.B15M;
-                else if (freq >= 23.17 && freq <= 26.495)
-                    return Band.B12M;
-                else if (freq >= 26.495 && freq <= 29.7)
-                    return Band.B10M;
-                else if (freq >= 29.7 && freq <= 50.0)
-                    return Band.B10M;
-                else if (freq >= 50.0 && freq <= 54.0)
-                    return Band.B6M;
-                else if (freq >= 54.0 && freq <= 61.44)
-                    return Band.B6M;
-                else if (freq >= 144.0 && freq <= 148.0)
-                    return Band.B2M;
-                else if (freq == 2.5 || freq == 5.0 ||
-                    freq == 10.0 || freq == 15.0 ||
-                    freq == 20.0)
+                // ke9ns add
+                if (freq >= 0.20 && freq < 1.80)
+                {
+                    panelBandHF.Visible = false;
+                    panelBandGEN.Visible = true;
+                    return Band.BLMF;
+                    //  return Band.B160M;
+                }
+                else if (freq == 2.5 || freq == 5.0 || freq == 10.0 || freq == 15.0 ||
+                       freq == 20.0 || freq == 25.0 || freq == 3.33 || freq == 7.85 || freq == 14.67)
+                {
+                    panelBandHF.Visible = true;
+                    panelBandGEN.Visible = false;
                     return Band.WWV;
+                }
+
+
+                else if (freq >= 2.30 && freq < 3.0)
+                {
+                    panelBandHF.Visible = false;
+                    panelBandGEN.Visible = true;
+                    return Band.B120M;
+                    //  return Band.B160M;
+                }
+
+                else if (freq >= 3.0 && freq < 3.50)
+                {
+                    panelBandHF.Visible = false;
+                    panelBandGEN.Visible = true;
+                    return Band.B90M;
+                    // return Band.B80M;
+                }
+
+                else if (freq >= 4.00 && freq < 5.1)
+                {
+                    panelBandHF.Visible = false;
+                    panelBandGEN.Visible = true;
+                    return Band.B61M;
+                    //  return Band.B80M;
+                }
+
+                else if (freq >= 5.5 && freq < 7.00)
+                {
+                    panelBandHF.Visible = false;
+                    panelBandGEN.Visible = true;
+                    return Band.B49M;
+                    //  return Band.B60M;
+                }
+
+                else if (freq >= 7.30 && freq < 9.0)
+                {
+                    panelBandHF.Visible = false;
+                    panelBandGEN.Visible = true;
+                    return Band.B41M;
+                    //  return Band.B40M;
+                }
+
+                else if (freq >= 9.0 && freq < 10.1)
+                {
+                    panelBandHF.Visible = false;
+                    panelBandGEN.Visible = true;
+                    return Band.B31M;
+                    // return Band.B30M;
+                }
+
+                else if (freq >= 10.16 && freq < 13.57)
+                {
+                    panelBandHF.Visible = false;
+                    panelBandGEN.Visible = true;
+                    return Band.B25M;
+                    //  return Band.B20M;
+                }
+
+                else if (freq >= 13.57 && freq < 14.0)
+                {
+                    panelBandHF.Visible = false;
+                    panelBandGEN.Visible = true;
+                    return Band.B22M;
+                    //  return Band.B20M;
+                }
+
+                else if (freq >= 15.1 && freq < 17.0)
+                {
+                    panelBandHF.Visible = false;
+                    panelBandGEN.Visible = true;
+                    return Band.B19M;
+                    // return Band.B17M;
+                }
+
+                else if (freq >= 17.0 && freq < 18.068)
+                {
+
+                    panelBandHF.Visible = false;
+                    panelBandGEN.Visible = true;
+                    return Band.B16M;
+                    //return Band.B17M;
+                }
+
+                else if (freq >= 18.168 && freq < 21.0)
+                {
+                    panelBandHF.Visible = false;
+                    panelBandGEN.Visible = true;
+                    return Band.B14M;
+                    //  return Band.B15M;
+                }
+                else if (freq >= 21.450 && freq < 24.89)
+                {
+                    panelBandHF.Visible = false;
+                    panelBandGEN.Visible = true;
+                    return Band.B13M;
+                    //  return Band.B12M;
+                }
+
+                else if (freq >= 24.99 && freq < 28.0)
+                {
+                    panelBandHF.Visible = false;
+                    panelBandGEN.Visible = true;
+                    return Band.B11M;
+                    // return Band.B10M;
+                }
+
+                // original code below 
+                else if (freq >= 0.0 && freq <= 2.75)
+                {
+                    panelBandHF.Visible = true;
+                    panelBandGEN.Visible = false;
+                    return Band.B160M;
+                }
+                else if (freq > 2.75 && freq < 5.3305)
+                {
+                    panelBandHF.Visible = true;
+                    panelBandGEN.Visible = false;
+                    return Band.B80M;
+                }
+                else if (freq >= 5.3305 && freq < 7.0)
+                {
+                    panelBandHF.Visible = true;
+                    panelBandGEN.Visible = false;
+                    return Band.B60M;
+                }
+                else if (freq >= 7.0 && freq <= 8.7)
+                {
+                    panelBandHF.Visible = true;
+                    panelBandGEN.Visible = false;
+                    return Band.B40M;
+                }
+                else if (freq >= 8.7 && freq <= 12.075)
+                {
+                    panelBandHF.Visible = true;
+                    panelBandGEN.Visible = false;
+                    return Band.B30M;
+                }
+                else if (freq >= 12.075 && freq <= 16.209)
+                {
+                    panelBandHF.Visible = true;
+                    panelBandGEN.Visible = false;
+                    return Band.B20M;
+                }
+                else if (freq >= 16.209 && freq <= 19.584)
+                {
+                    panelBandHF.Visible = true;
+                    panelBandGEN.Visible = false;
+                    return Band.B17M;
+                }
+                else if (freq >= 19.584 && freq <= 23.17)
+                {
+                    panelBandHF.Visible = true;
+                    panelBandGEN.Visible = false;
+                    return Band.B15M;
+                }
+                else if (freq >= 23.17 && freq <= 26.495)
+                {
+                    panelBandHF.Visible = true;
+                    panelBandGEN.Visible = false;
+                    return Band.B12M;
+                }
+                else if (freq >= 26.495 && freq <= 29.7)
+                {
+                    panelBandHF.Visible = true;
+                    panelBandGEN.Visible = false;
+                    return Band.B10M;
+                }
+                else if (freq >= 50.0 && freq <= 54.0)
+                {
+                    panelBandHF.Visible = true;
+                    panelBandGEN.Visible = false;
+                    return Band.B6M;
+                }
+                else if (freq >= 144.0 && freq <= 148.0) // ke9ns test was 144.0 and 148.0
+                {
+                    panelBandHF.Visible = true;
+                    panelBandGEN.Visible = false;
+                    return Band.B2M;
+                }
                 else
                     return Band.GEN;
             }
-            */
-
-                if (extended) 
-                {
-                     // ke9ns add
-                    if (freq >= 0.20 && freq < 1.80)
-                    {
-                        panelBandHF.Visible = false;
-                        panelBandGEN.Visible = true;
-                        return Band.BLMF;
-                        //  return Band.B160M;
-                    }
-                    else if (freq == 2.5 || freq == 5.0 || freq == 10.0 || freq == 15.0 ||
-                           freq == 20.0 || freq == 25.0 || freq == 3.33 || freq == 7.85 || freq == 14.67)
-                    {
-                        panelBandHF.Visible = true; 
-                        panelBandGEN.Visible = false; 
-                        return Band.WWV;
-                    }
-
-
-                    else if (freq >= 2.30 && freq < 3.0)
-                    {
-                        panelBandHF.Visible = false;
-                        panelBandGEN.Visible = true;
-                        return Band.B120M;
-                        //  return Band.B160M;
-                    }
-
-                    else if (freq >= 3.0 && freq < 3.50)
-                    {
-                        panelBandHF.Visible = false;
-                        panelBandGEN.Visible = true;
-                        return Band.B90M;
-                        // return Band.B80M;
-                    }
-
-                    else if (freq >= 4.00 && freq < 5.1)
-                    {
-                        panelBandHF.Visible = false;
-                        panelBandGEN.Visible = true;
-                        return Band.B61M;
-                        //  return Band.B80M;
-                    }
-
-                    else if (freq >= 5.5 && freq < 7.00)
-                    {
-                        panelBandHF.Visible = false;
-                        panelBandGEN.Visible = true;
-                        return Band.B49M;
-                        //  return Band.B60M;
-                    }
-
-                    else if (freq >= 7.30 && freq < 9.0)
-                    {
-                        panelBandHF.Visible = false;
-                        panelBandGEN.Visible = true;
-                        return Band.B41M;
-                        //  return Band.B40M;
-                    }
-
-                    else if (freq >= 9.0 && freq < 10.1)
-                    {
-                        panelBandHF.Visible = false;
-                        panelBandGEN.Visible = true;
-                        return Band.B31M;
-                        // return Band.B30M;
-                    }
-
-                    else if (freq >= 10.16 && freq < 13.57)
-                    {
-                        panelBandHF.Visible = false;
-                        panelBandGEN.Visible = true;
-                        return Band.B25M;
-                        //  return Band.B20M;
-                    }
-
-                    else if (freq >= 13.57 && freq < 14.0)
-                    {
-                        panelBandHF.Visible = false;
-                        panelBandGEN.Visible = true;
-                        return Band.B22M;
-                        //  return Band.B20M;
-                    }
-
-                    else if (freq >= 15.1 && freq < 17.0)
-                    {
-                        panelBandHF.Visible = false;
-                        panelBandGEN.Visible = true;
-                        return Band.B19M;
-                        // return Band.B17M;
-                    }
-
-                    else if (freq >= 17.0 && freq < 18.068)
-                    {
-
-                        panelBandHF.Visible = false;
-                        panelBandGEN.Visible = true;
-                        return Band.B16M;
-                        //return Band.B17M;
-                    }
-
-                    else if (freq >= 18.168 && freq < 21.0)
-                    {
-                        panelBandHF.Visible = false;
-                        panelBandGEN.Visible = true;
-                        return Band.B14M;
-                        //  return Band.B15M;
-                    }
-                    else if (freq >= 21.450 && freq < 24.89)
-                    {
-                        panelBandHF.Visible = false;
-                        panelBandGEN.Visible = true;
-                        return Band.B13M;
-                        //  return Band.B12M;
-                    }
-
-                    else if (freq >= 24.99 && freq < 28.0)
-                    {
-                        panelBandHF.Visible = false;
-                        panelBandGEN.Visible = true;
-                        return Band.B11M;
-                        // return Band.B10M;
-                    }
-
-                    // original code below 
-                    else if (freq >= 0.0 && freq <= 2.75)
-                    {
-                        panelBandHF.Visible = true; 
-                        panelBandGEN.Visible = false; 
-                        return Band.B160M;
-                    }
-                    else if (freq > 2.75 && freq < 5.3305)
-                    {
-                        panelBandHF.Visible = true; 
-                        panelBandGEN.Visible = false; 
-                        return Band.B80M;
-                    }
-                    else if (freq >= 5.3305 && freq < 7.0)
-                    {
-                        panelBandHF.Visible = true; 
-                        panelBandGEN.Visible = false; 
-                        return Band.B60M;
-                    }
-                    else if (freq >= 7.0 && freq <= 8.7)
-                    {
-                        panelBandHF.Visible = true; 
-                        panelBandGEN.Visible = false; 
-                        return Band.B40M;
-                    }
-                    else if (freq >= 8.7 && freq <= 12.075)
-                    {
-                        panelBandHF.Visible = true; 
-                        panelBandGEN.Visible = false; 
-                        return Band.B30M;
-                    }
-                    else if (freq >= 12.075 && freq <= 16.209)
-                    {
-                        panelBandHF.Visible = true; 
-                        panelBandGEN.Visible = false; 
-                        return Band.B20M;
-                    }
-                    else if (freq >= 16.209 && freq <= 19.584)
-                    {
-                        panelBandHF.Visible = true; 
-                        panelBandGEN.Visible = false; 
-                        return Band.B17M;
-                    }
-                    else if (freq >= 19.584 && freq <= 23.17)
-                    {
-                        panelBandHF.Visible = true; 
-                        panelBandGEN.Visible = false; 
-                        return Band.B15M;
-                    }
-                    else if (freq >= 23.17 && freq <= 26.495)
-                    {
-                        panelBandHF.Visible = true; 
-                        panelBandGEN.Visible = false; 
-                        return Band.B12M;
-                    }
-                    else if (freq >= 26.495 && freq <= 29.7)
-                    {
-                        panelBandHF.Visible = true; 
-                        panelBandGEN.Visible = false; 
-                        return Band.B10M;
-                    }
-                    else if (freq >= 50.0 && freq <= 54.0)
-                    {
-                        panelBandHF.Visible = true; 
-                        panelBandGEN.Visible = false; 
-                        return Band.B6M;
-                    }
-                    else if (freq >= 144.0 && freq <= 148.0) // ke9ns test was 144.0 and 148.0
-                    {
-                        panelBandHF.Visible = true; 
-                        panelBandGEN.Visible = false; 
-                        return Band.B2M;
-                    }
-                    else
-                        return Band.GEN;
-                }
 
             switch (region)
             {
@@ -7151,270 +7154,270 @@ namespace Thetis
                     else
                         return Band.GEN;
                     */
-                if (freq >= 1.8 && freq <= 2.0)
-                {
-                    if (vfoa)
+                    if (freq >= 1.8 && freq <= 2.0)
                     {
-                        panelBandHF.Visible = true;
-                        panelBandGEN.Visible = false;
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
+                        return Band.B160M;
                     }
-                    return Band.B160M;
-                }
-                else if (freq >= 3.5 && freq <= 4.0)
-                {
-                    if (vfoa)
+                    else if (freq >= 3.5 && freq <= 4.0)
                     {
-                        panelBandHF.Visible = true;
-                        panelBandGEN.Visible = false;
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
+                        return Band.B80M;
                     }
-                    return Band.B80M;
-                }
-                else if (freq >= 5.1 && freq <= 5.5)
-                {
-                    if (vfoa)
+                    else if (freq >= 5.1 && freq <= 5.5)
                     {
-                        panelBandHF.Visible = true;
-                        panelBandGEN.Visible = false;
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
+                        return Band.B60M;
                     }
-                    return Band.B60M;
-                }
-                else if (freq >= 7.0 && freq <= 7.3)
-                {
-                    if (vfoa)
+                    else if (freq >= 7.0 && freq <= 7.3)
                     {
-                        panelBandHF.Visible = true;
-                        panelBandGEN.Visible = false;
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
+                        return Band.B40M;
                     }
-                    return Band.B40M;
-                }
-                else if (freq >= 10.1 && freq <= 10.15)
-                {
-                    if (vfoa)
+                    else if (freq >= 10.1 && freq <= 10.15)
                     {
-                        panelBandHF.Visible = true;
-                        panelBandGEN.Visible = false;
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
+                        return Band.B30M;
                     }
-                    return Band.B30M;
-                }
-                else if (freq >= 14.0 && freq <= 14.35)
-                {
-                    if (vfoa)
+                    else if (freq >= 14.0 && freq <= 14.35)
                     {
-                        panelBandHF.Visible = true;
-                        panelBandGEN.Visible = false;
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
+                        return Band.B20M;
                     }
-                    return Band.B20M;
-                }
-                else if (freq >= 18.068 && freq <= 18.168)
-                {
-                    if (vfoa)
+                    else if (freq >= 18.068 && freq <= 18.168)
                     {
-                        panelBandHF.Visible = true;
-                        panelBandGEN.Visible = false;
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
+                        return Band.B17M;
                     }
-                    return Band.B17M;
-                }
-                else if (freq >= 21.0 && freq <= 21.450)
-                {
-                    if (vfoa)
+                    else if (freq >= 21.0 && freq <= 21.450)
                     {
-                        panelBandHF.Visible = true;
-                        panelBandGEN.Visible = false;
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
+                        return Band.B15M;
                     }
-                    return Band.B15M;
-                }
-                else if (freq >= 24.89 && freq <= 24.99)
-                {
-                    if (vfoa)
+                    else if (freq >= 24.89 && freq <= 24.99)
                     {
-                        panelBandHF.Visible = true;
-                        panelBandGEN.Visible = false;
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
+                        return Band.B12M;
                     }
-                    return Band.B12M;
-                }
-                else if (freq >= 28.0 && freq <= 29.7)
-                {
-                    if (vfoa)
+                    else if (freq >= 28.0 && freq <= 29.7)
                     {
-                        panelBandHF.Visible = true;
-                        panelBandGEN.Visible = false;
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
+                        return Band.B10M;
                     }
-                    return Band.B10M;
-                }
-                else if (freq >= 50.0 && freq <= 54.0)
-                {
-                    if (vfoa)
+                    else if (freq >= 50.0 && freq <= 54.0)
                     {
-                        panelBandHF.Visible = true;
-                        panelBandGEN.Visible = false;
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
+                        return Band.B6M;
                     }
-                    return Band.B6M;
-                }
-                else if (freq >= 144.0 && freq <= 148.0) // ke9ns test was 144.0 148.0
-                {
-                    if (vfoa)
+                    else if (freq >= 144.0 && freq <= 148.0) // ke9ns test was 144.0 148.0
                     {
-                        panelBandHF.Visible = true;
-                        panelBandGEN.Visible = false;
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
+                        return Band.B2M;
                     }
-                    return Band.B2M;
-                }
-                else if (freq == 2.5 || freq == 5.0 || freq == 10.0 || freq == 15.0 ||
-                        freq == 20.0 || freq == 25.0 || freq == 3.33 || freq == 7.85 || freq == 14.67)
-                {
-                    if (vfoa)
+                    else if (freq == 2.5 || freq == 5.0 || freq == 10.0 || freq == 15.0 ||
+                            freq == 20.0 || freq == 25.0 || freq == 3.33 || freq == 7.85 || freq == 14.67)
                     {
-                        panelBandHF.Visible = true;
-                        panelBandGEN.Visible = false;
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
+                        return Band.WWV;
                     }
-                    return Band.WWV;
-                }
 
-                // ke9ns add
-                else if (freq >= 0.20 && freq < 1.80)
-                {
-                    if (vfoa)
+                    // ke9ns add
+                    else if (freq >= 0.20 && freq < 1.80)
                     {
-                        panelBandHF.Visible = false;
-                        panelBandGEN.Visible = true;
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.BLMF;
                     }
-                    return Band.BLMF;
-                }
 
-                else if (freq >= 1.8 && freq < 3.0)
-                {
-                    if (vfoa)
+                    else if (freq >= 1.8 && freq < 3.0)
                     {
-                        panelBandHF.Visible = false;
-                        panelBandGEN.Visible = true;
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B120M;
                     }
-                    return Band.B120M;
-                }
 
-                else if (freq >= 3.0 && freq < 4.1)
-                {
-                    if (vfoa)
+                    else if (freq >= 3.0 && freq < 4.1)
                     {
-                        panelBandHF.Visible = false;
-                        panelBandGEN.Visible = true;
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B90M;
                     }
-                    return Band.B90M;
-                }
 
-                else if (freq >= 4.10 && freq < 5.06)
-                {
-                    if (vfoa)
+                    else if (freq >= 4.10 && freq < 5.06)
                     {
-                        panelBandHF.Visible = false;
-                        panelBandGEN.Visible = true;
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B61M;
                     }
-                    return Band.B61M;
-                }
 
-                else if (freq >= 5.06 && freq < 7.20)
-                {
-                 //   Debug.WriteLine("bandbyfreq 49");
-                    if (vfoa)
+                    else if (freq >= 5.06 && freq < 7.20)
                     {
-                        panelBandHF.Visible = false;
-                        panelBandGEN.Visible = true;
+                        //   Debug.WriteLine("bandbyfreq 49");
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B49M;
                     }
-                    return Band.B49M;
-                }
 
-                else if (freq >= 7.20 && freq < 9.0)
-                {
-                  //  Debug.WriteLine("bandbyfreq 41");
-                    if (vfoa)
+                    else if (freq >= 7.20 && freq < 9.0)
                     {
-                        panelBandHF.Visible = false;
-                        panelBandGEN.Visible = true;
+                        //  Debug.WriteLine("bandbyfreq 41");
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B41M;
                     }
-                    return Band.B41M;
-                }
 
-                else if (freq >= 9.0 && freq < 11.6)
-                {
-                    if (vfoa)
+                    else if (freq >= 9.0 && freq < 11.6)
                     {
-                        panelBandHF.Visible = false;
-                        panelBandGEN.Visible = true;
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B31M;
                     }
-                    return Band.B31M;
-                }
 
-                else if (freq >= 11.6 && freq < 13.57)
-                {
-                    if (vfoa)
+                    else if (freq >= 11.6 && freq < 13.57)
                     {
-                        panelBandHF.Visible = false;
-                        panelBandGEN.Visible = true;
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B25M;
                     }
-                    return Band.B25M;
-                }
 
-                else if (freq >= 13.57 && freq < 13.87)
-                {
-                    if (vfoa)
+                    else if (freq >= 13.57 && freq < 13.87)
                     {
-                        panelBandHF.Visible = false;
-                        panelBandGEN.Visible = true;
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B22M;
                     }
-                    return Band.B22M;
-                }
 
-                else if (freq >= 13.87 && freq < 17.0)
-                {
-                    if (vfoa)
+                    else if (freq >= 13.87 && freq < 17.0)
                     {
-                        panelBandHF.Visible = false;
-                        panelBandGEN.Visible = true;
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B19M;
                     }
-                    return Band.B19M;
-                }
 
-                else if (freq >= 17.0 && freq < 18.0)
-                {
-                    if (vfoa)
+                    else if (freq >= 17.0 && freq < 18.0)
                     {
-                        panelBandHF.Visible = false;
-                        panelBandGEN.Visible = true;
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B16M;
                     }
-                    return Band.B16M;
-                }
 
-                else if (freq >= 18.0 && freq < 21.0)
-                {
-                    if (vfoa)
+                    else if (freq >= 18.0 && freq < 21.0)
                     {
-                        panelBandHF.Visible = false;
-                        panelBandGEN.Visible = true;
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B14M;
                     }
-                    return Band.B14M;
-                }
-                else if (freq >= 21.00 && freq < 25.0)
-                {
-                    if (vfoa)
+                    else if (freq >= 21.00 && freq < 25.0)
                     {
-                        panelBandHF.Visible = false;
-                        panelBandGEN.Visible = true;
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B13M;
                     }
-                    return Band.B13M;
-                }
 
-                else if (freq >= 25.0 && freq < 28.0)
-                {
-                    if (vfoa)
+                    else if (freq >= 25.0 && freq < 28.0)
                     {
-                        panelBandHF.Visible = false;
-                        panelBandGEN.Visible = true;
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B11M;
                     }
-                    return Band.B11M;
-                }
 
-                else
-                    return Band.GEN;
-                
+                    else
+                        return Band.GEN;
+
 
                 case FRSRegion.India:
                     //if (freq >= 1.81 && freq <= 2.0)
@@ -7448,269 +7451,269 @@ namespace Thetis
                     //else
                     //    return Band.GEN;
 
-                if (freq >= 1.81 && freq <= 2.0)
-                {
-                    if (vfoa)
+                    if (freq >= 1.81 && freq <= 2.0)
                     {
-                        panelBandHF.Visible = true;
-                        panelBandGEN.Visible = false;
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
+                        return Band.B160M;
                     }
-                    return Band.B160M;
-                }
-                else if (freq >= 3.5 && freq <= 3.9)
-                {
-                    if (vfoa)
+                    else if (freq >= 3.5 && freq <= 3.9)
                     {
-                        panelBandHF.Visible = true;
-                        panelBandGEN.Visible = false;
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
+                        return Band.B80M;
                     }
-                    return Band.B80M;
-                }
-                else if (freq >= 5.0 && freq <= 7.0)
-                {
-                    if (vfoa)
+                    else if (freq >= 5.0 && freq <= 7.0)
                     {
-                        panelBandHF.Visible = true;
-                        panelBandGEN.Visible = false;
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
+                        return Band.B60M;
                     }
-                    return Band.B60M;
-                }
-                else if (freq >= 7.0 && freq <= 7.2)
-                {
-                    if (vfoa)
+                    else if (freq >= 7.0 && freq <= 7.2)
                     {
-                        panelBandHF.Visible = true;
-                        panelBandGEN.Visible = false;
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
+                        return Band.B40M;
                     }
-                    return Band.B40M;
-                }
-                else if (freq >= 10.1 && freq <= 10.15)
-                {
-                    if (vfoa)
+                    else if (freq >= 10.1 && freq <= 10.15)
                     {
-                        panelBandHF.Visible = true;
-                        panelBandGEN.Visible = false;
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
+                        return Band.B30M;
                     }
-                    return Band.B30M;
-                }
-                else if (freq >= 14.0 && freq <= 14.35)
-                {
-                    if (vfoa)
+                    else if (freq >= 14.0 && freq <= 14.35)
                     {
-                        panelBandHF.Visible = true;
-                        panelBandGEN.Visible = false;
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
+                        return Band.B20M;
                     }
-                    return Band.B20M;
-                }
-                else if (freq >= 18.068 && freq <= 18.168)
-                {
-                    if (vfoa)
+                    else if (freq >= 18.068 && freq <= 18.168)
                     {
-                        panelBandHF.Visible = true;
-                        panelBandGEN.Visible = false;
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
+                        return Band.B17M;
                     }
-                    return Band.B17M;
-                }
-                else if (freq >= 21.0 && freq <= 21.450)
-                {
-                    if (vfoa)
+                    else if (freq >= 21.0 && freq <= 21.450)
                     {
-                        panelBandHF.Visible = true;
-                        panelBandGEN.Visible = false;
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
+                        return Band.B15M;
                     }
-                    return Band.B15M;
-                }
-                else if (freq >= 24.89 && freq <= 24.99)
-                {
-                    if (vfoa)
+                    else if (freq >= 24.89 && freq <= 24.99)
                     {
-                        panelBandHF.Visible = true;
-                        panelBandGEN.Visible = false;
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
+                        return Band.B12M;
                     }
-                    return Band.B12M;
-                }
-                else if (freq >= 28.0 && freq <= 29.7)
-                {
-                    if (vfoa)
+                    else if (freq >= 28.0 && freq <= 29.7)
                     {
-                        panelBandHF.Visible = true;
-                        panelBandGEN.Visible = false;
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
+                        return Band.B10M;
                     }
-                    return Band.B10M;
-                }
-                else if (freq >= 50.0 && freq <= 54.0)
-                {
-                    if (vfoa)
+                    else if (freq >= 50.0 && freq <= 54.0)
                     {
-                        panelBandHF.Visible = true;
-                        panelBandGEN.Visible = false;
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
+                        return Band.B6M;
                     }
-                    return Band.B6M;
-                }
-                else if (freq >= 144.0 && freq <= 148.0)
-                {
-                    if (vfoa)
+                    else if (freq >= 144.0 && freq <= 148.0)
                     {
-                        panelBandHF.Visible = true;
-                        panelBandGEN.Visible = false;
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
+                        return Band.B2M;
                     }
-                    return Band.B2M;
-                }
-                else if (freq == 2.5 || freq == 5.0 || freq == 10.0 || freq == 15.0 ||
-                        freq == 20.0 || freq == 25.0 || freq == 3.33 || freq == 7.85 || freq == 14.67)
-                {
-                    if (vfoa)
+                    else if (freq == 2.5 || freq == 5.0 || freq == 10.0 || freq == 15.0 ||
+                            freq == 20.0 || freq == 25.0 || freq == 3.33 || freq == 7.85 || freq == 14.67)
                     {
-                        panelBandHF.Visible = true;
-                        panelBandGEN.Visible = false;
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
+                        return Band.WWV;
                     }
-                    return Band.WWV;
-                }
 
-                // ke9ns add
-                else if (freq >= 0.20 && freq < 1.80)
-                {
-                    if (vfoa)
+                    // ke9ns add
+                    else if (freq >= 0.20 && freq < 1.80)
                     {
-                        panelBandHF.Visible = false;
-                        panelBandGEN.Visible = true;
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.BLMF;
                     }
-                    return Band.BLMF;
-                }
 
-                else if (freq >= 2.3 && freq < 3.0)
-                {
-                    if (vfoa)
+                    else if (freq >= 2.3 && freq < 3.0)
                     {
-                        panelBandHF.Visible = false;
-                        panelBandGEN.Visible = true;
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B120M;
                     }
-                    return Band.B120M;
-                }
 
-                else if (freq >= 3.0 && freq < 3.5)
-                {
-                    if (vfoa)
+                    else if (freq >= 3.0 && freq < 3.5)
                     {
-                        panelBandHF.Visible = false;
-                        panelBandGEN.Visible = true;
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B90M;
                     }
-                    return Band.B90M;
-                }
 
-                else if (freq >= 4.10 && freq < 5.06)
-                {
-                    if (vfoa)
+                    else if (freq >= 4.10 && freq < 5.06)
                     {
-                        panelBandHF.Visible = false;
-                        panelBandGEN.Visible = true;
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B61M;
                     }
-                    return Band.B61M;
-                }
 
-                else if (freq >= 5.06 && freq < 7.20)
-                {
-                    //   Debug.WriteLine("bandbyfreq 49");
-                    if (vfoa)
+                    else if (freq >= 5.06 && freq < 7.20)
                     {
-                        panelBandHF.Visible = false;
-                        panelBandGEN.Visible = true;
+                        //   Debug.WriteLine("bandbyfreq 49");
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B49M;
                     }
-                    return Band.B49M;
-                }
 
-                else if (freq >= 7.20 && freq < 9.0)
-                {
-                    //  Debug.WriteLine("bandbyfreq 41");
-                    if (vfoa)
+                    else if (freq >= 7.20 && freq < 9.0)
                     {
-                        panelBandHF.Visible = false;
-                        panelBandGEN.Visible = true;
+                        //  Debug.WriteLine("bandbyfreq 41");
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B41M;
                     }
-                    return Band.B41M;
-                }
 
-                else if (freq >= 9.0 && freq < 9.99)
-                {
-                    if (vfoa)
+                    else if (freq >= 9.0 && freq < 9.99)
                     {
-                        panelBandHF.Visible = false;
-                        panelBandGEN.Visible = true;
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B31M;
                     }
-                    return Band.B31M;
-                }
 
-                else if (freq >= 11.6 && freq < 13.57)
-                {
-                    if (vfoa)
+                    else if (freq >= 11.6 && freq < 13.57)
                     {
-                        panelBandHF.Visible = false;
-                        panelBandGEN.Visible = true;
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B25M;
                     }
-                    return Band.B25M;
-                }
 
-                else if (freq >= 13.57 && freq < 13.87)
-                {
-                    if (vfoa)
+                    else if (freq >= 13.57 && freq < 13.87)
                     {
-                        panelBandHF.Visible = false;
-                        panelBandGEN.Visible = true;
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B22M;
                     }
-                    return Band.B22M;
-                }
 
-                else if (freq >= 15.1 && freq < 17.0)
-                {
-                    if (vfoa)
+                    else if (freq >= 15.1 && freq < 17.0)
                     {
-                        panelBandHF.Visible = false;
-                        panelBandGEN.Visible = true;
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B19M;
                     }
-                    return Band.B19M;
-                }
 
-                else if (freq >= 17.0 && freq < 18.0)
-                {
-                    if (vfoa)
+                    else if (freq >= 17.0 && freq < 18.0)
                     {
-                        panelBandHF.Visible = false;
-                        panelBandGEN.Visible = true;
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B16M;
                     }
-                    return Band.B16M;
-                }
 
-                else if (freq >= 18.0 && freq < 21.0)
-                {
-                    if (vfoa)
+                    else if (freq >= 18.0 && freq < 21.0)
                     {
-                        panelBandHF.Visible = false;
-                        panelBandGEN.Visible = true;
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B14M;
                     }
-                    return Band.B14M;
-                }
-                else if (freq >= 21.00 && freq < 25.0)
-                {
-                    if (vfoa)
+                    else if (freq >= 21.00 && freq < 25.0)
                     {
-                        panelBandHF.Visible = false;
-                        panelBandGEN.Visible = true;
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B13M;
                     }
-                    return Band.B13M;
-                }
 
-                else if (freq >= 25.0 && freq < 28.0)
-                {
-                    if (vfoa)
+                    else if (freq >= 25.0 && freq < 28.0)
                     {
-                        panelBandHF.Visible = false;
-                        panelBandGEN.Visible = true;
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B11M;
                     }
-                    return Band.B11M;
-                }
 
-                else
-                    return Band.GEN;
+                    else
+                        return Band.GEN;
 
                 case FRSRegion.Spain:
                     //if (freq >= 1.81 && freq <= 2.0)
@@ -8007,7 +8010,7 @@ namespace Thetis
 
                     else
                         return Band.GEN;
-                
+
                 case FRSRegion.Europe:
                     //if (freq >= 1.81 && freq <= 2.0)
                     //    return Band.B160M;
@@ -9227,8 +9230,8 @@ namespace Thetis
                     //else
                     //    return Band.GEN;
 
-                   if ((freq >= 0.1357 && freq <= 0.1378) ||
-                        (freq >= 1.81 && freq <= 1.9125))
+                    if ((freq >= 0.1357 && freq <= 0.1378) ||
+                         (freq >= 1.81 && freq <= 1.9125))
                     {
                         if (vfoa)
                         {
@@ -9526,271 +9529,271 @@ namespace Thetis
                     //else
                     //    return Band.GEN;
 
-                     if ((freq >= 0.1357 && freq <= 0.1378) ||
-                         (freq >= 0.472 && freq <= 0.479) ||
-                          freq >= 1.8 && freq <= 1.875)
-                   {
-                       if (vfoa)
-                       {
-                           panelBandHF.Visible = true;
-                           panelBandGEN.Visible = false;
-                       }
-                       return Band.B160M;
-                   }
-                   else if (freq >= 3.5 && freq <= 3.8)
-                   {
-                       if (vfoa)
-                       {
-                           panelBandHF.Visible = true;
-                           panelBandGEN.Visible = false;
-                       }
-                       return Band.B80M;
-                   }
-                   else if (freq >= 5.0 && freq <= 7.0)
-                   {
-                       if (vfoa)
-                       {
-                           panelBandHF.Visible = true;
-                           panelBandGEN.Visible = false;
-                       }
-                       return Band.B60M;
-                   }
-                   else if (freq >= 7.0 && freq <= 7.3)
-                   {
-                       if (vfoa)
-                       {
-                           panelBandHF.Visible = true;
-                           panelBandGEN.Visible = false;
-                       }
-                       return Band.B40M;
-                   }
-                   else if (freq >= 10.1 && freq <= 10.15)
-                   {
-                       if (vfoa)
-                       {
-                           panelBandHF.Visible = true;
-                           panelBandGEN.Visible = false;
-                       }
-                       return Band.B30M;
-                   }
-                   else if (freq >= 14.0 && freq <= 14.35)
-                   {
-                       if (vfoa)
-                       {
-                           panelBandHF.Visible = true;
-                           panelBandGEN.Visible = false;
-                       }
-                       return Band.B20M;
-                   }
-                   else if (freq >= 18.068 && freq <= 18.168)
-                   {
-                       if (vfoa)
-                       {
-                           panelBandHF.Visible = true;
-                           panelBandGEN.Visible = false;
-                       }
-                       return Band.B17M;
-                   }
-                   else if (freq >= 21.0 && freq <= 21.450)
-                   {
-                       if (vfoa)
-                       {
-                           panelBandHF.Visible = true;
-                           panelBandGEN.Visible = false;
-                       }
-                       return Band.B15M;
-                   }
-                   else if (freq >= 24.89 && freq <= 24.99)
-                   {
-                       if (vfoa)
-                       {
-                           panelBandHF.Visible = true;
-                           panelBandGEN.Visible = false;
-                       }
-                       return Band.B12M;
-                   }
-                   else if (freq >= 28.0 && freq <= 29.7)
-                   {
-                       if (vfoa)
-                       {
-                           panelBandHF.Visible = true;
-                           panelBandGEN.Visible = false;
-                       }
-                       return Band.B10M;
-                   }
-                   else if (freq >= 50.0 && freq <= 54.0)
-                   {
-                       if (vfoa)
-                       {
-                           panelBandHF.Visible = true;
-                           panelBandGEN.Visible = false;
-                       }
-                       return Band.B6M;
-                   }
-                   else if (freq >= 144.0 && freq <= 148.0)
-                   {
-                       if (vfoa)
-                       {
-                           panelBandHF.Visible = true;
-                           panelBandGEN.Visible = false;
-                       }
-                       return Band.B2M;
-                   }
-                   else if (freq == 2.5 || freq == 5.0 || freq == 10.0 || freq == 15.0 ||
-                           freq == 20.0 || freq == 25.0 || freq == 3.33 || freq == 7.85 || freq == 14.67)
-                   {
-                       if (vfoa)
-                       {
-                           panelBandHF.Visible = true;
-                           panelBandGEN.Visible = false;
-                       }
-                       return Band.WWV;
-                   }
+                    if ((freq >= 0.1357 && freq <= 0.1378) ||
+                        (freq >= 0.472 && freq <= 0.479) ||
+                         freq >= 1.8 && freq <= 1.875)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
+                        return Band.B160M;
+                    }
+                    else if (freq >= 3.5 && freq <= 3.8)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
+                        return Band.B80M;
+                    }
+                    else if (freq >= 5.0 && freq <= 7.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
+                        return Band.B60M;
+                    }
+                    else if (freq >= 7.0 && freq <= 7.3)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
+                        return Band.B40M;
+                    }
+                    else if (freq >= 10.1 && freq <= 10.15)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
+                        return Band.B30M;
+                    }
+                    else if (freq >= 14.0 && freq <= 14.35)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
+                        return Band.B20M;
+                    }
+                    else if (freq >= 18.068 && freq <= 18.168)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
+                        return Band.B17M;
+                    }
+                    else if (freq >= 21.0 && freq <= 21.450)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
+                        return Band.B15M;
+                    }
+                    else if (freq >= 24.89 && freq <= 24.99)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
+                        return Band.B12M;
+                    }
+                    else if (freq >= 28.0 && freq <= 29.7)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
+                        return Band.B10M;
+                    }
+                    else if (freq >= 50.0 && freq <= 54.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
+                        return Band.B6M;
+                    }
+                    else if (freq >= 144.0 && freq <= 148.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
+                        return Band.B2M;
+                    }
+                    else if (freq == 2.5 || freq == 5.0 || freq == 10.0 || freq == 15.0 ||
+                            freq == 20.0 || freq == 25.0 || freq == 3.33 || freq == 7.85 || freq == 14.67)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
+                        return Band.WWV;
+                    }
 
-                   // ke9ns add
-                   else if (freq >= 0.20 && freq < 1.80)
-                   {
-                       if (vfoa)
-                       {
-                           panelBandHF.Visible = false;
-                           panelBandGEN.Visible = true;
-                       }
-                       return Band.BLMF;
-                   }
+                    // ke9ns add
+                    else if (freq >= 0.20 && freq < 1.80)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.BLMF;
+                    }
 
-                   else if (freq >= 2.3 && freq < 3.0)
-                   {
-                       if (vfoa)
-                       {
-                           panelBandHF.Visible = false;
-                           panelBandGEN.Visible = true;
-                       }
-                       return Band.B120M;
-                   }
+                    else if (freq >= 2.3 && freq < 3.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B120M;
+                    }
 
-                   else if (freq >= 3.0 && freq < 3.5)
-                   {
-                       if (vfoa)
-                       {
-                           panelBandHF.Visible = false;
-                           panelBandGEN.Visible = true;
-                       }
-                       return Band.B90M;
-                   }
+                    else if (freq >= 3.0 && freq < 3.5)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B90M;
+                    }
 
-                   else if (freq >= 4.10 && freq < 5.06)
-                   {
-                       if (vfoa)
-                       {
-                           panelBandHF.Visible = false;
-                           panelBandGEN.Visible = true;
-                       }
-                       return Band.B61M;
-                   }
+                    else if (freq >= 4.10 && freq < 5.06)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B61M;
+                    }
 
-                   else if (freq >= 5.06 && freq < 7.20)
-                   {
-                       //   Debug.WriteLine("bandbyfreq 49");
-                       if (vfoa)
-                       {
-                           panelBandHF.Visible = false;
-                           panelBandGEN.Visible = true;
-                       }
-                       return Band.B49M;
-                   }
+                    else if (freq >= 5.06 && freq < 7.20)
+                    {
+                        //   Debug.WriteLine("bandbyfreq 49");
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B49M;
+                    }
 
-                   else if (freq >= 7.20 && freq < 9.0)
-                   {
-                       //  Debug.WriteLine("bandbyfreq 41");
-                       if (vfoa)
-                       {
-                           panelBandHF.Visible = false;
-                           panelBandGEN.Visible = true;
-                       }
-                       return Band.B41M;
-                   }
+                    else if (freq >= 7.20 && freq < 9.0)
+                    {
+                        //  Debug.WriteLine("bandbyfreq 41");
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B41M;
+                    }
 
-                   else if (freq >= 9.0 && freq < 9.99)
-                   {
-                       if (vfoa)
-                       {
-                           panelBandHF.Visible = false;
-                           panelBandGEN.Visible = true;
-                       }
-                       return Band.B31M;
-                   }
+                    else if (freq >= 9.0 && freq < 9.99)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B31M;
+                    }
 
-                   else if (freq >= 11.6 && freq < 13.57)
-                   {
-                       if (vfoa)
-                       {
-                           panelBandHF.Visible = false;
-                           panelBandGEN.Visible = true;
-                       }
-                       return Band.B25M;
-                   }
+                    else if (freq >= 11.6 && freq < 13.57)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B25M;
+                    }
 
-                   else if (freq >= 13.57 && freq < 13.87)
-                   {
-                       if (vfoa)
-                       {
-                           panelBandHF.Visible = false;
-                           panelBandGEN.Visible = true;
-                       }
-                       return Band.B22M;
-                   }
+                    else if (freq >= 13.57 && freq < 13.87)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B22M;
+                    }
 
-                   else if (freq >= 15.1 && freq < 17.0)
-                   {
-                       if (vfoa)
-                       {
-                           panelBandHF.Visible = false;
-                           panelBandGEN.Visible = true;
-                       }
-                       return Band.B19M;
-                   }
+                    else if (freq >= 15.1 && freq < 17.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B19M;
+                    }
 
-                   else if (freq >= 17.0 && freq < 18.0)
-                   {
-                       if (vfoa)
-                       {
-                           panelBandHF.Visible = false;
-                           panelBandGEN.Visible = true;
-                       }
-                       return Band.B16M;
-                   }
+                    else if (freq >= 17.0 && freq < 18.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B16M;
+                    }
 
-                   else if (freq >= 18.0 && freq < 21.0)
-                   {
-                       if (vfoa)
-                       {
-                           panelBandHF.Visible = false;
-                           panelBandGEN.Visible = true;
-                       }
-                       return Band.B14M;
-                   }
-                   else if (freq >= 21.00 && freq < 25.0)
-                   {
-                       if (vfoa)
-                       {
-                           panelBandHF.Visible = false;
-                           panelBandGEN.Visible = true;
-                       }
-                       return Band.B13M;
-                   }
+                    else if (freq >= 18.0 && freq < 21.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B14M;
+                    }
+                    else if (freq >= 21.00 && freq < 25.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B13M;
+                    }
 
-                   else if (freq >= 25.0 && freq < 28.0)
-                   {
-                       if (vfoa)
-                       {
-                           panelBandHF.Visible = false;
-                           panelBandGEN.Visible = true;
-                       }
-                       return Band.B11M;
-                   }
+                    else if (freq >= 25.0 && freq < 28.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B11M;
+                    }
 
-                   else
-                       return Band.GEN;
+                    else
+                        return Band.GEN;
 
                 case FRSRegion.Norway:
                     //if (freq >= 1.81 && freq <= 2.0)
@@ -9824,269 +9827,269 @@ namespace Thetis
                     //else
                     //    return Band.GEN;
 
-                     if (freq >= 1.8 && freq <= 2.0)
-                     {
-                         if (vfoa)
-                         {
-                             panelBandHF.Visible = true;
-                             panelBandGEN.Visible = false;
-                         }
-                         return Band.B160M;
-                     }
-                     else if (freq >= 3.5 && freq <= 3.8)
-                     {
-                         if (vfoa)
-                         {
-                             panelBandHF.Visible = true;
-                             panelBandGEN.Visible = false;
-                         }
-                         return Band.B80M;
-                     }
-                     else if (freq >= 5.25 && freq <= 5.45)
-                     {
-                         if (vfoa)
-                         {
-                             panelBandHF.Visible = true;
-                             panelBandGEN.Visible = false;
-                         }
-                         return Band.B60M;
-                     }
-                     else if (freq >= 7.0 && freq <= 7.2)
-                     {
-                         if (vfoa)
-                         {
-                             panelBandHF.Visible = true;
-                             panelBandGEN.Visible = false;
-                         }
-                         return Band.B40M;
-                     }
-                     else if (freq >= 10.1 && freq <= 10.15)
-                     {
-                         if (vfoa)
-                         {
-                             panelBandHF.Visible = true;
-                             panelBandGEN.Visible = false;
-                         }
-                         return Band.B30M;
-                     }
-                     else if (freq >= 14.0 && freq <= 14.35)
-                     {
-                         if (vfoa)
-                         {
-                             panelBandHF.Visible = true;
-                             panelBandGEN.Visible = false;
-                         }
-                         return Band.B20M;
-                     }
-                     else if (freq >= 18.068 && freq <= 18.168)
-                     {
-                         if (vfoa)
-                         {
-                             panelBandHF.Visible = true;
-                             panelBandGEN.Visible = false;
-                         }
-                         return Band.B17M;
-                     }
-                     else if (freq >= 21.0 && freq <= 21.450)
-                     {
-                         if (vfoa)
-                         {
-                             panelBandHF.Visible = true;
-                             panelBandGEN.Visible = false;
-                         }
-                         return Band.B15M;
-                     }
-                     else if (freq >= 24.89 && freq <= 24.99)
-                     {
-                         if (vfoa)
-                         {
-                             panelBandHF.Visible = true;
-                             panelBandGEN.Visible = false;
-                         }
-                         return Band.B12M;
-                     }
-                     else if (freq >= 28.0 && freq <= 29.7)
-                     {
-                         if (vfoa)
-                         {
-                             panelBandHF.Visible = true;
-                             panelBandGEN.Visible = false;
-                         }
-                         return Band.B10M;
-                     }
-                     else if (freq >= 50.0 && freq <= 52.0)
-                     {
-                         if (vfoa)
-                         {
-                             panelBandHF.Visible = true;
-                             panelBandGEN.Visible = false;
-                         }
-                         return Band.B6M;
-                     }
-                     else if (freq >= 144.0 && freq <= 148.0)
-                     {
-                         if (vfoa)
-                         {
-                             panelBandHF.Visible = true;
-                             panelBandGEN.Visible = false;
-                         }
-                         return Band.B2M;
-                     }
-                     else if (freq == 2.5 || freq == 5.0 || freq == 10.0 || freq == 15.0 ||
-                             freq == 20.0 || freq == 25.0 || freq == 3.33 || freq == 7.85 || freq == 14.67)
-                     {
-                         if (vfoa)
-                         {
-                             panelBandHF.Visible = true;
-                             panelBandGEN.Visible = false;
-                         }
-                         return Band.WWV;
-                     }
+                    if (freq >= 1.8 && freq <= 2.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
+                        return Band.B160M;
+                    }
+                    else if (freq >= 3.5 && freq <= 3.8)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
+                        return Band.B80M;
+                    }
+                    else if (freq >= 5.25 && freq <= 5.45)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
+                        return Band.B60M;
+                    }
+                    else if (freq >= 7.0 && freq <= 7.2)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
+                        return Band.B40M;
+                    }
+                    else if (freq >= 10.1 && freq <= 10.15)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
+                        return Band.B30M;
+                    }
+                    else if (freq >= 14.0 && freq <= 14.35)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
+                        return Band.B20M;
+                    }
+                    else if (freq >= 18.068 && freq <= 18.168)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
+                        return Band.B17M;
+                    }
+                    else if (freq >= 21.0 && freq <= 21.450)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
+                        return Band.B15M;
+                    }
+                    else if (freq >= 24.89 && freq <= 24.99)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
+                        return Band.B12M;
+                    }
+                    else if (freq >= 28.0 && freq <= 29.7)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
+                        return Band.B10M;
+                    }
+                    else if (freq >= 50.0 && freq <= 52.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
+                        return Band.B6M;
+                    }
+                    else if (freq >= 144.0 && freq <= 148.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
+                        return Band.B2M;
+                    }
+                    else if (freq == 2.5 || freq == 5.0 || freq == 10.0 || freq == 15.0 ||
+                            freq == 20.0 || freq == 25.0 || freq == 3.33 || freq == 7.85 || freq == 14.67)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
+                        return Band.WWV;
+                    }
 
-                     // ke9ns add
-                     else if (freq >= 0.20 && freq < 1.80)
-                     {
-                         if (vfoa)
-                         {
-                             panelBandHF.Visible = false;
-                             panelBandGEN.Visible = true;
-                         }
-                         return Band.BLMF;
-                     }
+                    // ke9ns add
+                    else if (freq >= 0.20 && freq < 1.80)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.BLMF;
+                    }
 
-                     else if (freq >= 2.3 && freq < 3.0)
-                     {
-                         if (vfoa)
-                         {
-                             panelBandHF.Visible = false;
-                             panelBandGEN.Visible = true;
-                         }
-                         return Band.B120M;
-                     }
+                    else if (freq >= 2.3 && freq < 3.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B120M;
+                    }
 
-                     else if (freq >= 3.0 && freq < 3.5)
-                     {
-                         if (vfoa)
-                         {
-                             panelBandHF.Visible = false;
-                             panelBandGEN.Visible = true;
-                         }
-                         return Band.B90M;
-                     }
+                    else if (freq >= 3.0 && freq < 3.5)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B90M;
+                    }
 
-                     else if (freq >= 4.10 && freq < 5.06)
-                     {
-                         if (vfoa)
-                         {
-                             panelBandHF.Visible = false;
-                             panelBandGEN.Visible = true;
-                         }
-                         return Band.B61M;
-                     }
+                    else if (freq >= 4.10 && freq < 5.06)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B61M;
+                    }
 
-                     else if (freq >= 5.06 && freq < 7.20)
-                     {
-                         //   Debug.WriteLine("bandbyfreq 49");
-                         if (vfoa)
-                         {
-                             panelBandHF.Visible = false;
-                             panelBandGEN.Visible = true;
-                         }
-                         return Band.B49M;
-                     }
+                    else if (freq >= 5.06 && freq < 7.20)
+                    {
+                        //   Debug.WriteLine("bandbyfreq 49");
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B49M;
+                    }
 
-                     else if (freq >= 7.20 && freq < 9.0)
-                     {
-                         //  Debug.WriteLine("bandbyfreq 41");
-                         if (vfoa)
-                         {
-                             panelBandHF.Visible = false;
-                             panelBandGEN.Visible = true;
-                         }
-                         return Band.B41M;
-                     }
+                    else if (freq >= 7.20 && freq < 9.0)
+                    {
+                        //  Debug.WriteLine("bandbyfreq 41");
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B41M;
+                    }
 
-                     else if (freq >= 9.0 && freq < 9.99)
-                     {
-                         if (vfoa)
-                         {
-                             panelBandHF.Visible = false;
-                             panelBandGEN.Visible = true;
-                         }
-                         return Band.B31M;
-                     }
+                    else if (freq >= 9.0 && freq < 9.99)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B31M;
+                    }
 
-                     else if (freq >= 11.6 && freq < 13.57)
-                     {
-                         if (vfoa)
-                         {
-                             panelBandHF.Visible = false;
-                             panelBandGEN.Visible = true;
-                         }
-                         return Band.B25M;
-                     }
+                    else if (freq >= 11.6 && freq < 13.57)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B25M;
+                    }
 
-                     else if (freq >= 13.57 && freq < 13.87)
-                     {
-                         if (vfoa)
-                         {
-                             panelBandHF.Visible = false;
-                             panelBandGEN.Visible = true;
-                         }
-                         return Band.B22M;
-                     }
+                    else if (freq >= 13.57 && freq < 13.87)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B22M;
+                    }
 
-                     else if (freq >= 15.1 && freq < 17.0)
-                     {
-                         if (vfoa)
-                         {
-                             panelBandHF.Visible = false;
-                             panelBandGEN.Visible = true;
-                         }
-                         return Band.B19M;
-                     }
+                    else if (freq >= 15.1 && freq < 17.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B19M;
+                    }
 
-                     else if (freq >= 17.0 && freq < 18.0)
-                     {
-                         if (vfoa)
-                         {
-                             panelBandHF.Visible = false;
-                             panelBandGEN.Visible = true;
-                         }
-                         return Band.B16M;
-                     }
+                    else if (freq >= 17.0 && freq < 18.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B16M;
+                    }
 
-                     else if (freq >= 18.0 && freq < 21.0)
-                     {
-                         if (vfoa)
-                         {
-                             panelBandHF.Visible = false;
-                             panelBandGEN.Visible = true;
-                         }
-                         return Band.B14M;
-                     }
-                     else if (freq >= 21.00 && freq < 25.0)
-                     {
-                         if (vfoa)
-                         {
-                             panelBandHF.Visible = false;
-                             panelBandGEN.Visible = true;
-                         }
-                         return Band.B13M;
-                     }
+                    else if (freq >= 18.0 && freq < 21.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B14M;
+                    }
+                    else if (freq >= 21.00 && freq < 25.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B13M;
+                    }
 
-                     else if (freq >= 25.0 && freq < 28.0)
-                     {
-                         if (vfoa)
-                         {
-                             panelBandHF.Visible = false;
-                             panelBandGEN.Visible = true;
-                         }
-                         return Band.B11M;
-                     }
+                    else if (freq >= 25.0 && freq < 28.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B11M;
+                    }
 
-                     else
-                         return Band.GEN;
+                    else
+                        return Band.GEN;
 
                 case FRSRegion.Denmark:
                     //if (freq >= 1.81 && freq <= 2.0)
@@ -12753,36 +12756,36 @@ namespace Thetis
                         return Band.GEN;
 
                 case FRSRegion.Sweden:
-            //        if (freq >= 1.81 && freq <= 2.0)
-            //            return Band.B160M;
-            //        else if (freq >= 3.5 && freq <= 3.8)
-            //            return Band.B80M;
-            //        else if (freq >= 5.31 && freq < 5.93)
-            //            return Band.B60M;
-            //        else if (freq >= 7.0 && freq <= 7.2)
-            //            return Band.B40M;
-            //        else if (freq >= 10.1 && freq <= 10.15)
-            //            return Band.B30M;
-            //        else if (freq >= 14.0 && freq <= 14.35)
-            //            return Band.B20M;
-            //        else if (freq >= 18.068 && freq <= 18.168)
-            //            return Band.B17M;
-            //        else if (freq >= 21.0 && freq <= 21.45)
-            //            return Band.B15M;
-            //        else if (freq >= 24.89 && freq <= 24.99)
-            //            return Band.B12M;
-            //        else if (freq >= 28 && freq <= 29.7)
-            //            return Band.B10M;
-            //        else if (freq >= 50.0 && freq <= 52.0)
-            //            return Band.B6M;
-            //        else if (freq >= 144.0 && freq <= 148.0)
-            //            return Band.B2M;
-            //        else if (freq == 2.5 || freq == 5.0 ||
-            //            freq == 10.0 || freq == 15.0 ||
-            //            freq == 20.0)
-            //            return Band.WWV;
-            //        else
-            //            return Band.GEN;
+                    //        if (freq >= 1.81 && freq <= 2.0)
+                    //            return Band.B160M;
+                    //        else if (freq >= 3.5 && freq <= 3.8)
+                    //            return Band.B80M;
+                    //        else if (freq >= 5.31 && freq < 5.93)
+                    //            return Band.B60M;
+                    //        else if (freq >= 7.0 && freq <= 7.2)
+                    //            return Band.B40M;
+                    //        else if (freq >= 10.1 && freq <= 10.15)
+                    //            return Band.B30M;
+                    //        else if (freq >= 14.0 && freq <= 14.35)
+                    //            return Band.B20M;
+                    //        else if (freq >= 18.068 && freq <= 18.168)
+                    //            return Band.B17M;
+                    //        else if (freq >= 21.0 && freq <= 21.45)
+                    //            return Band.B15M;
+                    //        else if (freq >= 24.89 && freq <= 24.99)
+                    //            return Band.B12M;
+                    //        else if (freq >= 28 && freq <= 29.7)
+                    //            return Band.B10M;
+                    //        else if (freq >= 50.0 && freq <= 52.0)
+                    //            return Band.B6M;
+                    //        else if (freq >= 144.0 && freq <= 148.0)
+                    //            return Band.B2M;
+                    //        else if (freq == 2.5 || freq == 5.0 ||
+                    //            freq == 10.0 || freq == 15.0 ||
+                    //            freq == 20.0)
+                    //            return Band.WWV;
+                    //        else
+                    //            return Band.GEN;
                     if (freq >= 1.81 && freq <= 2.0)
                     {
                         if (vfoa)
@@ -14346,10 +14349,10 @@ namespace Thetis
                                                                114.0f };
                     watts = PowerKernel(watts, interval, entries, ANAN100DCal);
                     break;
-               case HPSDRModel.ANAN7000D:
+                case HPSDRModel.ANAN7000D:
                     interval = 10.0f;
                     break;
-               case HPSDRModel.ANAN8000D:
+                case HPSDRModel.ANAN8000D:
                     interval = 20.0f;
                     break;
                 case HPSDRModel.ANAN10:
@@ -15494,7 +15497,7 @@ namespace Thetis
         // ke9ns mod add GEN SWL bands
         public int[] band_stacks; // ke9ns add each entry contains the # of bandstack entries for each band listed below 
         public int[] band_sort; // ke9ns add lowest to highest sorted freq list of the current bandstack  
-        
+
         private void UpdateBandStackRegisters()
         {
             band_stacks = DB.GetBandStackNum();
@@ -16109,7 +16112,7 @@ namespace Thetis
         }
 
         // Diversity operation is on RX1; therefore, the 'rx1_rate' will be used as the diversity rate;
-        public void UpdateDDCs (bool rx2_enabled)
+        public void UpdateDDCs(bool rx2_enabled)
         {
             int DDCEnable = 0;
             int DDC0 = 1, DDC1 = 2, DDC2 = 4, DDC3 = 8;
@@ -16951,12 +16954,12 @@ namespace Thetis
             if (Display.GrayScale == 1) // do if currently GRAY waterfall
             {
                 Display.GrayScale = 0;                // change to  RGB
-              //  this.GrayMenuItem.Text = "GrayWtr";
+                //  this.GrayMenuItem.Text = "GrayWtr";
             }
             else  // do if currently Color waterfall
             {
                 Display.GrayScale = 1;                 // change to Gray
-              //  this.GrayMenuItem.Text = "ColorWtr";
+                //  this.GrayMenuItem.Text = "ColorWtr";
             }
 
             //  this.GrayMenuItem.ForeColor = System.Drawing.SystemColors.ControlLightLight;
@@ -17050,7 +17053,7 @@ namespace Thetis
 
             MouseEventArgs me = (MouseEventArgs)e;
 
-          //  callsignTextBox.ShortcutsEnabled = false; // added to eliminate the contextmenu from popping up
+            //  callsignTextBox.ShortcutsEnabled = false; // added to eliminate the contextmenu from popping up
 
             if (me.Button == System.Windows.Forms.MouseButtons.Right) // right mouse click
             {
@@ -17071,7 +17074,7 @@ namespace Thetis
 
             if (me.Button == System.Windows.Forms.MouseButtons.Left) // left mouse click
             {
-             //   WaveForm.CreatePlay = true;   // create wave file            
+                //   WaveForm.CreatePlay = true;   // create wave file            
             }
 
         } // callsigntextbox mouse down
@@ -17086,8 +17089,8 @@ namespace Thetis
             // Debug.WriteLine("change   ");
             // Process.Start(@"c:\test")
 
-          //  callsignTextBox.BackColor = Color.LemonChiffon; //to show your editing this callsign field
-          //  callsign = callsignTextBox.Text;
+            //  callsignTextBox.BackColor = Color.LemonChiffon; //to show your editing this callsign field
+            //  callsign = callsignTextBox.Text;
             menuStrip1.Invalidate();
             menuStrip1.Update();
 
@@ -17101,11 +17104,11 @@ namespace Thetis
 
             //  Debug.WriteLine("Enter  ");
 
-          //  callsign = callsignTextBox.Text;
-          //  callsignTextBox.BackColor = Color.LemonChiffon;  // to show your editing this callsign field
+            //  callsign = callsignTextBox.Text;
+            //  callsignTextBox.BackColor = Color.LemonChiffon;  // to show your editing this callsign field
             callsignfocus = 1;
 
-          //  callsignTextBox.Focus();
+            //  callsignTextBox.Focus();
 
 
         }
@@ -17113,7 +17116,7 @@ namespace Thetis
         private void callsignTextBox_MouseLeave(object sender, EventArgs e)// ke9ns add
         {
             // Debug.WriteLine("leaveM   ");
-          //  WaveForm.CreatePlay = true;   // create wave file
+            //  WaveForm.CreatePlay = true;   // create wave file
             btnHidden.Focus();
 
             callsignfocus = 0; // ke9ns 
@@ -17127,7 +17130,7 @@ namespace Thetis
         private void callsignTextBox_Leave(object sender, EventArgs e)// ke9ns add
         {
             //   Debug.WriteLine("leave   ");
-          //  WaveForm.CreatePlay = true;   // create wave file
+            //  WaveForm.CreatePlay = true;   // create wave file
             // "bright" variable controls brightness of txwaterID
         } // callsignTextBox_Leave
 
@@ -17143,44 +17146,44 @@ namespace Thetis
         private static int Txfh = 0;
         private void TXIDMenuItem_CheckedChanged(object sender, EventArgs e)
         {
-/*
-            if ((TXIDMenuItem.Checked) && (chkPower.Checked))
-            {
-                if (comboDisplayMode.Focused)
-                    btnHidden.Focus();
+            /*
+                        if ((TXIDMenuItem.Checked) && (chkPower.Checked))
+                        {
+                            if (comboDisplayMode.Focused)
+                                btnHidden.Focus();
 
-                if (chkVAC1.Checked)
-                {
-                    vac1 = 1;
-                    chkVAC1.Checked = false;
-                }
-                chkMOX.Checked = true;     // key radio 
-                WaveForm.TXIDPlay = true;
-            }
-            else
-            {
-                this.TXIDMenuItem.Text = "TX WaterID";
-                WaveForm.TXIDPlay = false;
+                            if (chkVAC1.Checked)
+                            {
+                                vac1 = 1;
+                                chkVAC1.Checked = false;
+                            }
+                            chkMOX.Checked = true;     // key radio 
+                            WaveForm.TXIDPlay = true;
+                        }
+                        else
+                        {
+                            this.TXIDMenuItem.Text = "TX WaterID";
+                            WaveForm.TXIDPlay = false;
 
-                if (Txfh > 0) TXFilterHigh = Txfh;         // put back original filter size
+                            if (Txfh > 0) TXFilterHigh = Txfh;         // put back original filter size
 
-                if (vac1 == 1)
-                {
-                    vac1 = 0;
-                    Thread.Sleep(100);
-                    chkVAC1.Checked = true;
+                            if (vac1 == 1)
+                            {
+                                vac1 = 0;
+                                Thread.Sleep(100);
+                                chkVAC1.Checked = true;
 
-                    //  await Task.Delay(3000);
-                }
-                //  Debug.WriteLine("wating...........");
+                                //  await Task.Delay(3000);
+                            }
+                            //  Debug.WriteLine("wating...........");
 
-                //  Thread.Sleep(300);
-                //  Task.Delay(200);
+                            //  Thread.Sleep(300);
+                            //  Task.Delay(200);
 
-                chkMOX.Checked = false;
+                            chkMOX.Checked = false;
 
-            }
-            */
+                        }
+                        */
         } // TXIDMenuItem_CheckedChanged
 
 
@@ -17329,41 +17332,41 @@ namespace Thetis
                 string filePath = AppDataPath + "ke9ns8.dat";
                 string filePath1 = AppDataPath + "QuickAudio\\";
 
-/*
-                if (WaveForm.chkQuickAudioFolder.Checked == false) // ke9ns do below if standard quickqudio
-                {
-                    if (!File.Exists(filePath))
-                    {
-                        Debug.WriteLine("problem no ke9ns dat file found");
-                        return;
-                    }
+                /*
+                                if (WaveForm.chkQuickAudioFolder.Checked == false) // ke9ns do below if standard quickqudio
+                                {
+                                    if (!File.Exists(filePath))
+                                    {
+                                        Debug.WriteLine("problem no ke9ns dat file found");
+                                        return;
+                                    }
 
-                    string argument = @"/select, " + filePath;
-                    //   Debug.WriteLine("filepath " + argument);
+                                    string argument = @"/select, " + filePath;
+                                    //   Debug.WriteLine("filepath " + argument);
 
-                    System.Diagnostics.Process.Start("explorer.exe", argument);
-                }
-                else // do below if subfolder sequential quickaudio
-                {
+                                    System.Diagnostics.Process.Start("explorer.exe", argument);
+                                }
+                                else // do below if subfolder sequential quickaudio
+                                {
 
 
-                    if (!Directory.Exists(filePath1))
-                    {
-                        // create PowerSDR audio folder if it does not exist
-                        //  Directory.CreateDirectory(wave_folder);
-                        Debug.WriteLine("problem no ke9ns dat file found");
-                        return;
+                                    if (!Directory.Exists(filePath1))
+                                    {
+                                        // create PowerSDR audio folder if it does not exist
+                                        //  Directory.CreateDirectory(wave_folder);
+                                        Debug.WriteLine("problem no ke9ns dat file found");
+                                        return;
 
-                    }
-                    string argument = @"/select, " + filePath1;
+                                    }
+                                    string argument = @"/select, " + filePath1;
 
-                    //   Debug.WriteLine("filepath1 " + argument);
+                                    //   Debug.WriteLine("filepath1 " + argument);
 
-                    System.Diagnostics.Process.Start("explorer.exe", argument);
+                                    System.Diagnostics.Process.Start("explorer.exe", argument);
 
-                } // 
+                                } // 
 
-                */
+                                */
 
             } // right mouse button click
 
@@ -20042,8 +20045,8 @@ namespace Thetis
             set
             {
                 hf_tr_relay = value;
-                if(!initializing)
-                txtVFOAFreq_LostFocus(this, EventArgs.Empty);
+                if (!initializing)
+                    txtVFOAFreq_LostFocus(this, EventArgs.Empty);
             }
         }
 
@@ -20114,14 +20117,14 @@ namespace Thetis
             {
                 rx1_attenuator_data = value;
                 if (initializing) return;
-                if (AlexPresent && !ANAN10Present && !ANAN10EPresent 
-                     && !ANAN7000DPresent&& !ANAN8000DPresent && !ORIONMKIIPresent)
+                if (AlexPresent && !ANAN10Present && !ANAN10EPresent
+                     && !ANAN7000DPresent && !ANAN8000DPresent && !ORIONMKIIPresent)
                     udRX1StepAttData.Maximum = (decimal)61;
                 else udRX1StepAttData.Maximum = (decimal)31;
 
                 if (rx1_step_att_present)
                 {
-                    if (AlexPresent && !ANAN10Present && !ANAN10EPresent 
+                    if (AlexPresent && !ANAN10Present && !ANAN10EPresent
                          && !ANAN7000DPresent && !ANAN8000DPresent && !ORIONMKIIPresent)
                     {
                         if (rx1_attenuator_data <= 31)
@@ -22050,7 +22053,7 @@ namespace Thetis
             set
             {
                 vac2_rx2 = value;
-               // Audio.VAC2RX2 = value;
+                // Audio.VAC2RX2 = value;
                 if (SetupForm == null) return;
                 if (vac2_auto_enable)
                 {
@@ -24671,7 +24674,7 @@ namespace Thetis
         {
             get
             {
-                return midi_messages_per_tune_step;                
+                return midi_messages_per_tune_step;
             }
             set
             {
@@ -24679,7 +24682,7 @@ namespace Thetis
                     midi_messages_per_tune_step = value;
             }
         }
-        
+
         private int max_midi_messages_per_tune_step = 64;  // Upper limit 
         public int MaxMIDIMessagesPerTuneStep
         {
@@ -24718,7 +24721,7 @@ namespace Thetis
             int oldM = MidiMessagesPerTuneStep;
             MidiMessagesPerTuneStep = oldM * 2;  // Increment by 2x
         }
-        public void CATMidiMessagesPerTuneStepDown() 
+        public void CATMidiMessagesPerTuneStepDown()
         {
             int oldM = MidiMessagesPerTuneStep;
             MidiMessagesPerTuneStep = oldM / 2;  // Decrement by half
@@ -24787,7 +24790,7 @@ namespace Thetis
                     SetupForm.TTgenrun = true;
                     cat_TTT_status = 1;
                 }
-                    
+
             }
         }
 
@@ -26290,7 +26293,7 @@ namespace Thetis
             num = num +
                 rx1_meter_cal_offset +
                 rx1_preamp_offset[(int)rx1_preamp_mode] +
-               // rx1_filter_size_cal_offset +
+                // rx1_filter_size_cal_offset +
                 rx1_path_offset +
                 rx1_xvtr_gain_offset;
             return (int)num;
@@ -26305,7 +26308,7 @@ namespace Thetis
             num = num +
                 rx1_meter_cal_offset +
                 rx1_preamp_offset[(int)rx1_preamp_mode] +
-               // rx1_filter_size_cal_offset +
+                // rx1_filter_size_cal_offset +
                 rx1_path_offset +
                 rx1_xvtr_gain_offset;
             return (int)num;
@@ -26331,7 +26334,7 @@ namespace Thetis
             //  Debug.WriteLine("scopetime" + scope_time);
             fixed (float* ptr = &wwvbuf[0])
             {
-              //  WDSP.GetScope(0, ptr, 2048);  // scope time = 50
+                //  WDSP.GetScope(0, ptr, 2048);  // scope time = 50
             }
 
             WWV_mutex.ReleaseMutex();
@@ -26352,7 +26355,7 @@ namespace Thetis
 
             fixed (float* ptr = &buf[0])            // ke9ns prevent garbage collecion from moving this pointer data
             {
-               // WDSP.GetSpectrum(0, ptr);      // get the spectrum values
+                // WDSP.GetSpectrum(0, ptr);      // get the spectrum values
             }
 
             WWV_mutex.ReleaseMutex();
@@ -27331,15 +27334,15 @@ namespace Thetis
             get { return disable_6m_lna_on_rx; }
             set
             {
-                disable_6m_lna_on_rx = value;             
+                disable_6m_lna_on_rx = value;
                 double freq = Double.Parse(txtVFOAFreq.Text);
                 double freq2 = Double.Parse(txtVFOBFreq.Text);
                 SetAlexHPF(freq);
-                if (anan7000dpresent || anan8000dpresent) 
-                    {
-                        SetAlex2HPF(freq2);
-                        txtVFOBFreq_LostFocus(this, EventArgs.Empty);
-                    }
+                if (anan7000dpresent || anan8000dpresent)
+                {
+                    SetAlex2HPF(freq2);
+                    txtVFOBFreq_LostFocus(this, EventArgs.Empty);
+                }
 
                 txtVFOAFreq_LostFocus(this, EventArgs.Empty);
             }
@@ -29891,24 +29894,24 @@ namespace Thetis
 
         public void UpdatePAVoltsAmpsDisplay()
         {
-               if (anan8000dpresent && ANAN8000DLEDisplayVoltsAmps)
-                {
-                 //  txtDisplayCursorFreq.Hide(); // BringToFront();
-                  //  txtDisplayCursorOffset.Hide(); // BringToFront();
-                  //  txtDisplayCursorPower.Hide(); // BringToFront();
-                    txtDisplayOrionMKIIPAVolts.BringToFront();
-                    txtDisplayOrionMKIIPAAmps.BringToFront();
-                    txtDisplayOrionMKIIBlank.BringToFront();
-                }
-                else
-                {
-                   // txtDisplayOrionMKIIPAVolts.Hide(); // BringToFront();
-                  //  txtDisplayOrionMKIIPAAmps.Hide(); // BringToFront();
-                   // txtDisplayOrionMKIIBlank.Hide(); // BringToFront();
-                    txtDisplayCursorFreq.BringToFront();
-                    txtDisplayCursorOffset.BringToFront();
-                    txtDisplayCursorPower.BringToFront();
-                }
+            if (anan8000dpresent && ANAN8000DLEDisplayVoltsAmps)
+            {
+                //  txtDisplayCursorFreq.Hide(); // BringToFront();
+                //  txtDisplayCursorOffset.Hide(); // BringToFront();
+                //  txtDisplayCursorPower.Hide(); // BringToFront();
+                txtDisplayOrionMKIIPAVolts.BringToFront();
+                txtDisplayOrionMKIIPAAmps.BringToFront();
+                txtDisplayOrionMKIIBlank.BringToFront();
+            }
+            else
+            {
+                // txtDisplayOrionMKIIPAVolts.Hide(); // BringToFront();
+                //  txtDisplayOrionMKIIPAAmps.Hide(); // BringToFront();
+                // txtDisplayOrionMKIIBlank.Hide(); // BringToFront();
+                txtDisplayCursorFreq.BringToFront();
+                txtDisplayCursorOffset.BringToFront();
+                txtDisplayCursorPower.BringToFront();
+            }
         }
 
         private Color txtcenterBackColor = Color.Black;
@@ -31020,7 +31023,7 @@ namespace Thetis
                                     //g.SmoothingMode = SmoothingMode.None;
                                 }
                                 spacing = (W * 0.335 - 2.0 - 3.0) / 3.0;
-                                 for (int i = 1; i < 4; i++)
+                                for (int i = 1; i < 4; i++)
                                 {
                                     g.FillRectangle(high_brush, (int)((double)W * 0.665 + i * spacing - spacing * 0.5), H - 4 - 3, 1, 3);
                                     g.FillRectangle(high_brush, (int)((double)W * 0.665 + i * spacing), H - 4 - 6, 2, 6);
@@ -33320,7 +33323,7 @@ namespace Thetis
                                     }
                                     else
                                     {
-                                    new_meter_data = calfwdpower;
+                                        new_meter_data = calfwdpower;
                                     }
                                 }
                                 else
@@ -33487,7 +33490,7 @@ namespace Thetis
         }
         public void computeMKIIPAVolts()
         {
-                       float adc = 0;
+            float adc = 0;
             float addadc = 0;
             float volt_div = (22.0f + 1.0f) / 1.1f; // Voltage divider (R1 + R2) / R2
 
@@ -33496,7 +33499,7 @@ namespace Thetis
                 adc = NetworkIO.getUserADC0();
                 addadc += adc;
                 Thread.Sleep(1);
-           }
+            }
             adc = addadc / 100.0f;
 
             float volts = (adc / 4095.0f) * 5.0f;
@@ -33525,7 +33528,7 @@ namespace Thetis
             float fwdvolts = ((float)adc * 5000.0f) / 4095.0f;
             if (fwdvolts < 0) fwdvolts = 0.0f;
             float amps = ((fwdvolts - voff) / sens);
-          //  float amps = (0.01f * adc - 2.91f);
+            //  float amps = (0.01f * adc - 2.91f);
             if (amps < 0) amps = 0.0f;
             MKIIPAAmps = amps;
         }
@@ -34309,9 +34312,9 @@ namespace Thetis
                 if (tx_inhibit_enabled && current_hpsdr_model != HPSDRModel.HPSDR)
                 {
                     if (anan7000dpresent || anan8000dpresent)
-                    inhibit_input = NetworkIO.getUserI02();
+                        inhibit_input = NetworkIO.getUserI02();
                     else
-                    inhibit_input = NetworkIO.getUserI01();
+                        inhibit_input = NetworkIO.getUserI01();
                     if (tx_inhibit_sense)
                     {
                         if (inhibit_input) TXInhibit = true;
@@ -34331,9 +34334,9 @@ namespace Thetis
         private UdpClient n1mm_udp_client;
         private void PollN1MMPacket()
         {
-          //  radio_info = new RadioInfo();
-          //  contact_info = new ContactInfo();
-            
+            //  radio_info = new RadioInfo();
+            //  contact_info = new ContactInfo();
+
             if (n1mm_udp_client != null) n1mm_udp_client.Close();
             IPEndPoint udp_ep = new IPEndPoint(IPAddress.Any, focus_master_udp_port);
             n1mm_udp_client = new UdpClient(udp_ep);
@@ -34865,7 +34868,7 @@ namespace Thetis
                         // in following 'if', K2UE recommends not checking open antenna for the 8000 model
                         // if (swrprotection && alex_fwd > 10.0f && (alex_fwd - alex_rev) < 1.0f)
                         //-W2PA Changed to allow 35w - some amplifier tuners need about 30w to reliably start working
-                        if (swrprotection && alex_fwd > 35.0f && (alex_fwd - alex_rev) < 1.0f 
+                        if (swrprotection && alex_fwd > 35.0f && (alex_fwd - alex_rev) < 1.0f
                             && current_hpsdr_model != HPSDRModel.ANAN8000D) // open ant condition
                         {
                             swr = 50.0f;
@@ -34913,14 +34916,14 @@ namespace Thetis
                             high_swr_count = 0;
                             NetworkIO.SWRProtect = (float)(2.0f / (swr + 1.0f));
                             HighSWR = true;
-                         }
+                        }
                     }
                     else
                     {
                         high_swr_count = 0;
                         NetworkIO.SWRProtect = 1.0f;
                         HighSWR = false;
-                     }
+                    }
 
                 end:
                     swr_pass = false;
@@ -34953,12 +34956,15 @@ namespace Thetis
 
         private void timer_cpu_meter_Tick(object sender, System.EventArgs e)
         {
-                if ((anan7000dpresent || anan8000dpresent) && ANAN8000DLEDisplayVoltsAmps)
-                {
-                    txtCPUMeter.Text = String.Format("{0:#0.0}V {1:#0.0}A", MKIIPAVolts, MKIIPAAmps);
-                }
-                else
-                txtCPUMeter.Text = String.Format("CPU%  {0:##0}", cpu_usage.NextValue());
+            if ((anan7000dpresent || anan8000dpresent) && ANAN8000DLEDisplayVoltsAmps)
+            {
+                txtCPUMeter.Text = String.Format("{0:#0.0}V {1:#0.0}A", MKIIPAVolts, MKIIPAAmps);
+            }
+            else
+            {
+                if (cpu_usage != null)
+                    txtCPUMeter.Text = String.Format("CPU%  {0:##0}", cpu_usage.NextValue());
+            }
         }
 
         private void timer_peak_text_Tick(object sender, System.EventArgs e)
@@ -35043,7 +35049,7 @@ namespace Thetis
         private void Console_KeyUp(object sender, System.Windows.Forms.KeyEventArgs e)
         {
             regBand = 0;  // ke9ns add
-           ToggleFocusMasterTimer();
+            ToggleFocusMasterTimer();
             if (callsignfocus == 1) return; // ke9ns add to focus on waterfall ID text
 
             if (e.Shift == false && shift_down)
@@ -35475,7 +35481,7 @@ namespace Thetis
 
             //==================================================================
 
-            if (e.Shift == true && !shift_down) 
+            if (e.Shift == true && !shift_down)
                 shift_down = true;
 
             if (e.Control == true && e.Shift == true)
@@ -38089,13 +38095,13 @@ namespace Thetis
             //chkMOX.BackColor = button_selected_color;
 
             picSquelch.Invalidate();
-         }
+        }
 
         private void UIMOXChangedFalse()
         {
             Display.MOX = false;
             if (display_duplex) chkNB.CheckState = NB_CheckState; // restore saved state of NB
- 
+
             if (!disable_ui_mox_changes)
             {
                 //  SetupForm.SpurRedEnabled = true;
@@ -39234,7 +39240,7 @@ namespace Thetis
 
         private void chkVFOLock_CheckedChanged(object sender, System.EventArgs e)
         {
-            VFOALock = chkVFOLock.Checked; 
+            VFOALock = chkVFOLock.Checked;
         }
 
         private void chkVFOBLock_CheckedChanged(object sender, EventArgs e)
@@ -39313,7 +39319,7 @@ namespace Thetis
             lblRX1MuteVFOA.SendToBack();
             lblRX1APF.SendToBack();
         }
-        
+
         private void udFilterLow_LostFocus(object sender, EventArgs e)
         {
             udFilterLow_ValueChanged(sender, e);
@@ -40047,15 +40053,15 @@ namespace Thetis
                 //}
 
                 //-W2PA If we tune beyond the display limits, re-center and keep going.  Original code above just stops tuning at edges.
-                double Lmargin = Convert.ToDouble( -Display.RX1FilterLow );
-                double Hmargin = Convert.ToDouble( Display.RX1FilterHigh );
+                double Lmargin = Convert.ToDouble(-Display.RX1FilterLow);
+                double Hmargin = Convert.ToDouble(Display.RX1FilterHigh);
                 if (Lmargin < 0.0) Lmargin = 0.0;
                 if (Hmargin < 0.0) Hmargin = 0.0;
                 //double Lmargin = 50.0;
                 //double Hmargin = 50.0;
                 double Ldisp = Convert.ToDouble(Display.RXDisplayLow);
                 double Hdisp = Convert.ToDouble(Display.RXDisplayHigh);
-                if ( ( (-rx1_osc) - Lmargin) < Ldisp || ( (-rx1_osc) + Hmargin) > Hdisp)
+                if (((-rx1_osc) - Lmargin) < Ldisp || ((-rx1_osc) + Hmargin) > Hdisp)
                 {
                     center_frequency = freq;
                     update_centerfreq = false;
@@ -40172,7 +40178,7 @@ namespace Thetis
 
                 if (hf_tr_relay)
                 {
-                   // NetworkIO.SetXVTREnable(1);
+                    // NetworkIO.SetXVTREnable(1);
                     NetworkIO.DisablePA(1);
                 }
                 else
@@ -40701,7 +40707,7 @@ namespace Thetis
                     else if (Band.B11M == b) b1 = Band.B10M;
                 }
 
-                if (chkVFOSplit.Checked && old_tx_band != b1) 
+                if (chkVFOSplit.Checked && old_tx_band != b1)
                     SetTXBand(b1); // ke9ns mod b1
 
                 //tx
@@ -41133,7 +41139,7 @@ namespace Thetis
                 else if (Band.B13M == b) b1 = Band.B12M;
                 else if (Band.B11M == b) b1 = Band.B10M;
             }
-            if (old_tx_band != b1) 
+            if (old_tx_band != b1)
                 SetTXBand(b1); // ke9ns mod b1
 
             if (tx_xvtr_index >= 0)
@@ -41180,12 +41186,12 @@ namespace Thetis
 
                 if (hf_tr_relay)
                 {
-                   // NetworkIO.SetXVTREnable(1);
+                    // NetworkIO.SetXVTREnable(1);
                     NetworkIO.DisablePA(1);
                 }
                 else
                 {
-                   // NetworkIO.SetXVTREnable(0);
+                    // NetworkIO.SetXVTREnable(0);
                     NetworkIO.DisablePA(0);
                 }
 
@@ -43727,17 +43733,17 @@ namespace Thetis
             CalcRX2DisplayFreq();
             CalcTXDisplayFreq();
 
- 
+
             if (initializing) lastZoom = zoom_factor;
             Boolean zoomingIn = (zoom_factor > lastZoom);
             if (ClickTuneDisplay && zoomingIn)  //-W2PA Force centering display when zooming in with CTUN on, to keep the vfo within the display
             {
-                center_frequency = VFOAFreq; 
+                center_frequency = VFOAFreq;
                 txtVFOAFreq_LostFocus(this, EventArgs.Empty);
             }
-            lastZoom = zoom_factor; 
+            lastZoom = zoom_factor;
 
-           //if (ptbDisplayZoom.Focused) btnHidden.Focus();
+            //if (ptbDisplayZoom.Focused) btnHidden.Focus();
             if (sender.GetType() == typeof(PrettyTrackBar))
             {
                 ptbDisplayZoom.Focus();
@@ -46094,7 +46100,7 @@ namespace Thetis
                     break;
                 case DSPMode.CWU:
                 case DSPMode.DIGU:
-                     if ((int)udFilterLow.Value < 0) // If we're already starting out of bounds, suspend trying to stay on the correct side.
+                    if ((int)udFilterLow.Value < 0) // If we're already starting out of bounds, suspend trying to stay on the correct side.
                     {
                         low = current_center - new_bw / 2;
                         high = current_center + new_bw / 2;
@@ -46132,7 +46138,7 @@ namespace Thetis
                                 high = new_bw;
                             }
                         }
-                    }                    
+                    }
 
                     if (high > 9999)
                     {
@@ -51633,7 +51639,7 @@ namespace Thetis
             {
                 comboRX2Preamp.Items.Clear();
 
-                if (anan100dpresent || anan200dpresent || anan7000dpresent || 
+                if (anan100dpresent || anan200dpresent || anan7000dpresent ||
                     anan8000dpresent || orionmkiipresent)
                     comboRX2Preamp.Items.AddRange(anan100d_preamp_settings);
                 else
@@ -51799,9 +51805,9 @@ namespace Thetis
             }
             else if (this.panelBandGEN.Visible)
             {
-                btnBandGEN_Click(radBandGEN, EventArgs.Empty);                
+                btnBandGEN_Click(radBandGEN, EventArgs.Empty);
             }
-            else 
+            else
             {
                 btnBandHF_Click(btnBandHF, EventArgs.Empty);
             }
@@ -52441,9 +52447,9 @@ namespace Thetis
                 {
                     panelBandHF.Show();  //w3sz
                 }
-               else 
+                else
                 {
-                    panelBandGEN.Show();  
+                    panelBandGEN.Show();
                 }
             }
             else //w3sz added
@@ -52737,7 +52743,7 @@ namespace Thetis
                     btnBandHF.Location = new Point(radBandVHF13.Location.X + radBandVHF13.Width, 0);//w3sz added
                     top = panelBandVHF.Location.Y + panelBandVHF.Height;//w3sz added "V"
                 }
-                else if (panelBandHF.Visible) 
+                else if (panelBandHF.Visible)
                 {
                     panelBandHF.Location = new Point(this.ClientSize.Width / 2 - radBand160.Width * 7, top);
                     panelBandHF.Size = new Size(radBand160.Width * 15, radBand160.Height);
@@ -53751,51 +53757,51 @@ namespace Thetis
         //============================================================================ 
         private void TXIDMenuItem_MouseDown(object sender, MouseEventArgs e)
         {
-/*
-            if ((!TXIDMenuItem.Checked) && (callsignTextBox.BackColor == Color.MediumSpringGreen) && (chkPower.Checked)) // cant transmit unless you have a valid callsign waterfall id wave file and Radio is ON
-            {
-                // WaveOptions.RECPLAY1 = true; // force wave into POST
-                WaveForm.RECPLAY = true;
+            /*
+                        if ((!TXIDMenuItem.Checked) && (callsignTextBox.BackColor == Color.MediumSpringGreen) && (chkPower.Checked)) // cant transmit unless you have a valid callsign waterfall id wave file and Radio is ON
+                        {
+                            // WaveOptions.RECPLAY1 = true; // force wave into POST
+                            WaveForm.RECPLAY = true;
 
-                Txfh = TXFilterHigh;         // save original filter size
-                TXFilterHigh = 2600;         // reduce size for text waterfall ID
+                            Txfh = TXFilterHigh;         // save original filter size
+                            TXFilterHigh = 2600;         // reduce size for text waterfall ID
 
-                if (chkVAC1.Checked)
-                {
-                    vac1 = 1;
-                    chkVAC1.Checked = false;
-                }
+                            if (chkVAC1.Checked)
+                            {
+                                vac1 = 1;
+                                chkVAC1.Checked = false;
+                            }
 
-                TXIDMenuItem.Text = "Creating";   // transmit will  be displayed in the wave.cs form
+                            TXIDMenuItem.Text = "Creating";   // transmit will  be displayed in the wave.cs form
 
-                menuStrip1.Invalidate();
-                menuStrip1.Update();
+                            menuStrip1.Invalidate();
+                            menuStrip1.Update();
 
-                TXIDMenuItem.Checked = true;
-            }
-            else
-            {
-                //  Debug.WriteLine("WATERFALL OFF======================");
-                WaveForm.TXIDPlay = false; // tell wave.cs not to create or send waterfall id
-                this.TXIDMenuItem.Text = "TX WaterID";
+                            TXIDMenuItem.Checked = true;
+                        }
+                        else
+                        {
+                            //  Debug.WriteLine("WATERFALL OFF======================");
+                            WaveForm.TXIDPlay = false; // tell wave.cs not to create or send waterfall id
+                            this.TXIDMenuItem.Text = "TX WaterID";
 
-                TXIDMenuItem.Checked = false;
+                            TXIDMenuItem.Checked = false;
 
-                if (Txfh > 0) TXFilterHigh = Txfh;         // put back original filter size
+                            if (Txfh > 0) TXFilterHigh = Txfh;         // put back original filter size
 
-                if (vac1 == 1)
-                {
-                    vac1 = 0;
-                    Thread.Sleep(100);
-                    chkVAC1.Checked = true;
+                            if (vac1 == 1)
+                            {
+                                vac1 = 0;
+                                Thread.Sleep(100);
+                                chkVAC1.Checked = true;
 
-                    // Task.Delay(200);
-                }
+                                // Task.Delay(200);
+                            }
 
-                chkMOX.Checked = false;
+                            chkMOX.Checked = false;
 
-            } // was checked when clicked
-*/
+                        } // was checked when clicked
+            */
         } // mousedown on TXID menu item
 
         //============================================================================ 
@@ -53879,12 +53885,12 @@ namespace Thetis
 
         private void checkBoxID_CheckedChanged(object sender, EventArgs e)
         {
-        //    if (checkBoxID.Checked == true)
-        //    {
+            //    if (checkBoxID.Checked == true)
+            //    {
 
-        //        WaveForm.RECPLAY = true;
+            //        WaveForm.RECPLAY = true;
 
-        //    }
+            //    }
 
         } //checkBoxID_CheckedChanged
 
@@ -54144,7 +54150,7 @@ namespace Thetis
 
         private void autoBrightBox_MouseUp(object sender, MouseEventArgs e)
         {
-           // autoBrightBox.ForeColor = Color.White;
+            // autoBrightBox.ForeColor = Color.White;
         }
 
         private void ckQuickPlay_MouseUp(object sender, MouseEventArgs e)
@@ -54185,83 +54191,83 @@ namespace Thetis
         //================================================================================================
         // Button Push event handler
         //================================================================================================
- /*
-     public void OnButtonEvent(HidDevice.PowerMate.ButtonState bs, int value, int value1, int value2)
-        {
+        /*
+            public void OnButtonEvent(HidDevice.PowerMate.ButtonState bs, int value, int value1, int value2)
+               {
 
-            switch (bs)   // 2 cases UP or DOwn
-            {
-                case HidDevice.PowerMate.ButtonState.Down:
-                    {
-                        Trace.WriteLine(" down");
-                        if (RIT == true)
-                        {
-                            RITValue = 0; // reset RIT back to zero if you hit the KNOB
-                        }
-                        else
-                        {
-                            if (setupForm.chkBoxIND.Checked == true)
-                            {
-                                if (setupForm.tune_step_index2 >= 6)
-                                {
-                                    setupForm.tune_step_index2 = 3 % tune_step_list.Count;
-                                    setupForm.txtWheelTune2.Text = tune_step_list[setupForm.tune_step_index2].Name;
+                   switch (bs)   // 2 cases UP or DOwn
+                   {
+                       case HidDevice.PowerMate.ButtonState.Down:
+                           {
+                               Trace.WriteLine(" down");
+                               if (RIT == true)
+                               {
+                                   RITValue = 0; // reset RIT back to zero if you hit the KNOB
+                               }
+                               else
+                               {
+                                   if (setupForm.chkBoxIND.Checked == true)
+                                   {
+                                       if (setupForm.tune_step_index2 >= 6)
+                                       {
+                                           setupForm.tune_step_index2 = 3 % tune_step_list.Count;
+                                           setupForm.txtWheelTune2.Text = tune_step_list[setupForm.tune_step_index2].Name;
 
-                                }
-                                else
-                                {
-                                    setupForm.ChangeTuneStepUp2();
-                                }
-                            }
-                            else
-                            {
-                                if (tune_step_index >= 6)
-                                {
-                                    tune_step_index = 3 % tune_step_list.Count;
-                                    txtWheelTune.Text = tune_step_list[tune_step_index].Name;
+                                       }
+                                       else
+                                       {
+                                           setupForm.ChangeTuneStepUp2();
+                                       }
+                                   }
+                                   else
+                                   {
+                                       if (tune_step_index >= 6)
+                                       {
+                                           tune_step_index = 3 % tune_step_list.Count;
+                                           txtWheelTune.Text = tune_step_list[tune_step_index].Name;
 
-                                }
-                                else
-                                {
-                                    ChangeTuneStepUp();
-                                }
-                            }
-                        }
-                    }
-                    break;
+                                       }
+                                       else
+                                       {
+                                           ChangeTuneStepUp();
+                                       }
+                                   }
+                               }
+                           }
+                           break;
 
-                case HidDevice.PowerMate.ButtonState.Up:
-                    {
-                        Trace.WriteLine("up");
+                       case HidDevice.PowerMate.ButtonState.Up:
+                           {
+                               Trace.WriteLine("up");
 
-                    }
-                    break;
-            } // switch
-
-
-        } // onbutton
+                           }
+                           break;
+                   } // switch
 
 
-
-        //================================================================================================
-        //   LED brightness event handler (slider)
-        //================================================================================================
-
-        public void OnSliderBrightness(object sender, EventArgs e)
-        {
-            TrackBar slider = sender as TrackBar;
-
-            if (slider != null)
-            {
-                //  LEDV = (int)slider.Value;
-                this.powerMate.LedBrightness = (byte)slider.Value; // get slider bar value to set LED
+               } // onbutton
 
 
-                Trace.WriteLine(slider.Value.ToString());
-            }
 
-        }
-        */
+               //================================================================================================
+               //   LED brightness event handler (slider)
+               //================================================================================================
+
+               public void OnSliderBrightness(object sender, EventArgs e)
+               {
+                   TrackBar slider = sender as TrackBar;
+
+                   if (slider != null)
+                   {
+                       //  LEDV = (int)slider.Value;
+                       this.powerMate.LedBrightness = (byte)slider.Value; // get slider bar value to set LED
+
+
+                       Trace.WriteLine(slider.Value.ToString());
+                   }
+
+               }
+               */
 
         /*
         public static int CTUN3 = 0; // ke9ns add keep rundisplay() thread from updating pan and water too soon in CTUn mode
@@ -54477,7 +54483,7 @@ namespace Thetis
         // ke9ns add
         private void udTXFilterLow_ValueChanged(object sender, EventArgs e)
         {
-             if (SetupForm != null) SetupForm.TXFilterLow = (int)udTXFilterLow.Value;
+            if (SetupForm != null) SetupForm.TXFilterLow = (int)udTXFilterLow.Value;
         }
 
         //=========================================================================================
@@ -54488,7 +54494,7 @@ namespace Thetis
         {
             get
             {
-               return (int)SetupForm.udHttpPort.Value;
+                return (int)SetupForm.udHttpPort.Value;
             }
 
         } // HTTP_PORT
@@ -54541,7 +54547,7 @@ namespace Thetis
                 try
                 {
                     Debug.WriteLine("DDUTIL ROTOR1:");
-                   // siolisten1.SIO.put(value);   // this is the DDUtil PORT found in setup and SIOListenerIII.cs
+                    // siolisten1.SIO.put(value);   // this is the DDUtil PORT found in setup and SIOListenerIII.cs
                 }
                 catch { }
             }

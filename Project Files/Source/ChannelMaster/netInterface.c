@@ -1210,6 +1210,12 @@ void SetXVTREnable(int enable)
 }
 
 PORT
+int getLEDs()
+{
+	return prn->hardware_LEDs;
+}
+
+PORT
 void create_rnet() {
 	int i;
 

@@ -252,6 +252,13 @@
             this.labelTS9 = new System.Windows.Forms.LabelTS();
             this.lblMetisIP = new System.Windows.Forms.LabelTS();
             this.lblMetisMAC = new System.Windows.Forms.LabelTS();
+            this.groupBoxHPSDRHW = new System.Windows.Forms.GroupBoxTS();
+            this.chkApolloPresent = new System.Windows.Forms.CheckBoxTS();
+            this.chkPennyLane = new System.Windows.Forms.CheckBoxTS();
+            this.chkExcaliburPresent = new System.Windows.Forms.CheckBoxTS();
+            this.chkAlexPresent = new System.Windows.Forms.CheckBoxTS();
+            this.chkMercuryPresent = new System.Windows.Forms.CheckBoxTS();
+            this.chkPennyPresent = new System.Windows.Forms.CheckBoxTS();
             this.grpGeneralHardwareORION = new System.Windows.Forms.GroupBoxTS();
             this.panelOrionPTT = new System.Windows.Forms.PanelTS();
             this.radOrionPTTOn = new System.Windows.Forms.RadioButtonTS();
@@ -265,13 +272,6 @@
             this.radOrionMicRing = new System.Windows.Forms.RadioButtonTS();
             this.radOrionMicTip = new System.Windows.Forms.RadioButtonTS();
             this.lblOrionMic = new System.Windows.Forms.LabelTS();
-            this.groupBoxHPSDRHW = new System.Windows.Forms.GroupBoxTS();
-            this.chkApolloPresent = new System.Windows.Forms.CheckBoxTS();
-            this.chkPennyLane = new System.Windows.Forms.CheckBoxTS();
-            this.chkExcaliburPresent = new System.Windows.Forms.CheckBoxTS();
-            this.chkAlexPresent = new System.Windows.Forms.CheckBoxTS();
-            this.chkMercuryPresent = new System.Windows.Forms.CheckBoxTS();
-            this.chkPennyPresent = new System.Windows.Forms.CheckBoxTS();
             this.tpGeneralOptions = new System.Windows.Forms.TabPage();
             this.grpCWDelay = new System.Windows.Forms.GroupBoxTS();
             this.labelTS322 = new System.Windows.Forms.LabelTS();
@@ -384,213 +384,12 @@
             this.chkSpaceNavFlyPanadapter = new System.Windows.Forms.CheckBoxTS();
             this.chkSpaceNavControlVFOs = new System.Windows.Forms.CheckBoxTS();
             this.tpPennyCtrl = new System.Windows.Forms.TabPage();
+            this.tcOCControl = new System.Windows.Forms.TabControl();
+            this.tpOCHFControl = new System.Windows.Forms.TabPage();
             this.groupBoxTS1 = new System.Windows.Forms.GroupBoxTS();
             this.radSplitPins3x4 = new System.Windows.Forms.RadioButtonTS();
             this.radSplitPins4x3 = new System.Windows.Forms.RadioButtonTS();
             this.chkSplitPins = new System.Windows.Forms.CheckBoxTS();
-            this.btnPennyCtrlVHFReset = new System.Windows.Forms.ButtonTS();
-            this.checkBoxTS1 = new System.Windows.Forms.CheckBoxTS();
-            this.grpPennyExtCtrlVHF = new System.Windows.Forms.GroupBoxTS();
-            this.labelTS71 = new System.Windows.Forms.LabelTS();
-            this.labelTS72 = new System.Windows.Forms.LabelTS();
-            this.labelTS73 = new System.Windows.Forms.LabelTS();
-            this.labelTS74 = new System.Windows.Forms.LabelTS();
-            this.labelTS75 = new System.Windows.Forms.LabelTS();
-            this.labelTS76 = new System.Windows.Forms.LabelTS();
-            this.labelTS77 = new System.Windows.Forms.LabelTS();
-            this.labelTS78 = new System.Windows.Forms.LabelTS();
-            this.labelTS79 = new System.Windows.Forms.LabelTS();
-            this.labelTS80 = new System.Windows.Forms.LabelTS();
-            this.labelTS81 = new System.Windows.Forms.LabelTS();
-            this.labelTS82 = new System.Windows.Forms.LabelTS();
-            this.labelTS83 = new System.Windows.Forms.LabelTS();
-            this.labelTS84 = new System.Windows.Forms.LabelTS();
-            this.labelTS85 = new System.Windows.Forms.LabelTS();
-            this.lblVHFTxControl = new System.Windows.Forms.LabelTS();
-            this.lblVHFRxControl = new System.Windows.Forms.LabelTS();
-            this.labelTS59 = new System.Windows.Forms.LabelTS();
-            this.labelTS60 = new System.Windows.Forms.LabelTS();
-            this.labelTS61 = new System.Windows.Forms.LabelTS();
-            this.labelTS62 = new System.Windows.Forms.LabelTS();
-            this.labelTS63 = new System.Windows.Forms.LabelTS();
-            this.labelTS64 = new System.Windows.Forms.LabelTS();
-            this.labelTS65 = new System.Windows.Forms.LabelTS();
-            this.labelTS66 = new System.Windows.Forms.LabelTS();
-            this.labelTS67 = new System.Windows.Forms.LabelTS();
-            this.labelTS68 = new System.Windows.Forms.LabelTS();
-            this.labelTS69 = new System.Windows.Forms.LabelTS();
-            this.labelTS70 = new System.Windows.Forms.LabelTS();
-            this.chkPenOCxmitVHF117 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCxmitVHF116 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCxmitVHF115 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCxmitVHF114 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCxmitVHF113 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCxmitVHF112 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCxmitVHF111 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCrcvVHF117 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCrcvVHF116 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCrcvVHF115 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCrcvVHF114 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCrcvVHF113 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCrcvVHF112 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCrcvVHF111 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCxmitVHF107 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCxmitVHF106 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCxmitVHF105 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCxmitVHF104 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCxmitVHF103 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCxmitVHF102 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCxmitVHF101 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCrcvVHF107 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCrcvVHF106 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCrcvVHF105 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCrcvVHF104 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCrcvVHF103 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCrcvVHF102 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCrcvVHF101 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCxmitVHF97 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCxmitVHF96 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCxmitVHF95 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCxmitVHF94 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCxmitVHF93 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCxmitVHF92 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCxmitVHF91 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCrcvVHF97 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCrcvVHF96 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCrcvVHF95 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCrcvVHF94 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCrcvVHF93 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCrcvVHF92 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCrcvVHF91 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCxmitVHF87 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCxmitVHF86 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCxmitVHF85 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCxmitVHF84 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCxmitVHF83 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCxmitVHF82 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCxmitVHF81 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCrcvVHF87 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCrcvVHF86 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCrcvVHF85 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCrcvVHF84 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCrcvVHF83 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCrcvVHF82 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCrcvVHF81 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCxmitVHF77 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCxmitVHF76 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCxmitVHF75 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCxmitVHF74 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCxmitVHF73 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCxmitVHF72 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCxmitVHF71 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCrcvVHF77 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCrcvVHF76 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCrcvVHF75 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCrcvVHF74 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCrcvVHF73 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCrcvVHF72 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCrcvVHF71 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCxmitVHF67 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCxmitVHF66 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCxmitVHF65 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCxmitVHF64 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCxmitVHF63 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCxmitVHF62 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCxmitVHF61 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCrcvVHF67 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCrcvVHF66 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCrcvVHF65 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCrcvVHF64 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCrcvVHF63 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCrcvVHF62 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCrcvVHF61 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCxmitVHF57 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCxmitVHF56 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCxmitVHF55 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCxmitVHF54 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCxmitVHF53 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCxmitVHF52 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCxmitVHF51 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCrcvVHF57 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCrcvVHF56 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCrcvVHF55 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCrcvVHF54 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCrcvVHF53 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCrcvVHF52 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCrcvVHF51 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCxmitVHF47 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCxmitVHF46 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCxmitVHF45 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCxmitVHF44 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCxmitVHF43 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCxmitVHF42 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCxmitVHF41 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCrcvVHF47 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCrcvVHF46 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCrcvVHF45 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCrcvVHF44 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCrcvVHF43 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCrcvVHF42 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCrcvVHF41 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCxmitVHF37 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCxmitVHF36 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCxmitVHF35 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCxmitVHF34 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCxmitVHF33 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCxmitVHF32 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCxmitVHF31 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCrcvVHF37 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCrcvVHF36 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCrcvVHF35 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCrcvVHF34 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCrcvVHF33 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCrcvVHF32 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCrcvVHF31 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCxmitVHF27 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCxmitVHF26 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCxmitVHF25 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCxmitVHF24 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCxmitVHF23 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCxmitVHF22 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCxmitVHF21 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCrcvVHF27 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCrcvVHF26 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCrcvVHF25 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCrcvVHF24 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCrcvVHF23 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCrcvVHF22 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCrcvVHF21 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCxmitVHF17 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCxmitVHF16 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCxmitVHF15 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCxmitVHF14 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCxmitVHF13 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCxmitVHF12 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCxmitVHF11 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCrcvVHF17 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCrcvVHF16 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCrcvVHF15 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCrcvVHF14 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCrcvVHF13 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCrcvVHF12 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCrcvVHF11 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCxmitVHF07 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCxmitVHF06 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCxmitVHF05 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCxmitVHF04 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCxmitVHF03 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCxmitVHF02 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCxmitVHF01 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCrcvVHF07 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCrcvVHF06 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCrcvVHF05 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCrcvVHF04 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCrcvVHF03 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCrcvVHF02 = new System.Windows.Forms.CheckBoxTS();
-            this.chkPenOCrcvVHF01 = new System.Windows.Forms.CheckBoxTS();
-            this.btnPennyCtrlReset = new System.Windows.Forms.ButtonTS();
-            this.chkHERCULES = new System.Windows.Forms.CheckBoxTS();
-            this.chkPennyExtCtrl = new System.Windows.Forms.CheckBoxTS();
             this.grpPennyExtCtrl = new System.Windows.Forms.GroupBoxTS();
             this.labelTS28 = new System.Windows.Forms.LabelTS();
             this.labelTS29 = new System.Windows.Forms.LabelTS();
@@ -789,7 +588,453 @@
             this.labelTS42 = new System.Windows.Forms.LabelTS();
             this.lblHFTxControl = new System.Windows.Forms.LabelTS();
             this.lblHFRxControl = new System.Windows.Forms.LabelTS();
+            this.chkPennyExtCtrl = new System.Windows.Forms.CheckBoxTS();
+            this.chkHERCULES = new System.Windows.Forms.CheckBoxTS();
+            this.btnPennyCtrlReset = new System.Windows.Forms.ButtonTS();
+            this.tbOCVHFControl = new System.Windows.Forms.TabPage();
+            this.grpPennyExtCtrlVHF = new System.Windows.Forms.GroupBoxTS();
+            this.labelTS71 = new System.Windows.Forms.LabelTS();
+            this.labelTS72 = new System.Windows.Forms.LabelTS();
+            this.labelTS73 = new System.Windows.Forms.LabelTS();
+            this.labelTS74 = new System.Windows.Forms.LabelTS();
+            this.labelTS75 = new System.Windows.Forms.LabelTS();
+            this.labelTS76 = new System.Windows.Forms.LabelTS();
+            this.labelTS77 = new System.Windows.Forms.LabelTS();
+            this.labelTS78 = new System.Windows.Forms.LabelTS();
+            this.labelTS79 = new System.Windows.Forms.LabelTS();
+            this.labelTS80 = new System.Windows.Forms.LabelTS();
+            this.labelTS81 = new System.Windows.Forms.LabelTS();
+            this.labelTS82 = new System.Windows.Forms.LabelTS();
+            this.labelTS83 = new System.Windows.Forms.LabelTS();
+            this.labelTS84 = new System.Windows.Forms.LabelTS();
+            this.labelTS85 = new System.Windows.Forms.LabelTS();
+            this.lblVHFTxControl = new System.Windows.Forms.LabelTS();
+            this.lblVHFRxControl = new System.Windows.Forms.LabelTS();
+            this.labelTS59 = new System.Windows.Forms.LabelTS();
+            this.labelTS60 = new System.Windows.Forms.LabelTS();
+            this.labelTS61 = new System.Windows.Forms.LabelTS();
+            this.labelTS62 = new System.Windows.Forms.LabelTS();
+            this.labelTS63 = new System.Windows.Forms.LabelTS();
+            this.labelTS64 = new System.Windows.Forms.LabelTS();
+            this.labelTS65 = new System.Windows.Forms.LabelTS();
+            this.labelTS66 = new System.Windows.Forms.LabelTS();
+            this.labelTS67 = new System.Windows.Forms.LabelTS();
+            this.labelTS68 = new System.Windows.Forms.LabelTS();
+            this.labelTS69 = new System.Windows.Forms.LabelTS();
+            this.labelTS70 = new System.Windows.Forms.LabelTS();
+            this.chkPenOCxmitVHF117 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCxmitVHF116 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCxmitVHF115 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCxmitVHF114 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCxmitVHF113 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCxmitVHF112 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCxmitVHF111 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCrcvVHF117 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCrcvVHF116 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCrcvVHF115 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCrcvVHF114 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCrcvVHF113 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCrcvVHF112 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCrcvVHF111 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCxmitVHF107 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCxmitVHF106 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCxmitVHF105 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCxmitVHF104 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCxmitVHF103 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCxmitVHF102 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCxmitVHF101 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCrcvVHF107 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCrcvVHF106 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCrcvVHF105 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCrcvVHF104 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCrcvVHF103 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCrcvVHF102 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCrcvVHF101 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCxmitVHF97 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCxmitVHF96 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCxmitVHF95 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCxmitVHF94 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCxmitVHF93 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCxmitVHF92 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCxmitVHF91 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCrcvVHF97 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCrcvVHF96 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCrcvVHF95 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCrcvVHF94 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCrcvVHF93 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCrcvVHF92 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCrcvVHF91 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCxmitVHF87 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCxmitVHF86 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCxmitVHF85 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCxmitVHF84 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCxmitVHF83 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCxmitVHF82 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCxmitVHF81 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCrcvVHF87 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCrcvVHF86 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCrcvVHF85 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCrcvVHF84 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCrcvVHF83 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCrcvVHF82 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCrcvVHF81 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCxmitVHF77 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCxmitVHF76 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCxmitVHF75 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCxmitVHF74 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCxmitVHF73 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCxmitVHF72 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCxmitVHF71 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCrcvVHF77 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCrcvVHF76 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCrcvVHF75 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCrcvVHF74 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCrcvVHF73 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCrcvVHF72 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCrcvVHF71 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCxmitVHF67 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCxmitVHF66 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCxmitVHF65 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCxmitVHF64 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCxmitVHF63 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCxmitVHF62 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCxmitVHF61 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCrcvVHF67 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCrcvVHF66 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCrcvVHF65 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCrcvVHF64 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCrcvVHF63 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCrcvVHF62 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCrcvVHF61 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCxmitVHF57 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCxmitVHF56 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCxmitVHF55 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCxmitVHF54 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCxmitVHF53 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCxmitVHF52 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCxmitVHF51 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCrcvVHF57 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCrcvVHF56 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCrcvVHF55 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCrcvVHF54 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCrcvVHF53 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCrcvVHF52 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCrcvVHF51 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCxmitVHF47 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCxmitVHF46 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCxmitVHF45 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCxmitVHF44 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCxmitVHF43 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCxmitVHF42 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCxmitVHF41 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCrcvVHF47 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCrcvVHF46 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCrcvVHF45 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCrcvVHF44 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCrcvVHF43 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCrcvVHF42 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCrcvVHF41 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCxmitVHF37 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCxmitVHF36 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCxmitVHF35 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCxmitVHF34 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCxmitVHF33 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCxmitVHF32 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCxmitVHF31 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCrcvVHF37 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCrcvVHF36 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCrcvVHF35 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCrcvVHF34 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCrcvVHF33 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCrcvVHF32 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCrcvVHF31 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCxmitVHF27 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCxmitVHF26 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCxmitVHF25 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCxmitVHF24 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCxmitVHF23 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCxmitVHF22 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCxmitVHF21 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCrcvVHF27 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCrcvVHF26 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCrcvVHF25 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCrcvVHF24 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCrcvVHF23 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCrcvVHF22 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCrcvVHF21 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCxmitVHF17 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCxmitVHF16 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCxmitVHF15 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCxmitVHF14 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCxmitVHF13 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCxmitVHF12 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCxmitVHF11 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCrcvVHF17 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCrcvVHF16 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCrcvVHF15 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCrcvVHF14 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCrcvVHF13 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCrcvVHF12 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCrcvVHF11 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCxmitVHF07 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCxmitVHF06 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCxmitVHF05 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCxmitVHF04 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCxmitVHF03 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCxmitVHF02 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCxmitVHF01 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCrcvVHF07 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCrcvVHF06 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCrcvVHF05 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCrcvVHF04 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCrcvVHF03 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCrcvVHF02 = new System.Windows.Forms.CheckBoxTS();
+            this.chkPenOCrcvVHF01 = new System.Windows.Forms.CheckBoxTS();
+            this.btnPennyCtrlVHFReset = new System.Windows.Forms.ButtonTS();
+            this.checkBoxTS1 = new System.Windows.Forms.CheckBoxTS();
+            this.tpOCSWLControl = new System.Windows.Forms.TabPage();
+            this.btnCtrlSWLReset = new System.Windows.Forms.ButtonTS();
+            this.checkBoxTS12 = new System.Windows.Forms.CheckBoxTS();
+            this.grpExtCtrlSWL = new System.Windows.Forms.GroupBoxTS();
+            this.labelTS513 = new System.Windows.Forms.LabelTS();
+            this.labelTS484 = new System.Windows.Forms.LabelTS();
+            this.labelTS514 = new System.Windows.Forms.LabelTS();
+            this.chkOCxmit117 = new System.Windows.Forms.CheckBoxTS();
+            this.labelTS485 = new System.Windows.Forms.LabelTS();
+            this.chkOCxmit116 = new System.Windows.Forms.CheckBoxTS();
+            this.labelTS486 = new System.Windows.Forms.LabelTS();
+            this.chkOCxmit115 = new System.Windows.Forms.CheckBoxTS();
+            this.labelTS487 = new System.Windows.Forms.LabelTS();
+            this.chkOCxmit114 = new System.Windows.Forms.CheckBoxTS();
+            this.labelTS488 = new System.Windows.Forms.LabelTS();
+            this.chkOCxmit113 = new System.Windows.Forms.CheckBoxTS();
+            this.labelTS489 = new System.Windows.Forms.LabelTS();
+            this.chkOCxmit112 = new System.Windows.Forms.CheckBoxTS();
+            this.labelTS490 = new System.Windows.Forms.LabelTS();
+            this.chkOCxmit111 = new System.Windows.Forms.CheckBoxTS();
+            this.labelTS491 = new System.Windows.Forms.LabelTS();
+            this.chkOCrcv117 = new System.Windows.Forms.CheckBoxTS();
+            this.labelTS492 = new System.Windows.Forms.LabelTS();
+            this.chkOCrcv116 = new System.Windows.Forms.CheckBoxTS();
+            this.labelTS493 = new System.Windows.Forms.LabelTS();
+            this.chkOCrcv115 = new System.Windows.Forms.CheckBoxTS();
+            this.labelTS494 = new System.Windows.Forms.LabelTS();
+            this.chkOCrcv114 = new System.Windows.Forms.CheckBoxTS();
+            this.labelTS495 = new System.Windows.Forms.LabelTS();
+            this.chkOCrcv113 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCxmit147 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCrcv112 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCxmit146 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCrcv111 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCxmit145 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCxmit137 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCxmit144 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCxmit136 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCxmit143 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCxmit135 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCxmit142 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCxmit134 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCxmit141 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCxmit133 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCrcv147 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCxmit132 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCrcv146 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCxmit131 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCrcv145 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCrcv137 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCrcv144 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCrcv136 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCrcv143 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCrcv135 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCrcv142 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCrcv134 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCrcv141 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCrcv133 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCxmit167 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCrcv132 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCxmit166 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCrcv131 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCxmit165 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCxmit164 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCxmit163 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCxmit162 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCxmit161 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCrcv167 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCrcv166 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCrcv165 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCrcv164 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCrcv163 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCrcv162 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCrcv161 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCxmit197 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCxmit196 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCxmit195 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCxmit194 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCxmit193 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCxmit192 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCxmit191 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCrcv197 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCrcv196 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCrcv195 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCrcv194 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCrcv193 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCrcv192 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCrcv191 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCxmit227 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCxmit226 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCxmit225 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCxmit224 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCxmit223 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCxmit222 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCxmit221 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCrcv227 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCrcv226 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCrcv225 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCrcv224 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCrcv223 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCrcv222 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCrcv221 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCxmit257 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCxmit256 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCxmit255 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCxmit254 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCxmit253 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCxmit252 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCxmit251 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCrcv257 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCrcv256 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCrcv255 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCrcv254 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCrcv253 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCrcv252 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCrcv251 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCxmit317 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCxmit316 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCxmit315 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCxmit314 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCxmit313 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCxmit312 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCxmit311 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCrcv317 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCrcv316 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCrcv315 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCrcv314 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCrcv313 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCrcv312 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCrcv311 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCxmit417 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCxmit416 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCxmit415 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCxmit414 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCxmit413 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCxmit412 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCxmit411 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCrcv417 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCrcv416 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCrcv415 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCrcv414 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCrcv413 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCrcv412 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCrcv411 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCxmit497 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCxmit496 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCxmit495 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCxmit494 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCxmit493 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCxmit492 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCxmit491 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCrcv497 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCrcv496 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCrcv495 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCrcv494 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCrcv493 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCrcv492 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCrcv491 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCxmit617 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCxmit616 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCxmit615 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCxmit614 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCxmit613 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCxmit612 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCxmit611 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCrcv617 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCrcv616 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCrcv615 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCrcv614 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCrcv613 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCrcv612 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCrcv611 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCxmit907 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCxmit906 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCxmit905 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCxmit904 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCxmit903 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCxmit902 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCxmit901 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCrcv907 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCrcv906 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCrcv905 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCrcv904 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCrcv903 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCrcv902 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCrcv901 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCxmit1207 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCxmit1206 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCxmit1205 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCxmit1204 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCxmit1203 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCxmit1202 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCxmit1201 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCrcv1207 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCrcv1206 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCrcv1205 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCrcv1204 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCrcv1203 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCrcv1202 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCrcv1201 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCxmitLMW7 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCxmitLMW6 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCxmitLMW5 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCxmitLMW4 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCxmitLMW3 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCxmitLMW2 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCxmitLMW1 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCrcvLMW7 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCrcvLMW6 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCrcvLMW5 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCrcvLMW4 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCrcvLMW3 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCrcvLMW2 = new System.Windows.Forms.CheckBoxTS();
+            this.chkOCrcvLMW1 = new System.Windows.Forms.CheckBoxTS();
+            this.labelTS496 = new System.Windows.Forms.LabelTS();
+            this.labelTS497 = new System.Windows.Forms.LabelTS();
+            this.labelTS498 = new System.Windows.Forms.LabelTS();
+            this.labelTS499 = new System.Windows.Forms.LabelTS();
+            this.labelTS500 = new System.Windows.Forms.LabelTS();
+            this.labelTS501 = new System.Windows.Forms.LabelTS();
+            this.labelTS502 = new System.Windows.Forms.LabelTS();
+            this.labelTS503 = new System.Windows.Forms.LabelTS();
+            this.labelTS504 = new System.Windows.Forms.LabelTS();
+            this.labelTS505 = new System.Windows.Forms.LabelTS();
+            this.labelTS506 = new System.Windows.Forms.LabelTS();
+            this.labelTS507 = new System.Windows.Forms.LabelTS();
+            this.labelTS508 = new System.Windows.Forms.LabelTS();
+            this.labelTS509 = new System.Windows.Forms.LabelTS();
+            this.labelTS510 = new System.Windows.Forms.LabelTS();
+            this.lblSWLTxControl = new System.Windows.Forms.LabelTS();
+            this.lblSWLRxControl = new System.Windows.Forms.LabelTS();
             this.tpHPSDR = new System.Windows.Forms.TabPage();
+            this.grpLEDMirror = new System.Windows.Forms.GroupBoxTS();
+            this.lblLED10 = new System.Windows.Forms.LabelTS();
+            this.lblLED09 = new System.Windows.Forms.LabelTS();
+            this.lblLED08 = new System.Windows.Forms.LabelTS();
+            this.lblLED07 = new System.Windows.Forms.LabelTS();
+            this.lblLED06 = new System.Windows.Forms.LabelTS();
+            this.lblLED05 = new System.Windows.Forms.LabelTS();
+            this.lblLED04 = new System.Windows.Forms.LabelTS();
+            this.lblLED03 = new System.Windows.Forms.LabelTS();
+            this.lblLED02 = new System.Windows.Forms.LabelTS();
+            this.lblLED01 = new System.Windows.Forms.LabelTS();
             this.grpAudioSampleRateRX2 = new System.Windows.Forms.GroupBoxTS();
             this.comboAudioSampleRateRX2 = new System.Windows.Forms.ComboBoxTS();
             this.grpVersion = new System.Windows.Forms.GroupBoxTS();
@@ -820,6 +1065,7 @@
             this.tpAlexControl = new System.Windows.Forms.TabPage();
             this.tcAlexControl = new System.Windows.Forms.TabControl();
             this.tpAlexFilterControl = new System.Windows.Forms.TabPage();
+            this.chkLPFBypass = new System.Windows.Forms.CheckBoxTS();
             this.labelAlexFilterActive = new System.Windows.Forms.LabelTS();
             this.panelTS6 = new System.Windows.Forms.PanelTS();
             this.rad6LPFled = new System.Windows.Forms.RadioButtonTS();
@@ -2901,6 +3147,7 @@
             this.mainMenu1 = new System.Windows.Forms.MainMenu(this.components);
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.timer_VAC_Monitor = new System.Windows.Forms.Timer(this.components);
+            this.timer_LED_Mirror = new System.Windows.Forms.Timer(this.components);
             this.grpDiagInfo = new System.Windows.Forms.GroupBoxTS();
             this.lblSyncData = new System.Windows.Forms.LabelTS();
             this.numericUpDownTS5 = new System.Windows.Forms.NumericUpDownTS();
@@ -2944,7 +3191,6 @@
             this.panelTS4 = new System.Windows.Forms.PanelTS();
             this.radioButtonTS5 = new System.Windows.Forms.RadioButtonTS();
             this.radioButtonTS6 = new System.Windows.Forms.RadioButtonTS();
-            this.chkLPFBypass = new System.Windows.Forms.CheckBoxTS();
             tpAlexAntCtrl = new System.Windows.Forms.TabPage();
             numericUpDownTS3 = new System.Windows.Forms.NumericUpDownTS();
             numericUpDownTS4 = new System.Windows.Forms.NumericUpDownTS();
@@ -3013,11 +3259,11 @@
             this.grpFRSRegion.SuspendLayout();
             this.grpGeneralModel.SuspendLayout();
             this.grpMetisAddr.SuspendLayout();
+            this.groupBoxHPSDRHW.SuspendLayout();
             this.grpGeneralHardwareORION.SuspendLayout();
             this.panelOrionPTT.SuspendLayout();
             this.panelOrionBias.SuspendLayout();
             this.panelOrionMic.SuspendLayout();
-            this.groupBoxHPSDRHW.SuspendLayout();
             this.tpGeneralOptions.SuspendLayout();
             this.grpCWDelay.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.udCWKeyUpDelay)).BeginInit();
@@ -3065,10 +3311,16 @@
             this.tpGeneralNavigation.SuspendLayout();
             this.grpOptSpaceNav.SuspendLayout();
             this.tpPennyCtrl.SuspendLayout();
+            this.tcOCControl.SuspendLayout();
+            this.tpOCHFControl.SuspendLayout();
             this.groupBoxTS1.SuspendLayout();
-            this.grpPennyExtCtrlVHF.SuspendLayout();
             this.grpPennyExtCtrl.SuspendLayout();
+            this.tbOCVHFControl.SuspendLayout();
+            this.grpPennyExtCtrlVHF.SuspendLayout();
+            this.tpOCSWLControl.SuspendLayout();
+            this.grpExtCtrlSWL.SuspendLayout();
             this.tpHPSDR.SuspendLayout();
+            this.grpLEDMirror.SuspendLayout();
             this.grpAudioSampleRateRX2.SuspendLayout();
             this.grpVersion.SuspendLayout();
             this.groupBoxRXOptions.SuspendLayout();
@@ -7141,6 +7393,95 @@
             this.lblMetisMAC.TabIndex = 1;
             this.lblMetisMAC.Text = "00:00:00:00:00:00";
             // 
+            // groupBoxHPSDRHW
+            // 
+            this.groupBoxHPSDRHW.Controls.Add(this.chkApolloPresent);
+            this.groupBoxHPSDRHW.Controls.Add(this.chkPennyLane);
+            this.groupBoxHPSDRHW.Controls.Add(this.chkExcaliburPresent);
+            this.groupBoxHPSDRHW.Controls.Add(this.chkAlexPresent);
+            this.groupBoxHPSDRHW.Controls.Add(this.chkMercuryPresent);
+            this.groupBoxHPSDRHW.Controls.Add(this.chkPennyPresent);
+            this.groupBoxHPSDRHW.Location = new System.Drawing.Point(160, 8);
+            this.groupBoxHPSDRHW.Name = "groupBoxHPSDRHW";
+            this.groupBoxHPSDRHW.Size = new System.Drawing.Size(160, 171);
+            this.groupBoxHPSDRHW.TabIndex = 30;
+            this.groupBoxHPSDRHW.TabStop = false;
+            this.groupBoxHPSDRHW.Text = "Hardware Options";
+            // 
+            // chkApolloPresent
+            // 
+            this.chkApolloPresent.AutoSize = true;
+            this.chkApolloPresent.Image = null;
+            this.chkApolloPresent.Location = new System.Drawing.Point(25, 100);
+            this.chkApolloPresent.Name = "chkApolloPresent";
+            this.chkApolloPresent.Size = new System.Drawing.Size(55, 17);
+            this.chkApolloPresent.TabIndex = 7;
+            this.chkApolloPresent.Text = "Apollo";
+            this.chkApolloPresent.UseVisualStyleBackColor = true;
+            this.chkApolloPresent.CheckedChanged += new System.EventHandler(this.chkApolloPresent_CheckedChanged);
+            // 
+            // chkPennyLane
+            // 
+            this.chkPennyLane.AutoSize = true;
+            this.chkPennyLane.Image = null;
+            this.chkPennyLane.Location = new System.Drawing.Point(25, 60);
+            this.chkPennyLane.Name = "chkPennyLane";
+            this.chkPennyLane.Size = new System.Drawing.Size(80, 17);
+            this.chkPennyLane.TabIndex = 6;
+            this.chkPennyLane.Text = "PennyLane";
+            this.chkPennyLane.UseVisualStyleBackColor = true;
+            this.chkPennyLane.CheckedChanged += new System.EventHandler(this.chkPennyLane_CheckedChanged);
+            // 
+            // chkExcaliburPresent
+            // 
+            this.chkExcaliburPresent.AutoSize = true;
+            this.chkExcaliburPresent.Image = null;
+            this.chkExcaliburPresent.Location = new System.Drawing.Point(25, 120);
+            this.chkExcaliburPresent.Name = "chkExcaliburPresent";
+            this.chkExcaliburPresent.Size = new System.Drawing.Size(69, 17);
+            this.chkExcaliburPresent.TabIndex = 2;
+            this.chkExcaliburPresent.Text = "Excalibur";
+            this.chkExcaliburPresent.UseVisualStyleBackColor = true;
+            this.chkExcaliburPresent.CheckedChanged += new System.EventHandler(this.chkExcaliburPresent_CheckedChanged);
+            // 
+            // chkAlexPresent
+            // 
+            this.chkAlexPresent.AutoSize = true;
+            this.chkAlexPresent.Checked = true;
+            this.chkAlexPresent.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkAlexPresent.Image = null;
+            this.chkAlexPresent.Location = new System.Drawing.Point(25, 80);
+            this.chkAlexPresent.Name = "chkAlexPresent";
+            this.chkAlexPresent.Size = new System.Drawing.Size(46, 17);
+            this.chkAlexPresent.TabIndex = 3;
+            this.chkAlexPresent.Text = "Alex";
+            this.chkAlexPresent.UseVisualStyleBackColor = true;
+            this.chkAlexPresent.CheckedChanged += new System.EventHandler(this.chkAlexPresent_CheckedChanged);
+            // 
+            // chkMercuryPresent
+            // 
+            this.chkMercuryPresent.AutoSize = true;
+            this.chkMercuryPresent.Image = null;
+            this.chkMercuryPresent.Location = new System.Drawing.Point(25, 20);
+            this.chkMercuryPresent.Name = "chkMercuryPresent";
+            this.chkMercuryPresent.Size = new System.Drawing.Size(64, 17);
+            this.chkMercuryPresent.TabIndex = 0;
+            this.chkMercuryPresent.Text = "Mercury";
+            this.chkMercuryPresent.UseVisualStyleBackColor = true;
+            this.chkMercuryPresent.CheckedChanged += new System.EventHandler(this.chkMercuryPresent_CheckedChanged);
+            // 
+            // chkPennyPresent
+            // 
+            this.chkPennyPresent.AutoSize = true;
+            this.chkPennyPresent.Image = null;
+            this.chkPennyPresent.Location = new System.Drawing.Point(25, 40);
+            this.chkPennyPresent.Name = "chkPennyPresent";
+            this.chkPennyPresent.Size = new System.Drawing.Size(71, 17);
+            this.chkPennyPresent.TabIndex = 1;
+            this.chkPennyPresent.Text = "Penelope";
+            this.chkPennyPresent.UseVisualStyleBackColor = true;
+            this.chkPennyPresent.CheckedChanged += new System.EventHandler(this.chkPennyPresent_CheckedChanged);
+            // 
             // grpGeneralHardwareORION
             // 
             this.grpGeneralHardwareORION.Controls.Add(this.panelOrionPTT);
@@ -7296,95 +7637,6 @@
             this.lblOrionMic.Size = new System.Drawing.Size(24, 13);
             this.lblOrionMic.TabIndex = 0;
             this.lblOrionMic.Text = "Mic";
-            // 
-            // groupBoxHPSDRHW
-            // 
-            this.groupBoxHPSDRHW.Controls.Add(this.chkApolloPresent);
-            this.groupBoxHPSDRHW.Controls.Add(this.chkPennyLane);
-            this.groupBoxHPSDRHW.Controls.Add(this.chkExcaliburPresent);
-            this.groupBoxHPSDRHW.Controls.Add(this.chkAlexPresent);
-            this.groupBoxHPSDRHW.Controls.Add(this.chkMercuryPresent);
-            this.groupBoxHPSDRHW.Controls.Add(this.chkPennyPresent);
-            this.groupBoxHPSDRHW.Location = new System.Drawing.Point(160, 8);
-            this.groupBoxHPSDRHW.Name = "groupBoxHPSDRHW";
-            this.groupBoxHPSDRHW.Size = new System.Drawing.Size(160, 171);
-            this.groupBoxHPSDRHW.TabIndex = 30;
-            this.groupBoxHPSDRHW.TabStop = false;
-            this.groupBoxHPSDRHW.Text = "Hardware Options";
-            // 
-            // chkApolloPresent
-            // 
-            this.chkApolloPresent.AutoSize = true;
-            this.chkApolloPresent.Image = null;
-            this.chkApolloPresent.Location = new System.Drawing.Point(25, 100);
-            this.chkApolloPresent.Name = "chkApolloPresent";
-            this.chkApolloPresent.Size = new System.Drawing.Size(55, 17);
-            this.chkApolloPresent.TabIndex = 7;
-            this.chkApolloPresent.Text = "Apollo";
-            this.chkApolloPresent.UseVisualStyleBackColor = true;
-            this.chkApolloPresent.CheckedChanged += new System.EventHandler(this.chkApolloPresent_CheckedChanged);
-            // 
-            // chkPennyLane
-            // 
-            this.chkPennyLane.AutoSize = true;
-            this.chkPennyLane.Image = null;
-            this.chkPennyLane.Location = new System.Drawing.Point(25, 60);
-            this.chkPennyLane.Name = "chkPennyLane";
-            this.chkPennyLane.Size = new System.Drawing.Size(80, 17);
-            this.chkPennyLane.TabIndex = 6;
-            this.chkPennyLane.Text = "PennyLane";
-            this.chkPennyLane.UseVisualStyleBackColor = true;
-            this.chkPennyLane.CheckedChanged += new System.EventHandler(this.chkPennyLane_CheckedChanged);
-            // 
-            // chkExcaliburPresent
-            // 
-            this.chkExcaliburPresent.AutoSize = true;
-            this.chkExcaliburPresent.Image = null;
-            this.chkExcaliburPresent.Location = new System.Drawing.Point(25, 120);
-            this.chkExcaliburPresent.Name = "chkExcaliburPresent";
-            this.chkExcaliburPresent.Size = new System.Drawing.Size(69, 17);
-            this.chkExcaliburPresent.TabIndex = 2;
-            this.chkExcaliburPresent.Text = "Excalibur";
-            this.chkExcaliburPresent.UseVisualStyleBackColor = true;
-            this.chkExcaliburPresent.CheckedChanged += new System.EventHandler(this.chkExcaliburPresent_CheckedChanged);
-            // 
-            // chkAlexPresent
-            // 
-            this.chkAlexPresent.AutoSize = true;
-            this.chkAlexPresent.Checked = true;
-            this.chkAlexPresent.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkAlexPresent.Image = null;
-            this.chkAlexPresent.Location = new System.Drawing.Point(25, 80);
-            this.chkAlexPresent.Name = "chkAlexPresent";
-            this.chkAlexPresent.Size = new System.Drawing.Size(46, 17);
-            this.chkAlexPresent.TabIndex = 3;
-            this.chkAlexPresent.Text = "Alex";
-            this.chkAlexPresent.UseVisualStyleBackColor = true;
-            this.chkAlexPresent.CheckedChanged += new System.EventHandler(this.chkAlexPresent_CheckedChanged);
-            // 
-            // chkMercuryPresent
-            // 
-            this.chkMercuryPresent.AutoSize = true;
-            this.chkMercuryPresent.Image = null;
-            this.chkMercuryPresent.Location = new System.Drawing.Point(25, 20);
-            this.chkMercuryPresent.Name = "chkMercuryPresent";
-            this.chkMercuryPresent.Size = new System.Drawing.Size(64, 17);
-            this.chkMercuryPresent.TabIndex = 0;
-            this.chkMercuryPresent.Text = "Mercury";
-            this.chkMercuryPresent.UseVisualStyleBackColor = true;
-            this.chkMercuryPresent.CheckedChanged += new System.EventHandler(this.chkMercuryPresent_CheckedChanged);
-            // 
-            // chkPennyPresent
-            // 
-            this.chkPennyPresent.AutoSize = true;
-            this.chkPennyPresent.Image = null;
-            this.chkPennyPresent.Location = new System.Drawing.Point(25, 40);
-            this.chkPennyPresent.Name = "chkPennyPresent";
-            this.chkPennyPresent.Size = new System.Drawing.Size(71, 17);
-            this.chkPennyPresent.TabIndex = 1;
-            this.chkPennyPresent.Text = "Penelope";
-            this.chkPennyPresent.UseVisualStyleBackColor = true;
-            this.chkPennyPresent.CheckedChanged += new System.EventHandler(this.chkPennyPresent_CheckedChanged);
             // 
             // tpGeneralOptions
             // 
@@ -9143,14 +9395,7 @@
             // tpPennyCtrl
             // 
             this.tpPennyCtrl.BackColor = System.Drawing.SystemColors.Control;
-            this.tpPennyCtrl.Controls.Add(this.groupBoxTS1);
-            this.tpPennyCtrl.Controls.Add(this.btnPennyCtrlVHFReset);
-            this.tpPennyCtrl.Controls.Add(this.checkBoxTS1);
-            this.tpPennyCtrl.Controls.Add(this.grpPennyExtCtrlVHF);
-            this.tpPennyCtrl.Controls.Add(this.btnPennyCtrlReset);
-            this.tpPennyCtrl.Controls.Add(this.chkHERCULES);
-            this.tpPennyCtrl.Controls.Add(this.chkPennyExtCtrl);
-            this.tpPennyCtrl.Controls.Add(this.grpPennyExtCtrl);
+            this.tpPennyCtrl.Controls.Add(this.tcOCControl);
             this.tpPennyCtrl.Location = new System.Drawing.Point(4, 22);
             this.tpPennyCtrl.Name = "tpPennyCtrl";
             this.tpPennyCtrl.Padding = new System.Windows.Forms.Padding(3);
@@ -9159,12 +9404,38 @@
             this.tpPennyCtrl.Text = "Penny/Hermes Ctrl";
             this.tpPennyCtrl.Paint += new System.Windows.Forms.PaintEventHandler(this.tpPennyCtrl_Paint);
             // 
+            // tcOCControl
+            // 
+            this.tcOCControl.Controls.Add(this.tpOCHFControl);
+            this.tcOCControl.Controls.Add(this.tbOCVHFControl);
+            this.tcOCControl.Controls.Add(this.tpOCSWLControl);
+            this.tcOCControl.Location = new System.Drawing.Point(0, 0);
+            this.tcOCControl.Name = "tcOCControl";
+            this.tcOCControl.SelectedIndex = 0;
+            this.tcOCControl.Size = new System.Drawing.Size(583, 339);
+            this.tcOCControl.TabIndex = 0;
+            // 
+            // tpOCHFControl
+            // 
+            this.tpOCHFControl.BackColor = System.Drawing.SystemColors.Control;
+            this.tpOCHFControl.Controls.Add(this.groupBoxTS1);
+            this.tpOCHFControl.Controls.Add(this.grpPennyExtCtrl);
+            this.tpOCHFControl.Controls.Add(this.chkPennyExtCtrl);
+            this.tpOCHFControl.Controls.Add(this.chkHERCULES);
+            this.tpOCHFControl.Controls.Add(this.btnPennyCtrlReset);
+            this.tpOCHFControl.Location = new System.Drawing.Point(4, 22);
+            this.tpOCHFControl.Name = "tpOCHFControl";
+            this.tpOCHFControl.Padding = new System.Windows.Forms.Padding(3);
+            this.tpOCHFControl.Size = new System.Drawing.Size(575, 313);
+            this.tpOCHFControl.TabIndex = 0;
+            this.tpOCHFControl.Text = "HF";
+            // 
             // groupBoxTS1
             // 
             this.groupBoxTS1.Controls.Add(this.radSplitPins3x4);
             this.groupBoxTS1.Controls.Add(this.radSplitPins4x3);
             this.groupBoxTS1.Controls.Add(this.chkSplitPins);
-            this.groupBoxTS1.Location = new System.Drawing.Point(12, 269);
+            this.groupBoxTS1.Location = new System.Drawing.Point(354, 241);
             this.groupBoxTS1.Name = "groupBoxTS1";
             this.groupBoxTS1.Size = new System.Drawing.Size(200, 66);
             this.groupBoxTS1.TabIndex = 10;
@@ -9211,2435 +9482,6 @@
             this.toolTip1.SetToolTip(this.chkSplitPins, "Enable Split Pins feature");
             this.chkSplitPins.UseVisualStyleBackColor = true;
             this.chkSplitPins.CheckedChanged += new System.EventHandler(this.chkSplitPins_CheckedChanged);
-            // 
-            // btnPennyCtrlVHFReset
-            // 
-            this.btnPennyCtrlVHFReset.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnPennyCtrlVHFReset.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.btnPennyCtrlVHFReset.Image = null;
-            this.btnPennyCtrlVHFReset.Location = new System.Drawing.Point(481, 240);
-            this.btnPennyCtrlVHFReset.Name = "btnPennyCtrlVHFReset";
-            this.btnPennyCtrlVHFReset.Size = new System.Drawing.Size(62, 23);
-            this.btnPennyCtrlVHFReset.TabIndex = 7;
-            this.btnPennyCtrlVHFReset.Text = "VHF Reset";
-            this.toolTip1.SetToolTip(this.btnPennyCtrlVHFReset, "Clears to Default");
-            this.btnPennyCtrlVHFReset.UseVisualStyleBackColor = true;
-            this.btnPennyCtrlVHFReset.Click += new System.EventHandler(this.btnPennyCtrlVHFReset_Click);
-            // 
-            // checkBoxTS1
-            // 
-            this.checkBoxTS1.Appearance = System.Windows.Forms.Appearance.Button;
-            this.checkBoxTS1.BackColor = System.Drawing.SystemColors.Control;
-            this.checkBoxTS1.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.checkBoxTS1.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.checkBoxTS1.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.checkBoxTS1.Image = null;
-            this.checkBoxTS1.Location = new System.Drawing.Point(355, 240);
-            this.checkBoxTS1.Name = "checkBoxTS1";
-            this.checkBoxTS1.Size = new System.Drawing.Size(90, 23);
-            this.checkBoxTS1.TabIndex = 6;
-            this.checkBoxTS1.Text = "VHF Ext Control";
-            this.checkBoxTS1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.toolTip1.SetToolTip(this.checkBoxTS1, "Enable External Control on Penelope J6");
-            this.checkBoxTS1.UseVisualStyleBackColor = false;
-            this.checkBoxTS1.Visible = false;
-            // 
-            // grpPennyExtCtrlVHF
-            // 
-            this.grpPennyExtCtrlVHF.Controls.Add(this.labelTS71);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.labelTS72);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.labelTS73);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.labelTS74);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.labelTS75);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.labelTS76);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.labelTS77);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.labelTS78);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.labelTS79);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.labelTS80);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.labelTS81);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.labelTS82);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.labelTS83);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.labelTS84);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.labelTS85);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.lblVHFTxControl);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.lblVHFRxControl);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.labelTS59);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.labelTS60);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.labelTS61);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.labelTS62);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.labelTS63);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.labelTS64);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.labelTS65);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.labelTS66);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.labelTS67);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.labelTS68);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.labelTS69);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.labelTS70);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF117);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF116);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF115);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF114);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF113);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF112);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF111);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF117);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF116);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF115);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF114);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF113);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF112);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF111);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF107);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF106);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF105);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF104);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF103);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF102);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF101);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF107);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF106);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF105);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF104);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF103);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF102);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF101);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF97);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF96);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF95);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF94);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF93);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF92);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF91);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF97);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF96);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF95);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF94);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF93);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF92);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF91);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF87);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF86);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF85);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF84);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF83);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF82);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF81);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF87);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF86);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF85);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF84);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF83);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF82);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF81);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF77);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF76);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF75);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF74);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF73);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF72);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF71);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF77);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF76);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF75);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF74);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF73);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF72);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF71);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF67);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF66);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF65);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF64);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF63);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF62);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF61);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF67);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF66);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF65);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF64);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF63);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF62);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF61);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF57);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF56);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF55);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF54);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF53);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF52);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF51);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF57);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF56);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF55);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF54);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF53);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF52);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF51);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF47);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF46);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF45);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF44);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF43);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF42);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF41);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF47);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF46);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF45);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF44);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF43);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF42);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF41);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF37);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF36);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF35);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF34);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF33);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF32);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF31);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF37);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF36);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF35);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF34);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF33);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF32);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF31);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF27);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF26);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF25);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF24);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF23);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF22);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF21);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF27);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF26);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF25);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF24);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF23);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF22);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF21);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF17);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF16);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF15);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF14);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF13);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF12);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF11);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF17);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF16);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF15);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF14);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF13);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF12);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF11);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF07);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF06);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF05);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF04);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF03);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF02);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF01);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF07);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF06);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF05);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF04);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF03);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF02);
-            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF01);
-            this.grpPennyExtCtrlVHF.Enabled = false;
-            this.grpPennyExtCtrlVHF.Location = new System.Drawing.Point(295, 0);
-            this.grpPennyExtCtrlVHF.Name = "grpPennyExtCtrlVHF";
-            this.grpPennyExtCtrlVHF.Size = new System.Drawing.Size(285, 236);
-            this.grpPennyExtCtrlVHF.TabIndex = 5;
-            this.grpPennyExtCtrlVHF.TabStop = false;
-            // 
-            // labelTS71
-            // 
-            this.labelTS71.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelTS71.Image = null;
-            this.labelTS71.Location = new System.Drawing.Point(9, 24);
-            this.labelTS71.Name = "labelTS71";
-            this.labelTS71.Size = new System.Drawing.Size(32, 16);
-            this.labelTS71.TabIndex = 395;
-            this.labelTS71.Text = "Band";
-            // 
-            // labelTS72
-            // 
-            this.labelTS72.Image = null;
-            this.labelTS72.Location = new System.Drawing.Point(262, 24);
-            this.labelTS72.Name = "labelTS72";
-            this.labelTS72.Size = new System.Drawing.Size(16, 16);
-            this.labelTS72.TabIndex = 394;
-            this.labelTS72.Text = "7";
-            this.labelTS72.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // labelTS73
-            // 
-            this.labelTS73.Image = null;
-            this.labelTS73.Location = new System.Drawing.Point(246, 24);
-            this.labelTS73.Name = "labelTS73";
-            this.labelTS73.Size = new System.Drawing.Size(16, 16);
-            this.labelTS73.TabIndex = 393;
-            this.labelTS73.Text = "6";
-            this.labelTS73.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // labelTS74
-            // 
-            this.labelTS74.Image = null;
-            this.labelTS74.Location = new System.Drawing.Point(230, 24);
-            this.labelTS74.Name = "labelTS74";
-            this.labelTS74.Size = new System.Drawing.Size(16, 16);
-            this.labelTS74.TabIndex = 392;
-            this.labelTS74.Text = "5";
-            this.labelTS74.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // labelTS75
-            // 
-            this.labelTS75.Image = null;
-            this.labelTS75.Location = new System.Drawing.Point(214, 24);
-            this.labelTS75.Name = "labelTS75";
-            this.labelTS75.Size = new System.Drawing.Size(16, 16);
-            this.labelTS75.TabIndex = 391;
-            this.labelTS75.Text = "4";
-            this.labelTS75.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // labelTS76
-            // 
-            this.labelTS76.Image = null;
-            this.labelTS76.Location = new System.Drawing.Point(198, 24);
-            this.labelTS76.Name = "labelTS76";
-            this.labelTS76.Size = new System.Drawing.Size(16, 16);
-            this.labelTS76.TabIndex = 390;
-            this.labelTS76.Text = "3";
-            this.labelTS76.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // labelTS77
-            // 
-            this.labelTS77.Image = null;
-            this.labelTS77.Location = new System.Drawing.Point(182, 24);
-            this.labelTS77.Name = "labelTS77";
-            this.labelTS77.Size = new System.Drawing.Size(16, 16);
-            this.labelTS77.TabIndex = 389;
-            this.labelTS77.Text = "2";
-            this.labelTS77.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // labelTS78
-            // 
-            this.labelTS78.Image = null;
-            this.labelTS78.Location = new System.Drawing.Point(166, 24);
-            this.labelTS78.Name = "labelTS78";
-            this.labelTS78.Size = new System.Drawing.Size(16, 16);
-            this.labelTS78.TabIndex = 388;
-            this.labelTS78.Text = "1";
-            this.labelTS78.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // labelTS79
-            // 
-            this.labelTS79.Image = null;
-            this.labelTS79.Location = new System.Drawing.Point(144, 24);
-            this.labelTS79.Name = "labelTS79";
-            this.labelTS79.Size = new System.Drawing.Size(16, 16);
-            this.labelTS79.TabIndex = 387;
-            this.labelTS79.Text = "7";
-            this.labelTS79.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // labelTS80
-            // 
-            this.labelTS80.Image = null;
-            this.labelTS80.Location = new System.Drawing.Point(128, 24);
-            this.labelTS80.Name = "labelTS80";
-            this.labelTS80.Size = new System.Drawing.Size(16, 16);
-            this.labelTS80.TabIndex = 386;
-            this.labelTS80.Text = "6";
-            this.labelTS80.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // labelTS81
-            // 
-            this.labelTS81.Image = null;
-            this.labelTS81.Location = new System.Drawing.Point(112, 24);
-            this.labelTS81.Name = "labelTS81";
-            this.labelTS81.Size = new System.Drawing.Size(16, 16);
-            this.labelTS81.TabIndex = 385;
-            this.labelTS81.Text = "5";
-            this.labelTS81.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // labelTS82
-            // 
-            this.labelTS82.Image = null;
-            this.labelTS82.Location = new System.Drawing.Point(96, 24);
-            this.labelTS82.Name = "labelTS82";
-            this.labelTS82.Size = new System.Drawing.Size(16, 16);
-            this.labelTS82.TabIndex = 384;
-            this.labelTS82.Text = "4";
-            this.labelTS82.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // labelTS83
-            // 
-            this.labelTS83.Image = null;
-            this.labelTS83.Location = new System.Drawing.Point(80, 24);
-            this.labelTS83.Name = "labelTS83";
-            this.labelTS83.Size = new System.Drawing.Size(16, 16);
-            this.labelTS83.TabIndex = 383;
-            this.labelTS83.Text = "3";
-            this.labelTS83.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // labelTS84
-            // 
-            this.labelTS84.Image = null;
-            this.labelTS84.Location = new System.Drawing.Point(64, 24);
-            this.labelTS84.Name = "labelTS84";
-            this.labelTS84.Size = new System.Drawing.Size(16, 16);
-            this.labelTS84.TabIndex = 382;
-            this.labelTS84.Text = "2";
-            this.labelTS84.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // labelTS85
-            // 
-            this.labelTS85.Image = null;
-            this.labelTS85.Location = new System.Drawing.Point(48, 24);
-            this.labelTS85.Name = "labelTS85";
-            this.labelTS85.Size = new System.Drawing.Size(16, 16);
-            this.labelTS85.TabIndex = 381;
-            this.labelTS85.Text = "1";
-            this.labelTS85.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // lblVHFTxControl
-            // 
-            this.lblVHFTxControl.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblVHFTxControl.Image = null;
-            this.lblVHFTxControl.Location = new System.Drawing.Point(182, 8);
-            this.lblVHFTxControl.Name = "lblVHFTxControl";
-            this.lblVHFTxControl.Size = new System.Drawing.Size(95, 16);
-            this.lblVHFTxControl.TabIndex = 380;
-            this.lblVHFTxControl.Text = "J6 Transmit Pins";
-            this.lblVHFTxControl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // lblVHFRxControl
-            // 
-            this.lblVHFRxControl.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblVHFRxControl.Image = null;
-            this.lblVHFRxControl.Location = new System.Drawing.Point(60, 8);
-            this.lblVHFRxControl.Name = "lblVHFRxControl";
-            this.lblVHFRxControl.Size = new System.Drawing.Size(95, 16);
-            this.lblVHFRxControl.TabIndex = 379;
-            this.lblVHFRxControl.Text = "J6 Receive Pins";
-            this.lblVHFRxControl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // labelTS59
-            // 
-            this.labelTS59.Image = null;
-            this.labelTS59.Location = new System.Drawing.Point(5, 217);
-            this.labelTS59.Name = "labelTS59";
-            this.labelTS59.Size = new System.Drawing.Size(40, 16);
-            this.labelTS59.TabIndex = 378;
-            this.labelTS59.Text = "VHF11";
-            this.labelTS59.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // labelTS60
-            // 
-            this.labelTS60.Image = null;
-            this.labelTS60.Location = new System.Drawing.Point(5, 201);
-            this.labelTS60.Name = "labelTS60";
-            this.labelTS60.Size = new System.Drawing.Size(40, 16);
-            this.labelTS60.TabIndex = 377;
-            this.labelTS60.Text = "VHF10";
-            this.labelTS60.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // labelTS61
-            // 
-            this.labelTS61.Image = null;
-            this.labelTS61.Location = new System.Drawing.Point(6, 185);
-            this.labelTS61.Name = "labelTS61";
-            this.labelTS61.Size = new System.Drawing.Size(35, 16);
-            this.labelTS61.TabIndex = 376;
-            this.labelTS61.Text = "VHF9";
-            this.labelTS61.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // labelTS62
-            // 
-            this.labelTS62.Image = null;
-            this.labelTS62.Location = new System.Drawing.Point(6, 169);
-            this.labelTS62.Name = "labelTS62";
-            this.labelTS62.Size = new System.Drawing.Size(35, 16);
-            this.labelTS62.TabIndex = 375;
-            this.labelTS62.Text = "VHF8";
-            this.labelTS62.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // labelTS63
-            // 
-            this.labelTS63.Image = null;
-            this.labelTS63.Location = new System.Drawing.Point(6, 153);
-            this.labelTS63.Name = "labelTS63";
-            this.labelTS63.Size = new System.Drawing.Size(35, 16);
-            this.labelTS63.TabIndex = 374;
-            this.labelTS63.Text = "VHF7";
-            this.labelTS63.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // labelTS64
-            // 
-            this.labelTS64.Image = null;
-            this.labelTS64.Location = new System.Drawing.Point(6, 137);
-            this.labelTS64.Name = "labelTS64";
-            this.labelTS64.Size = new System.Drawing.Size(35, 16);
-            this.labelTS64.TabIndex = 373;
-            this.labelTS64.Text = "VHF6";
-            this.labelTS64.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // labelTS65
-            // 
-            this.labelTS65.Image = null;
-            this.labelTS65.Location = new System.Drawing.Point(6, 121);
-            this.labelTS65.Name = "labelTS65";
-            this.labelTS65.Size = new System.Drawing.Size(35, 16);
-            this.labelTS65.TabIndex = 372;
-            this.labelTS65.Text = "VHF5";
-            this.labelTS65.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // labelTS66
-            // 
-            this.labelTS66.Image = null;
-            this.labelTS66.Location = new System.Drawing.Point(6, 105);
-            this.labelTS66.Name = "labelTS66";
-            this.labelTS66.Size = new System.Drawing.Size(35, 16);
-            this.labelTS66.TabIndex = 371;
-            this.labelTS66.Text = "VHF4";
-            this.labelTS66.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // labelTS67
-            // 
-            this.labelTS67.Image = null;
-            this.labelTS67.Location = new System.Drawing.Point(6, 89);
-            this.labelTS67.Name = "labelTS67";
-            this.labelTS67.Size = new System.Drawing.Size(35, 16);
-            this.labelTS67.TabIndex = 370;
-            this.labelTS67.Text = "VHF3";
-            this.labelTS67.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // labelTS68
-            // 
-            this.labelTS68.Image = null;
-            this.labelTS68.Location = new System.Drawing.Point(6, 73);
-            this.labelTS68.Name = "labelTS68";
-            this.labelTS68.Size = new System.Drawing.Size(35, 16);
-            this.labelTS68.TabIndex = 369;
-            this.labelTS68.Text = "VHF2";
-            this.labelTS68.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // labelTS69
-            // 
-            this.labelTS69.Image = null;
-            this.labelTS69.Location = new System.Drawing.Point(6, 57);
-            this.labelTS69.Name = "labelTS69";
-            this.labelTS69.Size = new System.Drawing.Size(35, 16);
-            this.labelTS69.TabIndex = 368;
-            this.labelTS69.Text = "VHF1";
-            this.labelTS69.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // labelTS70
-            // 
-            this.labelTS70.Image = null;
-            this.labelTS70.Location = new System.Drawing.Point(6, 41);
-            this.labelTS70.Name = "labelTS70";
-            this.labelTS70.Size = new System.Drawing.Size(35, 16);
-            this.labelTS70.TabIndex = 367;
-            this.labelTS70.Text = "VHF0";
-            this.labelTS70.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // chkPenOCxmitVHF117
-            // 
-            this.chkPenOCxmitVHF117.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCxmitVHF117.Image = null;
-            this.chkPenOCxmitVHF117.Location = new System.Drawing.Point(262, 217);
-            this.chkPenOCxmitVHF117.Name = "chkPenOCxmitVHF117";
-            this.chkPenOCxmitVHF117.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCxmitVHF117.TabIndex = 366;
-            this.chkPenOCxmitVHF117.UseVisualStyleBackColor = false;
-            this.chkPenOCxmitVHF117.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF11_CheckedChanged);
-            // 
-            // chkPenOCxmitVHF116
-            // 
-            this.chkPenOCxmitVHF116.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCxmitVHF116.Image = null;
-            this.chkPenOCxmitVHF116.Location = new System.Drawing.Point(246, 217);
-            this.chkPenOCxmitVHF116.Name = "chkPenOCxmitVHF116";
-            this.chkPenOCxmitVHF116.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCxmitVHF116.TabIndex = 365;
-            this.chkPenOCxmitVHF116.UseVisualStyleBackColor = false;
-            this.chkPenOCxmitVHF116.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF11_CheckedChanged);
-            // 
-            // chkPenOCxmitVHF115
-            // 
-            this.chkPenOCxmitVHF115.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCxmitVHF115.Image = null;
-            this.chkPenOCxmitVHF115.Location = new System.Drawing.Point(230, 217);
-            this.chkPenOCxmitVHF115.Name = "chkPenOCxmitVHF115";
-            this.chkPenOCxmitVHF115.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCxmitVHF115.TabIndex = 364;
-            this.chkPenOCxmitVHF115.UseVisualStyleBackColor = false;
-            this.chkPenOCxmitVHF115.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF11_CheckedChanged);
-            // 
-            // chkPenOCxmitVHF114
-            // 
-            this.chkPenOCxmitVHF114.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCxmitVHF114.Image = null;
-            this.chkPenOCxmitVHF114.Location = new System.Drawing.Point(214, 217);
-            this.chkPenOCxmitVHF114.Name = "chkPenOCxmitVHF114";
-            this.chkPenOCxmitVHF114.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCxmitVHF114.TabIndex = 363;
-            this.chkPenOCxmitVHF114.UseVisualStyleBackColor = false;
-            this.chkPenOCxmitVHF114.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF11_CheckedChanged);
-            // 
-            // chkPenOCxmitVHF113
-            // 
-            this.chkPenOCxmitVHF113.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCxmitVHF113.Image = null;
-            this.chkPenOCxmitVHF113.Location = new System.Drawing.Point(198, 217);
-            this.chkPenOCxmitVHF113.Name = "chkPenOCxmitVHF113";
-            this.chkPenOCxmitVHF113.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCxmitVHF113.TabIndex = 362;
-            this.chkPenOCxmitVHF113.UseVisualStyleBackColor = false;
-            this.chkPenOCxmitVHF113.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF11_CheckedChanged);
-            // 
-            // chkPenOCxmitVHF112
-            // 
-            this.chkPenOCxmitVHF112.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCxmitVHF112.Image = null;
-            this.chkPenOCxmitVHF112.Location = new System.Drawing.Point(182, 217);
-            this.chkPenOCxmitVHF112.Name = "chkPenOCxmitVHF112";
-            this.chkPenOCxmitVHF112.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCxmitVHF112.TabIndex = 361;
-            this.chkPenOCxmitVHF112.UseVisualStyleBackColor = false;
-            this.chkPenOCxmitVHF112.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF11_CheckedChanged);
-            // 
-            // chkPenOCxmitVHF111
-            // 
-            this.chkPenOCxmitVHF111.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCxmitVHF111.Image = null;
-            this.chkPenOCxmitVHF111.Location = new System.Drawing.Point(166, 217);
-            this.chkPenOCxmitVHF111.Name = "chkPenOCxmitVHF111";
-            this.chkPenOCxmitVHF111.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCxmitVHF111.TabIndex = 360;
-            this.chkPenOCxmitVHF111.UseVisualStyleBackColor = false;
-            this.chkPenOCxmitVHF111.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF11_CheckedChanged);
-            // 
-            // chkPenOCrcvVHF117
-            // 
-            this.chkPenOCrcvVHF117.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCrcvVHF117.Image = null;
-            this.chkPenOCrcvVHF117.Location = new System.Drawing.Point(144, 217);
-            this.chkPenOCrcvVHF117.Name = "chkPenOCrcvVHF117";
-            this.chkPenOCrcvVHF117.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCrcvVHF117.TabIndex = 359;
-            this.chkPenOCrcvVHF117.UseVisualStyleBackColor = false;
-            this.chkPenOCrcvVHF117.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF11_CheckedChanged);
-            // 
-            // chkPenOCrcvVHF116
-            // 
-            this.chkPenOCrcvVHF116.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCrcvVHF116.Image = null;
-            this.chkPenOCrcvVHF116.Location = new System.Drawing.Point(128, 217);
-            this.chkPenOCrcvVHF116.Name = "chkPenOCrcvVHF116";
-            this.chkPenOCrcvVHF116.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCrcvVHF116.TabIndex = 358;
-            this.chkPenOCrcvVHF116.UseVisualStyleBackColor = false;
-            this.chkPenOCrcvVHF116.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF11_CheckedChanged);
-            // 
-            // chkPenOCrcvVHF115
-            // 
-            this.chkPenOCrcvVHF115.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCrcvVHF115.Image = null;
-            this.chkPenOCrcvVHF115.Location = new System.Drawing.Point(112, 217);
-            this.chkPenOCrcvVHF115.Name = "chkPenOCrcvVHF115";
-            this.chkPenOCrcvVHF115.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCrcvVHF115.TabIndex = 357;
-            this.chkPenOCrcvVHF115.UseVisualStyleBackColor = false;
-            this.chkPenOCrcvVHF115.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF11_CheckedChanged);
-            // 
-            // chkPenOCrcvVHF114
-            // 
-            this.chkPenOCrcvVHF114.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCrcvVHF114.Image = null;
-            this.chkPenOCrcvVHF114.Location = new System.Drawing.Point(96, 217);
-            this.chkPenOCrcvVHF114.Name = "chkPenOCrcvVHF114";
-            this.chkPenOCrcvVHF114.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCrcvVHF114.TabIndex = 356;
-            this.chkPenOCrcvVHF114.UseVisualStyleBackColor = false;
-            this.chkPenOCrcvVHF114.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF11_CheckedChanged);
-            // 
-            // chkPenOCrcvVHF113
-            // 
-            this.chkPenOCrcvVHF113.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCrcvVHF113.Image = null;
-            this.chkPenOCrcvVHF113.Location = new System.Drawing.Point(80, 217);
-            this.chkPenOCrcvVHF113.Name = "chkPenOCrcvVHF113";
-            this.chkPenOCrcvVHF113.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCrcvVHF113.TabIndex = 355;
-            this.chkPenOCrcvVHF113.UseVisualStyleBackColor = false;
-            this.chkPenOCrcvVHF113.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF11_CheckedChanged);
-            // 
-            // chkPenOCrcvVHF112
-            // 
-            this.chkPenOCrcvVHF112.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCrcvVHF112.Image = null;
-            this.chkPenOCrcvVHF112.Location = new System.Drawing.Point(64, 217);
-            this.chkPenOCrcvVHF112.Name = "chkPenOCrcvVHF112";
-            this.chkPenOCrcvVHF112.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCrcvVHF112.TabIndex = 354;
-            this.chkPenOCrcvVHF112.UseVisualStyleBackColor = false;
-            this.chkPenOCrcvVHF112.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF11_CheckedChanged);
-            // 
-            // chkPenOCrcvVHF111
-            // 
-            this.chkPenOCrcvVHF111.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCrcvVHF111.Image = null;
-            this.chkPenOCrcvVHF111.Location = new System.Drawing.Point(48, 217);
-            this.chkPenOCrcvVHF111.Name = "chkPenOCrcvVHF111";
-            this.chkPenOCrcvVHF111.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCrcvVHF111.TabIndex = 353;
-            this.chkPenOCrcvVHF111.UseVisualStyleBackColor = false;
-            this.chkPenOCrcvVHF111.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF11_CheckedChanged);
-            // 
-            // chkPenOCxmitVHF107
-            // 
-            this.chkPenOCxmitVHF107.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCxmitVHF107.Image = null;
-            this.chkPenOCxmitVHF107.Location = new System.Drawing.Point(262, 201);
-            this.chkPenOCxmitVHF107.Name = "chkPenOCxmitVHF107";
-            this.chkPenOCxmitVHF107.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCxmitVHF107.TabIndex = 352;
-            this.chkPenOCxmitVHF107.UseVisualStyleBackColor = false;
-            this.chkPenOCxmitVHF107.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF10_CheckedChanged);
-            // 
-            // chkPenOCxmitVHF106
-            // 
-            this.chkPenOCxmitVHF106.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCxmitVHF106.Image = null;
-            this.chkPenOCxmitVHF106.Location = new System.Drawing.Point(246, 201);
-            this.chkPenOCxmitVHF106.Name = "chkPenOCxmitVHF106";
-            this.chkPenOCxmitVHF106.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCxmitVHF106.TabIndex = 351;
-            this.chkPenOCxmitVHF106.UseVisualStyleBackColor = false;
-            this.chkPenOCxmitVHF106.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF10_CheckedChanged);
-            // 
-            // chkPenOCxmitVHF105
-            // 
-            this.chkPenOCxmitVHF105.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCxmitVHF105.Image = null;
-            this.chkPenOCxmitVHF105.Location = new System.Drawing.Point(230, 201);
-            this.chkPenOCxmitVHF105.Name = "chkPenOCxmitVHF105";
-            this.chkPenOCxmitVHF105.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCxmitVHF105.TabIndex = 350;
-            this.chkPenOCxmitVHF105.UseVisualStyleBackColor = false;
-            this.chkPenOCxmitVHF105.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF10_CheckedChanged);
-            // 
-            // chkPenOCxmitVHF104
-            // 
-            this.chkPenOCxmitVHF104.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCxmitVHF104.Image = null;
-            this.chkPenOCxmitVHF104.Location = new System.Drawing.Point(214, 201);
-            this.chkPenOCxmitVHF104.Name = "chkPenOCxmitVHF104";
-            this.chkPenOCxmitVHF104.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCxmitVHF104.TabIndex = 349;
-            this.chkPenOCxmitVHF104.UseVisualStyleBackColor = false;
-            this.chkPenOCxmitVHF104.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF10_CheckedChanged);
-            // 
-            // chkPenOCxmitVHF103
-            // 
-            this.chkPenOCxmitVHF103.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCxmitVHF103.Image = null;
-            this.chkPenOCxmitVHF103.Location = new System.Drawing.Point(198, 201);
-            this.chkPenOCxmitVHF103.Name = "chkPenOCxmitVHF103";
-            this.chkPenOCxmitVHF103.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCxmitVHF103.TabIndex = 348;
-            this.chkPenOCxmitVHF103.UseVisualStyleBackColor = false;
-            this.chkPenOCxmitVHF103.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF10_CheckedChanged);
-            // 
-            // chkPenOCxmitVHF102
-            // 
-            this.chkPenOCxmitVHF102.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCxmitVHF102.Image = null;
-            this.chkPenOCxmitVHF102.Location = new System.Drawing.Point(182, 201);
-            this.chkPenOCxmitVHF102.Name = "chkPenOCxmitVHF102";
-            this.chkPenOCxmitVHF102.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCxmitVHF102.TabIndex = 347;
-            this.chkPenOCxmitVHF102.UseVisualStyleBackColor = false;
-            this.chkPenOCxmitVHF102.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF10_CheckedChanged);
-            // 
-            // chkPenOCxmitVHF101
-            // 
-            this.chkPenOCxmitVHF101.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCxmitVHF101.Image = null;
-            this.chkPenOCxmitVHF101.Location = new System.Drawing.Point(166, 201);
-            this.chkPenOCxmitVHF101.Name = "chkPenOCxmitVHF101";
-            this.chkPenOCxmitVHF101.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCxmitVHF101.TabIndex = 346;
-            this.chkPenOCxmitVHF101.UseVisualStyleBackColor = false;
-            this.chkPenOCxmitVHF101.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF10_CheckedChanged);
-            // 
-            // chkPenOCrcvVHF107
-            // 
-            this.chkPenOCrcvVHF107.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCrcvVHF107.Image = null;
-            this.chkPenOCrcvVHF107.Location = new System.Drawing.Point(144, 201);
-            this.chkPenOCrcvVHF107.Name = "chkPenOCrcvVHF107";
-            this.chkPenOCrcvVHF107.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCrcvVHF107.TabIndex = 345;
-            this.chkPenOCrcvVHF107.UseVisualStyleBackColor = false;
-            this.chkPenOCrcvVHF107.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF10_CheckedChanged);
-            // 
-            // chkPenOCrcvVHF106
-            // 
-            this.chkPenOCrcvVHF106.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCrcvVHF106.Image = null;
-            this.chkPenOCrcvVHF106.Location = new System.Drawing.Point(128, 201);
-            this.chkPenOCrcvVHF106.Name = "chkPenOCrcvVHF106";
-            this.chkPenOCrcvVHF106.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCrcvVHF106.TabIndex = 344;
-            this.chkPenOCrcvVHF106.UseVisualStyleBackColor = false;
-            this.chkPenOCrcvVHF106.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF10_CheckedChanged);
-            // 
-            // chkPenOCrcvVHF105
-            // 
-            this.chkPenOCrcvVHF105.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCrcvVHF105.Image = null;
-            this.chkPenOCrcvVHF105.Location = new System.Drawing.Point(112, 201);
-            this.chkPenOCrcvVHF105.Name = "chkPenOCrcvVHF105";
-            this.chkPenOCrcvVHF105.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCrcvVHF105.TabIndex = 343;
-            this.chkPenOCrcvVHF105.UseVisualStyleBackColor = false;
-            this.chkPenOCrcvVHF105.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF10_CheckedChanged);
-            // 
-            // chkPenOCrcvVHF104
-            // 
-            this.chkPenOCrcvVHF104.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCrcvVHF104.Image = null;
-            this.chkPenOCrcvVHF104.Location = new System.Drawing.Point(96, 201);
-            this.chkPenOCrcvVHF104.Name = "chkPenOCrcvVHF104";
-            this.chkPenOCrcvVHF104.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCrcvVHF104.TabIndex = 342;
-            this.chkPenOCrcvVHF104.UseVisualStyleBackColor = false;
-            this.chkPenOCrcvVHF104.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF10_CheckedChanged);
-            // 
-            // chkPenOCrcvVHF103
-            // 
-            this.chkPenOCrcvVHF103.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCrcvVHF103.Image = null;
-            this.chkPenOCrcvVHF103.Location = new System.Drawing.Point(80, 201);
-            this.chkPenOCrcvVHF103.Name = "chkPenOCrcvVHF103";
-            this.chkPenOCrcvVHF103.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCrcvVHF103.TabIndex = 341;
-            this.chkPenOCrcvVHF103.UseVisualStyleBackColor = false;
-            this.chkPenOCrcvVHF103.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF10_CheckedChanged);
-            // 
-            // chkPenOCrcvVHF102
-            // 
-            this.chkPenOCrcvVHF102.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCrcvVHF102.Image = null;
-            this.chkPenOCrcvVHF102.Location = new System.Drawing.Point(64, 201);
-            this.chkPenOCrcvVHF102.Name = "chkPenOCrcvVHF102";
-            this.chkPenOCrcvVHF102.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCrcvVHF102.TabIndex = 340;
-            this.chkPenOCrcvVHF102.UseVisualStyleBackColor = false;
-            this.chkPenOCrcvVHF102.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF10_CheckedChanged);
-            // 
-            // chkPenOCrcvVHF101
-            // 
-            this.chkPenOCrcvVHF101.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCrcvVHF101.Image = null;
-            this.chkPenOCrcvVHF101.Location = new System.Drawing.Point(48, 201);
-            this.chkPenOCrcvVHF101.Name = "chkPenOCrcvVHF101";
-            this.chkPenOCrcvVHF101.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCrcvVHF101.TabIndex = 339;
-            this.chkPenOCrcvVHF101.UseVisualStyleBackColor = false;
-            this.chkPenOCrcvVHF101.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF10_CheckedChanged);
-            // 
-            // chkPenOCxmitVHF97
-            // 
-            this.chkPenOCxmitVHF97.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCxmitVHF97.Image = null;
-            this.chkPenOCxmitVHF97.Location = new System.Drawing.Point(262, 185);
-            this.chkPenOCxmitVHF97.Name = "chkPenOCxmitVHF97";
-            this.chkPenOCxmitVHF97.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCxmitVHF97.TabIndex = 338;
-            this.chkPenOCxmitVHF97.UseVisualStyleBackColor = false;
-            this.chkPenOCxmitVHF97.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF9_CheckedChanged);
-            // 
-            // chkPenOCxmitVHF96
-            // 
-            this.chkPenOCxmitVHF96.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCxmitVHF96.Image = null;
-            this.chkPenOCxmitVHF96.Location = new System.Drawing.Point(246, 185);
-            this.chkPenOCxmitVHF96.Name = "chkPenOCxmitVHF96";
-            this.chkPenOCxmitVHF96.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCxmitVHF96.TabIndex = 337;
-            this.chkPenOCxmitVHF96.UseVisualStyleBackColor = false;
-            this.chkPenOCxmitVHF96.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF9_CheckedChanged);
-            // 
-            // chkPenOCxmitVHF95
-            // 
-            this.chkPenOCxmitVHF95.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCxmitVHF95.Image = null;
-            this.chkPenOCxmitVHF95.Location = new System.Drawing.Point(230, 185);
-            this.chkPenOCxmitVHF95.Name = "chkPenOCxmitVHF95";
-            this.chkPenOCxmitVHF95.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCxmitVHF95.TabIndex = 336;
-            this.chkPenOCxmitVHF95.UseVisualStyleBackColor = false;
-            this.chkPenOCxmitVHF95.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF9_CheckedChanged);
-            // 
-            // chkPenOCxmitVHF94
-            // 
-            this.chkPenOCxmitVHF94.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCxmitVHF94.Image = null;
-            this.chkPenOCxmitVHF94.Location = new System.Drawing.Point(214, 185);
-            this.chkPenOCxmitVHF94.Name = "chkPenOCxmitVHF94";
-            this.chkPenOCxmitVHF94.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCxmitVHF94.TabIndex = 335;
-            this.chkPenOCxmitVHF94.UseVisualStyleBackColor = false;
-            this.chkPenOCxmitVHF94.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF9_CheckedChanged);
-            // 
-            // chkPenOCxmitVHF93
-            // 
-            this.chkPenOCxmitVHF93.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCxmitVHF93.Image = null;
-            this.chkPenOCxmitVHF93.Location = new System.Drawing.Point(198, 185);
-            this.chkPenOCxmitVHF93.Name = "chkPenOCxmitVHF93";
-            this.chkPenOCxmitVHF93.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCxmitVHF93.TabIndex = 334;
-            this.chkPenOCxmitVHF93.UseVisualStyleBackColor = false;
-            this.chkPenOCxmitVHF93.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF9_CheckedChanged);
-            // 
-            // chkPenOCxmitVHF92
-            // 
-            this.chkPenOCxmitVHF92.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCxmitVHF92.Image = null;
-            this.chkPenOCxmitVHF92.Location = new System.Drawing.Point(182, 185);
-            this.chkPenOCxmitVHF92.Name = "chkPenOCxmitVHF92";
-            this.chkPenOCxmitVHF92.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCxmitVHF92.TabIndex = 333;
-            this.chkPenOCxmitVHF92.UseVisualStyleBackColor = false;
-            this.chkPenOCxmitVHF92.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF9_CheckedChanged);
-            // 
-            // chkPenOCxmitVHF91
-            // 
-            this.chkPenOCxmitVHF91.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCxmitVHF91.Image = null;
-            this.chkPenOCxmitVHF91.Location = new System.Drawing.Point(166, 185);
-            this.chkPenOCxmitVHF91.Name = "chkPenOCxmitVHF91";
-            this.chkPenOCxmitVHF91.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCxmitVHF91.TabIndex = 332;
-            this.chkPenOCxmitVHF91.UseVisualStyleBackColor = false;
-            this.chkPenOCxmitVHF91.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF9_CheckedChanged);
-            // 
-            // chkPenOCrcvVHF97
-            // 
-            this.chkPenOCrcvVHF97.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCrcvVHF97.Image = null;
-            this.chkPenOCrcvVHF97.Location = new System.Drawing.Point(144, 185);
-            this.chkPenOCrcvVHF97.Name = "chkPenOCrcvVHF97";
-            this.chkPenOCrcvVHF97.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCrcvVHF97.TabIndex = 331;
-            this.chkPenOCrcvVHF97.UseVisualStyleBackColor = false;
-            this.chkPenOCrcvVHF97.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF9_CheckedChanged);
-            // 
-            // chkPenOCrcvVHF96
-            // 
-            this.chkPenOCrcvVHF96.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCrcvVHF96.Image = null;
-            this.chkPenOCrcvVHF96.Location = new System.Drawing.Point(128, 185);
-            this.chkPenOCrcvVHF96.Name = "chkPenOCrcvVHF96";
-            this.chkPenOCrcvVHF96.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCrcvVHF96.TabIndex = 330;
-            this.chkPenOCrcvVHF96.UseVisualStyleBackColor = false;
-            this.chkPenOCrcvVHF96.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF9_CheckedChanged);
-            // 
-            // chkPenOCrcvVHF95
-            // 
-            this.chkPenOCrcvVHF95.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCrcvVHF95.Image = null;
-            this.chkPenOCrcvVHF95.Location = new System.Drawing.Point(112, 185);
-            this.chkPenOCrcvVHF95.Name = "chkPenOCrcvVHF95";
-            this.chkPenOCrcvVHF95.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCrcvVHF95.TabIndex = 329;
-            this.chkPenOCrcvVHF95.UseVisualStyleBackColor = false;
-            this.chkPenOCrcvVHF95.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF9_CheckedChanged);
-            // 
-            // chkPenOCrcvVHF94
-            // 
-            this.chkPenOCrcvVHF94.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCrcvVHF94.Image = null;
-            this.chkPenOCrcvVHF94.Location = new System.Drawing.Point(96, 185);
-            this.chkPenOCrcvVHF94.Name = "chkPenOCrcvVHF94";
-            this.chkPenOCrcvVHF94.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCrcvVHF94.TabIndex = 328;
-            this.chkPenOCrcvVHF94.UseVisualStyleBackColor = false;
-            this.chkPenOCrcvVHF94.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF9_CheckedChanged);
-            // 
-            // chkPenOCrcvVHF93
-            // 
-            this.chkPenOCrcvVHF93.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCrcvVHF93.Image = null;
-            this.chkPenOCrcvVHF93.Location = new System.Drawing.Point(80, 185);
-            this.chkPenOCrcvVHF93.Name = "chkPenOCrcvVHF93";
-            this.chkPenOCrcvVHF93.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCrcvVHF93.TabIndex = 327;
-            this.chkPenOCrcvVHF93.UseVisualStyleBackColor = false;
-            this.chkPenOCrcvVHF93.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF9_CheckedChanged);
-            // 
-            // chkPenOCrcvVHF92
-            // 
-            this.chkPenOCrcvVHF92.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCrcvVHF92.Image = null;
-            this.chkPenOCrcvVHF92.Location = new System.Drawing.Point(64, 185);
-            this.chkPenOCrcvVHF92.Name = "chkPenOCrcvVHF92";
-            this.chkPenOCrcvVHF92.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCrcvVHF92.TabIndex = 326;
-            this.chkPenOCrcvVHF92.UseVisualStyleBackColor = false;
-            this.chkPenOCrcvVHF92.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF9_CheckedChanged);
-            // 
-            // chkPenOCrcvVHF91
-            // 
-            this.chkPenOCrcvVHF91.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCrcvVHF91.Image = null;
-            this.chkPenOCrcvVHF91.Location = new System.Drawing.Point(48, 185);
-            this.chkPenOCrcvVHF91.Name = "chkPenOCrcvVHF91";
-            this.chkPenOCrcvVHF91.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCrcvVHF91.TabIndex = 325;
-            this.chkPenOCrcvVHF91.UseVisualStyleBackColor = false;
-            this.chkPenOCrcvVHF91.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF9_CheckedChanged);
-            // 
-            // chkPenOCxmitVHF87
-            // 
-            this.chkPenOCxmitVHF87.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCxmitVHF87.Image = null;
-            this.chkPenOCxmitVHF87.Location = new System.Drawing.Point(262, 169);
-            this.chkPenOCxmitVHF87.Name = "chkPenOCxmitVHF87";
-            this.chkPenOCxmitVHF87.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCxmitVHF87.TabIndex = 324;
-            this.chkPenOCxmitVHF87.UseVisualStyleBackColor = false;
-            this.chkPenOCxmitVHF87.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF8_CheckedChanged);
-            // 
-            // chkPenOCxmitVHF86
-            // 
-            this.chkPenOCxmitVHF86.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCxmitVHF86.Image = null;
-            this.chkPenOCxmitVHF86.Location = new System.Drawing.Point(246, 169);
-            this.chkPenOCxmitVHF86.Name = "chkPenOCxmitVHF86";
-            this.chkPenOCxmitVHF86.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCxmitVHF86.TabIndex = 323;
-            this.chkPenOCxmitVHF86.UseVisualStyleBackColor = false;
-            this.chkPenOCxmitVHF86.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF8_CheckedChanged);
-            // 
-            // chkPenOCxmitVHF85
-            // 
-            this.chkPenOCxmitVHF85.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCxmitVHF85.Image = null;
-            this.chkPenOCxmitVHF85.Location = new System.Drawing.Point(230, 169);
-            this.chkPenOCxmitVHF85.Name = "chkPenOCxmitVHF85";
-            this.chkPenOCxmitVHF85.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCxmitVHF85.TabIndex = 322;
-            this.chkPenOCxmitVHF85.UseVisualStyleBackColor = false;
-            this.chkPenOCxmitVHF85.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF8_CheckedChanged);
-            // 
-            // chkPenOCxmitVHF84
-            // 
-            this.chkPenOCxmitVHF84.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCxmitVHF84.Image = null;
-            this.chkPenOCxmitVHF84.Location = new System.Drawing.Point(214, 169);
-            this.chkPenOCxmitVHF84.Name = "chkPenOCxmitVHF84";
-            this.chkPenOCxmitVHF84.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCxmitVHF84.TabIndex = 321;
-            this.chkPenOCxmitVHF84.UseVisualStyleBackColor = false;
-            this.chkPenOCxmitVHF84.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF8_CheckedChanged);
-            // 
-            // chkPenOCxmitVHF83
-            // 
-            this.chkPenOCxmitVHF83.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCxmitVHF83.Image = null;
-            this.chkPenOCxmitVHF83.Location = new System.Drawing.Point(198, 169);
-            this.chkPenOCxmitVHF83.Name = "chkPenOCxmitVHF83";
-            this.chkPenOCxmitVHF83.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCxmitVHF83.TabIndex = 320;
-            this.chkPenOCxmitVHF83.UseVisualStyleBackColor = false;
-            this.chkPenOCxmitVHF83.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF8_CheckedChanged);
-            // 
-            // chkPenOCxmitVHF82
-            // 
-            this.chkPenOCxmitVHF82.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCxmitVHF82.Image = null;
-            this.chkPenOCxmitVHF82.Location = new System.Drawing.Point(182, 169);
-            this.chkPenOCxmitVHF82.Name = "chkPenOCxmitVHF82";
-            this.chkPenOCxmitVHF82.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCxmitVHF82.TabIndex = 319;
-            this.chkPenOCxmitVHF82.UseVisualStyleBackColor = false;
-            this.chkPenOCxmitVHF82.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF8_CheckedChanged);
-            // 
-            // chkPenOCxmitVHF81
-            // 
-            this.chkPenOCxmitVHF81.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCxmitVHF81.Image = null;
-            this.chkPenOCxmitVHF81.Location = new System.Drawing.Point(166, 169);
-            this.chkPenOCxmitVHF81.Name = "chkPenOCxmitVHF81";
-            this.chkPenOCxmitVHF81.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCxmitVHF81.TabIndex = 318;
-            this.chkPenOCxmitVHF81.UseVisualStyleBackColor = false;
-            this.chkPenOCxmitVHF81.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF8_CheckedChanged);
-            // 
-            // chkPenOCrcvVHF87
-            // 
-            this.chkPenOCrcvVHF87.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCrcvVHF87.Image = null;
-            this.chkPenOCrcvVHF87.Location = new System.Drawing.Point(144, 169);
-            this.chkPenOCrcvVHF87.Name = "chkPenOCrcvVHF87";
-            this.chkPenOCrcvVHF87.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCrcvVHF87.TabIndex = 317;
-            this.chkPenOCrcvVHF87.UseVisualStyleBackColor = false;
-            this.chkPenOCrcvVHF87.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF8_CheckedChanged);
-            // 
-            // chkPenOCrcvVHF86
-            // 
-            this.chkPenOCrcvVHF86.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCrcvVHF86.Image = null;
-            this.chkPenOCrcvVHF86.Location = new System.Drawing.Point(128, 169);
-            this.chkPenOCrcvVHF86.Name = "chkPenOCrcvVHF86";
-            this.chkPenOCrcvVHF86.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCrcvVHF86.TabIndex = 316;
-            this.chkPenOCrcvVHF86.UseVisualStyleBackColor = false;
-            this.chkPenOCrcvVHF86.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF8_CheckedChanged);
-            // 
-            // chkPenOCrcvVHF85
-            // 
-            this.chkPenOCrcvVHF85.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCrcvVHF85.Image = null;
-            this.chkPenOCrcvVHF85.Location = new System.Drawing.Point(112, 169);
-            this.chkPenOCrcvVHF85.Name = "chkPenOCrcvVHF85";
-            this.chkPenOCrcvVHF85.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCrcvVHF85.TabIndex = 315;
-            this.chkPenOCrcvVHF85.UseVisualStyleBackColor = false;
-            this.chkPenOCrcvVHF85.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF8_CheckedChanged);
-            // 
-            // chkPenOCrcvVHF84
-            // 
-            this.chkPenOCrcvVHF84.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCrcvVHF84.Image = null;
-            this.chkPenOCrcvVHF84.Location = new System.Drawing.Point(96, 169);
-            this.chkPenOCrcvVHF84.Name = "chkPenOCrcvVHF84";
-            this.chkPenOCrcvVHF84.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCrcvVHF84.TabIndex = 314;
-            this.chkPenOCrcvVHF84.UseVisualStyleBackColor = false;
-            this.chkPenOCrcvVHF84.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF8_CheckedChanged);
-            // 
-            // chkPenOCrcvVHF83
-            // 
-            this.chkPenOCrcvVHF83.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCrcvVHF83.Image = null;
-            this.chkPenOCrcvVHF83.Location = new System.Drawing.Point(80, 169);
-            this.chkPenOCrcvVHF83.Name = "chkPenOCrcvVHF83";
-            this.chkPenOCrcvVHF83.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCrcvVHF83.TabIndex = 313;
-            this.chkPenOCrcvVHF83.UseVisualStyleBackColor = false;
-            this.chkPenOCrcvVHF83.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF8_CheckedChanged);
-            // 
-            // chkPenOCrcvVHF82
-            // 
-            this.chkPenOCrcvVHF82.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCrcvVHF82.Image = null;
-            this.chkPenOCrcvVHF82.Location = new System.Drawing.Point(64, 169);
-            this.chkPenOCrcvVHF82.Name = "chkPenOCrcvVHF82";
-            this.chkPenOCrcvVHF82.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCrcvVHF82.TabIndex = 312;
-            this.chkPenOCrcvVHF82.UseVisualStyleBackColor = false;
-            this.chkPenOCrcvVHF82.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF8_CheckedChanged);
-            // 
-            // chkPenOCrcvVHF81
-            // 
-            this.chkPenOCrcvVHF81.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCrcvVHF81.Image = null;
-            this.chkPenOCrcvVHF81.Location = new System.Drawing.Point(48, 169);
-            this.chkPenOCrcvVHF81.Name = "chkPenOCrcvVHF81";
-            this.chkPenOCrcvVHF81.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCrcvVHF81.TabIndex = 311;
-            this.chkPenOCrcvVHF81.UseVisualStyleBackColor = false;
-            this.chkPenOCrcvVHF81.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF8_CheckedChanged);
-            // 
-            // chkPenOCxmitVHF77
-            // 
-            this.chkPenOCxmitVHF77.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCxmitVHF77.Image = null;
-            this.chkPenOCxmitVHF77.Location = new System.Drawing.Point(262, 153);
-            this.chkPenOCxmitVHF77.Name = "chkPenOCxmitVHF77";
-            this.chkPenOCxmitVHF77.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCxmitVHF77.TabIndex = 310;
-            this.chkPenOCxmitVHF77.UseVisualStyleBackColor = false;
-            this.chkPenOCxmitVHF77.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF7_CheckedChanged);
-            // 
-            // chkPenOCxmitVHF76
-            // 
-            this.chkPenOCxmitVHF76.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCxmitVHF76.Image = null;
-            this.chkPenOCxmitVHF76.Location = new System.Drawing.Point(246, 153);
-            this.chkPenOCxmitVHF76.Name = "chkPenOCxmitVHF76";
-            this.chkPenOCxmitVHF76.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCxmitVHF76.TabIndex = 309;
-            this.chkPenOCxmitVHF76.UseVisualStyleBackColor = false;
-            this.chkPenOCxmitVHF76.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF7_CheckedChanged);
-            // 
-            // chkPenOCxmitVHF75
-            // 
-            this.chkPenOCxmitVHF75.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCxmitVHF75.Image = null;
-            this.chkPenOCxmitVHF75.Location = new System.Drawing.Point(230, 153);
-            this.chkPenOCxmitVHF75.Name = "chkPenOCxmitVHF75";
-            this.chkPenOCxmitVHF75.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCxmitVHF75.TabIndex = 308;
-            this.chkPenOCxmitVHF75.UseVisualStyleBackColor = false;
-            this.chkPenOCxmitVHF75.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF7_CheckedChanged);
-            // 
-            // chkPenOCxmitVHF74
-            // 
-            this.chkPenOCxmitVHF74.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCxmitVHF74.Image = null;
-            this.chkPenOCxmitVHF74.Location = new System.Drawing.Point(214, 153);
-            this.chkPenOCxmitVHF74.Name = "chkPenOCxmitVHF74";
-            this.chkPenOCxmitVHF74.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCxmitVHF74.TabIndex = 307;
-            this.chkPenOCxmitVHF74.UseVisualStyleBackColor = false;
-            this.chkPenOCxmitVHF74.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF7_CheckedChanged);
-            // 
-            // chkPenOCxmitVHF73
-            // 
-            this.chkPenOCxmitVHF73.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCxmitVHF73.Image = null;
-            this.chkPenOCxmitVHF73.Location = new System.Drawing.Point(198, 153);
-            this.chkPenOCxmitVHF73.Name = "chkPenOCxmitVHF73";
-            this.chkPenOCxmitVHF73.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCxmitVHF73.TabIndex = 306;
-            this.chkPenOCxmitVHF73.UseVisualStyleBackColor = false;
-            this.chkPenOCxmitVHF73.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF7_CheckedChanged);
-            // 
-            // chkPenOCxmitVHF72
-            // 
-            this.chkPenOCxmitVHF72.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCxmitVHF72.Image = null;
-            this.chkPenOCxmitVHF72.Location = new System.Drawing.Point(182, 153);
-            this.chkPenOCxmitVHF72.Name = "chkPenOCxmitVHF72";
-            this.chkPenOCxmitVHF72.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCxmitVHF72.TabIndex = 305;
-            this.chkPenOCxmitVHF72.UseVisualStyleBackColor = false;
-            this.chkPenOCxmitVHF72.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF7_CheckedChanged);
-            // 
-            // chkPenOCxmitVHF71
-            // 
-            this.chkPenOCxmitVHF71.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCxmitVHF71.Image = null;
-            this.chkPenOCxmitVHF71.Location = new System.Drawing.Point(166, 153);
-            this.chkPenOCxmitVHF71.Name = "chkPenOCxmitVHF71";
-            this.chkPenOCxmitVHF71.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCxmitVHF71.TabIndex = 304;
-            this.chkPenOCxmitVHF71.UseVisualStyleBackColor = false;
-            this.chkPenOCxmitVHF71.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF7_CheckedChanged);
-            // 
-            // chkPenOCrcvVHF77
-            // 
-            this.chkPenOCrcvVHF77.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCrcvVHF77.Image = null;
-            this.chkPenOCrcvVHF77.Location = new System.Drawing.Point(144, 153);
-            this.chkPenOCrcvVHF77.Name = "chkPenOCrcvVHF77";
-            this.chkPenOCrcvVHF77.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCrcvVHF77.TabIndex = 303;
-            this.chkPenOCrcvVHF77.UseVisualStyleBackColor = false;
-            this.chkPenOCrcvVHF77.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF7_CheckedChanged);
-            // 
-            // chkPenOCrcvVHF76
-            // 
-            this.chkPenOCrcvVHF76.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCrcvVHF76.Image = null;
-            this.chkPenOCrcvVHF76.Location = new System.Drawing.Point(128, 153);
-            this.chkPenOCrcvVHF76.Name = "chkPenOCrcvVHF76";
-            this.chkPenOCrcvVHF76.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCrcvVHF76.TabIndex = 302;
-            this.chkPenOCrcvVHF76.UseVisualStyleBackColor = false;
-            this.chkPenOCrcvVHF76.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF7_CheckedChanged);
-            // 
-            // chkPenOCrcvVHF75
-            // 
-            this.chkPenOCrcvVHF75.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCrcvVHF75.Image = null;
-            this.chkPenOCrcvVHF75.Location = new System.Drawing.Point(112, 153);
-            this.chkPenOCrcvVHF75.Name = "chkPenOCrcvVHF75";
-            this.chkPenOCrcvVHF75.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCrcvVHF75.TabIndex = 301;
-            this.chkPenOCrcvVHF75.UseVisualStyleBackColor = false;
-            this.chkPenOCrcvVHF75.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF7_CheckedChanged);
-            // 
-            // chkPenOCrcvVHF74
-            // 
-            this.chkPenOCrcvVHF74.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCrcvVHF74.Image = null;
-            this.chkPenOCrcvVHF74.Location = new System.Drawing.Point(96, 153);
-            this.chkPenOCrcvVHF74.Name = "chkPenOCrcvVHF74";
-            this.chkPenOCrcvVHF74.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCrcvVHF74.TabIndex = 300;
-            this.chkPenOCrcvVHF74.UseVisualStyleBackColor = false;
-            this.chkPenOCrcvVHF74.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF7_CheckedChanged);
-            // 
-            // chkPenOCrcvVHF73
-            // 
-            this.chkPenOCrcvVHF73.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCrcvVHF73.Image = null;
-            this.chkPenOCrcvVHF73.Location = new System.Drawing.Point(80, 153);
-            this.chkPenOCrcvVHF73.Name = "chkPenOCrcvVHF73";
-            this.chkPenOCrcvVHF73.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCrcvVHF73.TabIndex = 299;
-            this.chkPenOCrcvVHF73.UseVisualStyleBackColor = false;
-            this.chkPenOCrcvVHF73.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF7_CheckedChanged);
-            // 
-            // chkPenOCrcvVHF72
-            // 
-            this.chkPenOCrcvVHF72.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCrcvVHF72.Image = null;
-            this.chkPenOCrcvVHF72.Location = new System.Drawing.Point(64, 153);
-            this.chkPenOCrcvVHF72.Name = "chkPenOCrcvVHF72";
-            this.chkPenOCrcvVHF72.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCrcvVHF72.TabIndex = 298;
-            this.chkPenOCrcvVHF72.UseVisualStyleBackColor = false;
-            this.chkPenOCrcvVHF72.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF7_CheckedChanged);
-            // 
-            // chkPenOCrcvVHF71
-            // 
-            this.chkPenOCrcvVHF71.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCrcvVHF71.Image = null;
-            this.chkPenOCrcvVHF71.Location = new System.Drawing.Point(48, 153);
-            this.chkPenOCrcvVHF71.Name = "chkPenOCrcvVHF71";
-            this.chkPenOCrcvVHF71.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCrcvVHF71.TabIndex = 297;
-            this.chkPenOCrcvVHF71.UseVisualStyleBackColor = false;
-            this.chkPenOCrcvVHF71.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF7_CheckedChanged);
-            // 
-            // chkPenOCxmitVHF67
-            // 
-            this.chkPenOCxmitVHF67.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCxmitVHF67.Image = null;
-            this.chkPenOCxmitVHF67.Location = new System.Drawing.Point(262, 137);
-            this.chkPenOCxmitVHF67.Name = "chkPenOCxmitVHF67";
-            this.chkPenOCxmitVHF67.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCxmitVHF67.TabIndex = 296;
-            this.chkPenOCxmitVHF67.UseVisualStyleBackColor = false;
-            this.chkPenOCxmitVHF67.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF6_CheckedChanged);
-            // 
-            // chkPenOCxmitVHF66
-            // 
-            this.chkPenOCxmitVHF66.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCxmitVHF66.Image = null;
-            this.chkPenOCxmitVHF66.Location = new System.Drawing.Point(246, 137);
-            this.chkPenOCxmitVHF66.Name = "chkPenOCxmitVHF66";
-            this.chkPenOCxmitVHF66.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCxmitVHF66.TabIndex = 295;
-            this.chkPenOCxmitVHF66.UseVisualStyleBackColor = false;
-            this.chkPenOCxmitVHF66.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF6_CheckedChanged);
-            // 
-            // chkPenOCxmitVHF65
-            // 
-            this.chkPenOCxmitVHF65.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCxmitVHF65.Image = null;
-            this.chkPenOCxmitVHF65.Location = new System.Drawing.Point(230, 137);
-            this.chkPenOCxmitVHF65.Name = "chkPenOCxmitVHF65";
-            this.chkPenOCxmitVHF65.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCxmitVHF65.TabIndex = 294;
-            this.chkPenOCxmitVHF65.UseVisualStyleBackColor = false;
-            this.chkPenOCxmitVHF65.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF6_CheckedChanged);
-            // 
-            // chkPenOCxmitVHF64
-            // 
-            this.chkPenOCxmitVHF64.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCxmitVHF64.Image = null;
-            this.chkPenOCxmitVHF64.Location = new System.Drawing.Point(214, 137);
-            this.chkPenOCxmitVHF64.Name = "chkPenOCxmitVHF64";
-            this.chkPenOCxmitVHF64.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCxmitVHF64.TabIndex = 293;
-            this.chkPenOCxmitVHF64.UseVisualStyleBackColor = false;
-            this.chkPenOCxmitVHF64.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF6_CheckedChanged);
-            // 
-            // chkPenOCxmitVHF63
-            // 
-            this.chkPenOCxmitVHF63.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCxmitVHF63.Image = null;
-            this.chkPenOCxmitVHF63.Location = new System.Drawing.Point(198, 137);
-            this.chkPenOCxmitVHF63.Name = "chkPenOCxmitVHF63";
-            this.chkPenOCxmitVHF63.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCxmitVHF63.TabIndex = 292;
-            this.chkPenOCxmitVHF63.UseVisualStyleBackColor = false;
-            this.chkPenOCxmitVHF63.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF6_CheckedChanged);
-            // 
-            // chkPenOCxmitVHF62
-            // 
-            this.chkPenOCxmitVHF62.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCxmitVHF62.Image = null;
-            this.chkPenOCxmitVHF62.Location = new System.Drawing.Point(182, 137);
-            this.chkPenOCxmitVHF62.Name = "chkPenOCxmitVHF62";
-            this.chkPenOCxmitVHF62.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCxmitVHF62.TabIndex = 291;
-            this.chkPenOCxmitVHF62.UseVisualStyleBackColor = false;
-            this.chkPenOCxmitVHF62.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF6_CheckedChanged);
-            // 
-            // chkPenOCxmitVHF61
-            // 
-            this.chkPenOCxmitVHF61.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCxmitVHF61.Image = null;
-            this.chkPenOCxmitVHF61.Location = new System.Drawing.Point(166, 137);
-            this.chkPenOCxmitVHF61.Name = "chkPenOCxmitVHF61";
-            this.chkPenOCxmitVHF61.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCxmitVHF61.TabIndex = 290;
-            this.chkPenOCxmitVHF61.UseVisualStyleBackColor = false;
-            this.chkPenOCxmitVHF61.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF6_CheckedChanged);
-            // 
-            // chkPenOCrcvVHF67
-            // 
-            this.chkPenOCrcvVHF67.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCrcvVHF67.Image = null;
-            this.chkPenOCrcvVHF67.Location = new System.Drawing.Point(144, 137);
-            this.chkPenOCrcvVHF67.Name = "chkPenOCrcvVHF67";
-            this.chkPenOCrcvVHF67.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCrcvVHF67.TabIndex = 289;
-            this.chkPenOCrcvVHF67.UseVisualStyleBackColor = false;
-            this.chkPenOCrcvVHF67.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF6_CheckedChanged);
-            // 
-            // chkPenOCrcvVHF66
-            // 
-            this.chkPenOCrcvVHF66.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCrcvVHF66.Image = null;
-            this.chkPenOCrcvVHF66.Location = new System.Drawing.Point(128, 137);
-            this.chkPenOCrcvVHF66.Name = "chkPenOCrcvVHF66";
-            this.chkPenOCrcvVHF66.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCrcvVHF66.TabIndex = 288;
-            this.chkPenOCrcvVHF66.UseVisualStyleBackColor = false;
-            this.chkPenOCrcvVHF66.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF6_CheckedChanged);
-            // 
-            // chkPenOCrcvVHF65
-            // 
-            this.chkPenOCrcvVHF65.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCrcvVHF65.Image = null;
-            this.chkPenOCrcvVHF65.Location = new System.Drawing.Point(112, 137);
-            this.chkPenOCrcvVHF65.Name = "chkPenOCrcvVHF65";
-            this.chkPenOCrcvVHF65.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCrcvVHF65.TabIndex = 287;
-            this.chkPenOCrcvVHF65.UseVisualStyleBackColor = false;
-            this.chkPenOCrcvVHF65.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF6_CheckedChanged);
-            // 
-            // chkPenOCrcvVHF64
-            // 
-            this.chkPenOCrcvVHF64.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCrcvVHF64.Image = null;
-            this.chkPenOCrcvVHF64.Location = new System.Drawing.Point(96, 137);
-            this.chkPenOCrcvVHF64.Name = "chkPenOCrcvVHF64";
-            this.chkPenOCrcvVHF64.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCrcvVHF64.TabIndex = 286;
-            this.chkPenOCrcvVHF64.UseVisualStyleBackColor = false;
-            this.chkPenOCrcvVHF64.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF6_CheckedChanged);
-            // 
-            // chkPenOCrcvVHF63
-            // 
-            this.chkPenOCrcvVHF63.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCrcvVHF63.Image = null;
-            this.chkPenOCrcvVHF63.Location = new System.Drawing.Point(80, 137);
-            this.chkPenOCrcvVHF63.Name = "chkPenOCrcvVHF63";
-            this.chkPenOCrcvVHF63.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCrcvVHF63.TabIndex = 285;
-            this.chkPenOCrcvVHF63.UseVisualStyleBackColor = false;
-            this.chkPenOCrcvVHF63.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF6_CheckedChanged);
-            // 
-            // chkPenOCrcvVHF62
-            // 
-            this.chkPenOCrcvVHF62.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCrcvVHF62.Image = null;
-            this.chkPenOCrcvVHF62.Location = new System.Drawing.Point(64, 137);
-            this.chkPenOCrcvVHF62.Name = "chkPenOCrcvVHF62";
-            this.chkPenOCrcvVHF62.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCrcvVHF62.TabIndex = 284;
-            this.chkPenOCrcvVHF62.UseVisualStyleBackColor = false;
-            this.chkPenOCrcvVHF62.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF6_CheckedChanged);
-            // 
-            // chkPenOCrcvVHF61
-            // 
-            this.chkPenOCrcvVHF61.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCrcvVHF61.Image = null;
-            this.chkPenOCrcvVHF61.Location = new System.Drawing.Point(48, 137);
-            this.chkPenOCrcvVHF61.Name = "chkPenOCrcvVHF61";
-            this.chkPenOCrcvVHF61.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCrcvVHF61.TabIndex = 283;
-            this.chkPenOCrcvVHF61.UseVisualStyleBackColor = false;
-            this.chkPenOCrcvVHF61.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF6_CheckedChanged);
-            // 
-            // chkPenOCxmitVHF57
-            // 
-            this.chkPenOCxmitVHF57.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCxmitVHF57.Image = null;
-            this.chkPenOCxmitVHF57.Location = new System.Drawing.Point(262, 121);
-            this.chkPenOCxmitVHF57.Name = "chkPenOCxmitVHF57";
-            this.chkPenOCxmitVHF57.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCxmitVHF57.TabIndex = 282;
-            this.chkPenOCxmitVHF57.UseVisualStyleBackColor = false;
-            this.chkPenOCxmitVHF57.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF5_CheckedChanged);
-            // 
-            // chkPenOCxmitVHF56
-            // 
-            this.chkPenOCxmitVHF56.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCxmitVHF56.Image = null;
-            this.chkPenOCxmitVHF56.Location = new System.Drawing.Point(246, 121);
-            this.chkPenOCxmitVHF56.Name = "chkPenOCxmitVHF56";
-            this.chkPenOCxmitVHF56.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCxmitVHF56.TabIndex = 281;
-            this.chkPenOCxmitVHF56.UseVisualStyleBackColor = false;
-            this.chkPenOCxmitVHF56.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF5_CheckedChanged);
-            // 
-            // chkPenOCxmitVHF55
-            // 
-            this.chkPenOCxmitVHF55.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCxmitVHF55.Image = null;
-            this.chkPenOCxmitVHF55.Location = new System.Drawing.Point(230, 121);
-            this.chkPenOCxmitVHF55.Name = "chkPenOCxmitVHF55";
-            this.chkPenOCxmitVHF55.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCxmitVHF55.TabIndex = 280;
-            this.chkPenOCxmitVHF55.UseVisualStyleBackColor = false;
-            this.chkPenOCxmitVHF55.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF5_CheckedChanged);
-            // 
-            // chkPenOCxmitVHF54
-            // 
-            this.chkPenOCxmitVHF54.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCxmitVHF54.Image = null;
-            this.chkPenOCxmitVHF54.Location = new System.Drawing.Point(214, 121);
-            this.chkPenOCxmitVHF54.Name = "chkPenOCxmitVHF54";
-            this.chkPenOCxmitVHF54.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCxmitVHF54.TabIndex = 279;
-            this.chkPenOCxmitVHF54.UseVisualStyleBackColor = false;
-            this.chkPenOCxmitVHF54.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF5_CheckedChanged);
-            // 
-            // chkPenOCxmitVHF53
-            // 
-            this.chkPenOCxmitVHF53.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCxmitVHF53.Image = null;
-            this.chkPenOCxmitVHF53.Location = new System.Drawing.Point(198, 121);
-            this.chkPenOCxmitVHF53.Name = "chkPenOCxmitVHF53";
-            this.chkPenOCxmitVHF53.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCxmitVHF53.TabIndex = 278;
-            this.chkPenOCxmitVHF53.UseVisualStyleBackColor = false;
-            this.chkPenOCxmitVHF53.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF5_CheckedChanged);
-            // 
-            // chkPenOCxmitVHF52
-            // 
-            this.chkPenOCxmitVHF52.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCxmitVHF52.Image = null;
-            this.chkPenOCxmitVHF52.Location = new System.Drawing.Point(182, 121);
-            this.chkPenOCxmitVHF52.Name = "chkPenOCxmitVHF52";
-            this.chkPenOCxmitVHF52.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCxmitVHF52.TabIndex = 277;
-            this.chkPenOCxmitVHF52.UseVisualStyleBackColor = false;
-            this.chkPenOCxmitVHF52.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF5_CheckedChanged);
-            // 
-            // chkPenOCxmitVHF51
-            // 
-            this.chkPenOCxmitVHF51.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCxmitVHF51.Image = null;
-            this.chkPenOCxmitVHF51.Location = new System.Drawing.Point(166, 121);
-            this.chkPenOCxmitVHF51.Name = "chkPenOCxmitVHF51";
-            this.chkPenOCxmitVHF51.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCxmitVHF51.TabIndex = 276;
-            this.chkPenOCxmitVHF51.UseVisualStyleBackColor = false;
-            this.chkPenOCxmitVHF51.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF5_CheckedChanged);
-            // 
-            // chkPenOCrcvVHF57
-            // 
-            this.chkPenOCrcvVHF57.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCrcvVHF57.Image = null;
-            this.chkPenOCrcvVHF57.Location = new System.Drawing.Point(144, 121);
-            this.chkPenOCrcvVHF57.Name = "chkPenOCrcvVHF57";
-            this.chkPenOCrcvVHF57.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCrcvVHF57.TabIndex = 275;
-            this.chkPenOCrcvVHF57.UseVisualStyleBackColor = false;
-            this.chkPenOCrcvVHF57.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF5_CheckedChanged);
-            // 
-            // chkPenOCrcvVHF56
-            // 
-            this.chkPenOCrcvVHF56.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCrcvVHF56.Image = null;
-            this.chkPenOCrcvVHF56.Location = new System.Drawing.Point(128, 121);
-            this.chkPenOCrcvVHF56.Name = "chkPenOCrcvVHF56";
-            this.chkPenOCrcvVHF56.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCrcvVHF56.TabIndex = 274;
-            this.chkPenOCrcvVHF56.UseVisualStyleBackColor = false;
-            this.chkPenOCrcvVHF56.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF5_CheckedChanged);
-            // 
-            // chkPenOCrcvVHF55
-            // 
-            this.chkPenOCrcvVHF55.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCrcvVHF55.Image = null;
-            this.chkPenOCrcvVHF55.Location = new System.Drawing.Point(112, 121);
-            this.chkPenOCrcvVHF55.Name = "chkPenOCrcvVHF55";
-            this.chkPenOCrcvVHF55.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCrcvVHF55.TabIndex = 273;
-            this.chkPenOCrcvVHF55.UseVisualStyleBackColor = false;
-            this.chkPenOCrcvVHF55.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF5_CheckedChanged);
-            // 
-            // chkPenOCrcvVHF54
-            // 
-            this.chkPenOCrcvVHF54.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCrcvVHF54.Image = null;
-            this.chkPenOCrcvVHF54.Location = new System.Drawing.Point(96, 121);
-            this.chkPenOCrcvVHF54.Name = "chkPenOCrcvVHF54";
-            this.chkPenOCrcvVHF54.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCrcvVHF54.TabIndex = 272;
-            this.chkPenOCrcvVHF54.UseVisualStyleBackColor = false;
-            this.chkPenOCrcvVHF54.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF5_CheckedChanged);
-            // 
-            // chkPenOCrcvVHF53
-            // 
-            this.chkPenOCrcvVHF53.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCrcvVHF53.Image = null;
-            this.chkPenOCrcvVHF53.Location = new System.Drawing.Point(80, 121);
-            this.chkPenOCrcvVHF53.Name = "chkPenOCrcvVHF53";
-            this.chkPenOCrcvVHF53.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCrcvVHF53.TabIndex = 271;
-            this.chkPenOCrcvVHF53.UseVisualStyleBackColor = false;
-            this.chkPenOCrcvVHF53.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF5_CheckedChanged);
-            // 
-            // chkPenOCrcvVHF52
-            // 
-            this.chkPenOCrcvVHF52.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCrcvVHF52.Image = null;
-            this.chkPenOCrcvVHF52.Location = new System.Drawing.Point(64, 121);
-            this.chkPenOCrcvVHF52.Name = "chkPenOCrcvVHF52";
-            this.chkPenOCrcvVHF52.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCrcvVHF52.TabIndex = 270;
-            this.chkPenOCrcvVHF52.UseVisualStyleBackColor = false;
-            this.chkPenOCrcvVHF52.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF5_CheckedChanged);
-            // 
-            // chkPenOCrcvVHF51
-            // 
-            this.chkPenOCrcvVHF51.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCrcvVHF51.Image = null;
-            this.chkPenOCrcvVHF51.Location = new System.Drawing.Point(48, 121);
-            this.chkPenOCrcvVHF51.Name = "chkPenOCrcvVHF51";
-            this.chkPenOCrcvVHF51.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCrcvVHF51.TabIndex = 269;
-            this.chkPenOCrcvVHF51.UseVisualStyleBackColor = false;
-            this.chkPenOCrcvVHF51.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF5_CheckedChanged);
-            // 
-            // chkPenOCxmitVHF47
-            // 
-            this.chkPenOCxmitVHF47.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCxmitVHF47.Image = null;
-            this.chkPenOCxmitVHF47.Location = new System.Drawing.Point(262, 105);
-            this.chkPenOCxmitVHF47.Name = "chkPenOCxmitVHF47";
-            this.chkPenOCxmitVHF47.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCxmitVHF47.TabIndex = 268;
-            this.chkPenOCxmitVHF47.UseVisualStyleBackColor = false;
-            this.chkPenOCxmitVHF47.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF4_CheckedChanged);
-            // 
-            // chkPenOCxmitVHF46
-            // 
-            this.chkPenOCxmitVHF46.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCxmitVHF46.Image = null;
-            this.chkPenOCxmitVHF46.Location = new System.Drawing.Point(246, 105);
-            this.chkPenOCxmitVHF46.Name = "chkPenOCxmitVHF46";
-            this.chkPenOCxmitVHF46.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCxmitVHF46.TabIndex = 267;
-            this.chkPenOCxmitVHF46.UseVisualStyleBackColor = false;
-            this.chkPenOCxmitVHF46.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF4_CheckedChanged);
-            // 
-            // chkPenOCxmitVHF45
-            // 
-            this.chkPenOCxmitVHF45.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCxmitVHF45.Image = null;
-            this.chkPenOCxmitVHF45.Location = new System.Drawing.Point(230, 105);
-            this.chkPenOCxmitVHF45.Name = "chkPenOCxmitVHF45";
-            this.chkPenOCxmitVHF45.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCxmitVHF45.TabIndex = 266;
-            this.chkPenOCxmitVHF45.UseVisualStyleBackColor = false;
-            this.chkPenOCxmitVHF45.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF4_CheckedChanged);
-            // 
-            // chkPenOCxmitVHF44
-            // 
-            this.chkPenOCxmitVHF44.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCxmitVHF44.Image = null;
-            this.chkPenOCxmitVHF44.Location = new System.Drawing.Point(214, 105);
-            this.chkPenOCxmitVHF44.Name = "chkPenOCxmitVHF44";
-            this.chkPenOCxmitVHF44.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCxmitVHF44.TabIndex = 265;
-            this.chkPenOCxmitVHF44.UseVisualStyleBackColor = false;
-            this.chkPenOCxmitVHF44.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF4_CheckedChanged);
-            // 
-            // chkPenOCxmitVHF43
-            // 
-            this.chkPenOCxmitVHF43.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCxmitVHF43.Image = null;
-            this.chkPenOCxmitVHF43.Location = new System.Drawing.Point(198, 105);
-            this.chkPenOCxmitVHF43.Name = "chkPenOCxmitVHF43";
-            this.chkPenOCxmitVHF43.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCxmitVHF43.TabIndex = 264;
-            this.chkPenOCxmitVHF43.UseVisualStyleBackColor = false;
-            this.chkPenOCxmitVHF43.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF4_CheckedChanged);
-            // 
-            // chkPenOCxmitVHF42
-            // 
-            this.chkPenOCxmitVHF42.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCxmitVHF42.Image = null;
-            this.chkPenOCxmitVHF42.Location = new System.Drawing.Point(182, 105);
-            this.chkPenOCxmitVHF42.Name = "chkPenOCxmitVHF42";
-            this.chkPenOCxmitVHF42.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCxmitVHF42.TabIndex = 263;
-            this.chkPenOCxmitVHF42.UseVisualStyleBackColor = false;
-            this.chkPenOCxmitVHF42.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF4_CheckedChanged);
-            // 
-            // chkPenOCxmitVHF41
-            // 
-            this.chkPenOCxmitVHF41.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCxmitVHF41.Image = null;
-            this.chkPenOCxmitVHF41.Location = new System.Drawing.Point(166, 105);
-            this.chkPenOCxmitVHF41.Name = "chkPenOCxmitVHF41";
-            this.chkPenOCxmitVHF41.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCxmitVHF41.TabIndex = 262;
-            this.chkPenOCxmitVHF41.UseVisualStyleBackColor = false;
-            this.chkPenOCxmitVHF41.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF4_CheckedChanged);
-            // 
-            // chkPenOCrcvVHF47
-            // 
-            this.chkPenOCrcvVHF47.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCrcvVHF47.Image = null;
-            this.chkPenOCrcvVHF47.Location = new System.Drawing.Point(144, 105);
-            this.chkPenOCrcvVHF47.Name = "chkPenOCrcvVHF47";
-            this.chkPenOCrcvVHF47.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCrcvVHF47.TabIndex = 261;
-            this.chkPenOCrcvVHF47.UseVisualStyleBackColor = false;
-            this.chkPenOCrcvVHF47.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF4_CheckedChanged);
-            // 
-            // chkPenOCrcvVHF46
-            // 
-            this.chkPenOCrcvVHF46.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCrcvVHF46.Image = null;
-            this.chkPenOCrcvVHF46.Location = new System.Drawing.Point(128, 105);
-            this.chkPenOCrcvVHF46.Name = "chkPenOCrcvVHF46";
-            this.chkPenOCrcvVHF46.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCrcvVHF46.TabIndex = 260;
-            this.chkPenOCrcvVHF46.UseVisualStyleBackColor = false;
-            this.chkPenOCrcvVHF46.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF4_CheckedChanged);
-            // 
-            // chkPenOCrcvVHF45
-            // 
-            this.chkPenOCrcvVHF45.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCrcvVHF45.Image = null;
-            this.chkPenOCrcvVHF45.Location = new System.Drawing.Point(112, 105);
-            this.chkPenOCrcvVHF45.Name = "chkPenOCrcvVHF45";
-            this.chkPenOCrcvVHF45.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCrcvVHF45.TabIndex = 259;
-            this.chkPenOCrcvVHF45.UseVisualStyleBackColor = false;
-            this.chkPenOCrcvVHF45.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF4_CheckedChanged);
-            // 
-            // chkPenOCrcvVHF44
-            // 
-            this.chkPenOCrcvVHF44.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCrcvVHF44.Image = null;
-            this.chkPenOCrcvVHF44.Location = new System.Drawing.Point(96, 105);
-            this.chkPenOCrcvVHF44.Name = "chkPenOCrcvVHF44";
-            this.chkPenOCrcvVHF44.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCrcvVHF44.TabIndex = 258;
-            this.chkPenOCrcvVHF44.UseVisualStyleBackColor = false;
-            this.chkPenOCrcvVHF44.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF4_CheckedChanged);
-            // 
-            // chkPenOCrcvVHF43
-            // 
-            this.chkPenOCrcvVHF43.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCrcvVHF43.Image = null;
-            this.chkPenOCrcvVHF43.Location = new System.Drawing.Point(80, 105);
-            this.chkPenOCrcvVHF43.Name = "chkPenOCrcvVHF43";
-            this.chkPenOCrcvVHF43.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCrcvVHF43.TabIndex = 257;
-            this.chkPenOCrcvVHF43.UseVisualStyleBackColor = false;
-            this.chkPenOCrcvVHF43.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF4_CheckedChanged);
-            // 
-            // chkPenOCrcvVHF42
-            // 
-            this.chkPenOCrcvVHF42.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCrcvVHF42.Image = null;
-            this.chkPenOCrcvVHF42.Location = new System.Drawing.Point(64, 105);
-            this.chkPenOCrcvVHF42.Name = "chkPenOCrcvVHF42";
-            this.chkPenOCrcvVHF42.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCrcvVHF42.TabIndex = 256;
-            this.chkPenOCrcvVHF42.UseVisualStyleBackColor = false;
-            this.chkPenOCrcvVHF42.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF4_CheckedChanged);
-            // 
-            // chkPenOCrcvVHF41
-            // 
-            this.chkPenOCrcvVHF41.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCrcvVHF41.Image = null;
-            this.chkPenOCrcvVHF41.Location = new System.Drawing.Point(48, 105);
-            this.chkPenOCrcvVHF41.Name = "chkPenOCrcvVHF41";
-            this.chkPenOCrcvVHF41.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCrcvVHF41.TabIndex = 255;
-            this.chkPenOCrcvVHF41.UseVisualStyleBackColor = false;
-            this.chkPenOCrcvVHF41.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF4_CheckedChanged);
-            // 
-            // chkPenOCxmitVHF37
-            // 
-            this.chkPenOCxmitVHF37.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCxmitVHF37.Image = null;
-            this.chkPenOCxmitVHF37.Location = new System.Drawing.Point(262, 89);
-            this.chkPenOCxmitVHF37.Name = "chkPenOCxmitVHF37";
-            this.chkPenOCxmitVHF37.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCxmitVHF37.TabIndex = 254;
-            this.chkPenOCxmitVHF37.UseVisualStyleBackColor = false;
-            this.chkPenOCxmitVHF37.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF3_CheckedChanged);
-            // 
-            // chkPenOCxmitVHF36
-            // 
-            this.chkPenOCxmitVHF36.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCxmitVHF36.Image = null;
-            this.chkPenOCxmitVHF36.Location = new System.Drawing.Point(246, 89);
-            this.chkPenOCxmitVHF36.Name = "chkPenOCxmitVHF36";
-            this.chkPenOCxmitVHF36.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCxmitVHF36.TabIndex = 253;
-            this.chkPenOCxmitVHF36.UseVisualStyleBackColor = false;
-            this.chkPenOCxmitVHF36.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF3_CheckedChanged);
-            // 
-            // chkPenOCxmitVHF35
-            // 
-            this.chkPenOCxmitVHF35.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCxmitVHF35.Image = null;
-            this.chkPenOCxmitVHF35.Location = new System.Drawing.Point(230, 89);
-            this.chkPenOCxmitVHF35.Name = "chkPenOCxmitVHF35";
-            this.chkPenOCxmitVHF35.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCxmitVHF35.TabIndex = 252;
-            this.chkPenOCxmitVHF35.UseVisualStyleBackColor = false;
-            this.chkPenOCxmitVHF35.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF3_CheckedChanged);
-            // 
-            // chkPenOCxmitVHF34
-            // 
-            this.chkPenOCxmitVHF34.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCxmitVHF34.Image = null;
-            this.chkPenOCxmitVHF34.Location = new System.Drawing.Point(214, 89);
-            this.chkPenOCxmitVHF34.Name = "chkPenOCxmitVHF34";
-            this.chkPenOCxmitVHF34.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCxmitVHF34.TabIndex = 251;
-            this.chkPenOCxmitVHF34.UseVisualStyleBackColor = false;
-            this.chkPenOCxmitVHF34.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF3_CheckedChanged);
-            // 
-            // chkPenOCxmitVHF33
-            // 
-            this.chkPenOCxmitVHF33.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCxmitVHF33.Image = null;
-            this.chkPenOCxmitVHF33.Location = new System.Drawing.Point(198, 89);
-            this.chkPenOCxmitVHF33.Name = "chkPenOCxmitVHF33";
-            this.chkPenOCxmitVHF33.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCxmitVHF33.TabIndex = 250;
-            this.chkPenOCxmitVHF33.UseVisualStyleBackColor = false;
-            this.chkPenOCxmitVHF33.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF3_CheckedChanged);
-            // 
-            // chkPenOCxmitVHF32
-            // 
-            this.chkPenOCxmitVHF32.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCxmitVHF32.Image = null;
-            this.chkPenOCxmitVHF32.Location = new System.Drawing.Point(182, 89);
-            this.chkPenOCxmitVHF32.Name = "chkPenOCxmitVHF32";
-            this.chkPenOCxmitVHF32.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCxmitVHF32.TabIndex = 249;
-            this.chkPenOCxmitVHF32.UseVisualStyleBackColor = false;
-            this.chkPenOCxmitVHF32.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF3_CheckedChanged);
-            // 
-            // chkPenOCxmitVHF31
-            // 
-            this.chkPenOCxmitVHF31.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCxmitVHF31.Image = null;
-            this.chkPenOCxmitVHF31.Location = new System.Drawing.Point(166, 89);
-            this.chkPenOCxmitVHF31.Name = "chkPenOCxmitVHF31";
-            this.chkPenOCxmitVHF31.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCxmitVHF31.TabIndex = 248;
-            this.chkPenOCxmitVHF31.UseVisualStyleBackColor = false;
-            this.chkPenOCxmitVHF31.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF3_CheckedChanged);
-            // 
-            // chkPenOCrcvVHF37
-            // 
-            this.chkPenOCrcvVHF37.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCrcvVHF37.Image = null;
-            this.chkPenOCrcvVHF37.Location = new System.Drawing.Point(144, 89);
-            this.chkPenOCrcvVHF37.Name = "chkPenOCrcvVHF37";
-            this.chkPenOCrcvVHF37.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCrcvVHF37.TabIndex = 247;
-            this.chkPenOCrcvVHF37.UseVisualStyleBackColor = false;
-            this.chkPenOCrcvVHF37.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF3_CheckedChanged);
-            // 
-            // chkPenOCrcvVHF36
-            // 
-            this.chkPenOCrcvVHF36.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCrcvVHF36.Image = null;
-            this.chkPenOCrcvVHF36.Location = new System.Drawing.Point(128, 89);
-            this.chkPenOCrcvVHF36.Name = "chkPenOCrcvVHF36";
-            this.chkPenOCrcvVHF36.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCrcvVHF36.TabIndex = 246;
-            this.chkPenOCrcvVHF36.UseVisualStyleBackColor = false;
-            this.chkPenOCrcvVHF36.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF3_CheckedChanged);
-            // 
-            // chkPenOCrcvVHF35
-            // 
-            this.chkPenOCrcvVHF35.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCrcvVHF35.Image = null;
-            this.chkPenOCrcvVHF35.Location = new System.Drawing.Point(112, 89);
-            this.chkPenOCrcvVHF35.Name = "chkPenOCrcvVHF35";
-            this.chkPenOCrcvVHF35.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCrcvVHF35.TabIndex = 245;
-            this.chkPenOCrcvVHF35.UseVisualStyleBackColor = false;
-            this.chkPenOCrcvVHF35.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF3_CheckedChanged);
-            // 
-            // chkPenOCrcvVHF34
-            // 
-            this.chkPenOCrcvVHF34.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCrcvVHF34.Image = null;
-            this.chkPenOCrcvVHF34.Location = new System.Drawing.Point(96, 89);
-            this.chkPenOCrcvVHF34.Name = "chkPenOCrcvVHF34";
-            this.chkPenOCrcvVHF34.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCrcvVHF34.TabIndex = 244;
-            this.chkPenOCrcvVHF34.UseVisualStyleBackColor = false;
-            this.chkPenOCrcvVHF34.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF3_CheckedChanged);
-            // 
-            // chkPenOCrcvVHF33
-            // 
-            this.chkPenOCrcvVHF33.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCrcvVHF33.Image = null;
-            this.chkPenOCrcvVHF33.Location = new System.Drawing.Point(80, 89);
-            this.chkPenOCrcvVHF33.Name = "chkPenOCrcvVHF33";
-            this.chkPenOCrcvVHF33.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCrcvVHF33.TabIndex = 243;
-            this.chkPenOCrcvVHF33.UseVisualStyleBackColor = false;
-            this.chkPenOCrcvVHF33.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF3_CheckedChanged);
-            // 
-            // chkPenOCrcvVHF32
-            // 
-            this.chkPenOCrcvVHF32.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCrcvVHF32.Image = null;
-            this.chkPenOCrcvVHF32.Location = new System.Drawing.Point(64, 89);
-            this.chkPenOCrcvVHF32.Name = "chkPenOCrcvVHF32";
-            this.chkPenOCrcvVHF32.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCrcvVHF32.TabIndex = 242;
-            this.chkPenOCrcvVHF32.UseVisualStyleBackColor = false;
-            this.chkPenOCrcvVHF32.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF3_CheckedChanged);
-            // 
-            // chkPenOCrcvVHF31
-            // 
-            this.chkPenOCrcvVHF31.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCrcvVHF31.Image = null;
-            this.chkPenOCrcvVHF31.Location = new System.Drawing.Point(48, 89);
-            this.chkPenOCrcvVHF31.Name = "chkPenOCrcvVHF31";
-            this.chkPenOCrcvVHF31.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCrcvVHF31.TabIndex = 241;
-            this.chkPenOCrcvVHF31.UseVisualStyleBackColor = false;
-            this.chkPenOCrcvVHF31.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF3_CheckedChanged);
-            // 
-            // chkPenOCxmitVHF27
-            // 
-            this.chkPenOCxmitVHF27.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCxmitVHF27.Image = null;
-            this.chkPenOCxmitVHF27.Location = new System.Drawing.Point(262, 73);
-            this.chkPenOCxmitVHF27.Name = "chkPenOCxmitVHF27";
-            this.chkPenOCxmitVHF27.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCxmitVHF27.TabIndex = 240;
-            this.chkPenOCxmitVHF27.UseVisualStyleBackColor = false;
-            this.chkPenOCxmitVHF27.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF2_CheckedChanged);
-            // 
-            // chkPenOCxmitVHF26
-            // 
-            this.chkPenOCxmitVHF26.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCxmitVHF26.Image = null;
-            this.chkPenOCxmitVHF26.Location = new System.Drawing.Point(246, 73);
-            this.chkPenOCxmitVHF26.Name = "chkPenOCxmitVHF26";
-            this.chkPenOCxmitVHF26.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCxmitVHF26.TabIndex = 239;
-            this.chkPenOCxmitVHF26.UseVisualStyleBackColor = false;
-            this.chkPenOCxmitVHF26.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF2_CheckedChanged);
-            // 
-            // chkPenOCxmitVHF25
-            // 
-            this.chkPenOCxmitVHF25.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCxmitVHF25.Image = null;
-            this.chkPenOCxmitVHF25.Location = new System.Drawing.Point(230, 73);
-            this.chkPenOCxmitVHF25.Name = "chkPenOCxmitVHF25";
-            this.chkPenOCxmitVHF25.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCxmitVHF25.TabIndex = 238;
-            this.chkPenOCxmitVHF25.UseVisualStyleBackColor = false;
-            this.chkPenOCxmitVHF25.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF2_CheckedChanged);
-            // 
-            // chkPenOCxmitVHF24
-            // 
-            this.chkPenOCxmitVHF24.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCxmitVHF24.Image = null;
-            this.chkPenOCxmitVHF24.Location = new System.Drawing.Point(214, 73);
-            this.chkPenOCxmitVHF24.Name = "chkPenOCxmitVHF24";
-            this.chkPenOCxmitVHF24.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCxmitVHF24.TabIndex = 237;
-            this.chkPenOCxmitVHF24.UseVisualStyleBackColor = false;
-            this.chkPenOCxmitVHF24.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF2_CheckedChanged);
-            // 
-            // chkPenOCxmitVHF23
-            // 
-            this.chkPenOCxmitVHF23.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCxmitVHF23.Image = null;
-            this.chkPenOCxmitVHF23.Location = new System.Drawing.Point(198, 73);
-            this.chkPenOCxmitVHF23.Name = "chkPenOCxmitVHF23";
-            this.chkPenOCxmitVHF23.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCxmitVHF23.TabIndex = 236;
-            this.chkPenOCxmitVHF23.UseVisualStyleBackColor = false;
-            this.chkPenOCxmitVHF23.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF2_CheckedChanged);
-            // 
-            // chkPenOCxmitVHF22
-            // 
-            this.chkPenOCxmitVHF22.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCxmitVHF22.Image = null;
-            this.chkPenOCxmitVHF22.Location = new System.Drawing.Point(182, 73);
-            this.chkPenOCxmitVHF22.Name = "chkPenOCxmitVHF22";
-            this.chkPenOCxmitVHF22.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCxmitVHF22.TabIndex = 235;
-            this.chkPenOCxmitVHF22.UseVisualStyleBackColor = false;
-            this.chkPenOCxmitVHF22.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF2_CheckedChanged);
-            // 
-            // chkPenOCxmitVHF21
-            // 
-            this.chkPenOCxmitVHF21.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCxmitVHF21.Image = null;
-            this.chkPenOCxmitVHF21.Location = new System.Drawing.Point(166, 73);
-            this.chkPenOCxmitVHF21.Name = "chkPenOCxmitVHF21";
-            this.chkPenOCxmitVHF21.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCxmitVHF21.TabIndex = 234;
-            this.chkPenOCxmitVHF21.UseVisualStyleBackColor = false;
-            this.chkPenOCxmitVHF21.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF2_CheckedChanged);
-            // 
-            // chkPenOCrcvVHF27
-            // 
-            this.chkPenOCrcvVHF27.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCrcvVHF27.Image = null;
-            this.chkPenOCrcvVHF27.Location = new System.Drawing.Point(144, 73);
-            this.chkPenOCrcvVHF27.Name = "chkPenOCrcvVHF27";
-            this.chkPenOCrcvVHF27.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCrcvVHF27.TabIndex = 233;
-            this.chkPenOCrcvVHF27.UseVisualStyleBackColor = false;
-            this.chkPenOCrcvVHF27.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF2_CheckedChanged);
-            // 
-            // chkPenOCrcvVHF26
-            // 
-            this.chkPenOCrcvVHF26.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCrcvVHF26.Image = null;
-            this.chkPenOCrcvVHF26.Location = new System.Drawing.Point(128, 73);
-            this.chkPenOCrcvVHF26.Name = "chkPenOCrcvVHF26";
-            this.chkPenOCrcvVHF26.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCrcvVHF26.TabIndex = 232;
-            this.chkPenOCrcvVHF26.UseVisualStyleBackColor = false;
-            this.chkPenOCrcvVHF26.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF2_CheckedChanged);
-            // 
-            // chkPenOCrcvVHF25
-            // 
-            this.chkPenOCrcvVHF25.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCrcvVHF25.Image = null;
-            this.chkPenOCrcvVHF25.Location = new System.Drawing.Point(112, 73);
-            this.chkPenOCrcvVHF25.Name = "chkPenOCrcvVHF25";
-            this.chkPenOCrcvVHF25.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCrcvVHF25.TabIndex = 231;
-            this.chkPenOCrcvVHF25.UseVisualStyleBackColor = false;
-            this.chkPenOCrcvVHF25.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF2_CheckedChanged);
-            // 
-            // chkPenOCrcvVHF24
-            // 
-            this.chkPenOCrcvVHF24.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCrcvVHF24.Image = null;
-            this.chkPenOCrcvVHF24.Location = new System.Drawing.Point(96, 73);
-            this.chkPenOCrcvVHF24.Name = "chkPenOCrcvVHF24";
-            this.chkPenOCrcvVHF24.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCrcvVHF24.TabIndex = 230;
-            this.chkPenOCrcvVHF24.UseVisualStyleBackColor = false;
-            this.chkPenOCrcvVHF24.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF2_CheckedChanged);
-            // 
-            // chkPenOCrcvVHF23
-            // 
-            this.chkPenOCrcvVHF23.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCrcvVHF23.Image = null;
-            this.chkPenOCrcvVHF23.Location = new System.Drawing.Point(80, 73);
-            this.chkPenOCrcvVHF23.Name = "chkPenOCrcvVHF23";
-            this.chkPenOCrcvVHF23.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCrcvVHF23.TabIndex = 229;
-            this.chkPenOCrcvVHF23.UseVisualStyleBackColor = false;
-            this.chkPenOCrcvVHF23.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF2_CheckedChanged);
-            // 
-            // chkPenOCrcvVHF22
-            // 
-            this.chkPenOCrcvVHF22.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCrcvVHF22.Image = null;
-            this.chkPenOCrcvVHF22.Location = new System.Drawing.Point(64, 73);
-            this.chkPenOCrcvVHF22.Name = "chkPenOCrcvVHF22";
-            this.chkPenOCrcvVHF22.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCrcvVHF22.TabIndex = 228;
-            this.chkPenOCrcvVHF22.UseVisualStyleBackColor = false;
-            this.chkPenOCrcvVHF22.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF2_CheckedChanged);
-            // 
-            // chkPenOCrcvVHF21
-            // 
-            this.chkPenOCrcvVHF21.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCrcvVHF21.Image = null;
-            this.chkPenOCrcvVHF21.Location = new System.Drawing.Point(48, 73);
-            this.chkPenOCrcvVHF21.Name = "chkPenOCrcvVHF21";
-            this.chkPenOCrcvVHF21.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCrcvVHF21.TabIndex = 227;
-            this.chkPenOCrcvVHF21.UseVisualStyleBackColor = false;
-            this.chkPenOCrcvVHF21.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF2_CheckedChanged);
-            // 
-            // chkPenOCxmitVHF17
-            // 
-            this.chkPenOCxmitVHF17.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCxmitVHF17.Image = null;
-            this.chkPenOCxmitVHF17.Location = new System.Drawing.Point(262, 57);
-            this.chkPenOCxmitVHF17.Name = "chkPenOCxmitVHF17";
-            this.chkPenOCxmitVHF17.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCxmitVHF17.TabIndex = 226;
-            this.chkPenOCxmitVHF17.UseVisualStyleBackColor = false;
-            this.chkPenOCxmitVHF17.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF1_CheckedChanged);
-            // 
-            // chkPenOCxmitVHF16
-            // 
-            this.chkPenOCxmitVHF16.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCxmitVHF16.Image = null;
-            this.chkPenOCxmitVHF16.Location = new System.Drawing.Point(246, 57);
-            this.chkPenOCxmitVHF16.Name = "chkPenOCxmitVHF16";
-            this.chkPenOCxmitVHF16.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCxmitVHF16.TabIndex = 225;
-            this.chkPenOCxmitVHF16.UseVisualStyleBackColor = false;
-            this.chkPenOCxmitVHF16.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF1_CheckedChanged);
-            // 
-            // chkPenOCxmitVHF15
-            // 
-            this.chkPenOCxmitVHF15.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCxmitVHF15.Image = null;
-            this.chkPenOCxmitVHF15.Location = new System.Drawing.Point(230, 57);
-            this.chkPenOCxmitVHF15.Name = "chkPenOCxmitVHF15";
-            this.chkPenOCxmitVHF15.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCxmitVHF15.TabIndex = 224;
-            this.chkPenOCxmitVHF15.UseVisualStyleBackColor = false;
-            this.chkPenOCxmitVHF15.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF1_CheckedChanged);
-            // 
-            // chkPenOCxmitVHF14
-            // 
-            this.chkPenOCxmitVHF14.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCxmitVHF14.Image = null;
-            this.chkPenOCxmitVHF14.Location = new System.Drawing.Point(214, 57);
-            this.chkPenOCxmitVHF14.Name = "chkPenOCxmitVHF14";
-            this.chkPenOCxmitVHF14.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCxmitVHF14.TabIndex = 223;
-            this.chkPenOCxmitVHF14.UseVisualStyleBackColor = false;
-            this.chkPenOCxmitVHF14.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF1_CheckedChanged);
-            // 
-            // chkPenOCxmitVHF13
-            // 
-            this.chkPenOCxmitVHF13.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCxmitVHF13.Image = null;
-            this.chkPenOCxmitVHF13.Location = new System.Drawing.Point(198, 57);
-            this.chkPenOCxmitVHF13.Name = "chkPenOCxmitVHF13";
-            this.chkPenOCxmitVHF13.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCxmitVHF13.TabIndex = 222;
-            this.chkPenOCxmitVHF13.UseVisualStyleBackColor = false;
-            this.chkPenOCxmitVHF13.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF1_CheckedChanged);
-            // 
-            // chkPenOCxmitVHF12
-            // 
-            this.chkPenOCxmitVHF12.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCxmitVHF12.Image = null;
-            this.chkPenOCxmitVHF12.Location = new System.Drawing.Point(182, 57);
-            this.chkPenOCxmitVHF12.Name = "chkPenOCxmitVHF12";
-            this.chkPenOCxmitVHF12.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCxmitVHF12.TabIndex = 221;
-            this.chkPenOCxmitVHF12.UseVisualStyleBackColor = false;
-            this.chkPenOCxmitVHF12.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF1_CheckedChanged);
-            // 
-            // chkPenOCxmitVHF11
-            // 
-            this.chkPenOCxmitVHF11.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCxmitVHF11.Image = null;
-            this.chkPenOCxmitVHF11.Location = new System.Drawing.Point(166, 57);
-            this.chkPenOCxmitVHF11.Name = "chkPenOCxmitVHF11";
-            this.chkPenOCxmitVHF11.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCxmitVHF11.TabIndex = 220;
-            this.chkPenOCxmitVHF11.UseVisualStyleBackColor = false;
-            this.chkPenOCxmitVHF11.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF1_CheckedChanged);
-            // 
-            // chkPenOCrcvVHF17
-            // 
-            this.chkPenOCrcvVHF17.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCrcvVHF17.Image = null;
-            this.chkPenOCrcvVHF17.Location = new System.Drawing.Point(144, 57);
-            this.chkPenOCrcvVHF17.Name = "chkPenOCrcvVHF17";
-            this.chkPenOCrcvVHF17.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCrcvVHF17.TabIndex = 219;
-            this.chkPenOCrcvVHF17.UseVisualStyleBackColor = false;
-            this.chkPenOCrcvVHF17.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF1_CheckedChanged);
-            // 
-            // chkPenOCrcvVHF16
-            // 
-            this.chkPenOCrcvVHF16.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCrcvVHF16.Image = null;
-            this.chkPenOCrcvVHF16.Location = new System.Drawing.Point(128, 57);
-            this.chkPenOCrcvVHF16.Name = "chkPenOCrcvVHF16";
-            this.chkPenOCrcvVHF16.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCrcvVHF16.TabIndex = 218;
-            this.chkPenOCrcvVHF16.UseVisualStyleBackColor = false;
-            this.chkPenOCrcvVHF16.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF1_CheckedChanged);
-            // 
-            // chkPenOCrcvVHF15
-            // 
-            this.chkPenOCrcvVHF15.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCrcvVHF15.Image = null;
-            this.chkPenOCrcvVHF15.Location = new System.Drawing.Point(112, 57);
-            this.chkPenOCrcvVHF15.Name = "chkPenOCrcvVHF15";
-            this.chkPenOCrcvVHF15.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCrcvVHF15.TabIndex = 217;
-            this.chkPenOCrcvVHF15.UseVisualStyleBackColor = false;
-            this.chkPenOCrcvVHF15.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF1_CheckedChanged);
-            // 
-            // chkPenOCrcvVHF14
-            // 
-            this.chkPenOCrcvVHF14.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCrcvVHF14.Image = null;
-            this.chkPenOCrcvVHF14.Location = new System.Drawing.Point(96, 57);
-            this.chkPenOCrcvVHF14.Name = "chkPenOCrcvVHF14";
-            this.chkPenOCrcvVHF14.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCrcvVHF14.TabIndex = 216;
-            this.chkPenOCrcvVHF14.UseVisualStyleBackColor = false;
-            this.chkPenOCrcvVHF14.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF1_CheckedChanged);
-            // 
-            // chkPenOCrcvVHF13
-            // 
-            this.chkPenOCrcvVHF13.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCrcvVHF13.Image = null;
-            this.chkPenOCrcvVHF13.Location = new System.Drawing.Point(80, 57);
-            this.chkPenOCrcvVHF13.Name = "chkPenOCrcvVHF13";
-            this.chkPenOCrcvVHF13.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCrcvVHF13.TabIndex = 215;
-            this.chkPenOCrcvVHF13.UseVisualStyleBackColor = false;
-            this.chkPenOCrcvVHF13.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF1_CheckedChanged);
-            // 
-            // chkPenOCrcvVHF12
-            // 
-            this.chkPenOCrcvVHF12.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCrcvVHF12.Image = null;
-            this.chkPenOCrcvVHF12.Location = new System.Drawing.Point(64, 57);
-            this.chkPenOCrcvVHF12.Name = "chkPenOCrcvVHF12";
-            this.chkPenOCrcvVHF12.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCrcvVHF12.TabIndex = 214;
-            this.chkPenOCrcvVHF12.UseVisualStyleBackColor = false;
-            this.chkPenOCrcvVHF12.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF1_CheckedChanged);
-            // 
-            // chkPenOCrcvVHF11
-            // 
-            this.chkPenOCrcvVHF11.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCrcvVHF11.Image = null;
-            this.chkPenOCrcvVHF11.Location = new System.Drawing.Point(48, 57);
-            this.chkPenOCrcvVHF11.Name = "chkPenOCrcvVHF11";
-            this.chkPenOCrcvVHF11.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCrcvVHF11.TabIndex = 213;
-            this.chkPenOCrcvVHF11.UseVisualStyleBackColor = false;
-            this.chkPenOCrcvVHF11.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF1_CheckedChanged);
-            // 
-            // chkPenOCxmitVHF07
-            // 
-            this.chkPenOCxmitVHF07.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCxmitVHF07.Image = null;
-            this.chkPenOCxmitVHF07.Location = new System.Drawing.Point(262, 41);
-            this.chkPenOCxmitVHF07.Name = "chkPenOCxmitVHF07";
-            this.chkPenOCxmitVHF07.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCxmitVHF07.TabIndex = 212;
-            this.chkPenOCxmitVHF07.UseVisualStyleBackColor = false;
-            this.chkPenOCxmitVHF07.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF0_CheckedChanged);
-            // 
-            // chkPenOCxmitVHF06
-            // 
-            this.chkPenOCxmitVHF06.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCxmitVHF06.Image = null;
-            this.chkPenOCxmitVHF06.Location = new System.Drawing.Point(246, 41);
-            this.chkPenOCxmitVHF06.Name = "chkPenOCxmitVHF06";
-            this.chkPenOCxmitVHF06.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCxmitVHF06.TabIndex = 211;
-            this.chkPenOCxmitVHF06.UseVisualStyleBackColor = false;
-            this.chkPenOCxmitVHF06.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF0_CheckedChanged);
-            // 
-            // chkPenOCxmitVHF05
-            // 
-            this.chkPenOCxmitVHF05.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCxmitVHF05.Image = null;
-            this.chkPenOCxmitVHF05.Location = new System.Drawing.Point(230, 41);
-            this.chkPenOCxmitVHF05.Name = "chkPenOCxmitVHF05";
-            this.chkPenOCxmitVHF05.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCxmitVHF05.TabIndex = 210;
-            this.chkPenOCxmitVHF05.UseVisualStyleBackColor = false;
-            this.chkPenOCxmitVHF05.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF0_CheckedChanged);
-            // 
-            // chkPenOCxmitVHF04
-            // 
-            this.chkPenOCxmitVHF04.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCxmitVHF04.Image = null;
-            this.chkPenOCxmitVHF04.Location = new System.Drawing.Point(214, 41);
-            this.chkPenOCxmitVHF04.Name = "chkPenOCxmitVHF04";
-            this.chkPenOCxmitVHF04.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCxmitVHF04.TabIndex = 209;
-            this.chkPenOCxmitVHF04.UseVisualStyleBackColor = false;
-            this.chkPenOCxmitVHF04.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF0_CheckedChanged);
-            // 
-            // chkPenOCxmitVHF03
-            // 
-            this.chkPenOCxmitVHF03.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCxmitVHF03.Image = null;
-            this.chkPenOCxmitVHF03.Location = new System.Drawing.Point(198, 41);
-            this.chkPenOCxmitVHF03.Name = "chkPenOCxmitVHF03";
-            this.chkPenOCxmitVHF03.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCxmitVHF03.TabIndex = 208;
-            this.chkPenOCxmitVHF03.UseVisualStyleBackColor = false;
-            this.chkPenOCxmitVHF03.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF0_CheckedChanged);
-            // 
-            // chkPenOCxmitVHF02
-            // 
-            this.chkPenOCxmitVHF02.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCxmitVHF02.Image = null;
-            this.chkPenOCxmitVHF02.Location = new System.Drawing.Point(182, 41);
-            this.chkPenOCxmitVHF02.Name = "chkPenOCxmitVHF02";
-            this.chkPenOCxmitVHF02.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCxmitVHF02.TabIndex = 207;
-            this.chkPenOCxmitVHF02.UseVisualStyleBackColor = false;
-            this.chkPenOCxmitVHF02.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF0_CheckedChanged);
-            // 
-            // chkPenOCxmitVHF01
-            // 
-            this.chkPenOCxmitVHF01.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCxmitVHF01.Image = null;
-            this.chkPenOCxmitVHF01.Location = new System.Drawing.Point(166, 41);
-            this.chkPenOCxmitVHF01.Name = "chkPenOCxmitVHF01";
-            this.chkPenOCxmitVHF01.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCxmitVHF01.TabIndex = 206;
-            this.chkPenOCxmitVHF01.UseVisualStyleBackColor = false;
-            this.chkPenOCxmitVHF01.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF0_CheckedChanged);
-            // 
-            // chkPenOCrcvVHF07
-            // 
-            this.chkPenOCrcvVHF07.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCrcvVHF07.Image = null;
-            this.chkPenOCrcvVHF07.Location = new System.Drawing.Point(144, 41);
-            this.chkPenOCrcvVHF07.Name = "chkPenOCrcvVHF07";
-            this.chkPenOCrcvVHF07.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCrcvVHF07.TabIndex = 205;
-            this.chkPenOCrcvVHF07.UseVisualStyleBackColor = false;
-            this.chkPenOCrcvVHF07.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF0_CheckedChanged);
-            // 
-            // chkPenOCrcvVHF06
-            // 
-            this.chkPenOCrcvVHF06.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCrcvVHF06.Image = null;
-            this.chkPenOCrcvVHF06.Location = new System.Drawing.Point(128, 41);
-            this.chkPenOCrcvVHF06.Name = "chkPenOCrcvVHF06";
-            this.chkPenOCrcvVHF06.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCrcvVHF06.TabIndex = 204;
-            this.chkPenOCrcvVHF06.UseVisualStyleBackColor = false;
-            this.chkPenOCrcvVHF06.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF0_CheckedChanged);
-            // 
-            // chkPenOCrcvVHF05
-            // 
-            this.chkPenOCrcvVHF05.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCrcvVHF05.Image = null;
-            this.chkPenOCrcvVHF05.Location = new System.Drawing.Point(112, 41);
-            this.chkPenOCrcvVHF05.Name = "chkPenOCrcvVHF05";
-            this.chkPenOCrcvVHF05.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCrcvVHF05.TabIndex = 203;
-            this.chkPenOCrcvVHF05.UseVisualStyleBackColor = false;
-            this.chkPenOCrcvVHF05.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF0_CheckedChanged);
-            // 
-            // chkPenOCrcvVHF04
-            // 
-            this.chkPenOCrcvVHF04.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCrcvVHF04.Image = null;
-            this.chkPenOCrcvVHF04.Location = new System.Drawing.Point(96, 41);
-            this.chkPenOCrcvVHF04.Name = "chkPenOCrcvVHF04";
-            this.chkPenOCrcvVHF04.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCrcvVHF04.TabIndex = 202;
-            this.chkPenOCrcvVHF04.UseVisualStyleBackColor = false;
-            this.chkPenOCrcvVHF04.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF0_CheckedChanged);
-            // 
-            // chkPenOCrcvVHF03
-            // 
-            this.chkPenOCrcvVHF03.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCrcvVHF03.Image = null;
-            this.chkPenOCrcvVHF03.Location = new System.Drawing.Point(80, 41);
-            this.chkPenOCrcvVHF03.Name = "chkPenOCrcvVHF03";
-            this.chkPenOCrcvVHF03.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCrcvVHF03.TabIndex = 201;
-            this.chkPenOCrcvVHF03.UseVisualStyleBackColor = false;
-            this.chkPenOCrcvVHF03.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF0_CheckedChanged);
-            // 
-            // chkPenOCrcvVHF02
-            // 
-            this.chkPenOCrcvVHF02.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCrcvVHF02.Image = null;
-            this.chkPenOCrcvVHF02.Location = new System.Drawing.Point(64, 41);
-            this.chkPenOCrcvVHF02.Name = "chkPenOCrcvVHF02";
-            this.chkPenOCrcvVHF02.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCrcvVHF02.TabIndex = 200;
-            this.chkPenOCrcvVHF02.UseVisualStyleBackColor = false;
-            this.chkPenOCrcvVHF02.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF0_CheckedChanged);
-            // 
-            // chkPenOCrcvVHF01
-            // 
-            this.chkPenOCrcvVHF01.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCrcvVHF01.ForeColor = System.Drawing.SystemColors.Control;
-            this.chkPenOCrcvVHF01.Image = null;
-            this.chkPenOCrcvVHF01.Location = new System.Drawing.Point(48, 41);
-            this.chkPenOCrcvVHF01.Name = "chkPenOCrcvVHF01";
-            this.chkPenOCrcvVHF01.Size = new System.Drawing.Size(16, 16);
-            this.chkPenOCrcvVHF01.TabIndex = 199;
-            this.chkPenOCrcvVHF01.UseVisualStyleBackColor = false;
-            this.chkPenOCrcvVHF01.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF0_CheckedChanged);
-            // 
-            // btnPennyCtrlReset
-            // 
-            this.btnPennyCtrlReset.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnPennyCtrlReset.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.btnPennyCtrlReset.Image = null;
-            this.btnPennyCtrlReset.Location = new System.Drawing.Point(212, 240);
-            this.btnPennyCtrlReset.Name = "btnPennyCtrlReset";
-            this.btnPennyCtrlReset.Size = new System.Drawing.Size(60, 23);
-            this.btnPennyCtrlReset.TabIndex = 4;
-            this.btnPennyCtrlReset.Text = "HF Reset";
-            this.toolTip1.SetToolTip(this.btnPennyCtrlReset, "Clears to Default");
-            this.btnPennyCtrlReset.UseVisualStyleBackColor = true;
-            this.btnPennyCtrlReset.Click += new System.EventHandler(this.btnPennyCtrlReset_Click);
-            // 
-            // chkHERCULES
-            // 
-            this.chkHERCULES.Appearance = System.Windows.Forms.Appearance.Button;
-            this.chkHERCULES.BackColor = System.Drawing.SystemColors.Control;
-            this.chkHERCULES.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.chkHERCULES.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.chkHERCULES.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.chkHERCULES.Image = null;
-            this.chkHERCULES.Location = new System.Drawing.Point(112, 240);
-            this.chkHERCULES.Name = "chkHERCULES";
-            this.chkHERCULES.Size = new System.Drawing.Size(90, 23);
-            this.chkHERCULES.TabIndex = 2;
-            this.chkHERCULES.Text = "Hercules Amp";
-            this.chkHERCULES.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.toolTip1.SetToolTip(this.chkHERCULES, "Preset pins for Hercules Amplifier");
-            this.chkHERCULES.UseVisualStyleBackColor = false;
-            this.chkHERCULES.CheckedChanged += new System.EventHandler(this.chkHERCULES_CheckedChanged);
-            // 
-            // chkPennyExtCtrl
-            // 
-            this.chkPennyExtCtrl.Appearance = System.Windows.Forms.Appearance.Button;
-            this.chkPennyExtCtrl.BackColor = System.Drawing.SystemColors.Control;
-            this.chkPennyExtCtrl.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.chkPennyExtCtrl.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.chkPennyExtCtrl.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.chkPennyExtCtrl.Image = null;
-            this.chkPennyExtCtrl.Location = new System.Drawing.Point(12, 240);
-            this.chkPennyExtCtrl.Name = "chkPennyExtCtrl";
-            this.chkPennyExtCtrl.Size = new System.Drawing.Size(90, 23);
-            this.chkPennyExtCtrl.TabIndex = 1;
-            this.chkPennyExtCtrl.Text = "Ext Control";
-            this.chkPennyExtCtrl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.toolTip1.SetToolTip(this.chkPennyExtCtrl, "Enable External Control on Penelope J6");
-            this.chkPennyExtCtrl.UseVisualStyleBackColor = false;
-            this.chkPennyExtCtrl.CheckedChanged += new System.EventHandler(this.chkPennyExtCtrl_CheckedChanged);
             // 
             // grpPennyExtCtrl
             // 
@@ -11841,7 +9683,7 @@
             this.grpPennyExtCtrl.Controls.Add(this.lblHFTxControl);
             this.grpPennyExtCtrl.Controls.Add(this.lblHFRxControl);
             this.grpPennyExtCtrl.Enabled = false;
-            this.grpPennyExtCtrl.Location = new System.Drawing.Point(3, 0);
+            this.grpPennyExtCtrl.Location = new System.Drawing.Point(0, 0);
             this.grpPennyExtCtrl.Name = "grpPennyExtCtrl";
             this.grpPennyExtCtrl.Size = new System.Drawing.Size(290, 236);
             this.grpPennyExtCtrl.TabIndex = 0;
@@ -13988,9 +11830,5202 @@
             this.lblHFRxControl.Text = "J6 Receive Pins";
             this.lblHFRxControl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // chkPennyExtCtrl
+            // 
+            this.chkPennyExtCtrl.Appearance = System.Windows.Forms.Appearance.Button;
+            this.chkPennyExtCtrl.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPennyExtCtrl.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.chkPennyExtCtrl.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.chkPennyExtCtrl.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.chkPennyExtCtrl.Image = null;
+            this.chkPennyExtCtrl.Location = new System.Drawing.Point(19, 260);
+            this.chkPennyExtCtrl.Name = "chkPennyExtCtrl";
+            this.chkPennyExtCtrl.Size = new System.Drawing.Size(90, 23);
+            this.chkPennyExtCtrl.TabIndex = 1;
+            this.chkPennyExtCtrl.Text = "Ext Control";
+            this.chkPennyExtCtrl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.toolTip1.SetToolTip(this.chkPennyExtCtrl, "Enable External Control on Penelope J6");
+            this.chkPennyExtCtrl.UseVisualStyleBackColor = false;
+            this.chkPennyExtCtrl.CheckedChanged += new System.EventHandler(this.chkPennyExtCtrl_CheckedChanged);
+            // 
+            // chkHERCULES
+            // 
+            this.chkHERCULES.Appearance = System.Windows.Forms.Appearance.Button;
+            this.chkHERCULES.BackColor = System.Drawing.SystemColors.Control;
+            this.chkHERCULES.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.chkHERCULES.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.chkHERCULES.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.chkHERCULES.Image = null;
+            this.chkHERCULES.Location = new System.Drawing.Point(119, 260);
+            this.chkHERCULES.Name = "chkHERCULES";
+            this.chkHERCULES.Size = new System.Drawing.Size(90, 23);
+            this.chkHERCULES.TabIndex = 2;
+            this.chkHERCULES.Text = "Hercules Amp";
+            this.chkHERCULES.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.toolTip1.SetToolTip(this.chkHERCULES, "Preset pins for Hercules Amplifier");
+            this.chkHERCULES.UseVisualStyleBackColor = false;
+            this.chkHERCULES.CheckedChanged += new System.EventHandler(this.chkHERCULES_CheckedChanged);
+            // 
+            // btnPennyCtrlReset
+            // 
+            this.btnPennyCtrlReset.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnPennyCtrlReset.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.btnPennyCtrlReset.Image = null;
+            this.btnPennyCtrlReset.Location = new System.Drawing.Point(219, 260);
+            this.btnPennyCtrlReset.Name = "btnPennyCtrlReset";
+            this.btnPennyCtrlReset.Size = new System.Drawing.Size(60, 23);
+            this.btnPennyCtrlReset.TabIndex = 4;
+            this.btnPennyCtrlReset.Text = "HF Reset";
+            this.toolTip1.SetToolTip(this.btnPennyCtrlReset, "Clears to Default");
+            this.btnPennyCtrlReset.UseVisualStyleBackColor = true;
+            this.btnPennyCtrlReset.Click += new System.EventHandler(this.btnPennyCtrlReset_Click);
+            // 
+            // tbOCVHFControl
+            // 
+            this.tbOCVHFControl.BackColor = System.Drawing.SystemColors.Control;
+            this.tbOCVHFControl.Controls.Add(this.grpPennyExtCtrlVHF);
+            this.tbOCVHFControl.Controls.Add(this.btnPennyCtrlVHFReset);
+            this.tbOCVHFControl.Controls.Add(this.checkBoxTS1);
+            this.tbOCVHFControl.Location = new System.Drawing.Point(4, 22);
+            this.tbOCVHFControl.Name = "tbOCVHFControl";
+            this.tbOCVHFControl.Padding = new System.Windows.Forms.Padding(3);
+            this.tbOCVHFControl.Size = new System.Drawing.Size(575, 313);
+            this.tbOCVHFControl.TabIndex = 1;
+            this.tbOCVHFControl.Text = "VHF";
+            // 
+            // grpPennyExtCtrlVHF
+            // 
+            this.grpPennyExtCtrlVHF.Controls.Add(this.labelTS71);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.labelTS72);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.labelTS73);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.labelTS74);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.labelTS75);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.labelTS76);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.labelTS77);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.labelTS78);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.labelTS79);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.labelTS80);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.labelTS81);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.labelTS82);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.labelTS83);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.labelTS84);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.labelTS85);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.lblVHFTxControl);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.lblVHFRxControl);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.labelTS59);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.labelTS60);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.labelTS61);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.labelTS62);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.labelTS63);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.labelTS64);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.labelTS65);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.labelTS66);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.labelTS67);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.labelTS68);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.labelTS69);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.labelTS70);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF117);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF116);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF115);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF114);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF113);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF112);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF111);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF117);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF116);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF115);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF114);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF113);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF112);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF111);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF107);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF106);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF105);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF104);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF103);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF102);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF101);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF107);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF106);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF105);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF104);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF103);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF102);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF101);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF97);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF96);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF95);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF94);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF93);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF92);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF91);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF97);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF96);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF95);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF94);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF93);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF92);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF91);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF87);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF86);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF85);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF84);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF83);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF82);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF81);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF87);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF86);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF85);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF84);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF83);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF82);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF81);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF77);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF76);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF75);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF74);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF73);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF72);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF71);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF77);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF76);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF75);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF74);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF73);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF72);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF71);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF67);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF66);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF65);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF64);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF63);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF62);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF61);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF67);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF66);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF65);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF64);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF63);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF62);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF61);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF57);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF56);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF55);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF54);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF53);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF52);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF51);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF57);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF56);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF55);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF54);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF53);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF52);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF51);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF47);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF46);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF45);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF44);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF43);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF42);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF41);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF47);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF46);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF45);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF44);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF43);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF42);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF41);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF37);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF36);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF35);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF34);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF33);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF32);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF31);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF37);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF36);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF35);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF34);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF33);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF32);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF31);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF27);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF26);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF25);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF24);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF23);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF22);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF21);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF27);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF26);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF25);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF24);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF23);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF22);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF21);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF17);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF16);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF15);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF14);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF13);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF12);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF11);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF17);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF16);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF15);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF14);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF13);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF12);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF11);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF07);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF06);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF05);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF04);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF03);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF02);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCxmitVHF01);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF07);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF06);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF05);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF04);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF03);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF02);
+            this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF01);
+            this.grpPennyExtCtrlVHF.Enabled = false;
+            this.grpPennyExtCtrlVHF.Location = new System.Drawing.Point(0, 0);
+            this.grpPennyExtCtrlVHF.Name = "grpPennyExtCtrlVHF";
+            this.grpPennyExtCtrlVHF.Size = new System.Drawing.Size(285, 236);
+            this.grpPennyExtCtrlVHF.TabIndex = 5;
+            this.grpPennyExtCtrlVHF.TabStop = false;
+            // 
+            // labelTS71
+            // 
+            this.labelTS71.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelTS71.Image = null;
+            this.labelTS71.Location = new System.Drawing.Point(9, 24);
+            this.labelTS71.Name = "labelTS71";
+            this.labelTS71.Size = new System.Drawing.Size(32, 16);
+            this.labelTS71.TabIndex = 395;
+            this.labelTS71.Text = "Band";
+            // 
+            // labelTS72
+            // 
+            this.labelTS72.Image = null;
+            this.labelTS72.Location = new System.Drawing.Point(262, 24);
+            this.labelTS72.Name = "labelTS72";
+            this.labelTS72.Size = new System.Drawing.Size(16, 16);
+            this.labelTS72.TabIndex = 394;
+            this.labelTS72.Text = "7";
+            this.labelTS72.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // labelTS73
+            // 
+            this.labelTS73.Image = null;
+            this.labelTS73.Location = new System.Drawing.Point(246, 24);
+            this.labelTS73.Name = "labelTS73";
+            this.labelTS73.Size = new System.Drawing.Size(16, 16);
+            this.labelTS73.TabIndex = 393;
+            this.labelTS73.Text = "6";
+            this.labelTS73.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // labelTS74
+            // 
+            this.labelTS74.Image = null;
+            this.labelTS74.Location = new System.Drawing.Point(230, 24);
+            this.labelTS74.Name = "labelTS74";
+            this.labelTS74.Size = new System.Drawing.Size(16, 16);
+            this.labelTS74.TabIndex = 392;
+            this.labelTS74.Text = "5";
+            this.labelTS74.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // labelTS75
+            // 
+            this.labelTS75.Image = null;
+            this.labelTS75.Location = new System.Drawing.Point(214, 24);
+            this.labelTS75.Name = "labelTS75";
+            this.labelTS75.Size = new System.Drawing.Size(16, 16);
+            this.labelTS75.TabIndex = 391;
+            this.labelTS75.Text = "4";
+            this.labelTS75.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // labelTS76
+            // 
+            this.labelTS76.Image = null;
+            this.labelTS76.Location = new System.Drawing.Point(198, 24);
+            this.labelTS76.Name = "labelTS76";
+            this.labelTS76.Size = new System.Drawing.Size(16, 16);
+            this.labelTS76.TabIndex = 390;
+            this.labelTS76.Text = "3";
+            this.labelTS76.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // labelTS77
+            // 
+            this.labelTS77.Image = null;
+            this.labelTS77.Location = new System.Drawing.Point(182, 24);
+            this.labelTS77.Name = "labelTS77";
+            this.labelTS77.Size = new System.Drawing.Size(16, 16);
+            this.labelTS77.TabIndex = 389;
+            this.labelTS77.Text = "2";
+            this.labelTS77.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // labelTS78
+            // 
+            this.labelTS78.Image = null;
+            this.labelTS78.Location = new System.Drawing.Point(166, 24);
+            this.labelTS78.Name = "labelTS78";
+            this.labelTS78.Size = new System.Drawing.Size(16, 16);
+            this.labelTS78.TabIndex = 388;
+            this.labelTS78.Text = "1";
+            this.labelTS78.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // labelTS79
+            // 
+            this.labelTS79.Image = null;
+            this.labelTS79.Location = new System.Drawing.Point(144, 24);
+            this.labelTS79.Name = "labelTS79";
+            this.labelTS79.Size = new System.Drawing.Size(16, 16);
+            this.labelTS79.TabIndex = 387;
+            this.labelTS79.Text = "7";
+            this.labelTS79.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // labelTS80
+            // 
+            this.labelTS80.Image = null;
+            this.labelTS80.Location = new System.Drawing.Point(128, 24);
+            this.labelTS80.Name = "labelTS80";
+            this.labelTS80.Size = new System.Drawing.Size(16, 16);
+            this.labelTS80.TabIndex = 386;
+            this.labelTS80.Text = "6";
+            this.labelTS80.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // labelTS81
+            // 
+            this.labelTS81.Image = null;
+            this.labelTS81.Location = new System.Drawing.Point(112, 24);
+            this.labelTS81.Name = "labelTS81";
+            this.labelTS81.Size = new System.Drawing.Size(16, 16);
+            this.labelTS81.TabIndex = 385;
+            this.labelTS81.Text = "5";
+            this.labelTS81.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // labelTS82
+            // 
+            this.labelTS82.Image = null;
+            this.labelTS82.Location = new System.Drawing.Point(96, 24);
+            this.labelTS82.Name = "labelTS82";
+            this.labelTS82.Size = new System.Drawing.Size(16, 16);
+            this.labelTS82.TabIndex = 384;
+            this.labelTS82.Text = "4";
+            this.labelTS82.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // labelTS83
+            // 
+            this.labelTS83.Image = null;
+            this.labelTS83.Location = new System.Drawing.Point(80, 24);
+            this.labelTS83.Name = "labelTS83";
+            this.labelTS83.Size = new System.Drawing.Size(16, 16);
+            this.labelTS83.TabIndex = 383;
+            this.labelTS83.Text = "3";
+            this.labelTS83.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // labelTS84
+            // 
+            this.labelTS84.Image = null;
+            this.labelTS84.Location = new System.Drawing.Point(64, 24);
+            this.labelTS84.Name = "labelTS84";
+            this.labelTS84.Size = new System.Drawing.Size(16, 16);
+            this.labelTS84.TabIndex = 382;
+            this.labelTS84.Text = "2";
+            this.labelTS84.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // labelTS85
+            // 
+            this.labelTS85.Image = null;
+            this.labelTS85.Location = new System.Drawing.Point(48, 24);
+            this.labelTS85.Name = "labelTS85";
+            this.labelTS85.Size = new System.Drawing.Size(16, 16);
+            this.labelTS85.TabIndex = 381;
+            this.labelTS85.Text = "1";
+            this.labelTS85.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lblVHFTxControl
+            // 
+            this.lblVHFTxControl.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblVHFTxControl.Image = null;
+            this.lblVHFTxControl.Location = new System.Drawing.Point(182, 8);
+            this.lblVHFTxControl.Name = "lblVHFTxControl";
+            this.lblVHFTxControl.Size = new System.Drawing.Size(95, 16);
+            this.lblVHFTxControl.TabIndex = 380;
+            this.lblVHFTxControl.Text = "J6 Transmit Pins";
+            this.lblVHFTxControl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lblVHFRxControl
+            // 
+            this.lblVHFRxControl.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblVHFRxControl.Image = null;
+            this.lblVHFRxControl.Location = new System.Drawing.Point(60, 8);
+            this.lblVHFRxControl.Name = "lblVHFRxControl";
+            this.lblVHFRxControl.Size = new System.Drawing.Size(95, 16);
+            this.lblVHFRxControl.TabIndex = 379;
+            this.lblVHFRxControl.Text = "J6 Receive Pins";
+            this.lblVHFRxControl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // labelTS59
+            // 
+            this.labelTS59.Image = null;
+            this.labelTS59.Location = new System.Drawing.Point(5, 217);
+            this.labelTS59.Name = "labelTS59";
+            this.labelTS59.Size = new System.Drawing.Size(40, 16);
+            this.labelTS59.TabIndex = 378;
+            this.labelTS59.Text = "VHF11";
+            this.labelTS59.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // labelTS60
+            // 
+            this.labelTS60.Image = null;
+            this.labelTS60.Location = new System.Drawing.Point(5, 201);
+            this.labelTS60.Name = "labelTS60";
+            this.labelTS60.Size = new System.Drawing.Size(40, 16);
+            this.labelTS60.TabIndex = 377;
+            this.labelTS60.Text = "VHF10";
+            this.labelTS60.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // labelTS61
+            // 
+            this.labelTS61.Image = null;
+            this.labelTS61.Location = new System.Drawing.Point(6, 185);
+            this.labelTS61.Name = "labelTS61";
+            this.labelTS61.Size = new System.Drawing.Size(35, 16);
+            this.labelTS61.TabIndex = 376;
+            this.labelTS61.Text = "VHF9";
+            this.labelTS61.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // labelTS62
+            // 
+            this.labelTS62.Image = null;
+            this.labelTS62.Location = new System.Drawing.Point(6, 169);
+            this.labelTS62.Name = "labelTS62";
+            this.labelTS62.Size = new System.Drawing.Size(35, 16);
+            this.labelTS62.TabIndex = 375;
+            this.labelTS62.Text = "VHF8";
+            this.labelTS62.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // labelTS63
+            // 
+            this.labelTS63.Image = null;
+            this.labelTS63.Location = new System.Drawing.Point(6, 153);
+            this.labelTS63.Name = "labelTS63";
+            this.labelTS63.Size = new System.Drawing.Size(35, 16);
+            this.labelTS63.TabIndex = 374;
+            this.labelTS63.Text = "VHF7";
+            this.labelTS63.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // labelTS64
+            // 
+            this.labelTS64.Image = null;
+            this.labelTS64.Location = new System.Drawing.Point(6, 137);
+            this.labelTS64.Name = "labelTS64";
+            this.labelTS64.Size = new System.Drawing.Size(35, 16);
+            this.labelTS64.TabIndex = 373;
+            this.labelTS64.Text = "VHF6";
+            this.labelTS64.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // labelTS65
+            // 
+            this.labelTS65.Image = null;
+            this.labelTS65.Location = new System.Drawing.Point(6, 121);
+            this.labelTS65.Name = "labelTS65";
+            this.labelTS65.Size = new System.Drawing.Size(35, 16);
+            this.labelTS65.TabIndex = 372;
+            this.labelTS65.Text = "VHF5";
+            this.labelTS65.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // labelTS66
+            // 
+            this.labelTS66.Image = null;
+            this.labelTS66.Location = new System.Drawing.Point(6, 105);
+            this.labelTS66.Name = "labelTS66";
+            this.labelTS66.Size = new System.Drawing.Size(35, 16);
+            this.labelTS66.TabIndex = 371;
+            this.labelTS66.Text = "VHF4";
+            this.labelTS66.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // labelTS67
+            // 
+            this.labelTS67.Image = null;
+            this.labelTS67.Location = new System.Drawing.Point(6, 89);
+            this.labelTS67.Name = "labelTS67";
+            this.labelTS67.Size = new System.Drawing.Size(35, 16);
+            this.labelTS67.TabIndex = 370;
+            this.labelTS67.Text = "VHF3";
+            this.labelTS67.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // labelTS68
+            // 
+            this.labelTS68.Image = null;
+            this.labelTS68.Location = new System.Drawing.Point(6, 73);
+            this.labelTS68.Name = "labelTS68";
+            this.labelTS68.Size = new System.Drawing.Size(35, 16);
+            this.labelTS68.TabIndex = 369;
+            this.labelTS68.Text = "VHF2";
+            this.labelTS68.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // labelTS69
+            // 
+            this.labelTS69.Image = null;
+            this.labelTS69.Location = new System.Drawing.Point(6, 57);
+            this.labelTS69.Name = "labelTS69";
+            this.labelTS69.Size = new System.Drawing.Size(35, 16);
+            this.labelTS69.TabIndex = 368;
+            this.labelTS69.Text = "VHF1";
+            this.labelTS69.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // labelTS70
+            // 
+            this.labelTS70.Image = null;
+            this.labelTS70.Location = new System.Drawing.Point(6, 41);
+            this.labelTS70.Name = "labelTS70";
+            this.labelTS70.Size = new System.Drawing.Size(35, 16);
+            this.labelTS70.TabIndex = 367;
+            this.labelTS70.Text = "VHF0";
+            this.labelTS70.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // chkPenOCxmitVHF117
+            // 
+            this.chkPenOCxmitVHF117.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCxmitVHF117.Image = null;
+            this.chkPenOCxmitVHF117.Location = new System.Drawing.Point(262, 217);
+            this.chkPenOCxmitVHF117.Name = "chkPenOCxmitVHF117";
+            this.chkPenOCxmitVHF117.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCxmitVHF117.TabIndex = 366;
+            this.chkPenOCxmitVHF117.UseVisualStyleBackColor = false;
+            this.chkPenOCxmitVHF117.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF11_CheckedChanged);
+            // 
+            // chkPenOCxmitVHF116
+            // 
+            this.chkPenOCxmitVHF116.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCxmitVHF116.Image = null;
+            this.chkPenOCxmitVHF116.Location = new System.Drawing.Point(246, 217);
+            this.chkPenOCxmitVHF116.Name = "chkPenOCxmitVHF116";
+            this.chkPenOCxmitVHF116.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCxmitVHF116.TabIndex = 365;
+            this.chkPenOCxmitVHF116.UseVisualStyleBackColor = false;
+            this.chkPenOCxmitVHF116.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF11_CheckedChanged);
+            // 
+            // chkPenOCxmitVHF115
+            // 
+            this.chkPenOCxmitVHF115.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCxmitVHF115.Image = null;
+            this.chkPenOCxmitVHF115.Location = new System.Drawing.Point(230, 217);
+            this.chkPenOCxmitVHF115.Name = "chkPenOCxmitVHF115";
+            this.chkPenOCxmitVHF115.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCxmitVHF115.TabIndex = 364;
+            this.chkPenOCxmitVHF115.UseVisualStyleBackColor = false;
+            this.chkPenOCxmitVHF115.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF11_CheckedChanged);
+            // 
+            // chkPenOCxmitVHF114
+            // 
+            this.chkPenOCxmitVHF114.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCxmitVHF114.Image = null;
+            this.chkPenOCxmitVHF114.Location = new System.Drawing.Point(214, 217);
+            this.chkPenOCxmitVHF114.Name = "chkPenOCxmitVHF114";
+            this.chkPenOCxmitVHF114.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCxmitVHF114.TabIndex = 363;
+            this.chkPenOCxmitVHF114.UseVisualStyleBackColor = false;
+            this.chkPenOCxmitVHF114.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF11_CheckedChanged);
+            // 
+            // chkPenOCxmitVHF113
+            // 
+            this.chkPenOCxmitVHF113.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCxmitVHF113.Image = null;
+            this.chkPenOCxmitVHF113.Location = new System.Drawing.Point(198, 217);
+            this.chkPenOCxmitVHF113.Name = "chkPenOCxmitVHF113";
+            this.chkPenOCxmitVHF113.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCxmitVHF113.TabIndex = 362;
+            this.chkPenOCxmitVHF113.UseVisualStyleBackColor = false;
+            this.chkPenOCxmitVHF113.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF11_CheckedChanged);
+            // 
+            // chkPenOCxmitVHF112
+            // 
+            this.chkPenOCxmitVHF112.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCxmitVHF112.Image = null;
+            this.chkPenOCxmitVHF112.Location = new System.Drawing.Point(182, 217);
+            this.chkPenOCxmitVHF112.Name = "chkPenOCxmitVHF112";
+            this.chkPenOCxmitVHF112.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCxmitVHF112.TabIndex = 361;
+            this.chkPenOCxmitVHF112.UseVisualStyleBackColor = false;
+            this.chkPenOCxmitVHF112.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF11_CheckedChanged);
+            // 
+            // chkPenOCxmitVHF111
+            // 
+            this.chkPenOCxmitVHF111.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCxmitVHF111.Image = null;
+            this.chkPenOCxmitVHF111.Location = new System.Drawing.Point(166, 217);
+            this.chkPenOCxmitVHF111.Name = "chkPenOCxmitVHF111";
+            this.chkPenOCxmitVHF111.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCxmitVHF111.TabIndex = 360;
+            this.chkPenOCxmitVHF111.UseVisualStyleBackColor = false;
+            this.chkPenOCxmitVHF111.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF11_CheckedChanged);
+            // 
+            // chkPenOCrcvVHF117
+            // 
+            this.chkPenOCrcvVHF117.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCrcvVHF117.Image = null;
+            this.chkPenOCrcvVHF117.Location = new System.Drawing.Point(144, 217);
+            this.chkPenOCrcvVHF117.Name = "chkPenOCrcvVHF117";
+            this.chkPenOCrcvVHF117.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCrcvVHF117.TabIndex = 359;
+            this.chkPenOCrcvVHF117.UseVisualStyleBackColor = false;
+            this.chkPenOCrcvVHF117.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF11_CheckedChanged);
+            // 
+            // chkPenOCrcvVHF116
+            // 
+            this.chkPenOCrcvVHF116.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCrcvVHF116.Image = null;
+            this.chkPenOCrcvVHF116.Location = new System.Drawing.Point(128, 217);
+            this.chkPenOCrcvVHF116.Name = "chkPenOCrcvVHF116";
+            this.chkPenOCrcvVHF116.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCrcvVHF116.TabIndex = 358;
+            this.chkPenOCrcvVHF116.UseVisualStyleBackColor = false;
+            this.chkPenOCrcvVHF116.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF11_CheckedChanged);
+            // 
+            // chkPenOCrcvVHF115
+            // 
+            this.chkPenOCrcvVHF115.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCrcvVHF115.Image = null;
+            this.chkPenOCrcvVHF115.Location = new System.Drawing.Point(112, 217);
+            this.chkPenOCrcvVHF115.Name = "chkPenOCrcvVHF115";
+            this.chkPenOCrcvVHF115.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCrcvVHF115.TabIndex = 357;
+            this.chkPenOCrcvVHF115.UseVisualStyleBackColor = false;
+            this.chkPenOCrcvVHF115.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF11_CheckedChanged);
+            // 
+            // chkPenOCrcvVHF114
+            // 
+            this.chkPenOCrcvVHF114.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCrcvVHF114.Image = null;
+            this.chkPenOCrcvVHF114.Location = new System.Drawing.Point(96, 217);
+            this.chkPenOCrcvVHF114.Name = "chkPenOCrcvVHF114";
+            this.chkPenOCrcvVHF114.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCrcvVHF114.TabIndex = 356;
+            this.chkPenOCrcvVHF114.UseVisualStyleBackColor = false;
+            this.chkPenOCrcvVHF114.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF11_CheckedChanged);
+            // 
+            // chkPenOCrcvVHF113
+            // 
+            this.chkPenOCrcvVHF113.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCrcvVHF113.Image = null;
+            this.chkPenOCrcvVHF113.Location = new System.Drawing.Point(80, 217);
+            this.chkPenOCrcvVHF113.Name = "chkPenOCrcvVHF113";
+            this.chkPenOCrcvVHF113.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCrcvVHF113.TabIndex = 355;
+            this.chkPenOCrcvVHF113.UseVisualStyleBackColor = false;
+            this.chkPenOCrcvVHF113.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF11_CheckedChanged);
+            // 
+            // chkPenOCrcvVHF112
+            // 
+            this.chkPenOCrcvVHF112.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCrcvVHF112.Image = null;
+            this.chkPenOCrcvVHF112.Location = new System.Drawing.Point(64, 217);
+            this.chkPenOCrcvVHF112.Name = "chkPenOCrcvVHF112";
+            this.chkPenOCrcvVHF112.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCrcvVHF112.TabIndex = 354;
+            this.chkPenOCrcvVHF112.UseVisualStyleBackColor = false;
+            this.chkPenOCrcvVHF112.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF11_CheckedChanged);
+            // 
+            // chkPenOCrcvVHF111
+            // 
+            this.chkPenOCrcvVHF111.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCrcvVHF111.Image = null;
+            this.chkPenOCrcvVHF111.Location = new System.Drawing.Point(48, 217);
+            this.chkPenOCrcvVHF111.Name = "chkPenOCrcvVHF111";
+            this.chkPenOCrcvVHF111.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCrcvVHF111.TabIndex = 353;
+            this.chkPenOCrcvVHF111.UseVisualStyleBackColor = false;
+            this.chkPenOCrcvVHF111.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF11_CheckedChanged);
+            // 
+            // chkPenOCxmitVHF107
+            // 
+            this.chkPenOCxmitVHF107.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCxmitVHF107.Image = null;
+            this.chkPenOCxmitVHF107.Location = new System.Drawing.Point(262, 201);
+            this.chkPenOCxmitVHF107.Name = "chkPenOCxmitVHF107";
+            this.chkPenOCxmitVHF107.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCxmitVHF107.TabIndex = 352;
+            this.chkPenOCxmitVHF107.UseVisualStyleBackColor = false;
+            this.chkPenOCxmitVHF107.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF10_CheckedChanged);
+            // 
+            // chkPenOCxmitVHF106
+            // 
+            this.chkPenOCxmitVHF106.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCxmitVHF106.Image = null;
+            this.chkPenOCxmitVHF106.Location = new System.Drawing.Point(246, 201);
+            this.chkPenOCxmitVHF106.Name = "chkPenOCxmitVHF106";
+            this.chkPenOCxmitVHF106.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCxmitVHF106.TabIndex = 351;
+            this.chkPenOCxmitVHF106.UseVisualStyleBackColor = false;
+            this.chkPenOCxmitVHF106.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF10_CheckedChanged);
+            // 
+            // chkPenOCxmitVHF105
+            // 
+            this.chkPenOCxmitVHF105.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCxmitVHF105.Image = null;
+            this.chkPenOCxmitVHF105.Location = new System.Drawing.Point(230, 201);
+            this.chkPenOCxmitVHF105.Name = "chkPenOCxmitVHF105";
+            this.chkPenOCxmitVHF105.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCxmitVHF105.TabIndex = 350;
+            this.chkPenOCxmitVHF105.UseVisualStyleBackColor = false;
+            this.chkPenOCxmitVHF105.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF10_CheckedChanged);
+            // 
+            // chkPenOCxmitVHF104
+            // 
+            this.chkPenOCxmitVHF104.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCxmitVHF104.Image = null;
+            this.chkPenOCxmitVHF104.Location = new System.Drawing.Point(214, 201);
+            this.chkPenOCxmitVHF104.Name = "chkPenOCxmitVHF104";
+            this.chkPenOCxmitVHF104.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCxmitVHF104.TabIndex = 349;
+            this.chkPenOCxmitVHF104.UseVisualStyleBackColor = false;
+            this.chkPenOCxmitVHF104.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF10_CheckedChanged);
+            // 
+            // chkPenOCxmitVHF103
+            // 
+            this.chkPenOCxmitVHF103.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCxmitVHF103.Image = null;
+            this.chkPenOCxmitVHF103.Location = new System.Drawing.Point(198, 201);
+            this.chkPenOCxmitVHF103.Name = "chkPenOCxmitVHF103";
+            this.chkPenOCxmitVHF103.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCxmitVHF103.TabIndex = 348;
+            this.chkPenOCxmitVHF103.UseVisualStyleBackColor = false;
+            this.chkPenOCxmitVHF103.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF10_CheckedChanged);
+            // 
+            // chkPenOCxmitVHF102
+            // 
+            this.chkPenOCxmitVHF102.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCxmitVHF102.Image = null;
+            this.chkPenOCxmitVHF102.Location = new System.Drawing.Point(182, 201);
+            this.chkPenOCxmitVHF102.Name = "chkPenOCxmitVHF102";
+            this.chkPenOCxmitVHF102.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCxmitVHF102.TabIndex = 347;
+            this.chkPenOCxmitVHF102.UseVisualStyleBackColor = false;
+            this.chkPenOCxmitVHF102.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF10_CheckedChanged);
+            // 
+            // chkPenOCxmitVHF101
+            // 
+            this.chkPenOCxmitVHF101.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCxmitVHF101.Image = null;
+            this.chkPenOCxmitVHF101.Location = new System.Drawing.Point(166, 201);
+            this.chkPenOCxmitVHF101.Name = "chkPenOCxmitVHF101";
+            this.chkPenOCxmitVHF101.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCxmitVHF101.TabIndex = 346;
+            this.chkPenOCxmitVHF101.UseVisualStyleBackColor = false;
+            this.chkPenOCxmitVHF101.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF10_CheckedChanged);
+            // 
+            // chkPenOCrcvVHF107
+            // 
+            this.chkPenOCrcvVHF107.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCrcvVHF107.Image = null;
+            this.chkPenOCrcvVHF107.Location = new System.Drawing.Point(144, 201);
+            this.chkPenOCrcvVHF107.Name = "chkPenOCrcvVHF107";
+            this.chkPenOCrcvVHF107.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCrcvVHF107.TabIndex = 345;
+            this.chkPenOCrcvVHF107.UseVisualStyleBackColor = false;
+            this.chkPenOCrcvVHF107.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF10_CheckedChanged);
+            // 
+            // chkPenOCrcvVHF106
+            // 
+            this.chkPenOCrcvVHF106.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCrcvVHF106.Image = null;
+            this.chkPenOCrcvVHF106.Location = new System.Drawing.Point(128, 201);
+            this.chkPenOCrcvVHF106.Name = "chkPenOCrcvVHF106";
+            this.chkPenOCrcvVHF106.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCrcvVHF106.TabIndex = 344;
+            this.chkPenOCrcvVHF106.UseVisualStyleBackColor = false;
+            this.chkPenOCrcvVHF106.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF10_CheckedChanged);
+            // 
+            // chkPenOCrcvVHF105
+            // 
+            this.chkPenOCrcvVHF105.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCrcvVHF105.Image = null;
+            this.chkPenOCrcvVHF105.Location = new System.Drawing.Point(112, 201);
+            this.chkPenOCrcvVHF105.Name = "chkPenOCrcvVHF105";
+            this.chkPenOCrcvVHF105.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCrcvVHF105.TabIndex = 343;
+            this.chkPenOCrcvVHF105.UseVisualStyleBackColor = false;
+            this.chkPenOCrcvVHF105.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF10_CheckedChanged);
+            // 
+            // chkPenOCrcvVHF104
+            // 
+            this.chkPenOCrcvVHF104.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCrcvVHF104.Image = null;
+            this.chkPenOCrcvVHF104.Location = new System.Drawing.Point(96, 201);
+            this.chkPenOCrcvVHF104.Name = "chkPenOCrcvVHF104";
+            this.chkPenOCrcvVHF104.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCrcvVHF104.TabIndex = 342;
+            this.chkPenOCrcvVHF104.UseVisualStyleBackColor = false;
+            this.chkPenOCrcvVHF104.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF10_CheckedChanged);
+            // 
+            // chkPenOCrcvVHF103
+            // 
+            this.chkPenOCrcvVHF103.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCrcvVHF103.Image = null;
+            this.chkPenOCrcvVHF103.Location = new System.Drawing.Point(80, 201);
+            this.chkPenOCrcvVHF103.Name = "chkPenOCrcvVHF103";
+            this.chkPenOCrcvVHF103.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCrcvVHF103.TabIndex = 341;
+            this.chkPenOCrcvVHF103.UseVisualStyleBackColor = false;
+            this.chkPenOCrcvVHF103.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF10_CheckedChanged);
+            // 
+            // chkPenOCrcvVHF102
+            // 
+            this.chkPenOCrcvVHF102.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCrcvVHF102.Image = null;
+            this.chkPenOCrcvVHF102.Location = new System.Drawing.Point(64, 201);
+            this.chkPenOCrcvVHF102.Name = "chkPenOCrcvVHF102";
+            this.chkPenOCrcvVHF102.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCrcvVHF102.TabIndex = 340;
+            this.chkPenOCrcvVHF102.UseVisualStyleBackColor = false;
+            this.chkPenOCrcvVHF102.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF10_CheckedChanged);
+            // 
+            // chkPenOCrcvVHF101
+            // 
+            this.chkPenOCrcvVHF101.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCrcvVHF101.Image = null;
+            this.chkPenOCrcvVHF101.Location = new System.Drawing.Point(48, 201);
+            this.chkPenOCrcvVHF101.Name = "chkPenOCrcvVHF101";
+            this.chkPenOCrcvVHF101.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCrcvVHF101.TabIndex = 339;
+            this.chkPenOCrcvVHF101.UseVisualStyleBackColor = false;
+            this.chkPenOCrcvVHF101.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF10_CheckedChanged);
+            // 
+            // chkPenOCxmitVHF97
+            // 
+            this.chkPenOCxmitVHF97.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCxmitVHF97.Image = null;
+            this.chkPenOCxmitVHF97.Location = new System.Drawing.Point(262, 185);
+            this.chkPenOCxmitVHF97.Name = "chkPenOCxmitVHF97";
+            this.chkPenOCxmitVHF97.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCxmitVHF97.TabIndex = 338;
+            this.chkPenOCxmitVHF97.UseVisualStyleBackColor = false;
+            this.chkPenOCxmitVHF97.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF9_CheckedChanged);
+            // 
+            // chkPenOCxmitVHF96
+            // 
+            this.chkPenOCxmitVHF96.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCxmitVHF96.Image = null;
+            this.chkPenOCxmitVHF96.Location = new System.Drawing.Point(246, 185);
+            this.chkPenOCxmitVHF96.Name = "chkPenOCxmitVHF96";
+            this.chkPenOCxmitVHF96.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCxmitVHF96.TabIndex = 337;
+            this.chkPenOCxmitVHF96.UseVisualStyleBackColor = false;
+            this.chkPenOCxmitVHF96.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF9_CheckedChanged);
+            // 
+            // chkPenOCxmitVHF95
+            // 
+            this.chkPenOCxmitVHF95.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCxmitVHF95.Image = null;
+            this.chkPenOCxmitVHF95.Location = new System.Drawing.Point(230, 185);
+            this.chkPenOCxmitVHF95.Name = "chkPenOCxmitVHF95";
+            this.chkPenOCxmitVHF95.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCxmitVHF95.TabIndex = 336;
+            this.chkPenOCxmitVHF95.UseVisualStyleBackColor = false;
+            this.chkPenOCxmitVHF95.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF9_CheckedChanged);
+            // 
+            // chkPenOCxmitVHF94
+            // 
+            this.chkPenOCxmitVHF94.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCxmitVHF94.Image = null;
+            this.chkPenOCxmitVHF94.Location = new System.Drawing.Point(214, 185);
+            this.chkPenOCxmitVHF94.Name = "chkPenOCxmitVHF94";
+            this.chkPenOCxmitVHF94.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCxmitVHF94.TabIndex = 335;
+            this.chkPenOCxmitVHF94.UseVisualStyleBackColor = false;
+            this.chkPenOCxmitVHF94.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF9_CheckedChanged);
+            // 
+            // chkPenOCxmitVHF93
+            // 
+            this.chkPenOCxmitVHF93.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCxmitVHF93.Image = null;
+            this.chkPenOCxmitVHF93.Location = new System.Drawing.Point(198, 185);
+            this.chkPenOCxmitVHF93.Name = "chkPenOCxmitVHF93";
+            this.chkPenOCxmitVHF93.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCxmitVHF93.TabIndex = 334;
+            this.chkPenOCxmitVHF93.UseVisualStyleBackColor = false;
+            this.chkPenOCxmitVHF93.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF9_CheckedChanged);
+            // 
+            // chkPenOCxmitVHF92
+            // 
+            this.chkPenOCxmitVHF92.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCxmitVHF92.Image = null;
+            this.chkPenOCxmitVHF92.Location = new System.Drawing.Point(182, 185);
+            this.chkPenOCxmitVHF92.Name = "chkPenOCxmitVHF92";
+            this.chkPenOCxmitVHF92.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCxmitVHF92.TabIndex = 333;
+            this.chkPenOCxmitVHF92.UseVisualStyleBackColor = false;
+            this.chkPenOCxmitVHF92.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF9_CheckedChanged);
+            // 
+            // chkPenOCxmitVHF91
+            // 
+            this.chkPenOCxmitVHF91.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCxmitVHF91.Image = null;
+            this.chkPenOCxmitVHF91.Location = new System.Drawing.Point(166, 185);
+            this.chkPenOCxmitVHF91.Name = "chkPenOCxmitVHF91";
+            this.chkPenOCxmitVHF91.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCxmitVHF91.TabIndex = 332;
+            this.chkPenOCxmitVHF91.UseVisualStyleBackColor = false;
+            this.chkPenOCxmitVHF91.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF9_CheckedChanged);
+            // 
+            // chkPenOCrcvVHF97
+            // 
+            this.chkPenOCrcvVHF97.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCrcvVHF97.Image = null;
+            this.chkPenOCrcvVHF97.Location = new System.Drawing.Point(144, 185);
+            this.chkPenOCrcvVHF97.Name = "chkPenOCrcvVHF97";
+            this.chkPenOCrcvVHF97.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCrcvVHF97.TabIndex = 331;
+            this.chkPenOCrcvVHF97.UseVisualStyleBackColor = false;
+            this.chkPenOCrcvVHF97.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF9_CheckedChanged);
+            // 
+            // chkPenOCrcvVHF96
+            // 
+            this.chkPenOCrcvVHF96.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCrcvVHF96.Image = null;
+            this.chkPenOCrcvVHF96.Location = new System.Drawing.Point(128, 185);
+            this.chkPenOCrcvVHF96.Name = "chkPenOCrcvVHF96";
+            this.chkPenOCrcvVHF96.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCrcvVHF96.TabIndex = 330;
+            this.chkPenOCrcvVHF96.UseVisualStyleBackColor = false;
+            this.chkPenOCrcvVHF96.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF9_CheckedChanged);
+            // 
+            // chkPenOCrcvVHF95
+            // 
+            this.chkPenOCrcvVHF95.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCrcvVHF95.Image = null;
+            this.chkPenOCrcvVHF95.Location = new System.Drawing.Point(112, 185);
+            this.chkPenOCrcvVHF95.Name = "chkPenOCrcvVHF95";
+            this.chkPenOCrcvVHF95.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCrcvVHF95.TabIndex = 329;
+            this.chkPenOCrcvVHF95.UseVisualStyleBackColor = false;
+            this.chkPenOCrcvVHF95.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF9_CheckedChanged);
+            // 
+            // chkPenOCrcvVHF94
+            // 
+            this.chkPenOCrcvVHF94.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCrcvVHF94.Image = null;
+            this.chkPenOCrcvVHF94.Location = new System.Drawing.Point(96, 185);
+            this.chkPenOCrcvVHF94.Name = "chkPenOCrcvVHF94";
+            this.chkPenOCrcvVHF94.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCrcvVHF94.TabIndex = 328;
+            this.chkPenOCrcvVHF94.UseVisualStyleBackColor = false;
+            this.chkPenOCrcvVHF94.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF9_CheckedChanged);
+            // 
+            // chkPenOCrcvVHF93
+            // 
+            this.chkPenOCrcvVHF93.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCrcvVHF93.Image = null;
+            this.chkPenOCrcvVHF93.Location = new System.Drawing.Point(80, 185);
+            this.chkPenOCrcvVHF93.Name = "chkPenOCrcvVHF93";
+            this.chkPenOCrcvVHF93.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCrcvVHF93.TabIndex = 327;
+            this.chkPenOCrcvVHF93.UseVisualStyleBackColor = false;
+            this.chkPenOCrcvVHF93.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF9_CheckedChanged);
+            // 
+            // chkPenOCrcvVHF92
+            // 
+            this.chkPenOCrcvVHF92.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCrcvVHF92.Image = null;
+            this.chkPenOCrcvVHF92.Location = new System.Drawing.Point(64, 185);
+            this.chkPenOCrcvVHF92.Name = "chkPenOCrcvVHF92";
+            this.chkPenOCrcvVHF92.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCrcvVHF92.TabIndex = 326;
+            this.chkPenOCrcvVHF92.UseVisualStyleBackColor = false;
+            this.chkPenOCrcvVHF92.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF9_CheckedChanged);
+            // 
+            // chkPenOCrcvVHF91
+            // 
+            this.chkPenOCrcvVHF91.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCrcvVHF91.Image = null;
+            this.chkPenOCrcvVHF91.Location = new System.Drawing.Point(48, 185);
+            this.chkPenOCrcvVHF91.Name = "chkPenOCrcvVHF91";
+            this.chkPenOCrcvVHF91.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCrcvVHF91.TabIndex = 325;
+            this.chkPenOCrcvVHF91.UseVisualStyleBackColor = false;
+            this.chkPenOCrcvVHF91.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF9_CheckedChanged);
+            // 
+            // chkPenOCxmitVHF87
+            // 
+            this.chkPenOCxmitVHF87.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCxmitVHF87.Image = null;
+            this.chkPenOCxmitVHF87.Location = new System.Drawing.Point(262, 169);
+            this.chkPenOCxmitVHF87.Name = "chkPenOCxmitVHF87";
+            this.chkPenOCxmitVHF87.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCxmitVHF87.TabIndex = 324;
+            this.chkPenOCxmitVHF87.UseVisualStyleBackColor = false;
+            this.chkPenOCxmitVHF87.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF8_CheckedChanged);
+            // 
+            // chkPenOCxmitVHF86
+            // 
+            this.chkPenOCxmitVHF86.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCxmitVHF86.Image = null;
+            this.chkPenOCxmitVHF86.Location = new System.Drawing.Point(246, 169);
+            this.chkPenOCxmitVHF86.Name = "chkPenOCxmitVHF86";
+            this.chkPenOCxmitVHF86.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCxmitVHF86.TabIndex = 323;
+            this.chkPenOCxmitVHF86.UseVisualStyleBackColor = false;
+            this.chkPenOCxmitVHF86.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF8_CheckedChanged);
+            // 
+            // chkPenOCxmitVHF85
+            // 
+            this.chkPenOCxmitVHF85.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCxmitVHF85.Image = null;
+            this.chkPenOCxmitVHF85.Location = new System.Drawing.Point(230, 169);
+            this.chkPenOCxmitVHF85.Name = "chkPenOCxmitVHF85";
+            this.chkPenOCxmitVHF85.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCxmitVHF85.TabIndex = 322;
+            this.chkPenOCxmitVHF85.UseVisualStyleBackColor = false;
+            this.chkPenOCxmitVHF85.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF8_CheckedChanged);
+            // 
+            // chkPenOCxmitVHF84
+            // 
+            this.chkPenOCxmitVHF84.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCxmitVHF84.Image = null;
+            this.chkPenOCxmitVHF84.Location = new System.Drawing.Point(214, 169);
+            this.chkPenOCxmitVHF84.Name = "chkPenOCxmitVHF84";
+            this.chkPenOCxmitVHF84.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCxmitVHF84.TabIndex = 321;
+            this.chkPenOCxmitVHF84.UseVisualStyleBackColor = false;
+            this.chkPenOCxmitVHF84.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF8_CheckedChanged);
+            // 
+            // chkPenOCxmitVHF83
+            // 
+            this.chkPenOCxmitVHF83.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCxmitVHF83.Image = null;
+            this.chkPenOCxmitVHF83.Location = new System.Drawing.Point(198, 169);
+            this.chkPenOCxmitVHF83.Name = "chkPenOCxmitVHF83";
+            this.chkPenOCxmitVHF83.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCxmitVHF83.TabIndex = 320;
+            this.chkPenOCxmitVHF83.UseVisualStyleBackColor = false;
+            this.chkPenOCxmitVHF83.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF8_CheckedChanged);
+            // 
+            // chkPenOCxmitVHF82
+            // 
+            this.chkPenOCxmitVHF82.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCxmitVHF82.Image = null;
+            this.chkPenOCxmitVHF82.Location = new System.Drawing.Point(182, 169);
+            this.chkPenOCxmitVHF82.Name = "chkPenOCxmitVHF82";
+            this.chkPenOCxmitVHF82.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCxmitVHF82.TabIndex = 319;
+            this.chkPenOCxmitVHF82.UseVisualStyleBackColor = false;
+            this.chkPenOCxmitVHF82.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF8_CheckedChanged);
+            // 
+            // chkPenOCxmitVHF81
+            // 
+            this.chkPenOCxmitVHF81.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCxmitVHF81.Image = null;
+            this.chkPenOCxmitVHF81.Location = new System.Drawing.Point(166, 169);
+            this.chkPenOCxmitVHF81.Name = "chkPenOCxmitVHF81";
+            this.chkPenOCxmitVHF81.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCxmitVHF81.TabIndex = 318;
+            this.chkPenOCxmitVHF81.UseVisualStyleBackColor = false;
+            this.chkPenOCxmitVHF81.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF8_CheckedChanged);
+            // 
+            // chkPenOCrcvVHF87
+            // 
+            this.chkPenOCrcvVHF87.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCrcvVHF87.Image = null;
+            this.chkPenOCrcvVHF87.Location = new System.Drawing.Point(144, 169);
+            this.chkPenOCrcvVHF87.Name = "chkPenOCrcvVHF87";
+            this.chkPenOCrcvVHF87.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCrcvVHF87.TabIndex = 317;
+            this.chkPenOCrcvVHF87.UseVisualStyleBackColor = false;
+            this.chkPenOCrcvVHF87.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF8_CheckedChanged);
+            // 
+            // chkPenOCrcvVHF86
+            // 
+            this.chkPenOCrcvVHF86.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCrcvVHF86.Image = null;
+            this.chkPenOCrcvVHF86.Location = new System.Drawing.Point(128, 169);
+            this.chkPenOCrcvVHF86.Name = "chkPenOCrcvVHF86";
+            this.chkPenOCrcvVHF86.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCrcvVHF86.TabIndex = 316;
+            this.chkPenOCrcvVHF86.UseVisualStyleBackColor = false;
+            this.chkPenOCrcvVHF86.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF8_CheckedChanged);
+            // 
+            // chkPenOCrcvVHF85
+            // 
+            this.chkPenOCrcvVHF85.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCrcvVHF85.Image = null;
+            this.chkPenOCrcvVHF85.Location = new System.Drawing.Point(112, 169);
+            this.chkPenOCrcvVHF85.Name = "chkPenOCrcvVHF85";
+            this.chkPenOCrcvVHF85.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCrcvVHF85.TabIndex = 315;
+            this.chkPenOCrcvVHF85.UseVisualStyleBackColor = false;
+            this.chkPenOCrcvVHF85.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF8_CheckedChanged);
+            // 
+            // chkPenOCrcvVHF84
+            // 
+            this.chkPenOCrcvVHF84.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCrcvVHF84.Image = null;
+            this.chkPenOCrcvVHF84.Location = new System.Drawing.Point(96, 169);
+            this.chkPenOCrcvVHF84.Name = "chkPenOCrcvVHF84";
+            this.chkPenOCrcvVHF84.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCrcvVHF84.TabIndex = 314;
+            this.chkPenOCrcvVHF84.UseVisualStyleBackColor = false;
+            this.chkPenOCrcvVHF84.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF8_CheckedChanged);
+            // 
+            // chkPenOCrcvVHF83
+            // 
+            this.chkPenOCrcvVHF83.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCrcvVHF83.Image = null;
+            this.chkPenOCrcvVHF83.Location = new System.Drawing.Point(80, 169);
+            this.chkPenOCrcvVHF83.Name = "chkPenOCrcvVHF83";
+            this.chkPenOCrcvVHF83.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCrcvVHF83.TabIndex = 313;
+            this.chkPenOCrcvVHF83.UseVisualStyleBackColor = false;
+            this.chkPenOCrcvVHF83.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF8_CheckedChanged);
+            // 
+            // chkPenOCrcvVHF82
+            // 
+            this.chkPenOCrcvVHF82.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCrcvVHF82.Image = null;
+            this.chkPenOCrcvVHF82.Location = new System.Drawing.Point(64, 169);
+            this.chkPenOCrcvVHF82.Name = "chkPenOCrcvVHF82";
+            this.chkPenOCrcvVHF82.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCrcvVHF82.TabIndex = 312;
+            this.chkPenOCrcvVHF82.UseVisualStyleBackColor = false;
+            this.chkPenOCrcvVHF82.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF8_CheckedChanged);
+            // 
+            // chkPenOCrcvVHF81
+            // 
+            this.chkPenOCrcvVHF81.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCrcvVHF81.Image = null;
+            this.chkPenOCrcvVHF81.Location = new System.Drawing.Point(48, 169);
+            this.chkPenOCrcvVHF81.Name = "chkPenOCrcvVHF81";
+            this.chkPenOCrcvVHF81.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCrcvVHF81.TabIndex = 311;
+            this.chkPenOCrcvVHF81.UseVisualStyleBackColor = false;
+            this.chkPenOCrcvVHF81.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF8_CheckedChanged);
+            // 
+            // chkPenOCxmitVHF77
+            // 
+            this.chkPenOCxmitVHF77.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCxmitVHF77.Image = null;
+            this.chkPenOCxmitVHF77.Location = new System.Drawing.Point(262, 153);
+            this.chkPenOCxmitVHF77.Name = "chkPenOCxmitVHF77";
+            this.chkPenOCxmitVHF77.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCxmitVHF77.TabIndex = 310;
+            this.chkPenOCxmitVHF77.UseVisualStyleBackColor = false;
+            this.chkPenOCxmitVHF77.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF7_CheckedChanged);
+            // 
+            // chkPenOCxmitVHF76
+            // 
+            this.chkPenOCxmitVHF76.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCxmitVHF76.Image = null;
+            this.chkPenOCxmitVHF76.Location = new System.Drawing.Point(246, 153);
+            this.chkPenOCxmitVHF76.Name = "chkPenOCxmitVHF76";
+            this.chkPenOCxmitVHF76.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCxmitVHF76.TabIndex = 309;
+            this.chkPenOCxmitVHF76.UseVisualStyleBackColor = false;
+            this.chkPenOCxmitVHF76.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF7_CheckedChanged);
+            // 
+            // chkPenOCxmitVHF75
+            // 
+            this.chkPenOCxmitVHF75.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCxmitVHF75.Image = null;
+            this.chkPenOCxmitVHF75.Location = new System.Drawing.Point(230, 153);
+            this.chkPenOCxmitVHF75.Name = "chkPenOCxmitVHF75";
+            this.chkPenOCxmitVHF75.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCxmitVHF75.TabIndex = 308;
+            this.chkPenOCxmitVHF75.UseVisualStyleBackColor = false;
+            this.chkPenOCxmitVHF75.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF7_CheckedChanged);
+            // 
+            // chkPenOCxmitVHF74
+            // 
+            this.chkPenOCxmitVHF74.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCxmitVHF74.Image = null;
+            this.chkPenOCxmitVHF74.Location = new System.Drawing.Point(214, 153);
+            this.chkPenOCxmitVHF74.Name = "chkPenOCxmitVHF74";
+            this.chkPenOCxmitVHF74.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCxmitVHF74.TabIndex = 307;
+            this.chkPenOCxmitVHF74.UseVisualStyleBackColor = false;
+            this.chkPenOCxmitVHF74.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF7_CheckedChanged);
+            // 
+            // chkPenOCxmitVHF73
+            // 
+            this.chkPenOCxmitVHF73.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCxmitVHF73.Image = null;
+            this.chkPenOCxmitVHF73.Location = new System.Drawing.Point(198, 153);
+            this.chkPenOCxmitVHF73.Name = "chkPenOCxmitVHF73";
+            this.chkPenOCxmitVHF73.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCxmitVHF73.TabIndex = 306;
+            this.chkPenOCxmitVHF73.UseVisualStyleBackColor = false;
+            this.chkPenOCxmitVHF73.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF7_CheckedChanged);
+            // 
+            // chkPenOCxmitVHF72
+            // 
+            this.chkPenOCxmitVHF72.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCxmitVHF72.Image = null;
+            this.chkPenOCxmitVHF72.Location = new System.Drawing.Point(182, 153);
+            this.chkPenOCxmitVHF72.Name = "chkPenOCxmitVHF72";
+            this.chkPenOCxmitVHF72.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCxmitVHF72.TabIndex = 305;
+            this.chkPenOCxmitVHF72.UseVisualStyleBackColor = false;
+            this.chkPenOCxmitVHF72.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF7_CheckedChanged);
+            // 
+            // chkPenOCxmitVHF71
+            // 
+            this.chkPenOCxmitVHF71.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCxmitVHF71.Image = null;
+            this.chkPenOCxmitVHF71.Location = new System.Drawing.Point(166, 153);
+            this.chkPenOCxmitVHF71.Name = "chkPenOCxmitVHF71";
+            this.chkPenOCxmitVHF71.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCxmitVHF71.TabIndex = 304;
+            this.chkPenOCxmitVHF71.UseVisualStyleBackColor = false;
+            this.chkPenOCxmitVHF71.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF7_CheckedChanged);
+            // 
+            // chkPenOCrcvVHF77
+            // 
+            this.chkPenOCrcvVHF77.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCrcvVHF77.Image = null;
+            this.chkPenOCrcvVHF77.Location = new System.Drawing.Point(144, 153);
+            this.chkPenOCrcvVHF77.Name = "chkPenOCrcvVHF77";
+            this.chkPenOCrcvVHF77.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCrcvVHF77.TabIndex = 303;
+            this.chkPenOCrcvVHF77.UseVisualStyleBackColor = false;
+            this.chkPenOCrcvVHF77.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF7_CheckedChanged);
+            // 
+            // chkPenOCrcvVHF76
+            // 
+            this.chkPenOCrcvVHF76.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCrcvVHF76.Image = null;
+            this.chkPenOCrcvVHF76.Location = new System.Drawing.Point(128, 153);
+            this.chkPenOCrcvVHF76.Name = "chkPenOCrcvVHF76";
+            this.chkPenOCrcvVHF76.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCrcvVHF76.TabIndex = 302;
+            this.chkPenOCrcvVHF76.UseVisualStyleBackColor = false;
+            this.chkPenOCrcvVHF76.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF7_CheckedChanged);
+            // 
+            // chkPenOCrcvVHF75
+            // 
+            this.chkPenOCrcvVHF75.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCrcvVHF75.Image = null;
+            this.chkPenOCrcvVHF75.Location = new System.Drawing.Point(112, 153);
+            this.chkPenOCrcvVHF75.Name = "chkPenOCrcvVHF75";
+            this.chkPenOCrcvVHF75.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCrcvVHF75.TabIndex = 301;
+            this.chkPenOCrcvVHF75.UseVisualStyleBackColor = false;
+            this.chkPenOCrcvVHF75.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF7_CheckedChanged);
+            // 
+            // chkPenOCrcvVHF74
+            // 
+            this.chkPenOCrcvVHF74.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCrcvVHF74.Image = null;
+            this.chkPenOCrcvVHF74.Location = new System.Drawing.Point(96, 153);
+            this.chkPenOCrcvVHF74.Name = "chkPenOCrcvVHF74";
+            this.chkPenOCrcvVHF74.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCrcvVHF74.TabIndex = 300;
+            this.chkPenOCrcvVHF74.UseVisualStyleBackColor = false;
+            this.chkPenOCrcvVHF74.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF7_CheckedChanged);
+            // 
+            // chkPenOCrcvVHF73
+            // 
+            this.chkPenOCrcvVHF73.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCrcvVHF73.Image = null;
+            this.chkPenOCrcvVHF73.Location = new System.Drawing.Point(80, 153);
+            this.chkPenOCrcvVHF73.Name = "chkPenOCrcvVHF73";
+            this.chkPenOCrcvVHF73.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCrcvVHF73.TabIndex = 299;
+            this.chkPenOCrcvVHF73.UseVisualStyleBackColor = false;
+            this.chkPenOCrcvVHF73.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF7_CheckedChanged);
+            // 
+            // chkPenOCrcvVHF72
+            // 
+            this.chkPenOCrcvVHF72.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCrcvVHF72.Image = null;
+            this.chkPenOCrcvVHF72.Location = new System.Drawing.Point(64, 153);
+            this.chkPenOCrcvVHF72.Name = "chkPenOCrcvVHF72";
+            this.chkPenOCrcvVHF72.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCrcvVHF72.TabIndex = 298;
+            this.chkPenOCrcvVHF72.UseVisualStyleBackColor = false;
+            this.chkPenOCrcvVHF72.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF7_CheckedChanged);
+            // 
+            // chkPenOCrcvVHF71
+            // 
+            this.chkPenOCrcvVHF71.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCrcvVHF71.Image = null;
+            this.chkPenOCrcvVHF71.Location = new System.Drawing.Point(48, 153);
+            this.chkPenOCrcvVHF71.Name = "chkPenOCrcvVHF71";
+            this.chkPenOCrcvVHF71.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCrcvVHF71.TabIndex = 297;
+            this.chkPenOCrcvVHF71.UseVisualStyleBackColor = false;
+            this.chkPenOCrcvVHF71.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF7_CheckedChanged);
+            // 
+            // chkPenOCxmitVHF67
+            // 
+            this.chkPenOCxmitVHF67.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCxmitVHF67.Image = null;
+            this.chkPenOCxmitVHF67.Location = new System.Drawing.Point(262, 137);
+            this.chkPenOCxmitVHF67.Name = "chkPenOCxmitVHF67";
+            this.chkPenOCxmitVHF67.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCxmitVHF67.TabIndex = 296;
+            this.chkPenOCxmitVHF67.UseVisualStyleBackColor = false;
+            this.chkPenOCxmitVHF67.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF6_CheckedChanged);
+            // 
+            // chkPenOCxmitVHF66
+            // 
+            this.chkPenOCxmitVHF66.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCxmitVHF66.Image = null;
+            this.chkPenOCxmitVHF66.Location = new System.Drawing.Point(246, 137);
+            this.chkPenOCxmitVHF66.Name = "chkPenOCxmitVHF66";
+            this.chkPenOCxmitVHF66.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCxmitVHF66.TabIndex = 295;
+            this.chkPenOCxmitVHF66.UseVisualStyleBackColor = false;
+            this.chkPenOCxmitVHF66.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF6_CheckedChanged);
+            // 
+            // chkPenOCxmitVHF65
+            // 
+            this.chkPenOCxmitVHF65.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCxmitVHF65.Image = null;
+            this.chkPenOCxmitVHF65.Location = new System.Drawing.Point(230, 137);
+            this.chkPenOCxmitVHF65.Name = "chkPenOCxmitVHF65";
+            this.chkPenOCxmitVHF65.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCxmitVHF65.TabIndex = 294;
+            this.chkPenOCxmitVHF65.UseVisualStyleBackColor = false;
+            this.chkPenOCxmitVHF65.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF6_CheckedChanged);
+            // 
+            // chkPenOCxmitVHF64
+            // 
+            this.chkPenOCxmitVHF64.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCxmitVHF64.Image = null;
+            this.chkPenOCxmitVHF64.Location = new System.Drawing.Point(214, 137);
+            this.chkPenOCxmitVHF64.Name = "chkPenOCxmitVHF64";
+            this.chkPenOCxmitVHF64.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCxmitVHF64.TabIndex = 293;
+            this.chkPenOCxmitVHF64.UseVisualStyleBackColor = false;
+            this.chkPenOCxmitVHF64.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF6_CheckedChanged);
+            // 
+            // chkPenOCxmitVHF63
+            // 
+            this.chkPenOCxmitVHF63.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCxmitVHF63.Image = null;
+            this.chkPenOCxmitVHF63.Location = new System.Drawing.Point(198, 137);
+            this.chkPenOCxmitVHF63.Name = "chkPenOCxmitVHF63";
+            this.chkPenOCxmitVHF63.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCxmitVHF63.TabIndex = 292;
+            this.chkPenOCxmitVHF63.UseVisualStyleBackColor = false;
+            this.chkPenOCxmitVHF63.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF6_CheckedChanged);
+            // 
+            // chkPenOCxmitVHF62
+            // 
+            this.chkPenOCxmitVHF62.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCxmitVHF62.Image = null;
+            this.chkPenOCxmitVHF62.Location = new System.Drawing.Point(182, 137);
+            this.chkPenOCxmitVHF62.Name = "chkPenOCxmitVHF62";
+            this.chkPenOCxmitVHF62.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCxmitVHF62.TabIndex = 291;
+            this.chkPenOCxmitVHF62.UseVisualStyleBackColor = false;
+            this.chkPenOCxmitVHF62.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF6_CheckedChanged);
+            // 
+            // chkPenOCxmitVHF61
+            // 
+            this.chkPenOCxmitVHF61.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCxmitVHF61.Image = null;
+            this.chkPenOCxmitVHF61.Location = new System.Drawing.Point(166, 137);
+            this.chkPenOCxmitVHF61.Name = "chkPenOCxmitVHF61";
+            this.chkPenOCxmitVHF61.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCxmitVHF61.TabIndex = 290;
+            this.chkPenOCxmitVHF61.UseVisualStyleBackColor = false;
+            this.chkPenOCxmitVHF61.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF6_CheckedChanged);
+            // 
+            // chkPenOCrcvVHF67
+            // 
+            this.chkPenOCrcvVHF67.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCrcvVHF67.Image = null;
+            this.chkPenOCrcvVHF67.Location = new System.Drawing.Point(144, 137);
+            this.chkPenOCrcvVHF67.Name = "chkPenOCrcvVHF67";
+            this.chkPenOCrcvVHF67.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCrcvVHF67.TabIndex = 289;
+            this.chkPenOCrcvVHF67.UseVisualStyleBackColor = false;
+            this.chkPenOCrcvVHF67.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF6_CheckedChanged);
+            // 
+            // chkPenOCrcvVHF66
+            // 
+            this.chkPenOCrcvVHF66.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCrcvVHF66.Image = null;
+            this.chkPenOCrcvVHF66.Location = new System.Drawing.Point(128, 137);
+            this.chkPenOCrcvVHF66.Name = "chkPenOCrcvVHF66";
+            this.chkPenOCrcvVHF66.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCrcvVHF66.TabIndex = 288;
+            this.chkPenOCrcvVHF66.UseVisualStyleBackColor = false;
+            this.chkPenOCrcvVHF66.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF6_CheckedChanged);
+            // 
+            // chkPenOCrcvVHF65
+            // 
+            this.chkPenOCrcvVHF65.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCrcvVHF65.Image = null;
+            this.chkPenOCrcvVHF65.Location = new System.Drawing.Point(112, 137);
+            this.chkPenOCrcvVHF65.Name = "chkPenOCrcvVHF65";
+            this.chkPenOCrcvVHF65.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCrcvVHF65.TabIndex = 287;
+            this.chkPenOCrcvVHF65.UseVisualStyleBackColor = false;
+            this.chkPenOCrcvVHF65.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF6_CheckedChanged);
+            // 
+            // chkPenOCrcvVHF64
+            // 
+            this.chkPenOCrcvVHF64.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCrcvVHF64.Image = null;
+            this.chkPenOCrcvVHF64.Location = new System.Drawing.Point(96, 137);
+            this.chkPenOCrcvVHF64.Name = "chkPenOCrcvVHF64";
+            this.chkPenOCrcvVHF64.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCrcvVHF64.TabIndex = 286;
+            this.chkPenOCrcvVHF64.UseVisualStyleBackColor = false;
+            this.chkPenOCrcvVHF64.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF6_CheckedChanged);
+            // 
+            // chkPenOCrcvVHF63
+            // 
+            this.chkPenOCrcvVHF63.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCrcvVHF63.Image = null;
+            this.chkPenOCrcvVHF63.Location = new System.Drawing.Point(80, 137);
+            this.chkPenOCrcvVHF63.Name = "chkPenOCrcvVHF63";
+            this.chkPenOCrcvVHF63.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCrcvVHF63.TabIndex = 285;
+            this.chkPenOCrcvVHF63.UseVisualStyleBackColor = false;
+            this.chkPenOCrcvVHF63.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF6_CheckedChanged);
+            // 
+            // chkPenOCrcvVHF62
+            // 
+            this.chkPenOCrcvVHF62.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCrcvVHF62.Image = null;
+            this.chkPenOCrcvVHF62.Location = new System.Drawing.Point(64, 137);
+            this.chkPenOCrcvVHF62.Name = "chkPenOCrcvVHF62";
+            this.chkPenOCrcvVHF62.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCrcvVHF62.TabIndex = 284;
+            this.chkPenOCrcvVHF62.UseVisualStyleBackColor = false;
+            this.chkPenOCrcvVHF62.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF6_CheckedChanged);
+            // 
+            // chkPenOCrcvVHF61
+            // 
+            this.chkPenOCrcvVHF61.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCrcvVHF61.Image = null;
+            this.chkPenOCrcvVHF61.Location = new System.Drawing.Point(48, 137);
+            this.chkPenOCrcvVHF61.Name = "chkPenOCrcvVHF61";
+            this.chkPenOCrcvVHF61.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCrcvVHF61.TabIndex = 283;
+            this.chkPenOCrcvVHF61.UseVisualStyleBackColor = false;
+            this.chkPenOCrcvVHF61.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF6_CheckedChanged);
+            // 
+            // chkPenOCxmitVHF57
+            // 
+            this.chkPenOCxmitVHF57.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCxmitVHF57.Image = null;
+            this.chkPenOCxmitVHF57.Location = new System.Drawing.Point(262, 121);
+            this.chkPenOCxmitVHF57.Name = "chkPenOCxmitVHF57";
+            this.chkPenOCxmitVHF57.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCxmitVHF57.TabIndex = 282;
+            this.chkPenOCxmitVHF57.UseVisualStyleBackColor = false;
+            this.chkPenOCxmitVHF57.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF5_CheckedChanged);
+            // 
+            // chkPenOCxmitVHF56
+            // 
+            this.chkPenOCxmitVHF56.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCxmitVHF56.Image = null;
+            this.chkPenOCxmitVHF56.Location = new System.Drawing.Point(246, 121);
+            this.chkPenOCxmitVHF56.Name = "chkPenOCxmitVHF56";
+            this.chkPenOCxmitVHF56.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCxmitVHF56.TabIndex = 281;
+            this.chkPenOCxmitVHF56.UseVisualStyleBackColor = false;
+            this.chkPenOCxmitVHF56.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF5_CheckedChanged);
+            // 
+            // chkPenOCxmitVHF55
+            // 
+            this.chkPenOCxmitVHF55.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCxmitVHF55.Image = null;
+            this.chkPenOCxmitVHF55.Location = new System.Drawing.Point(230, 121);
+            this.chkPenOCxmitVHF55.Name = "chkPenOCxmitVHF55";
+            this.chkPenOCxmitVHF55.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCxmitVHF55.TabIndex = 280;
+            this.chkPenOCxmitVHF55.UseVisualStyleBackColor = false;
+            this.chkPenOCxmitVHF55.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF5_CheckedChanged);
+            // 
+            // chkPenOCxmitVHF54
+            // 
+            this.chkPenOCxmitVHF54.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCxmitVHF54.Image = null;
+            this.chkPenOCxmitVHF54.Location = new System.Drawing.Point(214, 121);
+            this.chkPenOCxmitVHF54.Name = "chkPenOCxmitVHF54";
+            this.chkPenOCxmitVHF54.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCxmitVHF54.TabIndex = 279;
+            this.chkPenOCxmitVHF54.UseVisualStyleBackColor = false;
+            this.chkPenOCxmitVHF54.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF5_CheckedChanged);
+            // 
+            // chkPenOCxmitVHF53
+            // 
+            this.chkPenOCxmitVHF53.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCxmitVHF53.Image = null;
+            this.chkPenOCxmitVHF53.Location = new System.Drawing.Point(198, 121);
+            this.chkPenOCxmitVHF53.Name = "chkPenOCxmitVHF53";
+            this.chkPenOCxmitVHF53.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCxmitVHF53.TabIndex = 278;
+            this.chkPenOCxmitVHF53.UseVisualStyleBackColor = false;
+            this.chkPenOCxmitVHF53.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF5_CheckedChanged);
+            // 
+            // chkPenOCxmitVHF52
+            // 
+            this.chkPenOCxmitVHF52.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCxmitVHF52.Image = null;
+            this.chkPenOCxmitVHF52.Location = new System.Drawing.Point(182, 121);
+            this.chkPenOCxmitVHF52.Name = "chkPenOCxmitVHF52";
+            this.chkPenOCxmitVHF52.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCxmitVHF52.TabIndex = 277;
+            this.chkPenOCxmitVHF52.UseVisualStyleBackColor = false;
+            this.chkPenOCxmitVHF52.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF5_CheckedChanged);
+            // 
+            // chkPenOCxmitVHF51
+            // 
+            this.chkPenOCxmitVHF51.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCxmitVHF51.Image = null;
+            this.chkPenOCxmitVHF51.Location = new System.Drawing.Point(166, 121);
+            this.chkPenOCxmitVHF51.Name = "chkPenOCxmitVHF51";
+            this.chkPenOCxmitVHF51.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCxmitVHF51.TabIndex = 276;
+            this.chkPenOCxmitVHF51.UseVisualStyleBackColor = false;
+            this.chkPenOCxmitVHF51.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF5_CheckedChanged);
+            // 
+            // chkPenOCrcvVHF57
+            // 
+            this.chkPenOCrcvVHF57.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCrcvVHF57.Image = null;
+            this.chkPenOCrcvVHF57.Location = new System.Drawing.Point(144, 121);
+            this.chkPenOCrcvVHF57.Name = "chkPenOCrcvVHF57";
+            this.chkPenOCrcvVHF57.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCrcvVHF57.TabIndex = 275;
+            this.chkPenOCrcvVHF57.UseVisualStyleBackColor = false;
+            this.chkPenOCrcvVHF57.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF5_CheckedChanged);
+            // 
+            // chkPenOCrcvVHF56
+            // 
+            this.chkPenOCrcvVHF56.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCrcvVHF56.Image = null;
+            this.chkPenOCrcvVHF56.Location = new System.Drawing.Point(128, 121);
+            this.chkPenOCrcvVHF56.Name = "chkPenOCrcvVHF56";
+            this.chkPenOCrcvVHF56.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCrcvVHF56.TabIndex = 274;
+            this.chkPenOCrcvVHF56.UseVisualStyleBackColor = false;
+            this.chkPenOCrcvVHF56.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF5_CheckedChanged);
+            // 
+            // chkPenOCrcvVHF55
+            // 
+            this.chkPenOCrcvVHF55.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCrcvVHF55.Image = null;
+            this.chkPenOCrcvVHF55.Location = new System.Drawing.Point(112, 121);
+            this.chkPenOCrcvVHF55.Name = "chkPenOCrcvVHF55";
+            this.chkPenOCrcvVHF55.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCrcvVHF55.TabIndex = 273;
+            this.chkPenOCrcvVHF55.UseVisualStyleBackColor = false;
+            this.chkPenOCrcvVHF55.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF5_CheckedChanged);
+            // 
+            // chkPenOCrcvVHF54
+            // 
+            this.chkPenOCrcvVHF54.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCrcvVHF54.Image = null;
+            this.chkPenOCrcvVHF54.Location = new System.Drawing.Point(96, 121);
+            this.chkPenOCrcvVHF54.Name = "chkPenOCrcvVHF54";
+            this.chkPenOCrcvVHF54.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCrcvVHF54.TabIndex = 272;
+            this.chkPenOCrcvVHF54.UseVisualStyleBackColor = false;
+            this.chkPenOCrcvVHF54.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF5_CheckedChanged);
+            // 
+            // chkPenOCrcvVHF53
+            // 
+            this.chkPenOCrcvVHF53.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCrcvVHF53.Image = null;
+            this.chkPenOCrcvVHF53.Location = new System.Drawing.Point(80, 121);
+            this.chkPenOCrcvVHF53.Name = "chkPenOCrcvVHF53";
+            this.chkPenOCrcvVHF53.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCrcvVHF53.TabIndex = 271;
+            this.chkPenOCrcvVHF53.UseVisualStyleBackColor = false;
+            this.chkPenOCrcvVHF53.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF5_CheckedChanged);
+            // 
+            // chkPenOCrcvVHF52
+            // 
+            this.chkPenOCrcvVHF52.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCrcvVHF52.Image = null;
+            this.chkPenOCrcvVHF52.Location = new System.Drawing.Point(64, 121);
+            this.chkPenOCrcvVHF52.Name = "chkPenOCrcvVHF52";
+            this.chkPenOCrcvVHF52.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCrcvVHF52.TabIndex = 270;
+            this.chkPenOCrcvVHF52.UseVisualStyleBackColor = false;
+            this.chkPenOCrcvVHF52.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF5_CheckedChanged);
+            // 
+            // chkPenOCrcvVHF51
+            // 
+            this.chkPenOCrcvVHF51.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCrcvVHF51.Image = null;
+            this.chkPenOCrcvVHF51.Location = new System.Drawing.Point(48, 121);
+            this.chkPenOCrcvVHF51.Name = "chkPenOCrcvVHF51";
+            this.chkPenOCrcvVHF51.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCrcvVHF51.TabIndex = 269;
+            this.chkPenOCrcvVHF51.UseVisualStyleBackColor = false;
+            this.chkPenOCrcvVHF51.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF5_CheckedChanged);
+            // 
+            // chkPenOCxmitVHF47
+            // 
+            this.chkPenOCxmitVHF47.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCxmitVHF47.Image = null;
+            this.chkPenOCxmitVHF47.Location = new System.Drawing.Point(262, 105);
+            this.chkPenOCxmitVHF47.Name = "chkPenOCxmitVHF47";
+            this.chkPenOCxmitVHF47.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCxmitVHF47.TabIndex = 268;
+            this.chkPenOCxmitVHF47.UseVisualStyleBackColor = false;
+            this.chkPenOCxmitVHF47.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF4_CheckedChanged);
+            // 
+            // chkPenOCxmitVHF46
+            // 
+            this.chkPenOCxmitVHF46.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCxmitVHF46.Image = null;
+            this.chkPenOCxmitVHF46.Location = new System.Drawing.Point(246, 105);
+            this.chkPenOCxmitVHF46.Name = "chkPenOCxmitVHF46";
+            this.chkPenOCxmitVHF46.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCxmitVHF46.TabIndex = 267;
+            this.chkPenOCxmitVHF46.UseVisualStyleBackColor = false;
+            this.chkPenOCxmitVHF46.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF4_CheckedChanged);
+            // 
+            // chkPenOCxmitVHF45
+            // 
+            this.chkPenOCxmitVHF45.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCxmitVHF45.Image = null;
+            this.chkPenOCxmitVHF45.Location = new System.Drawing.Point(230, 105);
+            this.chkPenOCxmitVHF45.Name = "chkPenOCxmitVHF45";
+            this.chkPenOCxmitVHF45.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCxmitVHF45.TabIndex = 266;
+            this.chkPenOCxmitVHF45.UseVisualStyleBackColor = false;
+            this.chkPenOCxmitVHF45.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF4_CheckedChanged);
+            // 
+            // chkPenOCxmitVHF44
+            // 
+            this.chkPenOCxmitVHF44.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCxmitVHF44.Image = null;
+            this.chkPenOCxmitVHF44.Location = new System.Drawing.Point(214, 105);
+            this.chkPenOCxmitVHF44.Name = "chkPenOCxmitVHF44";
+            this.chkPenOCxmitVHF44.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCxmitVHF44.TabIndex = 265;
+            this.chkPenOCxmitVHF44.UseVisualStyleBackColor = false;
+            this.chkPenOCxmitVHF44.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF4_CheckedChanged);
+            // 
+            // chkPenOCxmitVHF43
+            // 
+            this.chkPenOCxmitVHF43.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCxmitVHF43.Image = null;
+            this.chkPenOCxmitVHF43.Location = new System.Drawing.Point(198, 105);
+            this.chkPenOCxmitVHF43.Name = "chkPenOCxmitVHF43";
+            this.chkPenOCxmitVHF43.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCxmitVHF43.TabIndex = 264;
+            this.chkPenOCxmitVHF43.UseVisualStyleBackColor = false;
+            this.chkPenOCxmitVHF43.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF4_CheckedChanged);
+            // 
+            // chkPenOCxmitVHF42
+            // 
+            this.chkPenOCxmitVHF42.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCxmitVHF42.Image = null;
+            this.chkPenOCxmitVHF42.Location = new System.Drawing.Point(182, 105);
+            this.chkPenOCxmitVHF42.Name = "chkPenOCxmitVHF42";
+            this.chkPenOCxmitVHF42.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCxmitVHF42.TabIndex = 263;
+            this.chkPenOCxmitVHF42.UseVisualStyleBackColor = false;
+            this.chkPenOCxmitVHF42.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF4_CheckedChanged);
+            // 
+            // chkPenOCxmitVHF41
+            // 
+            this.chkPenOCxmitVHF41.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCxmitVHF41.Image = null;
+            this.chkPenOCxmitVHF41.Location = new System.Drawing.Point(166, 105);
+            this.chkPenOCxmitVHF41.Name = "chkPenOCxmitVHF41";
+            this.chkPenOCxmitVHF41.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCxmitVHF41.TabIndex = 262;
+            this.chkPenOCxmitVHF41.UseVisualStyleBackColor = false;
+            this.chkPenOCxmitVHF41.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF4_CheckedChanged);
+            // 
+            // chkPenOCrcvVHF47
+            // 
+            this.chkPenOCrcvVHF47.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCrcvVHF47.Image = null;
+            this.chkPenOCrcvVHF47.Location = new System.Drawing.Point(144, 105);
+            this.chkPenOCrcvVHF47.Name = "chkPenOCrcvVHF47";
+            this.chkPenOCrcvVHF47.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCrcvVHF47.TabIndex = 261;
+            this.chkPenOCrcvVHF47.UseVisualStyleBackColor = false;
+            this.chkPenOCrcvVHF47.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF4_CheckedChanged);
+            // 
+            // chkPenOCrcvVHF46
+            // 
+            this.chkPenOCrcvVHF46.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCrcvVHF46.Image = null;
+            this.chkPenOCrcvVHF46.Location = new System.Drawing.Point(128, 105);
+            this.chkPenOCrcvVHF46.Name = "chkPenOCrcvVHF46";
+            this.chkPenOCrcvVHF46.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCrcvVHF46.TabIndex = 260;
+            this.chkPenOCrcvVHF46.UseVisualStyleBackColor = false;
+            this.chkPenOCrcvVHF46.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF4_CheckedChanged);
+            // 
+            // chkPenOCrcvVHF45
+            // 
+            this.chkPenOCrcvVHF45.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCrcvVHF45.Image = null;
+            this.chkPenOCrcvVHF45.Location = new System.Drawing.Point(112, 105);
+            this.chkPenOCrcvVHF45.Name = "chkPenOCrcvVHF45";
+            this.chkPenOCrcvVHF45.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCrcvVHF45.TabIndex = 259;
+            this.chkPenOCrcvVHF45.UseVisualStyleBackColor = false;
+            this.chkPenOCrcvVHF45.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF4_CheckedChanged);
+            // 
+            // chkPenOCrcvVHF44
+            // 
+            this.chkPenOCrcvVHF44.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCrcvVHF44.Image = null;
+            this.chkPenOCrcvVHF44.Location = new System.Drawing.Point(96, 105);
+            this.chkPenOCrcvVHF44.Name = "chkPenOCrcvVHF44";
+            this.chkPenOCrcvVHF44.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCrcvVHF44.TabIndex = 258;
+            this.chkPenOCrcvVHF44.UseVisualStyleBackColor = false;
+            this.chkPenOCrcvVHF44.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF4_CheckedChanged);
+            // 
+            // chkPenOCrcvVHF43
+            // 
+            this.chkPenOCrcvVHF43.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCrcvVHF43.Image = null;
+            this.chkPenOCrcvVHF43.Location = new System.Drawing.Point(80, 105);
+            this.chkPenOCrcvVHF43.Name = "chkPenOCrcvVHF43";
+            this.chkPenOCrcvVHF43.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCrcvVHF43.TabIndex = 257;
+            this.chkPenOCrcvVHF43.UseVisualStyleBackColor = false;
+            this.chkPenOCrcvVHF43.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF4_CheckedChanged);
+            // 
+            // chkPenOCrcvVHF42
+            // 
+            this.chkPenOCrcvVHF42.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCrcvVHF42.Image = null;
+            this.chkPenOCrcvVHF42.Location = new System.Drawing.Point(64, 105);
+            this.chkPenOCrcvVHF42.Name = "chkPenOCrcvVHF42";
+            this.chkPenOCrcvVHF42.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCrcvVHF42.TabIndex = 256;
+            this.chkPenOCrcvVHF42.UseVisualStyleBackColor = false;
+            this.chkPenOCrcvVHF42.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF4_CheckedChanged);
+            // 
+            // chkPenOCrcvVHF41
+            // 
+            this.chkPenOCrcvVHF41.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCrcvVHF41.Image = null;
+            this.chkPenOCrcvVHF41.Location = new System.Drawing.Point(48, 105);
+            this.chkPenOCrcvVHF41.Name = "chkPenOCrcvVHF41";
+            this.chkPenOCrcvVHF41.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCrcvVHF41.TabIndex = 255;
+            this.chkPenOCrcvVHF41.UseVisualStyleBackColor = false;
+            this.chkPenOCrcvVHF41.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF4_CheckedChanged);
+            // 
+            // chkPenOCxmitVHF37
+            // 
+            this.chkPenOCxmitVHF37.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCxmitVHF37.Image = null;
+            this.chkPenOCxmitVHF37.Location = new System.Drawing.Point(262, 89);
+            this.chkPenOCxmitVHF37.Name = "chkPenOCxmitVHF37";
+            this.chkPenOCxmitVHF37.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCxmitVHF37.TabIndex = 254;
+            this.chkPenOCxmitVHF37.UseVisualStyleBackColor = false;
+            this.chkPenOCxmitVHF37.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF3_CheckedChanged);
+            // 
+            // chkPenOCxmitVHF36
+            // 
+            this.chkPenOCxmitVHF36.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCxmitVHF36.Image = null;
+            this.chkPenOCxmitVHF36.Location = new System.Drawing.Point(246, 89);
+            this.chkPenOCxmitVHF36.Name = "chkPenOCxmitVHF36";
+            this.chkPenOCxmitVHF36.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCxmitVHF36.TabIndex = 253;
+            this.chkPenOCxmitVHF36.UseVisualStyleBackColor = false;
+            this.chkPenOCxmitVHF36.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF3_CheckedChanged);
+            // 
+            // chkPenOCxmitVHF35
+            // 
+            this.chkPenOCxmitVHF35.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCxmitVHF35.Image = null;
+            this.chkPenOCxmitVHF35.Location = new System.Drawing.Point(230, 89);
+            this.chkPenOCxmitVHF35.Name = "chkPenOCxmitVHF35";
+            this.chkPenOCxmitVHF35.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCxmitVHF35.TabIndex = 252;
+            this.chkPenOCxmitVHF35.UseVisualStyleBackColor = false;
+            this.chkPenOCxmitVHF35.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF3_CheckedChanged);
+            // 
+            // chkPenOCxmitVHF34
+            // 
+            this.chkPenOCxmitVHF34.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCxmitVHF34.Image = null;
+            this.chkPenOCxmitVHF34.Location = new System.Drawing.Point(214, 89);
+            this.chkPenOCxmitVHF34.Name = "chkPenOCxmitVHF34";
+            this.chkPenOCxmitVHF34.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCxmitVHF34.TabIndex = 251;
+            this.chkPenOCxmitVHF34.UseVisualStyleBackColor = false;
+            this.chkPenOCxmitVHF34.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF3_CheckedChanged);
+            // 
+            // chkPenOCxmitVHF33
+            // 
+            this.chkPenOCxmitVHF33.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCxmitVHF33.Image = null;
+            this.chkPenOCxmitVHF33.Location = new System.Drawing.Point(198, 89);
+            this.chkPenOCxmitVHF33.Name = "chkPenOCxmitVHF33";
+            this.chkPenOCxmitVHF33.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCxmitVHF33.TabIndex = 250;
+            this.chkPenOCxmitVHF33.UseVisualStyleBackColor = false;
+            this.chkPenOCxmitVHF33.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF3_CheckedChanged);
+            // 
+            // chkPenOCxmitVHF32
+            // 
+            this.chkPenOCxmitVHF32.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCxmitVHF32.Image = null;
+            this.chkPenOCxmitVHF32.Location = new System.Drawing.Point(182, 89);
+            this.chkPenOCxmitVHF32.Name = "chkPenOCxmitVHF32";
+            this.chkPenOCxmitVHF32.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCxmitVHF32.TabIndex = 249;
+            this.chkPenOCxmitVHF32.UseVisualStyleBackColor = false;
+            this.chkPenOCxmitVHF32.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF3_CheckedChanged);
+            // 
+            // chkPenOCxmitVHF31
+            // 
+            this.chkPenOCxmitVHF31.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCxmitVHF31.Image = null;
+            this.chkPenOCxmitVHF31.Location = new System.Drawing.Point(166, 89);
+            this.chkPenOCxmitVHF31.Name = "chkPenOCxmitVHF31";
+            this.chkPenOCxmitVHF31.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCxmitVHF31.TabIndex = 248;
+            this.chkPenOCxmitVHF31.UseVisualStyleBackColor = false;
+            this.chkPenOCxmitVHF31.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF3_CheckedChanged);
+            // 
+            // chkPenOCrcvVHF37
+            // 
+            this.chkPenOCrcvVHF37.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCrcvVHF37.Image = null;
+            this.chkPenOCrcvVHF37.Location = new System.Drawing.Point(144, 89);
+            this.chkPenOCrcvVHF37.Name = "chkPenOCrcvVHF37";
+            this.chkPenOCrcvVHF37.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCrcvVHF37.TabIndex = 247;
+            this.chkPenOCrcvVHF37.UseVisualStyleBackColor = false;
+            this.chkPenOCrcvVHF37.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF3_CheckedChanged);
+            // 
+            // chkPenOCrcvVHF36
+            // 
+            this.chkPenOCrcvVHF36.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCrcvVHF36.Image = null;
+            this.chkPenOCrcvVHF36.Location = new System.Drawing.Point(128, 89);
+            this.chkPenOCrcvVHF36.Name = "chkPenOCrcvVHF36";
+            this.chkPenOCrcvVHF36.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCrcvVHF36.TabIndex = 246;
+            this.chkPenOCrcvVHF36.UseVisualStyleBackColor = false;
+            this.chkPenOCrcvVHF36.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF3_CheckedChanged);
+            // 
+            // chkPenOCrcvVHF35
+            // 
+            this.chkPenOCrcvVHF35.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCrcvVHF35.Image = null;
+            this.chkPenOCrcvVHF35.Location = new System.Drawing.Point(112, 89);
+            this.chkPenOCrcvVHF35.Name = "chkPenOCrcvVHF35";
+            this.chkPenOCrcvVHF35.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCrcvVHF35.TabIndex = 245;
+            this.chkPenOCrcvVHF35.UseVisualStyleBackColor = false;
+            this.chkPenOCrcvVHF35.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF3_CheckedChanged);
+            // 
+            // chkPenOCrcvVHF34
+            // 
+            this.chkPenOCrcvVHF34.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCrcvVHF34.Image = null;
+            this.chkPenOCrcvVHF34.Location = new System.Drawing.Point(96, 89);
+            this.chkPenOCrcvVHF34.Name = "chkPenOCrcvVHF34";
+            this.chkPenOCrcvVHF34.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCrcvVHF34.TabIndex = 244;
+            this.chkPenOCrcvVHF34.UseVisualStyleBackColor = false;
+            this.chkPenOCrcvVHF34.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF3_CheckedChanged);
+            // 
+            // chkPenOCrcvVHF33
+            // 
+            this.chkPenOCrcvVHF33.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCrcvVHF33.Image = null;
+            this.chkPenOCrcvVHF33.Location = new System.Drawing.Point(80, 89);
+            this.chkPenOCrcvVHF33.Name = "chkPenOCrcvVHF33";
+            this.chkPenOCrcvVHF33.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCrcvVHF33.TabIndex = 243;
+            this.chkPenOCrcvVHF33.UseVisualStyleBackColor = false;
+            this.chkPenOCrcvVHF33.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF3_CheckedChanged);
+            // 
+            // chkPenOCrcvVHF32
+            // 
+            this.chkPenOCrcvVHF32.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCrcvVHF32.Image = null;
+            this.chkPenOCrcvVHF32.Location = new System.Drawing.Point(64, 89);
+            this.chkPenOCrcvVHF32.Name = "chkPenOCrcvVHF32";
+            this.chkPenOCrcvVHF32.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCrcvVHF32.TabIndex = 242;
+            this.chkPenOCrcvVHF32.UseVisualStyleBackColor = false;
+            this.chkPenOCrcvVHF32.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF3_CheckedChanged);
+            // 
+            // chkPenOCrcvVHF31
+            // 
+            this.chkPenOCrcvVHF31.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCrcvVHF31.Image = null;
+            this.chkPenOCrcvVHF31.Location = new System.Drawing.Point(48, 89);
+            this.chkPenOCrcvVHF31.Name = "chkPenOCrcvVHF31";
+            this.chkPenOCrcvVHF31.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCrcvVHF31.TabIndex = 241;
+            this.chkPenOCrcvVHF31.UseVisualStyleBackColor = false;
+            this.chkPenOCrcvVHF31.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF3_CheckedChanged);
+            // 
+            // chkPenOCxmitVHF27
+            // 
+            this.chkPenOCxmitVHF27.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCxmitVHF27.Image = null;
+            this.chkPenOCxmitVHF27.Location = new System.Drawing.Point(262, 73);
+            this.chkPenOCxmitVHF27.Name = "chkPenOCxmitVHF27";
+            this.chkPenOCxmitVHF27.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCxmitVHF27.TabIndex = 240;
+            this.chkPenOCxmitVHF27.UseVisualStyleBackColor = false;
+            this.chkPenOCxmitVHF27.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF2_CheckedChanged);
+            // 
+            // chkPenOCxmitVHF26
+            // 
+            this.chkPenOCxmitVHF26.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCxmitVHF26.Image = null;
+            this.chkPenOCxmitVHF26.Location = new System.Drawing.Point(246, 73);
+            this.chkPenOCxmitVHF26.Name = "chkPenOCxmitVHF26";
+            this.chkPenOCxmitVHF26.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCxmitVHF26.TabIndex = 239;
+            this.chkPenOCxmitVHF26.UseVisualStyleBackColor = false;
+            this.chkPenOCxmitVHF26.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF2_CheckedChanged);
+            // 
+            // chkPenOCxmitVHF25
+            // 
+            this.chkPenOCxmitVHF25.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCxmitVHF25.Image = null;
+            this.chkPenOCxmitVHF25.Location = new System.Drawing.Point(230, 73);
+            this.chkPenOCxmitVHF25.Name = "chkPenOCxmitVHF25";
+            this.chkPenOCxmitVHF25.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCxmitVHF25.TabIndex = 238;
+            this.chkPenOCxmitVHF25.UseVisualStyleBackColor = false;
+            this.chkPenOCxmitVHF25.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF2_CheckedChanged);
+            // 
+            // chkPenOCxmitVHF24
+            // 
+            this.chkPenOCxmitVHF24.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCxmitVHF24.Image = null;
+            this.chkPenOCxmitVHF24.Location = new System.Drawing.Point(214, 73);
+            this.chkPenOCxmitVHF24.Name = "chkPenOCxmitVHF24";
+            this.chkPenOCxmitVHF24.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCxmitVHF24.TabIndex = 237;
+            this.chkPenOCxmitVHF24.UseVisualStyleBackColor = false;
+            this.chkPenOCxmitVHF24.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF2_CheckedChanged);
+            // 
+            // chkPenOCxmitVHF23
+            // 
+            this.chkPenOCxmitVHF23.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCxmitVHF23.Image = null;
+            this.chkPenOCxmitVHF23.Location = new System.Drawing.Point(198, 73);
+            this.chkPenOCxmitVHF23.Name = "chkPenOCxmitVHF23";
+            this.chkPenOCxmitVHF23.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCxmitVHF23.TabIndex = 236;
+            this.chkPenOCxmitVHF23.UseVisualStyleBackColor = false;
+            this.chkPenOCxmitVHF23.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF2_CheckedChanged);
+            // 
+            // chkPenOCxmitVHF22
+            // 
+            this.chkPenOCxmitVHF22.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCxmitVHF22.Image = null;
+            this.chkPenOCxmitVHF22.Location = new System.Drawing.Point(182, 73);
+            this.chkPenOCxmitVHF22.Name = "chkPenOCxmitVHF22";
+            this.chkPenOCxmitVHF22.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCxmitVHF22.TabIndex = 235;
+            this.chkPenOCxmitVHF22.UseVisualStyleBackColor = false;
+            this.chkPenOCxmitVHF22.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF2_CheckedChanged);
+            // 
+            // chkPenOCxmitVHF21
+            // 
+            this.chkPenOCxmitVHF21.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCxmitVHF21.Image = null;
+            this.chkPenOCxmitVHF21.Location = new System.Drawing.Point(166, 73);
+            this.chkPenOCxmitVHF21.Name = "chkPenOCxmitVHF21";
+            this.chkPenOCxmitVHF21.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCxmitVHF21.TabIndex = 234;
+            this.chkPenOCxmitVHF21.UseVisualStyleBackColor = false;
+            this.chkPenOCxmitVHF21.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF2_CheckedChanged);
+            // 
+            // chkPenOCrcvVHF27
+            // 
+            this.chkPenOCrcvVHF27.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCrcvVHF27.Image = null;
+            this.chkPenOCrcvVHF27.Location = new System.Drawing.Point(144, 73);
+            this.chkPenOCrcvVHF27.Name = "chkPenOCrcvVHF27";
+            this.chkPenOCrcvVHF27.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCrcvVHF27.TabIndex = 233;
+            this.chkPenOCrcvVHF27.UseVisualStyleBackColor = false;
+            this.chkPenOCrcvVHF27.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF2_CheckedChanged);
+            // 
+            // chkPenOCrcvVHF26
+            // 
+            this.chkPenOCrcvVHF26.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCrcvVHF26.Image = null;
+            this.chkPenOCrcvVHF26.Location = new System.Drawing.Point(128, 73);
+            this.chkPenOCrcvVHF26.Name = "chkPenOCrcvVHF26";
+            this.chkPenOCrcvVHF26.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCrcvVHF26.TabIndex = 232;
+            this.chkPenOCrcvVHF26.UseVisualStyleBackColor = false;
+            this.chkPenOCrcvVHF26.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF2_CheckedChanged);
+            // 
+            // chkPenOCrcvVHF25
+            // 
+            this.chkPenOCrcvVHF25.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCrcvVHF25.Image = null;
+            this.chkPenOCrcvVHF25.Location = new System.Drawing.Point(112, 73);
+            this.chkPenOCrcvVHF25.Name = "chkPenOCrcvVHF25";
+            this.chkPenOCrcvVHF25.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCrcvVHF25.TabIndex = 231;
+            this.chkPenOCrcvVHF25.UseVisualStyleBackColor = false;
+            this.chkPenOCrcvVHF25.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF2_CheckedChanged);
+            // 
+            // chkPenOCrcvVHF24
+            // 
+            this.chkPenOCrcvVHF24.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCrcvVHF24.Image = null;
+            this.chkPenOCrcvVHF24.Location = new System.Drawing.Point(96, 73);
+            this.chkPenOCrcvVHF24.Name = "chkPenOCrcvVHF24";
+            this.chkPenOCrcvVHF24.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCrcvVHF24.TabIndex = 230;
+            this.chkPenOCrcvVHF24.UseVisualStyleBackColor = false;
+            this.chkPenOCrcvVHF24.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF2_CheckedChanged);
+            // 
+            // chkPenOCrcvVHF23
+            // 
+            this.chkPenOCrcvVHF23.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCrcvVHF23.Image = null;
+            this.chkPenOCrcvVHF23.Location = new System.Drawing.Point(80, 73);
+            this.chkPenOCrcvVHF23.Name = "chkPenOCrcvVHF23";
+            this.chkPenOCrcvVHF23.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCrcvVHF23.TabIndex = 229;
+            this.chkPenOCrcvVHF23.UseVisualStyleBackColor = false;
+            this.chkPenOCrcvVHF23.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF2_CheckedChanged);
+            // 
+            // chkPenOCrcvVHF22
+            // 
+            this.chkPenOCrcvVHF22.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCrcvVHF22.Image = null;
+            this.chkPenOCrcvVHF22.Location = new System.Drawing.Point(64, 73);
+            this.chkPenOCrcvVHF22.Name = "chkPenOCrcvVHF22";
+            this.chkPenOCrcvVHF22.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCrcvVHF22.TabIndex = 228;
+            this.chkPenOCrcvVHF22.UseVisualStyleBackColor = false;
+            this.chkPenOCrcvVHF22.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF2_CheckedChanged);
+            // 
+            // chkPenOCrcvVHF21
+            // 
+            this.chkPenOCrcvVHF21.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCrcvVHF21.Image = null;
+            this.chkPenOCrcvVHF21.Location = new System.Drawing.Point(48, 73);
+            this.chkPenOCrcvVHF21.Name = "chkPenOCrcvVHF21";
+            this.chkPenOCrcvVHF21.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCrcvVHF21.TabIndex = 227;
+            this.chkPenOCrcvVHF21.UseVisualStyleBackColor = false;
+            this.chkPenOCrcvVHF21.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF2_CheckedChanged);
+            // 
+            // chkPenOCxmitVHF17
+            // 
+            this.chkPenOCxmitVHF17.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCxmitVHF17.Image = null;
+            this.chkPenOCxmitVHF17.Location = new System.Drawing.Point(262, 57);
+            this.chkPenOCxmitVHF17.Name = "chkPenOCxmitVHF17";
+            this.chkPenOCxmitVHF17.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCxmitVHF17.TabIndex = 226;
+            this.chkPenOCxmitVHF17.UseVisualStyleBackColor = false;
+            this.chkPenOCxmitVHF17.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF1_CheckedChanged);
+            // 
+            // chkPenOCxmitVHF16
+            // 
+            this.chkPenOCxmitVHF16.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCxmitVHF16.Image = null;
+            this.chkPenOCxmitVHF16.Location = new System.Drawing.Point(246, 57);
+            this.chkPenOCxmitVHF16.Name = "chkPenOCxmitVHF16";
+            this.chkPenOCxmitVHF16.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCxmitVHF16.TabIndex = 225;
+            this.chkPenOCxmitVHF16.UseVisualStyleBackColor = false;
+            this.chkPenOCxmitVHF16.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF1_CheckedChanged);
+            // 
+            // chkPenOCxmitVHF15
+            // 
+            this.chkPenOCxmitVHF15.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCxmitVHF15.Image = null;
+            this.chkPenOCxmitVHF15.Location = new System.Drawing.Point(230, 57);
+            this.chkPenOCxmitVHF15.Name = "chkPenOCxmitVHF15";
+            this.chkPenOCxmitVHF15.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCxmitVHF15.TabIndex = 224;
+            this.chkPenOCxmitVHF15.UseVisualStyleBackColor = false;
+            this.chkPenOCxmitVHF15.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF1_CheckedChanged);
+            // 
+            // chkPenOCxmitVHF14
+            // 
+            this.chkPenOCxmitVHF14.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCxmitVHF14.Image = null;
+            this.chkPenOCxmitVHF14.Location = new System.Drawing.Point(214, 57);
+            this.chkPenOCxmitVHF14.Name = "chkPenOCxmitVHF14";
+            this.chkPenOCxmitVHF14.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCxmitVHF14.TabIndex = 223;
+            this.chkPenOCxmitVHF14.UseVisualStyleBackColor = false;
+            this.chkPenOCxmitVHF14.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF1_CheckedChanged);
+            // 
+            // chkPenOCxmitVHF13
+            // 
+            this.chkPenOCxmitVHF13.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCxmitVHF13.Image = null;
+            this.chkPenOCxmitVHF13.Location = new System.Drawing.Point(198, 57);
+            this.chkPenOCxmitVHF13.Name = "chkPenOCxmitVHF13";
+            this.chkPenOCxmitVHF13.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCxmitVHF13.TabIndex = 222;
+            this.chkPenOCxmitVHF13.UseVisualStyleBackColor = false;
+            this.chkPenOCxmitVHF13.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF1_CheckedChanged);
+            // 
+            // chkPenOCxmitVHF12
+            // 
+            this.chkPenOCxmitVHF12.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCxmitVHF12.Image = null;
+            this.chkPenOCxmitVHF12.Location = new System.Drawing.Point(182, 57);
+            this.chkPenOCxmitVHF12.Name = "chkPenOCxmitVHF12";
+            this.chkPenOCxmitVHF12.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCxmitVHF12.TabIndex = 221;
+            this.chkPenOCxmitVHF12.UseVisualStyleBackColor = false;
+            this.chkPenOCxmitVHF12.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF1_CheckedChanged);
+            // 
+            // chkPenOCxmitVHF11
+            // 
+            this.chkPenOCxmitVHF11.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCxmitVHF11.Image = null;
+            this.chkPenOCxmitVHF11.Location = new System.Drawing.Point(166, 57);
+            this.chkPenOCxmitVHF11.Name = "chkPenOCxmitVHF11";
+            this.chkPenOCxmitVHF11.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCxmitVHF11.TabIndex = 220;
+            this.chkPenOCxmitVHF11.UseVisualStyleBackColor = false;
+            this.chkPenOCxmitVHF11.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF1_CheckedChanged);
+            // 
+            // chkPenOCrcvVHF17
+            // 
+            this.chkPenOCrcvVHF17.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCrcvVHF17.Image = null;
+            this.chkPenOCrcvVHF17.Location = new System.Drawing.Point(144, 57);
+            this.chkPenOCrcvVHF17.Name = "chkPenOCrcvVHF17";
+            this.chkPenOCrcvVHF17.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCrcvVHF17.TabIndex = 219;
+            this.chkPenOCrcvVHF17.UseVisualStyleBackColor = false;
+            this.chkPenOCrcvVHF17.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF1_CheckedChanged);
+            // 
+            // chkPenOCrcvVHF16
+            // 
+            this.chkPenOCrcvVHF16.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCrcvVHF16.Image = null;
+            this.chkPenOCrcvVHF16.Location = new System.Drawing.Point(128, 57);
+            this.chkPenOCrcvVHF16.Name = "chkPenOCrcvVHF16";
+            this.chkPenOCrcvVHF16.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCrcvVHF16.TabIndex = 218;
+            this.chkPenOCrcvVHF16.UseVisualStyleBackColor = false;
+            this.chkPenOCrcvVHF16.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF1_CheckedChanged);
+            // 
+            // chkPenOCrcvVHF15
+            // 
+            this.chkPenOCrcvVHF15.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCrcvVHF15.Image = null;
+            this.chkPenOCrcvVHF15.Location = new System.Drawing.Point(112, 57);
+            this.chkPenOCrcvVHF15.Name = "chkPenOCrcvVHF15";
+            this.chkPenOCrcvVHF15.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCrcvVHF15.TabIndex = 217;
+            this.chkPenOCrcvVHF15.UseVisualStyleBackColor = false;
+            this.chkPenOCrcvVHF15.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF1_CheckedChanged);
+            // 
+            // chkPenOCrcvVHF14
+            // 
+            this.chkPenOCrcvVHF14.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCrcvVHF14.Image = null;
+            this.chkPenOCrcvVHF14.Location = new System.Drawing.Point(96, 57);
+            this.chkPenOCrcvVHF14.Name = "chkPenOCrcvVHF14";
+            this.chkPenOCrcvVHF14.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCrcvVHF14.TabIndex = 216;
+            this.chkPenOCrcvVHF14.UseVisualStyleBackColor = false;
+            this.chkPenOCrcvVHF14.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF1_CheckedChanged);
+            // 
+            // chkPenOCrcvVHF13
+            // 
+            this.chkPenOCrcvVHF13.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCrcvVHF13.Image = null;
+            this.chkPenOCrcvVHF13.Location = new System.Drawing.Point(80, 57);
+            this.chkPenOCrcvVHF13.Name = "chkPenOCrcvVHF13";
+            this.chkPenOCrcvVHF13.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCrcvVHF13.TabIndex = 215;
+            this.chkPenOCrcvVHF13.UseVisualStyleBackColor = false;
+            this.chkPenOCrcvVHF13.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF1_CheckedChanged);
+            // 
+            // chkPenOCrcvVHF12
+            // 
+            this.chkPenOCrcvVHF12.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCrcvVHF12.Image = null;
+            this.chkPenOCrcvVHF12.Location = new System.Drawing.Point(64, 57);
+            this.chkPenOCrcvVHF12.Name = "chkPenOCrcvVHF12";
+            this.chkPenOCrcvVHF12.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCrcvVHF12.TabIndex = 214;
+            this.chkPenOCrcvVHF12.UseVisualStyleBackColor = false;
+            this.chkPenOCrcvVHF12.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF1_CheckedChanged);
+            // 
+            // chkPenOCrcvVHF11
+            // 
+            this.chkPenOCrcvVHF11.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCrcvVHF11.Image = null;
+            this.chkPenOCrcvVHF11.Location = new System.Drawing.Point(48, 57);
+            this.chkPenOCrcvVHF11.Name = "chkPenOCrcvVHF11";
+            this.chkPenOCrcvVHF11.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCrcvVHF11.TabIndex = 213;
+            this.chkPenOCrcvVHF11.UseVisualStyleBackColor = false;
+            this.chkPenOCrcvVHF11.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF1_CheckedChanged);
+            // 
+            // chkPenOCxmitVHF07
+            // 
+            this.chkPenOCxmitVHF07.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCxmitVHF07.Image = null;
+            this.chkPenOCxmitVHF07.Location = new System.Drawing.Point(262, 41);
+            this.chkPenOCxmitVHF07.Name = "chkPenOCxmitVHF07";
+            this.chkPenOCxmitVHF07.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCxmitVHF07.TabIndex = 212;
+            this.chkPenOCxmitVHF07.UseVisualStyleBackColor = false;
+            this.chkPenOCxmitVHF07.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF0_CheckedChanged);
+            // 
+            // chkPenOCxmitVHF06
+            // 
+            this.chkPenOCxmitVHF06.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCxmitVHF06.Image = null;
+            this.chkPenOCxmitVHF06.Location = new System.Drawing.Point(246, 41);
+            this.chkPenOCxmitVHF06.Name = "chkPenOCxmitVHF06";
+            this.chkPenOCxmitVHF06.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCxmitVHF06.TabIndex = 211;
+            this.chkPenOCxmitVHF06.UseVisualStyleBackColor = false;
+            this.chkPenOCxmitVHF06.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF0_CheckedChanged);
+            // 
+            // chkPenOCxmitVHF05
+            // 
+            this.chkPenOCxmitVHF05.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCxmitVHF05.Image = null;
+            this.chkPenOCxmitVHF05.Location = new System.Drawing.Point(230, 41);
+            this.chkPenOCxmitVHF05.Name = "chkPenOCxmitVHF05";
+            this.chkPenOCxmitVHF05.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCxmitVHF05.TabIndex = 210;
+            this.chkPenOCxmitVHF05.UseVisualStyleBackColor = false;
+            this.chkPenOCxmitVHF05.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF0_CheckedChanged);
+            // 
+            // chkPenOCxmitVHF04
+            // 
+            this.chkPenOCxmitVHF04.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCxmitVHF04.Image = null;
+            this.chkPenOCxmitVHF04.Location = new System.Drawing.Point(214, 41);
+            this.chkPenOCxmitVHF04.Name = "chkPenOCxmitVHF04";
+            this.chkPenOCxmitVHF04.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCxmitVHF04.TabIndex = 209;
+            this.chkPenOCxmitVHF04.UseVisualStyleBackColor = false;
+            this.chkPenOCxmitVHF04.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF0_CheckedChanged);
+            // 
+            // chkPenOCxmitVHF03
+            // 
+            this.chkPenOCxmitVHF03.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCxmitVHF03.Image = null;
+            this.chkPenOCxmitVHF03.Location = new System.Drawing.Point(198, 41);
+            this.chkPenOCxmitVHF03.Name = "chkPenOCxmitVHF03";
+            this.chkPenOCxmitVHF03.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCxmitVHF03.TabIndex = 208;
+            this.chkPenOCxmitVHF03.UseVisualStyleBackColor = false;
+            this.chkPenOCxmitVHF03.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF0_CheckedChanged);
+            // 
+            // chkPenOCxmitVHF02
+            // 
+            this.chkPenOCxmitVHF02.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCxmitVHF02.Image = null;
+            this.chkPenOCxmitVHF02.Location = new System.Drawing.Point(182, 41);
+            this.chkPenOCxmitVHF02.Name = "chkPenOCxmitVHF02";
+            this.chkPenOCxmitVHF02.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCxmitVHF02.TabIndex = 207;
+            this.chkPenOCxmitVHF02.UseVisualStyleBackColor = false;
+            this.chkPenOCxmitVHF02.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF0_CheckedChanged);
+            // 
+            // chkPenOCxmitVHF01
+            // 
+            this.chkPenOCxmitVHF01.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCxmitVHF01.Image = null;
+            this.chkPenOCxmitVHF01.Location = new System.Drawing.Point(166, 41);
+            this.chkPenOCxmitVHF01.Name = "chkPenOCxmitVHF01";
+            this.chkPenOCxmitVHF01.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCxmitVHF01.TabIndex = 206;
+            this.chkPenOCxmitVHF01.UseVisualStyleBackColor = false;
+            this.chkPenOCxmitVHF01.CheckedChanged += new System.EventHandler(this.chkPenOCxmitVHF0_CheckedChanged);
+            // 
+            // chkPenOCrcvVHF07
+            // 
+            this.chkPenOCrcvVHF07.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCrcvVHF07.Image = null;
+            this.chkPenOCrcvVHF07.Location = new System.Drawing.Point(144, 41);
+            this.chkPenOCrcvVHF07.Name = "chkPenOCrcvVHF07";
+            this.chkPenOCrcvVHF07.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCrcvVHF07.TabIndex = 205;
+            this.chkPenOCrcvVHF07.UseVisualStyleBackColor = false;
+            this.chkPenOCrcvVHF07.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF0_CheckedChanged);
+            // 
+            // chkPenOCrcvVHF06
+            // 
+            this.chkPenOCrcvVHF06.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCrcvVHF06.Image = null;
+            this.chkPenOCrcvVHF06.Location = new System.Drawing.Point(128, 41);
+            this.chkPenOCrcvVHF06.Name = "chkPenOCrcvVHF06";
+            this.chkPenOCrcvVHF06.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCrcvVHF06.TabIndex = 204;
+            this.chkPenOCrcvVHF06.UseVisualStyleBackColor = false;
+            this.chkPenOCrcvVHF06.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF0_CheckedChanged);
+            // 
+            // chkPenOCrcvVHF05
+            // 
+            this.chkPenOCrcvVHF05.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCrcvVHF05.Image = null;
+            this.chkPenOCrcvVHF05.Location = new System.Drawing.Point(112, 41);
+            this.chkPenOCrcvVHF05.Name = "chkPenOCrcvVHF05";
+            this.chkPenOCrcvVHF05.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCrcvVHF05.TabIndex = 203;
+            this.chkPenOCrcvVHF05.UseVisualStyleBackColor = false;
+            this.chkPenOCrcvVHF05.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF0_CheckedChanged);
+            // 
+            // chkPenOCrcvVHF04
+            // 
+            this.chkPenOCrcvVHF04.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCrcvVHF04.Image = null;
+            this.chkPenOCrcvVHF04.Location = new System.Drawing.Point(96, 41);
+            this.chkPenOCrcvVHF04.Name = "chkPenOCrcvVHF04";
+            this.chkPenOCrcvVHF04.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCrcvVHF04.TabIndex = 202;
+            this.chkPenOCrcvVHF04.UseVisualStyleBackColor = false;
+            this.chkPenOCrcvVHF04.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF0_CheckedChanged);
+            // 
+            // chkPenOCrcvVHF03
+            // 
+            this.chkPenOCrcvVHF03.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCrcvVHF03.Image = null;
+            this.chkPenOCrcvVHF03.Location = new System.Drawing.Point(80, 41);
+            this.chkPenOCrcvVHF03.Name = "chkPenOCrcvVHF03";
+            this.chkPenOCrcvVHF03.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCrcvVHF03.TabIndex = 201;
+            this.chkPenOCrcvVHF03.UseVisualStyleBackColor = false;
+            this.chkPenOCrcvVHF03.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF0_CheckedChanged);
+            // 
+            // chkPenOCrcvVHF02
+            // 
+            this.chkPenOCrcvVHF02.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCrcvVHF02.Image = null;
+            this.chkPenOCrcvVHF02.Location = new System.Drawing.Point(64, 41);
+            this.chkPenOCrcvVHF02.Name = "chkPenOCrcvVHF02";
+            this.chkPenOCrcvVHF02.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCrcvVHF02.TabIndex = 200;
+            this.chkPenOCrcvVHF02.UseVisualStyleBackColor = false;
+            this.chkPenOCrcvVHF02.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF0_CheckedChanged);
+            // 
+            // chkPenOCrcvVHF01
+            // 
+            this.chkPenOCrcvVHF01.BackColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCrcvVHF01.ForeColor = System.Drawing.SystemColors.Control;
+            this.chkPenOCrcvVHF01.Image = null;
+            this.chkPenOCrcvVHF01.Location = new System.Drawing.Point(48, 41);
+            this.chkPenOCrcvVHF01.Name = "chkPenOCrcvVHF01";
+            this.chkPenOCrcvVHF01.Size = new System.Drawing.Size(16, 16);
+            this.chkPenOCrcvVHF01.TabIndex = 199;
+            this.chkPenOCrcvVHF01.UseVisualStyleBackColor = false;
+            this.chkPenOCrcvVHF01.CheckedChanged += new System.EventHandler(this.chkPenOCrcvVHF0_CheckedChanged);
+            // 
+            // btnPennyCtrlVHFReset
+            // 
+            this.btnPennyCtrlVHFReset.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnPennyCtrlVHFReset.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.btnPennyCtrlVHFReset.Image = null;
+            this.btnPennyCtrlVHFReset.Location = new System.Drawing.Point(174, 267);
+            this.btnPennyCtrlVHFReset.Name = "btnPennyCtrlVHFReset";
+            this.btnPennyCtrlVHFReset.Size = new System.Drawing.Size(62, 23);
+            this.btnPennyCtrlVHFReset.TabIndex = 7;
+            this.btnPennyCtrlVHFReset.Text = "VHF Reset";
+            this.toolTip1.SetToolTip(this.btnPennyCtrlVHFReset, "Clears to Default");
+            this.btnPennyCtrlVHFReset.UseVisualStyleBackColor = true;
+            this.btnPennyCtrlVHFReset.Click += new System.EventHandler(this.btnPennyCtrlVHFReset_Click);
+            // 
+            // checkBoxTS1
+            // 
+            this.checkBoxTS1.Appearance = System.Windows.Forms.Appearance.Button;
+            this.checkBoxTS1.BackColor = System.Drawing.SystemColors.Control;
+            this.checkBoxTS1.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.checkBoxTS1.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.checkBoxTS1.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.checkBoxTS1.Image = null;
+            this.checkBoxTS1.Location = new System.Drawing.Point(48, 267);
+            this.checkBoxTS1.Name = "checkBoxTS1";
+            this.checkBoxTS1.Size = new System.Drawing.Size(90, 23);
+            this.checkBoxTS1.TabIndex = 6;
+            this.checkBoxTS1.Text = "VHF Ext Control";
+            this.checkBoxTS1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.toolTip1.SetToolTip(this.checkBoxTS1, "Enable External Control on Penelope J6");
+            this.checkBoxTS1.UseVisualStyleBackColor = false;
+            this.checkBoxTS1.Visible = false;
+            // 
+            // tpOCSWLControl
+            // 
+            this.tpOCSWLControl.BackColor = System.Drawing.SystemColors.Control;
+            this.tpOCSWLControl.Controls.Add(this.btnCtrlSWLReset);
+            this.tpOCSWLControl.Controls.Add(this.checkBoxTS12);
+            this.tpOCSWLControl.Controls.Add(this.grpExtCtrlSWL);
+            this.tpOCSWLControl.Location = new System.Drawing.Point(4, 22);
+            this.tpOCSWLControl.Name = "tpOCSWLControl";
+            this.tpOCSWLControl.Padding = new System.Windows.Forms.Padding(3);
+            this.tpOCSWLControl.Size = new System.Drawing.Size(575, 313);
+            this.tpOCSWLControl.TabIndex = 2;
+            this.tpOCSWLControl.Text = "SWL";
+            // 
+            // btnCtrlSWLReset
+            // 
+            this.btnCtrlSWLReset.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnCtrlSWLReset.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.btnCtrlSWLReset.Image = null;
+            this.btnCtrlSWLReset.Location = new System.Drawing.Point(189, 284);
+            this.btnCtrlSWLReset.Name = "btnCtrlSWLReset";
+            this.btnCtrlSWLReset.Size = new System.Drawing.Size(62, 23);
+            this.btnCtrlSWLReset.TabIndex = 9;
+            this.btnCtrlSWLReset.Text = "SWL Reset";
+            this.toolTip1.SetToolTip(this.btnCtrlSWLReset, "Clears to Default");
+            this.btnCtrlSWLReset.UseVisualStyleBackColor = true;
+            this.btnCtrlSWLReset.Click += new System.EventHandler(this.btnCtrlSWLReset_Click);
+            // 
+            // checkBoxTS12
+            // 
+            this.checkBoxTS12.Appearance = System.Windows.Forms.Appearance.Button;
+            this.checkBoxTS12.BackColor = System.Drawing.SystemColors.Control;
+            this.checkBoxTS12.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.checkBoxTS12.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.checkBoxTS12.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.checkBoxTS12.Image = null;
+            this.checkBoxTS12.Location = new System.Drawing.Point(63, 284);
+            this.checkBoxTS12.Name = "checkBoxTS12";
+            this.checkBoxTS12.Size = new System.Drawing.Size(90, 23);
+            this.checkBoxTS12.TabIndex = 8;
+            this.checkBoxTS12.Text = "SWL Ext Control";
+            this.checkBoxTS12.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.toolTip1.SetToolTip(this.checkBoxTS12, "Enable External Control on Penelope J6");
+            this.checkBoxTS12.UseVisualStyleBackColor = false;
+            this.checkBoxTS12.Visible = false;
+            // 
+            // grpExtCtrlSWL
+            // 
+            this.grpExtCtrlSWL.Controls.Add(this.labelTS513);
+            this.grpExtCtrlSWL.Controls.Add(this.labelTS484);
+            this.grpExtCtrlSWL.Controls.Add(this.labelTS514);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCxmit117);
+            this.grpExtCtrlSWL.Controls.Add(this.labelTS485);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCxmit116);
+            this.grpExtCtrlSWL.Controls.Add(this.labelTS486);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCxmit115);
+            this.grpExtCtrlSWL.Controls.Add(this.labelTS487);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCxmit114);
+            this.grpExtCtrlSWL.Controls.Add(this.labelTS488);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCxmit113);
+            this.grpExtCtrlSWL.Controls.Add(this.labelTS489);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCxmit112);
+            this.grpExtCtrlSWL.Controls.Add(this.labelTS490);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCxmit111);
+            this.grpExtCtrlSWL.Controls.Add(this.labelTS491);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCrcv117);
+            this.grpExtCtrlSWL.Controls.Add(this.labelTS492);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCrcv116);
+            this.grpExtCtrlSWL.Controls.Add(this.labelTS493);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCrcv115);
+            this.grpExtCtrlSWL.Controls.Add(this.labelTS494);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCrcv114);
+            this.grpExtCtrlSWL.Controls.Add(this.labelTS495);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCrcv113);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCxmit147);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCrcv112);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCxmit146);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCrcv111);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCxmit145);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCxmit137);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCxmit144);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCxmit136);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCxmit143);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCxmit135);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCxmit142);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCxmit134);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCxmit141);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCxmit133);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCrcv147);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCxmit132);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCrcv146);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCxmit131);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCrcv145);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCrcv137);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCrcv144);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCrcv136);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCrcv143);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCrcv135);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCrcv142);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCrcv134);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCrcv141);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCrcv133);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCxmit167);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCrcv132);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCxmit166);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCrcv131);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCxmit165);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCxmit164);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCxmit163);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCxmit162);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCxmit161);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCrcv167);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCrcv166);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCrcv165);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCrcv164);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCrcv163);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCrcv162);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCrcv161);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCxmit197);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCxmit196);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCxmit195);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCxmit194);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCxmit193);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCxmit192);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCxmit191);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCrcv197);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCrcv196);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCrcv195);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCrcv194);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCrcv193);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCrcv192);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCrcv191);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCxmit227);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCxmit226);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCxmit225);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCxmit224);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCxmit223);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCxmit222);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCxmit221);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCrcv227);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCrcv226);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCrcv225);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCrcv224);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCrcv223);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCrcv222);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCrcv221);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCxmit257);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCxmit256);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCxmit255);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCxmit254);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCxmit253);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCxmit252);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCxmit251);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCrcv257);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCrcv256);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCrcv255);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCrcv254);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCrcv253);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCrcv252);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCrcv251);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCxmit317);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCxmit316);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCxmit315);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCxmit314);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCxmit313);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCxmit312);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCxmit311);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCrcv317);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCrcv316);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCrcv315);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCrcv314);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCrcv313);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCrcv312);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCrcv311);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCxmit417);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCxmit416);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCxmit415);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCxmit414);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCxmit413);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCxmit412);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCxmit411);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCrcv417);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCrcv416);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCrcv415);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCrcv414);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCrcv413);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCrcv412);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCrcv411);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCxmit497);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCxmit496);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCxmit495);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCxmit494);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCxmit493);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCxmit492);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCxmit491);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCrcv497);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCrcv496);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCrcv495);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCrcv494);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCrcv493);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCrcv492);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCrcv491);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCxmit617);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCxmit616);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCxmit615);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCxmit614);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCxmit613);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCxmit612);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCxmit611);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCrcv617);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCrcv616);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCrcv615);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCrcv614);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCrcv613);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCrcv612);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCrcv611);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCxmit907);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCxmit906);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCxmit905);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCxmit904);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCxmit903);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCxmit902);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCxmit901);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCrcv907);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCrcv906);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCrcv905);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCrcv904);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCrcv903);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCrcv902);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCrcv901);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCxmit1207);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCxmit1206);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCxmit1205);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCxmit1204);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCxmit1203);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCxmit1202);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCxmit1201);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCrcv1207);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCrcv1206);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCrcv1205);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCrcv1204);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCrcv1203);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCrcv1202);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCrcv1201);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCxmitLMW7);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCxmitLMW6);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCxmitLMW5);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCxmitLMW4);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCxmitLMW3);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCxmitLMW2);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCxmitLMW1);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCrcvLMW7);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCrcvLMW6);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCrcvLMW5);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCrcvLMW4);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCrcvLMW3);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCrcvLMW2);
+            this.grpExtCtrlSWL.Controls.Add(this.chkOCrcvLMW1);
+            this.grpExtCtrlSWL.Controls.Add(this.labelTS496);
+            this.grpExtCtrlSWL.Controls.Add(this.labelTS497);
+            this.grpExtCtrlSWL.Controls.Add(this.labelTS498);
+            this.grpExtCtrlSWL.Controls.Add(this.labelTS499);
+            this.grpExtCtrlSWL.Controls.Add(this.labelTS500);
+            this.grpExtCtrlSWL.Controls.Add(this.labelTS501);
+            this.grpExtCtrlSWL.Controls.Add(this.labelTS502);
+            this.grpExtCtrlSWL.Controls.Add(this.labelTS503);
+            this.grpExtCtrlSWL.Controls.Add(this.labelTS504);
+            this.grpExtCtrlSWL.Controls.Add(this.labelTS505);
+            this.grpExtCtrlSWL.Controls.Add(this.labelTS506);
+            this.grpExtCtrlSWL.Controls.Add(this.labelTS507);
+            this.grpExtCtrlSWL.Controls.Add(this.labelTS508);
+            this.grpExtCtrlSWL.Controls.Add(this.labelTS509);
+            this.grpExtCtrlSWL.Controls.Add(this.labelTS510);
+            this.grpExtCtrlSWL.Controls.Add(this.lblSWLTxControl);
+            this.grpExtCtrlSWL.Controls.Add(this.lblSWLRxControl);
+            this.grpExtCtrlSWL.Enabled = false;
+            this.grpExtCtrlSWL.Location = new System.Drawing.Point(0, 0);
+            this.grpExtCtrlSWL.Name = "grpExtCtrlSWL";
+            this.grpExtCtrlSWL.Size = new System.Drawing.Size(290, 278);
+            this.grpExtCtrlSWL.TabIndex = 1;
+            this.grpExtCtrlSWL.TabStop = false;
+            // 
+            // labelTS513
+            // 
+            this.labelTS513.Image = null;
+            this.labelTS513.Location = new System.Drawing.Point(6, 249);
+            this.labelTS513.Name = "labelTS513";
+            this.labelTS513.Size = new System.Drawing.Size(35, 16);
+            this.labelTS513.TabIndex = 228;
+            this.labelTS513.Text = "11m";
+            this.labelTS513.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // labelTS484
+            // 
+            this.labelTS484.Image = null;
+            this.labelTS484.Location = new System.Drawing.Point(6, 217);
+            this.labelTS484.Name = "labelTS484";
+            this.labelTS484.Size = new System.Drawing.Size(35, 16);
+            this.labelTS484.TabIndex = 198;
+            this.labelTS484.Text = "14m";
+            this.labelTS484.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // labelTS514
+            // 
+            this.labelTS514.Image = null;
+            this.labelTS514.Location = new System.Drawing.Point(6, 233);
+            this.labelTS514.Name = "labelTS514";
+            this.labelTS514.Size = new System.Drawing.Size(35, 16);
+            this.labelTS514.TabIndex = 227;
+            this.labelTS514.Text = "13m";
+            this.labelTS514.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // chkOCxmit117
+            // 
+            this.chkOCxmit117.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCxmit117.Image = null;
+            this.chkOCxmit117.Location = new System.Drawing.Point(269, 250);
+            this.chkOCxmit117.Name = "chkOCxmit117";
+            this.chkOCxmit117.Size = new System.Drawing.Size(16, 16);
+            this.chkOCxmit117.TabIndex = 226;
+            this.chkOCxmit117.UseVisualStyleBackColor = false;
+            this.chkOCxmit117.CheckedChanged += new System.EventHandler(this.chkOCxmit11_CheckedChanged);
+            // 
+            // labelTS485
+            // 
+            this.labelTS485.Image = null;
+            this.labelTS485.Location = new System.Drawing.Point(6, 201);
+            this.labelTS485.Name = "labelTS485";
+            this.labelTS485.Size = new System.Drawing.Size(35, 16);
+            this.labelTS485.TabIndex = 197;
+            this.labelTS485.Text = "16m";
+            this.labelTS485.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // chkOCxmit116
+            // 
+            this.chkOCxmit116.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCxmit116.Image = null;
+            this.chkOCxmit116.Location = new System.Drawing.Point(253, 250);
+            this.chkOCxmit116.Name = "chkOCxmit116";
+            this.chkOCxmit116.Size = new System.Drawing.Size(16, 16);
+            this.chkOCxmit116.TabIndex = 225;
+            this.chkOCxmit116.UseVisualStyleBackColor = false;
+            this.chkOCxmit116.CheckedChanged += new System.EventHandler(this.chkOCxmit11_CheckedChanged);
+            // 
+            // labelTS486
+            // 
+            this.labelTS486.Image = null;
+            this.labelTS486.Location = new System.Drawing.Point(6, 185);
+            this.labelTS486.Name = "labelTS486";
+            this.labelTS486.Size = new System.Drawing.Size(35, 16);
+            this.labelTS486.TabIndex = 196;
+            this.labelTS486.Text = "19m";
+            this.labelTS486.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // chkOCxmit115
+            // 
+            this.chkOCxmit115.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCxmit115.Image = null;
+            this.chkOCxmit115.Location = new System.Drawing.Point(237, 250);
+            this.chkOCxmit115.Name = "chkOCxmit115";
+            this.chkOCxmit115.Size = new System.Drawing.Size(16, 16);
+            this.chkOCxmit115.TabIndex = 224;
+            this.chkOCxmit115.UseVisualStyleBackColor = false;
+            this.chkOCxmit115.CheckedChanged += new System.EventHandler(this.chkOCxmit11_CheckedChanged);
+            // 
+            // labelTS487
+            // 
+            this.labelTS487.Image = null;
+            this.labelTS487.Location = new System.Drawing.Point(6, 169);
+            this.labelTS487.Name = "labelTS487";
+            this.labelTS487.Size = new System.Drawing.Size(35, 16);
+            this.labelTS487.TabIndex = 195;
+            this.labelTS487.Text = "22m";
+            this.labelTS487.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // chkOCxmit114
+            // 
+            this.chkOCxmit114.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCxmit114.Image = null;
+            this.chkOCxmit114.Location = new System.Drawing.Point(221, 250);
+            this.chkOCxmit114.Name = "chkOCxmit114";
+            this.chkOCxmit114.Size = new System.Drawing.Size(16, 16);
+            this.chkOCxmit114.TabIndex = 223;
+            this.chkOCxmit114.UseVisualStyleBackColor = false;
+            this.chkOCxmit114.CheckedChanged += new System.EventHandler(this.chkOCxmit11_CheckedChanged);
+            // 
+            // labelTS488
+            // 
+            this.labelTS488.Image = null;
+            this.labelTS488.Location = new System.Drawing.Point(6, 153);
+            this.labelTS488.Name = "labelTS488";
+            this.labelTS488.Size = new System.Drawing.Size(35, 16);
+            this.labelTS488.TabIndex = 194;
+            this.labelTS488.Text = "25m";
+            this.labelTS488.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // chkOCxmit113
+            // 
+            this.chkOCxmit113.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCxmit113.Image = null;
+            this.chkOCxmit113.Location = new System.Drawing.Point(205, 250);
+            this.chkOCxmit113.Name = "chkOCxmit113";
+            this.chkOCxmit113.Size = new System.Drawing.Size(16, 16);
+            this.chkOCxmit113.TabIndex = 222;
+            this.chkOCxmit113.UseVisualStyleBackColor = false;
+            this.chkOCxmit113.CheckedChanged += new System.EventHandler(this.chkOCxmit11_CheckedChanged);
+            // 
+            // labelTS489
+            // 
+            this.labelTS489.Image = null;
+            this.labelTS489.Location = new System.Drawing.Point(6, 137);
+            this.labelTS489.Name = "labelTS489";
+            this.labelTS489.Size = new System.Drawing.Size(35, 16);
+            this.labelTS489.TabIndex = 193;
+            this.labelTS489.Text = "31m";
+            this.labelTS489.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // chkOCxmit112
+            // 
+            this.chkOCxmit112.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCxmit112.Image = null;
+            this.chkOCxmit112.Location = new System.Drawing.Point(189, 250);
+            this.chkOCxmit112.Name = "chkOCxmit112";
+            this.chkOCxmit112.Size = new System.Drawing.Size(16, 16);
+            this.chkOCxmit112.TabIndex = 221;
+            this.chkOCxmit112.UseVisualStyleBackColor = false;
+            this.chkOCxmit112.CheckedChanged += new System.EventHandler(this.chkOCxmit11_CheckedChanged);
+            // 
+            // labelTS490
+            // 
+            this.labelTS490.Image = null;
+            this.labelTS490.Location = new System.Drawing.Point(6, 121);
+            this.labelTS490.Name = "labelTS490";
+            this.labelTS490.Size = new System.Drawing.Size(35, 16);
+            this.labelTS490.TabIndex = 192;
+            this.labelTS490.Text = "41m";
+            this.labelTS490.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // chkOCxmit111
+            // 
+            this.chkOCxmit111.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCxmit111.Image = null;
+            this.chkOCxmit111.Location = new System.Drawing.Point(173, 250);
+            this.chkOCxmit111.Name = "chkOCxmit111";
+            this.chkOCxmit111.Size = new System.Drawing.Size(16, 16);
+            this.chkOCxmit111.TabIndex = 220;
+            this.chkOCxmit111.UseVisualStyleBackColor = false;
+            this.chkOCxmit111.CheckedChanged += new System.EventHandler(this.chkOCxmit11_CheckedChanged);
+            // 
+            // labelTS491
+            // 
+            this.labelTS491.Image = null;
+            this.labelTS491.Location = new System.Drawing.Point(6, 105);
+            this.labelTS491.Name = "labelTS491";
+            this.labelTS491.Size = new System.Drawing.Size(35, 16);
+            this.labelTS491.TabIndex = 191;
+            this.labelTS491.Text = "49m";
+            this.labelTS491.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // chkOCrcv117
+            // 
+            this.chkOCrcv117.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCrcv117.Image = null;
+            this.chkOCrcv117.Location = new System.Drawing.Point(141, 249);
+            this.chkOCrcv117.Name = "chkOCrcv117";
+            this.chkOCrcv117.Size = new System.Drawing.Size(16, 16);
+            this.chkOCrcv117.TabIndex = 219;
+            this.chkOCrcv117.UseVisualStyleBackColor = false;
+            this.chkOCrcv117.CheckedChanged += new System.EventHandler(this.chkOCrcv11_CheckedChanged);
+            // 
+            // labelTS492
+            // 
+            this.labelTS492.Image = null;
+            this.labelTS492.Location = new System.Drawing.Point(6, 89);
+            this.labelTS492.Name = "labelTS492";
+            this.labelTS492.Size = new System.Drawing.Size(35, 16);
+            this.labelTS492.TabIndex = 190;
+            this.labelTS492.Text = "61m";
+            this.labelTS492.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // chkOCrcv116
+            // 
+            this.chkOCrcv116.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCrcv116.Image = null;
+            this.chkOCrcv116.Location = new System.Drawing.Point(125, 249);
+            this.chkOCrcv116.Name = "chkOCrcv116";
+            this.chkOCrcv116.Size = new System.Drawing.Size(16, 16);
+            this.chkOCrcv116.TabIndex = 218;
+            this.chkOCrcv116.UseVisualStyleBackColor = false;
+            this.chkOCrcv116.CheckedChanged += new System.EventHandler(this.chkOCrcv11_CheckedChanged);
+            // 
+            // labelTS493
+            // 
+            this.labelTS493.Image = null;
+            this.labelTS493.Location = new System.Drawing.Point(6, 73);
+            this.labelTS493.Name = "labelTS493";
+            this.labelTS493.Size = new System.Drawing.Size(35, 16);
+            this.labelTS493.TabIndex = 189;
+            this.labelTS493.Text = "90m";
+            this.labelTS493.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // chkOCrcv115
+            // 
+            this.chkOCrcv115.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCrcv115.Image = null;
+            this.chkOCrcv115.Location = new System.Drawing.Point(109, 249);
+            this.chkOCrcv115.Name = "chkOCrcv115";
+            this.chkOCrcv115.Size = new System.Drawing.Size(16, 16);
+            this.chkOCrcv115.TabIndex = 217;
+            this.chkOCrcv115.UseVisualStyleBackColor = false;
+            this.chkOCrcv115.CheckedChanged += new System.EventHandler(this.chkOCrcv11_CheckedChanged);
+            // 
+            // labelTS494
+            // 
+            this.labelTS494.Image = null;
+            this.labelTS494.Location = new System.Drawing.Point(6, 57);
+            this.labelTS494.Name = "labelTS494";
+            this.labelTS494.Size = new System.Drawing.Size(35, 16);
+            this.labelTS494.TabIndex = 188;
+            this.labelTS494.Text = "120m";
+            this.labelTS494.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // chkOCrcv114
+            // 
+            this.chkOCrcv114.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCrcv114.Image = null;
+            this.chkOCrcv114.Location = new System.Drawing.Point(93, 249);
+            this.chkOCrcv114.Name = "chkOCrcv114";
+            this.chkOCrcv114.Size = new System.Drawing.Size(16, 16);
+            this.chkOCrcv114.TabIndex = 216;
+            this.chkOCrcv114.UseVisualStyleBackColor = false;
+            this.chkOCrcv114.CheckedChanged += new System.EventHandler(this.chkOCrcv11_CheckedChanged);
+            // 
+            // labelTS495
+            // 
+            this.labelTS495.Image = null;
+            this.labelTS495.Location = new System.Drawing.Point(3, 41);
+            this.labelTS495.Name = "labelTS495";
+            this.labelTS495.Size = new System.Drawing.Size(38, 16);
+            this.labelTS495.TabIndex = 187;
+            this.labelTS495.Text = "L/MW";
+            this.labelTS495.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // chkOCrcv113
+            // 
+            this.chkOCrcv113.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCrcv113.Image = null;
+            this.chkOCrcv113.Location = new System.Drawing.Point(77, 249);
+            this.chkOCrcv113.Name = "chkOCrcv113";
+            this.chkOCrcv113.Size = new System.Drawing.Size(16, 16);
+            this.chkOCrcv113.TabIndex = 215;
+            this.chkOCrcv113.UseVisualStyleBackColor = false;
+            this.chkOCrcv113.CheckedChanged += new System.EventHandler(this.chkOCrcv11_CheckedChanged);
+            // 
+            // chkOCxmit147
+            // 
+            this.chkOCxmit147.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCxmit147.Image = null;
+            this.chkOCxmit147.Location = new System.Drawing.Point(269, 218);
+            this.chkOCxmit147.Name = "chkOCxmit147";
+            this.chkOCxmit147.Size = new System.Drawing.Size(16, 16);
+            this.chkOCxmit147.TabIndex = 186;
+            this.chkOCxmit147.UseVisualStyleBackColor = false;
+            this.chkOCxmit147.CheckedChanged += new System.EventHandler(this.chkOCxmit14_CheckedChanged);
+            // 
+            // chkOCrcv112
+            // 
+            this.chkOCrcv112.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCrcv112.Image = null;
+            this.chkOCrcv112.Location = new System.Drawing.Point(61, 249);
+            this.chkOCrcv112.Name = "chkOCrcv112";
+            this.chkOCrcv112.Size = new System.Drawing.Size(16, 16);
+            this.chkOCrcv112.TabIndex = 214;
+            this.chkOCrcv112.UseVisualStyleBackColor = false;
+            this.chkOCrcv112.CheckedChanged += new System.EventHandler(this.chkOCrcv11_CheckedChanged);
+            // 
+            // chkOCxmit146
+            // 
+            this.chkOCxmit146.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCxmit146.Image = null;
+            this.chkOCxmit146.Location = new System.Drawing.Point(253, 218);
+            this.chkOCxmit146.Name = "chkOCxmit146";
+            this.chkOCxmit146.Size = new System.Drawing.Size(16, 16);
+            this.chkOCxmit146.TabIndex = 185;
+            this.chkOCxmit146.UseVisualStyleBackColor = false;
+            this.chkOCxmit146.CheckedChanged += new System.EventHandler(this.chkOCxmit14_CheckedChanged);
+            // 
+            // chkOCrcv111
+            // 
+            this.chkOCrcv111.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCrcv111.Image = null;
+            this.chkOCrcv111.Location = new System.Drawing.Point(45, 249);
+            this.chkOCrcv111.Name = "chkOCrcv111";
+            this.chkOCrcv111.Size = new System.Drawing.Size(16, 16);
+            this.chkOCrcv111.TabIndex = 213;
+            this.chkOCrcv111.UseVisualStyleBackColor = false;
+            this.chkOCrcv111.CheckedChanged += new System.EventHandler(this.chkOCrcv11_CheckedChanged);
+            // 
+            // chkOCxmit145
+            // 
+            this.chkOCxmit145.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCxmit145.Image = null;
+            this.chkOCxmit145.Location = new System.Drawing.Point(237, 218);
+            this.chkOCxmit145.Name = "chkOCxmit145";
+            this.chkOCxmit145.Size = new System.Drawing.Size(16, 16);
+            this.chkOCxmit145.TabIndex = 184;
+            this.chkOCxmit145.UseVisualStyleBackColor = false;
+            this.chkOCxmit145.CheckedChanged += new System.EventHandler(this.chkOCxmit14_CheckedChanged);
+            // 
+            // chkOCxmit137
+            // 
+            this.chkOCxmit137.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCxmit137.Image = null;
+            this.chkOCxmit137.Location = new System.Drawing.Point(269, 234);
+            this.chkOCxmit137.Name = "chkOCxmit137";
+            this.chkOCxmit137.Size = new System.Drawing.Size(16, 16);
+            this.chkOCxmit137.TabIndex = 212;
+            this.chkOCxmit137.UseVisualStyleBackColor = false;
+            this.chkOCxmit137.CheckedChanged += new System.EventHandler(this.chkOCxmit13_CheckedChanged);
+            // 
+            // chkOCxmit144
+            // 
+            this.chkOCxmit144.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCxmit144.Image = null;
+            this.chkOCxmit144.Location = new System.Drawing.Point(221, 218);
+            this.chkOCxmit144.Name = "chkOCxmit144";
+            this.chkOCxmit144.Size = new System.Drawing.Size(16, 16);
+            this.chkOCxmit144.TabIndex = 183;
+            this.chkOCxmit144.UseVisualStyleBackColor = false;
+            this.chkOCxmit144.CheckedChanged += new System.EventHandler(this.chkOCxmit14_CheckedChanged);
+            // 
+            // chkOCxmit136
+            // 
+            this.chkOCxmit136.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCxmit136.Image = null;
+            this.chkOCxmit136.Location = new System.Drawing.Point(253, 234);
+            this.chkOCxmit136.Name = "chkOCxmit136";
+            this.chkOCxmit136.Size = new System.Drawing.Size(16, 16);
+            this.chkOCxmit136.TabIndex = 211;
+            this.chkOCxmit136.UseVisualStyleBackColor = false;
+            this.chkOCxmit136.CheckedChanged += new System.EventHandler(this.chkOCxmit13_CheckedChanged);
+            // 
+            // chkOCxmit143
+            // 
+            this.chkOCxmit143.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCxmit143.Image = null;
+            this.chkOCxmit143.Location = new System.Drawing.Point(205, 218);
+            this.chkOCxmit143.Name = "chkOCxmit143";
+            this.chkOCxmit143.Size = new System.Drawing.Size(16, 16);
+            this.chkOCxmit143.TabIndex = 182;
+            this.chkOCxmit143.UseVisualStyleBackColor = false;
+            this.chkOCxmit143.CheckedChanged += new System.EventHandler(this.chkOCxmit14_CheckedChanged);
+            // 
+            // chkOCxmit135
+            // 
+            this.chkOCxmit135.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCxmit135.Image = null;
+            this.chkOCxmit135.Location = new System.Drawing.Point(237, 234);
+            this.chkOCxmit135.Name = "chkOCxmit135";
+            this.chkOCxmit135.Size = new System.Drawing.Size(16, 16);
+            this.chkOCxmit135.TabIndex = 210;
+            this.chkOCxmit135.UseVisualStyleBackColor = false;
+            this.chkOCxmit135.CheckedChanged += new System.EventHandler(this.chkOCxmit13_CheckedChanged);
+            // 
+            // chkOCxmit142
+            // 
+            this.chkOCxmit142.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCxmit142.Image = null;
+            this.chkOCxmit142.Location = new System.Drawing.Point(189, 218);
+            this.chkOCxmit142.Name = "chkOCxmit142";
+            this.chkOCxmit142.Size = new System.Drawing.Size(16, 16);
+            this.chkOCxmit142.TabIndex = 181;
+            this.chkOCxmit142.UseVisualStyleBackColor = false;
+            this.chkOCxmit142.CheckedChanged += new System.EventHandler(this.chkOCxmit14_CheckedChanged);
+            // 
+            // chkOCxmit134
+            // 
+            this.chkOCxmit134.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCxmit134.Image = null;
+            this.chkOCxmit134.Location = new System.Drawing.Point(221, 234);
+            this.chkOCxmit134.Name = "chkOCxmit134";
+            this.chkOCxmit134.Size = new System.Drawing.Size(16, 16);
+            this.chkOCxmit134.TabIndex = 209;
+            this.chkOCxmit134.UseVisualStyleBackColor = false;
+            this.chkOCxmit134.CheckedChanged += new System.EventHandler(this.chkOCxmit13_CheckedChanged);
+            // 
+            // chkOCxmit141
+            // 
+            this.chkOCxmit141.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCxmit141.Image = null;
+            this.chkOCxmit141.Location = new System.Drawing.Point(173, 218);
+            this.chkOCxmit141.Name = "chkOCxmit141";
+            this.chkOCxmit141.Size = new System.Drawing.Size(16, 16);
+            this.chkOCxmit141.TabIndex = 180;
+            this.chkOCxmit141.UseVisualStyleBackColor = false;
+            this.chkOCxmit141.CheckedChanged += new System.EventHandler(this.chkOCxmit14_CheckedChanged);
+            // 
+            // chkOCxmit133
+            // 
+            this.chkOCxmit133.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCxmit133.Image = null;
+            this.chkOCxmit133.Location = new System.Drawing.Point(205, 234);
+            this.chkOCxmit133.Name = "chkOCxmit133";
+            this.chkOCxmit133.Size = new System.Drawing.Size(16, 16);
+            this.chkOCxmit133.TabIndex = 208;
+            this.chkOCxmit133.UseVisualStyleBackColor = false;
+            this.chkOCxmit133.CheckedChanged += new System.EventHandler(this.chkOCxmit13_CheckedChanged);
+            // 
+            // chkOCrcv147
+            // 
+            this.chkOCrcv147.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCrcv147.Image = null;
+            this.chkOCrcv147.Location = new System.Drawing.Point(141, 217);
+            this.chkOCrcv147.Name = "chkOCrcv147";
+            this.chkOCrcv147.Size = new System.Drawing.Size(16, 16);
+            this.chkOCrcv147.TabIndex = 179;
+            this.chkOCrcv147.UseVisualStyleBackColor = false;
+            this.chkOCrcv147.CheckedChanged += new System.EventHandler(this.chkOCrcv14_CheckedChanged);
+            // 
+            // chkOCxmit132
+            // 
+            this.chkOCxmit132.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCxmit132.Image = null;
+            this.chkOCxmit132.Location = new System.Drawing.Point(189, 234);
+            this.chkOCxmit132.Name = "chkOCxmit132";
+            this.chkOCxmit132.Size = new System.Drawing.Size(16, 16);
+            this.chkOCxmit132.TabIndex = 207;
+            this.chkOCxmit132.UseVisualStyleBackColor = false;
+            this.chkOCxmit132.CheckedChanged += new System.EventHandler(this.chkOCxmit13_CheckedChanged);
+            // 
+            // chkOCrcv146
+            // 
+            this.chkOCrcv146.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCrcv146.Image = null;
+            this.chkOCrcv146.Location = new System.Drawing.Point(125, 217);
+            this.chkOCrcv146.Name = "chkOCrcv146";
+            this.chkOCrcv146.Size = new System.Drawing.Size(16, 16);
+            this.chkOCrcv146.TabIndex = 178;
+            this.chkOCrcv146.UseVisualStyleBackColor = false;
+            this.chkOCrcv146.CheckedChanged += new System.EventHandler(this.chkOCrcv14_CheckedChanged);
+            // 
+            // chkOCxmit131
+            // 
+            this.chkOCxmit131.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCxmit131.Image = null;
+            this.chkOCxmit131.Location = new System.Drawing.Point(173, 234);
+            this.chkOCxmit131.Name = "chkOCxmit131";
+            this.chkOCxmit131.Size = new System.Drawing.Size(16, 16);
+            this.chkOCxmit131.TabIndex = 206;
+            this.chkOCxmit131.UseVisualStyleBackColor = false;
+            this.chkOCxmit131.CheckedChanged += new System.EventHandler(this.chkOCxmit13_CheckedChanged);
+            // 
+            // chkOCrcv145
+            // 
+            this.chkOCrcv145.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCrcv145.Image = null;
+            this.chkOCrcv145.Location = new System.Drawing.Point(109, 217);
+            this.chkOCrcv145.Name = "chkOCrcv145";
+            this.chkOCrcv145.Size = new System.Drawing.Size(16, 16);
+            this.chkOCrcv145.TabIndex = 177;
+            this.chkOCrcv145.UseVisualStyleBackColor = false;
+            this.chkOCrcv145.CheckedChanged += new System.EventHandler(this.chkOCrcv14_CheckedChanged);
+            // 
+            // chkOCrcv137
+            // 
+            this.chkOCrcv137.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCrcv137.Image = null;
+            this.chkOCrcv137.Location = new System.Drawing.Point(141, 233);
+            this.chkOCrcv137.Name = "chkOCrcv137";
+            this.chkOCrcv137.Size = new System.Drawing.Size(16, 16);
+            this.chkOCrcv137.TabIndex = 205;
+            this.chkOCrcv137.UseVisualStyleBackColor = false;
+            this.chkOCrcv137.CheckedChanged += new System.EventHandler(this.chkOCrcv13_CheckedChanged);
+            // 
+            // chkOCrcv144
+            // 
+            this.chkOCrcv144.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCrcv144.Image = null;
+            this.chkOCrcv144.Location = new System.Drawing.Point(93, 217);
+            this.chkOCrcv144.Name = "chkOCrcv144";
+            this.chkOCrcv144.Size = new System.Drawing.Size(16, 16);
+            this.chkOCrcv144.TabIndex = 176;
+            this.chkOCrcv144.UseVisualStyleBackColor = false;
+            this.chkOCrcv144.CheckedChanged += new System.EventHandler(this.chkOCrcv14_CheckedChanged);
+            // 
+            // chkOCrcv136
+            // 
+            this.chkOCrcv136.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCrcv136.Image = null;
+            this.chkOCrcv136.Location = new System.Drawing.Point(125, 233);
+            this.chkOCrcv136.Name = "chkOCrcv136";
+            this.chkOCrcv136.Size = new System.Drawing.Size(16, 16);
+            this.chkOCrcv136.TabIndex = 204;
+            this.chkOCrcv136.UseVisualStyleBackColor = false;
+            this.chkOCrcv136.CheckedChanged += new System.EventHandler(this.chkOCrcv13_CheckedChanged);
+            // 
+            // chkOCrcv143
+            // 
+            this.chkOCrcv143.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCrcv143.Image = null;
+            this.chkOCrcv143.Location = new System.Drawing.Point(77, 217);
+            this.chkOCrcv143.Name = "chkOCrcv143";
+            this.chkOCrcv143.Size = new System.Drawing.Size(16, 16);
+            this.chkOCrcv143.TabIndex = 175;
+            this.chkOCrcv143.UseVisualStyleBackColor = false;
+            this.chkOCrcv143.CheckedChanged += new System.EventHandler(this.chkOCrcv14_CheckedChanged);
+            // 
+            // chkOCrcv135
+            // 
+            this.chkOCrcv135.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCrcv135.Image = null;
+            this.chkOCrcv135.Location = new System.Drawing.Point(109, 233);
+            this.chkOCrcv135.Name = "chkOCrcv135";
+            this.chkOCrcv135.Size = new System.Drawing.Size(16, 16);
+            this.chkOCrcv135.TabIndex = 203;
+            this.chkOCrcv135.UseVisualStyleBackColor = false;
+            this.chkOCrcv135.CheckedChanged += new System.EventHandler(this.chkOCrcv13_CheckedChanged);
+            // 
+            // chkOCrcv142
+            // 
+            this.chkOCrcv142.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCrcv142.Image = null;
+            this.chkOCrcv142.Location = new System.Drawing.Point(61, 217);
+            this.chkOCrcv142.Name = "chkOCrcv142";
+            this.chkOCrcv142.Size = new System.Drawing.Size(16, 16);
+            this.chkOCrcv142.TabIndex = 174;
+            this.chkOCrcv142.UseVisualStyleBackColor = false;
+            this.chkOCrcv142.CheckedChanged += new System.EventHandler(this.chkOCrcv14_CheckedChanged);
+            // 
+            // chkOCrcv134
+            // 
+            this.chkOCrcv134.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCrcv134.Image = null;
+            this.chkOCrcv134.Location = new System.Drawing.Point(93, 233);
+            this.chkOCrcv134.Name = "chkOCrcv134";
+            this.chkOCrcv134.Size = new System.Drawing.Size(16, 16);
+            this.chkOCrcv134.TabIndex = 202;
+            this.chkOCrcv134.UseVisualStyleBackColor = false;
+            this.chkOCrcv134.CheckedChanged += new System.EventHandler(this.chkOCrcv13_CheckedChanged);
+            // 
+            // chkOCrcv141
+            // 
+            this.chkOCrcv141.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCrcv141.Image = null;
+            this.chkOCrcv141.Location = new System.Drawing.Point(45, 217);
+            this.chkOCrcv141.Name = "chkOCrcv141";
+            this.chkOCrcv141.Size = new System.Drawing.Size(16, 16);
+            this.chkOCrcv141.TabIndex = 173;
+            this.chkOCrcv141.UseVisualStyleBackColor = false;
+            this.chkOCrcv141.CheckedChanged += new System.EventHandler(this.chkOCrcv14_CheckedChanged);
+            // 
+            // chkOCrcv133
+            // 
+            this.chkOCrcv133.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCrcv133.Image = null;
+            this.chkOCrcv133.Location = new System.Drawing.Point(77, 233);
+            this.chkOCrcv133.Name = "chkOCrcv133";
+            this.chkOCrcv133.Size = new System.Drawing.Size(16, 16);
+            this.chkOCrcv133.TabIndex = 201;
+            this.chkOCrcv133.UseVisualStyleBackColor = false;
+            this.chkOCrcv133.CheckedChanged += new System.EventHandler(this.chkOCrcv13_CheckedChanged);
+            // 
+            // chkOCxmit167
+            // 
+            this.chkOCxmit167.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCxmit167.Image = null;
+            this.chkOCxmit167.Location = new System.Drawing.Point(269, 202);
+            this.chkOCxmit167.Name = "chkOCxmit167";
+            this.chkOCxmit167.Size = new System.Drawing.Size(16, 16);
+            this.chkOCxmit167.TabIndex = 172;
+            this.chkOCxmit167.UseVisualStyleBackColor = false;
+            this.chkOCxmit167.CheckedChanged += new System.EventHandler(this.chkOCxmit16_CheckedChanged);
+            // 
+            // chkOCrcv132
+            // 
+            this.chkOCrcv132.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCrcv132.Image = null;
+            this.chkOCrcv132.Location = new System.Drawing.Point(61, 233);
+            this.chkOCrcv132.Name = "chkOCrcv132";
+            this.chkOCrcv132.Size = new System.Drawing.Size(16, 16);
+            this.chkOCrcv132.TabIndex = 200;
+            this.chkOCrcv132.UseVisualStyleBackColor = false;
+            this.chkOCrcv132.CheckedChanged += new System.EventHandler(this.chkOCrcv13_CheckedChanged);
+            // 
+            // chkOCxmit166
+            // 
+            this.chkOCxmit166.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCxmit166.Image = null;
+            this.chkOCxmit166.Location = new System.Drawing.Point(253, 202);
+            this.chkOCxmit166.Name = "chkOCxmit166";
+            this.chkOCxmit166.Size = new System.Drawing.Size(16, 16);
+            this.chkOCxmit166.TabIndex = 171;
+            this.chkOCxmit166.UseVisualStyleBackColor = false;
+            this.chkOCxmit166.CheckedChanged += new System.EventHandler(this.chkOCxmit16_CheckedChanged);
+            // 
+            // chkOCrcv131
+            // 
+            this.chkOCrcv131.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCrcv131.Image = null;
+            this.chkOCrcv131.Location = new System.Drawing.Point(45, 233);
+            this.chkOCrcv131.Name = "chkOCrcv131";
+            this.chkOCrcv131.Size = new System.Drawing.Size(16, 16);
+            this.chkOCrcv131.TabIndex = 199;
+            this.chkOCrcv131.UseVisualStyleBackColor = false;
+            this.chkOCrcv131.CheckedChanged += new System.EventHandler(this.chkOCrcv13_CheckedChanged);
+            // 
+            // chkOCxmit165
+            // 
+            this.chkOCxmit165.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCxmit165.Image = null;
+            this.chkOCxmit165.Location = new System.Drawing.Point(237, 202);
+            this.chkOCxmit165.Name = "chkOCxmit165";
+            this.chkOCxmit165.Size = new System.Drawing.Size(16, 16);
+            this.chkOCxmit165.TabIndex = 170;
+            this.chkOCxmit165.UseVisualStyleBackColor = false;
+            this.chkOCxmit165.CheckedChanged += new System.EventHandler(this.chkOCxmit16_CheckedChanged);
+            // 
+            // chkOCxmit164
+            // 
+            this.chkOCxmit164.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCxmit164.Image = null;
+            this.chkOCxmit164.Location = new System.Drawing.Point(221, 202);
+            this.chkOCxmit164.Name = "chkOCxmit164";
+            this.chkOCxmit164.Size = new System.Drawing.Size(16, 16);
+            this.chkOCxmit164.TabIndex = 169;
+            this.chkOCxmit164.UseVisualStyleBackColor = false;
+            this.chkOCxmit164.CheckedChanged += new System.EventHandler(this.chkOCxmit16_CheckedChanged);
+            // 
+            // chkOCxmit163
+            // 
+            this.chkOCxmit163.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCxmit163.Image = null;
+            this.chkOCxmit163.Location = new System.Drawing.Point(205, 202);
+            this.chkOCxmit163.Name = "chkOCxmit163";
+            this.chkOCxmit163.Size = new System.Drawing.Size(16, 16);
+            this.chkOCxmit163.TabIndex = 168;
+            this.chkOCxmit163.UseVisualStyleBackColor = false;
+            this.chkOCxmit163.CheckedChanged += new System.EventHandler(this.chkOCxmit16_CheckedChanged);
+            // 
+            // chkOCxmit162
+            // 
+            this.chkOCxmit162.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCxmit162.Image = null;
+            this.chkOCxmit162.Location = new System.Drawing.Point(189, 202);
+            this.chkOCxmit162.Name = "chkOCxmit162";
+            this.chkOCxmit162.Size = new System.Drawing.Size(16, 16);
+            this.chkOCxmit162.TabIndex = 167;
+            this.chkOCxmit162.UseVisualStyleBackColor = false;
+            this.chkOCxmit162.CheckedChanged += new System.EventHandler(this.chkOCxmit16_CheckedChanged);
+            // 
+            // chkOCxmit161
+            // 
+            this.chkOCxmit161.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCxmit161.Image = null;
+            this.chkOCxmit161.Location = new System.Drawing.Point(173, 202);
+            this.chkOCxmit161.Name = "chkOCxmit161";
+            this.chkOCxmit161.Size = new System.Drawing.Size(16, 16);
+            this.chkOCxmit161.TabIndex = 166;
+            this.chkOCxmit161.UseVisualStyleBackColor = false;
+            this.chkOCxmit161.CheckedChanged += new System.EventHandler(this.chkOCxmit16_CheckedChanged);
+            // 
+            // chkOCrcv167
+            // 
+            this.chkOCrcv167.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCrcv167.Image = null;
+            this.chkOCrcv167.Location = new System.Drawing.Point(141, 201);
+            this.chkOCrcv167.Name = "chkOCrcv167";
+            this.chkOCrcv167.Size = new System.Drawing.Size(16, 16);
+            this.chkOCrcv167.TabIndex = 165;
+            this.chkOCrcv167.UseVisualStyleBackColor = false;
+            this.chkOCrcv167.CheckedChanged += new System.EventHandler(this.chkOCrcv16_CheckedChanged);
+            // 
+            // chkOCrcv166
+            // 
+            this.chkOCrcv166.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCrcv166.Image = null;
+            this.chkOCrcv166.Location = new System.Drawing.Point(125, 201);
+            this.chkOCrcv166.Name = "chkOCrcv166";
+            this.chkOCrcv166.Size = new System.Drawing.Size(16, 16);
+            this.chkOCrcv166.TabIndex = 164;
+            this.chkOCrcv166.UseVisualStyleBackColor = false;
+            this.chkOCrcv166.CheckedChanged += new System.EventHandler(this.chkOCrcv16_CheckedChanged);
+            // 
+            // chkOCrcv165
+            // 
+            this.chkOCrcv165.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCrcv165.Image = null;
+            this.chkOCrcv165.Location = new System.Drawing.Point(109, 201);
+            this.chkOCrcv165.Name = "chkOCrcv165";
+            this.chkOCrcv165.Size = new System.Drawing.Size(16, 16);
+            this.chkOCrcv165.TabIndex = 163;
+            this.chkOCrcv165.UseVisualStyleBackColor = false;
+            this.chkOCrcv165.CheckedChanged += new System.EventHandler(this.chkOCrcv16_CheckedChanged);
+            // 
+            // chkOCrcv164
+            // 
+            this.chkOCrcv164.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCrcv164.Image = null;
+            this.chkOCrcv164.Location = new System.Drawing.Point(93, 201);
+            this.chkOCrcv164.Name = "chkOCrcv164";
+            this.chkOCrcv164.Size = new System.Drawing.Size(16, 16);
+            this.chkOCrcv164.TabIndex = 162;
+            this.chkOCrcv164.UseVisualStyleBackColor = false;
+            this.chkOCrcv164.CheckedChanged += new System.EventHandler(this.chkOCrcv16_CheckedChanged);
+            // 
+            // chkOCrcv163
+            // 
+            this.chkOCrcv163.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCrcv163.Image = null;
+            this.chkOCrcv163.Location = new System.Drawing.Point(77, 201);
+            this.chkOCrcv163.Name = "chkOCrcv163";
+            this.chkOCrcv163.Size = new System.Drawing.Size(16, 16);
+            this.chkOCrcv163.TabIndex = 161;
+            this.chkOCrcv163.UseVisualStyleBackColor = false;
+            this.chkOCrcv163.CheckedChanged += new System.EventHandler(this.chkOCrcv16_CheckedChanged);
+            // 
+            // chkOCrcv162
+            // 
+            this.chkOCrcv162.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCrcv162.Image = null;
+            this.chkOCrcv162.Location = new System.Drawing.Point(61, 201);
+            this.chkOCrcv162.Name = "chkOCrcv162";
+            this.chkOCrcv162.Size = new System.Drawing.Size(16, 16);
+            this.chkOCrcv162.TabIndex = 160;
+            this.chkOCrcv162.UseVisualStyleBackColor = false;
+            this.chkOCrcv162.CheckedChanged += new System.EventHandler(this.chkOCrcv16_CheckedChanged);
+            // 
+            // chkOCrcv161
+            // 
+            this.chkOCrcv161.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCrcv161.Image = null;
+            this.chkOCrcv161.Location = new System.Drawing.Point(45, 201);
+            this.chkOCrcv161.Name = "chkOCrcv161";
+            this.chkOCrcv161.Size = new System.Drawing.Size(16, 16);
+            this.chkOCrcv161.TabIndex = 159;
+            this.chkOCrcv161.UseVisualStyleBackColor = false;
+            this.chkOCrcv161.CheckedChanged += new System.EventHandler(this.chkOCrcv16_CheckedChanged);
+            // 
+            // chkOCxmit197
+            // 
+            this.chkOCxmit197.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCxmit197.Image = null;
+            this.chkOCxmit197.Location = new System.Drawing.Point(269, 186);
+            this.chkOCxmit197.Name = "chkOCxmit197";
+            this.chkOCxmit197.Size = new System.Drawing.Size(16, 16);
+            this.chkOCxmit197.TabIndex = 158;
+            this.chkOCxmit197.UseVisualStyleBackColor = false;
+            this.chkOCxmit197.CheckedChanged += new System.EventHandler(this.chkOCxmit19_CheckedChanged);
+            // 
+            // chkOCxmit196
+            // 
+            this.chkOCxmit196.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCxmit196.Image = null;
+            this.chkOCxmit196.Location = new System.Drawing.Point(253, 186);
+            this.chkOCxmit196.Name = "chkOCxmit196";
+            this.chkOCxmit196.Size = new System.Drawing.Size(16, 16);
+            this.chkOCxmit196.TabIndex = 157;
+            this.chkOCxmit196.UseVisualStyleBackColor = false;
+            this.chkOCxmit196.CheckedChanged += new System.EventHandler(this.chkOCxmit19_CheckedChanged);
+            // 
+            // chkOCxmit195
+            // 
+            this.chkOCxmit195.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCxmit195.Image = null;
+            this.chkOCxmit195.Location = new System.Drawing.Point(237, 186);
+            this.chkOCxmit195.Name = "chkOCxmit195";
+            this.chkOCxmit195.Size = new System.Drawing.Size(16, 16);
+            this.chkOCxmit195.TabIndex = 156;
+            this.chkOCxmit195.UseVisualStyleBackColor = false;
+            this.chkOCxmit195.CheckedChanged += new System.EventHandler(this.chkOCxmit19_CheckedChanged);
+            // 
+            // chkOCxmit194
+            // 
+            this.chkOCxmit194.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCxmit194.Image = null;
+            this.chkOCxmit194.Location = new System.Drawing.Point(221, 186);
+            this.chkOCxmit194.Name = "chkOCxmit194";
+            this.chkOCxmit194.Size = new System.Drawing.Size(16, 16);
+            this.chkOCxmit194.TabIndex = 155;
+            this.chkOCxmit194.UseVisualStyleBackColor = false;
+            this.chkOCxmit194.CheckedChanged += new System.EventHandler(this.chkOCxmit19_CheckedChanged);
+            // 
+            // chkOCxmit193
+            // 
+            this.chkOCxmit193.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCxmit193.Image = null;
+            this.chkOCxmit193.Location = new System.Drawing.Point(205, 186);
+            this.chkOCxmit193.Name = "chkOCxmit193";
+            this.chkOCxmit193.Size = new System.Drawing.Size(16, 16);
+            this.chkOCxmit193.TabIndex = 154;
+            this.chkOCxmit193.UseVisualStyleBackColor = false;
+            this.chkOCxmit193.CheckedChanged += new System.EventHandler(this.chkOCxmit19_CheckedChanged);
+            // 
+            // chkOCxmit192
+            // 
+            this.chkOCxmit192.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCxmit192.Image = null;
+            this.chkOCxmit192.Location = new System.Drawing.Point(189, 186);
+            this.chkOCxmit192.Name = "chkOCxmit192";
+            this.chkOCxmit192.Size = new System.Drawing.Size(16, 16);
+            this.chkOCxmit192.TabIndex = 153;
+            this.chkOCxmit192.UseVisualStyleBackColor = false;
+            this.chkOCxmit192.CheckedChanged += new System.EventHandler(this.chkOCxmit19_CheckedChanged);
+            // 
+            // chkOCxmit191
+            // 
+            this.chkOCxmit191.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCxmit191.Image = null;
+            this.chkOCxmit191.Location = new System.Drawing.Point(173, 186);
+            this.chkOCxmit191.Name = "chkOCxmit191";
+            this.chkOCxmit191.Size = new System.Drawing.Size(16, 16);
+            this.chkOCxmit191.TabIndex = 152;
+            this.chkOCxmit191.UseVisualStyleBackColor = false;
+            this.chkOCxmit191.CheckedChanged += new System.EventHandler(this.chkOCxmit19_CheckedChanged);
+            // 
+            // chkOCrcv197
+            // 
+            this.chkOCrcv197.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCrcv197.Image = null;
+            this.chkOCrcv197.Location = new System.Drawing.Point(141, 185);
+            this.chkOCrcv197.Name = "chkOCrcv197";
+            this.chkOCrcv197.Size = new System.Drawing.Size(16, 16);
+            this.chkOCrcv197.TabIndex = 151;
+            this.chkOCrcv197.UseVisualStyleBackColor = false;
+            this.chkOCrcv197.CheckedChanged += new System.EventHandler(this.chkOCrcv19_CheckedChanged);
+            // 
+            // chkOCrcv196
+            // 
+            this.chkOCrcv196.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCrcv196.Image = null;
+            this.chkOCrcv196.Location = new System.Drawing.Point(125, 185);
+            this.chkOCrcv196.Name = "chkOCrcv196";
+            this.chkOCrcv196.Size = new System.Drawing.Size(16, 16);
+            this.chkOCrcv196.TabIndex = 150;
+            this.chkOCrcv196.UseVisualStyleBackColor = false;
+            this.chkOCrcv196.CheckedChanged += new System.EventHandler(this.chkOCrcv19_CheckedChanged);
+            // 
+            // chkOCrcv195
+            // 
+            this.chkOCrcv195.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCrcv195.Image = null;
+            this.chkOCrcv195.Location = new System.Drawing.Point(109, 185);
+            this.chkOCrcv195.Name = "chkOCrcv195";
+            this.chkOCrcv195.Size = new System.Drawing.Size(16, 16);
+            this.chkOCrcv195.TabIndex = 149;
+            this.chkOCrcv195.UseVisualStyleBackColor = false;
+            this.chkOCrcv195.CheckedChanged += new System.EventHandler(this.chkOCrcv19_CheckedChanged);
+            // 
+            // chkOCrcv194
+            // 
+            this.chkOCrcv194.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCrcv194.Image = null;
+            this.chkOCrcv194.Location = new System.Drawing.Point(93, 185);
+            this.chkOCrcv194.Name = "chkOCrcv194";
+            this.chkOCrcv194.Size = new System.Drawing.Size(16, 16);
+            this.chkOCrcv194.TabIndex = 148;
+            this.chkOCrcv194.UseVisualStyleBackColor = false;
+            this.chkOCrcv194.CheckedChanged += new System.EventHandler(this.chkOCrcv19_CheckedChanged);
+            // 
+            // chkOCrcv193
+            // 
+            this.chkOCrcv193.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCrcv193.Image = null;
+            this.chkOCrcv193.Location = new System.Drawing.Point(77, 185);
+            this.chkOCrcv193.Name = "chkOCrcv193";
+            this.chkOCrcv193.Size = new System.Drawing.Size(16, 16);
+            this.chkOCrcv193.TabIndex = 147;
+            this.chkOCrcv193.UseVisualStyleBackColor = false;
+            this.chkOCrcv193.CheckedChanged += new System.EventHandler(this.chkOCrcv19_CheckedChanged);
+            // 
+            // chkOCrcv192
+            // 
+            this.chkOCrcv192.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCrcv192.Image = null;
+            this.chkOCrcv192.Location = new System.Drawing.Point(61, 185);
+            this.chkOCrcv192.Name = "chkOCrcv192";
+            this.chkOCrcv192.Size = new System.Drawing.Size(16, 16);
+            this.chkOCrcv192.TabIndex = 146;
+            this.chkOCrcv192.UseVisualStyleBackColor = false;
+            this.chkOCrcv192.CheckedChanged += new System.EventHandler(this.chkOCrcv19_CheckedChanged);
+            // 
+            // chkOCrcv191
+            // 
+            this.chkOCrcv191.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCrcv191.Image = null;
+            this.chkOCrcv191.Location = new System.Drawing.Point(45, 185);
+            this.chkOCrcv191.Name = "chkOCrcv191";
+            this.chkOCrcv191.Size = new System.Drawing.Size(16, 16);
+            this.chkOCrcv191.TabIndex = 145;
+            this.chkOCrcv191.UseVisualStyleBackColor = false;
+            this.chkOCrcv191.CheckedChanged += new System.EventHandler(this.chkOCrcv19_CheckedChanged);
+            // 
+            // chkOCxmit227
+            // 
+            this.chkOCxmit227.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCxmit227.Image = null;
+            this.chkOCxmit227.Location = new System.Drawing.Point(269, 170);
+            this.chkOCxmit227.Name = "chkOCxmit227";
+            this.chkOCxmit227.Size = new System.Drawing.Size(16, 16);
+            this.chkOCxmit227.TabIndex = 144;
+            this.chkOCxmit227.UseVisualStyleBackColor = false;
+            this.chkOCxmit227.CheckedChanged += new System.EventHandler(this.chkOCxmit22_CheckedChanged);
+            // 
+            // chkOCxmit226
+            // 
+            this.chkOCxmit226.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCxmit226.Image = null;
+            this.chkOCxmit226.Location = new System.Drawing.Point(253, 170);
+            this.chkOCxmit226.Name = "chkOCxmit226";
+            this.chkOCxmit226.Size = new System.Drawing.Size(16, 16);
+            this.chkOCxmit226.TabIndex = 143;
+            this.chkOCxmit226.UseVisualStyleBackColor = false;
+            this.chkOCxmit226.CheckedChanged += new System.EventHandler(this.chkOCxmit22_CheckedChanged);
+            // 
+            // chkOCxmit225
+            // 
+            this.chkOCxmit225.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCxmit225.Image = null;
+            this.chkOCxmit225.Location = new System.Drawing.Point(237, 170);
+            this.chkOCxmit225.Name = "chkOCxmit225";
+            this.chkOCxmit225.Size = new System.Drawing.Size(16, 16);
+            this.chkOCxmit225.TabIndex = 142;
+            this.chkOCxmit225.UseVisualStyleBackColor = false;
+            this.chkOCxmit225.CheckedChanged += new System.EventHandler(this.chkOCxmit22_CheckedChanged);
+            // 
+            // chkOCxmit224
+            // 
+            this.chkOCxmit224.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCxmit224.Image = null;
+            this.chkOCxmit224.Location = new System.Drawing.Point(221, 170);
+            this.chkOCxmit224.Name = "chkOCxmit224";
+            this.chkOCxmit224.Size = new System.Drawing.Size(16, 16);
+            this.chkOCxmit224.TabIndex = 141;
+            this.chkOCxmit224.UseVisualStyleBackColor = false;
+            this.chkOCxmit224.CheckedChanged += new System.EventHandler(this.chkOCxmit22_CheckedChanged);
+            // 
+            // chkOCxmit223
+            // 
+            this.chkOCxmit223.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCxmit223.Image = null;
+            this.chkOCxmit223.Location = new System.Drawing.Point(205, 170);
+            this.chkOCxmit223.Name = "chkOCxmit223";
+            this.chkOCxmit223.Size = new System.Drawing.Size(16, 16);
+            this.chkOCxmit223.TabIndex = 140;
+            this.chkOCxmit223.UseVisualStyleBackColor = false;
+            this.chkOCxmit223.CheckedChanged += new System.EventHandler(this.chkOCxmit22_CheckedChanged);
+            // 
+            // chkOCxmit222
+            // 
+            this.chkOCxmit222.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCxmit222.Image = null;
+            this.chkOCxmit222.Location = new System.Drawing.Point(189, 170);
+            this.chkOCxmit222.Name = "chkOCxmit222";
+            this.chkOCxmit222.Size = new System.Drawing.Size(16, 16);
+            this.chkOCxmit222.TabIndex = 139;
+            this.chkOCxmit222.UseVisualStyleBackColor = false;
+            this.chkOCxmit222.CheckedChanged += new System.EventHandler(this.chkOCxmit22_CheckedChanged);
+            // 
+            // chkOCxmit221
+            // 
+            this.chkOCxmit221.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCxmit221.Image = null;
+            this.chkOCxmit221.Location = new System.Drawing.Point(173, 170);
+            this.chkOCxmit221.Name = "chkOCxmit221";
+            this.chkOCxmit221.Size = new System.Drawing.Size(16, 16);
+            this.chkOCxmit221.TabIndex = 138;
+            this.chkOCxmit221.UseVisualStyleBackColor = false;
+            this.chkOCxmit221.CheckedChanged += new System.EventHandler(this.chkOCxmit22_CheckedChanged);
+            // 
+            // chkOCrcv227
+            // 
+            this.chkOCrcv227.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCrcv227.Image = null;
+            this.chkOCrcv227.Location = new System.Drawing.Point(141, 169);
+            this.chkOCrcv227.Name = "chkOCrcv227";
+            this.chkOCrcv227.Size = new System.Drawing.Size(16, 16);
+            this.chkOCrcv227.TabIndex = 137;
+            this.chkOCrcv227.UseVisualStyleBackColor = false;
+            this.chkOCrcv227.CheckedChanged += new System.EventHandler(this.chkOCrcv22_CheckedChanged);
+            // 
+            // chkOCrcv226
+            // 
+            this.chkOCrcv226.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCrcv226.Image = null;
+            this.chkOCrcv226.Location = new System.Drawing.Point(125, 169);
+            this.chkOCrcv226.Name = "chkOCrcv226";
+            this.chkOCrcv226.Size = new System.Drawing.Size(16, 16);
+            this.chkOCrcv226.TabIndex = 136;
+            this.chkOCrcv226.UseVisualStyleBackColor = false;
+            this.chkOCrcv226.CheckedChanged += new System.EventHandler(this.chkOCrcv22_CheckedChanged);
+            // 
+            // chkOCrcv225
+            // 
+            this.chkOCrcv225.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCrcv225.Image = null;
+            this.chkOCrcv225.Location = new System.Drawing.Point(109, 169);
+            this.chkOCrcv225.Name = "chkOCrcv225";
+            this.chkOCrcv225.Size = new System.Drawing.Size(16, 16);
+            this.chkOCrcv225.TabIndex = 135;
+            this.chkOCrcv225.UseVisualStyleBackColor = false;
+            this.chkOCrcv225.CheckedChanged += new System.EventHandler(this.chkOCrcv22_CheckedChanged);
+            // 
+            // chkOCrcv224
+            // 
+            this.chkOCrcv224.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCrcv224.Image = null;
+            this.chkOCrcv224.Location = new System.Drawing.Point(93, 169);
+            this.chkOCrcv224.Name = "chkOCrcv224";
+            this.chkOCrcv224.Size = new System.Drawing.Size(16, 16);
+            this.chkOCrcv224.TabIndex = 134;
+            this.chkOCrcv224.UseVisualStyleBackColor = false;
+            this.chkOCrcv224.CheckedChanged += new System.EventHandler(this.chkOCrcv22_CheckedChanged);
+            // 
+            // chkOCrcv223
+            // 
+            this.chkOCrcv223.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCrcv223.Image = null;
+            this.chkOCrcv223.Location = new System.Drawing.Point(77, 169);
+            this.chkOCrcv223.Name = "chkOCrcv223";
+            this.chkOCrcv223.Size = new System.Drawing.Size(16, 16);
+            this.chkOCrcv223.TabIndex = 133;
+            this.chkOCrcv223.UseVisualStyleBackColor = false;
+            this.chkOCrcv223.CheckedChanged += new System.EventHandler(this.chkOCrcv22_CheckedChanged);
+            // 
+            // chkOCrcv222
+            // 
+            this.chkOCrcv222.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCrcv222.Image = null;
+            this.chkOCrcv222.Location = new System.Drawing.Point(61, 169);
+            this.chkOCrcv222.Name = "chkOCrcv222";
+            this.chkOCrcv222.Size = new System.Drawing.Size(16, 16);
+            this.chkOCrcv222.TabIndex = 132;
+            this.chkOCrcv222.UseVisualStyleBackColor = false;
+            this.chkOCrcv222.CheckedChanged += new System.EventHandler(this.chkOCrcv22_CheckedChanged);
+            // 
+            // chkOCrcv221
+            // 
+            this.chkOCrcv221.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCrcv221.Image = null;
+            this.chkOCrcv221.Location = new System.Drawing.Point(45, 169);
+            this.chkOCrcv221.Name = "chkOCrcv221";
+            this.chkOCrcv221.Size = new System.Drawing.Size(16, 16);
+            this.chkOCrcv221.TabIndex = 131;
+            this.chkOCrcv221.UseVisualStyleBackColor = false;
+            this.chkOCrcv221.CheckedChanged += new System.EventHandler(this.chkOCrcv22_CheckedChanged);
+            // 
+            // chkOCxmit257
+            // 
+            this.chkOCxmit257.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCxmit257.Image = null;
+            this.chkOCxmit257.Location = new System.Drawing.Point(269, 154);
+            this.chkOCxmit257.Name = "chkOCxmit257";
+            this.chkOCxmit257.Size = new System.Drawing.Size(16, 16);
+            this.chkOCxmit257.TabIndex = 130;
+            this.chkOCxmit257.UseVisualStyleBackColor = false;
+            this.chkOCxmit257.CheckedChanged += new System.EventHandler(this.chkOCxmit25_CheckedChanged);
+            // 
+            // chkOCxmit256
+            // 
+            this.chkOCxmit256.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCxmit256.Image = null;
+            this.chkOCxmit256.Location = new System.Drawing.Point(253, 154);
+            this.chkOCxmit256.Name = "chkOCxmit256";
+            this.chkOCxmit256.Size = new System.Drawing.Size(16, 16);
+            this.chkOCxmit256.TabIndex = 129;
+            this.chkOCxmit256.UseVisualStyleBackColor = false;
+            this.chkOCxmit256.CheckedChanged += new System.EventHandler(this.chkOCxmit25_CheckedChanged);
+            // 
+            // chkOCxmit255
+            // 
+            this.chkOCxmit255.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCxmit255.Image = null;
+            this.chkOCxmit255.Location = new System.Drawing.Point(237, 154);
+            this.chkOCxmit255.Name = "chkOCxmit255";
+            this.chkOCxmit255.Size = new System.Drawing.Size(16, 16);
+            this.chkOCxmit255.TabIndex = 128;
+            this.chkOCxmit255.UseVisualStyleBackColor = false;
+            this.chkOCxmit255.CheckedChanged += new System.EventHandler(this.chkOCxmit25_CheckedChanged);
+            // 
+            // chkOCxmit254
+            // 
+            this.chkOCxmit254.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCxmit254.Image = null;
+            this.chkOCxmit254.Location = new System.Drawing.Point(221, 154);
+            this.chkOCxmit254.Name = "chkOCxmit254";
+            this.chkOCxmit254.Size = new System.Drawing.Size(16, 16);
+            this.chkOCxmit254.TabIndex = 127;
+            this.chkOCxmit254.UseVisualStyleBackColor = false;
+            this.chkOCxmit254.CheckedChanged += new System.EventHandler(this.chkOCxmit25_CheckedChanged);
+            // 
+            // chkOCxmit253
+            // 
+            this.chkOCxmit253.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCxmit253.Image = null;
+            this.chkOCxmit253.Location = new System.Drawing.Point(205, 154);
+            this.chkOCxmit253.Name = "chkOCxmit253";
+            this.chkOCxmit253.Size = new System.Drawing.Size(16, 16);
+            this.chkOCxmit253.TabIndex = 126;
+            this.chkOCxmit253.UseVisualStyleBackColor = false;
+            this.chkOCxmit253.CheckedChanged += new System.EventHandler(this.chkOCxmit25_CheckedChanged);
+            // 
+            // chkOCxmit252
+            // 
+            this.chkOCxmit252.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCxmit252.Image = null;
+            this.chkOCxmit252.Location = new System.Drawing.Point(189, 154);
+            this.chkOCxmit252.Name = "chkOCxmit252";
+            this.chkOCxmit252.Size = new System.Drawing.Size(16, 16);
+            this.chkOCxmit252.TabIndex = 125;
+            this.chkOCxmit252.UseVisualStyleBackColor = false;
+            this.chkOCxmit252.CheckedChanged += new System.EventHandler(this.chkOCxmit25_CheckedChanged);
+            // 
+            // chkOCxmit251
+            // 
+            this.chkOCxmit251.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCxmit251.Image = null;
+            this.chkOCxmit251.Location = new System.Drawing.Point(173, 154);
+            this.chkOCxmit251.Name = "chkOCxmit251";
+            this.chkOCxmit251.Size = new System.Drawing.Size(16, 16);
+            this.chkOCxmit251.TabIndex = 124;
+            this.chkOCxmit251.UseVisualStyleBackColor = false;
+            this.chkOCxmit251.CheckedChanged += new System.EventHandler(this.chkOCxmit25_CheckedChanged);
+            // 
+            // chkOCrcv257
+            // 
+            this.chkOCrcv257.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCrcv257.Image = null;
+            this.chkOCrcv257.Location = new System.Drawing.Point(141, 153);
+            this.chkOCrcv257.Name = "chkOCrcv257";
+            this.chkOCrcv257.Size = new System.Drawing.Size(16, 16);
+            this.chkOCrcv257.TabIndex = 123;
+            this.chkOCrcv257.UseVisualStyleBackColor = false;
+            this.chkOCrcv257.CheckedChanged += new System.EventHandler(this.chkOCrcv25_CheckedChanged);
+            // 
+            // chkOCrcv256
+            // 
+            this.chkOCrcv256.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCrcv256.Image = null;
+            this.chkOCrcv256.Location = new System.Drawing.Point(125, 153);
+            this.chkOCrcv256.Name = "chkOCrcv256";
+            this.chkOCrcv256.Size = new System.Drawing.Size(16, 16);
+            this.chkOCrcv256.TabIndex = 122;
+            this.chkOCrcv256.UseVisualStyleBackColor = false;
+            this.chkOCrcv256.CheckedChanged += new System.EventHandler(this.chkOCrcv25_CheckedChanged);
+            // 
+            // chkOCrcv255
+            // 
+            this.chkOCrcv255.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCrcv255.Image = null;
+            this.chkOCrcv255.Location = new System.Drawing.Point(109, 153);
+            this.chkOCrcv255.Name = "chkOCrcv255";
+            this.chkOCrcv255.Size = new System.Drawing.Size(16, 16);
+            this.chkOCrcv255.TabIndex = 121;
+            this.chkOCrcv255.UseVisualStyleBackColor = false;
+            this.chkOCrcv255.CheckedChanged += new System.EventHandler(this.chkOCrcv25_CheckedChanged);
+            // 
+            // chkOCrcv254
+            // 
+            this.chkOCrcv254.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCrcv254.Image = null;
+            this.chkOCrcv254.Location = new System.Drawing.Point(93, 153);
+            this.chkOCrcv254.Name = "chkOCrcv254";
+            this.chkOCrcv254.Size = new System.Drawing.Size(16, 16);
+            this.chkOCrcv254.TabIndex = 120;
+            this.chkOCrcv254.UseVisualStyleBackColor = false;
+            this.chkOCrcv254.CheckedChanged += new System.EventHandler(this.chkOCrcv25_CheckedChanged);
+            // 
+            // chkOCrcv253
+            // 
+            this.chkOCrcv253.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCrcv253.Image = null;
+            this.chkOCrcv253.Location = new System.Drawing.Point(77, 153);
+            this.chkOCrcv253.Name = "chkOCrcv253";
+            this.chkOCrcv253.Size = new System.Drawing.Size(16, 16);
+            this.chkOCrcv253.TabIndex = 119;
+            this.chkOCrcv253.UseVisualStyleBackColor = false;
+            this.chkOCrcv253.CheckedChanged += new System.EventHandler(this.chkOCrcv25_CheckedChanged);
+            // 
+            // chkOCrcv252
+            // 
+            this.chkOCrcv252.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCrcv252.Image = null;
+            this.chkOCrcv252.Location = new System.Drawing.Point(61, 153);
+            this.chkOCrcv252.Name = "chkOCrcv252";
+            this.chkOCrcv252.Size = new System.Drawing.Size(16, 16);
+            this.chkOCrcv252.TabIndex = 118;
+            this.chkOCrcv252.UseVisualStyleBackColor = false;
+            this.chkOCrcv252.CheckedChanged += new System.EventHandler(this.chkOCrcv25_CheckedChanged);
+            // 
+            // chkOCrcv251
+            // 
+            this.chkOCrcv251.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCrcv251.Image = null;
+            this.chkOCrcv251.Location = new System.Drawing.Point(45, 153);
+            this.chkOCrcv251.Name = "chkOCrcv251";
+            this.chkOCrcv251.Size = new System.Drawing.Size(16, 16);
+            this.chkOCrcv251.TabIndex = 117;
+            this.chkOCrcv251.UseVisualStyleBackColor = false;
+            this.chkOCrcv251.CheckedChanged += new System.EventHandler(this.chkOCrcv25_CheckedChanged);
+            // 
+            // chkOCxmit317
+            // 
+            this.chkOCxmit317.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCxmit317.Image = null;
+            this.chkOCxmit317.Location = new System.Drawing.Point(269, 138);
+            this.chkOCxmit317.Name = "chkOCxmit317";
+            this.chkOCxmit317.Size = new System.Drawing.Size(16, 16);
+            this.chkOCxmit317.TabIndex = 116;
+            this.chkOCxmit317.UseVisualStyleBackColor = false;
+            this.chkOCxmit317.CheckedChanged += new System.EventHandler(this.chkOCxmit31_CheckedChanged);
+            // 
+            // chkOCxmit316
+            // 
+            this.chkOCxmit316.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCxmit316.Image = null;
+            this.chkOCxmit316.Location = new System.Drawing.Point(253, 138);
+            this.chkOCxmit316.Name = "chkOCxmit316";
+            this.chkOCxmit316.Size = new System.Drawing.Size(16, 16);
+            this.chkOCxmit316.TabIndex = 115;
+            this.chkOCxmit316.UseVisualStyleBackColor = false;
+            this.chkOCxmit316.CheckedChanged += new System.EventHandler(this.chkOCxmit31_CheckedChanged);
+            // 
+            // chkOCxmit315
+            // 
+            this.chkOCxmit315.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCxmit315.Image = null;
+            this.chkOCxmit315.Location = new System.Drawing.Point(237, 138);
+            this.chkOCxmit315.Name = "chkOCxmit315";
+            this.chkOCxmit315.Size = new System.Drawing.Size(16, 16);
+            this.chkOCxmit315.TabIndex = 114;
+            this.chkOCxmit315.UseVisualStyleBackColor = false;
+            this.chkOCxmit315.CheckedChanged += new System.EventHandler(this.chkOCxmit31_CheckedChanged);
+            // 
+            // chkOCxmit314
+            // 
+            this.chkOCxmit314.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCxmit314.Image = null;
+            this.chkOCxmit314.Location = new System.Drawing.Point(221, 138);
+            this.chkOCxmit314.Name = "chkOCxmit314";
+            this.chkOCxmit314.Size = new System.Drawing.Size(16, 16);
+            this.chkOCxmit314.TabIndex = 113;
+            this.chkOCxmit314.UseVisualStyleBackColor = false;
+            this.chkOCxmit314.CheckedChanged += new System.EventHandler(this.chkOCxmit31_CheckedChanged);
+            // 
+            // chkOCxmit313
+            // 
+            this.chkOCxmit313.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCxmit313.Image = null;
+            this.chkOCxmit313.Location = new System.Drawing.Point(205, 138);
+            this.chkOCxmit313.Name = "chkOCxmit313";
+            this.chkOCxmit313.Size = new System.Drawing.Size(16, 16);
+            this.chkOCxmit313.TabIndex = 112;
+            this.chkOCxmit313.UseVisualStyleBackColor = false;
+            this.chkOCxmit313.CheckedChanged += new System.EventHandler(this.chkOCxmit31_CheckedChanged);
+            // 
+            // chkOCxmit312
+            // 
+            this.chkOCxmit312.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCxmit312.Image = null;
+            this.chkOCxmit312.Location = new System.Drawing.Point(189, 138);
+            this.chkOCxmit312.Name = "chkOCxmit312";
+            this.chkOCxmit312.Size = new System.Drawing.Size(16, 16);
+            this.chkOCxmit312.TabIndex = 111;
+            this.chkOCxmit312.UseVisualStyleBackColor = false;
+            this.chkOCxmit312.CheckedChanged += new System.EventHandler(this.chkOCxmit31_CheckedChanged);
+            // 
+            // chkOCxmit311
+            // 
+            this.chkOCxmit311.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCxmit311.Image = null;
+            this.chkOCxmit311.Location = new System.Drawing.Point(173, 138);
+            this.chkOCxmit311.Name = "chkOCxmit311";
+            this.chkOCxmit311.Size = new System.Drawing.Size(16, 16);
+            this.chkOCxmit311.TabIndex = 110;
+            this.chkOCxmit311.UseVisualStyleBackColor = false;
+            this.chkOCxmit311.CheckedChanged += new System.EventHandler(this.chkOCxmit31_CheckedChanged);
+            // 
+            // chkOCrcv317
+            // 
+            this.chkOCrcv317.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCrcv317.Image = null;
+            this.chkOCrcv317.Location = new System.Drawing.Point(141, 137);
+            this.chkOCrcv317.Name = "chkOCrcv317";
+            this.chkOCrcv317.Size = new System.Drawing.Size(16, 16);
+            this.chkOCrcv317.TabIndex = 109;
+            this.chkOCrcv317.UseVisualStyleBackColor = false;
+            this.chkOCrcv317.CheckedChanged += new System.EventHandler(this.chkOCrcv31_CheckedChanged);
+            // 
+            // chkOCrcv316
+            // 
+            this.chkOCrcv316.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCrcv316.Image = null;
+            this.chkOCrcv316.Location = new System.Drawing.Point(125, 137);
+            this.chkOCrcv316.Name = "chkOCrcv316";
+            this.chkOCrcv316.Size = new System.Drawing.Size(16, 16);
+            this.chkOCrcv316.TabIndex = 108;
+            this.chkOCrcv316.UseVisualStyleBackColor = false;
+            this.chkOCrcv316.CheckedChanged += new System.EventHandler(this.chkOCrcv31_CheckedChanged);
+            // 
+            // chkOCrcv315
+            // 
+            this.chkOCrcv315.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCrcv315.Image = null;
+            this.chkOCrcv315.Location = new System.Drawing.Point(109, 137);
+            this.chkOCrcv315.Name = "chkOCrcv315";
+            this.chkOCrcv315.Size = new System.Drawing.Size(16, 16);
+            this.chkOCrcv315.TabIndex = 107;
+            this.chkOCrcv315.UseVisualStyleBackColor = false;
+            this.chkOCrcv315.CheckedChanged += new System.EventHandler(this.chkOCrcv31_CheckedChanged);
+            // 
+            // chkOCrcv314
+            // 
+            this.chkOCrcv314.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCrcv314.Image = null;
+            this.chkOCrcv314.Location = new System.Drawing.Point(93, 137);
+            this.chkOCrcv314.Name = "chkOCrcv314";
+            this.chkOCrcv314.Size = new System.Drawing.Size(16, 16);
+            this.chkOCrcv314.TabIndex = 106;
+            this.chkOCrcv314.UseVisualStyleBackColor = false;
+            this.chkOCrcv314.CheckedChanged += new System.EventHandler(this.chkOCrcv31_CheckedChanged);
+            // 
+            // chkOCrcv313
+            // 
+            this.chkOCrcv313.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCrcv313.Image = null;
+            this.chkOCrcv313.Location = new System.Drawing.Point(77, 137);
+            this.chkOCrcv313.Name = "chkOCrcv313";
+            this.chkOCrcv313.Size = new System.Drawing.Size(16, 16);
+            this.chkOCrcv313.TabIndex = 105;
+            this.chkOCrcv313.UseVisualStyleBackColor = false;
+            this.chkOCrcv313.CheckedChanged += new System.EventHandler(this.chkOCrcv31_CheckedChanged);
+            // 
+            // chkOCrcv312
+            // 
+            this.chkOCrcv312.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCrcv312.Image = null;
+            this.chkOCrcv312.Location = new System.Drawing.Point(61, 137);
+            this.chkOCrcv312.Name = "chkOCrcv312";
+            this.chkOCrcv312.Size = new System.Drawing.Size(16, 16);
+            this.chkOCrcv312.TabIndex = 104;
+            this.chkOCrcv312.UseVisualStyleBackColor = false;
+            this.chkOCrcv312.CheckedChanged += new System.EventHandler(this.chkOCrcv31_CheckedChanged);
+            // 
+            // chkOCrcv311
+            // 
+            this.chkOCrcv311.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCrcv311.Image = null;
+            this.chkOCrcv311.Location = new System.Drawing.Point(45, 137);
+            this.chkOCrcv311.Name = "chkOCrcv311";
+            this.chkOCrcv311.Size = new System.Drawing.Size(16, 16);
+            this.chkOCrcv311.TabIndex = 103;
+            this.chkOCrcv311.UseVisualStyleBackColor = false;
+            this.chkOCrcv311.CheckedChanged += new System.EventHandler(this.chkOCrcv31_CheckedChanged);
+            // 
+            // chkOCxmit417
+            // 
+            this.chkOCxmit417.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCxmit417.Image = null;
+            this.chkOCxmit417.Location = new System.Drawing.Point(269, 122);
+            this.chkOCxmit417.Name = "chkOCxmit417";
+            this.chkOCxmit417.Size = new System.Drawing.Size(16, 16);
+            this.chkOCxmit417.TabIndex = 102;
+            this.chkOCxmit417.UseVisualStyleBackColor = false;
+            this.chkOCxmit417.CheckedChanged += new System.EventHandler(this.chkOCxmit41_CheckedChanged);
+            // 
+            // chkOCxmit416
+            // 
+            this.chkOCxmit416.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCxmit416.Image = null;
+            this.chkOCxmit416.Location = new System.Drawing.Point(253, 122);
+            this.chkOCxmit416.Name = "chkOCxmit416";
+            this.chkOCxmit416.Size = new System.Drawing.Size(16, 16);
+            this.chkOCxmit416.TabIndex = 101;
+            this.chkOCxmit416.UseVisualStyleBackColor = false;
+            this.chkOCxmit416.CheckedChanged += new System.EventHandler(this.chkOCxmit41_CheckedChanged);
+            // 
+            // chkOCxmit415
+            // 
+            this.chkOCxmit415.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCxmit415.Image = null;
+            this.chkOCxmit415.Location = new System.Drawing.Point(237, 122);
+            this.chkOCxmit415.Name = "chkOCxmit415";
+            this.chkOCxmit415.Size = new System.Drawing.Size(16, 16);
+            this.chkOCxmit415.TabIndex = 100;
+            this.chkOCxmit415.UseVisualStyleBackColor = false;
+            this.chkOCxmit415.CheckedChanged += new System.EventHandler(this.chkOCxmit41_CheckedChanged);
+            // 
+            // chkOCxmit414
+            // 
+            this.chkOCxmit414.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCxmit414.Image = null;
+            this.chkOCxmit414.Location = new System.Drawing.Point(221, 122);
+            this.chkOCxmit414.Name = "chkOCxmit414";
+            this.chkOCxmit414.Size = new System.Drawing.Size(16, 16);
+            this.chkOCxmit414.TabIndex = 99;
+            this.chkOCxmit414.UseVisualStyleBackColor = false;
+            this.chkOCxmit414.CheckedChanged += new System.EventHandler(this.chkOCxmit41_CheckedChanged);
+            // 
+            // chkOCxmit413
+            // 
+            this.chkOCxmit413.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCxmit413.Image = null;
+            this.chkOCxmit413.Location = new System.Drawing.Point(205, 122);
+            this.chkOCxmit413.Name = "chkOCxmit413";
+            this.chkOCxmit413.Size = new System.Drawing.Size(16, 16);
+            this.chkOCxmit413.TabIndex = 98;
+            this.chkOCxmit413.UseVisualStyleBackColor = false;
+            this.chkOCxmit413.CheckedChanged += new System.EventHandler(this.chkOCxmit41_CheckedChanged);
+            // 
+            // chkOCxmit412
+            // 
+            this.chkOCxmit412.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCxmit412.Image = null;
+            this.chkOCxmit412.Location = new System.Drawing.Point(189, 122);
+            this.chkOCxmit412.Name = "chkOCxmit412";
+            this.chkOCxmit412.Size = new System.Drawing.Size(16, 16);
+            this.chkOCxmit412.TabIndex = 97;
+            this.chkOCxmit412.UseVisualStyleBackColor = false;
+            this.chkOCxmit412.CheckedChanged += new System.EventHandler(this.chkOCxmit41_CheckedChanged);
+            // 
+            // chkOCxmit411
+            // 
+            this.chkOCxmit411.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCxmit411.Image = null;
+            this.chkOCxmit411.Location = new System.Drawing.Point(173, 122);
+            this.chkOCxmit411.Name = "chkOCxmit411";
+            this.chkOCxmit411.Size = new System.Drawing.Size(16, 16);
+            this.chkOCxmit411.TabIndex = 96;
+            this.chkOCxmit411.UseVisualStyleBackColor = false;
+            this.chkOCxmit411.CheckedChanged += new System.EventHandler(this.chkOCxmit41_CheckedChanged);
+            // 
+            // chkOCrcv417
+            // 
+            this.chkOCrcv417.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCrcv417.Image = null;
+            this.chkOCrcv417.Location = new System.Drawing.Point(141, 121);
+            this.chkOCrcv417.Name = "chkOCrcv417";
+            this.chkOCrcv417.Size = new System.Drawing.Size(16, 16);
+            this.chkOCrcv417.TabIndex = 95;
+            this.chkOCrcv417.UseVisualStyleBackColor = false;
+            this.chkOCrcv417.CheckedChanged += new System.EventHandler(this.chkOCrcv41_CheckedChanged);
+            // 
+            // chkOCrcv416
+            // 
+            this.chkOCrcv416.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCrcv416.Image = null;
+            this.chkOCrcv416.Location = new System.Drawing.Point(125, 121);
+            this.chkOCrcv416.Name = "chkOCrcv416";
+            this.chkOCrcv416.Size = new System.Drawing.Size(16, 16);
+            this.chkOCrcv416.TabIndex = 94;
+            this.chkOCrcv416.UseVisualStyleBackColor = false;
+            this.chkOCrcv416.CheckedChanged += new System.EventHandler(this.chkOCrcv41_CheckedChanged);
+            // 
+            // chkOCrcv415
+            // 
+            this.chkOCrcv415.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCrcv415.Image = null;
+            this.chkOCrcv415.Location = new System.Drawing.Point(109, 121);
+            this.chkOCrcv415.Name = "chkOCrcv415";
+            this.chkOCrcv415.Size = new System.Drawing.Size(16, 16);
+            this.chkOCrcv415.TabIndex = 93;
+            this.chkOCrcv415.UseVisualStyleBackColor = false;
+            this.chkOCrcv415.CheckedChanged += new System.EventHandler(this.chkOCrcv41_CheckedChanged);
+            // 
+            // chkOCrcv414
+            // 
+            this.chkOCrcv414.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCrcv414.Image = null;
+            this.chkOCrcv414.Location = new System.Drawing.Point(93, 121);
+            this.chkOCrcv414.Name = "chkOCrcv414";
+            this.chkOCrcv414.Size = new System.Drawing.Size(16, 16);
+            this.chkOCrcv414.TabIndex = 92;
+            this.chkOCrcv414.UseVisualStyleBackColor = false;
+            this.chkOCrcv414.CheckedChanged += new System.EventHandler(this.chkOCrcv41_CheckedChanged);
+            // 
+            // chkOCrcv413
+            // 
+            this.chkOCrcv413.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCrcv413.Image = null;
+            this.chkOCrcv413.Location = new System.Drawing.Point(77, 121);
+            this.chkOCrcv413.Name = "chkOCrcv413";
+            this.chkOCrcv413.Size = new System.Drawing.Size(16, 16);
+            this.chkOCrcv413.TabIndex = 91;
+            this.chkOCrcv413.UseVisualStyleBackColor = false;
+            this.chkOCrcv413.CheckedChanged += new System.EventHandler(this.chkOCrcv41_CheckedChanged);
+            // 
+            // chkOCrcv412
+            // 
+            this.chkOCrcv412.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCrcv412.Image = null;
+            this.chkOCrcv412.Location = new System.Drawing.Point(61, 121);
+            this.chkOCrcv412.Name = "chkOCrcv412";
+            this.chkOCrcv412.Size = new System.Drawing.Size(16, 16);
+            this.chkOCrcv412.TabIndex = 90;
+            this.chkOCrcv412.UseVisualStyleBackColor = false;
+            this.chkOCrcv412.CheckedChanged += new System.EventHandler(this.chkOCrcv41_CheckedChanged);
+            // 
+            // chkOCrcv411
+            // 
+            this.chkOCrcv411.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCrcv411.Image = null;
+            this.chkOCrcv411.Location = new System.Drawing.Point(45, 121);
+            this.chkOCrcv411.Name = "chkOCrcv411";
+            this.chkOCrcv411.Size = new System.Drawing.Size(16, 16);
+            this.chkOCrcv411.TabIndex = 89;
+            this.chkOCrcv411.UseVisualStyleBackColor = false;
+            this.chkOCrcv411.CheckedChanged += new System.EventHandler(this.chkOCrcv41_CheckedChanged);
+            // 
+            // chkOCxmit497
+            // 
+            this.chkOCxmit497.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCxmit497.Image = null;
+            this.chkOCxmit497.Location = new System.Drawing.Point(269, 106);
+            this.chkOCxmit497.Name = "chkOCxmit497";
+            this.chkOCxmit497.Size = new System.Drawing.Size(16, 16);
+            this.chkOCxmit497.TabIndex = 88;
+            this.chkOCxmit497.UseVisualStyleBackColor = false;
+            this.chkOCxmit497.CheckedChanged += new System.EventHandler(this.chkOCxmit49_CheckedChanged);
+            // 
+            // chkOCxmit496
+            // 
+            this.chkOCxmit496.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCxmit496.Image = null;
+            this.chkOCxmit496.Location = new System.Drawing.Point(253, 106);
+            this.chkOCxmit496.Name = "chkOCxmit496";
+            this.chkOCxmit496.Size = new System.Drawing.Size(16, 16);
+            this.chkOCxmit496.TabIndex = 87;
+            this.chkOCxmit496.UseVisualStyleBackColor = false;
+            this.chkOCxmit496.CheckedChanged += new System.EventHandler(this.chkOCxmit49_CheckedChanged);
+            // 
+            // chkOCxmit495
+            // 
+            this.chkOCxmit495.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCxmit495.Image = null;
+            this.chkOCxmit495.Location = new System.Drawing.Point(237, 106);
+            this.chkOCxmit495.Name = "chkOCxmit495";
+            this.chkOCxmit495.Size = new System.Drawing.Size(16, 16);
+            this.chkOCxmit495.TabIndex = 86;
+            this.chkOCxmit495.UseVisualStyleBackColor = false;
+            this.chkOCxmit495.CheckedChanged += new System.EventHandler(this.chkOCxmit49_CheckedChanged);
+            // 
+            // chkOCxmit494
+            // 
+            this.chkOCxmit494.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCxmit494.Image = null;
+            this.chkOCxmit494.Location = new System.Drawing.Point(221, 106);
+            this.chkOCxmit494.Name = "chkOCxmit494";
+            this.chkOCxmit494.Size = new System.Drawing.Size(16, 16);
+            this.chkOCxmit494.TabIndex = 85;
+            this.chkOCxmit494.UseVisualStyleBackColor = false;
+            this.chkOCxmit494.CheckedChanged += new System.EventHandler(this.chkOCxmit49_CheckedChanged);
+            // 
+            // chkOCxmit493
+            // 
+            this.chkOCxmit493.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCxmit493.Image = null;
+            this.chkOCxmit493.Location = new System.Drawing.Point(205, 106);
+            this.chkOCxmit493.Name = "chkOCxmit493";
+            this.chkOCxmit493.Size = new System.Drawing.Size(16, 16);
+            this.chkOCxmit493.TabIndex = 84;
+            this.chkOCxmit493.UseVisualStyleBackColor = false;
+            this.chkOCxmit493.CheckedChanged += new System.EventHandler(this.chkOCxmit49_CheckedChanged);
+            // 
+            // chkOCxmit492
+            // 
+            this.chkOCxmit492.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCxmit492.Image = null;
+            this.chkOCxmit492.Location = new System.Drawing.Point(189, 106);
+            this.chkOCxmit492.Name = "chkOCxmit492";
+            this.chkOCxmit492.Size = new System.Drawing.Size(16, 16);
+            this.chkOCxmit492.TabIndex = 83;
+            this.chkOCxmit492.UseVisualStyleBackColor = false;
+            this.chkOCxmit492.CheckedChanged += new System.EventHandler(this.chkOCxmit49_CheckedChanged);
+            // 
+            // chkOCxmit491
+            // 
+            this.chkOCxmit491.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCxmit491.Image = null;
+            this.chkOCxmit491.Location = new System.Drawing.Point(173, 106);
+            this.chkOCxmit491.Name = "chkOCxmit491";
+            this.chkOCxmit491.Size = new System.Drawing.Size(16, 16);
+            this.chkOCxmit491.TabIndex = 82;
+            this.chkOCxmit491.UseVisualStyleBackColor = false;
+            this.chkOCxmit491.CheckedChanged += new System.EventHandler(this.chkOCxmit49_CheckedChanged);
+            // 
+            // chkOCrcv497
+            // 
+            this.chkOCrcv497.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCrcv497.Image = null;
+            this.chkOCrcv497.Location = new System.Drawing.Point(141, 105);
+            this.chkOCrcv497.Name = "chkOCrcv497";
+            this.chkOCrcv497.Size = new System.Drawing.Size(16, 16);
+            this.chkOCrcv497.TabIndex = 81;
+            this.chkOCrcv497.UseVisualStyleBackColor = false;
+            this.chkOCrcv497.CheckedChanged += new System.EventHandler(this.chkOCrcv49_CheckedChanged);
+            // 
+            // chkOCrcv496
+            // 
+            this.chkOCrcv496.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCrcv496.Image = null;
+            this.chkOCrcv496.Location = new System.Drawing.Point(125, 105);
+            this.chkOCrcv496.Name = "chkOCrcv496";
+            this.chkOCrcv496.Size = new System.Drawing.Size(16, 16);
+            this.chkOCrcv496.TabIndex = 80;
+            this.chkOCrcv496.UseVisualStyleBackColor = false;
+            this.chkOCrcv496.CheckedChanged += new System.EventHandler(this.chkOCrcv49_CheckedChanged);
+            // 
+            // chkOCrcv495
+            // 
+            this.chkOCrcv495.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCrcv495.Image = null;
+            this.chkOCrcv495.Location = new System.Drawing.Point(109, 105);
+            this.chkOCrcv495.Name = "chkOCrcv495";
+            this.chkOCrcv495.Size = new System.Drawing.Size(16, 16);
+            this.chkOCrcv495.TabIndex = 79;
+            this.chkOCrcv495.UseVisualStyleBackColor = false;
+            this.chkOCrcv495.CheckedChanged += new System.EventHandler(this.chkOCrcv49_CheckedChanged);
+            // 
+            // chkOCrcv494
+            // 
+            this.chkOCrcv494.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCrcv494.Image = null;
+            this.chkOCrcv494.Location = new System.Drawing.Point(93, 105);
+            this.chkOCrcv494.Name = "chkOCrcv494";
+            this.chkOCrcv494.Size = new System.Drawing.Size(16, 16);
+            this.chkOCrcv494.TabIndex = 78;
+            this.chkOCrcv494.UseVisualStyleBackColor = false;
+            this.chkOCrcv494.CheckedChanged += new System.EventHandler(this.chkOCrcv49_CheckedChanged);
+            // 
+            // chkOCrcv493
+            // 
+            this.chkOCrcv493.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCrcv493.Image = null;
+            this.chkOCrcv493.Location = new System.Drawing.Point(77, 105);
+            this.chkOCrcv493.Name = "chkOCrcv493";
+            this.chkOCrcv493.Size = new System.Drawing.Size(16, 16);
+            this.chkOCrcv493.TabIndex = 77;
+            this.chkOCrcv493.UseVisualStyleBackColor = false;
+            this.chkOCrcv493.CheckedChanged += new System.EventHandler(this.chkOCrcv49_CheckedChanged);
+            // 
+            // chkOCrcv492
+            // 
+            this.chkOCrcv492.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCrcv492.Image = null;
+            this.chkOCrcv492.Location = new System.Drawing.Point(61, 105);
+            this.chkOCrcv492.Name = "chkOCrcv492";
+            this.chkOCrcv492.Size = new System.Drawing.Size(16, 16);
+            this.chkOCrcv492.TabIndex = 76;
+            this.chkOCrcv492.UseVisualStyleBackColor = false;
+            this.chkOCrcv492.CheckedChanged += new System.EventHandler(this.chkOCrcv49_CheckedChanged);
+            // 
+            // chkOCrcv491
+            // 
+            this.chkOCrcv491.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCrcv491.Image = null;
+            this.chkOCrcv491.Location = new System.Drawing.Point(45, 105);
+            this.chkOCrcv491.Name = "chkOCrcv491";
+            this.chkOCrcv491.Size = new System.Drawing.Size(16, 16);
+            this.chkOCrcv491.TabIndex = 75;
+            this.chkOCrcv491.UseVisualStyleBackColor = false;
+            this.chkOCrcv491.CheckedChanged += new System.EventHandler(this.chkOCrcv49_CheckedChanged);
+            // 
+            // chkOCxmit617
+            // 
+            this.chkOCxmit617.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCxmit617.Image = null;
+            this.chkOCxmit617.Location = new System.Drawing.Point(269, 90);
+            this.chkOCxmit617.Name = "chkOCxmit617";
+            this.chkOCxmit617.Size = new System.Drawing.Size(16, 16);
+            this.chkOCxmit617.TabIndex = 73;
+            this.chkOCxmit617.UseVisualStyleBackColor = false;
+            this.chkOCxmit617.CheckedChanged += new System.EventHandler(this.chkOCxmit61_CheckedChanged);
+            // 
+            // chkOCxmit616
+            // 
+            this.chkOCxmit616.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCxmit616.Image = null;
+            this.chkOCxmit616.Location = new System.Drawing.Point(253, 90);
+            this.chkOCxmit616.Name = "chkOCxmit616";
+            this.chkOCxmit616.Size = new System.Drawing.Size(16, 16);
+            this.chkOCxmit616.TabIndex = 72;
+            this.chkOCxmit616.UseVisualStyleBackColor = false;
+            this.chkOCxmit616.CheckedChanged += new System.EventHandler(this.chkOCxmit61_CheckedChanged);
+            // 
+            // chkOCxmit615
+            // 
+            this.chkOCxmit615.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCxmit615.Image = null;
+            this.chkOCxmit615.Location = new System.Drawing.Point(237, 90);
+            this.chkOCxmit615.Name = "chkOCxmit615";
+            this.chkOCxmit615.Size = new System.Drawing.Size(16, 16);
+            this.chkOCxmit615.TabIndex = 71;
+            this.chkOCxmit615.UseVisualStyleBackColor = false;
+            this.chkOCxmit615.CheckedChanged += new System.EventHandler(this.chkOCxmit61_CheckedChanged);
+            // 
+            // chkOCxmit614
+            // 
+            this.chkOCxmit614.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCxmit614.Image = null;
+            this.chkOCxmit614.Location = new System.Drawing.Point(221, 90);
+            this.chkOCxmit614.Name = "chkOCxmit614";
+            this.chkOCxmit614.Size = new System.Drawing.Size(16, 16);
+            this.chkOCxmit614.TabIndex = 70;
+            this.chkOCxmit614.UseVisualStyleBackColor = false;
+            this.chkOCxmit614.CheckedChanged += new System.EventHandler(this.chkOCxmit61_CheckedChanged);
+            // 
+            // chkOCxmit613
+            // 
+            this.chkOCxmit613.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCxmit613.Image = null;
+            this.chkOCxmit613.Location = new System.Drawing.Point(205, 90);
+            this.chkOCxmit613.Name = "chkOCxmit613";
+            this.chkOCxmit613.Size = new System.Drawing.Size(16, 16);
+            this.chkOCxmit613.TabIndex = 69;
+            this.chkOCxmit613.UseVisualStyleBackColor = false;
+            this.chkOCxmit613.CheckedChanged += new System.EventHandler(this.chkOCxmit61_CheckedChanged);
+            // 
+            // chkOCxmit612
+            // 
+            this.chkOCxmit612.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCxmit612.Image = null;
+            this.chkOCxmit612.Location = new System.Drawing.Point(189, 90);
+            this.chkOCxmit612.Name = "chkOCxmit612";
+            this.chkOCxmit612.Size = new System.Drawing.Size(16, 16);
+            this.chkOCxmit612.TabIndex = 68;
+            this.chkOCxmit612.UseVisualStyleBackColor = false;
+            this.chkOCxmit612.CheckedChanged += new System.EventHandler(this.chkOCxmit61_CheckedChanged);
+            // 
+            // chkOCxmit611
+            // 
+            this.chkOCxmit611.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCxmit611.Image = null;
+            this.chkOCxmit611.Location = new System.Drawing.Point(173, 90);
+            this.chkOCxmit611.Name = "chkOCxmit611";
+            this.chkOCxmit611.Size = new System.Drawing.Size(16, 16);
+            this.chkOCxmit611.TabIndex = 67;
+            this.chkOCxmit611.UseVisualStyleBackColor = false;
+            this.chkOCxmit611.CheckedChanged += new System.EventHandler(this.chkOCxmit61_CheckedChanged);
+            // 
+            // chkOCrcv617
+            // 
+            this.chkOCrcv617.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCrcv617.Image = null;
+            this.chkOCrcv617.Location = new System.Drawing.Point(141, 89);
+            this.chkOCrcv617.Name = "chkOCrcv617";
+            this.chkOCrcv617.Size = new System.Drawing.Size(16, 16);
+            this.chkOCrcv617.TabIndex = 66;
+            this.chkOCrcv617.UseVisualStyleBackColor = false;
+            this.chkOCrcv617.CheckedChanged += new System.EventHandler(this.chkOCrcv61_CheckedChanged);
+            // 
+            // chkOCrcv616
+            // 
+            this.chkOCrcv616.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCrcv616.Image = null;
+            this.chkOCrcv616.Location = new System.Drawing.Point(125, 89);
+            this.chkOCrcv616.Name = "chkOCrcv616";
+            this.chkOCrcv616.Size = new System.Drawing.Size(16, 16);
+            this.chkOCrcv616.TabIndex = 65;
+            this.chkOCrcv616.UseVisualStyleBackColor = false;
+            this.chkOCrcv616.CheckedChanged += new System.EventHandler(this.chkOCrcv61_CheckedChanged);
+            // 
+            // chkOCrcv615
+            // 
+            this.chkOCrcv615.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCrcv615.Image = null;
+            this.chkOCrcv615.Location = new System.Drawing.Point(109, 89);
+            this.chkOCrcv615.Name = "chkOCrcv615";
+            this.chkOCrcv615.Size = new System.Drawing.Size(16, 16);
+            this.chkOCrcv615.TabIndex = 64;
+            this.chkOCrcv615.UseVisualStyleBackColor = false;
+            this.chkOCrcv615.CheckedChanged += new System.EventHandler(this.chkOCrcv61_CheckedChanged);
+            // 
+            // chkOCrcv614
+            // 
+            this.chkOCrcv614.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCrcv614.Image = null;
+            this.chkOCrcv614.Location = new System.Drawing.Point(93, 89);
+            this.chkOCrcv614.Name = "chkOCrcv614";
+            this.chkOCrcv614.Size = new System.Drawing.Size(16, 16);
+            this.chkOCrcv614.TabIndex = 63;
+            this.chkOCrcv614.UseVisualStyleBackColor = false;
+            this.chkOCrcv614.CheckedChanged += new System.EventHandler(this.chkOCrcv61_CheckedChanged);
+            // 
+            // chkOCrcv613
+            // 
+            this.chkOCrcv613.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCrcv613.Image = null;
+            this.chkOCrcv613.Location = new System.Drawing.Point(77, 89);
+            this.chkOCrcv613.Name = "chkOCrcv613";
+            this.chkOCrcv613.Size = new System.Drawing.Size(16, 16);
+            this.chkOCrcv613.TabIndex = 62;
+            this.chkOCrcv613.UseVisualStyleBackColor = false;
+            this.chkOCrcv613.CheckedChanged += new System.EventHandler(this.chkOCrcv61_CheckedChanged);
+            // 
+            // chkOCrcv612
+            // 
+            this.chkOCrcv612.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCrcv612.Image = null;
+            this.chkOCrcv612.Location = new System.Drawing.Point(61, 89);
+            this.chkOCrcv612.Name = "chkOCrcv612";
+            this.chkOCrcv612.Size = new System.Drawing.Size(16, 16);
+            this.chkOCrcv612.TabIndex = 61;
+            this.chkOCrcv612.UseVisualStyleBackColor = false;
+            this.chkOCrcv612.CheckedChanged += new System.EventHandler(this.chkOCrcv61_CheckedChanged);
+            // 
+            // chkOCrcv611
+            // 
+            this.chkOCrcv611.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCrcv611.Image = null;
+            this.chkOCrcv611.Location = new System.Drawing.Point(45, 89);
+            this.chkOCrcv611.Name = "chkOCrcv611";
+            this.chkOCrcv611.Size = new System.Drawing.Size(16, 16);
+            this.chkOCrcv611.TabIndex = 60;
+            this.chkOCrcv611.UseVisualStyleBackColor = false;
+            this.chkOCrcv611.CheckedChanged += new System.EventHandler(this.chkOCrcv61_CheckedChanged);
+            // 
+            // chkOCxmit907
+            // 
+            this.chkOCxmit907.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCxmit907.Image = null;
+            this.chkOCxmit907.Location = new System.Drawing.Point(269, 74);
+            this.chkOCxmit907.Name = "chkOCxmit907";
+            this.chkOCxmit907.Size = new System.Drawing.Size(16, 16);
+            this.chkOCxmit907.TabIndex = 59;
+            this.chkOCxmit907.UseVisualStyleBackColor = false;
+            this.chkOCxmit907.CheckedChanged += new System.EventHandler(this.chkOCxmit90_CheckedChanged);
+            // 
+            // chkOCxmit906
+            // 
+            this.chkOCxmit906.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCxmit906.Image = null;
+            this.chkOCxmit906.Location = new System.Drawing.Point(253, 74);
+            this.chkOCxmit906.Name = "chkOCxmit906";
+            this.chkOCxmit906.Size = new System.Drawing.Size(16, 16);
+            this.chkOCxmit906.TabIndex = 58;
+            this.chkOCxmit906.UseVisualStyleBackColor = false;
+            this.chkOCxmit906.CheckedChanged += new System.EventHandler(this.chkOCxmit90_CheckedChanged);
+            // 
+            // chkOCxmit905
+            // 
+            this.chkOCxmit905.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCxmit905.Image = null;
+            this.chkOCxmit905.Location = new System.Drawing.Point(237, 74);
+            this.chkOCxmit905.Name = "chkOCxmit905";
+            this.chkOCxmit905.Size = new System.Drawing.Size(16, 16);
+            this.chkOCxmit905.TabIndex = 57;
+            this.chkOCxmit905.UseVisualStyleBackColor = false;
+            this.chkOCxmit905.CheckedChanged += new System.EventHandler(this.chkOCxmit90_CheckedChanged);
+            // 
+            // chkOCxmit904
+            // 
+            this.chkOCxmit904.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCxmit904.Image = null;
+            this.chkOCxmit904.Location = new System.Drawing.Point(221, 74);
+            this.chkOCxmit904.Name = "chkOCxmit904";
+            this.chkOCxmit904.Size = new System.Drawing.Size(16, 16);
+            this.chkOCxmit904.TabIndex = 56;
+            this.chkOCxmit904.UseVisualStyleBackColor = false;
+            this.chkOCxmit904.CheckedChanged += new System.EventHandler(this.chkOCxmit90_CheckedChanged);
+            // 
+            // chkOCxmit903
+            // 
+            this.chkOCxmit903.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCxmit903.Image = null;
+            this.chkOCxmit903.Location = new System.Drawing.Point(205, 74);
+            this.chkOCxmit903.Name = "chkOCxmit903";
+            this.chkOCxmit903.Size = new System.Drawing.Size(16, 16);
+            this.chkOCxmit903.TabIndex = 55;
+            this.chkOCxmit903.UseVisualStyleBackColor = false;
+            this.chkOCxmit903.CheckedChanged += new System.EventHandler(this.chkOCxmit90_CheckedChanged);
+            // 
+            // chkOCxmit902
+            // 
+            this.chkOCxmit902.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCxmit902.Image = null;
+            this.chkOCxmit902.Location = new System.Drawing.Point(189, 74);
+            this.chkOCxmit902.Name = "chkOCxmit902";
+            this.chkOCxmit902.Size = new System.Drawing.Size(16, 16);
+            this.chkOCxmit902.TabIndex = 54;
+            this.chkOCxmit902.UseVisualStyleBackColor = false;
+            this.chkOCxmit902.CheckedChanged += new System.EventHandler(this.chkOCxmit90_CheckedChanged);
+            // 
+            // chkOCxmit901
+            // 
+            this.chkOCxmit901.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCxmit901.Image = null;
+            this.chkOCxmit901.Location = new System.Drawing.Point(173, 74);
+            this.chkOCxmit901.Name = "chkOCxmit901";
+            this.chkOCxmit901.Size = new System.Drawing.Size(16, 16);
+            this.chkOCxmit901.TabIndex = 53;
+            this.chkOCxmit901.UseVisualStyleBackColor = false;
+            this.chkOCxmit901.CheckedChanged += new System.EventHandler(this.chkOCxmit90_CheckedChanged);
+            // 
+            // chkOCrcv907
+            // 
+            this.chkOCrcv907.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCrcv907.Image = null;
+            this.chkOCrcv907.Location = new System.Drawing.Point(141, 73);
+            this.chkOCrcv907.Name = "chkOCrcv907";
+            this.chkOCrcv907.Size = new System.Drawing.Size(16, 16);
+            this.chkOCrcv907.TabIndex = 52;
+            this.chkOCrcv907.UseVisualStyleBackColor = false;
+            this.chkOCrcv907.CheckedChanged += new System.EventHandler(this.chkOCrcv90_CheckedChanged);
+            // 
+            // chkOCrcv906
+            // 
+            this.chkOCrcv906.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCrcv906.Image = null;
+            this.chkOCrcv906.Location = new System.Drawing.Point(125, 73);
+            this.chkOCrcv906.Name = "chkOCrcv906";
+            this.chkOCrcv906.Size = new System.Drawing.Size(16, 16);
+            this.chkOCrcv906.TabIndex = 51;
+            this.chkOCrcv906.UseVisualStyleBackColor = false;
+            this.chkOCrcv906.CheckedChanged += new System.EventHandler(this.chkOCrcv90_CheckedChanged);
+            // 
+            // chkOCrcv905
+            // 
+            this.chkOCrcv905.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCrcv905.Image = null;
+            this.chkOCrcv905.Location = new System.Drawing.Point(109, 73);
+            this.chkOCrcv905.Name = "chkOCrcv905";
+            this.chkOCrcv905.Size = new System.Drawing.Size(16, 16);
+            this.chkOCrcv905.TabIndex = 50;
+            this.chkOCrcv905.UseVisualStyleBackColor = false;
+            this.chkOCrcv905.CheckedChanged += new System.EventHandler(this.chkOCrcv90_CheckedChanged);
+            // 
+            // chkOCrcv904
+            // 
+            this.chkOCrcv904.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCrcv904.Image = null;
+            this.chkOCrcv904.Location = new System.Drawing.Point(93, 73);
+            this.chkOCrcv904.Name = "chkOCrcv904";
+            this.chkOCrcv904.Size = new System.Drawing.Size(16, 16);
+            this.chkOCrcv904.TabIndex = 49;
+            this.chkOCrcv904.UseVisualStyleBackColor = false;
+            this.chkOCrcv904.CheckedChanged += new System.EventHandler(this.chkOCrcv90_CheckedChanged);
+            // 
+            // chkOCrcv903
+            // 
+            this.chkOCrcv903.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCrcv903.Image = null;
+            this.chkOCrcv903.Location = new System.Drawing.Point(77, 73);
+            this.chkOCrcv903.Name = "chkOCrcv903";
+            this.chkOCrcv903.Size = new System.Drawing.Size(16, 16);
+            this.chkOCrcv903.TabIndex = 48;
+            this.chkOCrcv903.UseVisualStyleBackColor = false;
+            this.chkOCrcv903.CheckedChanged += new System.EventHandler(this.chkOCrcv90_CheckedChanged);
+            // 
+            // chkOCrcv902
+            // 
+            this.chkOCrcv902.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCrcv902.Image = null;
+            this.chkOCrcv902.Location = new System.Drawing.Point(61, 73);
+            this.chkOCrcv902.Name = "chkOCrcv902";
+            this.chkOCrcv902.Size = new System.Drawing.Size(16, 16);
+            this.chkOCrcv902.TabIndex = 47;
+            this.chkOCrcv902.UseVisualStyleBackColor = false;
+            this.chkOCrcv902.CheckedChanged += new System.EventHandler(this.chkOCrcv90_CheckedChanged);
+            // 
+            // chkOCrcv901
+            // 
+            this.chkOCrcv901.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCrcv901.Image = null;
+            this.chkOCrcv901.Location = new System.Drawing.Point(45, 73);
+            this.chkOCrcv901.Name = "chkOCrcv901";
+            this.chkOCrcv901.Size = new System.Drawing.Size(16, 16);
+            this.chkOCrcv901.TabIndex = 46;
+            this.chkOCrcv901.UseVisualStyleBackColor = false;
+            this.chkOCrcv901.CheckedChanged += new System.EventHandler(this.chkOCrcv90_CheckedChanged);
+            // 
+            // chkOCxmit1207
+            // 
+            this.chkOCxmit1207.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCxmit1207.Image = null;
+            this.chkOCxmit1207.Location = new System.Drawing.Point(269, 58);
+            this.chkOCxmit1207.Name = "chkOCxmit1207";
+            this.chkOCxmit1207.Size = new System.Drawing.Size(16, 16);
+            this.chkOCxmit1207.TabIndex = 44;
+            this.chkOCxmit1207.UseVisualStyleBackColor = false;
+            this.chkOCxmit1207.CheckedChanged += new System.EventHandler(this.chkOCxmit120_CheckedChanged);
+            // 
+            // chkOCxmit1206
+            // 
+            this.chkOCxmit1206.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCxmit1206.Image = null;
+            this.chkOCxmit1206.Location = new System.Drawing.Point(253, 58);
+            this.chkOCxmit1206.Name = "chkOCxmit1206";
+            this.chkOCxmit1206.Size = new System.Drawing.Size(16, 16);
+            this.chkOCxmit1206.TabIndex = 43;
+            this.chkOCxmit1206.UseVisualStyleBackColor = false;
+            this.chkOCxmit1206.CheckedChanged += new System.EventHandler(this.chkOCxmit120_CheckedChanged);
+            // 
+            // chkOCxmit1205
+            // 
+            this.chkOCxmit1205.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCxmit1205.Image = null;
+            this.chkOCxmit1205.Location = new System.Drawing.Point(237, 58);
+            this.chkOCxmit1205.Name = "chkOCxmit1205";
+            this.chkOCxmit1205.Size = new System.Drawing.Size(16, 16);
+            this.chkOCxmit1205.TabIndex = 42;
+            this.chkOCxmit1205.UseVisualStyleBackColor = false;
+            this.chkOCxmit1205.CheckedChanged += new System.EventHandler(this.chkOCxmit120_CheckedChanged);
+            // 
+            // chkOCxmit1204
+            // 
+            this.chkOCxmit1204.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCxmit1204.Image = null;
+            this.chkOCxmit1204.Location = new System.Drawing.Point(221, 58);
+            this.chkOCxmit1204.Name = "chkOCxmit1204";
+            this.chkOCxmit1204.Size = new System.Drawing.Size(16, 16);
+            this.chkOCxmit1204.TabIndex = 41;
+            this.chkOCxmit1204.UseVisualStyleBackColor = false;
+            this.chkOCxmit1204.CheckedChanged += new System.EventHandler(this.chkOCxmit120_CheckedChanged);
+            // 
+            // chkOCxmit1203
+            // 
+            this.chkOCxmit1203.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCxmit1203.Image = null;
+            this.chkOCxmit1203.Location = new System.Drawing.Point(205, 58);
+            this.chkOCxmit1203.Name = "chkOCxmit1203";
+            this.chkOCxmit1203.Size = new System.Drawing.Size(16, 16);
+            this.chkOCxmit1203.TabIndex = 40;
+            this.chkOCxmit1203.UseVisualStyleBackColor = false;
+            this.chkOCxmit1203.CheckedChanged += new System.EventHandler(this.chkOCxmit120_CheckedChanged);
+            // 
+            // chkOCxmit1202
+            // 
+            this.chkOCxmit1202.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCxmit1202.Image = null;
+            this.chkOCxmit1202.Location = new System.Drawing.Point(189, 58);
+            this.chkOCxmit1202.Name = "chkOCxmit1202";
+            this.chkOCxmit1202.Size = new System.Drawing.Size(16, 16);
+            this.chkOCxmit1202.TabIndex = 39;
+            this.chkOCxmit1202.UseVisualStyleBackColor = false;
+            this.chkOCxmit1202.CheckedChanged += new System.EventHandler(this.chkOCxmit120_CheckedChanged);
+            // 
+            // chkOCxmit1201
+            // 
+            this.chkOCxmit1201.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCxmit1201.Image = null;
+            this.chkOCxmit1201.Location = new System.Drawing.Point(173, 58);
+            this.chkOCxmit1201.Name = "chkOCxmit1201";
+            this.chkOCxmit1201.Size = new System.Drawing.Size(16, 16);
+            this.chkOCxmit1201.TabIndex = 38;
+            this.chkOCxmit1201.UseVisualStyleBackColor = false;
+            this.chkOCxmit1201.CheckedChanged += new System.EventHandler(this.chkOCxmit120_CheckedChanged);
+            // 
+            // chkOCrcv1207
+            // 
+            this.chkOCrcv1207.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCrcv1207.Image = null;
+            this.chkOCrcv1207.Location = new System.Drawing.Point(141, 57);
+            this.chkOCrcv1207.Name = "chkOCrcv1207";
+            this.chkOCrcv1207.Size = new System.Drawing.Size(16, 16);
+            this.chkOCrcv1207.TabIndex = 37;
+            this.chkOCrcv1207.UseVisualStyleBackColor = false;
+            this.chkOCrcv1207.CheckedChanged += new System.EventHandler(this.chkOCrcv120_CheckedChanged);
+            // 
+            // chkOCrcv1206
+            // 
+            this.chkOCrcv1206.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCrcv1206.Image = null;
+            this.chkOCrcv1206.Location = new System.Drawing.Point(125, 57);
+            this.chkOCrcv1206.Name = "chkOCrcv1206";
+            this.chkOCrcv1206.Size = new System.Drawing.Size(16, 16);
+            this.chkOCrcv1206.TabIndex = 36;
+            this.chkOCrcv1206.UseVisualStyleBackColor = false;
+            this.chkOCrcv1206.CheckedChanged += new System.EventHandler(this.chkOCrcv120_CheckedChanged);
+            // 
+            // chkOCrcv1205
+            // 
+            this.chkOCrcv1205.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCrcv1205.Image = null;
+            this.chkOCrcv1205.Location = new System.Drawing.Point(109, 57);
+            this.chkOCrcv1205.Name = "chkOCrcv1205";
+            this.chkOCrcv1205.Size = new System.Drawing.Size(16, 16);
+            this.chkOCrcv1205.TabIndex = 35;
+            this.chkOCrcv1205.UseVisualStyleBackColor = false;
+            this.chkOCrcv1205.CheckedChanged += new System.EventHandler(this.chkOCrcv120_CheckedChanged);
+            // 
+            // chkOCrcv1204
+            // 
+            this.chkOCrcv1204.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCrcv1204.Image = null;
+            this.chkOCrcv1204.Location = new System.Drawing.Point(93, 57);
+            this.chkOCrcv1204.Name = "chkOCrcv1204";
+            this.chkOCrcv1204.Size = new System.Drawing.Size(16, 16);
+            this.chkOCrcv1204.TabIndex = 34;
+            this.chkOCrcv1204.UseVisualStyleBackColor = false;
+            this.chkOCrcv1204.CheckedChanged += new System.EventHandler(this.chkOCrcv120_CheckedChanged);
+            // 
+            // chkOCrcv1203
+            // 
+            this.chkOCrcv1203.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCrcv1203.Image = null;
+            this.chkOCrcv1203.Location = new System.Drawing.Point(77, 57);
+            this.chkOCrcv1203.Name = "chkOCrcv1203";
+            this.chkOCrcv1203.Size = new System.Drawing.Size(16, 16);
+            this.chkOCrcv1203.TabIndex = 33;
+            this.chkOCrcv1203.UseVisualStyleBackColor = false;
+            this.chkOCrcv1203.CheckedChanged += new System.EventHandler(this.chkOCrcv120_CheckedChanged);
+            // 
+            // chkOCrcv1202
+            // 
+            this.chkOCrcv1202.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCrcv1202.Image = null;
+            this.chkOCrcv1202.Location = new System.Drawing.Point(61, 57);
+            this.chkOCrcv1202.Name = "chkOCrcv1202";
+            this.chkOCrcv1202.Size = new System.Drawing.Size(16, 16);
+            this.chkOCrcv1202.TabIndex = 32;
+            this.chkOCrcv1202.UseVisualStyleBackColor = false;
+            this.chkOCrcv1202.CheckedChanged += new System.EventHandler(this.chkOCrcv120_CheckedChanged);
+            // 
+            // chkOCrcv1201
+            // 
+            this.chkOCrcv1201.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCrcv1201.Image = null;
+            this.chkOCrcv1201.Location = new System.Drawing.Point(45, 57);
+            this.chkOCrcv1201.Name = "chkOCrcv1201";
+            this.chkOCrcv1201.Size = new System.Drawing.Size(16, 16);
+            this.chkOCrcv1201.TabIndex = 31;
+            this.chkOCrcv1201.UseVisualStyleBackColor = false;
+            this.chkOCrcv1201.CheckedChanged += new System.EventHandler(this.chkOCrcv120_CheckedChanged);
+            // 
+            // chkOCxmitLMW7
+            // 
+            this.chkOCxmitLMW7.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCxmitLMW7.Image = null;
+            this.chkOCxmitLMW7.Location = new System.Drawing.Point(269, 42);
+            this.chkOCxmitLMW7.Name = "chkOCxmitLMW7";
+            this.chkOCxmitLMW7.Size = new System.Drawing.Size(16, 16);
+            this.chkOCxmitLMW7.TabIndex = 30;
+            this.chkOCxmitLMW7.UseVisualStyleBackColor = false;
+            this.chkOCxmitLMW7.CheckedChanged += new System.EventHandler(this.chkOCxmitLMW_CheckedChanged);
+            // 
+            // chkOCxmitLMW6
+            // 
+            this.chkOCxmitLMW6.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCxmitLMW6.Image = null;
+            this.chkOCxmitLMW6.Location = new System.Drawing.Point(253, 42);
+            this.chkOCxmitLMW6.Name = "chkOCxmitLMW6";
+            this.chkOCxmitLMW6.Size = new System.Drawing.Size(16, 16);
+            this.chkOCxmitLMW6.TabIndex = 29;
+            this.chkOCxmitLMW6.UseVisualStyleBackColor = false;
+            this.chkOCxmitLMW6.CheckedChanged += new System.EventHandler(this.chkOCxmitLMW_CheckedChanged);
+            // 
+            // chkOCxmitLMW5
+            // 
+            this.chkOCxmitLMW5.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCxmitLMW5.Image = null;
+            this.chkOCxmitLMW5.Location = new System.Drawing.Point(237, 42);
+            this.chkOCxmitLMW5.Name = "chkOCxmitLMW5";
+            this.chkOCxmitLMW5.Size = new System.Drawing.Size(16, 16);
+            this.chkOCxmitLMW5.TabIndex = 28;
+            this.chkOCxmitLMW5.UseVisualStyleBackColor = false;
+            this.chkOCxmitLMW5.CheckedChanged += new System.EventHandler(this.chkOCxmitLMW_CheckedChanged);
+            // 
+            // chkOCxmitLMW4
+            // 
+            this.chkOCxmitLMW4.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCxmitLMW4.Image = null;
+            this.chkOCxmitLMW4.Location = new System.Drawing.Point(221, 42);
+            this.chkOCxmitLMW4.Name = "chkOCxmitLMW4";
+            this.chkOCxmitLMW4.Size = new System.Drawing.Size(16, 16);
+            this.chkOCxmitLMW4.TabIndex = 27;
+            this.chkOCxmitLMW4.UseVisualStyleBackColor = false;
+            this.chkOCxmitLMW4.CheckedChanged += new System.EventHandler(this.chkOCxmitLMW_CheckedChanged);
+            // 
+            // chkOCxmitLMW3
+            // 
+            this.chkOCxmitLMW3.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCxmitLMW3.Image = null;
+            this.chkOCxmitLMW3.Location = new System.Drawing.Point(205, 42);
+            this.chkOCxmitLMW3.Name = "chkOCxmitLMW3";
+            this.chkOCxmitLMW3.Size = new System.Drawing.Size(16, 16);
+            this.chkOCxmitLMW3.TabIndex = 26;
+            this.chkOCxmitLMW3.UseVisualStyleBackColor = false;
+            this.chkOCxmitLMW3.CheckedChanged += new System.EventHandler(this.chkOCxmitLMW_CheckedChanged);
+            // 
+            // chkOCxmitLMW2
+            // 
+            this.chkOCxmitLMW2.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCxmitLMW2.Image = null;
+            this.chkOCxmitLMW2.Location = new System.Drawing.Point(189, 42);
+            this.chkOCxmitLMW2.Name = "chkOCxmitLMW2";
+            this.chkOCxmitLMW2.Size = new System.Drawing.Size(16, 16);
+            this.chkOCxmitLMW2.TabIndex = 25;
+            this.chkOCxmitLMW2.UseVisualStyleBackColor = false;
+            this.chkOCxmitLMW2.CheckedChanged += new System.EventHandler(this.chkOCxmitLMW_CheckedChanged);
+            // 
+            // chkOCxmitLMW1
+            // 
+            this.chkOCxmitLMW1.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCxmitLMW1.Image = null;
+            this.chkOCxmitLMW1.Location = new System.Drawing.Point(173, 42);
+            this.chkOCxmitLMW1.Name = "chkOCxmitLMW1";
+            this.chkOCxmitLMW1.Size = new System.Drawing.Size(16, 16);
+            this.chkOCxmitLMW1.TabIndex = 24;
+            this.chkOCxmitLMW1.UseVisualStyleBackColor = false;
+            this.chkOCxmitLMW1.CheckedChanged += new System.EventHandler(this.chkOCxmitLMW_CheckedChanged);
+            // 
+            // chkOCrcvLMW7
+            // 
+            this.chkOCrcvLMW7.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCrcvLMW7.Image = null;
+            this.chkOCrcvLMW7.Location = new System.Drawing.Point(141, 41);
+            this.chkOCrcvLMW7.Name = "chkOCrcvLMW7";
+            this.chkOCrcvLMW7.Size = new System.Drawing.Size(16, 16);
+            this.chkOCrcvLMW7.TabIndex = 23;
+            this.chkOCrcvLMW7.UseVisualStyleBackColor = false;
+            this.chkOCrcvLMW7.CheckedChanged += new System.EventHandler(this.chkOCrcvLMW_CheckedChanged);
+            // 
+            // chkOCrcvLMW6
+            // 
+            this.chkOCrcvLMW6.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCrcvLMW6.Image = null;
+            this.chkOCrcvLMW6.Location = new System.Drawing.Point(125, 41);
+            this.chkOCrcvLMW6.Name = "chkOCrcvLMW6";
+            this.chkOCrcvLMW6.Size = new System.Drawing.Size(16, 16);
+            this.chkOCrcvLMW6.TabIndex = 22;
+            this.chkOCrcvLMW6.UseVisualStyleBackColor = false;
+            this.chkOCrcvLMW6.CheckedChanged += new System.EventHandler(this.chkOCrcvLMW_CheckedChanged);
+            // 
+            // chkOCrcvLMW5
+            // 
+            this.chkOCrcvLMW5.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCrcvLMW5.Image = null;
+            this.chkOCrcvLMW5.Location = new System.Drawing.Point(109, 41);
+            this.chkOCrcvLMW5.Name = "chkOCrcvLMW5";
+            this.chkOCrcvLMW5.Size = new System.Drawing.Size(16, 16);
+            this.chkOCrcvLMW5.TabIndex = 21;
+            this.chkOCrcvLMW5.UseVisualStyleBackColor = false;
+            this.chkOCrcvLMW5.CheckedChanged += new System.EventHandler(this.chkOCrcvLMW_CheckedChanged);
+            // 
+            // chkOCrcvLMW4
+            // 
+            this.chkOCrcvLMW4.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCrcvLMW4.Image = null;
+            this.chkOCrcvLMW4.Location = new System.Drawing.Point(93, 41);
+            this.chkOCrcvLMW4.Name = "chkOCrcvLMW4";
+            this.chkOCrcvLMW4.Size = new System.Drawing.Size(16, 16);
+            this.chkOCrcvLMW4.TabIndex = 20;
+            this.chkOCrcvLMW4.UseVisualStyleBackColor = false;
+            this.chkOCrcvLMW4.CheckedChanged += new System.EventHandler(this.chkOCrcvLMW_CheckedChanged);
+            // 
+            // chkOCrcvLMW3
+            // 
+            this.chkOCrcvLMW3.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCrcvLMW3.Image = null;
+            this.chkOCrcvLMW3.Location = new System.Drawing.Point(77, 41);
+            this.chkOCrcvLMW3.Name = "chkOCrcvLMW3";
+            this.chkOCrcvLMW3.Size = new System.Drawing.Size(16, 16);
+            this.chkOCrcvLMW3.TabIndex = 19;
+            this.chkOCrcvLMW3.UseVisualStyleBackColor = false;
+            this.chkOCrcvLMW3.CheckedChanged += new System.EventHandler(this.chkOCrcvLMW_CheckedChanged);
+            // 
+            // chkOCrcvLMW2
+            // 
+            this.chkOCrcvLMW2.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCrcvLMW2.Image = null;
+            this.chkOCrcvLMW2.Location = new System.Drawing.Point(61, 41);
+            this.chkOCrcvLMW2.Name = "chkOCrcvLMW2";
+            this.chkOCrcvLMW2.Size = new System.Drawing.Size(16, 16);
+            this.chkOCrcvLMW2.TabIndex = 18;
+            this.chkOCrcvLMW2.UseVisualStyleBackColor = false;
+            this.chkOCrcvLMW2.CheckedChanged += new System.EventHandler(this.chkOCrcvLMW_CheckedChanged);
+            // 
+            // chkOCrcvLMW1
+            // 
+            this.chkOCrcvLMW1.BackColor = System.Drawing.SystemColors.Control;
+            this.chkOCrcvLMW1.ForeColor = System.Drawing.SystemColors.Control;
+            this.chkOCrcvLMW1.Image = null;
+            this.chkOCrcvLMW1.Location = new System.Drawing.Point(45, 41);
+            this.chkOCrcvLMW1.Name = "chkOCrcvLMW1";
+            this.chkOCrcvLMW1.Size = new System.Drawing.Size(16, 16);
+            this.chkOCrcvLMW1.TabIndex = 17;
+            this.chkOCrcvLMW1.UseVisualStyleBackColor = false;
+            this.chkOCrcvLMW1.CheckedChanged += new System.EventHandler(this.chkOCrcvLMW_CheckedChanged);
+            // 
+            // labelTS496
+            // 
+            this.labelTS496.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelTS496.Image = null;
+            this.labelTS496.Location = new System.Drawing.Point(6, 24);
+            this.labelTS496.Name = "labelTS496";
+            this.labelTS496.Size = new System.Drawing.Size(32, 16);
+            this.labelTS496.TabIndex = 16;
+            this.labelTS496.Text = "Band";
+            // 
+            // labelTS497
+            // 
+            this.labelTS497.Image = null;
+            this.labelTS497.Location = new System.Drawing.Point(269, 24);
+            this.labelTS497.Name = "labelTS497";
+            this.labelTS497.Size = new System.Drawing.Size(16, 16);
+            this.labelTS497.TabIndex = 15;
+            this.labelTS497.Text = "7";
+            this.labelTS497.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // labelTS498
+            // 
+            this.labelTS498.Image = null;
+            this.labelTS498.Location = new System.Drawing.Point(253, 24);
+            this.labelTS498.Name = "labelTS498";
+            this.labelTS498.Size = new System.Drawing.Size(16, 16);
+            this.labelTS498.TabIndex = 14;
+            this.labelTS498.Text = "6";
+            this.labelTS498.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // labelTS499
+            // 
+            this.labelTS499.Image = null;
+            this.labelTS499.Location = new System.Drawing.Point(237, 24);
+            this.labelTS499.Name = "labelTS499";
+            this.labelTS499.Size = new System.Drawing.Size(16, 16);
+            this.labelTS499.TabIndex = 13;
+            this.labelTS499.Text = "5";
+            this.labelTS499.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // labelTS500
+            // 
+            this.labelTS500.Image = null;
+            this.labelTS500.Location = new System.Drawing.Point(221, 24);
+            this.labelTS500.Name = "labelTS500";
+            this.labelTS500.Size = new System.Drawing.Size(16, 16);
+            this.labelTS500.TabIndex = 12;
+            this.labelTS500.Text = "4";
+            this.labelTS500.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // labelTS501
+            // 
+            this.labelTS501.Image = null;
+            this.labelTS501.Location = new System.Drawing.Point(205, 24);
+            this.labelTS501.Name = "labelTS501";
+            this.labelTS501.Size = new System.Drawing.Size(16, 16);
+            this.labelTS501.TabIndex = 11;
+            this.labelTS501.Text = "3";
+            this.labelTS501.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // labelTS502
+            // 
+            this.labelTS502.Image = null;
+            this.labelTS502.Location = new System.Drawing.Point(189, 24);
+            this.labelTS502.Name = "labelTS502";
+            this.labelTS502.Size = new System.Drawing.Size(16, 16);
+            this.labelTS502.TabIndex = 10;
+            this.labelTS502.Text = "2";
+            this.labelTS502.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // labelTS503
+            // 
+            this.labelTS503.Image = null;
+            this.labelTS503.Location = new System.Drawing.Point(173, 24);
+            this.labelTS503.Name = "labelTS503";
+            this.labelTS503.Size = new System.Drawing.Size(16, 16);
+            this.labelTS503.TabIndex = 9;
+            this.labelTS503.Text = "1";
+            this.labelTS503.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // labelTS504
+            // 
+            this.labelTS504.Image = null;
+            this.labelTS504.Location = new System.Drawing.Point(141, 24);
+            this.labelTS504.Name = "labelTS504";
+            this.labelTS504.Size = new System.Drawing.Size(16, 16);
+            this.labelTS504.TabIndex = 8;
+            this.labelTS504.Text = "7";
+            this.labelTS504.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // labelTS505
+            // 
+            this.labelTS505.Image = null;
+            this.labelTS505.Location = new System.Drawing.Point(125, 24);
+            this.labelTS505.Name = "labelTS505";
+            this.labelTS505.Size = new System.Drawing.Size(16, 16);
+            this.labelTS505.TabIndex = 7;
+            this.labelTS505.Text = "6";
+            this.labelTS505.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // labelTS506
+            // 
+            this.labelTS506.Image = null;
+            this.labelTS506.Location = new System.Drawing.Point(109, 24);
+            this.labelTS506.Name = "labelTS506";
+            this.labelTS506.Size = new System.Drawing.Size(16, 16);
+            this.labelTS506.TabIndex = 6;
+            this.labelTS506.Text = "5";
+            this.labelTS506.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // labelTS507
+            // 
+            this.labelTS507.Image = null;
+            this.labelTS507.Location = new System.Drawing.Point(93, 24);
+            this.labelTS507.Name = "labelTS507";
+            this.labelTS507.Size = new System.Drawing.Size(16, 16);
+            this.labelTS507.TabIndex = 5;
+            this.labelTS507.Text = "4";
+            this.labelTS507.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // labelTS508
+            // 
+            this.labelTS508.Image = null;
+            this.labelTS508.Location = new System.Drawing.Point(77, 24);
+            this.labelTS508.Name = "labelTS508";
+            this.labelTS508.Size = new System.Drawing.Size(16, 16);
+            this.labelTS508.TabIndex = 4;
+            this.labelTS508.Text = "3";
+            this.labelTS508.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // labelTS509
+            // 
+            this.labelTS509.Image = null;
+            this.labelTS509.Location = new System.Drawing.Point(61, 24);
+            this.labelTS509.Name = "labelTS509";
+            this.labelTS509.Size = new System.Drawing.Size(16, 16);
+            this.labelTS509.TabIndex = 3;
+            this.labelTS509.Text = "2";
+            this.labelTS509.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // labelTS510
+            // 
+            this.labelTS510.Image = null;
+            this.labelTS510.Location = new System.Drawing.Point(45, 24);
+            this.labelTS510.Name = "labelTS510";
+            this.labelTS510.Size = new System.Drawing.Size(16, 16);
+            this.labelTS510.TabIndex = 2;
+            this.labelTS510.Text = "1";
+            this.labelTS510.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lblSWLTxControl
+            // 
+            this.lblSWLTxControl.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblSWLTxControl.Image = null;
+            this.lblSWLTxControl.Location = new System.Drawing.Point(189, 8);
+            this.lblSWLTxControl.Name = "lblSWLTxControl";
+            this.lblSWLTxControl.Size = new System.Drawing.Size(95, 16);
+            this.lblSWLTxControl.TabIndex = 1;
+            this.lblSWLTxControl.Text = "J6 Transmit Pins";
+            this.lblSWLTxControl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lblSWLRxControl
+            // 
+            this.lblSWLRxControl.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblSWLRxControl.Image = null;
+            this.lblSWLRxControl.Location = new System.Drawing.Point(60, 8);
+            this.lblSWLRxControl.Name = "lblSWLRxControl";
+            this.lblSWLRxControl.Size = new System.Drawing.Size(95, 16);
+            this.lblSWLRxControl.TabIndex = 0;
+            this.lblSWLRxControl.Text = "J6 Receive Pins";
+            this.lblSWLRxControl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // tpHPSDR
             // 
             this.tpHPSDR.BackColor = System.Drawing.SystemColors.Control;
+            this.tpHPSDR.Controls.Add(this.grpLEDMirror);
             this.tpHPSDR.Controls.Add(this.grpAudioSampleRateRX2);
             this.tpHPSDR.Controls.Add(this.grpVersion);
             this.tpHPSDR.Controls.Add(this.groupBoxRXOptions);
@@ -14006,6 +17041,195 @@
             this.tpHPSDR.Text = "F/W Set";
             this.toolTip1.SetToolTip(this.tpHPSDR, "Firmware Configuration");
             this.tpHPSDR.Paint += new System.Windows.Forms.PaintEventHandler(this.tpHPSDR_Paint);
+             // 
+            // grpLEDMirror
+            // 
+            this.grpLEDMirror.Controls.Add(this.lblLED10);
+            this.grpLEDMirror.Controls.Add(this.lblLED09);
+            this.grpLEDMirror.Controls.Add(this.lblLED08);
+            this.grpLEDMirror.Controls.Add(this.lblLED07);
+            this.grpLEDMirror.Controls.Add(this.lblLED06);
+            this.grpLEDMirror.Controls.Add(this.lblLED05);
+            this.grpLEDMirror.Controls.Add(this.lblLED04);
+            this.grpLEDMirror.Controls.Add(this.lblLED03);
+            this.grpLEDMirror.Controls.Add(this.lblLED02);
+            this.grpLEDMirror.Controls.Add(this.lblLED01);
+            this.grpLEDMirror.Location = new System.Drawing.Point(288, 279);
+            this.grpLEDMirror.Name = "grpLEDMirror";
+            this.grpLEDMirror.Size = new System.Drawing.Size(289, 47);
+            this.grpLEDMirror.TabIndex = 53;
+            this.grpLEDMirror.TabStop = false;
+            this.grpLEDMirror.Text = "LED Mirror";
+            // 
+            // lblLED10
+            // 
+            this.lblLED10.AutoSize = true;
+            this.lblLED10.BackColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.lblLED10.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblLED10.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblLED10.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.lblLED10.Image = null;
+            this.lblLED10.Location = new System.Drawing.Point(252, 19);
+            this.lblLED10.MaximumSize = new System.Drawing.Size(20, 15);
+            this.lblLED10.MinimumSize = new System.Drawing.Size(20, 15);
+            this.lblLED10.Name = "lblLED10";
+            this.lblLED10.Size = new System.Drawing.Size(20, 15);
+            this.lblLED10.TabIndex = 9;
+            this.lblLED10.Text = "10";
+            this.lblLED10.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lblLED09
+            // 
+            this.lblLED09.AutoSize = true;
+            this.lblLED09.BackColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.lblLED09.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblLED09.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblLED09.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.lblLED09.Image = null;
+            this.lblLED09.Location = new System.Drawing.Point(226, 19);
+            this.lblLED09.MaximumSize = new System.Drawing.Size(20, 15);
+            this.lblLED09.MinimumSize = new System.Drawing.Size(20, 15);
+            this.lblLED09.Name = "lblLED09";
+            this.lblLED09.Size = new System.Drawing.Size(20, 15);
+            this.lblLED09.TabIndex = 8;
+            this.lblLED09.Text = "9";
+            this.lblLED09.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lblLED08
+            // 
+            this.lblLED08.AutoSize = true;
+            this.lblLED08.BackColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.lblLED08.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblLED08.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblLED08.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.lblLED08.Image = null;
+            this.lblLED08.Location = new System.Drawing.Point(200, 19);
+            this.lblLED08.MaximumSize = new System.Drawing.Size(20, 15);
+            this.lblLED08.MinimumSize = new System.Drawing.Size(20, 15);
+            this.lblLED08.Name = "lblLED08";
+            this.lblLED08.Size = new System.Drawing.Size(20, 15);
+            this.lblLED08.TabIndex = 7;
+            this.lblLED08.Text = "8";
+            this.lblLED08.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lblLED07
+            // 
+            this.lblLED07.AutoSize = true;
+            this.lblLED07.BackColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.lblLED07.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblLED07.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblLED07.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.lblLED07.Image = null;
+            this.lblLED07.Location = new System.Drawing.Point(174, 19);
+            this.lblLED07.MaximumSize = new System.Drawing.Size(20, 15);
+            this.lblLED07.MinimumSize = new System.Drawing.Size(20, 15);
+            this.lblLED07.Name = "lblLED07";
+            this.lblLED07.Size = new System.Drawing.Size(20, 15);
+            this.lblLED07.TabIndex = 6;
+            this.lblLED07.Text = "7";
+            this.lblLED07.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lblLED06
+            // 
+            this.lblLED06.AutoSize = true;
+            this.lblLED06.BackColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.lblLED06.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblLED06.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblLED06.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.lblLED06.Image = null;
+            this.lblLED06.Location = new System.Drawing.Point(148, 19);
+            this.lblLED06.MaximumSize = new System.Drawing.Size(20, 15);
+            this.lblLED06.MinimumSize = new System.Drawing.Size(20, 15);
+            this.lblLED06.Name = "lblLED06";
+            this.lblLED06.Size = new System.Drawing.Size(20, 15);
+            this.lblLED06.TabIndex = 5;
+            this.lblLED06.Text = "6";
+            this.lblLED06.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lblLED05
+            // 
+            this.lblLED05.AutoSize = true;
+            this.lblLED05.BackColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.lblLED05.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblLED05.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblLED05.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.lblLED05.Image = null;
+            this.lblLED05.Location = new System.Drawing.Point(122, 19);
+            this.lblLED05.MaximumSize = new System.Drawing.Size(20, 15);
+            this.lblLED05.MinimumSize = new System.Drawing.Size(20, 15);
+            this.lblLED05.Name = "lblLED05";
+            this.lblLED05.Size = new System.Drawing.Size(20, 15);
+            this.lblLED05.TabIndex = 4;
+            this.lblLED05.Text = "5";
+            this.lblLED05.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lblLED04
+            // 
+            this.lblLED04.AutoSize = true;
+            this.lblLED04.BackColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.lblLED04.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblLED04.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblLED04.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.lblLED04.Image = null;
+            this.lblLED04.Location = new System.Drawing.Point(96, 19);
+            this.lblLED04.MaximumSize = new System.Drawing.Size(20, 15);
+            this.lblLED04.MinimumSize = new System.Drawing.Size(20, 15);
+            this.lblLED04.Name = "lblLED04";
+            this.lblLED04.Size = new System.Drawing.Size(20, 15);
+            this.lblLED04.TabIndex = 3;
+            this.lblLED04.Text = "4";
+            this.lblLED04.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lblLED03
+            // 
+            this.lblLED03.AutoSize = true;
+            this.lblLED03.BackColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.lblLED03.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblLED03.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblLED03.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.lblLED03.Image = null;
+            this.lblLED03.Location = new System.Drawing.Point(70, 19);
+            this.lblLED03.MaximumSize = new System.Drawing.Size(20, 15);
+            this.lblLED03.MinimumSize = new System.Drawing.Size(20, 15);
+            this.lblLED03.Name = "lblLED03";
+            this.lblLED03.Size = new System.Drawing.Size(20, 15);
+            this.lblLED03.TabIndex = 2;
+            this.lblLED03.Text = "3";
+            this.lblLED03.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lblLED02
+            // 
+            this.lblLED02.AutoSize = true;
+            this.lblLED02.BackColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.lblLED02.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblLED02.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblLED02.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.lblLED02.Image = null;
+            this.lblLED02.Location = new System.Drawing.Point(44, 19);
+            this.lblLED02.MaximumSize = new System.Drawing.Size(20, 15);
+            this.lblLED02.MinimumSize = new System.Drawing.Size(20, 15);
+            this.lblLED02.Name = "lblLED02";
+            this.lblLED02.Size = new System.Drawing.Size(20, 15);
+            this.lblLED02.TabIndex = 1;
+            this.lblLED02.Text = "2";
+            this.lblLED02.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lblLED01
+            // 
+            this.lblLED01.AutoSize = true;
+            this.lblLED01.BackColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.lblLED01.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblLED01.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblLED01.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.lblLED01.Image = null;
+            this.lblLED01.Location = new System.Drawing.Point(18, 19);
+            this.lblLED01.MaximumSize = new System.Drawing.Size(20, 15);
+            this.lblLED01.MinimumSize = new System.Drawing.Size(20, 15);
+            this.lblLED01.Name = "lblLED01";
+            this.lblLED01.Size = new System.Drawing.Size(20, 15);
+            this.lblLED01.TabIndex = 0;
+            this.lblLED01.Text = "1";
+            this.lblLED01.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // grpAudioSampleRateRX2
             // 
@@ -14403,6 +17627,19 @@
             this.tpAlexFilterControl.Size = new System.Drawing.Size(575, 313);
             this.tpAlexFilterControl.TabIndex = 1;
             this.tpAlexFilterControl.Text = "Alex-1 Filters";
+            // 
+            // chkLPFBypass
+            // 
+            this.chkLPFBypass.AutoSize = true;
+            this.chkLPFBypass.Image = null;
+            this.chkLPFBypass.Location = new System.Drawing.Point(365, 217);
+            this.chkLPFBypass.Name = "chkLPFBypass";
+            this.chkLPFBypass.Size = new System.Drawing.Size(113, 17);
+            this.chkLPFBypass.TabIndex = 112;
+            this.chkLPFBypass.Text = "6m/ByPass on RX";
+            this.toolTip1.SetToolTip(this.chkLPFBypass, "Selects the 6m LPF during receive reguardless of frequency.");
+            this.chkLPFBypass.UseVisualStyleBackColor = true;
+            this.chkLPFBypass.CheckedChanged += new System.EventHandler(this.chkLPFBypass_CheckedChanged);
             // 
             // labelAlexFilterActive
             // 
@@ -48729,6 +51966,12 @@
             this.timer_VAC_Monitor.Enabled = true;
             this.timer_VAC_Monitor.Tick += new System.EventHandler(this.timer_VAC_Monitor_Tick);
             // 
+            // timer_LED_Mirror
+            // 
+            this.timer_LED_Mirror.Enabled = true;
+            this.timer_LED_Mirror.Interval = 10;
+            this.timer_LED_Mirror.Tick += new System.EventHandler(this.timer_LED_Mirror_Tick);
+            // 
             // grpDiagInfo
             // 
             this.grpDiagInfo.Controls.Add(this.lblSyncData);
@@ -49719,19 +52962,6 @@
             this.radioButtonTS6.Text = "Auto";
             this.radioButtonTS6.UseVisualStyleBackColor = true;
             // 
-            // chkLPFBypass
-            // 
-            this.chkLPFBypass.AutoSize = true;
-            this.chkLPFBypass.Image = null;
-            this.chkLPFBypass.Location = new System.Drawing.Point(365, 217);
-            this.chkLPFBypass.Name = "chkLPFBypass";
-            this.chkLPFBypass.Size = new System.Drawing.Size(113, 17);
-            this.chkLPFBypass.TabIndex = 112;
-            this.chkLPFBypass.Text = "6m/ByPass on RX";
-            this.toolTip1.SetToolTip(this.chkLPFBypass, "Selects the 6m LPF during receive reguardless of frequency.");
-            this.chkLPFBypass.UseVisualStyleBackColor = true;
-            this.chkLPFBypass.CheckedChanged += new System.EventHandler(this.chkLPFBypass_CheckedChanged);
-            // 
             // Setup
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -49817,6 +53047,8 @@
             this.grpFRSRegion.ResumeLayout(false);
             this.grpGeneralModel.ResumeLayout(false);
             this.grpMetisAddr.ResumeLayout(false);
+            this.groupBoxHPSDRHW.ResumeLayout(false);
+            this.groupBoxHPSDRHW.PerformLayout();
             this.grpGeneralHardwareORION.ResumeLayout(false);
             this.grpGeneralHardwareORION.PerformLayout();
             this.panelOrionPTT.ResumeLayout(false);
@@ -49825,8 +53057,6 @@
             this.panelOrionBias.PerformLayout();
             this.panelOrionMic.ResumeLayout(false);
             this.panelOrionMic.PerformLayout();
-            this.groupBoxHPSDRHW.ResumeLayout(false);
-            this.groupBoxHPSDRHW.PerformLayout();
             this.tpGeneralOptions.ResumeLayout(false);
             this.grpCWDelay.ResumeLayout(false);
             this.grpCWDelay.PerformLayout();
@@ -49880,11 +53110,18 @@
             this.grpOptSpaceNav.ResumeLayout(false);
             this.grpOptSpaceNav.PerformLayout();
             this.tpPennyCtrl.ResumeLayout(false);
+            this.tcOCControl.ResumeLayout(false);
+            this.tpOCHFControl.ResumeLayout(false);
             this.groupBoxTS1.ResumeLayout(false);
             this.groupBoxTS1.PerformLayout();
-            this.grpPennyExtCtrlVHF.ResumeLayout(false);
             this.grpPennyExtCtrl.ResumeLayout(false);
+            this.tbOCVHFControl.ResumeLayout(false);
+            this.grpPennyExtCtrlVHF.ResumeLayout(false);
+            this.tpOCSWLControl.ResumeLayout(false);
+            this.grpExtCtrlSWL.ResumeLayout(false);
             this.tpHPSDR.ResumeLayout(false);
+            this.grpLEDMirror.ResumeLayout(false);
+            this.grpLEDMirror.PerformLayout();
             this.grpAudioSampleRateRX2.ResumeLayout(false);
             this.grpVersion.ResumeLayout(false);
             this.grpVersion.PerformLayout();
@@ -53757,6 +56994,252 @@
         private LabelTS labelTS483;
         private NumericUpDownTS udANAN7000DPAGain160;
         private CheckBoxTS chkLPFBypass;
+        private TabControl tcOCControl;
+        private TabPage tpOCHFControl;
+        private TabPage tbOCVHFControl;
+        private TabPage tpOCSWLControl;
+        private GroupBoxTS grpExtCtrlSWL;
+        private LabelTS labelTS484;
+        private LabelTS labelTS485;
+        private LabelTS labelTS486;
+        private LabelTS labelTS487;
+        private LabelTS labelTS488;
+        private LabelTS labelTS489;
+        private LabelTS labelTS490;
+        private LabelTS labelTS491;
+        private LabelTS labelTS492;
+        private LabelTS labelTS493;
+        private LabelTS labelTS494;
+        private LabelTS labelTS495;
+        private CheckBoxTS chkOCxmit147;
+        private CheckBoxTS chkOCxmit146;
+        private CheckBoxTS chkOCxmit145;
+        private CheckBoxTS chkOCxmit144;
+        private CheckBoxTS chkOCxmit143;
+        private CheckBoxTS chkOCxmit142;
+        private CheckBoxTS chkOCxmit141;
+        private CheckBoxTS chkOCrcv147;
+        private CheckBoxTS chkOCrcv146;
+        private CheckBoxTS chkOCrcv145;
+        private CheckBoxTS chkOCrcv144;
+        private CheckBoxTS chkOCrcv143;
+        private CheckBoxTS chkOCrcv142;
+        private CheckBoxTS chkOCrcv141;
+        private CheckBoxTS chkOCxmit167;
+        private CheckBoxTS chkOCxmit166;
+        private CheckBoxTS chkOCxmit165;
+        private CheckBoxTS chkOCxmit164;
+        private CheckBoxTS chkOCxmit163;
+        private CheckBoxTS chkOCxmit162;
+        private CheckBoxTS chkOCxmit161;
+        private CheckBoxTS chkOCrcv167;
+        private CheckBoxTS chkOCrcv166;
+        private CheckBoxTS chkOCrcv165;
+        private CheckBoxTS chkOCrcv164;
+        private CheckBoxTS chkOCrcv163;
+        private CheckBoxTS chkOCrcv162;
+        private CheckBoxTS chkOCrcv161;
+        private CheckBoxTS chkOCxmit197;
+        private CheckBoxTS chkOCxmit196;
+        private CheckBoxTS chkOCxmit195;
+        private CheckBoxTS chkOCxmit194;
+        private CheckBoxTS chkOCxmit193;
+        private CheckBoxTS chkOCxmit192;
+        private CheckBoxTS chkOCxmit191;
+        private CheckBoxTS chkOCrcv197;
+        private CheckBoxTS chkOCrcv196;
+        private CheckBoxTS chkOCrcv195;
+        private CheckBoxTS chkOCrcv194;
+        private CheckBoxTS chkOCrcv193;
+        private CheckBoxTS chkOCrcv192;
+        private CheckBoxTS chkOCrcv191;
+        private CheckBoxTS chkOCxmit227;
+        private CheckBoxTS chkOCxmit226;
+        private CheckBoxTS chkOCxmit225;
+        private CheckBoxTS chkOCxmit224;
+        private CheckBoxTS chkOCxmit223;
+        private CheckBoxTS chkOCxmit222;
+        private CheckBoxTS chkOCxmit221;
+        private CheckBoxTS chkOCrcv227;
+        private CheckBoxTS chkOCrcv226;
+        private CheckBoxTS chkOCrcv225;
+        private CheckBoxTS chkOCrcv224;
+        private CheckBoxTS chkOCrcv223;
+        private CheckBoxTS chkOCrcv222;
+        private CheckBoxTS chkOCrcv221;
+        private CheckBoxTS chkOCxmit257;
+        private CheckBoxTS chkOCxmit256;
+        private CheckBoxTS chkOCxmit255;
+        private CheckBoxTS chkOCxmit254;
+        private CheckBoxTS chkOCxmit253;
+        private CheckBoxTS chkOCxmit252;
+        private CheckBoxTS chkOCxmit251;
+        private CheckBoxTS chkOCrcv257;
+        private CheckBoxTS chkOCrcv256;
+        private CheckBoxTS chkOCrcv255;
+        private CheckBoxTS chkOCrcv254;
+        private CheckBoxTS chkOCrcv253;
+        private CheckBoxTS chkOCrcv252;
+        private CheckBoxTS chkOCrcv251;
+        private CheckBoxTS chkOCxmit317;
+        private CheckBoxTS chkOCxmit316;
+        private CheckBoxTS chkOCxmit315;
+        private CheckBoxTS chkOCxmit314;
+        private CheckBoxTS chkOCxmit313;
+        private CheckBoxTS chkOCxmit312;
+        private CheckBoxTS chkOCxmit311;
+        private CheckBoxTS chkOCrcv317;
+        private CheckBoxTS chkOCrcv316;
+        private CheckBoxTS chkOCrcv315;
+        private CheckBoxTS chkOCrcv314;
+        private CheckBoxTS chkOCrcv313;
+        private CheckBoxTS chkOCrcv312;
+        private CheckBoxTS chkOCrcv311;
+        private CheckBoxTS chkOCxmit417;
+        private CheckBoxTS chkOCxmit416;
+        private CheckBoxTS chkOCxmit415;
+        private CheckBoxTS chkOCxmit414;
+        private CheckBoxTS chkOCxmit413;
+        private CheckBoxTS chkOCxmit412;
+        private CheckBoxTS chkOCxmit411;
+        private CheckBoxTS chkOCrcv417;
+        private CheckBoxTS chkOCrcv416;
+        private CheckBoxTS chkOCrcv415;
+        private CheckBoxTS chkOCrcv414;
+        private CheckBoxTS chkOCrcv413;
+        private CheckBoxTS chkOCrcv412;
+        private CheckBoxTS chkOCrcv411;
+        private CheckBoxTS chkOCxmit497;
+        private CheckBoxTS chkOCxmit496;
+        private CheckBoxTS chkOCxmit495;
+        private CheckBoxTS chkOCxmit494;
+        private CheckBoxTS chkOCxmit493;
+        private CheckBoxTS chkOCxmit492;
+        private CheckBoxTS chkOCxmit491;
+        private CheckBoxTS chkOCrcv497;
+        private CheckBoxTS chkOCrcv496;
+        private CheckBoxTS chkOCrcv495;
+        private CheckBoxTS chkOCrcv494;
+        private CheckBoxTS chkOCrcv493;
+        private CheckBoxTS chkOCrcv492;
+        private CheckBoxTS chkOCrcv491;
+        private CheckBoxTS chkOCxmit617;
+        private CheckBoxTS chkOCxmit616;
+        private CheckBoxTS chkOCxmit615;
+        private CheckBoxTS chkOCxmit614;
+        private CheckBoxTS chkOCxmit613;
+        private CheckBoxTS chkOCxmit612;
+        private CheckBoxTS chkOCxmit611;
+        private CheckBoxTS chkOCrcv617;
+        private CheckBoxTS chkOCrcv616;
+        private CheckBoxTS chkOCrcv615;
+        private CheckBoxTS chkOCrcv614;
+        private CheckBoxTS chkOCrcv613;
+        private CheckBoxTS chkOCrcv612;
+        private CheckBoxTS chkOCrcv611;
+        private CheckBoxTS chkOCxmit907;
+        private CheckBoxTS chkOCxmit906;
+        private CheckBoxTS chkOCxmit905;
+        private CheckBoxTS chkOCxmit904;
+        private CheckBoxTS chkOCxmit903;
+        private CheckBoxTS chkOCxmit902;
+        private CheckBoxTS chkOCxmit901;
+        private CheckBoxTS chkOCrcv907;
+        private CheckBoxTS chkOCrcv906;
+        private CheckBoxTS chkOCrcv905;
+        private CheckBoxTS chkOCrcv904;
+        private CheckBoxTS chkOCrcv903;
+        private CheckBoxTS chkOCrcv902;
+        private CheckBoxTS chkOCrcv901;
+        private CheckBoxTS chkOCxmit1207;
+        private CheckBoxTS chkOCxmit1206;
+        private CheckBoxTS chkOCxmit1205;
+        private CheckBoxTS chkOCxmit1204;
+        private CheckBoxTS chkOCxmit1203;
+        private CheckBoxTS chkOCxmit1202;
+        private CheckBoxTS chkOCxmit1201;
+        private CheckBoxTS chkOCrcv1207;
+        private CheckBoxTS chkOCrcv1206;
+        private CheckBoxTS chkOCrcv1205;
+        private CheckBoxTS chkOCrcv1204;
+        private CheckBoxTS chkOCrcv1203;
+        private CheckBoxTS chkOCrcv1202;
+        private CheckBoxTS chkOCrcv1201;
+        private CheckBoxTS chkOCxmitLMW7;
+        private CheckBoxTS chkOCxmitLMW6;
+        private CheckBoxTS chkOCxmitLMW5;
+        private CheckBoxTS chkOCxmitLMW4;
+        private CheckBoxTS chkOCxmitLMW3;
+        private CheckBoxTS chkOCxmitLMW2;
+        private CheckBoxTS chkOCxmitLMW1;
+        private CheckBoxTS chkOCrcvLMW7;
+        private CheckBoxTS chkOCrcvLMW6;
+        private CheckBoxTS chkOCrcvLMW5;
+        private CheckBoxTS chkOCrcvLMW4;
+        private CheckBoxTS chkOCrcvLMW3;
+        private CheckBoxTS chkOCrcvLMW2;
+        private CheckBoxTS chkOCrcvLMW1;
+        private LabelTS labelTS496;
+        private LabelTS labelTS497;
+        private LabelTS labelTS498;
+        private LabelTS labelTS499;
+        private LabelTS labelTS500;
+        private LabelTS labelTS501;
+        private LabelTS labelTS502;
+        private LabelTS labelTS503;
+        private LabelTS labelTS504;
+        private LabelTS labelTS505;
+        private LabelTS labelTS506;
+        private LabelTS labelTS507;
+        private LabelTS labelTS508;
+        private LabelTS labelTS509;
+        private LabelTS labelTS510;
+        private LabelTS lblSWLTxControl;
+        private LabelTS lblSWLRxControl;
+        private LabelTS labelTS513;
+        private LabelTS labelTS514;
+        private CheckBoxTS chkOCxmit117;
+        private CheckBoxTS chkOCxmit116;
+        private CheckBoxTS chkOCxmit115;
+        private CheckBoxTS chkOCxmit114;
+        private CheckBoxTS chkOCxmit113;
+        private CheckBoxTS chkOCxmit112;
+        private CheckBoxTS chkOCxmit111;
+        private CheckBoxTS chkOCrcv117;
+        private CheckBoxTS chkOCrcv116;
+        private CheckBoxTS chkOCrcv115;
+        private CheckBoxTS chkOCrcv114;
+        private CheckBoxTS chkOCrcv113;
+        private CheckBoxTS chkOCrcv112;
+        private CheckBoxTS chkOCrcv111;
+        private CheckBoxTS chkOCxmit137;
+        private CheckBoxTS chkOCxmit136;
+        private CheckBoxTS chkOCxmit135;
+        private CheckBoxTS chkOCxmit134;
+        private CheckBoxTS chkOCxmit133;
+        private CheckBoxTS chkOCxmit132;
+        private CheckBoxTS chkOCxmit131;
+        private CheckBoxTS chkOCrcv137;
+        private CheckBoxTS chkOCrcv136;
+        private CheckBoxTS chkOCrcv135;
+        private CheckBoxTS chkOCrcv134;
+        private CheckBoxTS chkOCrcv133;
+        private CheckBoxTS chkOCrcv132;
+        private CheckBoxTS chkOCrcv131;
+        private ButtonTS btnCtrlSWLReset;
+        private CheckBoxTS checkBoxTS12;
+        private GroupBoxTS grpLEDMirror;
+        private LabelTS lblLED10;
+        private LabelTS lblLED09;
+        private LabelTS lblLED08;
+        private LabelTS lblLED07;
+        private LabelTS lblLED06;
+        private LabelTS lblLED05;
+        private LabelTS lblLED04;
+        private LabelTS lblLED03;
+        private LabelTS lblLED02;
+        private LabelTS lblLED01;
+        private Timer timer_LED_Mirror;
 
     }
 }
