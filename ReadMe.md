@@ -1,7 +1,12 @@
 # Thetis beta releases
 # Official Releases are located at https://github.com/tapr
 
-Latest Beta Release v2.5.9 March 29, 2018
+Latest Beta Release v2.6.0 April 10, 2018
+# 2.6.0 (2018-4-10)
+- added diagnostic LED array
+- divided open collector controls into 3 groups (HF-VHF-SWL)
+- bug fix for step tune using MIDI
+
 # 2.5.9 (2018-3-29)
 - changed "MDECAY" constant to 0.99 in netInterface.c
 - added 2Hz step tune choice
