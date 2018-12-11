@@ -124,6 +124,11 @@ namespace Thetis
         [DllImport("ChannelMaster.dll", EntryPoint = "SetAAudioMixVol", CallingConvention = CallingConvention.Cdecl)]
         public static extern void SetAAudioMixVol(void* ptr, int id, int stream, double vol);
 
+        // VAC transmit audio selection
+
+        [DllImport("ChannelMaster.dll", EntryPoint = "SetTXVAC", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void SetTXVAC(int txid, int txvac);
+
         // Penelope output level
 
         [DllImport("ChannelMaster.dll", EntryPoint = "SetTXFixedGainRun", CallingConvention = CallingConvention.Cdecl)]

@@ -20498,6 +20498,17 @@ namespace Thetis
             set { chkVFOBTX.Checked = value; }
         }
 
+        private bool vac2_on_split = true;
+        public bool VAC2onSplit
+        {
+            get { return vac2_on_split; }
+            set 
+            { 
+                vac2_on_split = value; 
+            }
+
+        }
+
         private string db_file_name = "";
         public string DBFileName
         {
@@ -28534,6 +28545,7 @@ namespace Thetis
                 vac2_enabled = value;
                 Audio.VAC2Enabled = value;
                 if (chkVAC2 != null) chkVAC2.Checked = value;
+                chkVFOBTX_CheckedChanged(this, EventArgs.Empty);
             }
         }
 
@@ -50514,6 +50526,7 @@ namespace Thetis
                 //psform.RXrcvr = 1;
                 if (chkVFOBTX.Checked) chkVFOBTX.Checked = false;
                 swap_vfo_ab_tx = false;
+                cmaster.SetTXVAC(0, 0);
                 if (KWAutoInformation)
                     BroadcastVFOChange("0");
                 chkVFOATX.BackColor = Color.Red;//button_selected_color;
@@ -50590,6 +50603,10 @@ namespace Thetis
                 //psform.RXrcvr = 2;
                 if (chkVFOATX.Checked) chkVFOATX.Checked = false;
                 chkVFOBTX.BackColor = button_selected_color;
+
+                if (VAC2onSplit && VAC2Enabled) cmaster.SetTXVAC(0, 1);
+                else cmaster.SetTXVAC(0, 0);
+
                 swap_vfo_ab_tx = true;
                 if (KWAutoInformation)
                     BroadcastVFOChange("1");

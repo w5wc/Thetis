@@ -1413,6 +1413,9 @@ namespace Thetis
             // IVAC
             chkVAC1_Force_CheckedChanged(this, e);
             chkVAC1_Force2_CheckedChanged(this, e);
+            chkVAC2onSplit_CheckedChanged(this, e);
+            chkAudioEnableVAC_CheckedChanged(this, e);
+            chkVAC2Enable_CheckedChanged(this, e);
         }
 
         public string[] GetTXProfileStrings()
@@ -6617,7 +6620,6 @@ namespace Thetis
                 labelAlex1FilterHPF.Text = "BPF1";
                 chkAlexHPFBypass.Text = "ByPass/55 MHz BPF";
                 chkDisableHPFonTX.Text = "BPF ByPass on TX";
-                panelAlexRXXVRTControl.Visible = false;
                 labelAlexFilterActive.Location = new Point(275, 0);
                 ud6mRx2LNAGainOffset.Visible = true;
                 lblRx26mLNA.Visible = true;
@@ -7150,15 +7152,7 @@ namespace Thetis
                     comboAudioDriver2.SelectedIndex = 0;
             }
 
-            //bool power = console.PowerOn;
-            //if (power && val != old_val)
-            //{
-            //    console.PowerOn = false;
-            //    Thread.Sleep(100);
-            //}
-
             console.VACEnabled = val;
-            // if (power && val != old_val) console.PowerOn = true;
         }
 
         private void chkVAC2Enable_CheckedChanged(object sender, System.EventArgs e)
@@ -7173,15 +7167,7 @@ namespace Thetis
                     comboAudioDriver3.SelectedIndex = 0;
             }
 
-            //bool power = console.PowerOn;
-            //if (power && val != old_val)
-            //{
-            //    console.PowerOn = false;
-            //    Thread.Sleep(100);
-            //}
-
             console.VAC2Enabled = val;
-            // if (power && val != old_val) console.PowerOn = true;
         }
 
         private void comboAudioDriver2_SelectedIndexChanged(object sender, System.EventArgs e)
@@ -18886,6 +18872,11 @@ namespace Thetis
             lblLED08.BackColor = LEDColor[7];
             lblLED09.BackColor = LEDColor[8];
             lblLED10.BackColor = LEDColor[9];
+        }
+
+        private void chkVAC2onSplit_CheckedChanged(object sender, EventArgs e)
+        {
+            console.VAC2onSplit = chkVAC2onSplit.Checked;
         }
     }
 

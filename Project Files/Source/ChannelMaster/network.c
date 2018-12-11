@@ -154,13 +154,13 @@ int nativeInitMetis(char *netaddr, char *localaddr, int localport) {
 
 		fflush(stdout);
 
-		sndbufsize = 0xffff;
+		sndbufsize = 0x10000;
 		rc = setsockopt(listenSock, SOL_SOCKET, SO_SNDBUF, (const char *)&sndbufsize, sizeof(int));
 		if (rc == SOCKET_ERROR) {
 			printf("CreateSockets Warning: setsockopt SO_SNDBUF failed!\n");
 		}
 
-		sndbufsize = 0xffff;
+		sndbufsize = 0xfa000;
 		rc = setsockopt(listenSock, SOL_SOCKET, SO_RCVBUF, (const char *)&sndbufsize, sizeof(int));
 		if (rc == SOCKET_ERROR) {
 			printf("CreateSockets Warning: setsockopt SO_RCVBUF failed!\n");
