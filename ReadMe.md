@@ -1,7 +1,10 @@
 # Thetis beta releases
 # Official Releases are located at https://github.com/tapr
 
-Latest Beta Release v2.6.1 December 10, 2018
+Latest Beta Release v2.6.2 December 11, 2018
+# 2.6.2 (2018-12-11)
+- transverter T/R relay bug fixed
+
 # 2.6.1 (2018-12-10)
 - Added control for EXT1-EXT2-XVTR RX ANT for 7000DLE
 - VAC2 can be used for TX Audio when in Split mode
