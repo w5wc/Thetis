@@ -6,7 +6,7 @@ Latest Beta Release v2.6.2 December 11, 2018
 - transverter T/R relay bug fixed
 
 # 2.6.1 (2018-12-10)
-- Added control for EXT1-EXT2-XVTR RX ANT for 7000DLE
+- Added control for BYPS-EXT1-XVTR RX ANT for 7000DLE
 - VAC2 can be used for TX Audio when in Split mode
 
 # 2.6.0 (2018-4-10)
