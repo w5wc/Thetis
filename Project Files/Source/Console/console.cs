@@ -20067,6 +20067,11 @@ namespace Thetis
             set
             {
                 enable_xvtr_hf = value;
+                if (!initializing)
+                {
+                    txtVFOAFreq_LostFocus(this, EventArgs.Empty);
+                    txtVFOBFreq_LostFocus(this, EventArgs.Empty);
+                }
             }
         }
 
