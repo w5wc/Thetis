@@ -38,9 +38,9 @@ using System.Threading;
 using System.Windows.Forms;
 
 //reference Nuget Package NAudio.Lame
-using NAudio;
-using NAudio.Wave;
-using NAudio.Lame;
+//using NAudio;
+//using NAudio.Wave;
+//using NAudio.Lame;
 
 namespace Thetis
 {
@@ -645,6 +645,7 @@ namespace Thetis
             }
         } // RECPLAY3
         
+		BinaryReader reader = null;
         // private bool OpenWaveFile(string filename, bool rx2)
         private bool OpenWaveFile(string filename, int id)
 		{
@@ -662,7 +663,7 @@ namespace Thetis
 				return false;
 			}
 
-			BinaryReader reader = null;
+            reader = null;
 			try
 			{
 				reader = new BinaryReader(File.Open(filename, FileMode.Open, FileAccess.Read, FileShare.Read));
@@ -1237,7 +1238,7 @@ namespace Thetis
         {
             if (chkQuickRec.Checked)
             {
-
+                if (reader != null) reader.Close();
                 temp_record = Audio.RecordRXPreProcessed;
                 quickmp3SR = waveOptionsForm.comboSampleRate.Text;
 
@@ -1303,11 +1304,11 @@ namespace Thetis
 
                     try
                     {
-                        using (var reader = new WaveFileReader(file_name)) // closes reader when done using
-                        using (var writer = new LameMP3FileWriter(quickmp3, reader.WaveFormat, LAMEPreset.VBR_90)) // closes writer when done using (90=90% quality variable bit rate)
-                        {
-                            reader.CopyTo(writer);
-                        }
+                        //using (var reader = new WaveFileReader(file_name)) // closes reader when done using
+                        //using (var writer = new LameMP3FileWriter(quickmp3, reader.WaveFormat, LAMEPreset.VBR_90)) // closes writer when done using (90=90% quality variable bit rate)
+                        //{
+                        //    reader.CopyTo(writer);
+                        //}
                     }
                     catch (Exception)
                     {

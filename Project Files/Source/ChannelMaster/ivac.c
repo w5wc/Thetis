@@ -113,10 +113,10 @@ PORT void xvacIN(int id, double* in_tx)
 		xrmatchOUT (a->rmatchIN, in_tx);
 		if (a->vac_combine_input)
 			combinebuff(a->mic_size, in_tx, in_tx);
-		if (a->vox || a->mox)
-			scalebuff(a->mic_size, in_tx, a->vac_preamp, in_tx);
-		else
-			memset(in_tx, 0, a->mic_size * sizeof(complex));
+		//if (a->vox || a->mox)
+		scalebuff(a->mic_size, in_tx, a->vac_preamp, in_tx);
+		//else
+			//memset(in_tx, 0, a->mic_size * sizeof(complex));
 	}
 }
 

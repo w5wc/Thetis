@@ -236,25 +236,25 @@ namespace Thetis
             }
         }
 
-        private static float vox_threshold = 0.001f;
-        public static float VOXThreshold
-        {
-            get { return vox_threshold; }
-            set
-            {
-                vox_threshold = value;
-                cmaster.CMSetTXAVoxThresh(0);
-            }
-        }
+        //private static float vox_threshold = 0.001f;
+        //public static float VOXThreshold
+        //{
+        //    get { return vox_threshold; }
+        //    set
+        //    {
+        //        vox_threshold = value;
+        //        cmaster.CMSetTXAVoxThresh(0);
+        //    }
+        //}
 
-        private static float vox_gain = 0.001f;
+        private static float vox_gain = 1.0f;
         public static float VOXGain
         {
             get { return vox_gain; }
             set
             {
                 vox_gain = value;
-                cmaster.CMSetTXAVoxThresh(0);
+                //cmaster.CMSetTXAVoxThresh(0);
             }
         }
 
@@ -1681,7 +1681,7 @@ namespace Thetis
 
         #region Scope Stuff
 
-        private static int scope_samples_per_pixel = 512;
+        private static int scope_samples_per_pixel = 10000;
 
         public static int ScopeSamplesPerPixel
         {

@@ -148,15 +148,6 @@ namespace Thetis
         [DllImport("WDSP.dll", EntryPoint = "SetRXAAMSQMaxTail", CallingConvention = CallingConvention.Cdecl)]
         public static extern void SetRXAAMSQMaxTail(int channel, double tail);
 
-        [DllImport("WDSP.dll", EntryPoint = "SetTXAAMSQRun", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void SetTXAAMSQRun(int channel, bool run);
-
-        [DllImport("WDSP.dll", EntryPoint = "SetTXAAMSQMutedGain", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void SetTXAAMSQMutedGain(int channel, double dBlevel);
-
-        [DllImport("WDSP.dll", EntryPoint = "SetTXAAMSQThreshold", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void SetTXAAMSQThreshold(int channel, double threshold);
-
         [DllImport("WDSP.dll", EntryPoint = "SetTXAAMCarrierLevel", CallingConvention = CallingConvention.Cdecl)]
         public static extern void SetTXAAMCarrierLevel(int channel, double carrier);
 
@@ -769,7 +760,7 @@ namespace Thetis
 	        return (float)val;
         }
 
-        private static double alcgain = 0.0;
+        private static double alcgain = 3.0;
         public static double ALCGain
         {
             get { return alcgain; }

@@ -88,16 +88,55 @@ namespace Thetis
         [DllImport("ChannelMaster.dll", EntryPoint = "SetPSRxIdx", CallingConvention = CallingConvention.Cdecl)]
         public static extern void SetPSRxIdx(int id, int idx);
 
-        // vox
+        // vox-dexp
 
-        [DllImport("ChannelMaster.dll", EntryPoint = "SetTXAVoxRun", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void SetTXAVoxRun(int id, bool run);
-
-        [DllImport("ChannelMaster.dll", EntryPoint = "SetTXAVoxThresh", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("wdsp.dll", EntryPoint = "SetDEXPAttackThreshold", CallingConvention = CallingConvention.Cdecl)]
         public static extern void SetTXAVoxThresh(int id, double thresh);
 
-        [DllImport("ChannelMaster.dll", EntryPoint = "GetTXAVoxPeak", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void GetTXAVoxPeak(int id, double* peak);         // called by console.cs
+        [DllImport("wdsp.dll", EntryPoint = "GetDEXPPeakSignal", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void GetDEXPPeakSignal(int id, double* peak);         // called by console.cs
+
+        [DllImport("wdsp.dll", EntryPoint = "SetDEXPRun", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void SetDEXPRun (int id, bool run);
+
+        [DllImport("wdsp.dll", EntryPoint = "SetDEXPDetectorTau", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void SetDEXPDetectorTau(int id, double tau);
+
+        [DllImport("wdsp.dll", EntryPoint = "SetDEXPAttackTime", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void SetDEXPAttackTime(int id, double time);
+
+        [DllImport("wdsp.dll", EntryPoint = "SetDEXPReleaseTime", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void SetDEXPReleaseTime(int id, double time);
+
+        [DllImport("wdsp.dll", EntryPoint = "SetDEXPHoldTime", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void SetDEXPHoldTime(int id, double time);
+
+        [DllImport("wdsp.dll", EntryPoint = "SetDEXPExpansionRatio", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void SetDEXPExpansionRatio(int id, double ratio);
+
+        [DllImport("wdsp.dll", EntryPoint = "SetDEXPHysteresisRatio", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void SetDEXPHysteresisRatio(int id, double ratio);
+
+        [DllImport("wdsp.dll", EntryPoint = "SetDEXPAttackThreshold", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void SetDEXPAttackThreshold(int id, double thresh);
+
+        [DllImport("wdsp.dll", EntryPoint = "SetDEXPLowCut", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void SetDEXPLowCut(int id, double lowcut);
+
+        [DllImport("wdsp.dll", EntryPoint = "SetDEXPHighCut", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void SetDEXPHighCut(int id, double highcut);
+
+        [DllImport("wdsp.dll", EntryPoint = "SetDEXPRunSideChannelFilter", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void SetDEXPRunSideChannelFilter(int id, bool run);
+
+        [DllImport("wdsp.dll", EntryPoint = "SetDEXPRunVox", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void SetDEXPRunVox(int id, bool run);
+
+        [DllImport("wdsp.dll", EntryPoint = "SetDEXPRunAudioDelay", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void SetDEXPRunAudioDelay(int id, bool run);
+
+        [DllImport("wdsp.dll", EntryPoint = "SetDEXPAudioDelay", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void SetDEXPAudioDelay(int id, double delay);
 
         // siphon
 
@@ -396,7 +435,7 @@ namespace Thetis
                     case HPSDRModel.ANAN10:
                     case HPSDRModel.ANAN100:
                     case HPSDRModel.ANAN100B:
-                    case HPSDRModel.ANAN10E:
+                    // case HPSDRModel.ANAN10E:
                         int[] HermesE_Function = new int[32]
                         {
                             1, 1, 2, 2, 1, 2, 2, 2,     // Rx0, port 1035, Call 0
@@ -417,6 +456,29 @@ namespace Thetis
                             1                           // Rx1, port 1036
                         };
                         fixed (int* pstreams = &HermesE_nstreams[0], pfunction = &HermesE_Function[0], pcallid = &HermesE_Callid[0])
+                            LoadRouterAll((void*)0, 0, 2, 2, 8, pstreams, pfunction, pcallid);
+                        break;
+                    case HPSDRModel.ANAN10E:
+                        int[] HermesES_Function = new int[32]
+                        {
+                            2, 2, 2, 2, 2, 2, 2, 2,     // Rx0, port 1035, Call 0
+                            0, 0, 0, 0, 0, 2, 0, 2,     // Rx0, port 1035, Call 1
+                            0, 0, 0, 0, 0, 0, 0, 0,     // Rx1, port 1036, Call 0
+                            0, 0, 0, 0, 0, 0, 0, 0      // Rx1, port 1036, Call 1
+                        };
+                        int[] HermesES_Callid = new int[32]
+                        {
+                            2, 2, 0, 0, 2, 1, 0, 1,     // Rx0, port 1035, Call 0
+                            0, 0, 0, 0, 0, 2, 0, 2,     // Rx0, port 1035, Call 1
+                            1, 1, 1, 1, 1, 1, 1, 1,     // Rx1, port 1036, Call 0
+                            1, 1, 1, 1, 1, 1, 1, 1      // Rx1, port 1036, Call 1
+                        };
+                        int[] HermesES_nstreams = new int[2]
+                        {
+                            2,                          // Rx0, port 1035
+                            1                           // Rx1, port 1036
+                        };
+                        fixed (int* pstreams = &HermesES_nstreams[0], pfunction = &HermesES_Function[0], pcallid = &HermesES_Callid[0])
                             LoadRouterAll((void*)0, 0, 2, 2, 8, pstreams, pfunction, pcallid);
                         break;
                 }
@@ -469,7 +531,7 @@ namespace Thetis
                     case HPSDRModel.ANAN10:
                     case HPSDRModel.ANAN100:
                     case HPSDRModel.ANAN100B:
-                    case HPSDRModel.ANAN10E:
+                    // case HPSDRModel.ANAN10E:
                         int[] HermesE_Function = new int[32]
                         {
                             1, 1, 2, 2, 1, 2, 2, 2,     // Rx0, port 1035, Call 0
@@ -490,6 +552,29 @@ namespace Thetis
                             1                           // Rx1, port 1036
                         };
                         fixed (int* pstreams = &HermesE_nstreams[0], pfunction = &HermesE_Function[0], pcallid = &HermesE_Callid[0])
+                            LoadRouterAll((void*)0, 0, 2, 2, 8, pstreams, pfunction, pcallid);
+                        break;
+                    case HPSDRModel.ANAN10E:
+                        int[] HermesES_Function = new int[32]
+                        {
+                            2, 2, 2, 2, 2, 2, 2, 2,     // Rx0, port 1035, Call 0
+                            0, 0, 0, 0, 0, 2, 0, 2,     // Rx0, port 1035, Call 1
+                            0, 0, 0, 0, 0, 0, 0, 0,     // Rx1, port 1036, Call 0
+                            0, 0, 0, 0, 0, 0, 0, 0      // Rx1, port 1036, Call 1
+                        };
+                        int[] HermesES_Callid = new int[32]
+                        {
+                            2, 2, 0, 0, 2, 1, 0, 1,     // Rx0, port 1035, Call 0
+                            0, 0, 0, 0, 0, 3, 0, 3,     // Rx0, port 1035, Call 1
+                            1, 1, 1, 1, 1, 1, 1, 1,     // Rx1, port 1036, Call 0
+                            1, 1, 1, 1, 1, 1, 1, 1      // Rx1, port 1036, Call 1
+                        };
+                        int[] HermesES_nstreams = new int[2]
+                        {
+                            2,                          // Rx0, port 1035
+                            1                           // Rx1, port 1036
+                        };
+                        fixed (int* pstreams = &HermesES_nstreams[0], pfunction = &HermesES_Function[0], pcallid = &HermesES_Callid[0])
                             LoadRouterAll((void*)0, 0, 2, 2, 8, pstreams, pfunction, pcallid);
                         break;
                     case HPSDRModel.HPSDR:
@@ -593,14 +678,14 @@ namespace Thetis
                     mode == DSPMode.FM ||
                     mode == DSPMode.DIGL ||
                     mode == DSPMode.DIGU);
-            cmaster.SetTXAVoxRun(id, run);
+            cmaster.SetDEXPRunVox(id, run);
         }
 
-        public static void CMSetTXAVoxThresh(int id)
+        public static void CMSetTXAVoxThresh(int id, double thresh)
         {
-            double thresh = (double)Audio.VOXThreshold;
+            //double thresh = (double)Audio.VOXThreshold;
             if (Audio.console.MicBoost) thresh *= (double)Audio.VOXGain;
-            cmaster.SetTXAVoxThresh(id, thresh);
+            cmaster.SetDEXPAttackThreshold(id, thresh);
         }
 
         public static void CMSetTXAPanelGain1(int channel)
@@ -733,6 +818,24 @@ namespace Thetis
                 create_wb(adc);
             wideband[adc].Show();
             return wideband[adc];
+        }
+
+        public static void Hidewb(int adc)
+        {
+            if (wideband[adc] != null)
+            wideband[adc].Hide();           
+        }
+
+        public static void Closewb(int adc)
+        {
+            if (wideband[adc] != null)
+                wideband[adc].Close();
+        }
+
+        public static void Savewb(int adc)
+        {
+            if (wideband[adc] != null)
+                wideband[adc].SaveWideBand();
         }
 
         #endregion

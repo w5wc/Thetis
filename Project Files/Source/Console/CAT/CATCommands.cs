@@ -970,13 +970,17 @@ namespace Thetis
 				level = Convert.ToDouble(s.Substring(1));
 				level = Math.Max(0, level);			// lower bound
 				level = Math.Min(255, level);		// upper bound
-				level = level*0.62745;				// scale factor
+				//level = level*0.62745;				// scale factor
+                level = -160 + level * 0.62745;		    // scale factor
 				console.Squelch = Convert.ToInt32(Math.Round(level,0));
 				return "";
 			}
 			else if(s.Length == parser.nGet)
 			{
-				return rx+AddLeadingZeros(console.Squelch).Substring(1);
+				// return rx+AddLeadingZeros(console.Squelch).Substring(1);
+                // Map -160 to 0 to 0 to 255 for TS-2000 SQ command
+                int isquelch = Convert.ToInt32((1.0 - (Math.Abs(console.Squelch / 160.0))) * 255.0);
+                return rx + AddLeadingZeros(isquelch).Substring(1);
 			}
 			else
 			{

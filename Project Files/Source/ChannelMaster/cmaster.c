@@ -118,14 +118,38 @@ void create_xmtr()
 		// output buffers (two because of EER)
 		for (j = 0; j < 2; j++)
 			pcm->xmtr[i].out[j] = (double *) malloc0 (getbuffsize (pcm->cmMAXTxOutRate) * sizeof (complex));
-		//vox
-		pcm->xmtr[i].pvox = create_vox (
-			i,									// id
-			0,									// run
+		//// vox
+		//pcm->xmtr[i].pvox = create_vox (
+		//	i,									// id
+		//	0,									// run
+		//	pcm->xcm_insize[in_id],				// input buffer size
+		//	pcm->in[in_id],						// input buffer
+		//	0,									// mode
+		//	0.001);								// threshold
+		// dexp - vox
+		create_dexp (
+			i,									// transmitter id, txid
+			0,									// dexp initially set to OFF
 			pcm->xcm_insize[in_id],				// input buffer size
 			pcm->in[in_id],						// input buffer
-			0,									// mode
-			0.001);								// threshold
+			pcm->in[in_id],						// output buffer 
+			pcm->xcm_inrate[in_id],				// sample-rate 
+			0.01,								// detector smoothing time-constant 
+			0.025,								// attack time 
+			0.100,								// release time 
+			1.000,								// hold time
+			4.000,								// expansion ratio 
+			0.750,								// hysteresis ratio
+			0.050,								// attack threshold 
+			256,								// 256 taps for side-channel filter
+			0,									// BH-4 window for side-channel filter
+			1000.0,								// low-cut for side-channel filter
+			2000.0,								// high-cut for side-channel filter 
+			0,									// side-channel filter initially set to OFF
+			1,									// VOX initially set to ON
+			1,									// audio delay initially set to ON
+			0.060,								// audio delay set to 60ms
+			pcm->xmtr[i].pushvox);				// pointer to VOX callback
 		// dsp channel
 		OpenChannel(
 			chid (in_id, 0),					// channel number
@@ -136,8 +160,8 @@ void create_xmtr()
 			pcm->xmtr[i].ch_outrate,			// output sample rate
 			1,									// channel type
 			0,									// initial state
-			0.010,								// tdelayup
-			0.025,								// tslewup
+			0.000,								// tdelayup
+			0.010,								// tslewup
 			0.000,								// tdelaydown
 			0.010,								// tslewdown
 			1);									// block until output is available
@@ -196,7 +220,8 @@ void destroy_xmtr()
 		destroy_txgain (pcm->xmtr[i].pgain);
 		DestroyAnalyzer (inid (1, i));
 		CloseChannel (chid (inid (1, i), 0));
-		destroy_vox (pcm->xmtr[i].pvox);
+		/*destroy_vox (pcm->xmtr[i].pvox);*/
+		destroy_dexp (i);
 		for (j = 0; j < 2; j++)
 			_aligned_free (pcm->xmtr[i].out[j]);
 	}
@@ -289,7 +314,8 @@ void xcmaster (int stream)
 	case 1:  // standard transmitter
 		tx = txid (stream);
 		xpipe (stream, 0, pcm->in);
-		xvox (pcm->xmtr[tx].pvox);																// vox
+		//xvox (pcm->xmtr[tx].pvox);																// vox
+		xdexp (tx);																				// vox-dexp
 		fexchange0 (chid (stream, 0), pcm->in[stream], pcm->xmtr[tx].out[0], &error);			// dsp
 		xpipe (stream, 1, pcm->xmtr[tx].out);
 		// Spectrum0 (1, stream, 0, 0, pcm->xmtr[tx].out[0]);									// panadapter
@@ -354,7 +380,9 @@ void SetXcmInrate (int in_id, int rate)	// 2014-12-18:  called for streams 0, 1,
 			tx = txid (in_id);
 			SetInputSamplerate (chid (in_id, 0), rate);							// dsp channel input rate
 			SetInputBuffsize (chid (in_id, 0), pcm->xcm_insize[in_id]);			// dsp channel input size
-			SetTXAVoxSize (tx, pcm->xcm_insize[in_id]);							// VOX size
+			//SetTXAVoxSize (tx, pcm->xcm_insize[in_id]);							// VOX size
+			SetDEXPSize (tx, pcm->xcm_insize[in_id]);							// vox-dexp size
+			SetDEXPRate (tx, rate);												// vox-dexp rate
 			// PIPE - set wave player, rcvr0 (leave in C# since player is there)
 			// PIPE - set wave player, rcvr1 (leave in C# since player is there)
 			// PIPE - set wave recorder, rcvr0 (leave in C# since recorder is there)
