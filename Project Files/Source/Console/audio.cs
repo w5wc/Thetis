@@ -449,14 +449,9 @@ namespace Thetis
         public static bool phase;
         public static bool scope;
 
-        public static WaveFileWriter wave_file_writer;
-        public static WaveFileWriter wave_file_writer2;
-        public static WaveFileReader1 wave_file_reader;
-        public static WaveFileReader1 wave_file_reader2;
         public static bool two_tone;
         public static bool high_pwr_am;
         public static bool testing;
-        private static bool localmox;
 
         private static bool vac_combine_input = false;
         public static bool VACCombineInput

@@ -644,9 +644,7 @@ namespace Thetis
 
             }
         } // RECPLAY3
-        
-		BinaryReader reader = null;
-        // private bool OpenWaveFile(string filename, bool rx2)
+
         private bool OpenWaveFile(string filename, int id)
 		{
 			RIFFChunk riff = null;
@@ -663,7 +661,8 @@ namespace Thetis
 				return false;
 			}
 
-            reader = null;
+			BinaryReader reader = null;
+
 			try
 			{
 				reader = new BinaryReader(File.Open(filename, FileMode.Open, FileAccess.Read, FileShare.Read));
@@ -894,11 +893,11 @@ namespace Thetis
 			}
 			else
 			{
-				if(Audio.wave_file_reader != null)
-					Audio.wave_file_reader.Stop();
+                if (WaveThing.wave_file_reader[0] != null)
+                    WaveThing.wave_file_reader[0].Stop();
 
-                if (Audio.wave_file_reader2 != null)
-                    Audio.wave_file_reader2.Stop();
+                if (WaveThing.wave_file_reader[1] != null)
+                    WaveThing.wave_file_reader[1].Stop();
 
                 Thread.Sleep(50); // wait for files to close
 
@@ -1216,8 +1215,8 @@ namespace Thetis
 			}
 			else
 			{
-				if(Audio.wave_file_reader != null)
-					Audio.wave_file_reader.Stop();
+                if (WaveThing.wave_file_reader[0] != null)
+                    WaveThing.wave_file_reader[0].Stop();
 				chkQuickPlay.BackColor = SystemColors.Control;
 				console.QuickPlay = false;
 				console.MON = temp_mon;
@@ -1238,7 +1237,6 @@ namespace Thetis
         {
             if (chkQuickRec.Checked)
             {
-                if (reader != null) reader.Close();
                 temp_record = Audio.RecordRXPreProcessed;
                 quickmp3SR = waveOptionsForm.comboSampleRate.Text;
 
@@ -1427,7 +1425,7 @@ namespace Thetis
             } // txidboxts checked
             else// this is what signals the end of playback
             {
-                if (Audio.wave_file_reader != null) Audio.wave_file_reader.Stop();
+                if (WaveThing.wave_file_reader[0] != null) WaveThing.wave_file_reader[0].Stop();
 
                 TXIDBoxTS.BackColor = SystemColors.Control;
 
