@@ -124,6 +124,7 @@ namespace Thetis
             
 			tbRXEQ_Scroll(this, EventArgs.Empty);
 			//tbTXEQ_Scroll(this, EventArgs.Empty);
+            rad10Band_CheckedChanged(this, EventArgs.Empty);
 		}
 
 		/// <summary>

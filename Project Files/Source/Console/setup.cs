@@ -2889,7 +2889,7 @@ namespace Thetis
                 }
             }
         }
-
+        
         public int DisplayFFTSize
         {
             get { return (int)tbDisplayFFTSize.Value; }
@@ -4819,27 +4819,95 @@ namespace Thetis
         public float DisplayGridMin
         {
             get { return (float)udDisplayGridMin.Value; }
-            set { udDisplayGridMin.Value = (decimal)value; }
+            set 
+            {
+                if (udDisplayGridMin != null)
+                {
+                    if (value > (float)udDisplayGridMin.Maximum) value = (float)udDisplayGridMin.Maximum;
+                    if (value < (float)udDisplayGridMin.Minimum) value = (float)udDisplayGridMin.Minimum;
+                    udDisplayGridMin.Value = (decimal)value;
+                }
+            }
         }
 
         public float DisplayGridMax
         {
             get { return (float)udDisplayGridMax.Value; }
-            set { udDisplayGridMax.Value = (decimal)value; }
+            set
+            {
+                if (udDisplayGridMax != null)
+                {
+                    if (value > (float)udDisplayGridMax.Maximum) value = (float)udDisplayGridMax.Maximum;
+                    if (value < (float)udDisplayGridMax.Minimum) value = (float)udDisplayGridMax.Minimum;
+                    udDisplayGridMax.Value = (decimal)value;
+                }
+            }
         }
 
         public float RX2DisplayGridMin
         {
             get { return (float)udRX2DisplayGridMin.Value; }
-            set { udRX2DisplayGridMin.Value = (decimal)value; }
+            set
+            {
+                if (udRX2DisplayGridMin != null)
+                {
+                    if (value > (float)udRX2DisplayGridMin.Maximum) value = (float)udRX2DisplayGridMin.Maximum;
+                    if (value < (float)udRX2DisplayGridMin.Minimum) value = (float)udRX2DisplayGridMin.Minimum;
+                    udRX2DisplayGridMin.Value = (decimal)value;
+                }
+            }
         }
 
         public float RX2DisplayGridMax
         {
             get { return (float)udRX2DisplayGridMax.Value; }
-            set { udRX2DisplayGridMax.Value = (decimal)value; }
+            set
+            {
+                if (udRX2DisplayGridMax != null)
+                {
+                    if (value > (float)udRX2DisplayGridMax.Maximum) value = (float)udRX2DisplayGridMax.Maximum;
+                    if (value < (float)udRX2DisplayGridMax.Minimum) value = (float)udRX2DisplayGridMax.Minimum;
+                    udRX2DisplayGridMax.Value = (decimal)value;
+                }
+            }
         }
 
+        public float TXGridMax
+        {
+            get
+            {
+                if (udTXGridMax != null) return (float)udTXGridMax.Value;
+                else return -1;
+            }
+            set
+            {
+                if (udTXGridMax != null)
+                {
+                    if (value > (float)udTXGridMax.Maximum) value = (float)udTXGridMax.Maximum;
+                    if (value < (float)udTXGridMax.Minimum) value = (float)udTXGridMax.Minimum;
+                    udTXGridMax.Value = (decimal)value;
+                }
+            }
+        }
+
+        public float TXGridMin
+        {
+            get
+            {
+                if (udTXGridMin != null) return (float)udTXGridMin.Value;
+                else return -1;
+            }
+            set
+            {
+                if (udTXGridMin != null)
+                {
+                    if (value > (float)udTXGridMin.Maximum) value = (float)udTXGridMin.Maximum;
+                    if (value < (float)udTXGridMin.Minimum) value = (float)udTXGridMin.Minimum;
+                    udTXGridMin.Value = (decimal)value;
+                }
+            }
+        }
+        
         public float PA10W
         {
             get

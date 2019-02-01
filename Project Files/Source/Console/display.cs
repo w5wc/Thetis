@@ -7237,12 +7237,14 @@ namespace Thetis
                 {
                     Low = tx_display_low;
                     High = tx_display_high;
+                    label_align = tx_display_label_align;
                 }
                 else
                 {
                     Low = rx2_display_low;
                     High = rx2_display_high;
                 }
+
                 grid_max = rx2_spectrum_grid_max;
                 grid_min = rx2_spectrum_grid_min;
                 grid_step = rx2_spectrum_grid_step;
@@ -7254,20 +7256,21 @@ namespace Thetis
             {
                 Low = rx_display_low;
                 High = rx_display_high;
-                //if (local_mox)
-                //{
-                //    grid_max = tx_spectrum_grid_max;
-                //    grid_min = tx_spectrum_grid_min;
-                //    grid_step = tx_spectrum_grid_step;
-                //    sample_rate = sample_rate_rx1;
-                //}
-                //else
-                //{
+                if (local_mox)
+                {
+                    grid_max = tx_spectrum_grid_max;
+                    grid_min = tx_spectrum_grid_min;
+                    grid_step = tx_spectrum_grid_step;
+                    sample_rate = sample_rate_rx1;
+                    label_align = tx_display_label_align;
+                }
+                else
+                {
                     grid_max = spectrum_grid_max;
                     grid_min = spectrum_grid_min;
                     grid_step = spectrum_grid_step;
                     sample_rate = sample_rate_rx1;
-              //  }
+                }
                 g.FillRectangle(display_background_brush, 0, bottom ? H : 0, W, H);
                 f_diff = freq_diff;
             }
@@ -10268,7 +10271,7 @@ namespace Thetis
             }
             else
             {
-                if (local_mox && !displayduplex) // && !tx_on_vfob)
+                if (local_mox) // && !displayduplex) // && !tx_on_vfob)
                 {
                     grid_max = tx_spectrum_grid_max;
                     grid_min = tx_spectrum_grid_min;

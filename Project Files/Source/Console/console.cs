@@ -39954,6 +39954,7 @@ namespace Thetis
             switch (TuneHitTest(e.X, e.Y))
             {
                 case TuneLocation.VFOA:
+                    if (mox) return;
                     double freq = double.Parse(txtVFOAFreq.Text);
                     double mult = 1000.0;
                     int right = grpVFOA.Left + txtVFOAFreq.Left + txtVFOAFreq.Width;
@@ -39983,6 +39984,7 @@ namespace Thetis
                     break;
 
                 case TuneLocation.VFOB:
+                    if (mox && VFOBTX) return;
                     freq = double.Parse(txtVFOBFreq.Text);
                     mult = 1000.0;
                     right = grpVFOB.Left + txtVFOBFreq.Left + txtVFOBFreq.Width;
@@ -40062,7 +40064,8 @@ namespace Thetis
                         else
                             VFOBFreq = SnapTune(VFOBFreq, step, num_steps);
                     }
-                    else VFOAFreq = SnapTune(VFOAFreq, step, num_steps);
+                    else 
+                        if (!mox) VFOAFreq = SnapTune(VFOAFreq, step, num_steps);
                     break;
             }
         }
@@ -40118,7 +40121,9 @@ namespace Thetis
                 ((Display.CurrentDisplayMode == DisplayMode.PANADAPTER && mox && VFOBTX) ||
                  (Display.CurrentDisplayMode == DisplayMode.PANADAPTER && display_duplex) ||
                  (Display.CurrentDisplayMode == DisplayMode.PANADAPTER && !mox) ||
-                 (Display.CurrentDisplayMode == DisplayMode.PANAFALL) ||
+                 (Display.CurrentDisplayMode == DisplayMode.PANAFALL && mox && VFOBTX) ||
+                 (Display.CurrentDisplayMode == DisplayMode.PANAFALL && display_duplex) ||
+                 (Display.CurrentDisplayMode == DisplayMode.PANAFALL && !mox) ||
                  (Display.CurrentDisplayMode == DisplayMode.WATERFALL)))
             {
                 double rx1_osc = Math.Round(-(VFOAFreq - center_frequency) * 1e6);
@@ -40182,7 +40187,9 @@ namespace Thetis
                 ((Display.CurrentDisplayMode == DisplayMode.PANADAPTER && mox && VFOBTX) ||
                  (Display.CurrentDisplayMode == DisplayMode.PANADAPTER && display_duplex) ||
                  (Display.CurrentDisplayMode == DisplayMode.PANADAPTER && !mox) ||
+                 (Display.CurrentDisplayMode == DisplayMode.PANAFALL && mox && VFOBTX) ||
                  (Display.CurrentDisplayMode == DisplayMode.PANAFALL && display_duplex) ||
+                 (Display.CurrentDisplayMode == DisplayMode.PANAFALL && !mox) ||
                  (Display.CurrentDisplayMode == DisplayMode.WATERFALL)))
                 Display.VFOA = (long)(center_frequency * 1e6); // freeze display vfo
             else
@@ -41098,7 +41105,8 @@ namespace Thetis
                             Display.VFOASub = (long)(VFOAFreq * 1e6);
                     }
                     else if (display_duplex)
-                        Display.VFOASub = (long)(VFOAFreq * 1e6);
+                       // Display.VFOASub = (long)(VFOAFreq * 1e6);
+                        Display.VFOASub = (long)(center_frequency * 1e6);
                 }
                 else
                     Display.VFOASub = (long)(freq * 1e6);
@@ -41687,8 +41695,8 @@ namespace Thetis
 
         private Point grid_minmax_drag_start_point = new Point(0, 0);
         //  private int grid_minmax_drag_max_delta_x = 0;
-        private decimal grid_minmax_max_y = 0;
-        private decimal grid_minmax_min_y = 0;
+        private float grid_minmax_max_y = 0;
+        private float grid_minmax_min_y = 0;
         private Cursor grab = new Cursor(msgrab);
         private Cursor grabbing = new Cursor(msgrabbing);
 
@@ -41809,292 +41817,143 @@ namespace Thetis
 
                         if (rx1_grid_adjust && gridminmaxadjust && !tx1_grid_adjust)
                         {
-                            bool update = true;
+                           // bool update = true;
                             //  double db_per_pixel = PixelToDb(1) - PixelToDb(0);
                             int delta_y = e.Y - grid_minmax_drag_start_point.Y;
                             double delta_db = (delta_y / 10) * 5;
-                            decimal val = grid_minmax_max_y;
-                            val += (decimal)delta_db;
-                            decimal min_val = grid_minmax_min_y;
-                            min_val += (decimal)delta_db;
+                            float val = grid_minmax_max_y;
+                            val += (float)delta_db;
+                            float min_val = grid_minmax_min_y;
+                            min_val += (float)delta_db;
 
-                            if (val > SetupForm.udDisplayGridMax.Maximum)
-                            {
-                                val = SetupForm.udDisplayGridMax.Maximum;
-                                update = false;
-                            }
-                            if (min_val > SetupForm.udDisplayGridMin.Maximum)
-                            {
-                                min_val = SetupForm.udDisplayGridMin.Maximum;
-                                update = false;
-                            }
-                            if (val < SetupForm.udDisplayGridMax.Minimum)
-                            {
-                                val = SetupForm.udDisplayGridMax.Minimum;
-                                update = false;
-                            }
-                            if (min_val < SetupForm.udDisplayGridMin.Minimum)
-                            {
-                                min_val = SetupForm.udDisplayGridMin.Minimum;
-                                update = false;
-                            }
-
-                            // SetupForm.txtFwdPower.Text = val.ToString();
-                            if (update)
-                            {
-                                SetupForm.udDisplayGridMax.Value = val;
-                                SetupForm.udDisplayGridMin.Value = min_val;
-                            }
+                           // if (update)
+                           // {
+                                SetupForm.DisplayGridMax = val;
+                                SetupForm.DisplayGridMin = min_val;
+                           // }
                         }
 
                         if (rx2_grid_adjust && gridminmaxadjust && !tx2_grid_adjust)
                         {
-                            bool update = true;
+                          //  bool update = true;
                             //  double db_per_pixel = PixelToDb(1) - PixelToDb(0);
                             int delta_y = e.Y - grid_minmax_drag_start_point.Y;
 
                             double delta_db = (delta_y / 10) * 5;
-                            decimal val = grid_minmax_max_y;
-                            val += (decimal)delta_db;
-                            decimal min_val = grid_minmax_min_y;
-                            min_val += (decimal)delta_db;
+                            float val = grid_minmax_max_y;
+                            val += (float)delta_db;
+                            float min_val = grid_minmax_min_y;
+                            min_val += (float)delta_db;
 
-                            if (val > SetupForm.udRX2DisplayGridMax.Maximum)
-                            {
-                                val = SetupForm.udRX2DisplayGridMax.Maximum;
-                                update = false;
-                            }
-                            if (min_val > SetupForm.udRX2DisplayGridMin.Maximum)
-                            {
-                                min_val = SetupForm.udRX2DisplayGridMin.Maximum;
-                                update = false;
-                            }
-                            if (val < SetupForm.udRX2DisplayGridMax.Minimum)
-                            {
-                                val = SetupForm.udRX2DisplayGridMax.Minimum;
-                                update = false;
-                            }
-                            if (min_val < SetupForm.udRX2DisplayGridMin.Minimum)
-                            {
-                                min_val = SetupForm.udRX2DisplayGridMin.Minimum;
-                                update = false;
-                            }
-
-                            // SetupForm.txtFwdPower.Text = val.ToString();
-                            if (update)
-                            {
-                                SetupForm.udRX2DisplayGridMax.Value = val;
-                                SetupForm.udRX2DisplayGridMin.Value = min_val;
-                            }
+                          //  if (update)
+                          //  {
+                                SetupForm.RX2DisplayGridMax = val;
+                                SetupForm.RX2DisplayGridMin= min_val;
+                           // }
                         }
 
                         if (rx1_grid_adjust && gridmaxadjust && !tx1_grid_adjust)
                         {
-                            bool update = true;
+                           // bool update = true;
                             //  double db_per_pixel = PixelToDb(1) - PixelToDb(0);
                             int delta_y = e.Y - grid_minmax_drag_start_point.Y;
                             double delta_db = (delta_y / 10) * 5;
-                            decimal val = grid_minmax_max_y;
-                            val += (decimal)delta_db;
-                            //  decimal min_val = grid_minmax_min_y;
-                            //  min_val += (decimal)delta_db;
-
-                            if (val > SetupForm.udDisplayGridMax.Maximum)
-                            {
-                                val = SetupForm.udDisplayGridMax.Maximum;
-                                update = false;
-                            }
-                            if (val < SetupForm.udDisplayGridMax.Minimum)
-                            {
-                                val = SetupForm.udDisplayGridMax.Minimum;
-                                update = false;
-                            }
-
-                            //  SetupForm.txtFwdPower.Text = val.ToString();
-                            if (update)
-                            {
-                                SetupForm.udDisplayGridMax.Value = val;
-                                //  SetupForm.udDisplayGridMin.Value = min_val;
-                            }
+                            float val = grid_minmax_max_y;
+                            val += (float)delta_db;
+                          //  if (update)
+                          //  {
+                                SetupForm.DisplayGridMax = val;
+                          //  }
                         }
 
                         if (rx2_grid_adjust && gridmaxadjust && !tx2_grid_adjust)
                         {
-                            bool update = true;
+                          //  bool update = true;
                             //  double db_per_pixel = PixelToDb(1) - PixelToDb(0);
                             int delta_y = e.Y - grid_minmax_drag_start_point.Y;
 
                             double delta_db = (delta_y / 10) * 5;
-                            decimal val = grid_minmax_max_y;
-                            val += (decimal)delta_db;
-                            //  decimal min_val = grid_minmax_min_y;
-                            //  min_val += (decimal)delta_db;
+                            float val = grid_minmax_max_y;
+                            val += (float)delta_db;
 
-                            if (val > SetupForm.udRX2DisplayGridMax.Maximum)
-                            {
-                                val = SetupForm.udRX2DisplayGridMax.Maximum;
-                                update = false;
-                            }
-                            if (val < SetupForm.udRX2DisplayGridMax.Minimum)
-                            {
-                                val = SetupForm.udRX2DisplayGridMax.Minimum;
-                                update = false;
-                            }
-
-                            // SetupForm.txtFwdPower.Text = val.ToString();
-                            if (update)
-                            {
-                                SetupForm.udRX2DisplayGridMax.Value = val;
-                                // SetupForm.udRX2DisplayGridMin.Value = min_val;
-                            }
+                         //   if (update)
+                         //   {
+                                SetupForm.RX2DisplayGridMax = val;
+                         //   }
                         }
 
                         if (rx1_grid_adjust && gridminmaxadjust && tx1_grid_adjust)
                         {
-                            bool update = true;
+                        //    bool update = true;
                             //  double db_per_pixel = PixelToDb(1) - PixelToDb(0);
                             int delta_y = e.Y - grid_minmax_drag_start_point.Y;
                             double delta_db = (delta_y / 10) * 5;
-                            decimal val = grid_minmax_max_y;
-                            val += (decimal)delta_db;
-                            decimal min_val = grid_minmax_min_y;
-                            min_val += (decimal)delta_db;
+                            float val = grid_minmax_max_y;
+                            val += (float)delta_db;
+                            float min_val = grid_minmax_min_y;
+                            min_val += (float)delta_db;
 
-                            if (val > SetupForm.udTXGridMax.Maximum)
-                            {
-                                val = SetupForm.udTXGridMax.Maximum;
-                                update = false;
-                            }
-                            if (min_val > SetupForm.udTXGridMin.Maximum)
-                            {
-                                min_val = SetupForm.udTXGridMin.Maximum;
-                                update = false;
-                            }
-                            if (val < SetupForm.udTXGridMax.Minimum)
-                            {
-                                val = SetupForm.udTXGridMax.Minimum;
-                                update = false;
-                            }
-                            if (min_val < SetupForm.udTXGridMin.Minimum)
-                            {
-                                min_val = SetupForm.udTXGridMin.Minimum;
-                                update = false;
-                            }
-
-                            // SetupForm.txtFwdPower.Text = val.ToString();
-                            if (update)
-                            {
-                                SetupForm.udTXGridMax.Value = val;
-                                SetupForm.udTXGridMin.Value = min_val;
-                            }
+                        //    if (update)
+                        //    {
+                                SetupForm.TXGridMax = val;
+                                SetupForm.TXGridMin = min_val;
+                         //   }
                         }
 
                         if (rx2_grid_adjust && gridminmaxadjust && tx2_grid_adjust)
                         {
-                            bool update = true;
+                          //  bool update = true;
                             //  double db_per_pixel = PixelToDb(1) - PixelToDb(0);
                             int delta_y = e.Y - grid_minmax_drag_start_point.Y;
 
                             double delta_db = (delta_y / 10) * 5;
-                            decimal val = grid_minmax_max_y;
-                            val += (decimal)delta_db;
-                            decimal min_val = grid_minmax_min_y;
-                            min_val += (decimal)delta_db;
+                            float val = grid_minmax_max_y;
+                            val += (float)delta_db;
+                            float min_val = grid_minmax_min_y;
+                            min_val += (float)delta_db;
 
-                            if (val > SetupForm.udTXGridMax.Maximum)
-                            {
-                                val = SetupForm.udTXGridMax.Maximum;
-                                update = false;
-                            }
-                            if (min_val > SetupForm.udTXGridMin.Maximum)
-                            {
-                                min_val = SetupForm.udTXGridMin.Maximum;
-                                update = false;
-                            }
-                            if (val < SetupForm.udTXGridMax.Minimum)
-                            {
-                                val = SetupForm.udTXGridMax.Minimum;
-                                update = false;
-                            }
-                            if (min_val < SetupForm.udTXGridMin.Minimum)
-                            {
-                                min_val = SetupForm.udTXGridMin.Minimum;
-                                update = false;
-                            }
-
-                            if (update)
-                            {
-                                SetupForm.udTXGridMax.Value = val;
-                                SetupForm.udTXGridMin.Value = min_val;
-                            }
+                          //  if (update)
+                          //  {
+                                SetupForm.TXGridMax = val;
+                                SetupForm.TXGridMin = min_val;
+                         //   }
                         }
 
                         if (rx1_grid_adjust && gridmaxadjust && tx1_grid_adjust)
                         {
-                            bool update = true;
+                        //    bool update = true;
                             int delta_y = e.Y - grid_minmax_drag_start_point.Y;
                             double delta_db = (delta_y / 10) * 5;
-                            decimal val = grid_minmax_max_y;
-                            val += (decimal)delta_db;
+                            float val = grid_minmax_max_y;
+                            val += (float)delta_db;
 
-                            if (val > SetupForm.udTXGridMax.Maximum)
-                            {
-                                val = SetupForm.udTXGridMax.Maximum;
-                                update = false;
-                            }
-                            if (val < SetupForm.udTXGridMax.Minimum)
-                            {
-                                val = SetupForm.udTXGridMax.Minimum;
-                                update = false;
-                            }
-
-                            if (update)
-                            {
-                                SetupForm.udTXGridMax.Value = val;
-                            }
+                          //  if (update)
+                          //  {
+                                SetupForm.TXGridMax = val;
+                          //  }
                         }
 
                         if (rx2_grid_adjust && gridmaxadjust && tx2_grid_adjust)
                         {
-                            bool update = true;
+                       //     bool update = true;
                             int delta_y = e.Y - grid_minmax_drag_start_point.Y;
                             double delta_db = (delta_y / 10) * 5;
-                            decimal val = grid_minmax_max_y;
-                            val += (decimal)delta_db;
+                            float val = grid_minmax_max_y;
+                            val += (float)delta_db;
 
-                            if (val > SetupForm.udTXGridMax.Maximum)
-                            {
-                                val = SetupForm.udTXGridMax.Maximum;
-                                update = false;
-                            }
-                            if (val < SetupForm.udTXGridMax.Minimum)
-                            {
-                                val = SetupForm.udTXGridMax.Minimum;
-                                update = false;
-                            }
-
-                            // SetupForm.txtFwdPower.Text = val.ToString();
-                            if (update)
-                            {
-                                SetupForm.udTXGridMax.Value = val;
-                            }
+                         //   if (update)
+                          //  {
+                                SetupForm.TXGridMax = val;
+                          //  }
                         }
 
                         break;
                 }
 
-                switch (Display.CurrentDisplayMode)
+         /*       switch (Display.CurrentDisplayMode)
                 {
                     case DisplayMode.PANAFALL:
-                        /*   if ((e.Y > (picDisplay.Height / 2) && e.Y > 10) &&
-                              (e.X > display_grid_x && e.X < display_grid_w))
-                           {
-                               if (gridminmaxadjust || gridmaxadjust) Cursor = grabbing;
-                               else Cursor = grab;
-                               rx2_grid_adjust = true;
-                               rx1_grid_adjust = false;
-                           }
-                           else */
+                       
                         if ((e.X > display_grid_x && e.X < display_grid_w) &&
                             (e.Y < picDisplay.Height / 2 && e.Y > 10))
                         {
@@ -42115,37 +41974,15 @@ namespace Thetis
                             //  double db_per_pixel = PixelToDb(1) - PixelToDb(0);
                             int delta_y = e.Y - grid_minmax_drag_start_point.Y;
                             double delta_db = (delta_y / 10) * 5;
-                            decimal val = grid_minmax_max_y;
-                            val += (decimal)delta_db;
-                            decimal min_val = grid_minmax_min_y;
-                            min_val += (decimal)delta_db;
+                            float val = grid_minmax_max_y;
+                            val += (float)delta_db;
+                            float min_val = grid_minmax_min_y;
+                            min_val += (float)delta_db;
 
-                            if (val > SetupForm.udDisplayGridMax.Maximum)
-                            {
-                                val = SetupForm.udDisplayGridMax.Maximum;
-                                update = false;
-                            }
-                            if (min_val > SetupForm.udDisplayGridMin.Maximum)
-                            {
-                                min_val = SetupForm.udDisplayGridMin.Maximum;
-                                update = false;
-                            }
-                            if (val < SetupForm.udDisplayGridMax.Minimum)
-                            {
-                                val = SetupForm.udDisplayGridMax.Minimum;
-                                update = false;
-                            }
-                            if (min_val < SetupForm.udDisplayGridMin.Minimum)
-                            {
-                                min_val = SetupForm.udDisplayGridMin.Minimum;
-                                update = false;
-                            }
-
-                            // SetupForm.txtFwdPower.Text = val.ToString();
                             if (update)
                             {
-                                SetupForm.udDisplayGridMax.Value = val;
-                                SetupForm.udDisplayGridMin.Value = min_val;
+                                SetupForm.DisplayGridMax = val;
+                                SetupForm.DisplayGridMin = min_val;
                             }
                         }
 
@@ -42155,32 +41992,17 @@ namespace Thetis
                             //  double db_per_pixel = PixelToDb(1) - PixelToDb(0);
                             int delta_y = e.Y - grid_minmax_drag_start_point.Y;
                             double delta_db = (delta_y / 10) * 5;
-                            decimal val = grid_minmax_max_y;
-                            val += (decimal)delta_db;
-                            //  decimal min_val = grid_minmax_min_y;
-                            //  min_val += (decimal)delta_db;
+                            float val = grid_minmax_max_y;
+                            val += (float)delta_db;
 
-                            if (val > SetupForm.udDisplayGridMax.Maximum)
-                            {
-                                val = SetupForm.udDisplayGridMax.Maximum;
-                                update = false;
-                            }
-                            if (val < SetupForm.udDisplayGridMax.Minimum)
-                            {
-                                val = SetupForm.udDisplayGridMax.Minimum;
-                                update = false;
-                            }
-
-                            //  SetupForm.txtFwdPower.Text = val.ToString();
                             if (update)
                             {
-                                SetupForm.udDisplayGridMax.Value = val;
-                                //  SetupForm.udDisplayGridMin.Value = min_val;
+                                SetupForm.DisplayGridMax = val;
                             }
                         }
 
                         break;
-                }
+                } */
 
                 switch (Display.CurrentDisplayMode)
                 {
@@ -42881,8 +42703,8 @@ namespace Thetis
                                     grid_minmax_drag_start_point = new Point(e.X, e.Y);
                                     gridminmaxadjust = true;
                                     tx1_grid_adjust = false;
-                                    grid_minmax_max_y = (decimal)Display.SpectrumGridMax;
-                                    grid_minmax_min_y = (decimal)Display.SpectrumGridMin;
+                                    grid_minmax_max_y = Display.SpectrumGridMax;
+                                    grid_minmax_min_y = Display.SpectrumGridMin;
                                     Cursor = grabbing;
                                 }
 
@@ -42891,22 +42713,22 @@ namespace Thetis
                                     grid_minmax_drag_start_point = new Point(e.X, e.Y);
                                     gridminmaxadjust = true;
                                     tx1_grid_adjust = false;
-                                    grid_minmax_max_y = (decimal)Display.RX2SpectrumGridMax;
-                                    grid_minmax_min_y = (decimal)Display.RX2SpectrumGridMin;
+                                    grid_minmax_max_y = Display.RX2SpectrumGridMax;
+                                    grid_minmax_min_y = Display.RX2SpectrumGridMin;
                                     Cursor = grabbing;
                                 }
                             }
                             else
                             {
-                                if (((rx1_grid_adjust && !Display.TXOnVFOB) ||
-                                    (rx1_grid_adjust && Display.TXOnVFOB && !RX2Enabled)) &&
-                                    Display.CurrentDisplayMode != DisplayMode.PANAFALL)
+                                if ((rx1_grid_adjust && !Display.TXOnVFOB) ||
+                                    (rx1_grid_adjust && Display.TXOnVFOB && !RX2Enabled)) // &&
+                                   // Display.CurrentDisplayMode != DisplayMode.PANAFALL)
                                 {
                                     grid_minmax_drag_start_point = new Point(e.X, e.Y);
                                     gridminmaxadjust = true;
                                     tx1_grid_adjust = true;
-                                    grid_minmax_max_y = (decimal)Display.TXSpectrumGridMax;
-                                    grid_minmax_min_y = (decimal)Display.TXSpectrumGridMin;
+                                    grid_minmax_max_y = Display.TXSpectrumGridMax;
+                                    grid_minmax_min_y = Display.TXSpectrumGridMin;
                                     Cursor = grabbing;
                                 }
                                 else if (rx1_grid_adjust && Display.TXOnVFOB)
@@ -42914,28 +42736,18 @@ namespace Thetis
                                     grid_minmax_drag_start_point = new Point(e.X, e.Y);
                                     gridminmaxadjust = true;
                                     tx1_grid_adjust = false;
-                                    grid_minmax_max_y = (decimal)Display.SpectrumGridMax;
-                                    grid_minmax_min_y = (decimal)Display.SpectrumGridMin;
+                                    grid_minmax_max_y = Display.SpectrumGridMax;
+                                    grid_minmax_min_y = Display.SpectrumGridMin;
                                     Cursor = grabbing;
-                                }
-                                /*     else// if (rx1_grid_adjust && Display.TXOnVFOB)
-                                     {
-                                         grid_minmax_drag_start_point = new Point(e.X, e.Y);
-                                         gridminmaxadjust = true;
-                                         tx1_grid_adjust = false;
-                                         grid_minmax_max_y = (decimal)Display.SpectrumGridMax;
-                                         grid_minmax_min_y = (decimal)Display.SpectrumGridMin;
-                                         Cursor = grabbing;
-                                     } */
-
+                                }                             
 
                                 if (rx2_grid_adjust && Display.TXOnVFOB)
                                 {
                                     grid_minmax_drag_start_point = new Point(e.X, e.Y);
                                     gridminmaxadjust = true;
                                     tx2_grid_adjust = true;
-                                    grid_minmax_max_y = (decimal)Display.TXSpectrumGridMax;
-                                    grid_minmax_min_y = (decimal)Display.TXSpectrumGridMin;
+                                    grid_minmax_max_y = Display.TXSpectrumGridMax;
+                                    grid_minmax_min_y = Display.TXSpectrumGridMin;
                                     Cursor = grabbing;
                                 }
                                 else if (rx2_grid_adjust && !Display.TXOnVFOB)
@@ -42943,8 +42755,8 @@ namespace Thetis
                                     grid_minmax_drag_start_point = new Point(e.X, e.Y);
                                     gridminmaxadjust = true;
                                     tx2_grid_adjust = false;
-                                    grid_minmax_max_y = (decimal)Display.RX2SpectrumGridMax;
-                                    grid_minmax_min_y = (decimal)Display.RX2SpectrumGridMin;
+                                    grid_minmax_max_y = Display.RX2SpectrumGridMax;
+                                    grid_minmax_min_y = Display.RX2SpectrumGridMin;
                                     Cursor = grabbing;
                                 }
                             }
@@ -43467,7 +43279,7 @@ namespace Thetis
                             grid_minmax_drag_start_point = new Point(e.X, e.Y);
                             gridmaxadjust = true;
                             tx1_grid_adjust = false;
-                            grid_minmax_max_y = (decimal)Display.SpectrumGridMax;
+                            grid_minmax_max_y = Display.SpectrumGridMax;
                             Cursor = grabbing;
                         }
 
@@ -43476,7 +43288,7 @@ namespace Thetis
                             grid_minmax_drag_start_point = new Point(e.X, e.Y);
                             gridmaxadjust = true;
                             tx1_grid_adjust = false;
-                            grid_minmax_max_y = (decimal)Display.RX2SpectrumGridMax;
+                            grid_minmax_max_y = Display.RX2SpectrumGridMax;
                             Cursor = grabbing;
                         }
                     }
@@ -43488,7 +43300,7 @@ namespace Thetis
                             grid_minmax_drag_start_point = new Point(e.X, e.Y);
                             gridmaxadjust = true;
                             tx1_grid_adjust = true;
-                            grid_minmax_max_y = (decimal)Display.TXSpectrumGridMax;
+                            grid_minmax_max_y = Display.TXSpectrumGridMax;
                             Cursor = grabbing;
                         }
                         else if (rx1_grid_adjust && Display.TXOnVFOB)
@@ -43496,7 +43308,7 @@ namespace Thetis
                             grid_minmax_drag_start_point = new Point(e.X, e.Y);
                             gridmaxadjust = true;
                             tx1_grid_adjust = false;
-                            grid_minmax_max_y = (decimal)Display.SpectrumGridMax;
+                            grid_minmax_max_y = Display.SpectrumGridMax;
                             Cursor = grabbing;
                         }
 
@@ -43505,7 +43317,7 @@ namespace Thetis
                             grid_minmax_drag_start_point = new Point(e.X, e.Y);
                             gridmaxadjust = true;
                             tx2_grid_adjust = true;
-                            grid_minmax_max_y = (decimal)Display.TXSpectrumGridMax;
+                            grid_minmax_max_y = Display.TXSpectrumGridMax;
                             Cursor = grabbing;
                         }
                         else if (rx2_grid_adjust && !Display.TXOnVFOB)
@@ -43513,7 +43325,7 @@ namespace Thetis
                             grid_minmax_drag_start_point = new Point(e.X, e.Y);
                             gridmaxadjust = true;
                             tx2_grid_adjust = false;
-                            grid_minmax_max_y = (decimal)Display.RX2SpectrumGridMax;
+                            grid_minmax_max_y = Display.RX2SpectrumGridMax;
                             Cursor = grabbing;
                         }
                     }

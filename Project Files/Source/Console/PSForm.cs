@@ -236,7 +236,7 @@ namespace Thetis
         //-W2PA Adds capability for CAT control via console
         public void SingleCalrun()
         {
-            btnPSCalibrate.PerformClick();
+            btnPSCalibrate_Click(this, EventArgs.Empty); 
         }
 
         private void btnPSReset_Click(object sender, EventArgs e)
