@@ -49,6 +49,7 @@ typedef struct _ivac
 	int txmon_size;
 	int vac_size;					// VAC buffer size
 	void *mixer;					// pointer to async audio mixer
+	double* bitbucket;				// dump for un-needed resampler output
 
 	void *rmatchIN;
 	void *rmatchOUT;

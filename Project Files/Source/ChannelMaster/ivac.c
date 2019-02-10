@@ -2,7 +2,7 @@
 
 This file is part of a program that implements a Software-Defined Radio.
 
-Copyright (C) 2015-2017 Warren Pratt, NR0V
+Copyright (C) 2015-2019 Warren Pratt, NR0V
 Copyright (C) 2015-2016 Doug Wigley, W5WC
 
 This program is free software; you can redistribute it and/or
@@ -41,6 +41,7 @@ void create_resamps(IVAC a)
 	else
 		a->rmatchOUT = create_rmatchV (a->iq_size, a->vac_size, a->iq_rate, a->vac_rate, a->OUTringsize);		// RX I-Q data going to VAC
 	forceRMatchVar (a->rmatchOUT, a->OUTforce, a->OUTfvar);
+	a->bitbucket = (double *) malloc0 (getbuffsize (pcm->cmMAXInRate) * sizeof (complex));
 }
 
 PORT void create_ivac(
@@ -93,6 +94,7 @@ PORT void create_ivac(
 
 void destroy_resamps(IVAC a)
 {
+	_aligned_free (a->bitbucket);
 	destroy_rmatchV (a->rmatchOUT);
 	destroy_rmatchV (a->rmatchIN);
 }
@@ -108,16 +110,19 @@ PORT void xvacIN(int id, double* in_tx)
 {
 	// used for MIC data to TX
 	IVAC a = pvac[id];
-	if (a->run && !a->vac_bypass)
-	{
-		xrmatchOUT (a->rmatchIN, in_tx);
-		if (a->vac_combine_input)
-			combinebuff(a->mic_size, in_tx, in_tx);
-		//if (a->vox || a->mox)
-		scalebuff(a->mic_size, in_tx, a->vac_preamp, in_tx);
-		//else
-			//memset(in_tx, 0, a->mic_size * sizeof(complex));
-	}
+	if (a->run)
+		if (!a->vac_bypass)
+		{
+			xrmatchOUT (a->rmatchIN, in_tx);
+			if (a->vac_combine_input)
+				combinebuff(a->mic_size, in_tx, in_tx);
+			//if (a->vox || a->mox)
+			scalebuff(a->mic_size, in_tx, a->vac_preamp, in_tx);
+			//else
+				//memset(in_tx, 0, a->mic_size * sizeof(complex));
+		}
+		else
+			xrmatchOUT (a->rmatchIN, a->bitbucket);
 }
 
 PORT void xvacOUT(int id, int stream, double* data)

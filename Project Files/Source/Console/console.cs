@@ -36905,6 +36905,21 @@ namespace Thetis
                     if (!multimeter_thread.Join(500))
                         multimeter_thread.Abort();
                 }
+                if (rx2_meter_thread != null)
+                {
+                    if (!rx2_meter_thread.Join(500))
+                        rx2_meter_thread.Abort();
+                }
+                if (rx2_sql_update_thread != null)
+                {
+                    if (!rx2_sql_update_thread.Join(500))
+                        rx2_sql_update_thread.Abort();
+                }
+                if (rx2_sql_update_thread != null)
+                {
+                    if (!rx2_sql_update_thread.Join(500))
+                        rx2_sql_update_thread.Abort();
+                }
                 if (sql_update_thread != null)
                 {
                     if (!sql_update_thread.Join(500))
@@ -36929,6 +36944,16 @@ namespace Thetis
                 {
                     if (!poll_cw_thread.Join(500))
                         poll_cw_thread.Abort();
+                }
+                if (poll_pa_pwr_thread != null)
+                {
+                    if (!poll_pa_pwr_thread.Join(500))
+                        poll_pa_pwr_thread.Abort();
+                }
+                if (poll_tx_inhibit_thead != null)
+                {
+                    if (!poll_tx_inhibit_thead.Join(500))
+                        poll_tx_inhibit_thead.Abort();
                 }
                 if (display_volts_amps_thead != null)
                 {
@@ -37449,7 +37474,12 @@ namespace Thetis
 
             MemoryList.Save();
             SetupForm.SaveNotchesToDatabase();
+            if (chkPower.Checked == true)  // If we're quitting without first clicking off the "Power" button
+            {
             chkPower.Checked = false;
+                chkPower_CheckedChanged(sender, e);  // quits all threads and does other cleanup before exiting
+            }
+            
             Thread.Sleep(100);
             this.Hide();
             SaveState();
