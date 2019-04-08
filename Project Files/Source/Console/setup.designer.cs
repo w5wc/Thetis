@@ -1984,6 +1984,12 @@
             this.udDSPNB = new System.Windows.Forms.NumericUpDownTS();
             this.lblDSPNBThreshold = new System.Windows.Forms.LabelTS();
             this.tpDSPVOXDE = new System.Windows.Forms.TabPage();
+            this.grpAntiVOX = new System.Windows.Forms.GroupBoxTS();
+            this.udAntiVoxTau = new System.Windows.Forms.NumericUpDownTS();
+            this.lblAntiVoxTau = new System.Windows.Forms.LabelTS();
+            this.udAntiVoxGain = new System.Windows.Forms.NumericUpDownTS();
+            this.lblAntiVoxGain = new System.Windows.Forms.LabelTS();
+            this.chkAntiVoxEnable = new System.Windows.Forms.CheckBoxTS();
             this.grpDEXPLookAhead = new System.Windows.Forms.GroupBoxTS();
             this.udDEXPLookAhead = new System.Windows.Forms.NumericUpDownTS();
             this.lblDEXPAudioLookAhead = new System.Windows.Forms.LabelTS();
@@ -3216,6 +3222,7 @@
             this.panelTS4 = new System.Windows.Forms.PanelTS();
             this.radioButtonTS5 = new System.Windows.Forms.RadioButtonTS();
             this.radioButtonTS6 = new System.Windows.Forms.RadioButtonTS();
+            this.chkAntiVoxSource = new System.Windows.Forms.CheckBoxTS();
             tpAlexAntCtrl = new System.Windows.Forms.TabPage();
             numericUpDownTS3 = new System.Windows.Forms.NumericUpDownTS();
             numericUpDownTS4 = new System.Windows.Forms.NumericUpDownTS();
@@ -3686,6 +3693,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.udDSPNBTransition)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.udDSPNB)).BeginInit();
             this.tpDSPVOXDE.SuspendLayout();
+            this.grpAntiVOX.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.udAntiVoxTau)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udAntiVoxGain)).BeginInit();
             this.grpDEXPLookAhead.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.udDEXPLookAhead)).BeginInit();
             this.grpDEXPVOX.SuspendLayout();
@@ -32091,6 +32101,7 @@
             // tpDSPVOXDE
             // 
             this.tpDSPVOXDE.BackColor = System.Drawing.SystemColors.Control;
+            this.tpDSPVOXDE.Controls.Add(this.grpAntiVOX);
             this.tpDSPVOXDE.Controls.Add(this.grpDEXPLookAhead);
             this.tpDSPVOXDE.Controls.Add(this.grpDEXPVOX);
             this.tpDSPVOXDE.Controls.Add(this.grpSCF);
@@ -32100,6 +32111,110 @@
             this.tpDSPVOXDE.Size = new System.Drawing.Size(592, 338);
             this.tpDSPVOXDE.TabIndex = 13;
             this.tpDSPVOXDE.Text = "VOX/DE";
+            // 
+            // grpAntiVOX
+            // 
+            this.grpAntiVOX.Controls.Add(this.chkAntiVoxSource);
+            this.grpAntiVOX.Controls.Add(this.udAntiVoxTau);
+            this.grpAntiVOX.Controls.Add(this.lblAntiVoxTau);
+            this.grpAntiVOX.Controls.Add(this.udAntiVoxGain);
+            this.grpAntiVOX.Controls.Add(this.lblAntiVoxGain);
+            this.grpAntiVOX.Controls.Add(this.chkAntiVoxEnable);
+            this.grpAntiVOX.Location = new System.Drawing.Point(6, 175);
+            this.grpAntiVOX.Name = "grpAntiVOX";
+            this.grpAntiVOX.Size = new System.Drawing.Size(152, 129);
+            this.grpAntiVOX.TabIndex = 3;
+            this.grpAntiVOX.TabStop = false;
+            this.grpAntiVOX.Text = "Anti-VOX";
+            // 
+            // udAntiVoxTau
+            // 
+            this.udAntiVoxTau.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.udAntiVoxTau.Location = new System.Drawing.Point(78, 96);
+            this.udAntiVoxTau.Maximum = new decimal(new int[] {
+            500,
+            0,
+            0,
+            0});
+            this.udAntiVoxTau.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.udAntiVoxTau.Name = "udAntiVoxTau";
+            this.udAntiVoxTau.Size = new System.Drawing.Size(56, 20);
+            this.udAntiVoxTau.TabIndex = 19;
+            this.udAntiVoxTau.Value = new decimal(new int[] {
+            20,
+            0,
+            0,
+            0});
+            this.udAntiVoxTau.ValueChanged += new System.EventHandler(this.udAntiVoxTau_ValueChanged);
+            // 
+            // lblAntiVoxTau
+            // 
+            this.lblAntiVoxTau.AutoSize = true;
+            this.lblAntiVoxTau.Image = null;
+            this.lblAntiVoxTau.Location = new System.Drawing.Point(5, 98);
+            this.lblAntiVoxTau.Name = "lblAntiVoxTau";
+            this.lblAntiVoxTau.Size = new System.Drawing.Size(48, 13);
+            this.lblAntiVoxTau.TabIndex = 18;
+            this.lblAntiVoxTau.Text = "Tau (ms)";
+            // 
+            // udAntiVoxGain
+            // 
+            this.udAntiVoxGain.DecimalPlaces = 1;
+            this.udAntiVoxGain.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.udAntiVoxGain.Location = new System.Drawing.Point(78, 71);
+            this.udAntiVoxGain.Maximum = new decimal(new int[] {
+            60,
+            0,
+            0,
+            0});
+            this.udAntiVoxGain.Minimum = new decimal(new int[] {
+            60,
+            0,
+            0,
+            -2147483648});
+            this.udAntiVoxGain.Name = "udAntiVoxGain";
+            this.udAntiVoxGain.Size = new System.Drawing.Size(56, 20);
+            this.udAntiVoxGain.TabIndex = 17;
+            this.udAntiVoxGain.Value = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.udAntiVoxGain.ValueChanged += new System.EventHandler(this.udAntiVoxGain_ValueChanged);
+            // 
+            // lblAntiVoxGain
+            // 
+            this.lblAntiVoxGain.AutoSize = true;
+            this.lblAntiVoxGain.Image = null;
+            this.lblAntiVoxGain.Location = new System.Drawing.Point(6, 73);
+            this.lblAntiVoxGain.Name = "lblAntiVoxGain";
+            this.lblAntiVoxGain.Size = new System.Drawing.Size(51, 13);
+            this.lblAntiVoxGain.TabIndex = 16;
+            this.lblAntiVoxGain.Text = "Gain (dB)";
+            // 
+            // chkAntiVoxEnable
+            // 
+            this.chkAntiVoxEnable.AutoSize = true;
+            this.chkAntiVoxEnable.Image = null;
+            this.chkAntiVoxEnable.Location = new System.Drawing.Point(6, 19);
+            this.chkAntiVoxEnable.Name = "chkAntiVoxEnable";
+            this.chkAntiVoxEnable.Size = new System.Drawing.Size(105, 17);
+            this.chkAntiVoxEnable.TabIndex = 0;
+            this.chkAntiVoxEnable.Text = "Anti-VOX Enable";
+            this.chkAntiVoxEnable.UseVisualStyleBackColor = true;
+            this.chkAntiVoxEnable.CheckedChanged += new System.EventHandler(this.chkAntiVoxEnable_CheckedChanged);
             // 
             // grpDEXPLookAhead
             // 
@@ -53470,6 +53585,18 @@
             this.radioButtonTS6.Text = "Auto";
             this.radioButtonTS6.UseVisualStyleBackColor = true;
             // 
+            // chkAntiVoxSource
+            // 
+            this.chkAntiVoxSource.AutoSize = true;
+            this.chkAntiVoxSource.Image = null;
+            this.chkAntiVoxSource.Location = new System.Drawing.Point(6, 41);
+            this.chkAntiVoxSource.Name = "chkAntiVoxSource";
+            this.chkAntiVoxSource.Size = new System.Drawing.Size(99, 17);
+            this.chkAntiVoxSource.TabIndex = 20;
+            this.chkAntiVoxSource.Text = "Use VAC Audio";
+            this.chkAntiVoxSource.UseVisualStyleBackColor = true;
+            this.chkAntiVoxSource.CheckedChanged += new System.EventHandler(this.chkAntiVoxSource_CheckedChanged);
+            // 
             // Setup
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -54036,6 +54163,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.udDSPNBTransition)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.udDSPNB)).EndInit();
             this.tpDSPVOXDE.ResumeLayout(false);
+            this.grpAntiVOX.ResumeLayout(false);
+            this.grpAntiVOX.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.udAntiVoxTau)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udAntiVoxGain)).EndInit();
             this.grpDEXPLookAhead.ResumeLayout(false);
             this.grpDEXPLookAhead.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.udDEXPLookAhead)).EndInit();
@@ -57750,7 +57881,7 @@
         private LabelTS lblLED02;
         private LabelTS lblLED01;
         private Timer timer_LED_Mirror;
-		private CheckBoxTS chkVAC2onSplit;
+	private CheckBoxTS chkVAC2onSplit;
         private TabPage tpDSPVOXDE;
         private GroupBoxTS grpSCF;
         private LabelTS lblSCFHighCut;
@@ -57789,5 +57920,12 @@
         private LabelTS labelTS512;
         private LabelTS labelTS515;
         private NumericUpDownTS udUpdatesPerStepMax;
+        private GroupBoxTS grpAntiVOX;
+        private NumericUpDownTS udAntiVoxTau;
+        private LabelTS lblAntiVoxTau;
+        private NumericUpDownTS udAntiVoxGain;
+        private LabelTS lblAntiVoxGain;
+        private CheckBoxTS chkAntiVoxEnable;
+        private CheckBoxTS chkAntiVoxSource;
     }
 }

@@ -769,8 +769,8 @@ ReadThreadMainLoop() {
 						prn->tx[0].exciter_power = prn->ReadBufp[2] << 8 | prn->ReadBufp[3];
 						prn->tx[0].fwd_power = prn->ReadBufp[10] << 8 | prn->ReadBufp[11];
 						prn->tx[0].rev_power = prn->ReadBufp[18] << 8 | prn->ReadBufp[19];
-						PeakFwdPower (prn->tx[0].fwd_power);
-						PeakRevPower (prn->tx[0].rev_power);
+						PeakFwdPower ((float)(prn->tx[0].fwd_power));
+						PeakRevPower ((float)(prn->tx[0].rev_power));
 						//Bytes 45,46  Supply Volts [15:0]          
 						prn->supply_volts = prn->ReadBufp[45] << 8 | prn->ReadBufp[46];
 

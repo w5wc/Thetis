@@ -2,7 +2,7 @@
 
 This file is part of a program that implements a Software-Defined Radio.
 
-Copyright (C) 2018 Warren Pratt, NR0V
+Copyright (C) 2018, 2019 Warren Pratt, NR0V
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -169,10 +169,23 @@ void decalc_filter (DEXP a)
 	decalc_delring (a->scdring);
 }
 
+calc_antivox(DEXP a)
+{
+	a->antivox_mult = exp(-1.0 / (a->antivox_rate * a->antivox_tau));
+	a->antivox_onemmult = 1.0 - a->antivox_mult;
+	a->antivox_data = (double *) malloc0 (a->antivox_size * sizeof (complex));
+}
+
+decalc_antivox(DEXP a)
+{
+	_aligned_free (a->antivox_data);
+}
+
 PORT
 void create_dexp (int id, int run_dexp, int size, double* in, double* out, int rate, double dettau, double tattack, double tdecay, 
 	double thold, double exp_ratio, double hyst_ratio, double attack_thresh, int nc, int wtype, double lowcut, double highcut, 
-	int run_filt, int run_vox, int run_audelay, double audelay, void (__stdcall *pushvox)(int id, int active))
+	int run_filt, int run_vox, int run_audelay, double audelay, void (__stdcall *pushvox)(int id, int active),
+	int antivox_run, int antivox_size, int antivox_rate, double antivox_gain, double antivox_tau)
 {
 	DEXP a = (DEXP) malloc0 (sizeof (dexp));
 	a->id = id;
@@ -197,9 +210,15 @@ void create_dexp (int id, int run_dexp, int size, double* in, double* out, int r
 	a->run_audelay = run_audelay;
 	a->audelay = audelay;
 	a->pushvox = pushvox;
+	a->antivox_run = antivox_run;
+	a->antivox_size = antivox_size;
+	a->antivox_rate = (double)antivox_rate;
+	a->antivox_gain = antivox_gain;
+	a->antivox_tau = antivox_tau;
 	calc_buffs (a);
 	calc_dexp (a);
 	calc_filter (a);
+	calc_antivox (a);
 	InitializeCriticalSectionAndSpinCount(&a->cs_update, 2500);
 	pdexp[id] = a;
 	return;
@@ -210,6 +229,7 @@ void destroy_dexp (int id)
 {
 	DEXP a = pdexp[id];
 	DeleteCriticalSection (&a->cs_update);
+	decalc_antivox (a);
 	decalc_filter (a);
 	decalc_dexp (a);
 	decalc_buffs (a);
@@ -245,7 +265,7 @@ void xdexp (int id)
 {
 	DEXP a = pdexp[id];
 	int i;
-	double sig, gain;
+	double sig, gain, asig;
 	double max = 0.0;
 	EnterCriticalSection (&a->cs_update);
 
@@ -262,6 +282,20 @@ void xdexp (int id)
 	}
 	// ******* END SIDE-CHANNEL FILTER *******
 
+	// ******* CALCULATE ANTIVOX LEVEL *******
+	if (a->state == DEXP_LOW && a->antivox_new != 0)
+	{
+		// if VOX is currently NOT triggered, and, if we have new antivox data to process
+		for (i = 0; i < a->antivox_size; i++)
+		{
+			sig = sqrt (a->antivox_data[2 * i + 0] * a->antivox_data[2 * i + 0] + a->antivox_data[2 * i + 1] * a->antivox_data[2 * i + 1]);
+			a->antivox_level = a->antivox_mult * a->antivox_level + a->antivox_onemmult * sig;
+		}
+		// set the new_data flag to zero
+		a->antivox_new = 0;
+	}
+	// ******* END CALCULATE ANTIVOX LEVEL *******
+
 	// ******* BEGIN DEXP *******
 	// uses 'a->trigsig' as trigger signal; uses 'a->delsig' as audio input
 	// 'a->audbuffer' is audio output
@@ -274,7 +308,11 @@ void xdexp (int id)
 		switch (a->state)
 		{
 		case DEXP_LOW:
-			if (a->avsig > a->attack_thresh)
+			if (a->antivox_run)
+				asig = a->avsig - a->antivox_gain * a->antivox_level;
+			else
+				asig = a->avsig;
+			if (asig > a->attack_thresh)
 			{
 				a->state = DEXP_ATTACK;
 				a->count = a->nattack;
@@ -610,5 +648,67 @@ void GetDEXPPeakSignal (int id, double* peak)
 	DEXP a = pdexp[id];
 	EnterCriticalSection (&a->cs_update);
 	*peak = a->peak;
+	LeaveCriticalSection (&a->cs_update);
+}
+
+PORT
+void SetAntiVOXRun (int id, int run)
+{
+	DEXP a = pdexp[id];
+	EnterCriticalSection (&a->cs_update);
+	a->antivox_run = run;
+	LeaveCriticalSection (&a->cs_update);
+}
+
+PORT
+void SetAntiVOXSize (int id, int size)
+{
+	DEXP a = pdexp[id];
+	EnterCriticalSection (&a->cs_update);
+	decalc_antivox(a);
+	a->antivox_size = size;
+	calc_antivox(a);
+	LeaveCriticalSection (&a->cs_update);
+}
+
+PORT
+void SetAntiVOXRate (int id, double rate)
+{
+	DEXP a = pdexp[id];
+	EnterCriticalSection (&a->cs_update);
+	decalc_antivox(a);
+	a->antivox_rate = rate;
+	calc_antivox(a);
+	LeaveCriticalSection (&a->cs_update);
+}
+
+PORT
+void SetAntiVOXGain (int id, double gain)
+{
+	DEXP a = pdexp[id];
+	EnterCriticalSection (&a->cs_update);
+	a->antivox_gain = gain;
+	LeaveCriticalSection (&a->cs_update);
+}
+
+PORT
+void SetAntiVOXDetectorTau (int id, double tau)
+{
+	DEXP a = pdexp[id];
+	EnterCriticalSection (&a->cs_update);
+	decalc_antivox (a);
+	a->antivox_tau = tau;
+	calc_antivox (a);
+	LeaveCriticalSection (&a->cs_update);
+}
+
+PORT 
+void SendAntiVOXData (int id, int nsamples, double* data)
+{
+	// note:  'nsamples' is not used as it has been previously specified
+	DEXP a = pdexp[id];
+	EnterCriticalSection (&a->cs_update);
+	memcpy (a->antivox_data, data, a->antivox_size * sizeof (complex));
+	a->antivox_new = 1;
 	LeaveCriticalSection (&a->cs_update);
 }

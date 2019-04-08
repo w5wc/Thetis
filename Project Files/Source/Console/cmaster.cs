@@ -138,12 +138,27 @@ namespace Thetis
         [DllImport("wdsp.dll", EntryPoint = "SetDEXPAudioDelay", CallingConvention = CallingConvention.Cdecl)]
         public static extern void SetDEXPAudioDelay(int id, double delay);
 
+        [DllImport("wdsp.dll", EntryPoint = "SetAntiVOXRun", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void SetAntiVOXRun(int id, bool run);
+
+        [DllImport("wdsp.dll", EntryPoint = "SetAntiVOXGain", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void SetAntiVOXGain(int id, double gain);
+
+        [DllImport("wdsp.dll", EntryPoint = "SetAntiVOXDetectorTau", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void SetAntiVOXDetectorTau(int id, double tau);
+
+        [DllImport("ChannelMaster.dll", EntryPoint = "SetAntiVOXSourceStates", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void SetAntiVOXSourceStates(int txid, int streams, int states);
+
+        [DllImport("ChannelMaster.dll", EntryPoint = "SetAntiVOXSourceWhat", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void SetAntiVOXSourceWhat(int txid, int stream, int state);
+
         // siphon
 
-        [DllImport("WDSP.dll", EntryPoint = "SetSiphonInsize", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("wdsp.dll", EntryPoint = "SetSiphonInsize", CallingConvention = CallingConvention.Cdecl)]
         public static extern void SetSiphonInsize (int id, int size);
 
-        [DllImport("WDSP.dll", EntryPoint = "GetaSipF1EXT", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("wdsp.dll", EntryPoint = "GetaSipF1EXT", CallingConvention = CallingConvention.Cdecl)]
         public static extern void GetaSipF1EXT (int id, float* buff, int size);     // called by console.cs
 
         // audio mixer
@@ -581,6 +596,39 @@ namespace Thetis
 
                         break;
                 }
+            }
+        }
+        
+        public static void CMSetAntiVoxSourceWhat()
+        {
+            bool VACEn = Audio.console.VACEnabled;
+            bool VAC2En = Audio.console.VAC2Enabled;
+            bool useVAC = Audio.AntiVOXSourceVAC;
+            int RX1 = WDSP.id(0, 0);
+            int RX1S = WDSP.id(0, 1);
+            int RX2 = WDSP.id(2, 0);
+            if (useVAC)   // use VAC audio
+            {
+                if (VACEn)
+                {
+                    cmaster.SetAntiVOXSourceWhat(0, RX1,  1);
+                    cmaster.SetAntiVOXSourceWhat(0, RX1S, 1);
+                }
+                else
+                {
+                    cmaster.SetAntiVOXSourceWhat(0, RX1,  0);
+                    cmaster.SetAntiVOXSourceWhat(0, RX1S, 0);
+                }
+                if (VAC2En)
+                    cmaster.SetAntiVOXSourceWhat(0, RX2,  1);
+                else
+                    cmaster.SetAntiVOXSourceWhat(0, RX2,  0);
+            }
+            else         // use audio going to hardware minus MON
+            {
+                cmaster.SetAntiVOXSourceWhat(0, RX1,  1);
+                cmaster.SetAntiVOXSourceWhat(0, RX1S, 1);
+                cmaster.SetAntiVOXSourceWhat(0, RX2,  1);
             }
         }
         

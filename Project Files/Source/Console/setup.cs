@@ -1438,6 +1438,10 @@ namespace Thetis
             udSCFHighCut_ValueChanged(this, e);
             chkDEXPLookAheadEnable_CheckedChanged(this, e);
             udDEXPLookAhead_ValueChanged(this, e);
+            chkAntiVoxEnable_CheckedChanged(this, e);
+            udAntiVoxGain_ValueChanged(this, e);
+            udAntiVoxTau_ValueChanged(this, e);
+            chkAntiVoxSource_CheckedChanged(this, e);
         }
 
         public string[] GetTXProfileStrings()
@@ -2767,6 +2771,18 @@ namespace Thetis
                 //if (chkTXVOXEnabled != null) chkTXVOXEnabled.Checked = value;
             }
         }
+        public int VOXHangTime
+        {
+            get
+            {
+                if (udDEXPHold != null) return (int)udDEXPHold.Value;
+                else return 125;
+            }
+            set
+            {
+                if (udDEXPHold != null) udDEXPHold.Value = value;
+            }
+        }
 
         public int AGCMaxGain
         {
@@ -2822,6 +2838,10 @@ namespace Thetis
 
         public int AGCHangThreshold
         {
+            get
+            {
+                return tbDSPAGCHangThreshold.Value;
+            }
             set
             {
                 if (tbDSPAGCHangThreshold != null)
@@ -7514,7 +7534,7 @@ namespace Thetis
                 unsafe { cmaster.SetAAudioMixStates((void*)0, 0, 3, 0); }
 
                 // disable VAC
-                if (console.VACEnabled) Audio.EnableVAC1(false);
+                if (console.PowerOn && console.VACEnabled && !initializing) Audio.EnableVAC1(false);
 
                 // turn OFF the DDC(s) 
                 NetworkIO.EnableRx(0, 0);
@@ -7550,7 +7570,7 @@ namespace Thetis
                 }
 
                 // enable VAC
-                if (console.VACEnabled) Audio.EnableVAC1(true);
+                if (console.PowerOn && console.VACEnabled && !initializing) Audio.EnableVAC1(true);
 
                 // turn ON the DSP channels
                 int w_enable = 0;
@@ -7584,7 +7604,7 @@ namespace Thetis
                 // remove the RX2 audio stream from the mix set
                 unsafe { cmaster.SetAAudioMixState((void*)0, 0, 2, false); }
                 // disable VAC
-                if (console.VAC2Enabled) Audio.EnableVAC2(false);
+                if (console.PowerOn && console.VAC2Enabled && !initializing) Audio.EnableVAC2(false);
                 // turn OFF the DDC for RX2; had to add rx2_enabled as a parameter to UpdateReceivers() to do this --- THIS IS S HACK.  BETTER WAY?
                 console.UpdateDDCs(false);
                 // wait for all inflight packets to arrive
@@ -7612,7 +7632,7 @@ namespace Thetis
                     unsafe { cmaster.SetAAudioMixState((void*)0, 0, 2, true); }
                 }
                 // enable VAC2
-                if (console.VAC2Enabled) Audio.EnableVAC2(true);
+                if (console.PowerOn && console.VAC2Enabled && !initializing) Audio.EnableVAC2(true);
                 // turn ON the DSP channel if it was ON before
                 int w_enable = 0;
                 if (was_enabled) w_enable = 1;
@@ -13113,7 +13133,7 @@ namespace Thetis
                 fileName = fileName.Replace(c.ToString(), "_");  // Remove profile name chars that are invalid in filenames.
             }
 
-            fileName = console.AppDataPath + fileName;
+            fileName = console.AppDataPath + "\\" + fileName;
 
             int i = 1;
             string tempFN = fileName;
@@ -19095,6 +19115,26 @@ namespace Thetis
             decimal selectedMin = udUpdatesPerStepMin.Value;
             if (selectedMin >= currMax) udUpdatesPerStepMax.Value = selectedMin + 1;  // keep min and max sensible and separated by at least 1
             console.MinMIDIMessagesPerTuneStep = Convert.ToInt32(selectedMin);
+        }
+
+        private void chkAntiVoxEnable_CheckedChanged(object sender, EventArgs e)
+        {
+            cmaster.SetAntiVOXRun(0, chkAntiVoxEnable.Checked);
+        }
+
+        private void udAntiVoxGain_ValueChanged(object sender, EventArgs e)
+        {
+            cmaster.SetAntiVOXGain(0, Math.Pow(10.0, (double)udAntiVoxGain.Value / 20.0));
+        }
+
+        private void udAntiVoxTau_ValueChanged(object sender, EventArgs e)
+        {
+            cmaster.SetAntiVOXDetectorTau(0, (double)udAntiVoxTau.Value / 1000.0);
+        }
+
+        private void chkAntiVoxSource_CheckedChanged(object sender, EventArgs e)
+        {
+            Audio.AntiVOXSourceVAC = chkAntiVoxSource.Checked;
         }
     }
 

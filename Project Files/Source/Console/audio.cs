@@ -553,6 +553,17 @@ namespace Thetis
 
         }
 
+        private static bool antivox_source_VAC = false;
+        public static bool AntiVOXSourceVAC
+        {
+            get { return antivox_source_VAC; }
+            set
+            {
+                antivox_source_VAC = value;
+                cmaster.CMSetAntiVoxSourceWhat();
+            }
+        }
+
         private static bool vac_enabled = false;
         public static bool VACEnabled
         {
@@ -560,6 +571,7 @@ namespace Thetis
             {
                 vac_enabled = value;
                 cmaster.CMSetTXAPanelGain1(WDSP.id(1, 0));
+                cmaster.CMSetAntiVoxSourceWhat();
                 if (console.PowerOn)
                 EnableVAC1(value);
             }
@@ -572,6 +584,7 @@ namespace Thetis
             set
             {
                 vac2_enabled = value;
+                cmaster.CMSetAntiVoxSourceWhat();
                 if (console.PowerOn)
                 EnableVAC2(value);
             }

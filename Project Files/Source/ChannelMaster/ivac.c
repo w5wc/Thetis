@@ -106,20 +106,17 @@ PORT void destroy_ivac(int id)
 	free (a);
 }
 
-PORT void xvacIN(int id, double* in_tx)
+PORT void xvacIN(int id, double* in_tx, int bypass)
 {
 	// used for MIC data to TX
 	IVAC a = pvac[id];
 	if (a->run)
-		if (!a->vac_bypass)
+		if (!a->vac_bypass && !bypass)
 		{
 			xrmatchOUT (a->rmatchIN, in_tx);
 			if (a->vac_combine_input)
 				combinebuff(a->mic_size, in_tx, in_tx);
-			//if (a->vox || a->mox)
 			scalebuff(a->mic_size, in_tx, a->vac_preamp, in_tx);
-			//else
-				//memset(in_tx, 0, a->mic_size * sizeof(complex));
 		}
 		else
 			xrmatchOUT (a->rmatchIN, a->bitbucket);

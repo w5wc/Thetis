@@ -879,6 +879,7 @@
             this.lblRF2 = new System.Windows.Forms.LabelTS();
             this.panelPower = new System.Windows.Forms.PanelTS();
             this.panelModeSpecificCW = new System.Windows.Forms.PanelTS();
+            this.chkQSK = new System.Windows.Forms.CheckBoxTS();
             this.grpCWAPF = new System.Windows.Forms.GroupBoxTS();
             this.lblCWAPFGain = new System.Windows.Forms.LabelTS();
             this.lblCWAPFBandwidth = new System.Windows.Forms.LabelTS();
@@ -4822,6 +4823,7 @@
             // 
             resources.ApplyResources(this.panelModeSpecificCW, "panelModeSpecificCW");
             this.panelModeSpecificCW.BackColor = System.Drawing.Color.Transparent;
+            this.panelModeSpecificCW.Controls.Add(this.chkQSK);
             this.panelModeSpecificCW.Controls.Add(this.grpCWAPF);
             this.panelModeSpecificCW.Controls.Add(this.chkShowCWZero);
             this.panelModeSpecificCW.Controls.Add(this.ptbCWSpeed);
@@ -4834,6 +4836,15 @@
             this.panelModeSpecificCW.Controls.Add(this.chkCWSidetone);
             this.panelModeSpecificCW.Controls.Add(this.chkCWFWKeyer);
             this.panelModeSpecificCW.Name = "panelModeSpecificCW";
+            // 
+            // chkQSK
+            // 
+            resources.ApplyResources(this.chkQSK, "chkQSK");
+            this.chkQSK.FlatAppearance.BorderSize = 0;
+            this.chkQSK.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.chkQSK.Name = "chkQSK";
+            this.toolTip1.SetToolTip(this.chkQSK, resources.GetString("chkQSK.ToolTip"));
+            this.chkQSK.CheckedChanged += new System.EventHandler(this.chkQSK_CheckedChanged);
             // 
             // grpCWAPF
             // 
@@ -6388,13 +6399,13 @@
             this.Controls.Add(this.ptbSquelch);
             this.Controls.Add(this.panelRX2Power);
             this.Controls.Add(this.lblRF2);
-            this.Controls.Add(this.panelModeSpecificPhone);
-            this.Controls.Add(this.panelModeSpecificFM);
-            this.Controls.Add(this.panelModeSpecificDigital);
             this.Controls.Add(this.panelBandHF);
             this.Controls.Add(this.panelBandVHF);
             this.Controls.Add(this.panelBandGEN);
             this.Controls.Add(this.panelModeSpecificCW);
+            this.Controls.Add(this.panelModeSpecificPhone);
+            this.Controls.Add(this.panelModeSpecificFM);
+            this.Controls.Add(this.panelModeSpecificDigital);
             this.KeyPreview = true;
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "Console";
@@ -6540,6 +6551,6 @@
         private CheckBoxTS chkRxAnt;
         private LabelTS labelTS1;
         private CheckBoxTS chkVFOBLock;
-
+        private CheckBoxTS chkQSK;
     }
 }

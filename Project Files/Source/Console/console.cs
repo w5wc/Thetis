@@ -30,11 +30,12 @@
 // Modifications to support the Behringer Midi controllers
 // by Chris Codella, W2PA, May 2017.  Indicated by //-W2PA comment lines. 
 // Modifications for using the new database import function.  W2PA, 29 May 2017
+// Support QSK, possible with Protocol-2 firmware v1.7 (Orion-MkI and Orion-MkII), and later.  W2PA, 5 April 2019 
 
 using Midi2Cat.Data; //-W2PA Necessary for Behringer MIDI changes
 
 
-namespace Thetis
+namespace Thetis 
 {
     using System;
     using System.Runtime.InteropServices;
@@ -1112,6 +1113,11 @@ namespace Thetis
         private Point rad_mode_digu_basis = new Point(100, 100);
         private Point rad_mode_drm_basis = new Point(100, 100);
 
+        //
+        // G8NJJ: Titlebar strings for Andromeda
+        //
+        private string TitleBarMultifunction;                   // shows action assigned to multi encoder
+        private string TitleBarEncoder;                         // shows most recent encoder value change
         #endregion
 
         #region Constructor and Destructor
@@ -1436,6 +1442,7 @@ namespace Thetis
             LoadLEDFont();
             InitConsole();										// Initialize all forms and main variables
 
+            CWFWKeyer = true;                 
             Splash.SetStatus("Finished");						// Set progress point
             // Activates double buffering
 
@@ -1690,6 +1697,30 @@ namespace Thetis
             {
                 spec_display = value;
                 cmaster.SetRunPanadapter(0, value);
+            }
+        }
+//
+// added G8NJJ for Andromeda controller
+//
+        public string TitleBarMultifunctionString
+        {
+            set
+            {
+                TitleBarMultifunction = value;
+                if (iscollapsed)
+                    this.Text = TitleBar.GetString() + TitleBarMultifunction + "    " + TitleBarEncoder;
+                else
+                    this.Text = TitleBar.GetString() + TitleBarMultifunction;
+            }
+        }
+
+        public string TitleBarEncoderString
+        {
+            set
+            {
+                TitleBarEncoder = value;
+                if (iscollapsed)
+                    this.Text = TitleBar.GetString() + TitleBarMultifunction + "    " + TitleBarEncoder;
             }
         }
 
@@ -2156,6 +2187,7 @@ namespace Thetis
             radRX2Show_CheckedChanged(this, EventArgs.Empty);
             chkRX2SR_CheckedChanged(this, EventArgs.Empty);
             booting = false;
+            chkDisplayAVG_CheckedChanged(this, EventArgs.Empty);
 
             CalcDisplayFreq();
             CalcRX2DisplayFreq();
@@ -2266,6 +2298,30 @@ namespace Thetis
             //cmaster.Getrxa(6).pDisplay.StartDisplay(6);
 
             SetupForm.RestoreNotchesFromDatabase();
+
+            // Prepare for QSK in InitConsole
+            qsk_sidetone_volume = SetupForm.TXAF;
+            chkQSK.Checked = false;
+            non_qsk_agc = RX1AGCMode;
+            non_qsk_agc_hang_thresh = SetupForm.AGCHangThreshold;
+            non_qsk_ATTOnTX = attontx;
+            non_qsk_ATTOnTXVal = SetupForm.ATTOnTX;
+            non_qsk_breakin = BreakInEnabled;
+            non_qsk_breakin_delay = break_in_delay;
+            non_qsk_disablePTT = disable_ptt;
+
+            if (chkCWSidetone.Checked)
+            {
+                NetworkIO.SetCWSidetoneVolume(qsk_sidetone_volume);
+            }
+            else NetworkIO.SetCWSidetoneVolume(0);
+
+            RX1_band_change = RX1Band;
+            // Initialize for QSK those things normally triggered by inital MOX use, 
+            // which isn't used in Thetis in QSK mode, just in case we start-up in CW/QSK
+            chkMOX.Checked = true; 
+            chkMOX.Checked = false;
+
         }
 
         public void Init60mChannels()
@@ -2395,6 +2451,12 @@ namespace Thetis
             // pages on this form of the following types: CheckBox, ComboBox,
             // NumericUpDown, RadioButton, TextBox, and TrackBar (slider)
             string s;
+
+            if (chkQSK.Checked)
+            {
+                QSKEnabled = false;  // Just to save the non-qsk settings, but leaving the button alone
+            }
+
             chkPower.Checked = false;		// turn off the power first
 
             //-------------------------------------------------------------------
@@ -2857,7 +2919,6 @@ namespace Thetis
                    s += Convert.ToUInt16(rx1_loop_by_band[i]).ToString() + "|";
                s = s.Substring(0, s.Length - 1);
                a.Add(s); */
-
             rx1_preamp_by_band[(int)rx1_band] = rx1_preamp_mode;
             s = "rx1_preamp_by_band/";
             for (int i = 0; i < (int)Band.LAST; i++)
@@ -5840,6 +5901,11 @@ namespace Thetis
 
         public void SetBand(string mode, string filter, double freq, bool CTUN, int ZoomFactor, double CenterFreq)
         {
+            // These are needed for managing QSK when band changes also trigger mode changes.
+            RX1_band_change = BandByFreq(freq, tx_xvtr_index, true, current_region, true);
+            Band oldBand = RX1Band;
+            qsk_band_changing = true; 
+
             if (filter.Contains("@"))
             {
                 filter = filter.Substring(0, (filter.Length) - 1); // ke9ns add for bandstack lockout
@@ -5869,6 +5935,53 @@ namespace Thetis
             ClickTuneDisplay = CTUN;
             chkFWCATU.Checked = ClickTuneDisplay;
             VFOAFreq = freq;                                       // Restore actual receive frequency after CTUN status restored - G3OQD
+
+            // Continuation of QSK-related band/mode-change management - see also QSKEnabled()
+            qsk_band_changing = false;
+            if (RX1_band_change != oldBand) // actual band change, not just rotating the stack
+            {                
+                if (chkQSK.Checked && !QSKEnabled) // We're changing from QSK off to on due to a mode change
+                {
+                    QSKEnabled = true; // complete the postponed change started in SetRX1Mode() via QSKEnabled()                  
+                }
+                else if (!chkQSK.Checked && QSKEnabled) // We're changing from QSK on to off due to a mode change
+                {
+                    rx1_agcm_by_band[(int)oldBand] = non_qsk_agc;  // was set on the old band where it was on                     
+                    non_qsk_agc = rx1_agcm_by_band[(int)RX1_band_change];                     
+                    QSKEnabled = false;  // complete the postponed change started in SetRX1Mode() via QSKEnabled() 
+                }
+                else if (chkQSK.Checked && QSKEnabled) // CW mode to CW mode with QSK on 
+                {
+                    rx1_agcm_by_band[(int)oldBand] = non_qsk_agc;  // was set on the old band where it was on
+                    non_qsk_agc = rx1_agcm_by_band[(int)RX1_band_change];                    
+                    RX1AGCMode = AGCMode.CUSTOM;
+                    ; // don't need to turn QSK on - it's already on
+                }
+                else if (!chkQSK.Checked && !QSKEnabled) // Either CW to CW or non-CW to non-CW, with QSK off
+                {
+                    RX1AGCMode = rx1_agcm_by_band[(int)RX1_band_change];
+                }
+            }
+            else // just rotating the stack without changing bands
+            {
+                if (chkQSK.Checked && !QSKEnabled) // We're changing from QSK off to on due to a mode change
+                {
+                    QSKEnabled = true; // complete the postponed change started in SetRX1Mode() via QSKEnabled()                  
+                }
+                else if (!chkQSK.Checked && QSKEnabled) // We're changing from QSK on to off due to a mode change
+                {
+                    QSKEnabled = false;  // complete the postponed change started in SetRX1Mode() via QSKEnabled() 
+                }
+                else if (chkQSK.Checked && QSKEnabled) // CW mode to CW mode with QSK on 
+                {
+                    ; // don't need to turn QSK on - it's already on
+                }
+                if (RX1DSPMode != DSPMode.CWL && RX1DSPMode != DSPMode.CWU && !QSKEnabled)
+                {
+                    RX1AGCMode = non_qsk_agc;
+                }
+            }
+
         }
 
         public int last_MHZ = 0; // ke9ns 
@@ -5954,6 +6067,8 @@ namespace Thetis
         {
             SpotControl.VFOLOW = 0;   // ke9ns add default values (used in spot.cs for mapping dx spots)
             SpotControl.VFOHIGH = 1;  // ke9ns add default values
+
+            //RX1_band_change = b;
 
             switch (b)
             {
@@ -13015,6 +13130,10 @@ namespace Thetis
             return Band.GEN;
         }
 
+        // Used to detect when a band change is in progress
+        // by comparing with RX1Band at any point
+        private Band RX1_band_change = Band.B160M;  
+
         private void SetRX1Band(Band b)
         {
             if (disable_split_on_bandchange)
@@ -13028,6 +13147,7 @@ namespace Thetis
 
             Band old_band = rx1_band;
             RX1Band = b;
+
             if (old_band != b)
             {
                 UpdateBandButtonColors();
@@ -20391,12 +20511,79 @@ namespace Thetis
             }
         }
 
-        /*   public bool CATDiversityEnable
+        public decimal CATDiversityRX1Gain
+        {
+            get
+            {
+                if (diversityForm != null)
+                    return diversityForm.DiversityGain;
+                else
+                    return 0.0m;
+            }
+            set
+            {
+                if (diversityForm != null)
+                    diversityForm.DiversityGain = value;
+            }
+        }
+
+        public decimal CATDiversityRX2Gain
+        {
+            get
+            {
+                if (diversityForm != null)
+                    return diversityForm.DiversityR2Gain;
+                else
+                    return 0.0m;
+            }
+            set
+            {
+                if (diversityForm != null)
+                    diversityForm.DiversityR2Gain = value;
+            }
+        }
+
+        public decimal CATDiversityPhase
+        {
+            get
+            {
+                if (diversityForm != null)
+                    return diversityForm.DiversityPhase;
+                else
+                    return 0.0m;
+            }
+            set
+            {
+                if (diversityForm != null)
+                    diversityForm.DiversityPhase = value;
+            }
+        }
+
+        public bool CATDiversityEnable
+        {
+            get
+            {
+                if (diversityForm != null)
+                    return diversityForm.DiversityEnabled;
+                else
+                    return false;
+            }
+            set
+            {
+                if (diversityForm != null)
+                    if (value)
+                        diversityForm.DiversityEnabled = true;
+                    else
+                        diversityForm.DiversityEnabled = false;
+            }
+        }
+
+        public bool CATDiversityRXRefSource             // added G8NJJ
            {
                get
                {
                    if (diversityForm != null)
-                       return diversityForm.CATEnable;
+                    return diversityForm.DiversityRXRef;
                    else
                        return false;
                }
@@ -20404,11 +20591,27 @@ namespace Thetis
                {
                    if (diversityForm != null)
                        if (value)
-                           diversityForm.CATEnable = true;
+                        diversityForm.DiversityRXRef = true;
                        else
-                           diversityForm.CATEnable = false;
+                        diversityForm.DiversityRXRef = false;
+            }
+        }
+
+        public int CATDiversityRXSource             // added G8NJJ
+        {
+            get
+            {
+                if (diversityForm != null)
+                    return diversityForm.DiversityRXSource;
+                else
+                    return 0;
+            }
+            set
+            {
+                if (diversityForm != null)
+                    diversityForm.DiversityRXSource = value;
+            }
                }
-           } */
 
         public bool CATDiversityForm
         {
@@ -21626,6 +21829,23 @@ namespace Thetis
                 }
             }
         }
+        // added G8NJJ to allow scaling of VOX gain CAT command to Thetis range which is typ -80 to 0, not 0 to 1000
+        public int VOXSensExtent
+        {
+            get
+            {
+                if (ptbVOX != null) return (ptbVOX.Maximum - ptbVOX.Minimum);
+                else return -1;
+            }
+        }
+        public int VOXSensMin
+        {
+            get
+            {
+                if (ptbVOX != null) return ptbVOX.Minimum;
+                else return -1;
+            }
+        }
 
         public bool NoiseGateEnabled
         {
@@ -21712,6 +21932,76 @@ namespace Thetis
             }
         }
 
+        // These class vars save non-QSK settings so they don't have to be made persistent separately from how they're normally handled, 
+        // and so that going in/out of QSK mode doesn't modify a user's normal settings when not in a CW mode.
+        private bool qsk_enabled = false;
+        private int qsk_sidetone_volume = 50;
+        private AGCMode non_qsk_agc = AGCMode.MED;
+        private int non_qsk_agc_hang_thresh = 1;
+        private bool non_qsk_ATTOnTX = false;
+        private int non_qsk_ATTOnTXVal = 0;
+        private bool non_qsk_breakin = false;
+        private double non_qsk_breakin_delay = 100;
+        private bool non_qsk_disablePTT = false;
+        private bool qsk_in_CW = false;
+        private bool qsk_band_changing = false;
+
+        public bool QSKEnabled  // QSK - a.k.a. full-break-in - Possible with Protocol-2 v1.7 or later  -W2PA
+        {
+            get
+            {
+                return qsk_enabled;
+            }
+            set
+            {
+                if (qsk_band_changing) return; // Postpone until band change is completed, else things get messy.  See SetBand()
+                if (qsk_enabled == value) return;
+
+                qsk_enabled = value; 
+
+                if (qsk_enabled)
+                {
+                    // Save non-QSK settings
+                    non_qsk_agc = RX1AGCMode;
+                    non_qsk_agc_hang_thresh = SetupForm.AGCHangThreshold;
+                    non_qsk_ATTOnTX = ATTOnTX;
+                    non_qsk_ATTOnTXVal = SetupForm.ATTOnTX; 
+                    non_qsk_breakin = BreakInEnabled;
+                    non_qsk_breakin_delay = break_in_delay;
+                    non_qsk_disablePTT = disable_ptt;
+
+                    // Apply QSK settings.      
+                    RX1AGCMode = AGCMode.CUSTOM;  // Use AGC Custom mode for optimal QSK settings                   
+                    if (SetupForm.AGCHangThreshold < 70) SetupForm.AGCHangThreshold = 100;                   
+                    ATTOnTX = true;         // Enable attenuation on transmit via the setting
+                    SetupForm.ATTOnTX = 15;                    
+                    BreakInEnabled = true;  // Make sure break-in is on                    
+                    BreakInDelay = 0;       // Set break-in delay to zero in case it's something else                    
+                    DisablePTT = true;      // Turn on Disable PTT, or QSK doesn't work 
+                    if (chkCWSidetone.Checked)
+                    {
+                        NetworkIO.SetCWSidetoneVolume((int)(qsk_sidetone_volume * 1.27));
+                    } else NetworkIO.SetCWSidetoneVolume((int)(0));
+                }
+                else // Disable
+                {
+                    // Retrieve saved non-QSK settings
+                    RX1AGCMode = non_qsk_agc;                                      
+                    SetupForm.AGCHangThreshold = non_qsk_agc_hang_thresh;
+                    ATTOnTX = non_qsk_ATTOnTX;
+                    SetupForm.ATTOnTX = non_qsk_ATTOnTXVal;
+                    BreakInEnabled = non_qsk_breakin;
+                    BreakInDelay = non_qsk_breakin_delay;
+                    DisablePTT = non_qsk_disablePTT;                   
+                    if (chkCWSidetone.Checked)
+                    {
+                        qsk_sidetone_volume = SetupForm.TXAF;
+                    }
+                    NetworkIO.SetCWSidetoneVolume((int)(ptbAF.Value * 1.27));
+                }
+            }
+        }
+
         public bool BreakInEnabled
         {
             get
@@ -21724,6 +22014,34 @@ namespace Thetis
                 if (chkCWBreakInEnabled != null) chkCWBreakInEnabled.Checked = value;
             }
         }
+
+        private bool non_CW_mode_breakin_disabled = false;
+        public bool NonCWModeBreakInDisabled    
+            // Disable break-in temporarily. Used with QSK-enabled firmware (version 1.7 or later).
+            // Necessary so that hitting the key won't transmit when in a non-CW mode.
+        {
+            get
+            {
+                return non_CW_mode_breakin_disabled;
+            }
+            set
+            {
+                if (value)  // disable it if enabled
+                {
+                    if (BreakInEnabled)
+                    {
+                        non_CW_mode_breakin_disabled = true;    // take note of disabling so it can be undone
+                    }
+                    else non_CW_mode_breakin_disabled = false;  // don't need to disable, was already disabled
+                }
+                else  // re-enable it if it had been disabled
+                if (non_CW_mode_breakin_disabled)
+                {
+                    non_CW_mode_breakin_disabled = false;
+                }
+            }
+        }           
+          
 
         public bool APFEnabled
         {
@@ -23382,7 +23700,11 @@ namespace Thetis
         public double VOXHangTime
         {
             get { return vox_hang_time; }
-            set { vox_hang_time = value; }
+            set
+            {
+                vox_hang_time = value;
+                if (SetupForm != null) SetupForm.VOXHangTime = (int)value;
+            }
         }
 
         private bool vox_active = false;
@@ -25148,9 +25470,9 @@ namespace Thetis
             set
             {
                 if (value == 0)
-                    chkRX2NB2.Checked = false;
-                else
-                    chkRX2NB2.Checked = true;
+                    chkRX2NB.CheckState = CheckState.Unchecked;             // edited 30/3/2018 G8NJJ to access the NB control not SNB
+                else if (value == 1)
+                    chkRX2NB.CheckState = CheckState.Indeterminate;         // edited 30/3/2018 G8NJJ to access the NB control not SNB
             }
         }
 
@@ -25179,8 +25501,8 @@ namespace Thetis
             }
             set
             {
-                value = Math.Max(0, value);
-                value = Math.Min(100, value);
+                value = Math.Max(-96, value);
+                value = Math.Min(70, value);
                 ptbMic.Value = value;
                 ptbMic_Scroll(this, EventArgs.Empty);
             }
@@ -25741,7 +26063,7 @@ namespace Thetis
         private Band rx1_band;
         public Band RX1Band
         {
-            get { return rx1_band; }
+            get { return rx1_band; }  
             set
             {
                 Band old_band = rx1_band;
@@ -26997,6 +27319,11 @@ namespace Thetis
             set
             {
                 txaf = value;
+                if (QSKEnabled && chkCWSidetone.Checked)
+                {
+                    qsk_sidetone_volume = value;  // For QSK sidetone separate from rx audio level
+                    NetworkIO.SetCWSidetoneVolume((int)(qsk_sidetone_volume * 1.27)); 
+                }
                 if (SetupForm != null)
                 {
                     SetupForm.TXAF = txaf;
@@ -27103,7 +27430,7 @@ namespace Thetis
                 {
                     if (rx1_dsp_mode != DSPMode.CWL &&
                         rx1_dsp_mode != DSPMode.CWU)
-                        CWFWKeyer = false;
+                        ;//CWFWKeyer = false;
                 }
                 // chkCWFWKeyer_CheckedChanged(this, EventArgs.Empty);
             }
@@ -34099,13 +34426,13 @@ namespace Thetis
 
         private bool mon_recall = false;
         private static HiPerfTimer vox_timer = new HiPerfTimer();
-        private int dotdashptt = 0;
+        //private int dotdashptt = 0;                           
 
         private void PollPTT()
         {
             while (chkPower.Checked)
             {
-                dotdashptt = NetworkIO.nativeGetDotDashPTT();
+                int dotdashptt = NetworkIO.nativeGetDotDashPTT();
                 DSPMode tx_mode = rx1_dsp_mode;
 
                 if (chkVFOBTX.Checked && chkRX2.Checked) tx_mode = rx2_dsp_mode;
@@ -34143,18 +34470,18 @@ namespace Thetis
                             }
                         }
 
-                        if ((tx_mode == DSPMode.CWL ||
-                             tx_mode == DSPMode.CWU) &&
-                             cw_ptt)
+                        if (((tx_mode == DSPMode.CWL || 
+                              tx_mode == DSPMode.CWU) && 
+                              !all_mode_mic_ptt) && mic_ptt)
                         {
-                            current_ptt_mode = PTTMode.CW;
+                            current_ptt_mode = PTTMode.MIC;
 
-                            chkMOX.Checked = true;
-                            if (!mox)
-                            {
-                                chkPower.Checked = false;
-                                return;
-                            }
+                            if (chkVAC1.Checked && allow_vac_bypass)
+                                Audio.VACBypass = true;
+
+                            //if (!BreakInEnabled && !(break_in_delay == 0))
+                                //chkMOX.Checked = true;
+                                                                   
                         }
 
                         if ((tx_mode == DSPMode.LSB ||
@@ -34242,7 +34569,7 @@ namespace Thetis
         {
             while (chkPower.Checked)
             {
-                dotdashptt = NetworkIO.nativeGetDotDashPTT();
+                int dotdashptt = NetworkIO.nativeGetDotDashPTT();
                 bool state = (dotdashptt & 0x01) != 0; // ptt                
                 state = (dotdashptt & 0x02) != 0; // dash    
 
@@ -36683,8 +37010,8 @@ namespace Thetis
                 Audio.CurrentAudioState1 = Audio.AudioState.DTTSP;
                 Audio.callback_return = 0;
 
-                VACEnabled = vac_enabled;
-                VAC2Enabled = vac2_enabled;
+                if (vac_enabled) VACEnabled = true;  //Don't trigger StopAudioIVAC if the VACs aren't needed now
+                if (vac2_enabled) VAC2Enabled = true;
                 Thread.Sleep(100); // wait for hardware to settle before starting audio (possible sample rate change)
                 psform.ForcePS();
 
@@ -36829,6 +37156,15 @@ namespace Thetis
                 DataFlowing = true;
                 SetupForm.UpdateGeneraHardware();
                 SetMicGain();
+
+                // Only enable QSK if firmware is at the proper level
+                if (((CurrentHPSDRHardware == HPSDRHW.OrionMKII) && (NetworkIO.FWCodeVersion >= 17)
+                    || (CurrentHPSDRHardware == HPSDRHW.Orion) && (NetworkIO.FWCodeVersion >= 17)))
+                    chkQSK.Enabled = true;
+                else
+                {
+                    chkQSK.Enabled = false;
+                }
             }
             else
             {
@@ -36995,10 +37331,12 @@ namespace Thetis
                                 if (!psform.PSEnabled)
                                 {
                                     cmaster.SetAAudioMixStates((void*)0, 0, RX1 + RX1S + RX2 + MON, RX1 + RX1S + RX2EN + MON);
+                                    cmaster.SetAntiVOXSourceStates(0, RX1 + RX1S + RX2, RX1 + RX1S + RX2EN);
                                 }
                                 else
                                 {
                                     cmaster.SetAAudioMixStates((void*)0, 0, RX1 + RX1S + RX2 + MON, RX1 + RX1S + RX2EN + MON);
+                                    cmaster.SetAntiVOXSourceStates(0, RX1 + RX1S + RX2, RX1 + RX1S + RX2EN);
                                 }
                             }
                             else
@@ -37006,10 +37344,12 @@ namespace Thetis
                                 if (!psform.PSEnabled)
                                 {
                                     cmaster.SetAAudioMixStates((void*)0, 0, RX1 + RX1S + RX2 + MON, RX1 + RX1S + MON);
+                                    cmaster.SetAntiVOXSourceStates(0, RX1 + RX1S + RX2, RX1 + RX1S);
                                 }
                                 else
                                 {
                                     cmaster.SetAAudioMixStates((void*)0, 0, RX1 + RX1S + RX2 + MON, RX1 + RX1S + MON);
+                                    cmaster.SetAntiVOXSourceStates(0, RX1 + RX1S + RX2, RX1 + RX1S);
                                 }
                             }
                         }
@@ -37020,10 +37360,12 @@ namespace Thetis
                                 if (!psform.PSEnabled)
                                 {
                                     cmaster.SetAAudioMixStates((void*)0, 0, RX1 + RX1S + RX2 + MON, RX1 + RX1S + RX2EN + MON);
+                                    cmaster.SetAntiVOXSourceStates(0, RX1 + RX1S + RX2, RX1 + RX1S + RX2EN);
                                 }
                                 else
                                 {
                                     cmaster.SetAAudioMixStates((void*)0, 0, RX1 + RX1S + RX2 + MON, MON);
+                                    cmaster.SetAntiVOXSourceStates(0, RX1 + RX1S + RX2, 0);
                                 }
                             }
                             else
@@ -37031,10 +37373,12 @@ namespace Thetis
                                 if (!psform.PSEnabled)
                                 {
                                     cmaster.SetAAudioMixStates((void*)0, 0, RX1 + RX1S + RX2 + MON, RX1 + RX1S + MON);
+                                    cmaster.SetAntiVOXSourceStates(0, RX1 + RX1S + RX2, RX1 + RX1S);
                                 }
                                 else
                                 {
                                     cmaster.SetAAudioMixStates((void*)0, 0, RX1 + RX1S + RX2 + MON, MON);
+                                    cmaster.SetAntiVOXSourceStates(0, RX1 + RX1S + RX2, 0);
                                 }
                             }
                         }
@@ -37044,6 +37388,7 @@ namespace Thetis
                     {
                         cmaster.MONMixState = false;
                         cmaster.SetAAudioMixStates((void*)0, 0, RX1 + RX1S + RX2 + MON, 0);
+                        cmaster.SetAntiVOXSourceStates(0, RX1 + RX1S + RX2, 0);
                     }
                     break;
                 // 4-DDC Models
@@ -37058,6 +37403,7 @@ namespace Thetis
                         // RX2 if 'rx2_enabled'; we always have data flow (MIC samples) for the TX MON.
                         cmaster.MONMixState = true;
                         cmaster.SetAAudioMixStates((void*)0, 0, RX1 + RX1S + RX2 + MON, RX1 + RX1S + RX2EN + MON);
+                        cmaster.SetAntiVOXSourceStates(0, RX1 + RX1S + RX2, RX1 + RX1S + RX2EN);
                     }
                     else
                     {
@@ -37065,6 +37411,7 @@ namespace Thetis
                         // It's OK to turn something OFF again if it's already OFF.
                         cmaster.MONMixState = false;
                         cmaster.SetAAudioMixStates((void*)0, 0, RX1 + RX1S + RX2 + MON, 0);
+                        cmaster.SetAntiVOXSourceStates(0, RX1 + RX1S + RX2, 0);
                     }
                     break;
                 default:
@@ -37457,10 +37804,87 @@ namespace Thetis
                 btnHidden.Focus();
         }
 
+        //class AutoClosingMessageBox  // useful for debugging
+        //{
+        //    private static System.Threading.Timer Tmr;
+
+        //    public static void Show(Form Parent, string text, int timeout)
+        //    {
+        //        Form mbx = new Form();
+        //        Label LblMessage = new Label();
+
+        //        #region InitializeComponent
+        //        mbx.Size = new System.Drawing.Size(308, 185);
+        //        mbx.MaximizeBox = false;
+        //        mbx.MinimizeBox = false;
+        //        mbx.ShowIcon = false;
+        //        mbx.ShowInTaskbar = false;
+        //        mbx.ControlBox = false;
+        //        mbx.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
+        //        mbx.FormBorderStyle = FormBorderStyle.None;
+        //        mbx.StartPosition = FormStartPosition.CenterScreen;
+
+        //        #region Center on Parent StartPosition
+        //        if (Parent != null)
+        //        {
+        //            mbx.BackColor = Parent.BackColor;
+        //            mbx.StartPosition = FormStartPosition.Manual;
+        //            int X = Parent.Location.X + ((Parent.Width - mbx.Width) / 2);
+        //            int Y = Parent.Location.Y + ((Parent.Height - mbx.Height) / 2);
+        //            mbx.Location = new System.Drawing.Point(X, Y);
+        //        }
+        //        #endregion
+
+        //        //
+        //        //LblMessage
+        //        //
+        //        LblMessage.Location = new System.Drawing.Point(12, 23);
+        //        LblMessage.AutoSize = false;
+        //        LblMessage.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+        //        LblMessage.Font = new System.Drawing.Font("Microsoft Sans Serif", 17.0F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
+        //        //LblMessage.ForeColor = mbx.BackColor.;
+        //        LblMessage.BorderStyle = BorderStyle.FixedSingle;
+        //        LblMessage.Text = text;
+        //        LblMessage.Dock = DockStyle.Fill;
+
+        //        mbx.Controls.Add(LblMessage);
+        //        #endregion
+
+        //        Tmr = new System.Threading.Timer(new System.Threading.TimerCallback(Tmr_Tick), mbx, timeout, 0);
+        //        mbx.ShowDialog();
+        //    }
+        //    private static void Tmr_Tick(object obj)
+        //    {
+        //        Tmr.Dispose();
+        //        if (obj is Form)
+        //        {
+        //            if (((Form)obj).InvokeRequired)
+        //            {
+        //                ((Form)obj).Invoke(new System.Action<Form>(InvokeMbx), new object[] { ((Form)obj) });
+        //            }
+        //            else InvokeMbx((Form)obj);
+        //        }
+        //    }
+        //    private static void InvokeMbx(Form mbx)
+        //    {
+        //        mbx.Close();
+        //    }
+        //}
+
         private void Console_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             Audio.callback_return = 2;
             CATEnabled = false;
+
+            if (chkPower.Checked == true)  // If we're quitting without first clicking off the "Power" button            
+                chkPower.Checked = false;
+
+            MemoryList.Save();
+            SetupForm.SaveNotchesToDatabase();
+
+            Thread.Sleep(100);
+
+            SaveState();
 
             if (SetupForm != null) SetupForm.Hide();
             if (CWXForm != null) CWXForm.Hide();
@@ -37472,22 +37896,10 @@ namespace Thetis
             if (psform != null) psform.Hide();
             if (cmaster.Getwb(0).WBdisplay != null) cmaster.Hidewb(0);
 
-            MemoryList.Save();
-            SetupForm.SaveNotchesToDatabase();
-            if (chkPower.Checked == true)  // If we're quitting without first clicking off the "Power" button
-            {
-            chkPower.Checked = false;
-                chkPower_CheckedChanged(sender, e);  // quits all threads and does other cleanup before exiting
-            }
-            
-            Thread.Sleep(100);
-            this.Hide();
-            SaveState();
-
+            this.Hide();  // putting it here seems to prevent leaving a dangling process in Windows
             if (CWXForm != null) CWXForm.Close();
             if (SetupForm != null) SetupForm.SaveOptions();
             if (EQForm != null) EQForm.Close();
-            if (XVTRForm != null) XVTRForm.Close();
             if (memoryForm != null) memoryForm.Close();
             if (diversityForm != null) diversityForm.Close();
             //  if (preSelForm != null) preSelForm.Close();
@@ -39020,13 +39432,13 @@ namespace Thetis
                 switch (old_dsp_mode)
                 {
                     case DSPMode.CWL:
-                        CWFWKeyer = false;
+                        //CWFWKeyer = false;
                         Audio.CurrentAudioState1 = Audio.AudioState.DTTSP;      // for CAT, apparently
                         Audio.TXDSPMode = DSPMode.LSB;                          // set a non-CW mode of the same sex
                         radio.GetDSPTX(0).CurrentDSPMode = DSPMode.LSB;         // do that here too
                         break;
                     case DSPMode.CWU:
-                        CWFWKeyer = false;
+                        //CWFWKeyer = false;
                         Audio.CurrentAudioState1 = Audio.AudioState.DTTSP;
                         Audio.TXDSPMode = DSPMode.USB;
                         radio.GetDSPTX(0).CurrentDSPMode = DSPMode.USB;
@@ -39627,6 +40039,9 @@ namespace Thetis
         private void chkCWSidetone_CheckedChanged(object sender, System.EventArgs e)
         {
             if (SetupForm != null) SetupForm.CWDisableMonitor = chkCWSidetone.Checked;
+
+            if (QSKEnabled && !chkCWSidetone.Checked) NetworkIO.SetCWSidetoneVolume(0); // so we don't get audio artifacts with QSK on and sidetone off
+            else if (QSKEnabled && chkCWSidetone.Checked) NetworkIO.SetCWSidetoneVolume(qsk_sidetone_volume); 
         }
 
         private void udCWPitch_ValueChanged(object sender, System.EventArgs e)
@@ -44313,6 +44728,38 @@ namespace Thetis
             DSPMode old_mode = rx1_dsp_mode;
             bool old_sd = stereo_diversity;
 
+            // Manage QSK appropriately when switching modes --------------
+            if (new_mode != DSPMode.CWL && new_mode != DSPMode.CWU)  // Changing to a non-CW mode
+            {
+                // Although CWFWKeyer is mostly a deprecated flag, it's useful in the QSK-enabled firmware (1.7 or later) -W2PA
+                // It is used here solely to prevent keying in non-CW modes.
+                CWFWKeyer = false;  // Disallow the FW to key the rig except in CW modes
+                if (chkCWBreakInEnabled.Checked) NonCWModeBreakInDisabled = true;  // Disable break-in if not in a CW mode
+            }
+            else // Changing to a CW mode
+            {
+                CWFWKeyer = true;
+                NonCWModeBreakInDisabled = false; // Re-enable break-in if necessary
+            }
+
+            if ((new_mode != DSPMode.CWL && new_mode != DSPMode.CWU)
+                && (old_mode == DSPMode.CWL || old_mode == DSPMode.CWU)) // Changing to a non-CW mode from CW
+            {
+                if (QSKEnabled)
+                {
+                    chkQSK.Checked = false; // If QSK was on, turn it off to return to non-QSK settings
+                    qsk_in_CW = true; // But remember it was on in CW modes
+                }
+                else qsk_in_CW = false;
+            }
+
+            if ((new_mode == DSPMode.CWL || new_mode == DSPMode.CWU)
+                && (old_mode != DSPMode.CWL && old_mode != DSPMode.CWU)) // Changing to a CW mode from non-CW
+            {
+                if (qsk_in_CW) chkQSK.Checked = true;
+            }
+            // end of QSK-related code ---------------------------------------
+
             WDSP.SetChannelState(WDSP.id(0, 1), 0, 0);              // turn off the DSP channels
             WDSP.SetChannelState(WDSP.id(0, 0), 0, 1);
             Thread.Sleep(1);
@@ -44390,7 +44837,7 @@ namespace Thetis
                     }
 
                     if (!cw_auto_mode_switch)
-                        CWFWKeyer = false;
+                        //CWFWKeyer = false;
 
                     // turn off APF
                     radio.GetDSPRX(0, 0).RXAPFRun = false;
@@ -44428,7 +44875,7 @@ namespace Thetis
                     }
 
                     if (!cw_auto_mode_switch)
-                        CWFWKeyer = false;
+                        //CWFWKeyer = false;
 
                     // turn off APF
                     radio.GetDSPRX(0, 0).RXAPFRun = false;
@@ -44663,7 +45110,7 @@ namespace Thetis
                     radio.GetDSPRX(0, 1).AutoNotchFilter = false;
                     chkANF.Enabled = false;
 
-                    chkCWFWKeyer_CheckedChanged(this, EventArgs.Empty);
+                    //chkCWFWKeyer_CheckedChanged(this, EventArgs.Empty);
                     // chkCWAPFEnabled_CheckedChanged(this, EventArgs.Empty);
                     panelModeSpecificCW.BringToFront();
                     break;
@@ -44715,7 +45162,7 @@ namespace Thetis
                     radio.GetDSPRX(0, 0).AutoNotchFilter = false;
                     radio.GetDSPRX(0, 1).AutoNotchFilter = false;
 
-                    chkCWFWKeyer_CheckedChanged(this, EventArgs.Empty);
+                    //chkCWFWKeyer_CheckedChanged(this, EventArgs.Empty);
                     // chkCWAPFEnabled_CheckedChanged(this, EventArgs.Empty);
                     panelModeSpecificCW.BringToFront();
                     break;
@@ -44958,7 +45405,6 @@ namespace Thetis
             WDSP.SetChannelState(WDSP.id(0, 0), 1, 0);              // turn on the DSP channels
             if (radio.GetDSPRX(0, 1).Active)
                 WDSP.SetChannelState(WDSP.id(0, 1), 1, 0);
-
         }
 
         private void radModeButton_CheckedChanged(object sender, System.EventArgs e)
@@ -51700,6 +52146,8 @@ namespace Thetis
             lblFilterLabel.Hide();
             lblRX2ModeLabel.Hide();
             lblRX2FilterLabel.Hide();
+// added G8NJJ to display Andromeda encoder settings in title bar
+            this.Text = TitleBar.GetString() + TitleBarMultifunction;
 
             chkMUT.Show();
             radRX1Show.Hide();
@@ -52042,6 +52490,8 @@ namespace Thetis
             int minHeight = 210;
             // radRX1Show_CheckedChanged(this, EventArgs.Empty);
             // radRX2Show_CheckedChanged(this, EventArgs.Empty);
+            // added G8NJJ to show encoder and multifunction encoder settings in the title bar
+            this.Text = TitleBar.GetString() + TitleBarMultifunction + "    " + TitleBarEncoder;
 
             if (this.showTopControls)
             {
@@ -54805,6 +55255,19 @@ namespace Thetis
             AlexAntCtrlEnabled = alex_ant_ctrl_enabled;
         }
 
+        private void chkQSK_CheckedChanged(object sender, EventArgs e)
+        {
+            // enable/disable QSK
+            if (chkQSK.Checked)
+            {
+                // turn it on
+                QSKEnabled = true;
+            } else
+            {
+                // turn it off
+                QSKEnabled = false;
+            }
+        }
     }
 
     public class DigiMode
