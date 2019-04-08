@@ -37896,9 +37896,9 @@ namespace Thetis
             if (psform != null) psform.Hide();
             if (cmaster.Getwb(0).WBdisplay != null) cmaster.Hidewb(0);
 
-            this.Hide();  // putting it here seems to prevent leaving a dangling process in Windows
             if (CWXForm != null) CWXForm.Close();
             if (SetupForm != null) SetupForm.SaveOptions();
+            this.Hide();  // putting it here seems to prevent leaving a dangling process in Windows
             if (EQForm != null) EQForm.Close();
             if (memoryForm != null) memoryForm.Close();
             if (diversityForm != null) diversityForm.Close();
