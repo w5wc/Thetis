@@ -13133,7 +13133,7 @@ namespace Thetis
                 fileName = fileName.Replace(c.ToString(), "_");  // Remove profile name chars that are invalid in filenames.
             }
 
-            fileName = console.AppDataPath + "\\" + fileName;
+            fileName = console.AppDataPath + fileName;
 
             int i = 1;
             string tempFN = fileName;
