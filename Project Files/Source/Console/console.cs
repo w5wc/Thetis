@@ -37165,6 +37165,8 @@ namespace Thetis
                 {
                     chkQSK.Enabled = false;
                 }
+                if (RX1DSPMode != DSPMode.CWL && RX1DSPMode != DSPMode.CWU)
+                    CWFWKeyer = false; // Disallow the FW to key the rig except in CW modes
             }
             else
             {
