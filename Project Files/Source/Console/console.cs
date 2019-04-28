@@ -2317,11 +2317,6 @@ namespace Thetis
             else NetworkIO.SetCWSidetoneVolume(0);
 
             RX1_band_change = RX1Band;
-            // Initialize for QSK those things normally triggered by inital MOX use, 
-            // which isn't used in Thetis in QSK mode, just in case we start-up in CW/QSK
-            chkMOX.Checked = true; 
-            chkMOX.Checked = false;
-
         }
 
         public void Init60mChannels()
@@ -16264,8 +16259,8 @@ namespace Thetis
                     break;
                 case HPSDRModel.HERMES:
                 case HPSDRModel.ANAN10:
-                // case HPSDRModel.ANAN10E:
                 case HPSDRModel.ANAN100:
+                case HPSDRModel.ANAN10E:
                 case HPSDRModel.ANAN100B:
                     if (!mox)
                     {
@@ -16319,17 +16314,18 @@ namespace Thetis
                         }
                     }
                     break;
-                case HPSDRModel.ANAN10E:
-                    DDCEnable = DDC0 + DDC1;
-                    // SyncEnable = DDC1;
-                    if (mox && psform.PSEnabled)
-                    {
-                        Rate[0] = Rate[1] = ps_rate;
-                        SyncEnable = DDC1;
-                    }
-                    else
-                        Rate[0] = Rate[1] = rx1_rate;
-                    break;
+                //case HPSDRModel.ANAN10E: // DDCs syncronous
+                //case HPSDRModel.ANAN100B:
+                //    DDCEnable = DDC0 + DDC1;
+                //    // SyncEnable = DDC1;
+                //    if (mox && psform.PSEnabled)
+                //    {
+                //        Rate[0] = Rate[1] = ps_rate;
+                //        SyncEnable = DDC1;
+                //    }
+                //    else
+                //        Rate[0] = Rate[1] = rx1_rate;
+                //    break;
                 case HPSDRModel.HPSDR:
                     break;
             }
@@ -24514,7 +24510,7 @@ namespace Thetis
 
         bool tx_dds_freq_updated = false;
         // uint tx_dds_freq_tw;
-        double tx_dds_freq_mhz = 7.1;
+        double tx_dds_freq_mhz = 14;
         private void UpdateTXDDSFreq()
         {
             // if (chkPower.Checked)// && tx_dds_freq_updated)
@@ -24559,7 +24555,7 @@ namespace Thetis
         }
 
         //private uint last_tw = 0;
-        private double fwc_dds_freq = 7.1;
+        private double fwc_dds_freq = 14;
         public double FWCDDSFreq
         {
             get { return fwc_dds_freq; }
@@ -24576,7 +24572,7 @@ namespace Thetis
             }
         }
 
-        private double rx2_dds_freq = 7.1;
+        private double rx2_dds_freq = 14;
         public double RX2DDSFreq
         {
             get { return rx2_dds_freq; }
@@ -24593,7 +24589,7 @@ namespace Thetis
             }
         }
 
-        private double dds_freq = 7.1;
+        private double dds_freq = 14;
         public double DDSFreq
         {
             get { return dds_freq; }
@@ -24603,7 +24599,7 @@ namespace Thetis
                 //Debug.WriteLine("dds_freq: "+dds_freq.ToString("f6"));
 
                 double vfoFreq = value, f = value;
-                double dsp_osc_freq = 0.0;
+               // double dsp_osc_freq = 0.0;
 
                 //calculate DDS Tuning Word
                 if (xvtr_present && f >= 144 && f <= 146)		// If transverter enabled compute 28MHz IF frequency
@@ -33461,8 +33457,8 @@ namespace Thetis
                                     if (chkVFOATX.Checked || !chkRX2.Checked)
                                     {
                                         fixed (float* ptr = &Display.new_display_data[0])
-                                            //DttSP.GetPanadapter(top_thread, ptr);
-                                            SpecHPSDRDLL.GetPixels(cmaster.inid(1, 0), 0, ptr, ref flag);
+                                            //SpecHPSDRDLL.GetPixels(cmaster.inid(1, 0), 0, ptr, ref flag);
+                                        WDSP.TXAGetSpecF1(WDSP.id(1, 0), ptr);
                                     }
                                     else
                                     {
@@ -38725,6 +38721,41 @@ namespace Thetis
             if (tx) mox = tx;
             double freq = 0.0;
 
+            if (tx)                          // change to TX mode
+            {
+                radModeCWL.Enabled = false;  //Disallow mode changes in transmit mode            
+                radModeCWU.Enabled = false;
+                radModeAM.Enabled = false;
+                radModeDIGL.Enabled = false;
+                radModeDIGU.Enabled = false;
+                radModeDRM.Enabled = false;
+                radModeDSB.Enabled = false;
+                radModeLSB.Enabled = false;
+                radModeUSB.Enabled = false;
+                radModeFMN.Enabled = false;
+                radModeSAM.Enabled = false;
+                radModeSPEC.Enabled = false;
+            }
+            else                            // change to RX mode
+            {
+                if (!VFOALock)
+                {
+                    radModeCWL.Enabled = true;  //Re-enable mode changes in receive mode            
+                    radModeCWU.Enabled = true;
+                    radModeAM.Enabled = true;
+                    radModeDIGL.Enabled = true;
+                    radModeDIGU.Enabled = true;
+                    radModeDRM.Enabled = true;
+                    radModeDSB.Enabled = true;
+                    radModeLSB.Enabled = true;
+                    radModeUSB.Enabled = true;
+                    radModeFMN.Enabled = true;
+                    radModeSAM.Enabled = true;
+                    radModeSPEC.Enabled = true;
+                }
+            }
+
+
             if (tx)
             {
                 /*t1.Stop();
@@ -38842,6 +38873,7 @@ namespace Thetis
                         freq -= (double)cw_pitch * 0.0000010;
                         break;
                 }
+
             }
             else
             {
@@ -44733,38 +44765,6 @@ namespace Thetis
             DSPMode old_mode = rx1_dsp_mode;
             bool old_sd = stereo_diversity;
 
-            // Manage QSK appropriately when switching modes --------------
-            if (new_mode != DSPMode.CWL && new_mode != DSPMode.CWU)  // Changing to a non-CW mode
-            {
-                // Although CWFWKeyer is mostly a deprecated flag, it's useful in the QSK-enabled firmware (1.7 or later) -W2PA
-                // It is used here solely to prevent keying in non-CW modes.
-                CWFWKeyer = false;  // Disallow the FW to key the rig except in CW modes
-                if (chkCWBreakInEnabled.Checked) NonCWModeBreakInDisabled = true;  // Disable break-in if not in a CW mode
-            }
-            else // Changing to a CW mode
-            {
-                CWFWKeyer = true;
-                NonCWModeBreakInDisabled = false; // Re-enable break-in if necessary
-            }
-
-            if ((new_mode != DSPMode.CWL && new_mode != DSPMode.CWU)
-                && (old_mode == DSPMode.CWL || old_mode == DSPMode.CWU)) // Changing to a non-CW mode from CW
-            {
-                if (QSKEnabled)
-                {
-                    chkQSK.Checked = false; // If QSK was on, turn it off to return to non-QSK settings
-                    qsk_in_CW = true; // But remember it was on in CW modes
-                }
-                else qsk_in_CW = false;
-            }
-
-            if ((new_mode == DSPMode.CWL || new_mode == DSPMode.CWU)
-                && (old_mode != DSPMode.CWL && old_mode != DSPMode.CWU)) // Changing to a CW mode from non-CW
-            {
-                if (qsk_in_CW) chkQSK.Checked = true;
-            }
-            // end of QSK-related code ---------------------------------------
-
             WDSP.SetChannelState(WDSP.id(0, 1), 0, 0);              // turn off the DSP channels
             WDSP.SetChannelState(WDSP.id(0, 0), 0, 1);
             Thread.Sleep(1);
@@ -45410,6 +45410,39 @@ namespace Thetis
             WDSP.SetChannelState(WDSP.id(0, 0), 1, 0);              // turn on the DSP channels
             if (radio.GetDSPRX(0, 1).Active)
                 WDSP.SetChannelState(WDSP.id(0, 1), 1, 0);
+
+            // Manage QSK appropriately when switching modes --------------
+            if (new_mode != DSPMode.CWL && new_mode != DSPMode.CWU)  // Changing to a non-CW mode
+            {
+                // Although CWFWKeyer is mostly a deprecated flag, it's useful in the QSK-enabled firmware (1.7 or later) -W2PA
+                // It is used here solely to prevent keying in non-CW modes.
+                CWFWKeyer = false;  // Disallow the FW to key the rig except in CW modes
+                if (chkCWBreakInEnabled.Checked) NonCWModeBreakInDisabled = true;  // Disable break-in if not in a CW mode
+            }
+            else // Changing to a CW mode
+            {
+                CWFWKeyer = true;
+                NonCWModeBreakInDisabled = false; // Re-enable break-in if necessary
+            }
+
+            if ((new_mode != DSPMode.CWL && new_mode != DSPMode.CWU)
+                && (old_mode == DSPMode.CWL || old_mode == DSPMode.CWU)) // Changing to a non-CW mode from CW
+            {
+                if (QSKEnabled)
+                {
+                    chkQSK.Checked = false; // If QSK was on, turn it off to return to non-QSK settings
+                    qsk_in_CW = true; // But remember it was on in CW modes
+                }
+                else qsk_in_CW = false;
+            }
+
+            if ((new_mode == DSPMode.CWL || new_mode == DSPMode.CWU)
+                && (old_mode != DSPMode.CWL && old_mode != DSPMode.CWU)) // Changing to a CW mode from non-CW
+            {
+                if (qsk_in_CW) chkQSK.Checked = true;
+            }
+            // end of QSK-related code ---------------------------------------
+
         }
 
         private void radModeButton_CheckedChanged(object sender, System.EventArgs e)

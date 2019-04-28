@@ -7422,8 +7422,10 @@ namespace Thetis
                     }
                     else
                     {
-                        filter_left_x = (int)((float)(tx_filter_low - Low + xit_hz - rit_hz + (vfob_hz - vfoa_hz)) / width * W);
-                        filter_right_x = (int)((float)(tx_filter_high - Low + xit_hz - rit_hz + (vfob_hz - vfoa_hz)) / width * W);
+                       // filter_left_x = (int)((float)(tx_filter_low - Low + xit_hz - rit_hz + (vfob_hz - vfoa_hz)) / width * W);
+                       // filter_right_x = (int)((float)(tx_filter_high - Low + xit_hz - rit_hz + (vfob_hz - vfoa_hz)) / width * W);
+                        filter_left_x = (int)((float)(tx_filter_low - Low + xit_hz - rit_hz + (vfoa_sub_hz - vfoa_hz)) / width * W);
+                        filter_right_x = (int)((float)(tx_filter_high - Low + xit_hz - rit_hz + (vfoa_sub_hz - vfoa_hz)) / width * W);
                     }
                 }
                 else
@@ -7447,7 +7449,7 @@ namespace Thetis
                     g.DrawLine(tx_filter_pen, filter_right_x, H + top, filter_right_x, H + H);	// draw tx filter overlay
                     g.DrawLine(tx_filter_pen, filter_right_x + 1, H + top, filter_right_x + 1, H + H);// draw tx filter overlay
                 }
-                else if (!tx_on_vfob)
+                else //if (!tx_on_vfob)
                 {
                     g.DrawLine(tx_filter_pen, filter_left_x, top, filter_left_x, H);		// draw tx filter overlay
                     g.DrawLine(tx_filter_pen, filter_left_x + 1, top, filter_left_x + 1, H);	// draw tx filter overlay
@@ -10057,9 +10059,9 @@ namespace Thetis
             DrawSpectrumGrid(ref g, W, H, bottom);
             if (points == null || points.Length < W)
                 points = new Point[W];			// array of points to display
-            float slope = 0.0f;						// samples to process per pixel
-            int num_samples = 0;					// number of samples to process
-            int start_sample_index = 0;				// index to begin looking at samples
+           // float slope = 0.0f;						// samples to process per pixel
+           // int num_samples = 0;					// number of samples to process
+           // int start_sample_index = 0;				// index to begin looking at samples
             int low = 0;
             int high = 0;
             float local_max_y = float.MinValue;
@@ -10109,12 +10111,6 @@ namespace Thetis
             }
             else if (bottom && data_ready_bottom)
             {
-                /*  if(mox && (rx1_dsp_mode == DSPMode.CWL || rx1_dsp_mode == DSPMode.CWU))
-                  {
-                      for(int i=0; i<current_display_data_bottom.Length; i++)
-                          current_display_data_bottom[i] = -200.0f;
-                  }
-                  else */
                 {
                     fixed (void* rptr = &new_display_data_bottom[0])
                     fixed (void* wptr = &current_display_data_bottom[0])
@@ -10123,57 +10119,49 @@ namespace Thetis
                 data_ready_bottom = false;
             }
 
-            /*   if (!bottom && average_on)
-                   console.UpdateRX1DisplayAverage(rx1_average_buffer, current_display_data);
-               else if (bottom && rx2_avg_on)
-                   console.UpdateRX2DisplayAverage(rx2_average_buffer, current_display_data_bottom);
+            //start_sample_index = (BUFFER_SIZE >> 1) + (int)((low * BUFFER_SIZE) / sample_rate);
+            //num_samples = (int)((high - low) * BUFFER_SIZE / sample_rate);
 
-               if (!bottom && peak_on)
-                   UpdateDisplayPeak(rx1_peak_buffer, current_display_data);
-               else if (bottom && rx2_peak_on)
-                   UpdateDisplayPeak(rx2_peak_buffer, current_display_data_bottom);
-               */
-            start_sample_index = (BUFFER_SIZE >> 1) + (int)((low * BUFFER_SIZE) / sample_rate);
-            num_samples = (int)((high - low) * BUFFER_SIZE / sample_rate);
+            //if (start_sample_index < 0) start_sample_index = 0;
+            //if ((num_samples - start_sample_index) > (BUFFER_SIZE + 1))
+            //    num_samples = BUFFER_SIZE - start_sample_index;
 
-            if (start_sample_index < 0) start_sample_index = 0;
-            if ((num_samples - start_sample_index) > (BUFFER_SIZE + 1))
-                num_samples = BUFFER_SIZE - start_sample_index;
+            //slope = (float)num_samples / (float)W;
 
-            slope = (float)num_samples / (float)W;
             for (int i = 0; i < W; i++)
             {
                 float max = float.MinValue;
-                float dval = i * slope + start_sample_index;
-                int lindex = (int)Math.Floor(dval);
+               // float dval = i * slope + start_sample_index;
+              //  int lindex = (int)Math.Floor(dval);
                 if (!bottom)
                 {
-                    if (!mox)
+                   // if (!mox)
                         max = current_display_data[i];
-                    else
-                    {
-                        if (slope <= 1)
-                            max = current_display_data[lindex] * ((float)lindex - dval + 1) + current_display_data[lindex + 1] * (dval - (float)lindex);
-                        else
-                        {
-                            int rindex = (int)Math.Floor(dval + slope);
-                            if (rindex > BUFFER_SIZE) rindex = BUFFER_SIZE;
-                            for (int j = lindex; j < rindex; j++)
-                                if (current_display_data[j] > max) max = current_display_data[j];
-                        }
-                    }
+                    //else
+                    //{
+                    //    if (slope <= 1)
+                    //        max = current_display_data[lindex] * ((float)lindex - dval + 1) + current_display_data[lindex + 1] * (dval - (float)lindex);
+                    //    else
+                    //    {
+                    //        int rindex = (int)Math.Floor(dval + slope);
+                    //        if (rindex > BUFFER_SIZE) rindex = BUFFER_SIZE;
+                    //        for (int j = lindex; j < rindex; j++)
+                    //            if (current_display_data[j] > max) max = current_display_data[j];
+                    //    }
+                    //}
                 }
                 else
                 {
-                    if (slope <= 1)
-                        max = current_display_data_bottom[lindex] * ((float)lindex - dval + 1) + current_display_data_bottom[lindex + 1] * (dval - (float)lindex);
-                    else
-                    {
-                        int rindex = (int)Math.Floor(dval + slope);
-                        if (rindex > BUFFER_SIZE) rindex = BUFFER_SIZE;
-                        for (int j = lindex; j < rindex; j++)
-                            if (current_display_data_bottom[j] > max) max = current_display_data_bottom[j];
-                    }
+                    //if (slope <= 1)
+                    //    max = current_display_data_bottom[lindex] * ((float)lindex - dval + 1) + current_display_data_bottom[lindex + 1] * (dval - (float)lindex);
+                    //else
+                    //{
+                    //    int rindex = (int)Math.Floor(dval + slope);
+                    //    if (rindex > BUFFER_SIZE) rindex = BUFFER_SIZE;
+                    //    for (int j = lindex; j < rindex; j++)
+                    //        if (current_display_data_bottom[j] > max) 
+                                max = current_display_data_bottom[i];
+                   // }
                 }
 
                 if (!mox || (mox && tx_on_vfob && console.RX2Enabled))
@@ -10225,7 +10213,182 @@ namespace Thetis
             }
 
             return true;
-        }
+        } 
+
+        //unsafe static private bool DrawSpectrum(Graphics g, int W, int H, bool bottom)
+        //{
+        //    DrawSpectrumGrid(ref g, W, H, bottom);
+        //    if (points == null || points.Length < W)
+        //        points = new Point[W];			// array of points to display
+        //    float slope = 0.0f;						// samples to process per pixel
+        //    int num_samples = 0;					// number of samples to process
+        //    int start_sample_index = 0;				// index to begin looking at samples
+        //    int low = 0;
+        //    int high = 0;
+        //    float local_max_y = float.MinValue;
+        //    int grid_max = 0;
+        //    int grid_min = 0;
+        //    int sample_rate;
+
+        //    if (!mox || (mox && tx_on_vfob && console.RX2Enabled))
+        //    {
+        //        low = rx_spectrum_display_low;
+        //        high = rx_spectrum_display_high;
+        //        grid_max = spectrum_grid_max;
+        //        grid_min = spectrum_grid_min;
+        //        sample_rate = sample_rate_rx1;
+        //    }
+        //    else
+        //    {
+        //        low = tx_spectrum_display_low;
+        //        high = tx_spectrum_display_high;
+        //        grid_max = tx_spectrum_grid_max;
+        //        grid_min = tx_spectrum_grid_min;
+        //        sample_rate = sample_rate_tx;
+        //    }
+
+        //    if (rx1_dsp_mode == DSPMode.DRM)
+        //    {
+        //        low = 2500;
+        //        high = 21500;
+        //    }
+
+        //    int yRange = grid_max - grid_min;
+
+        //    if (!bottom && data_ready)
+        //    {
+        //        if (mox && (rx1_dsp_mode == DSPMode.CWL || rx1_dsp_mode == DSPMode.CWU))
+        //        {
+        //            for (int i = 0; i < current_display_data.Length; i++)
+        //                current_display_data[i] = grid_min - rx1_display_cal_offset;
+        //        }
+        //        else
+        //        {
+        //            fixed (void* rptr = &new_display_data[0])
+        //            fixed (void* wptr = &current_display_data[0])
+        //                Win32.memcpy(wptr, rptr, BUFFER_SIZE * sizeof(float));
+        //        }
+        //        data_ready = false;
+        //    }
+        //    else if (bottom && data_ready_bottom)
+        //    {
+        //        /*  if(mox && (rx1_dsp_mode == DSPMode.CWL || rx1_dsp_mode == DSPMode.CWU))
+        //          {
+        //              for(int i=0; i<current_display_data_bottom.Length; i++)
+        //                  current_display_data_bottom[i] = -200.0f;
+        //          }
+        //          else */
+        //        {
+        //            fixed (void* rptr = &new_display_data_bottom[0])
+        //            fixed (void* wptr = &current_display_data_bottom[0])
+        //                Win32.memcpy(wptr, rptr, BUFFER_SIZE * sizeof(float));
+        //        }
+        //        data_ready_bottom = false;
+        //    }
+
+        //    /*   if (!bottom && average_on)
+        //           console.UpdateRX1DisplayAverage(rx1_average_buffer, current_display_data);
+        //       else if (bottom && rx2_avg_on)
+        //           console.UpdateRX2DisplayAverage(rx2_average_buffer, current_display_data_bottom);
+
+        //       if (!bottom && peak_on)
+        //           UpdateDisplayPeak(rx1_peak_buffer, current_display_data);
+        //       else if (bottom && rx2_peak_on)
+        //           UpdateDisplayPeak(rx2_peak_buffer, current_display_data_bottom);
+        //       */
+        //    start_sample_index = (BUFFER_SIZE >> 1) + (int)((low * BUFFER_SIZE) / sample_rate);
+        //    num_samples = (int)((high - low) * BUFFER_SIZE / sample_rate);
+
+        //    if (start_sample_index < 0) start_sample_index = 0;
+        //    if ((num_samples - start_sample_index) > (BUFFER_SIZE + 1))
+        //        num_samples = BUFFER_SIZE - start_sample_index;
+
+        //    slope = (float)num_samples / (float)W;
+        //    for (int i = 0; i < W; i++)
+        //    {
+        //        float max = float.MinValue;
+        //        float dval = i * slope + start_sample_index;
+        //        int lindex = (int)Math.Floor(dval);
+        //        if (!bottom)
+        //        {
+        //            if (!mox)
+        //                max = current_display_data[i];
+        //            else
+        //            {
+        //                if (slope <= 1)
+        //                    max = current_display_data[lindex] * ((float)lindex - dval + 1) + current_display_data[lindex + 1] * (dval - (float)lindex);
+        //                else
+        //                {
+        //                    int rindex = (int)Math.Floor(dval + slope);
+        //                    if (rindex > BUFFER_SIZE) rindex = BUFFER_SIZE;
+        //                    for (int j = lindex; j < rindex; j++)
+        //                        if (current_display_data[j] > max) max = current_display_data[j];
+        //                }
+        //            }
+        //        }
+        //        else
+        //        {
+        //            if (slope <= 1)
+        //                max = current_display_data_bottom[lindex] * ((float)lindex - dval + 1) + current_display_data_bottom[lindex + 1] * (dval - (float)lindex);
+        //            else
+        //            {
+        //                int rindex = (int)Math.Floor(dval + slope);
+        //                if (rindex > BUFFER_SIZE) rindex = BUFFER_SIZE;
+        //                for (int j = lindex; j < rindex; j++)
+        //                    if (current_display_data_bottom[j] > max) max = current_display_data_bottom[j];
+        //            }
+        //        }
+
+        //        if (!mox || (mox && tx_on_vfob && console.RX2Enabled))
+        //        {
+        //            if (!bottom) max += rx1_display_cal_offset;
+        //            else max += rx2_display_cal_offset;
+        //        }
+        //        else
+        //        {
+        //            //if (!bottom) 
+        //            max += tx_display_cal_offset;
+        //        }
+
+        //        if (!mox || (mox && tx_on_vfob && console.RX2Enabled))
+        //        {
+        //            if (!bottom) max += rx1_preamp_offset - alex_preamp_offset;
+        //            else max += rx2_preamp_offset;
+        //        }
+
+        //        if (max > local_max_y)
+        //        {
+        //            local_max_y = max;
+        //            max_x = i;
+        //        }
+
+        //        points[i].X = i;
+        //        points[i].Y = (int)Math.Min((Math.Floor((grid_max - max) * H / yRange)), H);
+        //        if (bottom) points[i].Y += H;
+        //    }
+
+        //    max_y = local_max_y;
+        //    //using (Pen data_line_pen = new Pen(new SolidBrush(data_line_color), display_line_width))
+        //    g.DrawLines(data_line_pen, points);
+
+        //    // draw long cursor
+        //    if (current_click_tune_mode != ClickTuneMode.Off)
+        //    {
+        //        Pen p = current_click_tune_mode == ClickTuneMode.VFOA ? grid_text_pen : Pens.Red;
+        //        if (bottom)
+        //        {
+        //            g.DrawLine(p, display_cursor_x, H, display_cursor_x, H + H);
+        //            g.DrawLine(p, 0, display_cursor_y, W, display_cursor_y);
+        //        }
+        //        else
+        //        {
+        //            g.DrawLine(p, display_cursor_x, 0, display_cursor_x, H);
+        //            g.DrawLine(p, 0, display_cursor_y, W, display_cursor_y);
+        //        }
+        //    }
+
+        //    return true;
+        //} 
 
         unsafe static private bool DrawPanadapter(Graphics g, int W, int H, int rx, bool bottom)
         {
