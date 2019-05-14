@@ -505,10 +505,10 @@ namespace Thetis
     {
         Atlas = 0,
         Hermes = 1,
-        HermesII = 2, // ANAN-10E ANAN-100B
+        HermesII = 2, // ANAN-10E ANAN-100B HeremesII
         Angelia = 3,  // ANAN-100D
         Orion = 4,    // ANAN-200D
-        OrionMKII = 5 // ANAN-8000DLE OrionMkII
+        OrionMKII = 5 // AMAM-7000DLE 7000DLEMkII ANAN-8000DLE OrionMkII
     }
 
     public enum DSPFilterType
@@ -16064,12 +16064,20 @@ namespace Thetis
                     break;
             }
 
+            Display.RXSpectrumDisplayLow = low;
+            Display.RXSpectrumDisplayHigh = high;
             specRX.GetSpecRX(0).CalcSpectrum(low, high, spec_blocksize, 48000);
         }
 
-        public static void UpdateTXDisplayVars(int l, int h)
+        private void UpdateTXDisplayVars(int l, int h)
         {
+            if (Display.CurrentDisplayMode != DisplayMode.SPECTRUM &&
+                Display.CurrentDisplayMode != DisplayMode.HISTOGRAM &&
+                Display.CurrentDisplayMode != DisplayMode.SPECTRASCOPE)
+                return;
+
             int low = 0, high = 0;
+            int spec_blocksize = radio.GetDSPTX(0).BufferSize;
             if (l < 0 && h <= 0)
             {
                 high = 0;
@@ -16093,16 +16101,14 @@ namespace Thetis
                 high = (int)(max_edge * 1.1);
             }
 
-            //  Display.TXDisplayLow = low;
-            // Display.TXDisplayHigh = high;
             Display.TXSpectrumDisplayLow = low;
             Display.TXSpectrumDisplayHigh = high;
+            specRX.GetSpecRX(cmaster.inid(1, 0)).CalcSpectrum(low, high, spec_blocksize, 96000);
         }
 
         public void SetTXFilters(DSPMode mode, int low, int high)
         {
             int l = 0, h = 0;
-            // low = (int)Math.Max(low, 50);
             switch (mode)
             {
                 case DSPMode.LSB:
@@ -23978,7 +23984,7 @@ namespace Thetis
         {
             if (chkRxAnt.Checked)
             {
-                if (!Alex.trx_ant_not_same)
+                if (!Alex.trx_ant_not_same && !initializing)
                 {
                     chkRxAnt.Checked = false;
                     return;
@@ -29061,10 +29067,12 @@ namespace Thetis
                     case DisplayMode.PANASCOPE:
                         CalcTXDisplayFreq();
                         btnDisplayPanCenter.PerformClick();
+                       // UpdateTXSpectrumDisplayVars();
                         break;
                     case DisplayMode.SPECTRUM:
                     case DisplayMode.HISTOGRAM:
                         UpdateTXSpectrumDisplayVars();
+                       // UpdateTXDisplayVars((int)udTXFilterLow.Value, (int)udTXFilterHigh.Value);
                         break;
                 }
             }
@@ -33457,8 +33465,7 @@ namespace Thetis
                                     if (chkVFOATX.Checked || !chkRX2.Checked)
                                     {
                                         fixed (float* ptr = &Display.new_display_data[0])
-                                            //SpecHPSDRDLL.GetPixels(cmaster.inid(1, 0), 0, ptr, ref flag);
-                                        WDSP.TXAGetSpecF1(WDSP.id(1, 0), ptr);
+                                            SpecHPSDRDLL.GetPixels(cmaster.inid(1, 0), 0, ptr, ref flag);
                                     }
                                     else
                                     {
@@ -37429,6 +37436,7 @@ namespace Thetis
                     Display.CurrentDisplayMode = DisplayMode.SPECTRUM;
                     SpecDisplay = false;
                     UpdateRXDisplayVars((int)udFilterLow.Value, (int)udFilterHigh.Value);
+                    UpdateTXDisplayVars((int)udTXFilterLow.Value, (int)udTXFilterHigh.Value);
                     WDSP.SetRXASpectrum(WDSP.id(0, 0), 1, 0, 0, 0);
                     break;
                 case "Panadapter":
@@ -37436,6 +37444,7 @@ namespace Thetis
                     WDSP.SetRXASpectrum(WDSP.id(0, 0), 0, 0, 0, 0);
                     CalcDisplayFreq();
                     CalcRX2DisplayFreq();
+                    CalcTXDisplayFreq();
                     SpecDisplay = true;
                     break;
                 case "Scope":
@@ -37455,12 +37464,14 @@ namespace Thetis
                     WDSP.SetRXASpectrum(WDSP.id(0, 0), 0, 0, 0, 0);
                     CalcDisplayFreq();
                     CalcRX2DisplayFreq();
+                    CalcTXDisplayFreq();
                     SpecDisplay = true;
                     break;
                 case "Histogram":
                     Display.CurrentDisplayMode = DisplayMode.HISTOGRAM;
                     SpecDisplay = false;
                     UpdateRXDisplayVars((int)udFilterLow.Value, (int)udFilterHigh.Value);
+                    UpdateTXDisplayVars((int)udTXFilterLow.Value, (int)udTXFilterHigh.Value);
                     WDSP.SetRXASpectrum(WDSP.id(0, 0), 1, 0, 0, 0);
                     break;
                 case "Panafall":
@@ -37468,6 +37479,7 @@ namespace Thetis
                     WDSP.SetRXASpectrum(WDSP.id(0, 0), 0, 0, 0, 0);
                     CalcDisplayFreq();
                     CalcRX2DisplayFreq();
+                    CalcTXDisplayFreq();
                     SpecDisplay = true;
                     break;
                 case "Panascope":
@@ -37475,12 +37487,15 @@ namespace Thetis
                     WDSP.SetRXASpectrum(WDSP.id(0, 0), 0, 0, 0, 0);
                     CalcDisplayFreq();
                     CalcRX2DisplayFreq();
+                    CalcTXDisplayFreq();
                     SpecDisplay = true;
+                    UpdateTXSpectrumDisplayVars();
                     break;
                 case "Spectrascope":
                     Display.CurrentDisplayMode = DisplayMode.SPECTRASCOPE;
                     SpecDisplay = false;
                     UpdateRXDisplayVars((int)udFilterLow.Value, (int)udFilterHigh.Value);
+                    UpdateTXDisplayVars((int)udTXFilterLow.Value, (int)udTXFilterHigh.Value);
                     WDSP.SetRXASpectrum(WDSP.id(0, 0), 1, 0, 0, 0);
                     break;
                 case "Off":
@@ -50110,6 +50125,7 @@ namespace Thetis
             }
 
             UpdateRXSpectrumDisplayVars();
+            UpdateTXSpectrumDisplayVars();
         }
 
 
