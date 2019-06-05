@@ -193,11 +193,6 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ADODB">
-      <Name>adodb</Name>
-      <HintPath>..\..\..\..\..\..\..\..\..\Program Files\Microsoft.NET\Primary Interop Assemblies\adodb.dll</HintPath>
-      <AssemblyFolderKey>hklm\primary interop assemblies</AssemblyFolderKey>
-    </Reference>
     <Reference Include="System">
       <Name>System</Name>
     </Reference>
@@ -210,7 +205,6 @@
     <Reference Include="System.Drawing">
       <Name>System.Drawing</Name>
     </Reference>
-    <Reference Include="System.Speech" />
     <Reference Include="System.Windows.Forms">
       <Name>System.Windows.Forms</Name>
     </Reference>
@@ -218,13 +212,6 @@
     <Reference Include="System.Xml">
       <Name>System.XML</Name>
     </Reference>
-    <COMReference Include="stdole">
-      <Guid>{00020430-0000-0000-C000-000000000046}</Guid>
-      <VersionMajor>2</VersionMajor>
-      <VersionMinor>0</VersionMinor>
-      <Lcid>0</Lcid>
-      <WrapperTool>primary</WrapperTool>
-    </COMReference>
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
@@ -234,8 +221,14 @@
     <Compile Include="AmpView.Designer.cs">
       <DependentUpon>AmpView.cs</DependentUpon>
     </Compile>
+    <Compile Include="BandButtonsPopup.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Channel.cs" />
     <Compile Include="cmaster.cs" />
+    <Compile Include="FilterButtonsPopup.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="KE9N\conrec.cs" />
     <Compile Include="console.Designer.cs">
       <DependentUpon>console.cs</DependentUpon>
@@ -385,6 +378,9 @@
     <Compile Include="Memory\MemoryList.cs" />
     <Compile Include="Memory\MemoryRecord.cs" />
     <Compile Include="Midi2CatCommands.cs" />
+    <Compile Include="ModeButtonsPopup.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="notch.cs" />
     <Compile Include="notchlist.cs" />
     <Compile Include="HPSDR\Penny.cs" />
@@ -445,6 +441,9 @@
       <DependentUpon>setup.cs</DependentUpon>
     </Compile>
     <Compile Include="Skin.cs" />
+    <Compile Include="SliderSettingsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="SortableBindingList.cs" />
     <Compile Include="splash.cs">
       <SubType>Form</SubType>
@@ -482,9 +481,15 @@
     <Compile Include="xvtr.cs">
       <SubType>Form</SubType>
     </Compile>
+    <EmbeddedResource Include="FilterButtonsPopup.resx">
+      <DependentUpon>FilterButtonsPopup.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="KE9N\scan.resx">
       <SubType>Designer</SubType>
       <DependentUpon>scan.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ModeButtonsPopup.resx">
+      <DependentUpon>ModeButtonsPopup.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\picD1orig.png" />
     <Content Include="Resources\picD2.png" />
@@ -584,6 +589,9 @@
     <EmbeddedResource Include="setup.resx">
       <DependentUpon>setup.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SliderSettingsForm.resx">
+      <DependentUpon>SliderSettingsForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="splash.resx">
       <DependentUpon>splash.cs</DependentUpon>

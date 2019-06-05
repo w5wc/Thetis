@@ -59,7 +59,8 @@ namespace Thetis
     using System.Xml.Linq;
     using System.Timers;
     using System.Linq;
-    using System.Speech.Synthesis;
+   // using System.Speech.Synthesis;
+    using System.Media;
 
     #region Enums
 
@@ -537,6 +538,123 @@ namespace Thetis
         elsewhere
     }
 
+    //
+    // G8NJJ: define the button bar menu
+    //
+    public enum EButtonBarActions
+    {
+        eBBNone = 0,                // no action
+        eBBStartStop,               // start/stop the radio
+        eBBRX2OnOff,                // toggle RX2 on/off
+        eBBDUP,                     // press DUP button
+        eBBMON,                     // press MON button
+        eBBTune,                    // Tune on/off
+        eBBMOX,                     // MOX on/off
+        eBBPuresignalOnOff,         // toggle Puresignal on/off
+        eBBPuresignal2Tone,         // puresignal 2 tone test on/off
+        eBBMenu,                    // activate another menu
+        eBBNR,                      // press NR button
+        eBBNB,                      // press NB button
+        eBBSNB,                     // press SNB button
+        eBBANF,                     // press ANF button
+        eBBMNF,                     // press MNF button
+        eBBVFOSwap,                 // press VFO swap button
+        eBBVFOSplit,                // split operation
+        eBBVFOAtoB,                 // copy A to B
+        eBBVFOBtoA,                 // copy B to A
+        eBBVFOZeroBeat,             // operate zero beat button
+        eBBIFtoV,                   // operate IF->V button
+        eBBVFOSyncOnOff,            // VFO sync
+        eBBVFOLockOnOff,            // VFO Lock
+        eBBVFOCTUNEOnOff,           // Click Tune
+        eBBToggleAB,                // toggle betwee A & B
+        eBBRITOnOff,                // toggle RIT on/off
+        eBBXITOnOff,                // toggle XIT on/off
+        eBBRITXITToggle,            // step off-RIT-XIT
+        eBBClearRITXIT,             // clear RIT and XIT
+        eBBClearRIT,                // clear RIT only
+        eBBClearXIT,                // clear XIT only
+        eBBRITPlus,                 // RIT step up
+        eBBRITMinus,                // RIT step down
+        eBBXITPlus,                 // XIT step up
+        eBBXITMinus,                // XIT step down
+        eBBRITXITPlus,              // increment whichever is selected
+        eBBRITXITMinus,             // decrement whichever is selected
+        eBBFilterReset,             // reset variable filter
+        eBBFilterPlus,              // select next filter
+        eBBFilterMinus,             // select next lower filter
+        eBBBandPlus,                // step up band
+        eBBBandMinus,               // step down bans
+        eBBModePlus,                // step up mode
+        eBBModeMinus,               // step down mode
+        eBBAttenStep,               // step the attenuation value in 6dB steps
+        eBBMuteOnOff,               // mute on/off
+        eBBBINOnOff,                // Binaural on/off
+        eBBSDOnOff,                 // stereo diversity on/off
+        eBBVAC1OnOff,               // toggle VAC1 on/off
+        eBBVAC2OnOff,               // toggle VAC2 on/off
+        eBBAGCStep,                 // step the aGC setting
+        eBBSqlOnOff,                // step the squelch setting
+        eBBRXEQOnOff,               // RX equaliser on/off
+        eBBTXEQOnOff,               // TX equaliser on/off
+        eBBTXFLShow,                // show TX filter
+        eBBMICOnOff,                // MIC button on/off
+        eBBCOMPOnOff,               // COMP button on/off
+        eBBVOXOnOff,                // VOX on/off
+        eBBDEXPOnOff,               // DEXP on/off
+        eBBCWIambic,                // iambic keyer selected
+        eBBCWSidetone,              // CW sidetone
+        eBBCWShowTX,                // CW show tX frequency
+        eBBCWShowZero,              // show CW zero freq
+        eBBCWSemiBreakin,           // semi breakin on/off
+        eBBCWQSK,                   // QSK on/off
+        eBBRX1APF,                  // RX1 APF on/off
+        eBBCTCSSOnOff,              // FM CTCSS tone on/off
+        eBBFMDeviation,             // Toggle FM deviation
+        eBBDiversityOnOff,          // toggle diversity on/off
+        eBBSubRXOnOff,              // toggle sub-RX on/off
+        eBBRXMeterStep,             // step the setting of the RX meter
+        eBBTXMeterStep,             // step the setting of the TX meter
+        eBBDisplayModeStep,         // step the display mode
+        eBBDisplayDSPAVG,           // AVG button
+        eBBDisplayDSPPeak,          // AVG button
+        eBBCentreDisplay,           // centre the display
+        eBBZoomStep,                // step between the zoom step buttons
+        eBBRecordAudio,             // record audio
+        eBBTXAudio,                 // play audio (parameter identified which)
+        eBBModeForm,                // show MODE form
+        eBBFilterForm,              // show FILTER form
+        eBBBandForm,                // show BAND form
+        eBBSliderForm,              // show "sliders" form
+        eBBVFOSettingForm,          // show VFO Settings form
+        eBBBandstackForm,           // show band stacks form
+        eBBDiversityForm,           // show the diversity form
+        eBBModeSettingsForm,        // show the "mode dependent settings" form
+        eBBPuresignalForm,          // show the Puresignal form
+        eBBEqualiserForm,           // show equaliser form
+        eBBDisplaySettingsForm,     // show the display settings form
+        eBBAudioForm,               // open the audio record play form
+        eBBSetupForm                // open the setup form
+    }
+
+    public struct SButtonBarEntry
+    {
+        public EButtonBarActions Action;           // assigned action
+        public string ButtonText;                  // text for the button itself
+        public int RXOverride;                     // 0: use show_RX1 setting; 1: use RX1; 2: use RX2
+        public int ButtonParameter;                // a numerical param for menu buttons
+
+        //constructor
+        public SButtonBarEntry(EButtonBarActions action, string str, int rxovr, int param)
+        {
+            Action = action;
+            ButtonText = str;
+            RXOverride = rxovr;
+            ButtonParameter = param;
+        }
+    }
+
+
     #endregion
 
     unsafe public partial class Console : System.Windows.Forms.Form
@@ -590,7 +708,7 @@ namespace Thetis
         private int timerID;
 
         private TimeProc timeProcPeriodic;   // ke9ns add to use windows based multimedia timer
-        SpeechSynthesizer speaker = new SpeechSynthesizer(); // ke9ns add 
+       // SpeechSynthesizer speaker = new SpeechSynthesizer(); // ke9ns add 
         // HidDevice.PowerMate powerMate = new HidDevice.PowerMate();  // ke9ns add link back to PowerMate.cpp and PowerMate.h
         public int KBON = 0; // ke9ns add 1=knob present 0=knob not present
         public int speed = 0; // ke9ns add speed of knob freq change
@@ -666,6 +784,11 @@ namespace Thetis
         public FilterForm filterRX1Form;
         public FilterForm filterRX2Form;
         public DiversityForm diversityForm;
+        // G8NJJ
+        public SliderSettingsForm sliderForm;
+        public ModeButtonsPopup modePopupForm;
+        public FilterButtonsPopup filterPopupForm;
+        public BandButtonsPopup bandPopupForm;
         public RAForm raForm;
         public Path_Illustrator path_Illustrator;
         // public RadioInfo radio_info;
@@ -928,6 +1051,7 @@ namespace Thetis
         private Point gr_BandGEN_basis_location = new Point(100, 100);
         private Point gr_BandVHF_basis_location = new Point(100, 100);		//k6jca
         private Point gr_Mode_basis_location = new Point(100, 100);		//k6jca
+        private Point gr_RX2Mode_basis_location = new Point(100, 100);		//g8njj
         private Point gr_VFOB_basis_location = new Point(100, 100);		//k6jca
         private Point gr_VFOA_basis_location = new Point(100, 100);		//k6jca
         private Point gr_ModePhone_basis_location = new Point(100, 100);		//k6jca
@@ -1027,6 +1151,7 @@ namespace Thetis
         private Point chk_mox_basis = new Point(100, 100);
         private Point chk_tun_basis = new Point(100, 100);
         private Point chk_vox_basis = new Point(100, 100);
+        private Point chk_ps2_basis = new Point(100, 100);
         private Point chk_dup_basis = new Point(100, 100);
         private Point chk_ctun_basis = new Point(100, 100);
         private Point chk_x2tr_basis = new Point(100, 100);
@@ -1042,6 +1167,7 @@ namespace Thetis
         private Point pic_display_basis = new Point(100, 100);
         private Point pic_waterfall_basis = new Point(100, 100);
         private Point combo_display_mode_basis = new Point(100, 100);
+        private Point combo_rx2_display_mode_basis = new Point(100, 100);
         private Point combo_agc_basis = new Point(100, 100);
         private Point combo_preamp_basis = new Point(100, 100);
         private Point combo_rx2agc_basis = new Point(100, 100);
@@ -1055,6 +1181,7 @@ namespace Thetis
         private Size gr_BandGEN_basis_size = new Size(100, 100);
         private Size gr_BandVHF_basis_size = new Size(100, 100);
         private Size gr_Mode_basis_size = new Size(100, 100);
+        private Size gr_RX2Mode_basis_size = new Size(100, 100);
         private Point rad_band160_basis = new Point(100, 100);
         private Point rad_band80_basis = new Point(100, 100);
         private Point rad_band60_basis = new Point(100, 100);
@@ -1112,12 +1239,36 @@ namespace Thetis
         private Point rad_mode_digl_basis = new Point(100, 100);
         private Point rad_mode_digu_basis = new Point(100, 100);
         private Point rad_mode_drm_basis = new Point(100, 100);
-
+        private Point rad_RX2mode_lsb_basis = new Point(100, 100);
+        private Point rad_RX2mode_usb_basis = new Point(100, 100);
+        private Point rad_RX2mode_dsb_basis = new Point(100, 100);
+        private Point rad_RX2mode_cwl_basis = new Point(100, 100);
+        private Point rad_RX2mode_cwu_basis = new Point(100, 100);
+        private Point rad_RX2mode_fmn_basis = new Point(100, 100);
+        private Point rad_RX2mode_am_basis = new Point(100, 100);
+        private Point rad_RX2mode_sam_basis = new Point(100, 100);
+        private Point rad_RX2mode_spec_basis = new Point(100, 100);
+        private Point rad_RX2mode_digl_basis = new Point(100, 100);
+        private Point rad_RX2mode_digu_basis = new Point(100, 100);
+        private Point rad_RX2mode_drm_basis = new Point(100, 100);
+        // G8NJJ
+        private Point chk_RIT_basis = new Point(100, 100);//G8NJJ added
+        private Point chk_XIT_basis = new Point(100, 100);//G8NJJ added
+        private Point ud_RIT_basis = new Point(100, 100);//G8NJJ added
+        private Point ud_XIT_basis = new Point(100, 100);//G8NJJ added
+        private Point btn_RITReset_basis = new Point(100, 100);//G8NJJ added
+        private Point btn_XITReset_basis = new Point(100, 100);//G8NJJ added
+        private Point lbl_RX1_Mute_VFOA_basis = new Point(100, 100);
+        private Point lbl_RX2_Mute_VFOB_basis = new Point(100, 100);
+        private Point lbl_RX1_APF_VFOA_basis = new Point(100, 100);
+        private Point lbl_RX2_APF_VFOB_basis = new Point(100, 100);
         //
         // G8NJJ: Titlebar strings for Andromeda
         //
         private string TitleBarMultifunction;                   // shows action assigned to multi encoder
         private string TitleBarEncoder;                         // shows most recent encoder value change
+        private SButtonBarEntry[] ButtonBarMenu;
+
         #endregion
 
         #region Constructor and Destructor
@@ -1128,6 +1279,11 @@ namespace Thetis
         public Console(string[] args)
         {
             Display.specready = false;
+
+            // G8NJJ
+            InitialiseButtonBarMenu();
+
+            //        ButtonBarMenu[0] = {EButtonBarActions.eBBMenu, "Menu 1", 2};
 
             foreach (string s in args)
             {
@@ -5911,6 +6067,7 @@ namespace Thetis
 
             ClickTuneDisplay = false;                               // Set CTUN off to restore center frequency - G3OQD
             chkFWCATU.Checked = ClickTuneDisplay;
+
             ptbDisplayZoom.Value = ZoomFactor;
             ptbDisplayZoom_Scroll(this, EventArgs.Empty);
             if (CTUN)
@@ -5929,6 +6086,7 @@ namespace Thetis
             txtVFOBFreq_LostFocus(this, EventArgs.Empty);
             ClickTuneDisplay = CTUN;
             chkFWCATU.Checked = ClickTuneDisplay;
+
             VFOAFreq = freq;                                       // Restore actual receive frequency after CTUN status restored - G3OQD
 
             // Continuation of QSK-related band/mode-change management - see also QSKEnabled()
@@ -5986,12 +6144,14 @@ namespace Thetis
         {
             tune_step_index = (tune_step_index + 1) % tune_step_list.Count;
             txtWheelTune.Text = tune_step_list[tune_step_index].Name;
+            lblStepValue.Text = txtWheelTune.Text;
         }
 
         private void ChangeTuneStepDown()
         {
             tune_step_index = (tune_step_index - 1 + tune_step_list.Count) % tune_step_list.Count;
             txtWheelTune.Text = tune_step_list[tune_step_index].Name;
+            lblStepValue.Text = txtWheelTune.Text;
         }
 
         private void UpdateBandButtonColors()
@@ -15459,6 +15619,31 @@ namespace Thetis
             }
         }
 
+        // G8NJJ like CATBandGroup but covering SWL too
+        // use the enum variables, because all 3 forms can be hidden when display collapsed
+        public int BandGroup
+        {
+            get
+            {
+                if (whatisGEN)
+                    return 2;
+                else if (whatisVHF)
+                    return 1;
+                else
+                    return 0;
+            }
+            set
+            {
+                if (value == 0)
+                    btnBandHF_Click(btnBandHF, EventArgs.Empty);
+                else if (value == 1)
+                    btnBandVHF_Click(btnBandVHF, EventArgs.Empty);
+                else if (value == 2)
+                    btnBandGEN_Click(radBandGEN, EventArgs.Empty);
+            }
+        }
+
+
         //BT 06/17/05 added for CAT commands
         public void SetCATBand(Band pBand)
         {
@@ -15553,6 +15738,10 @@ namespace Thetis
                     radBandGEN_Click(this, EventArgs.Empty);
                     break;
             }
+            if (bandPopupForm != null) bandPopupForm.RepopulateForm();
+            if (modePopupForm != null) modePopupForm.RepopulateForm();
+            if (filterPopupForm != null) filterPopupForm.RepopulateForm();
+
         }
 
 
@@ -15565,6 +15754,13 @@ namespace Thetis
         {
             vhf_text[index].Enabled = b;
         }
+
+        // G8NJJ added to allow labelling of buttons in popup form
+        public string GetVHFText(int index)
+        {
+            return vhf_text[index].Text;
+        }
+
 
         //=============================================================================
         // ke9ns mod add GEN SWL bands
@@ -20087,13 +20283,28 @@ namespace Thetis
         public bool CTuneDisplay
         {
             get { return chkFWCATU.Checked; }
-            set { chkFWCATU.Checked = value; }
+            set
+            {
+                chkFWCATU.Checked = value;
+                if (value == true)
+                    lblCtunLabel.BackColor = System.Drawing.Color.Blue;
+                else
+                    lblCtunLabel.BackColor = System.Drawing.Color.Transparent;
+
+            }
         }
 
         public bool CTuneRX2Display
         {
             get { return chkX2TR.Checked; }
-            set { chkX2TR.Checked = value; }
+            set
+            {
+                chkX2TR.Checked = value;
+                if (value == true)
+                    lblRX2CtunLabel.BackColor = System.Drawing.Color.Blue;
+                else
+                    lblRX2CtunLabel.BackColor = System.Drawing.Color.Transparent;
+            }
         }
 
         private bool click_tune_display = false;
@@ -20245,6 +20456,7 @@ namespace Thetis
                     rx1_step_attenuator_by_band[(int)rx1_band] = rx1_attenuator_data;
 
                 udRX1StepAttData.Value = rx1_attenuator_data;
+                lblAttenLabel.Text = rx1_attenuator_data.ToString() + " dB";
                 if (!mox)
                 {
                     update_preamp = true;
@@ -20301,7 +20513,11 @@ namespace Thetis
         public int RX2ATT
         {
             get { return (int)udRX2StepAttData.Value; }
-            set { udRX2StepAttData.Value = (decimal)value; }
+            set
+            {
+                udRX2StepAttData.Value = (decimal)value;
+                lblRX2AttenLabel.Text = value.ToString() + " dB";
+            }
         }
 
         private int rx2_attenuator_data = 0;
@@ -20345,6 +20561,7 @@ namespace Thetis
 
                 tune_step_index = value;
                 txtWheelTune.Text = tune_step_list[tune_step_index].Name;
+                lblStepValue.Text = txtWheelTune.Text;
             }
         }
 
@@ -20440,6 +20657,8 @@ namespace Thetis
             {
                 if (ptbRX0Gain != null) ptbRX0Gain.Value = value;
                 ptbRX0Gain_Scroll(this, EventArgs.Empty);
+                if (sliderForm != null)
+                    sliderForm.RX1Gain = value;
             }
         }
 
@@ -20833,6 +21052,7 @@ namespace Thetis
                 {
                     CurrentMeterTXMode = value;
                     comboMeterTXMode_SelectedIndexChanged(this, EventArgs.Empty);
+                    lblTXMeter.Text = comboMeterTXMode.Text;
                 }
             }
         }
@@ -21494,7 +21714,14 @@ namespace Thetis
         public bool VFOSync
         {
             get { return chkVFOSync.Checked; }
-            set { chkVFOSync.Checked = value; }
+            set
+            {
+                chkVFOSync.Checked = value;
+                if (value == true)
+                    lblVFOSyncLabel.BackColor = System.Drawing.Color.Blue;
+                else
+                    lblVFOSyncLabel.BackColor = System.Drawing.Color.Transparent;
+            }
         }
 
         private Color vfo_background_color = Color.Black;
@@ -21514,6 +21741,7 @@ namespace Thetis
                 panelVFOBHover.BackColor = value;
                 lblFilterLabel.BackColor = value;
                 lblModeLabel.BackColor = value;
+                lblModeBigLabel.BackColor = value;
             }
         }
 
@@ -21713,7 +21941,14 @@ namespace Thetis
             {
                 info_buttons_color = value;
                 lblModeLabel.ForeColor = value;
+                lblModeBigLabel.ForeColor = value;
                 lblFilterLabel.ForeColor = value;
+                lblAttenLabel.ForeColor = value;
+                lblAGCLabel.ForeColor = value;
+                lblNRLabel.ForeColor = value;
+                lblNBLabel.ForeColor = value;
+                lblSNBLabel.ForeColor = value;
+                lblANFLabel.ForeColor = value;
             }
         }
 
@@ -25305,6 +25540,25 @@ namespace Thetis
             }
         }
 
+        public int CATRX1RX2RadioButton
+        {
+            get
+            {
+                if (show_rx2)
+                    return 1;
+                else
+                    return 0;
+
+            }
+            set
+            {
+                if (value == 0)                     // RX1
+                    radRX1Show.Checked = true;
+                else if (value == 1)                // RX2
+                    radRX2Show.Checked = true;
+            }
+        }
+
         public void CATRX2BandUpDown(int direction)
         {
             comboRX2Band.Focus();
@@ -26373,6 +26627,9 @@ namespace Thetis
 
                 //comboRX2Band.SelectedIndex = Math.Min(Math.Max(0, (int)value), comboRX2Band.Items.Count-1);
                 comboRX2Band.Text = BandToString(rx2_band);
+                // G8NJJ attempt to get CAT command to set the band, not just update the combo (the _changed event doesn't trigger)
+                // comboRX2Band.SelectedItem = BandToString(rx2_band);
+                comboRX2Band_SelectedIndexChanged(this, EventArgs.Empty);
 
                 Band lo_band = Band.FIRST;
                 if (rx2_xvtr_index >= 0)
@@ -26405,7 +26662,9 @@ namespace Thetis
                     rx2_preamp_offset[(int)PreampMode.HIGH] = rx2_level_table[(int)b][1];
                     rx2_meter_cal_offset = rx2_level_table[(int)b][2];
                     UpdateDisplayOffsets();*/
-
+                    if (bandPopupForm != null) bandPopupForm.RepopulateForm();
+                    if (modePopupForm != null) modePopupForm.RepopulateForm();
+                    if (filterPopupForm != null) filterPopupForm.RepopulateForm();
                 }
             }
         }
@@ -26473,13 +26732,27 @@ namespace Thetis
         public bool CATVFOLock
         {
             get { return chkVFOLock.Checked; }
-            set { chkVFOLock.Checked = value; }
+            set
+            {
+                chkVFOLock.Checked = value;
+                if (value == true)
+                    lblLockLabel.BackColor = System.Drawing.Color.Blue;
+                else
+                    lblLockLabel.BackColor = System.Drawing.Color.Transparent;
+            }
         }
 
         public bool CATVFOBLock
         {
             get { return chkVFOBLock.Checked; }
-            set { chkVFOBLock.Checked = value; }
+            set
+            {
+                chkVFOBLock.Checked = value;
+                if (value == true)
+                    lblRX2LockLabel.BackColor = System.Drawing.Color.Blue;
+                else
+                    lblRX2LockLabel.BackColor = System.Drawing.Color.Transparent;
+            }
         }
 
         public string CATGetVersion()
@@ -26776,6 +27049,9 @@ namespace Thetis
                 //r.Select();
                 //r.PerformClick();
                 r.Checked = true;
+                // G8NJJ make popup forms have up to date values
+                if (modePopupForm != null) modePopupForm.RepopulateForm();
+                if (filterPopupForm != null) filterPopupForm.RepopulateForm();
             }
         }
 
@@ -26824,6 +27100,9 @@ namespace Thetis
                 }
 
                 r.Checked = true;
+                // G8NJJ update popup forms
+                if (modePopupForm != null) modePopupForm.RepopulateForm();
+                if (filterPopupForm != null) filterPopupForm.RepopulateForm();
             }
         }
 
@@ -26889,6 +27168,7 @@ namespace Thetis
 
                 //SetFilter(value);  // kd5tfd added for cat zzsf support 
                 // commented as changed order in CATCommands.cs should no longer require this
+                if (filterPopupForm != null) filterPopupForm.RepopulateForm();
             }
         }
 
@@ -26946,6 +27226,7 @@ namespace Thetis
 
                 //SetFilter(value);  // kd5tfd added for cat zzsf support 
                 // commented as changed order in CATCommands.cs should no longer require this
+                if (filterPopupForm != null) filterPopupForm.RepopulateForm();
             }
         }
 
@@ -28661,7 +28942,11 @@ namespace Thetis
         public AGCMode RX1AGCMode
         {
             get { return (AGCMode)comboAGC.SelectedIndex; }
-            set { comboAGC.SelectedIndex = (int)value; }
+            set
+            {
+                comboAGC.SelectedIndex = (int)value;
+                lblAGCLabel.Text = "AGC: " + comboAGC.Text;
+            }
         }
 
         public AGCMode RX2AGCMode
@@ -28673,43 +28958,80 @@ namespace Thetis
             set
             {
                 comboRX2AGC.SelectedIndex = (int)value;
+                lblRX2AGCLabel.Text = "AGC: " + comboRX2AGC.Text;
             }
         }
 
         public bool VFOSplit
         {
             get { return chkVFOSplit.Checked; }
-            set { chkVFOSplit.Checked = value; }
+            set
+            {
+                chkVFOSplit.Checked = value;
+                if (value == true)
+                    lblVFOSplit.BackColor = System.Drawing.Color.Blue;
+                else
+                    lblVFOSplit.BackColor = System.Drawing.Color.Transparent;
+            }
         }
 
         public bool RIT
         {
             get { return chkRIT.Checked; }
-            set { chkRIT.Checked = value; }
+            set
+            {
+                chkRIT.Checked = value;
+                if (value == true)
+                    lblRITLabel.BackColor = System.Drawing.Color.Blue;
+                else
+                    lblRITLabel.BackColor = System.Drawing.Color.Transparent;
+            }
         }
 
         public bool RITOn
         {
             get { return chkRIT.Checked; }
-            set { chkRIT.Checked = value; }
+            set
+            {
+                chkRIT.Checked = value;
+                if (value == true)
+                    lblRITLabel.BackColor = System.Drawing.Color.Blue;
+                else
+                    lblRITLabel.BackColor = System.Drawing.Color.Transparent;
+            }
         }
 
         public int RITValue
         {
             get { return (int)udRIT.Value; }
-            set { udRIT.Value = value; }
+            set
+            {
+                udRIT.Value = value;
+                lblRITValue.Text = value.ToString();
+            }
         }
 
         public bool XITOn
         {
             get { return chkXIT.Checked; }
-            set { chkXIT.Checked = value; }
+            set
+            {
+                chkXIT.Checked = value;
+                if (value == true)
+                    lblXITLabel.BackColor = System.Drawing.Color.Blue;
+                else
+                    lblXITLabel.BackColor = System.Drawing.Color.Transparent;
+            }
         }
 
         public int XITValue
         {
             get { return (int)udXIT.Value; }
-            set { udXIT.Value = value; }
+            set
+            {
+                udXIT.Value = value;
+                lblXITValue.Text = value.ToString();
+            }
         }
 
         private int fm_tx_bw = 6000;
@@ -37707,6 +38029,7 @@ namespace Thetis
             if (comboAGC.SelectedIndex < 0) return;
             radio.GetDSPRX(0, 0).RXAGCMode = (AGCMode)comboAGC.SelectedIndex;
             radio.GetDSPRX(0, 1).RXAGCMode = (AGCMode)comboAGC.SelectedIndex;
+            lblAGCLabel.Text = "AGC: " + comboAGC.Text;
 
             // set whether custom controls are active
             switch ((AGCMode)comboAGC.SelectedIndex)
@@ -38054,6 +38377,8 @@ namespace Thetis
                 chkMUT.BackColor = SystemColors.Control;
                 lblRX1MuteVFOA.Text = "";
             }
+            if (sliderForm != null) sliderForm.RX1MuteOnOff = chkMUT.Checked;
+
             if (chkMUT.Focused)
                 btnHidden.Focus();
 
@@ -38135,6 +38460,9 @@ namespace Thetis
             //-W2PA Update LEDs on Behringer MIDI controller mini wheel
             pct = Convert.ToDouble(ptbPWR.Value - ptbPWR.Minimum) / Convert.ToDouble(ptbPWR.Maximum - ptbPWR.Minimum);
             Midi2Cat.SendUpdateToMidi(CatCmd.DriveLevel_inc, pct);
+            if (sliderForm != null)
+                sliderForm.TXDrive = ptbPWR.Value;
+
         }
 
         private void ptbAF_Scroll(object sender, System.EventArgs e)
@@ -38161,6 +38489,9 @@ namespace Thetis
             {
                 ptbAF.Focus();
             }
+            if (sliderForm != null)
+                sliderForm.MasterAFGain = ptbAF.Value;
+
 
             //if (ptbAF.Focused) btnHidden.Focus();
         }
@@ -38191,6 +38522,9 @@ namespace Thetis
             //-W2PA Update LEDs on Behringer MIDI controller
             double pct = Convert.ToDouble(ptbRF.Value - ptbRF.Minimum) / Convert.ToDouble(ptbRF.Maximum - ptbRF.Minimum);
             Midi2Cat.SendUpdateToMidi(CatCmd.AGCLevel_inc, pct);
+            if (sliderForm != null)
+                sliderForm.RX1RFGainAGC = ptbRF.Value;
+
         }
 
         private void chkMicMute_CheckedChanged(object sender, System.EventArgs e)
@@ -38302,6 +38636,9 @@ namespace Thetis
             {
                 ptbSquelch.Focus();
             }
+            if (sliderForm != null)
+                sliderForm.RX1Squelch = ptbSquelch.Value;
+
         }
 
         private void picSquelch_Paint(object sender, System.Windows.Forms.PaintEventArgs e)
@@ -39115,7 +39452,8 @@ namespace Thetis
                         break;
                 }
                 current_meter_rx_mode = mode;
-
+                if (show_rx1)                                      // collapsed label is RX1/2 dependent
+                    lblRXMeter.Text = comboMeterRXMode.Text;
                 if (!mox)
                 {
                     if (collapsedDisplay)
@@ -39221,7 +39559,7 @@ namespace Thetis
                         mode = MeterTXMode.OFF;
                         break;
                 }
-
+                lblTXMeter.Text = comboMeterTXMode.Text;
                 if (chkTUN.Checked)
                 {
                     tune_meter_tx_mode = mode;
@@ -39415,6 +39753,9 @@ namespace Thetis
             }
 
             if (rx1_dsp_mode == DSPMode.FM) rx1_fm_squelch_on = chkSquelch.Checked;
+            if (sliderForm != null)
+                sliderForm.RX1SquelchOnOff = chkSquelch.Checked;
+
         }
 
         private MeterTXMode old_tune_meter_tx_mode;
@@ -39817,11 +40158,19 @@ namespace Thetis
         private void chkVFOLock_CheckedChanged(object sender, System.EventArgs e)
         {
             VFOALock = chkVFOLock.Checked;
+            if (chkVFOLock.Checked == true)
+                lblLockLabel.BackColor = System.Drawing.Color.Blue;
+            else
+                lblLockLabel.BackColor = System.Drawing.Color.Transparent;
         }
 
         private void chkVFOBLock_CheckedChanged(object sender, EventArgs e)
         {
             VFOBLock = chkVFOBLock.Checked;
+            if (chkVFOBLock.Checked == true)
+                lblRX2LockLabel.BackColor = System.Drawing.Color.Blue;
+            else
+                lblRX2LockLabel.BackColor = System.Drawing.Color.Transparent;
         }
 
         private void btnBandVHF_Click(object sender, System.EventArgs e)
@@ -39840,12 +40189,17 @@ namespace Thetis
             }
 
             if (!rx1_click_tune_drag)
+            {
                 chkFWCATU.Checked = false;
+            }
             if (!rx2_click_tune_drag)
                 chkX2TR.Checked = false;
 
             lblRX1MuteVFOA.SendToBack();
             lblRX1APF.SendToBack();
+            if (bandPopupForm != null) bandPopupForm.RepopulateForm();
+            if (modePopupForm != null) modePopupForm.RepopulateForm();
+            if (filterPopupForm != null) filterPopupForm.RepopulateForm();
         }
 
         private void btnBandHF_Click(object sender, System.EventArgs e)
@@ -39864,12 +40218,19 @@ namespace Thetis
             }
 
             if (!rx1_click_tune_drag)
+            {
                 chkFWCATU.Checked = false;
+            }
+
             if (!rx2_click_tune_drag)
                 chkX2TR.Checked = false;
 
             lblRX1MuteVFOA.BringToFront();
             lblRX1APF.BringToFront();
+            if (bandPopupForm != null) bandPopupForm.RepopulateForm();
+            if (modePopupForm != null) modePopupForm.RepopulateForm();
+            if (filterPopupForm != null) filterPopupForm.RepopulateForm();
+
         }
 
         private void btnBandGEN_Click(object sender, EventArgs e) // ke9ns add hf screen click on GEN button
@@ -39888,12 +40249,17 @@ namespace Thetis
             }
 
             if (!rx1_click_tune_drag)
+            {
                 chkFWCATU.Checked = false;
+            }
             if (!rx2_click_tune_drag)
                 chkX2TR.Checked = false;
 
             lblRX1MuteVFOA.SendToBack();
             lblRX1APF.SendToBack();
+            if (bandPopupForm != null) bandPopupForm.RepopulateForm();
+            if (modePopupForm != null) modePopupForm.RepopulateForm();
+            if (filterPopupForm != null) filterPopupForm.RepopulateForm();
         }
 
         private void udFilterLow_LostFocus(object sender, EventArgs e)
@@ -40116,6 +40482,10 @@ namespace Thetis
             {
                 if (!chkFWCATU.Checked) chkFWCATU.Checked = true;
             }
+            if (chkX2TR.Checked == true)
+                lblRX2CtunLabel.BackColor = System.Drawing.Color.Blue;
+            else
+                lblRX2CtunLabel.BackColor = System.Drawing.Color.Transparent;
 
             txtVFOBFreq_LostFocus(this, EventArgs.Empty);
         }
@@ -44668,6 +45038,7 @@ namespace Thetis
             if (rx1_click_tune_drag || rx2_click_tune_drag)
             {
                 chkFWCATU.Checked = false;
+                lblCtunLabel.BackColor = System.Drawing.Color.Transparent;
                 chkX2TR.Checked = false;
             }
 
@@ -45473,50 +45844,62 @@ namespace Thetis
                 case "LSB":
                     SetRX1Mode(DSPMode.LSB);
                     lblModeLabel.Text = radModeLSB.Text;
+                    lblModeBigLabel.Text = radModeLSB.Text;
                     break;
                 case "USB":
                     SetRX1Mode(DSPMode.USB);
                     lblModeLabel.Text = radModeUSB.Text;
+                    lblModeBigLabel.Text = radModeUSB.Text;
                     break;
                 case "DSB":
                     SetRX1Mode(DSPMode.DSB);
                     lblModeLabel.Text = radModeDSB.Text;
+                    lblModeBigLabel.Text = radModeDSB.Text;
                     break;
                 case "CWL":
                     SetRX1Mode(DSPMode.CWL);
                     lblModeLabel.Text = radModeCWL.Text;
+                    lblModeBigLabel.Text = radModeCWL.Text;
                     break;
                 case "CWU":
                     SetRX1Mode(DSPMode.CWU);
                     lblModeLabel.Text = radModeCWU.Text;
+                    lblModeBigLabel.Text = radModeCWU.Text;
                     break;
                 case "FM":
                     SetRX1Mode(DSPMode.FM);
                     lblModeLabel.Text = radModeFMN.Text;
+                    lblModeBigLabel.Text = radModeFMN.Text;
                     break;
                 case "AM":
                     SetRX1Mode(DSPMode.AM);
                     lblModeLabel.Text = radModeAM.Text;
+                    lblModeBigLabel.Text = radModeAM.Text;
                     break;
                 case "SAM":
                     SetRX1Mode(DSPMode.SAM);
                     lblModeLabel.Text = radModeSAM.Text;
+                    lblModeBigLabel.Text = radModeSAM.Text;
                     break;
                 case "SPEC":
                     SetRX1Mode(DSPMode.SPEC);
                     lblModeLabel.Text = radModeSPEC.Text;
+                    lblModeBigLabel.Text = radModeSPEC.Text;
                     break;
                 case "DIGL":
                     SetRX1Mode(DSPMode.DIGL);
                     lblModeLabel.Text = radModeDIGL.Text;
+                    lblModeBigLabel.Text = radModeDIGL.Text;
                     break;
                 case "DIGU":
                     SetRX1Mode(DSPMode.DIGU);
                     lblModeLabel.Text = radModeDIGU.Text;
+                    lblModeBigLabel.Text = radModeDIGU.Text;
                     break;
                 case "DRM":
                     SetRX1Mode(DSPMode.DRM);
                     lblModeLabel.Text = radModeDRM.Text;
+                    lblModeBigLabel.Text = radModeDRM.Text;
                     break;
             }
             lSBToolStripMenuItem.Checked = radModeLSB.Checked;
@@ -45531,6 +45914,8 @@ namespace Thetis
             dIGLToolStripMenuItem.Checked = radModeDIGL.Checked;
             dIGUToolStripMenuItem.Checked = radModeDIGU.Checked;
             dRMToolStripMenuItem.Checked = radModeDRM.Checked;
+            if (modePopupForm != null) modePopupForm.RepopulateForm();
+            if (filterPopupForm != null) filterPopupForm.RepopulateForm();
         }
 
         #endregion
@@ -45726,6 +46111,8 @@ namespace Thetis
             kToolStripMenuItem4.Checked = radRX2Filter5.Checked;
             toolStripMenuItem13.Checked = radRX2Filter6.Checked;
             toolStripMenuItem14.Checked = radRX2Filter7.Checked;
+            if (filterPopupForm != null) filterPopupForm.RepopulateForm();          // G8NJJ update popup
+
         }
 
         private void radFilter_CheckedChanged(object sender, EventArgs e)
@@ -45808,6 +46195,8 @@ namespace Thetis
             FilterToolStripMenuItem8.Checked = radFilter8.Checked;
             FilterToolStripMenuItem9.Checked = radFilter9.Checked;
             FilterToolStripMenuItem10.Checked = radFilter10.Checked;
+            if (filterPopupForm != null) filterPopupForm.RepopulateForm();      // G8NJJ update popup
+
         }
 
         /*       private void radFilter1_CheckedChanged(object sender, System.EventArgs e)
@@ -46862,6 +47251,7 @@ namespace Thetis
                 //fm_tx_offset_mhz = 0;		
                 //  chkX2TR.Checked = false;
                 chkFWCATU.Checked = false;
+                lblVFOSplit.BackColor = System.Drawing.Color.Blue;
             }
             else
             {
@@ -46874,6 +47264,7 @@ namespace Thetis
                 chkFMTXRev.Enabled = true;
                 udFMOffset.Enabled = true;
                 //fm_tx_offset_mhz = 0;
+                lblVFOSplit.BackColor = System.Drawing.Color.Transparent;
             }
 
             if (rx2_enabled && !stereo_diversity)
@@ -46965,14 +47356,17 @@ namespace Thetis
             {
                 chkXIT.BackColor = button_selected_color;
                 chkXIT.ForeColor = Color.Red;
+                lblXITLabel.BackColor = System.Drawing.Color.Blue;
                 Display.XIT = (int)udXIT.Value;
             }
             else
             {
                 chkXIT.BackColor = SystemColors.Control;
                 chkXIT.ForeColor = SystemColors.ControlLightLight;
+                lblXITLabel.BackColor = System.Drawing.Color.Transparent;
                 Display.XIT = 0;
             }
+
 #if false
 			// wjtFIXME!
 			if ( current_model == Model.SOFTROCK40 )			
@@ -47006,13 +47400,15 @@ namespace Thetis
             {
                 chkRIT.BackColor = button_selected_color;
                 chkRIT.ForeColor = Color.Red;
-                // if (!click_tune_display)
+                lblRITLabel.BackColor = System.Drawing.Color.Blue;
+// if (!click_tune_display)
                 Display.RIT = (int)udRIT.Value;
             }
             else
             {
                 chkRIT.BackColor = SystemColors.Control;
                 chkRIT.ForeColor = SystemColors.ControlLightLight;
+                lblRITLabel.BackColor = System.Drawing.Color.Transparent;
                 Display.RIT = 0;
             }
 
@@ -47030,6 +47426,7 @@ namespace Thetis
                 txtVFOAFreq_LostFocus(this, EventArgs.Empty);
                 txtVFOBFreq_LostFocus(this, EventArgs.Empty);
             }
+            lblRITValue.Text = udRIT.Value.ToString();
             if (chkRIT.Checked) Display.RIT = (int)udRIT.Value;
 
             /*if(udRIT.Focused)
@@ -47053,6 +47450,7 @@ namespace Thetis
                 else
                     txtVFOAFreq_LostFocus(this, EventArgs.Empty);
             }
+            lblXITValue.Text = udXIT.Value.ToString();
 #if false
 			//wjtFIXME
 			else if ( current_model == Model.SOFTROCK40 )			
@@ -47383,8 +47781,17 @@ namespace Thetis
 
         private void chkANF_CheckedChanged(object sender, System.EventArgs e)
         {
-            if (chkANF.Checked) chkANF.BackColor = button_selected_color;
-            else chkANF.BackColor = SystemColors.Control;
+            if (chkANF.Checked)
+            {
+                chkANF.BackColor = button_selected_color;
+                lblANFLabel.Text = "ANF";
+            }
+
+            else
+            {
+                chkANF.BackColor = SystemColors.Control;
+                lblANFLabel.Text = "---";
+            }
             radio.GetDSPRX(0, 0).AutoNotchFilter = chkANF.Checked;
             radio.GetDSPRX(0, 1).AutoNotchFilter = chkANF.Checked;
             cat_anf_status = Convert.ToInt32(chkANF.Checked);
@@ -47393,8 +47800,17 @@ namespace Thetis
 
         private void chkDSPNB2_CheckedChanged(object sender, EventArgs e)
         {
-            if (chkDSPNB2.Checked) chkDSPNB2.BackColor = button_selected_color;
-            else chkDSPNB2.BackColor = SystemColors.Control;
+            if (chkDSPNB2.Checked)
+            {
+                chkDSPNB2.BackColor = button_selected_color;
+                lblSNBLabel.Text = "SNB";
+            }
+            else
+            {
+                chkDSPNB2.BackColor = SystemColors.Control;
+                lblSNBLabel.Text = "---";
+            }
+
             WDSP.SetRXASNBARun(WDSP.id(0, 0), chkDSPNB2.Checked);
             WDSP.SetRXASNBARun(WDSP.id(0, 1), chkDSPNB2.Checked);
             cat_snb_status = Convert.ToInt32(chkDSPNB2.Checked);
@@ -47404,8 +47820,17 @@ namespace Thetis
 
         private void chkRX2NB2_CheckedChanged(object sender, EventArgs e)
         {
-            if (chkRX2NB2.Checked) chkRX2NB2.BackColor = button_selected_color;
-            else chkRX2NB2.BackColor = SystemColors.Control;
+            if (chkRX2NB2.Checked)
+            {
+                chkRX2NB2.BackColor = button_selected_color;
+                lblRX2SNBLabel.Text = "SNB";
+            }
+
+            else
+            {
+                chkRX2NB2.BackColor = SystemColors.Control;
+                lblRX2SNBLabel.Text = "---";
+            }
             WDSP.SetRXASNBARun(WDSP.id(2, 0), chkRX2NB2.Checked);
             cat_rx2snb_status = Convert.ToInt32(chkRX2NB2.Checked);
         }
@@ -47655,6 +48080,9 @@ namespace Thetis
             {
                 ptbPanMainRX.Focus();
             }
+            if (sliderForm != null)
+                sliderForm.RX1LRPan = ptbPanMainRX.Value;
+
         }
 
         private void ptbPanSubRX_Scroll(object sender, System.EventArgs e)
@@ -47669,6 +48097,9 @@ namespace Thetis
             {
                 ptbPanSubRX.Focus();
             }
+            if (sliderForm != null)
+                sliderForm.SubRXLRPan = ptbPanSubRX.Value;
+
         }
 
         private void chkEnableMultiRX_CheckedChanged(object sender, System.EventArgs e)
@@ -47772,6 +48203,8 @@ namespace Thetis
                 //-W2PA Update LEDs on Behringer MIDI controller
                 double pct = Convert.ToDouble(ptbRX1AF.Value - ptbRX1AF.Minimum) / Convert.ToDouble(ptbRX1AF.Maximum - ptbRX1AF.Minimum);
                 Midi2Cat.SendUpdateToMidi(CatCmd.VolumeVfoA_inc, pct);
+                if (sliderForm != null)
+                    sliderForm.RX1Gain = ptbRX0Gain.Value;
             }
 
             lblRX1AF.Text = "RX1 AF:  " + ptbRX0Gain.Value.ToString();
@@ -47790,6 +48223,9 @@ namespace Thetis
             // if (ptbRX1Gain.Focused)
             // btnHidden.Focus();
             ptbRX1Gain.Focus();
+            if (sliderForm != null)
+                sliderForm.SubRXGain = ptbRX1Gain.Value;
+
         }
 
         #endregion
@@ -47887,6 +48323,10 @@ namespace Thetis
         {
             // if (SetupForm != null) SetupForm.X2TR = chkX2TR.Checked;
             ClickTuneDisplay = chkFWCATU.Checked;
+            if (ClickTuneDisplay == true)
+                lblCtunLabel.BackColor = System.Drawing.Color.Blue;
+            else
+                lblCtunLabel.BackColor = System.Drawing.Color.Transparent;
 
             // if (chkX2TR.Checked) chkX2TR.BackColor = button_selected_color;
             // else chkX2TR.BackColor = SystemColors.Control;
@@ -48052,6 +48492,7 @@ namespace Thetis
                 panelBandGEN.Location = new Point(gr_BandGEN_basis_location.X + h_delta, gr_BandGEN_basis_location.Y + (v_delta / 4));
                 panelBandVHF.Location = new Point(gr_BandVHF_basis_location.X + h_delta, gr_BandVHF_basis_location.Y + (v_delta / 4));
                 panelMode.Location = new Point(gr_Mode_basis_location.X + h_delta, gr_Mode_basis_location.Y + (v_delta / 2));
+                panelRX2Mode.Location = new Point(gr_RX2Mode_basis_location.X + h_delta, gr_RX2Mode_basis_location.Y + (v_delta / 2));
                 //grpVFOB.Location = new Point(gr_VFOB_basis_location.X+h_delta-(h_delta/4),gr_VFOB_basis_location.Y);
                 //grpVFOA.Location = new Point(gr_VFOA_basis_location.X+(h_delta/4),gr_VFOA_basis_location.Y);
                 panelModeSpecificPhone.Location = new Point(gr_ModePhone_basis_location.X + h_delta - (h_delta / 4), gr_ModePhone_basis_location.Y + v_delta);
@@ -48178,6 +48619,7 @@ namespace Thetis
             gr_BandGEN_basis_location = this.panelBandGEN.Location;
             gr_BandVHF_basis_location = this.panelBandVHF.Location;
             gr_Mode_basis_location = this.panelMode.Location;
+            gr_RX2Mode_basis_location = this.panelRX2Mode.Location;
             gr_VFOB_basis_location = this.grpVFOB.Location;
             gr_VFOA_basis_location = this.grpVFOA.Location;
             gr_ModePhone_basis_location = this.panelModeSpecificPhone.Location;
@@ -48272,6 +48714,7 @@ namespace Thetis
             chk_mox_basis = this.chkMOX.Location;
             chk_tun_basis = this.chkTUN.Location;
             chk_vox_basis = this.chkVOX.Location;
+            chk_ps2_basis = this.chkFWCATUBypass.Location;
             chk_dup_basis = this.chkRX2SR.Location;
             chk_ctun_basis = this.chkFWCATU.Location;
             chk_x2tr_basis = this.chkX2TR.Location;
@@ -48287,6 +48730,7 @@ namespace Thetis
             pic_display_basis = this.picDisplay.Location;
             pic_waterfall_basis = this.picWaterfall.Location;
             combo_display_mode_basis = this.comboDisplayMode.Location;
+            combo_rx2_display_mode_basis = this.comboRX2DisplayMode.Location;
             combo_agc_basis = this.comboAGC.Location;
             combo_rx2agc_basis = this.comboRX2AGC.Location;
             combo_preamp_basis = this.comboPreamp.Location;
@@ -48300,6 +48744,7 @@ namespace Thetis
             gr_BandGEN_basis_size = panelBandGEN.Size;
             gr_BandVHF_basis_size = panelBandVHF.Size;
             gr_Mode_basis_size = panelMode.Size;
+            gr_RX2Mode_basis_size = panelRX2Mode.Size;
             rad_band160_basis = radBand160.Location;
             rad_band80_basis = radBand80.Location;
             rad_band60_basis = radBand60.Location;
@@ -48357,6 +48802,30 @@ namespace Thetis
             rad_mode_digl_basis = radModeDIGL.Location;
             rad_mode_digu_basis = radModeDIGU.Location;
             rad_mode_drm_basis = radModeDRM.Location;
+            rad_RX2mode_lsb_basis = radModeLSB.Location;
+            rad_RX2mode_usb_basis = radModeUSB.Location;
+            rad_RX2mode_dsb_basis = radModeDSB.Location;
+            rad_RX2mode_cwl_basis = radModeCWL.Location;
+            rad_RX2mode_cwu_basis = radModeCWU.Location;
+            rad_RX2mode_fmn_basis = radModeFMN.Location;
+            rad_RX2mode_am_basis = radModeAM.Location;
+            rad_RX2mode_sam_basis = radModeSAM.Location;
+            rad_RX2mode_spec_basis = radModeSPEC.Location;
+            rad_RX2mode_digl_basis = radModeDIGL.Location;
+            rad_RX2mode_digu_basis = radModeDIGU.Location;
+            rad_RX2mode_drm_basis = radModeDRM.Location;
+            // G8NJJ - to allow RIT and XIT to show in collapsed view
+            chk_RIT_basis = chkRIT.Location;
+            chk_XIT_basis = chkXIT.Location;
+            ud_RIT_basis = udRIT.Location;
+            ud_XIT_basis = udXIT.Location;
+            btn_RITReset_basis = btnRITReset.Location;
+            btn_XITReset_basis = btnXITReset.Location;
+            lbl_RX1_Mute_VFOA_basis = lblRX1MuteVFOA.Location;
+            lbl_RX2_Mute_VFOB_basis = lblRX2MuteVFOB.Location;
+            lbl_RX1_APF_VFOA_basis = lblRX1APF.Location;
+            lbl_RX2_APF_VFOB_basis = lblRX2APF.Location;
+
         }
 
         private string old_rx1_display_mode = "";
@@ -49222,46 +49691,57 @@ namespace Thetis
                 case "LSB":
                     SetRX2Mode(DSPMode.LSB);
                     lblRX2ModeLabel.Text = radModeLSB.Text;
+                    lblRX2ModeBigLabel.Text = radModeLSB.Text;
                     break;
                 case "USB":
                     SetRX2Mode(DSPMode.USB);
                     lblRX2ModeLabel.Text = radModeUSB.Text;
+                    lblRX2ModeBigLabel.Text = radModeUSB.Text;
                     break;
                 case "DSB":
                     SetRX2Mode(DSPMode.DSB);
                     lblRX2ModeLabel.Text = radModeDSB.Text;
+                    lblRX2ModeBigLabel.Text = radModeDSB.Text;
                     break;
                 case "CWL":
                     SetRX2Mode(DSPMode.CWL);
                     lblRX2ModeLabel.Text = radModeCWL.Text;
+                    lblRX2ModeBigLabel.Text = radModeCWL.Text;
                     break;
                 case "CWU":
                     SetRX2Mode(DSPMode.CWU);
                     lblRX2ModeLabel.Text = radModeCWU.Text;
+                    lblRX2ModeBigLabel.Text = radModeCWU.Text;
                     break;
                 case "FM":
                     SetRX2Mode(DSPMode.FM);
                     lblRX2ModeLabel.Text = radModeFMN.Text;
+                    lblRX2ModeBigLabel.Text = radModeFMN.Text;
                     break;
                 case "AM":
                     SetRX2Mode(DSPMode.AM);
                     lblRX2ModeLabel.Text = radModeAM.Text;
+                    lblRX2ModeBigLabel.Text = radModeAM.Text;
                     break;
                 case "SAM":
                     SetRX2Mode(DSPMode.SAM);
                     lblRX2ModeLabel.Text = radModeSAM.Text;
+                    lblRX2ModeBigLabel.Text = radModeSAM.Text;
                     break;
                 case "DIGL":
                     SetRX2Mode(DSPMode.DIGL);
                     lblRX2ModeLabel.Text = radModeDIGL.Text;
+                    lblRX2ModeBigLabel.Text = radModeDIGL.Text;
                     break;
                 case "DIGU":
                     SetRX2Mode(DSPMode.DIGU);
                     lblRX2ModeLabel.Text = radModeDIGU.Text;
+                    lblRX2ModeBigLabel.Text = radModeDIGU.Text;
                     break;
                 case "DRM":
                     SetRX2Mode(DSPMode.DRM);
                     lblRX2ModeLabel.Text = radModeDRM.Text;
+                    lblRX2ModeBigLabel.Text = radModeDRM.Text;
                     break;
             }
             lSBToolStripMenuItem1.Checked = radRX2ModeLSB.Checked;
@@ -49275,6 +49755,8 @@ namespace Thetis
             dIGLToolStripMenuItem1.Checked = radRX2ModeDIGL.Checked;
             dIGUToolStripMenuItem1.Checked = radRX2ModeDIGU.Checked;
             dRMToolStripMenuItem1.Checked = radRX2ModeDRM.Checked;
+            if (filterPopupForm != null) filterPopupForm.RepopulateForm();
+            if (modePopupForm != null) modePopupForm.RepopulateForm();
         }
 
         private void radRX2ModeLSB_CheckedChanged(object sender, System.EventArgs e)
@@ -49575,8 +50057,17 @@ namespace Thetis
 
         private void chkRX2ANF_CheckedChanged(object sender, System.EventArgs e)
         {
-            if (chkRX2ANF.Checked) chkRX2ANF.BackColor = button_selected_color;
-            else chkRX2ANF.BackColor = SystemColors.Control;
+            if (chkRX2ANF.Checked)
+            {
+                chkRX2ANF.BackColor = button_selected_color;
+                lblRX2ANFLabel.Text = "ANF";
+            }
+
+            else
+            {
+                chkRX2ANF.BackColor = SystemColors.Control;
+                lblRX2ANFLabel.Text = "---";
+            }
             radio.GetDSPRX(1, 0).AutoNotchFilter = chkRX2ANF.Checked;
             radio.GetDSPRX(1, 1).AutoNotchFilter = chkRX2ANF.Checked;
             //cat_anf_status = Convert.ToInt32(chkRX2ANF.Checked);
@@ -49628,6 +50119,8 @@ namespace Thetis
                         break;
                 }
                 rx2_meter_mode = mode;
+                if (!show_rx1)                                          // collapsed meter is RX1/RX2 shared
+                    lblRXMeter.Text = comboRX2MeterMode.Text;
 
                 if (collapsedDisplay)
                 {
@@ -49727,6 +50220,9 @@ namespace Thetis
             //-W2PA Update LEDs on Behringer MIDI controller
             double pct = Convert.ToDouble(ptbRX2RF.Value - ptbRX2RF.Minimum) / Convert.ToDouble(ptbRX2RF.Maximum - ptbRX2RF.Minimum);
             Midi2Cat.SendUpdateToMidi(CatCmd.RX2AGCLevel_inc, pct);
+            if (sliderForm != null)
+                sliderForm.RX2RFGainAGC = ptbRX2RF.Value;
+
         }
 
         private void chkRX2Squelch_CheckedChanged(object sender, System.EventArgs e)
@@ -49764,6 +50260,10 @@ namespace Thetis
 
             if (rx2_dsp_mode == DSPMode.FM) rx2_fm_squelch_on = chkRX2Squelch.Checked;
             // else rx2_squelch_on = chkRX2Squelch.Checked;
+            if (sliderForm != null)
+                sliderForm.RX2SquelchOnOff = chkRX2Squelch.Checked;
+
+
         }
 
         private void ptbRX2Squelch_Scroll(object sender, System.EventArgs e)
@@ -49795,6 +50295,9 @@ namespace Thetis
             {
                 ptbRX2Squelch.Focus();
             }
+            if (sliderForm != null)
+                sliderForm.RX2Squelch = ptbRX2Squelch.Value;
+
         }
 
         private void picRX2Squelch_Paint(object sender, System.Windows.Forms.PaintEventArgs e)
@@ -49835,6 +50338,9 @@ namespace Thetis
             {
                 ptbRX2Pan.Focus();
             }
+            if (sliderForm != null)
+                sliderForm.RX2LRPan = ptbRX2Pan.Value;
+
         }
 
         private void ptbRX2Gain_Scroll(object sender, System.EventArgs e)
@@ -49854,6 +50360,9 @@ namespace Thetis
             //-W2PA Update LEDs on Behringer MIDI controller
             double pct = Convert.ToDouble(ptbRX2AF.Value - ptbRX2AF.Minimum) / Convert.ToDouble(ptbRX2AF.Maximum - ptbRX2AF.Minimum);
             Midi2Cat.SendUpdateToMidi(CatCmd.VolumeVfoB_inc, pct);
+            if (sliderForm != null)
+                sliderForm.RX2Gain = ptbRX2Gain.Value;
+
         }
 
         private void chkRX2Mute_CheckedChanged(object sender, System.EventArgs e)
@@ -49870,6 +50379,8 @@ namespace Thetis
                 ptbRX2Gain_Scroll(this, EventArgs.Empty);
                 lblRX2MuteVFOB.Text = "";
             }
+            if (sliderForm != null) sliderForm.RX2MuteOnOff = chkRX2Mute.Checked;
+
             if (chkRX2Mute.Focused)
                 btnHidden.Focus();
 
@@ -50581,7 +51092,9 @@ namespace Thetis
 
         private void comboRX2Band_SelectedIndexChanged(object sender, System.EventArgs e)
         {
-            if (comboRX2Band.Focused)
+            // G8NJJ to get settings to update from CAT command as well as mouse click
+            if (true)
+//            if (comboRX2Band.Focused)
             {
                 string filter = "", mode = "";
                 double freq = 0.0;
@@ -50759,6 +51272,7 @@ namespace Thetis
         {
             if (SetupForm == null) return;
             radio.GetDSPRX(1, 0).RXAGCMode = (AGCMode)comboRX2AGC.SelectedIndex;
+            lblRX2AGCLabel.Text = "AGC: " + comboRX2AGC.Text;
 
             switch ((AGCMode)comboRX2AGC.SelectedIndex)
             {
@@ -50850,6 +51364,7 @@ namespace Thetis
             if (chkVFOSync.Checked)
             {
                 chkVFOSync.BackColor = button_selected_color;
+                lblVFOSyncLabel.BackColor = System.Drawing.Color.Blue;
                 if (click_tune_display)
                     chkFWCATU.Checked = false;
                 if (click_tune_rx2_display)
@@ -50870,6 +51385,7 @@ namespace Thetis
             else
             {
                 chkVFOSync.BackColor = SystemColors.Control;
+                lblVFOSyncLabel.BackColor = System.Drawing.Color.Transparent;
             }
         }
 
@@ -52133,12 +52649,14 @@ namespace Thetis
         public bool ShowRX1
         {
             set { this.show_rx1 = value; }
+            get { return show_rx1;}
         }
 
         private bool show_rx2 = false;
         public bool ShowRX2
         {
             set { this.show_rx2 = value; }
+            get { return show_rx2; }
         }
 
         private Size expandedSize = new Size(0, 0);
@@ -52165,6 +52683,18 @@ namespace Thetis
         public bool ShowModeControls
         {
             set { this.showModeControls = value; }
+        }
+
+        private bool showAndromedaTopControls = true;
+        public bool ShowAndromedaTopControls
+        {
+            set { this.showAndromedaTopControls = value; }
+        }
+
+        private bool showAndromedaButtonBar = true;
+        public bool ShowAndromedaButtonBar
+        {
+            set { this.showAndromedaButtonBar = value; }
         }
 
         private void mnuCollapse_Click(object sender, EventArgs e)
@@ -52195,12 +52725,19 @@ namespace Thetis
             comboMeterRXMode_SelectedIndexChanged(this, EventArgs.Empty);
             comboRX2MeterMode_SelectedIndexChanged(this, EventArgs.Empty);
             comboMeterTXMode_SelectedIndexChanged(this, EventArgs.Empty);
-
             lblModeLabel.Hide();
             lblFilterLabel.Hide();
             lblRX2ModeLabel.Hide();
             lblRX2FilterLabel.Hide();
-// added G8NJJ to display Andromeda encoder settings in title bar
+            // added G8NJJ
+            panelVFOLabels.Hide();
+            panelVFOALabels.Hide();
+            panelVFOBLabels.Hide();
+            panelMeterLabels.Hide();
+            panelButtonBar.Hide();
+            lblModeBigLabel.Hide();
+            lblRX2ModeBigLabel.Hide();
+            // added G8NJJ to display Andromeda encoder settings in title bar
             this.Text = TitleBar.GetString() + TitleBarMultifunction;
 
             chkMUT.Show();
@@ -52296,6 +52833,8 @@ namespace Thetis
 
             grpVFOA.Location = new Point(gr_VFOA_basis_location.X + (h_delta / 4), gr_VFOA_basis_location.Y);
             grpVFOB.Location = new Point(gr_VFOB_basis_location.X + h_delta - (h_delta / 4), gr_VFOB_basis_location.Y);
+            grpVFOBetween.Location = gr_vfobetween_basis_location;
+
             grpMultimeter.Size = gr_multi_meter_size_basis;
             picMultiMeterDigital.Parent = grpMultimeter;
             picMultiMeterDigital.Size = pic_multi_meter_size_basis;
@@ -52350,9 +52889,12 @@ namespace Thetis
 
             chkX2TR.Parent = panelRX2Display;
             chkX2TR.Location = chk_x2tr_basis;
+            // G8NJJ swapped PS2 for VOX on collapsed display: TX controls visible a different way now.
+//            chkVOX.Parent = panelModeSpecificPhone;
+//            chkVOX.Location = chk_vox_basis;
 
-            chkVOX.Parent = panelModeSpecificPhone;
-            chkVOX.Location = chk_vox_basis;
+            chkFWCATUBypass.Parent = panelOptions;
+            chkFWCATUBypass.Location = chk_ps2_basis;
 
             //lblAF.Parent = panelSoundControls;
             //lblAF.Location = lbl_af_basis;
@@ -52383,6 +52925,28 @@ namespace Thetis
             comboRX2Preamp.Location = combo_rx2_preamp_basis;
             udRX2StepAttData.Parent = panelRX2Power;
             udRX2StepAttData.Location = ud_rx2_step_att_present_data_basis;
+            // G8NJJ
+            chkRIT.Parent = panelVFO;
+            chkRIT.Location = chk_RIT_basis;
+            chkXIT.Parent = panelVFO;
+            chkXIT.Location = chk_XIT_basis;
+            udRIT.Parent = panelVFO;
+            udRIT.Location = ud_RIT_basis;
+            udXIT.Parent = panelVFO;
+            udXIT.Location = ud_XIT_basis;
+            btnRITReset.Parent = panelVFO;
+            btnRITReset.Location = btn_RITReset_basis;
+            btnXITReset.Parent = panelVFO;
+            btnXITReset.Location = btn_XITReset_basis;
+            lblRX2Band.Parent = panelRX2Power;
+            comboRX2Band.Parent = panelRX2Power;
+            lblRX2Band.Location = lbl_rx2_band_basis;
+            comboRX2Band.Location = combo_rx2_band_basis;
+            lblRX1MuteVFOA.Location = lbl_RX1_Mute_VFOA_basis;
+            lblRX2MuteVFOB.Location = lbl_RX2_Mute_VFOB_basis;
+            lblRX1APF.Location = lbl_RX1_APF_VFOA_basis;
+            lblRX2APF.Location = lbl_RX2_APF_VFOB_basis;
+
 
             if (rx1_step_att_present)
             {
@@ -52405,9 +52969,13 @@ namespace Thetis
                 //  comboRX2Preamp.Location = combo_rx2_preamp_basis;
                 comboRX2Preamp.BringToFront();
             }
-
+            // G8NJJ
             comboDisplayMode.Parent = panelDisplay2;
             comboDisplayMode.Location = combo_display_mode_basis;
+            comboRX2DisplayMode.Parent = panelRX2Display;
+            comboRX2DisplayMode.Location = combo_rx2_display_mode_basis;
+            comboDisplayMode.Show();
+            comboRX2DisplayMode.Show();
 
             //btnDisplayPanCenter.Location = new Point(btn_display_pan_center_basis.X + (h_delta), btn_display_pan_center_basis.Y + v_delta);
             //ptbDisplayPan.Size = new Size(tb_display_pan_size_basis.Width + (h_delta), tb_display_pan_size_basis.Height);
@@ -52512,6 +53080,8 @@ namespace Thetis
 
             panelMode.Location = new Point(gr_Mode_basis_location.X + h_delta, gr_Mode_basis_location.Y + (v_delta / 2));
             panelMode.Size = gr_Mode_basis_size;
+            panelRX2Mode.Location = new Point(gr_RX2Mode_basis_location.X + h_delta, gr_RX2Mode_basis_location.Y + (v_delta / 2));
+            panelRX2Mode.Size = gr_RX2Mode_basis_size;
             radModeLSB.Location = rad_mode_lsb_basis;
             radModeUSB.Location = rad_mode_usb_basis;
             radModeDSB.Location = rad_mode_dsb_basis;
@@ -52524,8 +53094,24 @@ namespace Thetis
             radModeDIGL.Location = rad_mode_digl_basis;
             radModeDIGU.Location = rad_mode_digu_basis;
             radModeDRM.Location = rad_mode_drm_basis;
+            radRX2ModeLSB.Location = rad_RX2mode_lsb_basis;
+            radRX2ModeUSB.Location = rad_RX2mode_usb_basis;
+            radRX2ModeDSB.Location = rad_RX2mode_dsb_basis;
+            radRX2ModeCWL.Location = rad_RX2mode_cwl_basis;
+            radRX2ModeCWU.Location = rad_RX2mode_cwu_basis;
+            radRX2ModeFMN.Location = rad_RX2mode_fmn_basis;
+            radRX2ModeAM.Location = rad_RX2mode_am_basis;
+            radRX2ModeSAM.Location = rad_RX2mode_sam_basis;
+            radRX2ModeSPEC.Location = rad_RX2mode_spec_basis;
+            radRX2ModeDIGL.Location = rad_RX2mode_digl_basis;
+            radRX2ModeDIGU.Location = rad_RX2mode_digu_basis;
+            radRX2ModeDRM.Location = rad_RX2mode_drm_basis;
         }
 
+        //
+        // modified G8NJJ to add alternate top/button controls for Andromeda
+        // optimised for 1024x600 touchscreen display
+        //
         public void CollapseDisplay()
         {
             // Save expanded display size
@@ -52538,6 +53124,11 @@ namespace Thetis
             this.dSPToolStripMenuItem.Visible = true;
             this.filterToolStripMenuItem.Visible = true;
             this.displayControlsToolStripMenuItem.Visible = true;
+            // added G8NJJ so initial tick on menu item matches the initial displayed state
+            this.bandControlsToolStripMenuItem.Checked = SetupForm.chkShowBandControls.Checked;
+            this.modeControlsToolStripMenuItem.Checked = SetupForm.chkShowModeControls.Checked;
+            this.topControlsToolStripMenuItem.Checked = SetupForm.chkShowTopControls.Checked;
+
             this.bandToolStripMenuItem.Visible = !SetupForm.chkShowBandControls.Checked;
             this.modeToolStripMenuItem.Visible = !SetupForm.chkShowModeControls.Checked;
             int minWidth = 600;
@@ -52562,17 +53153,36 @@ namespace Thetis
                 comboRX2MeterMode_SelectedIndexChanged(this, EventArgs.Empty);
                 comboMeterTXMode_SelectedIndexChanged(this, EventArgs.Empty);
             }
-
-            if (this.showBandControls)
+            else if (this.showAndromedaTopControls)
             {
-                minWidth = Math.Max(minWidth, radBand160.Width * 14 + this.Width - this.ClientSize.Width);
-                minHeight += 5 + radBand160.Height;
+                minWidth = Math.Max(minWidth, console_basis_size.Width);
+                if (show_rx1)
+                    minHeight += grpVFOA.Height + 10;
+                if (show_rx2)
+                    minHeight += grpVFOB.Height + 10;
+                comboMeterRXMode_SelectedIndexChanged(this, EventArgs.Empty);
+                comboRX2MeterMode_SelectedIndexChanged(this, EventArgs.Empty);
+                comboMeterTXMode_SelectedIndexChanged(this, EventArgs.Empty);
             }
 
-            if (this.showModeControls)
+            if (this.showAndromedaButtonBar)
             {
-                minWidth = Math.Max(minWidth, radModeLSB.Width * 12 + this.Width - this.ClientSize.Width);
-                minHeight += 5 + radModeLSB.Height;
+                minWidth = panelButtonBar.Width;
+                minHeight += panelButtonBar.Height;
+            }
+            else
+            {
+                if (this.showBandControls)
+                {
+                    minWidth = Math.Max(minWidth, radBand160.Width * 14 + this.Width - this.ClientSize.Width);
+                    minHeight += 5 + radBand160.Height;
+                }
+
+                if (this.showModeControls)
+                {
+                    minWidth = Math.Max(minWidth, radModeLSB.Width * 12 + this.Width - this.ClientSize.Width);
+                    minHeight += 5 + radModeLSB.Height;
+                }
             }
 
             this.MinimumSize = new Size(minWidth, minHeight);
@@ -52632,15 +53242,173 @@ namespace Thetis
             grpRX2Meter.Hide();
             panelRX2RF.Hide();
 
-            if (this.showTopControls)
+            // G8NJJ: top display with both VFO controls
+            if (this.showAndromedaTopControls)
+            {
+                chkMUT.Hide();
+                comboPreamp.Hide();
+                comboRX2Preamp.Hide();
+                udRX1StepAttData.Hide();
+                udRX2StepAttData.Hide();
+                chkX2TR.Hide();                     // RX2 CTUN
+                chkFWCATU.Hide();                   // RX1 CTUN
+                lblAF2.Hide();
+                lblRF2.Hide();
+                lblPWR2.Hide();
+                ptbAF.Hide();
+                ptbRX1AF.Hide();
+                ptbPWR.Hide();
+                ptbRX2AF.Hide();
+                ptbRF.Hide();
+                ptbRX2RF.Hide();
+                comboAGC.Hide();
+                comboRX2AGC.Hide();
+                comboRX2Preamp.Hide();
+                udRX2StepAttData.Hide();
+                comboPreamp.Hide();
+                udRX1StepAttData.Hide();
+                comboMeterRXMode.Hide();
+                comboRX2MeterMode.Hide();
+                comboMeterTXMode.Hide();
+
+                panelMeterLabels.Show();
+                panelVFOALabels.Show();
+                lblModeBigLabel.Show();
+                panelVFOBLabels.Show();
+                lblRX2ModeBigLabel.Show();
+                panelVFOLabels.Show();
+                lblModeLabel.Hide();
+                lblFilterLabel.Hide();
+                lblRX2ModeLabel.Hide();
+                lblRX2FilterLabel.Hide();
+//                lblRX1APF.Hide();
+//                lblRX2APF.Hide();
+                lblRX1MuteVFOA.BringToFront();
+                lblRX2MuteVFOB.BringToFront();
+                //
+                // move radio controlling buttons to top left
+                //
+                chkPower.Parent = this;
+                chkPower.Show();
+                chkRX2.Parent = this;
+                chkRX2.Show();
+                radRX1Show.Parent = this;
+                radRX1Show.Show();
+                radRX2Show.Parent = this;
+                radRX2Show.Show();
+                chkMON.Parent = this;
+                chkMON.Show();
+                chkMOX.Parent = this;
+                chkMOX.Show();
+                chkTUN.Parent = this;
+                chkTUN.Show();
+                chkFWCATUBypass.Parent = this;                  // PS-A
+                chkFWCATUBypass.Show();
+                chkRX2SR.Parent = this;             // DUP
+                chkRX2SR.Show();
+                grpVFOA.Show();
+                grpVFOB.Show();
+
+                //
+                // show meter for RX1 or RX2 in centre, and panadapter type display controls
+                //
+                if (show_rx1)
+                {
+                    // G8NJJ
+                    comboDisplayMode.Show();            // display mode eg panadapter
+                    comboRX2DisplayMode.Hide();
+                    picMultiMeterDigital.Parent = this;
+                    picMultiMeterDigital.Show();
+                    txtMultiText.Parent = this;
+                    txtMultiText.Show();
+                    // picRX2Meter.Parent = this;
+                    picRX2Meter.Hide();
+                    // txtRX2Meter.Parent = this;
+                    txtRX2Meter.Hide();
+                    // lblMultiSMeter.Parent = this;
+                    lblMultiSMeter.Hide();
+                    //lblRX2Meter.Hide();
+
+                    if (current_meter_display_mode == MultiMeterDisplayMode.Original)
+                    {
+                        // current_meter_display_mode = MultiMeterDisplayMode.Edge;
+                        // SetupForm.comboMeterType.Text = "Edge";
+                        //picMultiMeterDigital.Hide();
+                        lblMultiSMeter.Parent = this;
+                        picMultiMeterDigital.SendToBack();
+                        lblMultiSMeter.Show();
+                        lblMultiSMeter.BringToFront();
+                    }
+                    lblRXMeter.Text = comboMeterRXMode.Text;
+                }
+                else if (show_rx2)
+                {
+                    // G8NJJ
+                    comboDisplayMode.Hide();
+                    comboRX2DisplayMode.Show();
+                    // picMultiMeterDigital.Parent = this;
+                    picMultiMeterDigital.Hide();
+                    // txtMultiText.Parent = this;
+                    txtMultiText.Hide();
+                    picRX2Meter.Parent = this;
+                    picRX2Meter.Show();
+                    txtRX2Meter.Parent = this;
+                    txtRX2Meter.Show();
+
+                    // lblMultiSMeter.Parent = this;
+                    //lblMultiSMeter.Hide();
+                    lblRX2Meter.Hide();
+
+                    if (current_meter_display_mode == MultiMeterDisplayMode.Original)
+                    {
+                        //current_meter_display_mode = MultiMeterDisplayMode.Edge;
+                        //SetupForm.comboMeterType.Text = "Edge";
+                        lblRX2Meter.Parent = this;
+                        picRX2Meter.SendToBack();
+                        lblRX2Meter.Show();
+                        lblRX2Meter.BringToFront();
+                    }
+                    lblRXMeter.Text = comboRX2MeterMode.Text;
+                }
+            }
+            else if (this.showTopControls)
             {
                 comboPreamp.Parent = this;
                 comboRX2Preamp.Parent = this;
                 udRX1StepAttData.Parent = this;
                 udRX2StepAttData.Parent = this;
+                //G8NJJ, to show RIT/XIT
+                //                chkRIT.Parent = this;
+                //                chkXIT.Parent = this;
+                //                udRIT.Parent = this;
+                //                udXIT.Parent = this;
+                //                btnRITReset.Parent = this;
+                //                btnXITReset.Parent = this;
+                //                chkRIT.Show();
+                //                chkXIT.Show();
+                //                udRIT.Show();
+                //                udXIT.Show();
+                //                btnRITReset.Show();
+                //                btnXITReset.Show();
+                // G8NJJ: restore foreground colours which seem to get lost in the move
+                //                if (!chkRIT.Checked)
+                //                    chkRIT.ForeColor = SystemColors.ControlLightLight;
+                //                if (!chkXIT.Checked)
+                //                    chkXIT.ForeColor = SystemColors.ControlLightLight;
+                //                btnRITReset.ForeColor = SystemColors.ControlLightLight;
+                //                btnXITReset.ForeColor = SystemColors.ControlLightLight;
+                panelVFOALabels.Hide();
+                lblModeBigLabel.Hide();
+                panelVFOBLabels.Hide();
+                lblRX2ModeBigLabel.Hide();
+                panelVFOLabels.Hide();
+                panelMeterLabels.Hide();
 
                 if (show_rx1)
                 {
+                    // G8NJJ
+                    comboDisplayMode.Show();
+                    comboRX2DisplayMode.Hide();
                     grpVFOA.Show();
                     grpVFOB.Hide();
                     chkPower.Parent = this;
@@ -52670,9 +53438,11 @@ namespace Thetis
                     chkMOX.Show();
                     chkTUN.Parent = this;
                     chkTUN.Show();
-
-                    chkVOX.Parent = this;
-                    chkVOX.Show();
+                    // G8NJJ swapped PS2 for VOX
+//                    chkVOX.Parent = this;
+//                    chkVOX.Show();
+                    chkFWCATUBypass.Parent = this;
+                    chkFWCATUBypass.Show();
 
                     chkRX2SR.Parent = this;
                     chkRX2SR.Show();
@@ -52741,9 +53511,23 @@ namespace Thetis
                           picMultiMeterDigital.Show();
                           lblMultiSMeter.Hide();
                       }*/
+                    // changed G8NJJ to pick up RX1 or RX2 mode
+                    if (this.showModeControls)
+                    {
+                        panelMode.Show();
+                        panelButtonBar.Hide();
+                    }
+
+                    else
+                        panelMode.Hide();
+                    panelRX2Mode.Hide();
                 }
                 if (show_rx2)
                 {
+                    // G8NJJ
+                    comboDisplayMode.Hide();
+                    comboRX2DisplayMode.Show();
+
                     grpVFOB.Show();
                     grpVFOA.Hide();
 
@@ -52780,9 +53564,11 @@ namespace Thetis
                     chkFWCATU.Hide();
                     chkX2TR.Parent = this;
                     chkX2TR.Show();
-
-                    chkVOX.Parent = this;
-                    chkVOX.Show();
+                    //  G8NJJ swap PS2 for VOX
+//                    chkVOX.Parent = this;
+//                    chkVOX.Show();
+                    chkFWCATUBypass.Parent = this;
+                    chkFWCATUBypass.Show();
 
                     //lblAF2.Parent = this;
                     lblAF2.Show();
@@ -52855,11 +53641,20 @@ namespace Thetis
                           picMultiMeterDigital.Show();
                           lblMultiSMeter.Hide();
                       }*/
+                    // changed G8NJJ to pick up RX1 or RX2 mode
+                    if (this.showModeControls)
+                    {
+                        panelRX2Mode.Show();
+                        panelButtonBar.Hide();
+                    }
+                    else
+                        panelRX2Mode.Hide();
+                    panelMode.Hide();
                 }
+
             }
             else
             {
-                comboDisplayMode.Show();
                 //chkPower.Hide();
                 grpVFOBetween.Hide();
                 grpMultimeter.Hide();
@@ -52869,14 +53664,26 @@ namespace Thetis
                 //radRX1Show.Hide();
                 // radRX2Show.Hide();
             }
-
-            if (this.showBandControls)
+            
+            //
+            // G8NJJ: if Andromeda button bar, show its button panel
+            //
+            if (this.showAndromedaButtonBar)
             {
-                if (panelBandVHF.Visible)  //w3sz added
+                panelBandVHF.Hide(); //w3sz added "V"
+                panelBandHF.Hide(); //w3sz added
+                panelBandGEN.Hide();
+                panelMode.Hide();
+                panelButtonBar.Show();
+            }
+            else if (this.showBandControls)
+            {
+                panelButtonBar.Hide();
+                if (whatisVHF)  //w3sz added; G8NJJ changed to use stored bool because sometimes all 3 are hidden)
                 {
                     panelBandVHF.Show();  //w3sz added "V"
                 }
-                else if (panelBandHF.Visible)
+                else if (whatisHF)
                 {
                     panelBandHF.Show();  //w3sz
                 }
@@ -52884,6 +53691,12 @@ namespace Thetis
                 {
                     panelBandGEN.Show();
                 }
+                // G8NJJ added
+                lblRX2Band.Show();
+                comboRX2Band.Show();
+                lblRX2Band.Parent = this;
+                comboRX2Band.Parent = this;
+
             }
             else //w3sz added
             {
@@ -52892,10 +53705,6 @@ namespace Thetis
                 panelBandGEN.Hide();
             }
 
-            if (this.showModeControls)
-                panelMode.Show();
-            else
-                panelMode.Hide();
 
             RepositionControlsForCollapsedlDisplay();
 
@@ -52903,13 +53712,95 @@ namespace Thetis
                 SetupForm.CollapsedHeight);
         }
 
+
+        // relocate the controls on the collapsed display
         private void RepositionControlsForCollapsedlDisplay()
         {
             int top = 0;
             int h_delta = this.Width - console_basis_size.Width;
             int v_delta = Math.Max(this.Height - console_basis_size.Height, 0);
 
-            if (showTopControls)
+            if (showAndromedaTopControls)
+            {
+                top = grpVFOA.Height + 50;
+                //
+                // radio controlling buttons
+                //
+                chkPower.Location = new Point(10, gr_VFOA_basis_location.Y + 2);
+                chkRX2.Location = new Point(chkPower.Location.X + chkPower.Width + 5, chkPower.Location.Y);
+
+                chkMON.Location = new Point(chkPower.Location.X + 5, chkPower.Location.Y + chkPower.Height + 12);
+                chkTUN.Location = new Point(chkMON.Location.X + chkMON.Width + 10, chkMON.Location.Y);
+
+                chkMOX.Location = new Point(chkMON.Location.X, chkMON.Location.Y + chkMON.Height + 4);
+
+                chkRX2SR.Location = new Point(chkMOX.Location.X, chkMOX.Location.Y + chkMOX.Height + 4);      //DUP
+                chkFWCATUBypass.Location = new Point(chkTUN.Location.X, chkRX2SR.Location.Y);     // PS-A
+
+                //
+                // VFO A and VFO labels
+                //
+                panelVFOALabels.Location = new Point(chkFWCATUBypass.Location.X + chkFWCATUBypass.Width + 20, gr_VFOA_basis_location.Y);
+                grpVFOA.Location = new Point(panelVFOALabels.Location.X, panelVFOALabels.Location.Y + panelVFOALabels.Height);
+                panelVFOLabels.Location = new Point(panelVFOALabels.Location.X + panelVFOALabels.Width + 10, grpVFOA.Location.Y + grpVFOA.Height - panelVFOLabels.Height);
+                radRX1Show.Location = new Point(panelVFOLabels.Location.X + panelVFOLabels.Width + 10, chkRX2.Location.Y + 4);
+                radRX2Show.Location = new Point(radRX1Show.Location.X + radRX1Show.Width + 5, radRX1Show.Location.Y);
+                lblRX1APF.Location = new Point(txtVFOABand.Location.X + 5, txtVFOABand.Location.Y + 2);
+                lblRX1MuteVFOA.Location = new Point(txtVFOABand.Location.X + 5, txtVFOABand.Location.Y + 12);
+                //
+                // VFO B at right
+                //
+                panelVFOBLabels.Location = new Point(panelButtonBar.Width - 10 - grpVFOB.Width, gr_VFOA_basis_location.Y);
+                grpVFOB.Location = new Point(panelVFOBLabels.Location.X, panelVFOBLabels.Location.Y + panelVFOBLabels.Height);
+                lblRX2APF.Location = new Point(txtVFOBBand.Location.X + 5, txtVFOBBand.Location.Y + 2);
+                lblRX2MuteVFOB.Location = new Point(txtVFOBBand.Location.X + 5, txtVFOBBand.Location.Y + 12);
+                //
+                // RX1 or RX2 meter (button dependent)
+                //
+                panelMeterLabels.Location = new Point(panelVFOLabels.Location.X + panelVFOLabels.Width + 10, grpVFOA.Location.Y + 3 - panelMeterLabels.Height);
+                if (show_rx1)
+                {
+                    txtMultiText.Location = new Point(panelVFOLabels.Location.X + panelVFOLabels.Width + 10, grpVFOA.Location.Y + 5);
+                    picMultiMeterDigital.Location = new Point(txtMultiText.Location.X, txtMultiText.Location.Y + txtMultiText.Height + 4);
+                    picMultiMeterDigital.Size = pic_multi_meter_size_basis;
+                    if (current_meter_display_mode == MultiMeterDisplayMode.Original)
+                    {
+                        picMultiMeterDigital.Size = new Size(pic_multi_meter_size_basis.Width * 2, pic_multi_meter_size_basis.Height - lblMultiSMeter.Height);
+                        lblMultiSMeter.Size = new Size(lbl_multi_smeter_size_basis.Width * 2, lbl_multi_smeter_size_basis.Height);
+                        lblMultiSMeter.Location = new Point(picMultiMeterDigital.Location.X, picMultiMeterDigital.Location.Y +
+                                                            picMultiMeterDigital.Height);
+                        lblMultiSMeter.Show();
+                        lblMultiSMeter.BringToFront();
+                    }
+                    else
+                        lblMultiSMeter.Hide();
+                }
+                else if (show_rx2)
+                {
+                    txtRX2Meter.Location = new Point(panelVFOLabels.Location.X + panelVFOLabels.Width + 10, grpVFOA.Location.Y + 5);
+                    picRX2Meter.Location = new Point(txtRX2Meter.Location.X, txtRX2Meter.Location.Y + txtRX2Meter.Height + 4);
+                    picRX2Meter.Size = pic_rx2meter_size_basis;
+                    if (current_meter_display_mode == MultiMeterDisplayMode.Original)
+                    {
+                        picRX2Meter.Size = new Size(pic_rx2meter_size_basis.Width * 2, pic_rx2meter_size_basis.Height - lblRX2Meter.Height);
+                        lblRX2Meter.Size = new Size(lbl_rx2meter_size_basis.Width * 2, lbl_rx2meter_size_basis.Height);
+                        lblRX2Meter.Location = new Point(picRX2Meter.Location.X, picRX2Meter.Location.Y +
+                                                            picRX2Meter.Height);
+                        lblRX2Meter.Show();
+                        lblRX2Meter.BringToFront();
+                    }
+                    else
+                        lblRX2Meter.Hide();
+                    comboRX2MeterMode.Location = new Point(txtRX2Meter.Location.X - comboRX2MeterMode.Width - 5,
+                        txtRX2Meter.Location.Y + 2);
+                    // comboMeterTXMode.Location = new Point(comboMeterRXMode.Location.X, 
+                    //     comboMeterRXMode.Location.Y + comboMeterRXMode.Height + 1);
+                    comboMeterTXMode.Location = new Point(txtRX2Meter.Location.X + txtRX2Meter.Width + 5,
+                        txtRX2Meter.Location.Y + 2);
+                    // G8NJJ
+                }
+            }
+            else if (showTopControls)
             {
                 if (show_rx1)
                 {
@@ -52953,7 +53844,8 @@ namespace Thetis
                     //chkMUT.Location = new Point(chkMON.Location.X + chkMON.Width, chkPower.Location.Y + chkPower.Height + 5);
                     chkTUN.Location = new Point(chkMON.Location.X, chkMON.Location.Y + chkMON.Height + 4);
                     chkMOX.Location = new Point(chkTUN.Location.X, chkTUN.Location.Y + chkTUN.Height + 4);
-                    chkVOX.Location = new Point(chkMON.Location.X - chkVOX.Width - 10, chkMON.Location.Y);
+                    //                    chkVOX.Location = new Point(chkMON.Location.X - chkVOX.Width - 10, chkMON.Location.Y);
+                    chkFWCATUBypass.Location = new Point(chkMON.Location.X - chkVOX.Width - 10, chkMON.Location.Y);
 
                     chkRX2SR.Location = new Point(chkTUN.Location.X - chkRX2SR.Width - 10, chkTUN.Location.Y); //DUP
                     chkFWCATU.Location = new Point(chkMOX.Location.X - chkFWCATU.Width - 10, chkMOX.Location.Y); //CTUN
@@ -52984,275 +53876,329 @@ namespace Thetis
                         comboPreamp.Show();
                         // comboPreamp.Location = new Point(comboAGC.Location.X + comboPreamp.Width + 2, comboAGC.Location.Y);
                     }
+                    udXIT.Location = new Point(grpVFOA.Location.X + grpVFOA.Width + 6, comboAGC.Location.Y);     // XIT bottom, to right of VFO
+                    chkXIT.Location = new Point(udXIT.Location.X, udXIT.Location.Y - chkXIT.Height);             // chkXIT above it
+                    btnXITReset.Location = new Point(chkXIT.Location.X + chkXIT.Width, chkXIT.Location.Y);      // btnXIT to its right
+                    udRIT.Location = new Point(udXIT.Location.X, chkXIT.Location.Y - udRIT.Height);
+                    chkRIT.Location = new Point(udRIT.Location.X, udRIT.Location.Y - chkRIT.Height);
+                    btnRITReset.Location = new Point(chkRIT.Location.X + chkRIT.Width, chkRIT.Location.Y);
+
                 }
-                else
-                    if (show_rx2)
+                else if (show_rx2)
+                {
+                    top = grpVFOB.Height + 10;
+                    //top = grpMultimeter.Location.Y + grpMultimeter.Height + 5;
+                    //grpVFOA.Location = new Point(gr_VFOA_basis_location.X + (h_delta / 4), gr_VFOA_basis_location.Y);
+                    grpVFOB.Location = new Point((this.ClientSize.Width - grpVFOB.Width) / 2, gr_VFOB_basis_location.Y);
+                    //grpVFOB.Location = new Point(gr_VFOB_basis_location.X + h_delta - (h_delta / 4), gr_VFOB_basis_location.Y);
+                    txtRX2Meter.Location = new Point(((this.ClientSize.Width - (grpVFOB.Location.X + grpVFOB.Width)) -
+                        (txtRX2Meter.Width / 12)) * 2, grpVFOB.Location.Y + 5);
+                    // picMultiMeterDigital.Location = txtMultiText.Location;
+                    // picMultiMeterDigital.Location = new Point(txtMultiText.Location.X, txtMultiText.Location.Y + txtMultiText.Height + 8);
+                    picRX2Meter.Size = new Size(pic_rx2meter_size_basis.Width * 2, pic_rx2meter_size_basis.Height);
+                    picRX2Meter.Location = new Point(((this.ClientSize.Width - (grpVFOB.Location.X + grpVFOB.Width)) -
+                        (picRX2Meter.Width / 6)) * 2, txtRX2Meter.Location.Y + txtRX2Meter.Height + 9);
+                    // picMultiMeterDigital.Size = new Size(pic_multi_meter_size_basis.Width * 2, pic_multi_meter_size_basis.Height);
+                    //grpMultimeter.Size = new Size(grpMultimeter.Width, grpVFOB.Height);
+                    if (current_meter_display_mode == MultiMeterDisplayMode.Original)
                     {
-                        top = grpVFOB.Height + 10;
-                        //top = grpMultimeter.Location.Y + grpMultimeter.Height + 5;
-                        //grpVFOA.Location = new Point(gr_VFOA_basis_location.X + (h_delta / 4), gr_VFOA_basis_location.Y);
-                        grpVFOB.Location = new Point((this.ClientSize.Width - grpVFOB.Width) / 2, gr_VFOB_basis_location.Y);
-                        //grpVFOB.Location = new Point(gr_VFOB_basis_location.X + h_delta - (h_delta / 4), gr_VFOB_basis_location.Y);
-                        txtRX2Meter.Location = new Point(((this.ClientSize.Width - (grpVFOB.Location.X + grpVFOB.Width)) -
-                            (txtRX2Meter.Width / 12)) * 2, grpVFOB.Location.Y + 5);
-                        // picMultiMeterDigital.Location = txtMultiText.Location;
-                        // picMultiMeterDigital.Location = new Point(txtMultiText.Location.X, txtMultiText.Location.Y + txtMultiText.Height + 8);
-                        picRX2Meter.Size = new Size(pic_rx2meter_size_basis.Width * 2, pic_rx2meter_size_basis.Height);
-                        picRX2Meter.Location = new Point(((this.ClientSize.Width - (grpVFOB.Location.X + grpVFOB.Width)) -
-                            (picRX2Meter.Width / 6)) * 2, txtRX2Meter.Location.Y + txtRX2Meter.Height + 9);
-                        // picMultiMeterDigital.Size = new Size(pic_multi_meter_size_basis.Width * 2, pic_multi_meter_size_basis.Height);
-                        //grpMultimeter.Size = new Size(grpMultimeter.Width, grpVFOB.Height);
-                        if (current_meter_display_mode == MultiMeterDisplayMode.Original)
+                        picRX2Meter.Size = new Size(pic_rx2meter_size_basis.Width * 2, pic_rx2meter_size_basis.Height - lblRX2Meter.Height);
+                        lblRX2Meter.Size = new Size(lbl_rx2meter_size_basis.Width * 2, lbl_rx2meter_size_basis.Height);
+                        lblRX2Meter.Location = new Point(picRX2Meter.Location.X, picRX2Meter.Location.Y +
+                                                            picRX2Meter.Height);
+                        lblRX2Meter.Show();
+                        lblRX2Meter.BringToFront();
+                    }
+                    else
+                        lblRX2Meter.Hide();
+                    comboRX2MeterMode.Location = new Point(txtRX2Meter.Location.X - comboRX2MeterMode.Width - 5,
+                        txtRX2Meter.Location.Y + 2);
+                    // comboMeterTXMode.Location = new Point(comboMeterRXMode.Location.X, 
+                    //     comboMeterRXMode.Location.Y + comboMeterRXMode.Height + 1);
+                    comboMeterTXMode.Location = new Point(txtRX2Meter.Location.X + txtRX2Meter.Width + 5,
+                        txtRX2Meter.Location.Y + 2);
+                    chkPower.Location = new Point(30, grpVFOB.Location.Y + 2);
+                    chkRX2.Location = new Point(chkPower.Location.X + chkRX2.Width + 5, chkPower.Location.Y);
+                    radRX1Show.Location = new Point(chkRX2.Location.X + radRX1Show.Width + 15, chkRX2.Location.Y + 4);
+                    radRX2Show.Location = new Point(radRX1Show.Location.X + radRX1Show.Width + 5, radRX1Show.Location.Y);
+                    //chkMON.Location = new Point(10, chkPower.Location.Y + chkPower.Height + 5);
+                    chkMON.Location = new Point(grpVFOB.Location.X - chkMON.Width - 10, grpVFOB.Location.Y + 8);
+                    //chkMUT.Location = new Point(chkMON.Location.X + chkMON.Width, chkPower.Location.Y + chkPower.Height + 5);
+                    chkTUN.Location = new Point(chkMON.Location.X, chkMON.Location.Y + chkMON.Height + 4);
+                    chkMOX.Location = new Point(chkTUN.Location.X, chkTUN.Location.Y + chkTUN.Height + 4);
+                    //                        chkVOX.Location = new Point(chkMON.Location.X - chkVOX.Width - 10, chkMON.Location.Y);
+                    chkFWCATUBypass.Location = new Point(chkMON.Location.X - chkVOX.Width - 10, chkMON.Location.Y);
+
+                    chkRX2SR.Location = new Point(chkTUN.Location.X - chkRX2SR.Width - 10, chkTUN.Location.Y); //DUP
+                                                                                                               //  chkFWCATU.Location = new Point(chkMOX.Location.X - chkFWCATU.Width - 10, chkMOX.Location.Y); //CTUN
+                    chkX2TR.Location = new Point(chkMOX.Location.X - chkX2TR.Width - 10, chkMOX.Location.Y); //RX2 CTUN
+                    lblAF2.Location = new Point(5, chkPower.Location.Y + chkPower.Height + 5);
+                    //ptbAF.Location = new Point(lblAF2.Location.X + lblAF2.Width, lblAF2.Location.Y); 
+                    ptbRX2AF.Location = new Point(lblAF2.Location.X + lblAF2.Width, lblAF2.Location.Y);
+                    //ptbAF.Location = new Point(10, chkPower.Location.Y + chkPower.Height + 2);
+                    lblPWR2.Location = new Point(ptbRX2AF.Location.X + ptbRX2AF.Width + 2, ptbRX2AF.Location.Y);
+                    ptbPWR.Location = new Point(lblPWR2.Location.X + lblPWR2.Width, lblPWR2.Location.Y);
+                    lblRF2.Location = new Point(5, lblAF2.Location.Y + lblAF2.Height + 2);
+                    ptbRX2RF.Location = new Point(lblRF2.Location.X + lblRF2.Width, ptbRX2AF.Location.Y + ptbRX2AF.Height + 2);
+                    comboRX2AGC.Location = new Point(ptbRX2RF.Location.X + ptbRX2RF.Width + 2, ptbRX2RF.Location.Y + 3);
+                    //chkMUT.Location = new Point(ptbAF.Location.X + ptbAF.Width + 2, ptbAF.Location.Y);
+                    //comboPreamp.Location = new Point(comboRX2AGC.Location.X + comboPreamp.Width + 2, comboRX2AGC.Location.Y);
+                    udXIT.Location = new Point(grpVFOB.Location.X + grpVFOB.Width + 6, comboRX2AGC.Location.Y);     // XIT bottom, to right of VFO
+                    chkXIT.Location = new Point(udXIT.Location.X, udXIT.Location.Y - chkXIT.Height);             // chkXIT above it
+                    btnXITReset.Location = new Point(chkXIT.Location.X + chkXIT.Width, chkXIT.Location.Y);      // btnXIT to its right
+                    udRIT.Location = new Point(udXIT.Location.X, chkXIT.Location.Y - udRIT.Height);
+                    chkRIT.Location = new Point(udRIT.Location.X, udRIT.Location.Y - chkRIT.Height);
+                    btnRITReset.Location = new Point(chkRIT.Location.X + chkRIT.Width, chkRIT.Location.Y);
+
+                    comboPreamp.Location = new Point(comboRX2AGC.Location.X + comboPreamp.Width + 2, comboRX2AGC.Location.Y);
+                    udRX1StepAttData.Location = new Point(comboRX2AGC.Location.X + udRX1StepAttData.Width + 2, comboRX2AGC.Location.Y);
+                    comboRX2Preamp.Location = new Point(comboRX2AGC.Location.X + comboRX2Preamp.Width + 2, comboRX2AGC.Location.Y);
+                    udRX2StepAttData.Location = new Point(comboRX2AGC.Location.X + udRX2StepAttData.Width + 2, comboRX2AGC.Location.Y);
+
+                    if (rx2_preamp_present)
+                    {
+                        if (rx2_step_att_present)
                         {
-                            picRX2Meter.Size = new Size(pic_rx2meter_size_basis.Width * 2, pic_rx2meter_size_basis.Height - lblRX2Meter.Height);
-                            lblRX2Meter.Size = new Size(lbl_rx2meter_size_basis.Width * 2, lbl_rx2meter_size_basis.Height);
-                            lblRX2Meter.Location = new Point(picRX2Meter.Location.X, picRX2Meter.Location.Y +
-                                                                picRX2Meter.Height);
-                            lblRX2Meter.Show();
-                            lblRX2Meter.BringToFront();
-                        }
-                        else lblRX2Meter.Hide();
-
-                        comboRX2MeterMode.Location = new Point(txtRX2Meter.Location.X - comboRX2MeterMode.Width - 5,
-                            txtRX2Meter.Location.Y + 2);
-                        // comboMeterTXMode.Location = new Point(comboMeterRXMode.Location.X, 
-                        //     comboMeterRXMode.Location.Y + comboMeterRXMode.Height + 1);
-                        comboMeterTXMode.Location = new Point(txtRX2Meter.Location.X + txtRX2Meter.Width + 5,
-                            txtRX2Meter.Location.Y + 2);
-                        chkPower.Location = new Point(30, grpVFOB.Location.Y + 2);
-                        chkRX2.Location = new Point(chkPower.Location.X + chkRX2.Width + 5, chkPower.Location.Y);
-                        radRX1Show.Location = new Point(chkRX2.Location.X + radRX1Show.Width + 15, chkRX2.Location.Y + 4);
-                        radRX2Show.Location = new Point(radRX1Show.Location.X + radRX1Show.Width + 5, radRX1Show.Location.Y);
-                        //chkMON.Location = new Point(10, chkPower.Location.Y + chkPower.Height + 5);
-                        chkMON.Location = new Point(grpVFOB.Location.X - chkMON.Width - 10, grpVFOB.Location.Y + 8);
-                        //chkMUT.Location = new Point(chkMON.Location.X + chkMON.Width, chkPower.Location.Y + chkPower.Height + 5);
-                        chkTUN.Location = new Point(chkMON.Location.X, chkMON.Location.Y + chkMON.Height + 4);
-                        chkMOX.Location = new Point(chkTUN.Location.X, chkTUN.Location.Y + chkTUN.Height + 4);
-                        chkVOX.Location = new Point(chkMON.Location.X - chkVOX.Width - 10, chkMON.Location.Y);
-                        chkRX2SR.Location = new Point(chkTUN.Location.X - chkRX2SR.Width - 10, chkTUN.Location.Y); //DUP
-                        //  chkFWCATU.Location = new Point(chkMOX.Location.X - chkFWCATU.Width - 10, chkMOX.Location.Y); //CTUN
-                        chkX2TR.Location = new Point(chkMOX.Location.X - chkX2TR.Width - 10, chkMOX.Location.Y); //RX2 CTUN
-                        lblAF2.Location = new Point(5, chkPower.Location.Y + chkPower.Height + 5);
-                        //ptbAF.Location = new Point(lblAF2.Location.X + lblAF2.Width, lblAF2.Location.Y); 
-                        ptbRX2AF.Location = new Point(lblAF2.Location.X + lblAF2.Width, lblAF2.Location.Y);
-                        //ptbAF.Location = new Point(10, chkPower.Location.Y + chkPower.Height + 2);
-                        lblPWR2.Location = new Point(ptbRX2AF.Location.X + ptbRX2AF.Width + 2, ptbRX2AF.Location.Y);
-                        ptbPWR.Location = new Point(lblPWR2.Location.X + lblPWR2.Width, lblPWR2.Location.Y);
-                        lblRF2.Location = new Point(5, lblAF2.Location.Y + lblAF2.Height + 2);
-                        ptbRX2RF.Location = new Point(lblRF2.Location.X + lblRF2.Width, ptbRX2AF.Location.Y + ptbRX2AF.Height + 2);
-                        comboRX2AGC.Location = new Point(ptbRX2RF.Location.X + ptbRX2RF.Width + 2, ptbRX2RF.Location.Y + 3);
-                        //chkMUT.Location = new Point(ptbAF.Location.X + ptbAF.Width + 2, ptbAF.Location.Y);
-                        //comboPreamp.Location = new Point(comboRX2AGC.Location.X + comboPreamp.Width + 2, comboRX2AGC.Location.Y);
-
-                        comboPreamp.Location = new Point(comboRX2AGC.Location.X + comboPreamp.Width + 2, comboRX2AGC.Location.Y);
-                        udRX1StepAttData.Location = new Point(comboRX2AGC.Location.X + udRX1StepAttData.Width + 2, comboRX2AGC.Location.Y);
-                        comboRX2Preamp.Location = new Point(comboRX2AGC.Location.X + comboRX2Preamp.Width + 2, comboRX2AGC.Location.Y);
-                        udRX2StepAttData.Location = new Point(comboRX2AGC.Location.X + udRX2StepAttData.Width + 2, comboRX2AGC.Location.Y);
-
-                        if (rx2_preamp_present)
-                        {
-                            if (rx2_step_att_present)
-                            {
-                                comboPreamp.Hide();
-                                udRX1StepAttData.Hide();
-                                comboRX2Preamp.Hide();
-                                udRX2StepAttData.Show();
-                                // udRX2StepAttData.Location = new Point(comboRX2AGC.Location.X + udRX2StepAttData.Width + 2, comboRX2AGC.Location.Y);
-                            }
-                            else
-                            {
-                                comboPreamp.Hide();
-                                udRX1StepAttData.Hide();
-                                udRX2StepAttData.Hide();
-                                comboRX2Preamp.Show();
-                                // comboRX2Preamp.Location = new Point(comboRX2AGC.Location.X + comboRX2Preamp.Width + 2, comboRX2AGC.Location.Y);
-                            }
+                            comboPreamp.Hide();
+                            udRX1StepAttData.Hide();
+                            comboRX2Preamp.Hide();
+                            udRX2StepAttData.Show();
+                            // udRX2StepAttData.Location = new Point(comboRX2AGC.Location.X + udRX2StepAttData.Width + 2, comboRX2AGC.Location.Y);
                         }
                         else
                         {
-                            if (rx1_step_att_present)
-                            {
-                                comboPreamp.Hide();
-                                comboRX2Preamp.Hide();
-                                udRX2StepAttData.Hide();
-                                udRX1StepAttData.Show();
-                                //udRX1StepAttData.Location = new Point(comboRX2AGC.Location.X + udRX1StepAttData.Width + 2, comboRX2AGC.Location.Y);
-                            }
-                            else
-                            {
-                                udRX1StepAttData.Hide();
-                                comboRX2Preamp.Hide();
-                                udRX2StepAttData.Hide();
-                                comboPreamp.Show();
-                                // comboPreamp.Location = new Point(comboRX2AGC.Location.X + comboPreamp.Width + 2, comboRX2AGC.Location.Y);
-                            }
+                            comboPreamp.Hide();
+                            udRX1StepAttData.Hide();
+                            udRX2StepAttData.Hide();
+                            comboRX2Preamp.Show();
+                            // comboRX2Preamp.Location = new Point(comboRX2AGC.Location.X + comboRX2Preamp.Width + 2, comboRX2AGC.Location.Y);
                         }
                     }
+                    else
+                    {
+                        if (rx1_step_att_present)
+                        {
+                            comboPreamp.Hide();
+                            comboRX2Preamp.Hide();
+                            udRX2StepAttData.Hide();
+                            udRX1StepAttData.Show();
+                            //udRX1StepAttData.Location = new Point(comboRX2AGC.Location.X + udRX1StepAttData.Width + 2, comboRX2AGC.Location.Y);
+                        }
+                        else
+                        {
+                            udRX1StepAttData.Hide();
+                            comboRX2Preamp.Hide();
+                            udRX2StepAttData.Hide();
+                            comboPreamp.Show();
+                            // comboPreamp.Location = new Point(comboRX2AGC.Location.X + comboPreamp.Width + 2, comboRX2AGC.Location.Y);
+                        }
+                    }
+                }
+                // G8NJJ
             }
 
-            panelDisplay.Location = new Point(0, top + 20);
+                panelDisplay.Location = new Point(0, top + 20);
 
-            int height = this.ClientSize.Height - (top + 25);
+                int height = this.ClientSize.Height - (top + 25);
 
-            if (this.showBandControls)
-                height -= radBand160.Height;
-
-            if (this.showModeControls)
-                height -= radModeLSB.Height;
-
-            panelDisplay.Size = new Size(this.ClientSize.Width, height);
-
-            picDisplay.Location = new Point(0, 0);
-            picDisplay.Size = new Size(panelDisplay.Size.Width, panelDisplay.Size.Height - (txtOverload_size_basis.Height + 5 + tb_display_pan_size_basis.Height + 5));
-            picWaterfall.Location = new Point(0, 0);
-            picWaterfall.Size = new Size(panelDisplay.Size.Width, panelDisplay.Size.Height - (txtOverload_size_basis.Height + 5 + tb_display_pan_size_basis.Height + 5));
-
-            top = picDisplay.Location.Y + picDisplay.Height;
-            txtDisplayCursorOffset.Location = new Point(picDisplay.Location.X, top);
-            txtDisplayCursorPower.Location = new Point(txtDisplayCursorOffset.Location.X + txtDisplayCursorOffset.Width, top);
-            txtDisplayCursorFreq.Location = new Point(txtDisplayCursorPower.Location.X + txtDisplayCursorPower.Width, top);
-            txtOverload.Location = new Point(txtDisplayCursorFreq.Location.X + txtDisplayCursorFreq.Width, top);
-            txtOverload.Size = new Size(picDisplay.Width - (txtDisplayPeakOffset.Width + txtDisplayPeakPower.Width + txtDisplayPeakFreq.Width + txtDisplayCursorOffset.Width + txtDisplayCursorPower.Width + txtDisplayCursorFreq.Width), txtOverload_size_basis.Height);
-            txtDisplayPeakOffset.Location = new Point(txtOverload.Location.X + txtOverload.Width, top);
-            txtDisplayPeakPower.Location = new Point(txtDisplayPeakOffset.Location.X + txtDisplayPeakOffset.Width, top);
-            txtDisplayPeakFreq.Location = new Point(txtDisplayPeakPower.Location.X + txtDisplayPeakPower.Width, top);
-
-            txtDisplayOrionMKIIPAVolts.Location = new Point(picDisplay.Location.X, top);
-            txtDisplayOrionMKIIPAAmps.Location = new Point(txtDisplayOrionMKIIPAVolts.Location.X + txtDisplayOrionMKIIPAVolts.Width, top);
-            txtDisplayOrionMKIIBlank.Location = new Point(txtDisplayOrionMKIIPAAmps.Location.X + txtDisplayOrionMKIIPAAmps.Width, top);
-
-            top = txtDisplayPeakOffset.Location.Y + txtDisplayPeakOffset.Height + 5;
-            int dynamicWidth = picDisplay.Width - (lblDisplayPan.Width + btnDisplayPanCenter.Width + 5 +
-                comboDisplayMode.Width + 5 + lblDisplayZoom.Width + radDisplayZoom05.Width * 4);
-
-            lblDisplayPan.Location = new Point(picDisplay.Location.X, top);
-            ptbDisplayPan.Location = new Point(lblDisplayPan.Location.X + lblDisplayPan.Width, top);
-            ptbDisplayPan.Size = new Size(dynamicWidth / 2, tb_display_pan_size_basis.Height);
-            btnDisplayPanCenter.Location = new Point(ptbDisplayPan.Location.X + ptbDisplayPan.Width, top);
-            //			btnDisplayPanCenter_Click(this, EventArgs.Empty);
-
-            // :NOTE: Force update on pan control
-            ptbDisplayPan.Value = ptbDisplayPan.Value;
-            ptbDisplayPan_Scroll(this, EventArgs.Empty);
-
-            comboDisplayMode.Parent = panelDisplay;
-            comboDisplayMode.Location = new Point(btnDisplayPanCenter.Location.X + btnDisplayPanCenter.Width + 5, top);
-
-            lblDisplayZoom.Location = new Point(comboDisplayMode.Location.X + comboDisplayMode.Width + 5, top);
-            ptbDisplayZoom.Location = new Point(lblDisplayZoom.Location.X + lblDisplayZoom.Width, top);
-            ptbDisplayZoom.Size = new Size(dynamicWidth / 2, tb_display_zoom_size_basis.Height);
-
-            // :NOTE: Force update on zoom control
-            ptbDisplayZoom.Value = ptbDisplayZoom.Value;
-            ptbDisplayZoom_Scroll(this, EventArgs.Empty);
-
-            radDisplayZoom05.Location = new Point(ptbDisplayZoom.Location.X + ptbDisplayZoom.Width, top);
-            radDisplayZoom1x.Location = new Point(radDisplayZoom05.Location.X + radDisplayZoom05.Width, top);
-            radDisplayZoom2x.Location = new Point(radDisplayZoom1x.Location.X + radDisplayZoom1x.Width, top);
-            radDisplayZoom4x.Location = new Point(radDisplayZoom2x.Location.X + radDisplayZoom2x.Width, top);
-
-            top = panelDisplay.Location.Y + panelDisplay.Height;
-
-            if (this.showBandControls)
-            {
-                if (panelBandVHF.Visible)  //w3sz added
+                if (showAndromedaButtonBar)
                 {
-                    panelBandVHF.Location = new Point(this.ClientSize.Width / 2 - radBandVHF0.Width * 7, top); //w3sz added "V"
-                    panelBandVHF.Size = new Size(radBandVHF0.Width * 15, radBandVHF0.Height); //w3sz added "V" 
-                    radBandVHF0.Location = new Point(0, 0);//w3sz added
-                    radBandVHF1.Location = new Point(radBandVHF0.Location.X + radBandVHF0.Width, 0);//w3sz added
-                    radBandVHF2.Location = new Point(radBandVHF1.Location.X + radBandVHF1.Width, 0);//w3sz added
-                    radBandVHF3.Location = new Point(radBandVHF2.Location.X + radBandVHF2.Width, 0);//w3sz added
-                    radBandVHF4.Location = new Point(radBandVHF3.Location.X + radBandVHF3.Width, 0);//w3sz added
-                    radBandVHF5.Location = new Point(radBandVHF4.Location.X + radBandVHF4.Width, 0);//w3sz added
-                    radBandVHF6.Location = new Point(radBandVHF5.Location.X + radBandVHF5.Width, 0);//w3sz added
-                    radBandVHF7.Location = new Point(radBandVHF6.Location.X + radBandVHF6.Width, 0);//w3sz added
-                    radBandVHF8.Location = new Point(radBandVHF7.Location.X + radBandVHF7.Width, 0);//w3sz added
-                    radBandVHF9.Location = new Point(radBandVHF8.Location.X + radBandVHF8.Width, 0);//w3sz added
-                    radBandVHF10.Location = new Point(radBandVHF9.Location.X + radBandVHF9.Width, 0);//w3sz added
-                    radBandVHF11.Location = new Point(radBandVHF10.Location.X + radBandVHF10.Width, 0);//w3sz added
-                    radBandVHF12.Location = new Point(radBandVHF11.Location.X + radBandVHF11.Width, 0);//w3sz added
-                    radBandVHF13.Location = new Point(radBandVHF12.Location.X + radBandVHF12.Width, 0);//w3sz added 
-                    btnBandHF.Location = new Point(radBandVHF13.Location.X + radBandVHF13.Width, 0);//w3sz added
-                    top = panelBandVHF.Location.Y + panelBandVHF.Height;//w3sz added "V"
-                }
-                else if (panelBandHF.Visible)
-                {
-                    panelBandHF.Location = new Point(this.ClientSize.Width / 2 - radBand160.Width * 7, top);
-                    panelBandHF.Size = new Size(radBand160.Width * 15, radBand160.Height);
-                    radBand160.Location = new Point(0, 0);
-                    radBand80.Location = new Point(radBand160.Location.X + radBand160.Width, 0);
-                    radBand60.Location = new Point(radBand80.Location.X + radBand80.Width, 0);
-                    radBand40.Location = new Point(radBand60.Location.X + radBand60.Width, 0);
-                    radBand30.Location = new Point(radBand40.Location.X + radBand40.Width, 0);
-                    radBand20.Location = new Point(radBand30.Location.X + radBand30.Width, 0);
-                    radBand17.Location = new Point(radBand20.Location.X + radBand20.Width, 0);
-                    radBand15.Location = new Point(radBand17.Location.X + radBand17.Width, 0);
-                    radBand12.Location = new Point(radBand15.Location.X + radBand15.Width, 0);
-                    radBand10.Location = new Point(radBand12.Location.X + radBand12.Width, 0);
-                    radBand6.Location = new Point(radBand10.Location.X + radBand10.Width, 0);
-                    radBandWWV.Location = new Point(radBand6.Location.X + radBand2.Width, 0);
-                    radBandGEN.Location = new Point(radBandWWV.Location.X + radBandWWV.Width, 0);
-                    btnBandVHF.Location = new Point(radBandGEN.Location.X + radBandGEN.Width, 0);//w3sz added
-                    top = panelBandHF.Location.Y + panelBandHF.Height;
+                    height -= panelButtonBar.Height;
                 }
                 else
                 {
-                    panelBandGEN.Location = new Point(this.ClientSize.Width / 2 - radBandGEN0.Width * 7, top);
-                    panelBandGEN.Size = new Size(radBandGEN0.Width * 15, radBandGEN0.Height);
-                    radBandGEN0.Location = new Point(0, 0);
-                    radBandGEN1.Location = new Point(radBandGEN0.Location.X + radBandGEN0.Width, 0);
-                    radBandGEN2.Location = new Point(radBandGEN1.Location.X + radBandGEN1.Width, 0);
-                    radBandGEN3.Location = new Point(radBandGEN2.Location.X + radBandGEN2.Width, 0);
-                    radBandGEN4.Location = new Point(radBandGEN3.Location.X + radBandGEN3.Width, 0);
-                    radBandGEN5.Location = new Point(radBandGEN4.Location.X + radBandGEN4.Width, 0);
-                    radBandGEN6.Location = new Point(radBandGEN5.Location.X + radBandGEN5.Width, 0);
-                    radBandGEN7.Location = new Point(radBandGEN6.Location.X + radBandGEN6.Width, 0);
-                    radBandGEN8.Location = new Point(radBandGEN7.Location.X + radBandGEN7.Width, 0);
-                    radBandGEN9.Location = new Point(radBandGEN8.Location.X + radBandGEN8.Width, 0);
-                    radBandGEN10.Location = new Point(radBandGEN9.Location.X + radBandGEN9.Width, 0);
-                    radBandGEN11.Location = new Point(radBandGEN10.Location.X + radBandGEN10.Width, 0);
-                    radBandGEN12.Location = new Point(radBandGEN11.Location.X + radBandGEN11.Width, 0);
-                    radBandGEN13.Location = new Point(radBandGEN12.Location.X + radBandGEN12.Width, 0);
-                    btnBandHF1.Location = new Point(radBandGEN13.Location.X + radBandGEN13.Width, 0);
-                    top = panelBandGEN.Location.Y + panelBandGEN.Height;
+                    if (this.showBandControls)
+                        height -= radBand160.Height;
+
+                    if (this.showModeControls)
+                        height -= radModeLSB.Height;
                 }
 
+                panelDisplay.Size = new Size(this.ClientSize.Width, height);
+
+                picDisplay.Location = new Point(0, 0);
+                picDisplay.Size = new Size(panelDisplay.Size.Width, panelDisplay.Size.Height - (txtOverload_size_basis.Height + 5 + tb_display_pan_size_basis.Height + 5));
+                picWaterfall.Location = new Point(0, 0);
+                picWaterfall.Size = new Size(panelDisplay.Size.Width, panelDisplay.Size.Height - (txtOverload_size_basis.Height + 5 + tb_display_pan_size_basis.Height + 5));
+
+                top = picDisplay.Location.Y + picDisplay.Height;
+                txtDisplayCursorOffset.Location = new Point(picDisplay.Location.X, top);
+                txtDisplayCursorPower.Location = new Point(txtDisplayCursorOffset.Location.X + txtDisplayCursorOffset.Width, top);
+                txtDisplayCursorFreq.Location = new Point(txtDisplayCursorPower.Location.X + txtDisplayCursorPower.Width, top);
+                txtOverload.Location = new Point(txtDisplayCursorFreq.Location.X + txtDisplayCursorFreq.Width, top);
+                txtOverload.Size = new Size(picDisplay.Width - (txtDisplayPeakOffset.Width + txtDisplayPeakPower.Width + txtDisplayPeakFreq.Width + txtDisplayCursorOffset.Width + txtDisplayCursorPower.Width + txtDisplayCursorFreq.Width), txtOverload_size_basis.Height);
+                txtDisplayPeakOffset.Location = new Point(txtOverload.Location.X + txtOverload.Width, top);
+                txtDisplayPeakPower.Location = new Point(txtDisplayPeakOffset.Location.X + txtDisplayPeakOffset.Width, top);
+                txtDisplayPeakFreq.Location = new Point(txtDisplayPeakPower.Location.X + txtDisplayPeakPower.Width, top);
+
+                txtDisplayOrionMKIIPAVolts.Location = new Point(picDisplay.Location.X, top);
+                txtDisplayOrionMKIIPAAmps.Location = new Point(txtDisplayOrionMKIIPAVolts.Location.X + txtDisplayOrionMKIIPAVolts.Width, top);
+                txtDisplayOrionMKIIBlank.Location = new Point(txtDisplayOrionMKIIPAAmps.Location.X + txtDisplayOrionMKIIPAAmps.Width, top);
+
+                top = txtDisplayPeakOffset.Location.Y + txtDisplayPeakOffset.Height + 5;
+                int dynamicWidth = picDisplay.Width - (lblDisplayPan.Width + btnDisplayPanCenter.Width + 5 +
+                    comboDisplayMode.Width + 5 + lblDisplayZoom.Width + radDisplayZoom05.Width * 4);
+
+                lblDisplayPan.Location = new Point(picDisplay.Location.X, top);
+                ptbDisplayPan.Location = new Point(lblDisplayPan.Location.X + lblDisplayPan.Width, top);
+                ptbDisplayPan.Size = new Size(dynamicWidth / 2, tb_display_pan_size_basis.Height);
+                btnDisplayPanCenter.Location = new Point(ptbDisplayPan.Location.X + ptbDisplayPan.Width, top);
+                //			btnDisplayPanCenter_Click(this, EventArgs.Empty);
+
+                // :NOTE: Force update on pan control
+                ptbDisplayPan.Value = ptbDisplayPan.Value;
+                ptbDisplayPan_Scroll(this, EventArgs.Empty);
+
+                comboDisplayMode.Parent = panelDisplay;
+                comboDisplayMode.Location = new Point(btnDisplayPanCenter.Location.X + btnDisplayPanCenter.Width + 5, top);
+                comboRX2DisplayMode.Parent = panelDisplay;
+                comboRX2DisplayMode.Location = new Point(btnDisplayPanCenter.Location.X + btnDisplayPanCenter.Width + 5, top);
+
+                lblDisplayZoom.Location = new Point(comboDisplayMode.Location.X + comboDisplayMode.Width + 5, top);
+                ptbDisplayZoom.Location = new Point(lblDisplayZoom.Location.X + lblDisplayZoom.Width, top);
+                ptbDisplayZoom.Size = new Size(dynamicWidth / 2, tb_display_zoom_size_basis.Height);
+
+                // :NOTE: Force update on zoom control
+                ptbDisplayZoom.Value = ptbDisplayZoom.Value;
+                ptbDisplayZoom_Scroll(this, EventArgs.Empty);
+
+                radDisplayZoom05.Location = new Point(ptbDisplayZoom.Location.X + ptbDisplayZoom.Width, top);
+                radDisplayZoom1x.Location = new Point(radDisplayZoom05.Location.X + radDisplayZoom05.Width, top);
+                radDisplayZoom2x.Location = new Point(radDisplayZoom1x.Location.X + radDisplayZoom1x.Width, top);
+                radDisplayZoom4x.Location = new Point(radDisplayZoom2x.Location.X + radDisplayZoom2x.Width, top);
+
+                top = panelDisplay.Location.Y + panelDisplay.Height;
+                // G8NJJ to add new Andromeda button bar in place of band, mode controls
+                if (this.showAndromedaButtonBar)
+                {
+                    panelButtonBar.Location = new Point(5, top);
+                    top = top + panelButtonBar.Height;
+
+                }
+                else
+                {
+                    if (this.showBandControls)
+                    {
+                        lblRX2Band.Location = new Point(5, top);
+                        comboRX2Band.Location = new Point(lblRX2Band.Location.X + lblRX2Band.Width + 5, top);
+
+                        if (panelBandVHF.Visible)  //w3sz added
+                        {
+                            panelBandVHF.Location = new Point(this.ClientSize.Width / 2 - radBandVHF0.Width * 7 + 100, top); //w3sz added "V"
+                            panelBandVHF.Size = new Size(radBandVHF0.Width * 15, radBandVHF0.Height); //w3sz added "V" 
+                            radBandVHF0.Location = new Point(0, 0);//w3sz added
+                            radBandVHF1.Location = new Point(radBandVHF0.Location.X + radBandVHF0.Width, 0);//w3sz added
+                            radBandVHF2.Location = new Point(radBandVHF1.Location.X + radBandVHF1.Width, 0);//w3sz added
+                            radBandVHF3.Location = new Point(radBandVHF2.Location.X + radBandVHF2.Width, 0);//w3sz added
+                            radBandVHF4.Location = new Point(radBandVHF3.Location.X + radBandVHF3.Width, 0);//w3sz added
+                            radBandVHF5.Location = new Point(radBandVHF4.Location.X + radBandVHF4.Width, 0);//w3sz added
+                            radBandVHF6.Location = new Point(radBandVHF5.Location.X + radBandVHF5.Width, 0);//w3sz added
+                            radBandVHF7.Location = new Point(radBandVHF6.Location.X + radBandVHF6.Width, 0);//w3sz added
+                            radBandVHF8.Location = new Point(radBandVHF7.Location.X + radBandVHF7.Width, 0);//w3sz added
+                            radBandVHF9.Location = new Point(radBandVHF8.Location.X + radBandVHF8.Width, 0);//w3sz added
+                            radBandVHF10.Location = new Point(radBandVHF9.Location.X + radBandVHF9.Width, 0);//w3sz added
+                            radBandVHF11.Location = new Point(radBandVHF10.Location.X + radBandVHF10.Width, 0);//w3sz added
+                            radBandVHF12.Location = new Point(radBandVHF11.Location.X + radBandVHF11.Width, 0);//w3sz added
+                            radBandVHF13.Location = new Point(radBandVHF12.Location.X + radBandVHF12.Width, 0);//w3sz added 
+                            btnBandHF.Location = new Point(radBandVHF13.Location.X + radBandVHF13.Width, 0);//w3sz added
+                            top = panelBandVHF.Location.Y + panelBandVHF.Height;//w3sz added "V"
+                        }
+                        else if (panelBandHF.Visible)
+                        {
+                            panelBandHF.Location = new Point(this.ClientSize.Width / 2 - radBand160.Width * 7 + 100, top);
+                            panelBandHF.Size = new Size(radBand160.Width * 15, radBand160.Height);
+                            radBand160.Location = new Point(0, 0);
+                            radBand80.Location = new Point(radBand160.Location.X + radBand160.Width, 0);
+                            radBand60.Location = new Point(radBand80.Location.X + radBand80.Width, 0);
+                            radBand40.Location = new Point(radBand60.Location.X + radBand60.Width, 0);
+                            radBand30.Location = new Point(radBand40.Location.X + radBand40.Width, 0);
+                            radBand20.Location = new Point(radBand30.Location.X + radBand30.Width, 0);
+                            radBand17.Location = new Point(radBand20.Location.X + radBand20.Width, 0);
+                            radBand15.Location = new Point(radBand17.Location.X + radBand17.Width, 0);
+                            radBand12.Location = new Point(radBand15.Location.X + radBand15.Width, 0);
+                            radBand10.Location = new Point(radBand12.Location.X + radBand12.Width, 0);
+                            radBand6.Location = new Point(radBand10.Location.X + radBand10.Width, 0);
+                            radBandWWV.Location = new Point(radBand6.Location.X + radBand2.Width, 0);
+                            radBandGEN.Location = new Point(radBandWWV.Location.X + radBandWWV.Width, 0);
+                            btnBandVHF.Location = new Point(radBandGEN.Location.X + radBandGEN.Width, 0);//w3sz added
+                            top = panelBandHF.Location.Y + panelBandHF.Height;
+                        }
+                        else
+                        {
+                            panelBandGEN.Location = new Point(this.ClientSize.Width / 2 - radBandGEN0.Width * 7 + 100, top);
+                            panelBandGEN.Size = new Size(radBandGEN0.Width * 15, radBandGEN0.Height);
+                            radBandGEN0.Location = new Point(0, 0);
+                            radBandGEN1.Location = new Point(radBandGEN0.Location.X + radBandGEN0.Width, 0);
+                            radBandGEN2.Location = new Point(radBandGEN1.Location.X + radBandGEN1.Width, 0);
+                            radBandGEN3.Location = new Point(radBandGEN2.Location.X + radBandGEN2.Width, 0);
+                            radBandGEN4.Location = new Point(radBandGEN3.Location.X + radBandGEN3.Width, 0);
+                            radBandGEN5.Location = new Point(radBandGEN4.Location.X + radBandGEN4.Width, 0);
+                            radBandGEN6.Location = new Point(radBandGEN5.Location.X + radBandGEN5.Width, 0);
+                            radBandGEN7.Location = new Point(radBandGEN6.Location.X + radBandGEN6.Width, 0);
+                            radBandGEN8.Location = new Point(radBandGEN7.Location.X + radBandGEN7.Width, 0);
+                            radBandGEN9.Location = new Point(radBandGEN8.Location.X + radBandGEN8.Width, 0);
+                            radBandGEN10.Location = new Point(radBandGEN9.Location.X + radBandGEN9.Width, 0);
+                            radBandGEN11.Location = new Point(radBandGEN10.Location.X + radBandGEN10.Width, 0);
+                            radBandGEN12.Location = new Point(radBandGEN11.Location.X + radBandGEN11.Width, 0);
+                            radBandGEN13.Location = new Point(radBandGEN12.Location.X + radBandGEN12.Width, 0);
+                            btnBandHF1.Location = new Point(radBandGEN13.Location.X + radBandGEN13.Width, 0);
+                            top = panelBandGEN.Location.Y + panelBandGEN.Height;
+                        }
+
+                    }
+
+                    if (this.showModeControls)
+                    {
+                        panelMode.Location = new Point(this.ClientSize.Width / 2 - radModeLSB.Width * 6 + 100, top);
+                        panelMode.Size = new Size(radModeLSB.Width * 12, radModeLSB.Height);
+                        panelRX2Mode.Location = new Point(this.ClientSize.Width / 2 - radModeLSB.Width * 6 + 100, top);
+                        panelRX2Mode.Size = new Size(radModeLSB.Width * 12, radModeLSB.Height);
+
+                        radModeLSB.Location = new Point(0, 0);
+                        radModeUSB.Location = new Point(radModeLSB.Location.X + radModeLSB.Width, 0);
+                        radModeDSB.Location = new Point(radModeUSB.Location.X + radModeUSB.Width, 0);
+                        radModeCWL.Location = new Point(radModeDSB.Location.X + radModeDSB.Width, 0);
+                        radModeCWU.Location = new Point(radModeCWL.Location.X + radModeCWL.Width, 0);
+                        radModeFMN.Location = new Point(radModeCWU.Location.X + radModeCWU.Width, 0);
+                        radModeAM.Location = new Point(radModeFMN.Location.X + radModeFMN.Width, 0);
+                        radModeSAM.Location = new Point(radModeAM.Location.X + radModeAM.Width, 0);
+                        radModeSPEC.Location = new Point(radModeSAM.Location.X + radModeSAM.Width, 0);
+                        radModeDIGL.Location = new Point(radModeSPEC.Location.X + radModeSPEC.Width, 0);
+                        radModeDIGU.Location = new Point(radModeDIGL.Location.X + radModeDIGL.Width, 0);
+                        radModeDRM.Location = new Point(radModeDIGU.Location.X + radModeDIGU.Width, 0);
+                        radRX2ModeLSB.Location = new Point(0, 0);
+                        radRX2ModeUSB.Location = new Point(radRX2ModeLSB.Location.X + radRX2ModeLSB.Width, 0);
+                        radRX2ModeDSB.Location = new Point(radRX2ModeUSB.Location.X + radRX2ModeUSB.Width, 0);
+                        radRX2ModeCWL.Location = new Point(radRX2ModeDSB.Location.X + radRX2ModeDSB.Width, 0);
+                        radRX2ModeCWU.Location = new Point(radRX2ModeCWL.Location.X + radRX2ModeCWL.Width, 0);
+                        radRX2ModeFMN.Location = new Point(radRX2ModeCWU.Location.X + radRX2ModeCWU.Width, 0);
+                        radRX2ModeAM.Location = new Point(radRX2ModeFMN.Location.X + radRX2ModeFMN.Width, 0);
+                        radRX2ModeSAM.Location = new Point(radRX2ModeAM.Location.X + radRX2ModeAM.Width, 0);
+                        radRX2ModeSPEC.Location = new Point(radRX2ModeSAM.Location.X + radRX2ModeSAM.Width, 0);
+                        radRX2ModeDIGL.Location = new Point(radRX2ModeSPEC.Location.X + radRX2ModeSPEC.Width, 0);
+                        radRX2ModeDIGU.Location = new Point(radRX2ModeDIGL.Location.X + radRX2ModeDIGL.Width, 0);
+                        radRX2ModeDRM.Location = new Point(radRX2ModeDIGU.Location.X + radRX2ModeDIGU.Width, 0);
+
+                        top = panelMode.Location.Y + panelMode.Height;
+                    }
+
+                }
+
+                if ((!this.showTopControls) && (!this.showAndromedaTopControls))
+                {
+                    grpVFOA.Location = new Point(grpVFOA.Location.X, -200);
+                    grpVFOB.Location = new Point(grpVFOB.Location.X, -200);
+                    radRX1Show.Location = new Point(radRX1Show.Location.X, -200);
+                    radRX2Show.Location = new Point(radRX2Show.Location.X, -200);
+                }
             }
 
-            if (this.showModeControls)
-            {
-                panelMode.Location = new Point(this.ClientSize.Width / 2 - radModeLSB.Width * 6, top);
-                panelMode.Size = new Size(radModeLSB.Width * 12, radModeLSB.Height);
 
-                radModeLSB.Location = new Point(0, 0);
-                radModeUSB.Location = new Point(radModeLSB.Location.X + radModeLSB.Width, 0);
-                radModeDSB.Location = new Point(radModeUSB.Location.X + radModeUSB.Width, 0);
-                radModeCWL.Location = new Point(radModeDSB.Location.X + radModeDSB.Width, 0);
-                radModeCWU.Location = new Point(radModeCWL.Location.X + radModeCWL.Width, 0);
-                radModeFMN.Location = new Point(radModeCWU.Location.X + radModeCWU.Width, 0);
-                radModeAM.Location = new Point(radModeFMN.Location.X + radModeFMN.Width, 0);
-                radModeSAM.Location = new Point(radModeAM.Location.X + radModeAM.Width, 0);
-                radModeSPEC.Location = new Point(radModeSAM.Location.X + radModeSAM.Width, 0);
-                radModeDIGL.Location = new Point(radModeSPEC.Location.X + radModeSPEC.Width, 0);
-                radModeDIGU.Location = new Point(radModeDIGL.Location.X + radModeDIGL.Width, 0);
-                radModeDRM.Location = new Point(radModeDIGU.Location.X + radModeDIGU.Width, 0);
 
-                top = panelMode.Location.Y + panelMode.Height;
-            }
+            // W1CEG:  End
+            #endregion Collapsible Display
 
-            if (!this.showTopControls)
-            {
-                grpVFOA.Location = new Point(grpVFOA.Location.X, -200);
-                grpVFOB.Location = new Point(grpVFOB.Location.X, -200);
-                radRX1Show.Location = new Point(radRX1Show.Location.X, -200);
-                radRX2Show.Location = new Point(radRX2Show.Location.X, -200);
-            }
-        }
-        // W1CEG:  End
-        #endregion Collapsible Display
-
-        private void mnuFilter_Click(object sender, EventArgs e)
+            private void mnuFilter_Click(object sender, EventArgs e)
         {
             if (sender == null) return;
             if (sender.GetType() != typeof(ToolStripMenuItem)) return;
@@ -53700,6 +54646,10 @@ namespace Thetis
 
             // !!!!! - G3OQD            if (!rx1_click_tune_drag && !rx2_click_tune_drag)
             // !!!!! - G3OQD                 chkFWCATU.Checked = false;
+            if (bandPopupForm != null) bandPopupForm.RepopulateForm();
+            if (modePopupForm != null) modePopupForm.RepopulateForm();
+            if (filterPopupForm != null) filterPopupForm.RepopulateForm();
+
         }
 
         private void ptbRX0Gain_MouseEnter(object sender, EventArgs e)
@@ -53758,6 +54708,7 @@ namespace Thetis
                 if (CollapsedDisplay)
                     CollapseDisplay();
             }
+            UpdateButtonBarButtons();               // G8NJJ - update the button bar
         }
 
         private void radRX2Show_CheckedChanged(object sender, EventArgs e)
@@ -53776,6 +54727,7 @@ namespace Thetis
                 if (CollapsedDisplay)
                     CollapseDisplay();
             }
+            UpdateButtonBarButtons();               // G8NJJ - update the button bar
         }
 
         private void ptbAF_DoubleClick(object sender, EventArgs e)
@@ -53807,12 +54759,16 @@ namespace Thetis
                 SetupForm.HermesAttenuatorData = (int)udRX1StepAttData.Value;
             }
             if (udRX1StepAttData.Focused) btnHidden.Focus();
+            if (sliderForm != null) sliderForm.RX1Atten = (int)udRX1StepAttData.Value;
+            lblAttenLabel.Text = udRX1StepAttData.Value.ToString() + " dB";
         }
 
         private void udRX2StepAttData_ValueChanged(object sender, EventArgs e)
         {
             RX2AttenuatorData = (int)udRX2StepAttData.Value;
             if (udRX2StepAttData.Focused) btnHidden.Focus();
+            if (sliderForm != null) sliderForm.RX2Atten = (int)udRX2StepAttData.Value;
+            lblRX2AttenLabel.Text = RX2AttenuatorData.ToString() + " dB";
         }
 
         private void lblPreamp_MouseDoubleClick(object sender, MouseEventArgs e)
@@ -53894,6 +54850,11 @@ namespace Thetis
                 chkRIT.Checked = rit_on;
             }
             else ClickTuneDisplay = false;
+
+            if (ClickTuneDisplay == true)
+                lblCtunLabel.BackColor = System.Drawing.Color.Blue;
+            else
+                lblCtunLabel.BackColor = System.Drawing.Color.Transparent;
 
             if (chkFWCATU.Checked && chkVFOSync.Checked)
             {
@@ -54023,6 +54984,7 @@ namespace Thetis
                     cat_nr2_status = 0;
                     cat_nr_status = 1;
                     chkNR.Text = "NR";
+                    lblNRLabel.Text = "NR";
                     break;
                 case CheckState.Indeterminate: // NR2
                     radio.GetDSPRX(0, 0).NoiseReduction = false;
@@ -54034,6 +54996,7 @@ namespace Thetis
                     cat_nr_status = 0;
                     cat_nr2_status = 1;
                     chkNR.Text = "NR2";
+                    lblNRLabel.Text = "NR2";
                     break;
                 case CheckState.Unchecked: // all off
                     radio.GetDSPRX(0, 0).NoiseReduction = false;
@@ -54045,6 +55008,7 @@ namespace Thetis
                     cat_nr_status = 0;
                     cat_nr2_status = 0;
                     chkNR.Text = "NR";
+                    lblNRLabel.Text = "--";
                     break;
             }
         }
@@ -54063,6 +55027,7 @@ namespace Thetis
                     cat_rx2_nr2_status = 0;
                     cat_rx2_nr_status = 1;
                     chkRX2NR.Text = "NR";
+                    lblRX2NRLabel.Text = "NR";
                     break;
                 case CheckState.Indeterminate: // NR2
                     radio.GetDSPRX(1, 0).RXANR2Run = 1;
@@ -54074,6 +55039,7 @@ namespace Thetis
                     cat_rx2_nr_status = 0;
                     cat_rx2_nr2_status = 1;
                     chkRX2NR.Text = "NR2";
+                    lblRX2NRLabel.Text = "NR2";
                     break;
                 case CheckState.Unchecked: // all off
                     radio.GetDSPRX(1, 0).NoiseReduction = false;
@@ -54085,6 +55051,7 @@ namespace Thetis
                     cat_rx2_nr_status = 0;
                     cat_rx2_nr2_status = 0;
                     chkRX2NR.Text = "NR";
+                    lblRX2NRLabel.Text = "--";
                     break;
 
             }
@@ -54120,6 +55087,7 @@ namespace Thetis
                     cat_nb1_status = 1;
                     cat_nb2_status = 0;
                     chkNB.Text = "NB";
+                    lblNBLabel.Text = "NB";
                     break;
                 case CheckState.Indeterminate: // NB2
                     specRX.GetSpecRX(0).NBOn = false;
@@ -54129,6 +55097,7 @@ namespace Thetis
                     cat_nb1_status = 0;
                     cat_nb2_status = 1;
                     chkNB.Text = "NB2";
+                    lblNBLabel.Text = "NB2";
                     break;
                 case CheckState.Unchecked: // all off                    
                     specRX.GetSpecRX(0).NBOn = false;
@@ -54138,6 +55107,7 @@ namespace Thetis
                     cat_nb1_status = 0;
                     cat_nb2_status = 0;
                     chkNB.Text = "NB";
+                    lblNBLabel.Text = "--";
                     break;
             }
             cmaster.CMSetFRXNBRun(0);
@@ -54156,6 +55126,7 @@ namespace Thetis
                     cat_rx2nb1_status = 1;
                     cat_rx2nb2_status = 0;
                     chkRX2NB.Text = "NB";
+                    lblRX2NBLabel.Text = "NB";
                     break;
                 case CheckState.Indeterminate: // NB2
                     specRX.GetSpecRX(1).NBOn = false;
@@ -54165,6 +55136,7 @@ namespace Thetis
                     cat_rx2nb1_status = 0;
                     cat_rx2nb2_status = 1;
                     chkRX2NB.Text = "NB2";
+                    lblRX2NBLabel.Text = "NB2";
                     break;
                 case CheckState.Unchecked: // all off                    
                     specRX.GetSpecRX(1).NBOn = false;
@@ -54174,6 +55146,7 @@ namespace Thetis
                     cat_rx2nb1_status = 0;
                     cat_rx2nb2_status = 0;
                     chkRX2NB.Text = "NB";
+                    lblRX2NBLabel.Text = "--";
                     break;
             }
             cmaster.CMSetFRXNBRun(1);
@@ -54183,8 +55156,17 @@ namespace Thetis
         // RX2 Spectral Noise Blanker (SNB)
         private void chkRX2NB2_CheckStateChanged(object sender, EventArgs e)
         {
-            if (chkRX2NB2.Checked) chkRX2NB2.BackColor = button_selected_color;
-            else chkRX2NB2.BackColor = SystemColors.Control;
+            if (chkRX2NB2.Checked)
+            {
+                chkRX2NB2.BackColor = button_selected_color;
+                lblRX2SNBLabel.Text = "SNB";
+            }
+
+            else
+            {
+                chkRX2NB2.BackColor = SystemColors.Control;
+                lblRX2SNBLabel.Text = "---";
+            }
             WDSP.SetRXASNBARun(WDSP.id(2, 0), chkRX2NB2.Checked);
             cat_rx2snb_status = Convert.ToInt32(chkRX2NB2.Checked);
         }
@@ -55322,7 +56304,1094 @@ namespace Thetis
                 QSKEnabled = false;
             }
         }
+
+
+        #region Andromeda Button Bar functions
+
+        //
+        // andromeda button bar button event handlers
+        //
+        private void btnAndrBar1_Click(object sender, EventArgs e)
+        {
+            ExecuteButtonBarPress(1);
+        }
+
+        private void btnAndrBar2_Click(object sender, EventArgs e)
+        {
+            ExecuteButtonBarPress(2);
+        }
+
+        private void btnAndrBar3_Click(object sender, EventArgs e)
+        {
+            ExecuteButtonBarPress(3);
+        }
+
+        private void btnAndrBar4_Click(object sender, EventArgs e)
+        {
+            ExecuteButtonBarPress(4);
+        }
+
+        private void btnAndrBar5_Click(object sender, EventArgs e)
+        {
+            ExecuteButtonBarPress(5);
+        }
+
+        private void btnAndrBar6_Click(object sender, EventArgs e)
+        {
+            ExecuteButtonBarPress(6);
+        }
+
+        private void btnAndrBar7_Click(object sender, EventArgs e)
+        {
+            ExecuteButtonBarPress(7);
+        }
+
+        private void btnAndrBar8_Click(object sender, EventArgs e)
+        {
+            ExecuteButtonBarPress(8);
+        }
+
+
+
+        //
+        // G8NJJ: define the button bar menu
+        // each menu has 8 buttons, and they chain together using the menu button to call up another set of 8
+        //
+
+        public const int VNUMButtonMenuEntries = 64;                // total number of buttons listed
+        private int currentButtonBarMenu = 0;                       // current menu sohwn (points to 1st entry shown)
+        // create the menus, in groups of 8
+        private void InitialiseButtonBarMenu()
+        {
+            ButtonBarMenu = new SButtonBarEntry[VNUMButtonMenuEntries];
+            // menu 1 - quick access
+            ButtonBarMenu[0] = new SButtonBarEntry(EButtonBarActions.eBBMenu, "Quick Menu", 0, 2);             // numerical paramter only for "menu" entries - points to next
+            ButtonBarMenu[1] = new SButtonBarEntry(EButtonBarActions.eBBNR, "NR", 0, 0);
+            ButtonBarMenu[2] = new SButtonBarEntry(EButtonBarActions.eBBNB, "NB", 0, 0);
+            ButtonBarMenu[3] = new SButtonBarEntry(EButtonBarActions.eBBSNB, "SNB", 0, 0);
+            ButtonBarMenu[4] = new SButtonBarEntry(EButtonBarActions.eBBANF, "ANF", 0, 0);
+            ButtonBarMenu[5] = new SButtonBarEntry(EButtonBarActions.eBBAGCStep, "AGC Step", 0, 0);
+            ButtonBarMenu[6] = new SButtonBarEntry(EButtonBarActions.eBBAttenStep, "Atten Step", 0, 0);
+            ButtonBarMenu[7] = new SButtonBarEntry(EButtonBarActions.eBBNone, "----", 0, 0);
+
+            // menu 2 - RX
+            ButtonBarMenu[8] = new SButtonBarEntry(EButtonBarActions.eBBMenu, "RX Menu", 0, 3);
+            ButtonBarMenu[9] = new SButtonBarEntry(EButtonBarActions.eBBDiversityOnOff, "Diversity", 0, 0);
+            ButtonBarMenu[10] = new SButtonBarEntry(EButtonBarActions.eBBDiversityForm, "Diversity Form", 0, 0);
+            ButtonBarMenu[11] = new SButtonBarEntry(EButtonBarActions.eBBSliderForm, "Gain Form", 0, 0);
+            ButtonBarMenu[12] = new SButtonBarEntry(EButtonBarActions.eBBFilterForm, "Filter Form", 0, 0);
+            ButtonBarMenu[13] = new SButtonBarEntry(EButtonBarActions.eBBMuteOnOff, "Mute", 0, 0);
+            ButtonBarMenu[14] = new SButtonBarEntry(EButtonBarActions.eBBNone, "----", 0, 0);
+            ButtonBarMenu[15] = new SButtonBarEntry(EButtonBarActions.eBBNone, "----", 0, 0);
+
+            // menu 3 - VFO
+            ButtonBarMenu[16] = new SButtonBarEntry(EButtonBarActions.eBBMenu, "VFO Menu", 0, 4);
+            ButtonBarMenu[17] = new SButtonBarEntry(EButtonBarActions.eBBBandForm, "Band Form", 0, 0);
+            ButtonBarMenu[18] = new SButtonBarEntry(EButtonBarActions.eBBModeForm, "Mode Form", 0, 0);
+            ButtonBarMenu[19] = new SButtonBarEntry(EButtonBarActions.eBBBandstackForm, "Bandstack Form", 0, 0);
+            ButtonBarMenu[20] = new SButtonBarEntry(EButtonBarActions.eBBVFOSwap, "Swap A <--> B", 0, 0);
+            ButtonBarMenu[21] = new SButtonBarEntry(EButtonBarActions.eBBVFOSettingForm, "VFO Settings Form", 0, 0);
+            ButtonBarMenu[22] = new SButtonBarEntry(EButtonBarActions.eBBNone, "----", 0, 0);
+            ButtonBarMenu[23] = new SButtonBarEntry(EButtonBarActions.eBBNone, "----", 0, 0);
+
+            // menu 4 - TX
+            ButtonBarMenu[24] = new SButtonBarEntry(EButtonBarActions.eBBMenu, "TX Menu", 0, 5);
+            ButtonBarMenu[25] = new SButtonBarEntry(EButtonBarActions.eBBModeSettingsForm, "Mode settings form", 0, 0);
+            ButtonBarMenu[26] = new SButtonBarEntry(EButtonBarActions.eBBPuresignalForm, "Puresignal Form", 0, 0);
+            ButtonBarMenu[27] = new SButtonBarEntry(EButtonBarActions.eBBPuresignalOnOff, "Puresignal select", 0, 0);
+            ButtonBarMenu[28] = new SButtonBarEntry(EButtonBarActions.eBBMOX, "MOX", 0, 0);
+            ButtonBarMenu[29] = new SButtonBarEntry(EButtonBarActions.eBBTune, "TUNE", 0, 0);
+            ButtonBarMenu[30] = new SButtonBarEntry(EButtonBarActions.eBBPuresignal2Tone, "PS 2 Tone test", 0, 0);
+            ButtonBarMenu[31] = new SButtonBarEntry(EButtonBarActions.eBBNone, "----", 0, 0);
+
+            // menu 5 - display
+            ButtonBarMenu[32] = new SButtonBarEntry(EButtonBarActions.eBBMenu, "Display Menu", 0, 6);
+            ButtonBarMenu[33] = new SButtonBarEntry(EButtonBarActions.eBBRXMeterStep, "RX Meter Mode Step", 0, 0);
+            ButtonBarMenu[34] = new SButtonBarEntry(EButtonBarActions.eBBTXMeterStep, "TX Meter mode step", 0, 0);
+            ButtonBarMenu[35] = new SButtonBarEntry(EButtonBarActions.eBBDisplayModeStep, "Display Mode Step", 0, 0);
+            ButtonBarMenu[36] = new SButtonBarEntry(EButtonBarActions.eBBCentreDisplay, "Centre Display", 0, 0);
+            ButtonBarMenu[37] = new SButtonBarEntry(EButtonBarActions.eBBDisplaySettingsForm, "Display Form", 0, 0);
+            ButtonBarMenu[38] = new SButtonBarEntry(EButtonBarActions.eBBZoomStep, "Zoom", 0, 0);
+            ButtonBarMenu[39] = new SButtonBarEntry(EButtonBarActions.eBBNone, "----", 0, 0);
+
+            // menu 6 - audio
+            ButtonBarMenu[40] = new SButtonBarEntry(EButtonBarActions.eBBMenu, "Audio Menu", 0, 7);
+            ButtonBarMenu[41] = new SButtonBarEntry(EButtonBarActions.eBBRecordAudio, "record audio", 0, 0);
+            ButtonBarMenu[42] = new SButtonBarEntry(EButtonBarActions.eBBTXAudio, "TX Audio 1", 0, 0);
+            ButtonBarMenu[43] = new SButtonBarEntry(EButtonBarActions.eBBTXAudio, "TX Audio 2", 0, 1);
+            ButtonBarMenu[44] = new SButtonBarEntry(EButtonBarActions.eBBAudioForm, "Audio rec/play Form", 0, 0);
+            ButtonBarMenu[45] = new SButtonBarEntry(EButtonBarActions.eBBVAC1OnOff, "VAC1", 0, 0);
+            ButtonBarMenu[46] = new SButtonBarEntry(EButtonBarActions.eBBVAC2OnOff, "VAC2", 0, 0);
+            ButtonBarMenu[47] = new SButtonBarEntry(EButtonBarActions.eBBNone, "----", 0, 0);
+
+            // menu 7 - setup
+            ButtonBarMenu[48] = new SButtonBarEntry(EButtonBarActions.eBBMenu, "Setup Menu", 0, 1);
+            ButtonBarMenu[49] = new SButtonBarEntry(EButtonBarActions.eBBDUP, "Duplex", 0, 0);
+            ButtonBarMenu[50] = new SButtonBarEntry(EButtonBarActions.eBBMON, "TX Monitor", 0, 0);
+            ButtonBarMenu[51] = new SButtonBarEntry(EButtonBarActions.eBBRX2OnOff, "RX2", 0, 0);
+            ButtonBarMenu[52] = new SButtonBarEntry(EButtonBarActions.eBBSubRXOnOff, "Sub RX", 0, 0);
+            ButtonBarMenu[53] = new SButtonBarEntry(EButtonBarActions.eBBEqualiserForm, "Equaliser Form", 0, 0);
+            ButtonBarMenu[54] = new SButtonBarEntry(EButtonBarActions.eBBSetupForm, "Setup Form", 0, 0);
+            ButtonBarMenu[55] = new SButtonBarEntry(EButtonBarActions.eBBMenu, "Extended Menu", 0, 8);
+
+            // menu 8 - extended / test
+            ButtonBarMenu[56] = new SButtonBarEntry(EButtonBarActions.eBBMenu, "Test Menu", 0, 1);
+            ButtonBarMenu[57] = new SButtonBarEntry(EButtonBarActions.eBBModePlus, "Mode Up", 0, 0);
+            ButtonBarMenu[58] = new SButtonBarEntry(EButtonBarActions.eBBModeMinus, "mode down", 0, 0);
+            ButtonBarMenu[59] = new SButtonBarEntry(EButtonBarActions.eBBFilterPlus, "filter up", 0, 0);
+            ButtonBarMenu[60] = new SButtonBarEntry(EButtonBarActions.eBBFilterMinus, "filter down", 0, 0);
+            ButtonBarMenu[61] = new SButtonBarEntry(EButtonBarActions.eBBBandPlus, "Band up", 0, 0);
+            ButtonBarMenu[62] = new SButtonBarEntry(EButtonBarActions.eBBBandMinus, "Band down", 0, 0);
+            ButtonBarMenu[63] = new SButtonBarEntry(EButtonBarActions.eBBNone, "----", 0, 0);
+
+            currentButtonBarMenu = 0;
+        }
+
+        //
+        // execute events for menu button bar presses
+        // called with a button number; fins the action assigned and implements it
+        //
+        private void ExecuteButtonBarPress(int ButtonNumber)
+        {
+            int button;                                             // button to press
+            bool UseRX1;                                            // true if we should process actions for RX1
+            EButtonBarActions assignedAction;
+            if ((ButtonNumber >= 1) && (ButtonNumber <= 8))         // check range!
+            {
+                button = (ButtonNumber - 1) + currentButtonBarMenu * 8;
+                assignedAction = ButtonBarMenu[button].Action;
+                if (ButtonBarMenu[button].RXOverride == 0)          // no override
+                    UseRX1 = show_rx1;
+                else if (ButtonBarMenu[button].RXOverride == 1)     // override to RX1
+                    UseRX1 = true;
+                else
+                    UseRX1 = false;
+
+                switch (assignedAction)
+                {
+                    case EButtonBarActions.eBBNone:
+                        break;
+
+                    case EButtonBarActions.eBBStartStop:               // start/stop the radio
+                        chkPower.Checked = !chkPower.Checked;
+                        break;
+
+                    case EButtonBarActions.eBBRX2OnOff:                // toggle RX2 on/off
+                        chkRX2.Checked = !chkRX2.Checked;
+                        break;
+
+                    case EButtonBarActions.eBBDUP:                      // DUPlex on/off
+                        chkRX2SR.Checked = !chkRX2SR.Checked;
+                        break;
+
+                    case EButtonBarActions.eBBMON:                      // monitor on/off
+                        chkMON.Checked = !chkMON.Checked;
+                        break;
+
+                    case EButtonBarActions.eBBTune:                    // Tune on/off
+                        chkTUN.Checked = !chkTUN.Checked;
+                        break;
+
+                    case EButtonBarActions.eBBMOX:                     // MOX on/off
+                        chkMOX.Checked = !chkMOX.Checked;
+                        break;
+
+                    case EButtonBarActions.eBBPuresignalOnOff:         // toggle Puresignal on/off
+                        chkFWCATUBypass.Checked = !chkFWCATUBypass.Checked;
+                        break;
+
+                    case EButtonBarActions.eBBPuresignal2Tone:         // puresignal 2 tone test on/off
+                        if (CATTTTest == 0) CATTTTest = 1; else CATTTTest = 0;
+                        break;
+                        
+
+                    case EButtonBarActions.eBBMenu:
+                        currentButtonBarMenu = ButtonBarMenu[button].ButtonParameter - 1;     // menu number turned into row number
+                        UpdateButtonBarButtons();
+                        break;
+
+                    case EButtonBarActions.eBBNR:
+                        if (UseRX1)
+                        {
+                            if (chkNR.CheckState == CheckState.Unchecked) chkNR.CheckState = CheckState.Checked;       // off to NR
+                            else if (chkNR.CheckState == CheckState.Checked) chkNR.CheckState = CheckState.Indeterminate;       // NR to NR2
+                            else chkNR.CheckState = CheckState.Unchecked;
+                        }
+                        else
+                        {
+                            if (chkRX2NR.CheckState == CheckState.Unchecked) chkRX2NR.CheckState = CheckState.Checked;       // off to NR
+                            else if (chkRX2NR.CheckState == CheckState.Checked) chkRX2NR.CheckState = CheckState.Indeterminate;       // NR to NR2
+                            else chkRX2NR.CheckState = CheckState.Unchecked;
+                        }
+                        break;
+
+                    case EButtonBarActions.eBBNB:
+                        if (UseRX1)
+                        {
+                            if (chkNB.CheckState == CheckState.Unchecked) chkNB.CheckState = CheckState.Checked;       // off to NR
+                            else if (chkNB.CheckState == CheckState.Checked) chkNB.CheckState = CheckState.Indeterminate;       // NR to NR2
+                            else chkNB.CheckState = CheckState.Unchecked;
+                        }
+                        else
+                        {
+                            if (chkRX2NB.CheckState == CheckState.Unchecked) chkRX2NB.CheckState = CheckState.Checked;       // off to NR
+                            else if (chkRX2NB.CheckState == CheckState.Checked) chkRX2NB.CheckState = CheckState.Indeterminate;       // NR to NR2
+                            else chkRX2NB.CheckState = CheckState.Unchecked;
+                        }
+                        break;
+
+                    case EButtonBarActions.eBBSNB:
+                        if (UseRX1) chkDSPNB2.Checked = !chkDSPNB2.Checked; else chkRX2NB2.Checked = !chkRX2NB2.Checked;
+                        break;
+
+                    case EButtonBarActions.eBBANF:
+                        if (UseRX1) chkANF.Checked = !chkANF.Checked; else chkRX2ANF.Checked = !chkRX2ANF.Checked;
+                        break;
+
+                    case EButtonBarActions.eBBMNF:
+                        chkTNF.Checked = !chkTNF.Checked;
+                        break;
+
+                    case EButtonBarActions.eBBVFOSwap:                 // press VFO swap button
+                        btnVFOSwap_Click(null, null);
+                        break;
+
+                    case EButtonBarActions.eBBVFOSplit:                // split operation
+                        chkVFOSplit.Checked = !chkVFOSplit.Checked;
+                        break;
+
+                    case EButtonBarActions.eBBVFOAtoB:                 // copy A to B
+                        btnVFOAtoB_Click(null, null);
+                        break;
+
+                    case EButtonBarActions.eBBVFOBtoA:                 // copy B to A
+                        btnVFOBtoA_Click(null, null);
+                        break;
+
+                    case EButtonBarActions.eBBVFOZeroBeat:             // operate zero beat button
+                        btnZeroBeat_Click(null, null);
+                        break;
+
+                    case EButtonBarActions.eBBIFtoV:                   // operate IF->V button
+                        btnIFtoVFO_Click(null, null);
+                        break;
+
+                    case EButtonBarActions.eBBVFOSyncOnOff:            // VFO sync
+                        chkVFOSync.Checked = !chkVFOSync.Checked;
+                        break;
+
+                    case EButtonBarActions.eBBVFOLockOnOff:            // VFO Lock
+                        if (UseRX1)
+                            chkVFOLock.Checked = !chkVFOLock.Checked;
+                        else
+                            chkVFOBLock.Checked = !chkVFOBLock.Checked;
+                        break;
+
+                    case EButtonBarActions.eBBVFOCTUNEOnOff:           // Click Tune
+                        if (UseRX1)
+                            chkFWCATU.Checked = !chkFWCATU.Checked;
+                        else
+                            chkX2TR.Checked = !chkX2TR.Checked;
+                        break;
+
+                    case EButtonBarActions.eBBToggleAB:                // toggle between A & B
+                        if (CATRX1RX2RadioButton == 0) CATRX1RX2RadioButton = 1; else CATRX1RX2RadioButton = 0;
+                        break;
+
+                    case EButtonBarActions.eBBRITOnOff:                // toggle RIT on/off
+                        chkRIT.Checked = !chkRIT.Checked;
+                        break;
+
+                    case EButtonBarActions.eBBXITOnOff:                // toggle XIT on/off
+                        chkXIT.Checked = !chkXIT.Checked;
+                        break;
+
+                    case EButtonBarActions.eBBRITXITToggle:            // step off-RIT-XIT
+                        if(chkRIT.Checked)
+                        {
+                            chkRIT.Checked = false;
+                            chkXIT.Checked = true;
+                        }
+                        else if (chkXIT.Checked)
+                        {
+                            chkRIT.Checked = false;
+                            chkXIT.Checked = false;
+                        }
+                        else
+                        {
+                            chkRIT.Checked = true;
+                            chkXIT.Checked = false;
+                        }
+                        break;
+
+                    case EButtonBarActions.eBBClearRITXIT:             // clear RIT and XIT
+                        udRIT.Value = 0;
+                        udXIT.Value = 0;
+                        break;
+
+                    case EButtonBarActions.eBBClearRIT:                // clear RIT only
+                        udRIT.Value = 0;
+                        break;
+
+                    case EButtonBarActions.eBBClearXIT:                // clear XIT only
+                        udXIT.Value = 0;
+                        break;
+
+                    case EButtonBarActions.eBBRITPlus:                 // RIT step up
+                        RITValue += 10;                                 // same code as CATCommands
+                        break;
+
+                    case EButtonBarActions.eBBRITMinus:                // RIT step down
+                        RITValue -= 10;                                 // same code as CATCommands
+                        break;
+
+                    case EButtonBarActions.eBBXITPlus:                 // XIT step up
+                        XITValue += 10;                                 // same code as CATCommands
+                        break;
+
+                    case EButtonBarActions.eBBXITMinus:                // XIT step down
+                        XITValue -= 10;                                 // same code as CATCommands
+                        break;
+
+                    case EButtonBarActions.eBBRITXITPlus:              // RIT/XIT up - whichever is selected
+                        if (chkRIT.Checked) RITValue += 10; else if (chkXIT.Checked) XITValue += 10;
+                        break;
+
+                    case EButtonBarActions.eBBRITXITMinus:             // RIT/XIT down - whichever is selected
+                        if (chkRIT.Checked) RITValue -= 10; else if (chkXIT.Checked) XITValue -= 10;
+                        break;
+
+                    case EButtonBarActions.eBBFilterReset:             // reset variable filter
+                        btnFilterShiftReset_Click(null, null);
+                        break;
+                    
+                        // filter enum runs from F1 to VAR2
+                    case EButtonBarActions.eBBFilterPlus:              // select next filter
+                        if (UseRX1)
+                            { if (RX1Filter != Filter.VAR2) RX1Filter = (Filter)((int)RX1Filter+1); }
+                        else
+                            { if (RX2Filter != Filter.VAR2) RX2Filter = (Filter)((int)RX2Filter+1); }
+                        break;
+
+                    case EButtonBarActions.eBBFilterMinus:             // select next lower filter
+                        if (UseRX1)
+                            { if (RX1Filter != Filter.F1) RX1Filter = (Filter)((int)RX1Filter-1); }
+                        else
+                            { if (RX2Filter != Filter.F1) RX2Filter = (Filter)((int)RX2Filter-1); }
+                        break;
+                    // Band enum for HF covers b160m to b6m
+                    case EButtonBarActions.eBBBandPlus:                // step up band
+                        if (UseRX1)
+                            { if (RX1Band != Band.B6M) RX1Band = (Band)((int)RX1Band + 1); }
+                        else
+                            { if (RX2Band != Band.B6M) RX2Band = (Band)((int)RX2Band + 1); }
+                        break;
+
+                    case EButtonBarActions.eBBBandMinus:               // step down band
+                        if (UseRX1)
+                        { if (RX1Band != Band.B160M) RX1Band = (Band)((int)RX1Band - 1); }
+                        else
+                        { if (RX2Band != Band.B160M) RX2Band = (Band)((int)RX2Band - 1); }
+                        break;
+                    // DSPMode enum runs from LSB to DRM
+                    case EButtonBarActions.eBBModePlus:                // step up mode
+                        if (UseRX1)
+                            { if (RX1DSPMode != DSPMode.DRM) RX1DSPMode = (DSPMode)((int)RX1DSPMode+1); }
+                        else
+                            { if (RX2DSPMode != DSPMode.DRM) RX2DSPMode = (DSPMode)((int)RX2DSPMode+1); }
+                        break;
+
+                    case EButtonBarActions.eBBModeMinus:               // step down mode
+                        if (UseRX1)
+                            { if (RX1DSPMode != DSPMode.LSB) RX1DSPMode = (DSPMode)((int)RX1DSPMode-1); }
+                        else
+                            { if (RX2DSPMode != DSPMode.LSB) RX2DSPMode = (DSPMode)((int)RX2DSPMode-1); }
+                        break;
+
+                    case EButtonBarActions.eBBAttenStep:               // step the attenuation value in 6dB steps
+                        if(UseRX1)
+                        {
+                            if (udRX1StepAttData.Value < 6) udRX1StepAttData.Value = 6;
+                            else if(udRX1StepAttData.Value < 12) udRX1StepAttData.Value = 12;
+                            else if (udRX1StepAttData.Value < 18) udRX1StepAttData.Value = 18;
+                            else if (udRX1StepAttData.Value < 24) udRX1StepAttData.Value = 24;
+                            else if (udRX1StepAttData.Value < 30) udRX1StepAttData.Value = 30;
+                            else udRX1StepAttData.Value = 0;
+                        }
+                        else
+                        {
+                            if (udRX2StepAttData.Value < 6) udRX2StepAttData.Value = 6;
+                            else if (udRX2StepAttData.Value < 12) udRX2StepAttData.Value = 12;
+                            else if (udRX2StepAttData.Value < 18) udRX2StepAttData.Value = 18;
+                            else if (udRX2StepAttData.Value < 24) udRX2StepAttData.Value = 24;
+                            else if (udRX2StepAttData.Value < 30) udRX2StepAttData.Value = 30;
+                            else udRX2StepAttData.Value = 0;
+                        }
+                        break;
+
+                    case EButtonBarActions.eBBMuteOnOff:               // mute on/off
+                        if (UseRX1)
+                            chkMUT.Checked = !chkMUT.Checked;
+                        else
+                            chkRX2Mute.Checked = !chkRX2Mute.Checked;
+                        break;
+
+                    case EButtonBarActions.eBBBINOnOff:                // Binaural on/off
+                        if (UseRX1)
+                            chkBIN.Checked = !chkBIN.Checked;
+                        else
+                            chkRX2BIN.Checked = !chkRX2BIN.Checked;
+                        break;
+
+                    case EButtonBarActions.eBBSDOnOff:                 // stereo diversity on/off
+                        chkDX.Checked = !chkDX.Checked;
+                        break;
+
+                    case EButtonBarActions.eBBVAC1OnOff:               // toggle VAC1 on/off
+                        chkVAC1.Checked = !chkVAC1.Checked;
+                        break;
+
+                    case EButtonBarActions.eBBVAC2OnOff:               // toggle VAC2 on/off
+                        chkVAC2.Checked = !chkVAC2.Checked;
+                        break;
+
+                    case EButtonBarActions.eBBAGCStep:                 // step the AGC setting
+                        if (UseRX1)
+                        {
+                            if (comboAGC.SelectedIndex < comboAGC.Items.Count - 1)
+                                comboAGC.SelectedIndex++;
+                            else
+                                comboAGC.SelectedIndex = 0;
+                        }
+                        else
+                        {
+                            if (comboRX2AGC.SelectedIndex < comboRX2AGC.Items.Count - 1)
+                                comboRX2AGC.SelectedIndex++;
+                            else
+                                comboRX2AGC.SelectedIndex = 0;
+                        }
+                        break;
+
+                    case EButtonBarActions.eBBSqlOnOff:                // step the squelch setting
+                        if (UseRX1)
+                            chkSquelch.Checked = !chkSquelch.Checked;
+                        else
+                            chkRX2Squelch.Checked = !chkRX2Squelch.Checked;
+                        break;
+
+                    case EButtonBarActions.eBBRXEQOnOff:               // RX equaliser on/off
+                        chkRXEQ.Checked = !chkRXEQ.Checked;
+                        break;
+
+                    case EButtonBarActions.eBBTXEQOnOff:               // TX equaliser on/off
+                        chkTXEQ.Checked = !chkTXEQ.Checked;
+                        break;
+
+                    case EButtonBarActions.eBBTXFLShow:                // show TX filter
+                        chkShowTXFilter.Checked = !chkShowTXFilter.Checked;
+                        break;
+
+                    case EButtonBarActions.eBBMICOnOff:                // MIC button on/off
+                        chkMicMute.Checked = !chkMicMute.Checked;
+                        break;
+
+                    case EButtonBarActions.eBBCOMPOnOff:               // COMP button on/off
+                        chkCPDR.Checked = !chkCPDR.Checked;
+                        break;
+
+                    case EButtonBarActions.eBBVOXOnOff:                // VOX on/off
+                        chkVOX.Checked = !chkVOX.Checked;
+                        break;
+
+                    case EButtonBarActions.eBBDEXPOnOff:               // DEXP on/off
+                        chkNoiseGate.Checked = !chkNoiseGate.Checked;
+                        break;
+
+                    case EButtonBarActions.eBBCWIambic:                // iambic keyer selected
+                        chkCWIambic.Checked = !chkCWIambic.Checked;
+                        break;
+
+                    case EButtonBarActions.eBBCWSidetone:              // CW sidetone
+                        chkCWSidetone.Checked = !chkCWSidetone.Checked;
+                        break;
+
+                    case EButtonBarActions.eBBCWShowTX:                // CW show tX frequency
+                        chkShowTXCWFreq.Checked = !chkShowTXCWFreq.Checked;
+                        break;
+
+                    case EButtonBarActions.eBBCWShowZero:              // show CW zero freq
+                        chkShowCWZero.Checked = !chkShowCWZero.Checked;
+                        break;
+
+                    case EButtonBarActions.eBBCWSemiBreakin:           // semi breakin on/off
+                        chkCWBreakInEnabled.Checked = !chkCWBreakInEnabled.Checked;
+                        break;
+
+                    case EButtonBarActions.eBBCWQSK:                   // QSK on/off
+                        chkQSK.Checked = !chkQSK.Checked;
+                        break;
+
+                    case EButtonBarActions.eBBRX1APF:                  // RX1 APF on/off
+                        chkCWAPFEnabled.Checked = !chkCWAPFEnabled.Checked;
+                        break;
+
+                    case EButtonBarActions.eBBCTCSSOnOff:              // FM CTCSS tone on/off
+                        chkFMCTCSS.Checked = !chkFMCTCSS.Checked;
+                        break;
+
+                    case EButtonBarActions.eBBFMDeviation:             // Toggle FM Deviation
+                        if (radFMDeviation2kHz.Checked) radFMDeviation5kHz.Checked = true; else radFMDeviation2kHz.Checked = true;
+                        break;
+
+                    case EButtonBarActions.eBBDiversityOnOff:          // toggle diversity on/off
+                        CATDiversityEnable = !CATDiversityEnable;
+                        break;
+
+                    case EButtonBarActions.eBBSubRXOnOff:              // toggle sub-RX on/off
+                        chkEnableMultiRX.Checked = !chkEnableMultiRX.Checked;
+                        break;
+
+                    case EButtonBarActions.eBBRXMeterStep:             // step the setting of the RX meter
+                        if (UseRX1)
+                        {
+                            if (comboMeterRXMode.SelectedIndex < comboMeterRXMode.Items.Count - 1)
+                                comboMeterRXMode.SelectedIndex++;
+                            else
+                                comboMeterRXMode.SelectedIndex = 0;
+                        }
+                        else
+                        {
+                            if (comboRX2MeterMode.SelectedIndex < comboRX2MeterMode.Items.Count - 1)
+                                comboRX2MeterMode.SelectedIndex++;
+                            else
+                                comboRX2MeterMode.SelectedIndex = 0;
+                        }
+                        break;
+
+                    case EButtonBarActions.eBBTXMeterStep:             // step the setting of the TX meter
+                        if (comboMeterTXMode.SelectedIndex < comboMeterTXMode.Items.Count - 1)
+                            comboMeterTXMode.SelectedIndex++;
+                        else
+                            comboMeterTXMode.SelectedIndex = 0;
+                        break;
+
+                    case EButtonBarActions.eBBDisplayModeStep:         // step the display mode
+                        if (UseRX1)
+                        {
+                            if (comboDisplayMode.SelectedIndex < comboDisplayMode.Items.Count - 1)
+                                comboDisplayMode.SelectedIndex++;
+                            else
+                                comboDisplayMode.SelectedIndex = 0;
+                        }
+                        else
+                        {
+                            if (comboRX2DisplayMode.SelectedIndex < comboRX2DisplayMode.Items.Count - 1)
+                                comboRX2DisplayMode.SelectedIndex++;
+                            else
+                                comboRX2DisplayMode.SelectedIndex = 0;
+                        }
+                        break;
+
+                    case EButtonBarActions.eBBDisplayDSPAVG:           // display DSP AVG button
+                        if (UseRX1)
+                            chkDisplayAVG.Checked = !chkDisplayAVG.Checked;
+                        else
+                            chkRX2DisplayAVG.Checked = !chkRX2DisplayAVG.Checked;
+                        break;
+
+                    case EButtonBarActions.eBBDisplayDSPPeak:          // display DSP PEAK button
+                        if (UseRX1)
+                            chkDisplayPeak.Checked = !chkDisplayPeak.Checked;
+                        else
+                            chkRX2DisplayPeak.Checked = !chkRX2DisplayPeak.Checked;
+                        break;
+
+                    case EButtonBarActions.eBBCentreDisplay:           // centre the display
+                        btnDisplayPanCenter_Click(null, null);
+                        break;
+
+                    case EButtonBarActions.eBBZoomStep:                // step between the zoom step buttons
+                        if (radDisplayZoom05.Checked) radDisplayZoom1x.Checked = true;
+                        else if (radDisplayZoom1x.Checked) radDisplayZoom2x.Checked = true;
+                        else if (radDisplayZoom2x.Checked) radDisplayZoom4x.Checked = true;
+                        else radDisplayZoom05.Checked = true;
+                        break;
+
+                    case EButtonBarActions.eBBRecordAudio:             // record audio
+                        // not yet written
+                        break;
+
+                    case EButtonBarActions.eBBTXAudio:                 // play audio: parameter identifies which audio
+                        // not yet written
+                        break;
+
+                    case EButtonBarActions.eBBModeForm:
+                        if (modePopupForm == null) modePopupForm = new ModeButtonsPopup(this);
+                        modePopupForm.Show();
+                        break;
+
+                    case EButtonBarActions.eBBFilterForm:
+                        if (filterPopupForm == null) filterPopupForm = new FilterButtonsPopup(this);
+                        filterPopupForm.Show();
+                        break;
+
+                    case EButtonBarActions.eBBBandForm:
+                        if (bandPopupForm == null) bandPopupForm = new BandButtonsPopup(this);
+                        bandPopupForm.RepopulateForm();
+                        bandPopupForm.Show();
+                        break;
+
+                    case EButtonBarActions.eBBSliderForm:
+                        if (sliderForm == null) sliderForm = new SliderSettingsForm(this);
+                        sliderForm.Show();
+                        break;
+
+                    case EButtonBarActions.eBBVFOSettingForm:          // show VFO Settings form
+                        // not yet written
+                        break;
+
+                    case EButtonBarActions.eBBBandstackForm:           // show band stacks form
+                        // not yet written
+                        break;
+
+                    case EButtonBarActions.eBBDiversityForm:           // show the diversity form
+                        eSCToolStripMenuItem_Click(null, null);
+                        break;
+
+                    case EButtonBarActions.eBBModeSettingsForm:        // show the "mode dependent settings" form
+                        if (panelModeSpecificCW.Visible == false)
+                        {
+                            panelModeSpecificCW.Show();
+                            panelModeSpecificPhone.Show();
+                            panelModeSpecificDigital.Show();
+                            panelModeSpecificFM.Show();
+
+                            panelModeSpecificCW.Location = new Point(600, 350);
+                            panelModeSpecificPhone.Location = new Point(600, 350);
+                            panelModeSpecificDigital.Location = new Point(600, 350);
+                            panelModeSpecificFM.Location = new Point(600, 350);
+                        }
+                        else
+                        {
+                            panelModeSpecificCW.Hide();
+                            panelModeSpecificPhone.Hide();
+                            panelModeSpecificDigital.Hide();
+                            panelModeSpecificFM.Hide();
+                        }
+                        break;
+
+                    case EButtonBarActions.eBBPuresignalForm:          // show the Puresignal form
+                        linearityToolStripMenuItem_Click(null, null);
+                        break;
+
+                    case EButtonBarActions.eBBEqualiserForm:           // show equaliser form
+                        equalizerToolStripMenuItem_Click(null, null);
+                        break;
+
+                    case EButtonBarActions.eBBDisplaySettingsForm:    // show the display settings form
+                        // not yet written
+                        break;
+
+                    case EButtonBarActions.eBBAudioForm:               // open the audio record play form
+                        waveToolStripMenuItem_Click(null, null);
+                        break;
+
+                    case EButtonBarActions.eBBSetupForm:               // open the setup form
+                        setupToolStripMenuItem_Click(null, null);
+                        break;
+
+                }
+                UpdateButtonBarButtons();                               // re-check textx
+            }
+        }
+
+
+        //
+        // update text for button bar buttons
+        // most will be labelled with default text; but they get an opportunity to rename themselves
+        // 
+        private String UpdateButtonBarLabel(EButtonBarActions assignedAction, String DefaultString, bool UseRX1)
+        {
+            String NewString = "";
+
+            switch (assignedAction)
+            {
+                case EButtonBarActions.eBBNR:
+                    if (UseRX1)
+                    {
+                        if (chkNR.Checked) NewString = "RX1 " + chkNR.Text; else NewString = "RX1 NR: off";
+                    }
+                    else
+                    {
+                        if (chkRX2NR.Checked) NewString = "RX2 " + chkRX2NR.Text; else NewString = "RX2 NR: off";
+                    }
+                    break;
+
+                case EButtonBarActions.eBBNB:
+                    if (UseRX1)
+                    {
+                        if (chkNB.Checked) NewString = "RX1 " + chkNB.Text; else NewString = "RX1 NB: off";
+                    }
+                    else
+                    {
+                        if (chkRX2NB.Checked) NewString = "RX2 " + chkRX2NB.Text; else NewString = "RX2 NB: off";
+                    }
+                    break;
+
+                case EButtonBarActions.eBBSNB:
+                    if (UseRX1) NewString = "RX1 SNB"; else NewString = "RX2 SNB";
+                    break;
+
+                case EButtonBarActions.eBBANF:
+                    if (UseRX1) NewString = "RX1 ANF"; else NewString = "RX2 ANF";
+                    break;
+
+                case EButtonBarActions.eBBFilterPlus:
+                    if (UseRX1) NewString = "RX1 filter step up: " + lblFilterLabel.Text; else NewString = "RX2 filter step up: " + lblRX2FilterLabel.Text;
+                    break;
+
+                case EButtonBarActions.eBBFilterMinus:
+                    if (UseRX1) NewString = "RX1 filter step down: " + lblFilterLabel.Text; else NewString = "RX2 filter step down: " + lblRX2FilterLabel.Text;
+                    break;
+
+                case EButtonBarActions.eBBBandPlus:
+                    if (UseRX1) NewString = "RX1 Band step UP"; else NewString = "RX2 Band step UP";
+                    break;
+
+                case EButtonBarActions.eBBBandMinus:
+                    if (UseRX1) NewString = "RX1 Band step DOWN"; else NewString = "RX2 Band step DOWN";
+                    break;
+
+                case EButtonBarActions.eBBModePlus:
+                    if (UseRX1) NewString = "RX1 Mode step UP"; else NewString = "RX2 Mode step UP";
+                    break;
+
+                case EButtonBarActions.eBBModeMinus:
+                    if (UseRX1) NewString = "RX1 Mode step DOWN"; else NewString = "RX2 Mode step DOWN";
+                    break;
+
+                case EButtonBarActions.eBBAttenStep:
+                    if (UseRX1) NewString = "RX1 Atten: " + udRX1StepAttData.Value.ToString() + "dB"; else NewString = "RX2 Atten: " + udRX2StepAttData.Value.ToString() + "dB";
+                    break;
+
+                case EButtonBarActions.eBBMuteOnOff:
+                    if (UseRX1) NewString = "RX1 Mute"; else NewString = "RX2 Mute";
+                    break;
+
+                case EButtonBarActions.eBBBINOnOff:
+                    if (UseRX1) NewString = "RX1 Binaural"; else NewString = "RX2 Binaural";
+                    break;
+
+                case EButtonBarActions.eBBAGCStep:
+                    if (UseRX1) NewString = "RX1 AGC: " + comboAGC.Text; else NewString = "RX2 AGC: " + comboRX2AGC.Text;
+                    break;
+
+                case EButtonBarActions.eBBSqlOnOff:
+                    if (UseRX1) NewString = "RX1 Squelch"; else NewString = "RX2 Squelch";
+                    break;
+
+                case EButtonBarActions.eBBFMDeviation:
+                    if (radFMDeviation2kHz.Checked) NewString = "FM Deviation: 2KHz"; else NewString = "FM Deviation: 5KHz";
+                    break;
+
+                case EButtonBarActions.eBBRXMeterStep:             // step the setting of the RX meter
+                    if (UseRX1) NewString = "RX1 Meter: " + comboMeterRXMode.Text; else NewString = "RX2 Meter: " + comboRX2MeterMode.Text;
+                    break;
+
+                case EButtonBarActions.eBBTXMeterStep:             // step the setting of the TX meter
+                    NewString = "TX Meter: " + comboMeterTXMode.Text;
+                    break;
+
+                case EButtonBarActions.eBBDisplayModeStep:         // step the display mode
+                    if (UseRX1) NewString = "RX1 Display: " + comboDisplayMode.Text; else NewString = "RX2 Display: " + comboRX2DisplayMode.Text;
+                    break;
+
+                case EButtonBarActions.eBBDisplayDSPAVG:
+                    if (UseRX1) NewString = "RX1 Display AVG"; else NewString = "RX2 Display AVG";
+                    break;
+
+                case EButtonBarActions.eBBDisplayDSPPeak:
+                    if (UseRX1) NewString = "RX1 Display PEAK"; else NewString = "RX2 Display PEAK";
+                    break;
+
+                default:
+                    NewString = DefaultString;                     // for the others - just use the default stribng from the menu entry 
+                    break;
+            }
+            return NewString;
+        }
+
+        //
+        // check if buttons on button bar should be highlighted (generally to indicate on/off state).
+        // if response is true, button will be highlighted
+        //
+        private bool CheckButtonHighlight(EButtonBarActions assignedAction, bool UseRX1)
+        {
+            bool State = false;
+
+            switch (assignedAction)
+            {
+                case EButtonBarActions.eBBStartStop:
+                    State = chkPower.Checked;
+                    break;
+
+                case EButtonBarActions.eBBRX2OnOff:
+                    State = chkRX2.Checked;
+                    break;
+
+                case EButtonBarActions.eBBDUP:
+                    State = chkRX2SR.Checked;
+                    break;
+
+                case EButtonBarActions.eBBMON:
+                    State = chkMON.Checked;
+                    break;
+
+                case EButtonBarActions.eBBTune:
+                    State = chkTUN.Checked;
+                    break;
+
+                case EButtonBarActions.eBBMOX:
+                    State = chkMOX.Checked;
+                    break;
+
+                case EButtonBarActions.eBBPuresignalOnOff:
+                    State = chkFWCATUBypass.Checked;
+                    break;
+
+                case EButtonBarActions.eBBPuresignal2Tone:
+                    break;
+
+                case EButtonBarActions.eBBNR:
+                    if (UseRX1) State = chkNR.Checked; else State = chkRX2NR.Checked;
+                    break;
+
+                case EButtonBarActions.eBBNB:
+                    if (UseRX1) State = chkNB.Checked; else State = chkRX2NB.Checked;
+                    break;
+
+                case EButtonBarActions.eBBSNB:
+                    if (UseRX1) State = chkDSPNB2.Checked; else State = chkRX2NB2.Checked;
+                    break;
+
+                case EButtonBarActions.eBBANF:
+                    if (UseRX1) State = chkANF.Checked; else State = chkRX2ANF.Checked;
+                    break;
+
+                case EButtonBarActions.eBBMNF:
+                    State = chkTNF.Checked;                         // there is only an RX1 MNF button
+                    break;
+
+                case EButtonBarActions.eBBVFOSplit:
+                    State = chkVFOSplit.Checked;
+                    break;
+
+                case EButtonBarActions.eBBVFOSyncOnOff:
+                    State = chkVFOSync.Checked;
+                    break;
+
+                case EButtonBarActions.eBBVFOLockOnOff:
+                    if (UseRX1) State = chkVFOLock.Checked; else State = chkVFOBLock.Checked;
+                    break;
+
+                case EButtonBarActions.eBBVFOCTUNEOnOff:
+                    if (UseRX1) State = chkFWCATU.Checked; else State = chkX2TR.Checked;
+                    break;
+
+                case EButtonBarActions.eBBRITOnOff:                // toggle RIT on/off
+                    State = chkRIT.Checked;
+                    break;
+
+                case EButtonBarActions.eBBXITOnOff:                // toggle XIT on/off
+                    State = chkXIT.Checked;
+                    break;
+
+                case EButtonBarActions.eBBMuteOnOff:
+                    if (UseRX1) State = chkMUT.Checked; else State = chkRX2Mute.Checked;
+                    break;
+
+                case EButtonBarActions.eBBBINOnOff:
+                    if (UseRX1) State = chkBIN.Checked; else State = chkRX2BIN.Checked;
+                    break;
+
+                case EButtonBarActions.eBBSDOnOff:                // toggle stereo diversity
+                    State = chkDX.Checked;
+                    break;
+
+                case EButtonBarActions.eBBVAC1OnOff:                // toggle VAC1 on/off
+                    State = chkVAC1.Checked;
+                    break;
+
+                case EButtonBarActions.eBBVAC2OnOff:                // toggle VAC2 on/off
+                    State = chkVAC2.Checked;
+                    break;
+
+                case EButtonBarActions.eBBSqlOnOff:                // toggle squelch on/off
+                    if (UseRX1) State = chkSquelch.Checked; else State = chkRX2Squelch.Checked;
+                    break;
+
+                case EButtonBarActions.eBBRXEQOnOff:                // RX equaliser
+                    State = chkRXEQ.Checked;
+                    break;
+
+                case EButtonBarActions.eBBTXEQOnOff:                // TX equaliser
+                    State = chkTXEQ.Checked;
+                    break;
+
+                case EButtonBarActions.eBBTXFLShow:                 // show TX filter
+                    State = chkShowTXFilter.Checked;
+                    break;
+
+                case EButtonBarActions.eBBMICOnOff:                 // toggle Mic mute
+                    State = chkMicMute.Checked;
+                    break;
+
+                case EButtonBarActions.eBBCOMPOnOff:                // toggle COMP on/off
+                    State = chkCPDR.Checked;
+                    break;
+
+                case EButtonBarActions.eBBVOXOnOff:                 // toggle Vox on/off
+                    State = chkVOX.Checked;
+                    break;
+
+                case EButtonBarActions.eBBDEXPOnOff:                // toggle DEXP on/off
+                    State = chkNoiseGate.Checked;
+                    break;
+
+                case EButtonBarActions.eBBCWIambic:                 // toggle iambic
+                    State = chkCWIambic.Checked;
+                    break;
+
+                case EButtonBarActions.eBBCWSidetone:               // toggle sidetone on/off
+                    State = chkCWSidetone.Checked;
+                    break;
+
+                case EButtonBarActions.eBBCWShowTX:                 // toggle show TX freq 
+                    State = chkShowTXCWFreq.Checked;
+                    break;
+
+                case EButtonBarActions.eBBCWShowZero:               // toggle show zero line 
+                    State = chkShowCWZero.Checked;
+                    break;
+
+                case EButtonBarActions.eBBCWSemiBreakin:            // toggle semi-breakin
+                    State = chkCWBreakInEnabled.Checked;
+                    break;
+
+                case EButtonBarActions.eBBCWQSK:                    // toggle QSK
+                    State = chkQSK.Checked;
+                    break;
+
+                case EButtonBarActions.eBBRX1APF:                   // toggle CW APF 
+                    State = chkCWAPFEnabled.Checked;
+                    break;
+
+                case EButtonBarActions.eBBCTCSSOnOff:               // toggle CTCSS 
+                    State = chkFMCTCSS.Checked;
+                    break;
+
+                case EButtonBarActions.eBBDiversityOnOff:          // toggle diversity on/off
+                    State = CATDiversityEnable;
+                    break;
+
+                case EButtonBarActions.eBBSubRXOnOff:               // toggle sub-RX on/off 
+                    State = chkEnableMultiRX.Checked;
+                    break;
+
+                case EButtonBarActions.eBBDisplayDSPAVG:            // toggle display AVERAGE on/off 
+                    if (UseRX1) State = chkDisplayAVG.Checked; else State = chkRX2DisplayAVG.Checked;
+                    break;
+
+                case EButtonBarActions.eBBDisplayDSPPeak:           // toggle display PEAK on/off 
+                    if (UseRX1) State = chkDisplayPeak.Checked; else State = chkRX2DisplayPeak.Checked;
+                    break;
+
+                default:                        // not highlighted unless specific code added!
+                    State = false;
+                    break;
+            }
+            return State;
+        }
+
+        //
+        // put text onto buttons for current menu
+        //
+        private void UpdateButtonBarButtons()
+        {
+            int buttonNumber;
+            bool UseRX1;
+            EButtonBarActions Action;                           // assigned action for one button
+            String Text;
+            Color Colour;
+
+            buttonNumber = currentButtonBarMenu * 8;            // point to 1st button
+            // for each button: get its text; give it an opportunity to edit; and set highlight
+
+            Action = ButtonBarMenu[buttonNumber].Action;
+            if (ButtonBarMenu[buttonNumber].RXOverride == 0) UseRX1 = show_rx1; else if (ButtonBarMenu[buttonNumber].RXOverride == 1) UseRX1 = true; else UseRX1 = false;
+            Text = ButtonBarMenu[buttonNumber++].ButtonText;
+            btnAndrBar1.Text = UpdateButtonBarLabel(Action, Text, UseRX1);
+            if (CheckButtonHighlight(Action, UseRX1)) Colour = SystemColors.GradientActiveCaption; else Colour = SystemColors.ButtonFace;
+            btnAndrBar1.BackColor = Colour;
+
+            Action = ButtonBarMenu[buttonNumber].Action;
+            if (ButtonBarMenu[buttonNumber].RXOverride == 0) UseRX1 = show_rx1; else if (ButtonBarMenu[buttonNumber].RXOverride == 1) UseRX1 = true; else UseRX1 = false;
+            Text = ButtonBarMenu[buttonNumber++].ButtonText;
+            btnAndrBar2.Text = UpdateButtonBarLabel(Action, Text, UseRX1);
+            if (CheckButtonHighlight(Action, UseRX1)) Colour = SystemColors.GradientActiveCaption; else Colour = SystemColors.ButtonFace;
+            btnAndrBar2.BackColor = Colour;
+
+            Action = ButtonBarMenu[buttonNumber].Action;
+            if (ButtonBarMenu[buttonNumber].RXOverride == 0) UseRX1 = show_rx1; else if (ButtonBarMenu[buttonNumber].RXOverride == 1) UseRX1 = true; else UseRX1 = false;
+            Text = ButtonBarMenu[buttonNumber++].ButtonText;
+            btnAndrBar3.Text = UpdateButtonBarLabel(Action, Text, UseRX1);
+            if (CheckButtonHighlight(Action, UseRX1)) Colour = SystemColors.GradientActiveCaption; else Colour = SystemColors.ButtonFace;
+            btnAndrBar3.BackColor = Colour;
+
+            Action = ButtonBarMenu[buttonNumber].Action;
+            if (ButtonBarMenu[buttonNumber].RXOverride == 0) UseRX1 = show_rx1; else if (ButtonBarMenu[buttonNumber].RXOverride == 1) UseRX1 = true; else UseRX1 = false;
+            Text = ButtonBarMenu[buttonNumber++].ButtonText;
+            btnAndrBar4.Text = UpdateButtonBarLabel(Action, Text, UseRX1);
+            if (CheckButtonHighlight(Action, UseRX1)) Colour = SystemColors.GradientActiveCaption; else Colour = SystemColors.ButtonFace;
+            btnAndrBar4.BackColor = Colour;
+
+            Action = ButtonBarMenu[buttonNumber].Action;
+            if (ButtonBarMenu[buttonNumber].RXOverride == 0) UseRX1 = show_rx1; else if (ButtonBarMenu[buttonNumber].RXOverride == 1) UseRX1 = true; else UseRX1 = false;
+            Text = ButtonBarMenu[buttonNumber++].ButtonText;
+            btnAndrBar5.Text = UpdateButtonBarLabel(Action, Text, UseRX1);
+            if (CheckButtonHighlight(Action, UseRX1)) Colour = SystemColors.GradientActiveCaption; else Colour = SystemColors.ButtonFace;
+            btnAndrBar5.BackColor = Colour;
+
+            Action = ButtonBarMenu[buttonNumber].Action;
+            if (ButtonBarMenu[buttonNumber].RXOverride == 0) UseRX1 = show_rx1; else if (ButtonBarMenu[buttonNumber].RXOverride == 1) UseRX1 = true; else UseRX1 = false;
+            Text = ButtonBarMenu[buttonNumber++].ButtonText;
+            btnAndrBar6.Text = UpdateButtonBarLabel(Action, Text, UseRX1);
+            if (CheckButtonHighlight(Action, UseRX1)) Colour = SystemColors.GradientActiveCaption; else Colour = SystemColors.ButtonFace;
+            btnAndrBar6.BackColor = Colour;
+
+            Action = ButtonBarMenu[buttonNumber].Action;
+            if (ButtonBarMenu[buttonNumber].RXOverride == 0) UseRX1 = show_rx1; else if (ButtonBarMenu[buttonNumber].RXOverride == 1) UseRX1 = true; else UseRX1 = false;
+            Text = ButtonBarMenu[buttonNumber++].ButtonText;
+            btnAndrBar7.Text = UpdateButtonBarLabel(Action, Text, UseRX1);
+            if (CheckButtonHighlight(Action, UseRX1)) Colour = SystemColors.GradientActiveCaption; else Colour = SystemColors.ButtonFace;
+            btnAndrBar7.BackColor = Colour;
+
+            Action = ButtonBarMenu[buttonNumber].Action;
+            if (ButtonBarMenu[buttonNumber].RXOverride == 0) UseRX1 = show_rx1; else if (ButtonBarMenu[buttonNumber].RXOverride == 1) UseRX1 = true; else UseRX1 = false;
+            Text = ButtonBarMenu[buttonNumber++].ButtonText;
+            btnAndrBar8.Text = UpdateButtonBarLabel(Action, Text, UseRX1);
+            if (CheckButtonHighlight(Action, UseRX1)) Colour = SystemColors.GradientActiveCaption; else Colour = SystemColors.ButtonFace;
+            btnAndrBar8.BackColor = Colour;
+        }
+
+
+        private void panelButtonBar_Layout(object sender, LayoutEventArgs e)
+        {
+            UpdateButtonBarButtons();
+        }
     }
+    #endregion
+
 
     public class DigiMode
     {

@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
-  <!-- 
-    Microsoft ResX Schema 
-    
+  <!--
+    Microsoft ResX Schema
+
     Version 2.0
-    
-    The primary goals of this format is to allow a simple XML format 
-    that is mostly human readable. The generation and parsing of the 
-    various data types are done through the TypeConverter classes 
+
+    The primary goals of this format is to allow a simple XML format
+    that is mostly human readable. The generation and parsing of the
+    various data types are done through the TypeConverter classes
     associated with the data types.
-    
+
     Example:
-    
+
     ... ado.net/XML headers & schema ...
     <resheader name="resmimetype">text/microsoft-resx</resheader>
     <resheader name="version">2.0</resheader>
@@ -26,36 +26,36 @@
         <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
         <comment>This is a comment</comment>
     </data>
-                
-    There are any number of "resheader" rows that contain simple 
+
+    There are any number of "resheader" rows that contain simple
     name/value pairs.
-    
-    Each data row contains a name, and value. The row also contains a 
-    type or mimetype. Type corresponds to a .NET class that support 
-    text/value conversion through the TypeConverter architecture. 
-    Classes that don't support this are serialized and stored with the 
+
+    Each data row contains a name, and value. The row also contains a
+    type or mimetype. Type corresponds to a .NET class that support
+    text/value conversion through the TypeConverter architecture.
+    Classes that don't support this are serialized and stored with the
     mimetype set.
-    
-    The mimetype is used for serialized objects, and tells the 
-    ResXResourceReader how to depersist the object. This is currently not 
+
+    The mimetype is used for serialized objects, and tells the
+    ResXResourceReader how to depersist the object. This is currently not
     extensible. For a given mimetype the value must be set accordingly:
-    
-    Note - application/x-microsoft.net.object.binary.base64 is the format 
-    that the ResXResourceWriter will generate, however the reader can 
+
+    Note - application/x-microsoft.net.object.binary.base64 is the format
+    that the ResXResourceWriter will generate, however the reader can
     read any of the formats listed below.
-    
+
     mimetype: application/x-microsoft.net.object.binary.base64
-    value   : The object must be serialized with 
+    value   : The object must be serialized with
             : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
             : and then encoded with base64 encoding.
-    
+
     mimetype: application/x-microsoft.net.object.soap.base64
-    value   : The object must be serialized with 
+    value   : The object must be serialized with
             : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
             : and then encoded with base64 encoding.
 
     mimetype: application/x-microsoft.net.object.bytearray.base64
-    value   : The object must be serialized into a byte array 
+    value   : The object must be serialized into a byte array
             : using a System.ComponentModel.TypeConverter
             : and then encoded with base64 encoding.
     -->
@@ -9419,6 +9419,1210 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
   <data name="&gt;&gt;picRX2Squelch.ZOrder" xml:space="preserve">
     <value>5</value>
   </data>
+  <data name="panelButtonBar.AutoScrollMargin" type="System.Drawing.Size, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="panelButtonBar.AutoScrollMinSize" type="System.Drawing.Size, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="btnAndrBar8.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 10pt</value>
+  </data>
+  <data name="btnAndrBar8.Image" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="btnAndrBar8.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>Off</value>
+  </data>
+  <data name="btnAndrBar8.Location" type="System.Drawing.Point, System.Drawing">
+    <value>889, 2</value>
+  </data>
+  <data name="btnAndrBar8.Size" type="System.Drawing.Size, System.Drawing">
+    <value>120, 46</value>
+  </data>
+  <data name="btnAndrBar8.TabIndex" type="System.Int32, mscorlib">
+    <value>7</value>
+  </data>
+  <data name="btnAndrBar8.Text" xml:space="preserve">
+    <value>button 8</value>
+  </data>
+  <data name="&gt;&gt;btnAndrBar8.Name" xml:space="preserve">
+    <value>btnAndrBar8</value>
+  </data>
+  <data name="&gt;&gt;btnAndrBar8.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ButtonTS, Thetis, Version=2.6.4.0, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;btnAndrBar8.Parent" xml:space="preserve">
+    <value>panelButtonBar</value>
+  </data>
+  <data name="&gt;&gt;btnAndrBar8.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="btnAndrBar7.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 10pt</value>
+  </data>
+  <data name="btnAndrBar7.Image" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="btnAndrBar7.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>Off</value>
+  </data>
+  <data name="btnAndrBar7.Location" type="System.Drawing.Point, System.Drawing">
+    <value>762, 2</value>
+  </data>
+  <data name="btnAndrBar7.Size" type="System.Drawing.Size, System.Drawing">
+    <value>120, 46</value>
+  </data>
+  <data name="btnAndrBar7.TabIndex" type="System.Int32, mscorlib">
+    <value>6</value>
+  </data>
+  <data name="btnAndrBar7.Text" xml:space="preserve">
+    <value>button 7</value>
+  </data>
+  <data name="&gt;&gt;btnAndrBar7.Name" xml:space="preserve">
+    <value>btnAndrBar7</value>
+  </data>
+  <data name="&gt;&gt;btnAndrBar7.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ButtonTS, Thetis, Version=2.6.4.0, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;btnAndrBar7.Parent" xml:space="preserve">
+    <value>panelButtonBar</value>
+  </data>
+  <data name="&gt;&gt;btnAndrBar7.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="btnAndrBar6.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 10pt</value>
+  </data>
+  <data name="btnAndrBar6.Image" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="btnAndrBar6.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>Off</value>
+  </data>
+  <data name="btnAndrBar6.Location" type="System.Drawing.Point, System.Drawing">
+    <value>635, 2</value>
+  </data>
+  <data name="btnAndrBar6.Size" type="System.Drawing.Size, System.Drawing">
+    <value>120, 46</value>
+  </data>
+  <data name="btnAndrBar6.TabIndex" type="System.Int32, mscorlib">
+    <value>5</value>
+  </data>
+  <data name="btnAndrBar6.Text" xml:space="preserve">
+    <value>button 6</value>
+  </data>
+  <data name="&gt;&gt;btnAndrBar6.Name" xml:space="preserve">
+    <value>btnAndrBar6</value>
+  </data>
+  <data name="&gt;&gt;btnAndrBar6.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ButtonTS, Thetis, Version=2.6.4.0, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;btnAndrBar6.Parent" xml:space="preserve">
+    <value>panelButtonBar</value>
+  </data>
+  <data name="&gt;&gt;btnAndrBar6.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="btnAndrBar5.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 10pt</value>
+  </data>
+  <data name="btnAndrBar5.Image" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="btnAndrBar5.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>Off</value>
+  </data>
+  <data name="btnAndrBar5.Location" type="System.Drawing.Point, System.Drawing">
+    <value>508, 2</value>
+  </data>
+  <data name="btnAndrBar5.Size" type="System.Drawing.Size, System.Drawing">
+    <value>120, 46</value>
+  </data>
+  <data name="btnAndrBar5.TabIndex" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="btnAndrBar5.Text" xml:space="preserve">
+    <value>button 5</value>
+  </data>
+  <data name="&gt;&gt;btnAndrBar5.Name" xml:space="preserve">
+    <value>btnAndrBar5</value>
+  </data>
+  <data name="&gt;&gt;btnAndrBar5.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ButtonTS, Thetis, Version=2.6.4.0, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;btnAndrBar5.Parent" xml:space="preserve">
+    <value>panelButtonBar</value>
+  </data>
+  <data name="&gt;&gt;btnAndrBar5.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="btnAndrBar4.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 10pt</value>
+  </data>
+  <data name="btnAndrBar4.Image" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="btnAndrBar4.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>Off</value>
+  </data>
+  <data name="btnAndrBar4.Location" type="System.Drawing.Point, System.Drawing">
+    <value>383, 2</value>
+  </data>
+  <data name="btnAndrBar4.Size" type="System.Drawing.Size, System.Drawing">
+    <value>120, 46</value>
+  </data>
+  <data name="btnAndrBar4.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="btnAndrBar4.Text" xml:space="preserve">
+    <value>button 4</value>
+  </data>
+  <data name="&gt;&gt;btnAndrBar4.Name" xml:space="preserve">
+    <value>btnAndrBar4</value>
+  </data>
+  <data name="&gt;&gt;btnAndrBar4.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ButtonTS, Thetis, Version=2.6.4.0, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;btnAndrBar4.Parent" xml:space="preserve">
+    <value>panelButtonBar</value>
+  </data>
+  <data name="&gt;&gt;btnAndrBar4.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="btnAndrBar3.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 10pt</value>
+  </data>
+  <data name="btnAndrBar3.Image" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="btnAndrBar3.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>Off</value>
+  </data>
+  <data name="btnAndrBar3.Location" type="System.Drawing.Point, System.Drawing">
+    <value>256, 2</value>
+  </data>
+  <data name="btnAndrBar3.Size" type="System.Drawing.Size, System.Drawing">
+    <value>120, 46</value>
+  </data>
+  <data name="btnAndrBar3.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="btnAndrBar3.Text" xml:space="preserve">
+    <value>button 3</value>
+  </data>
+  <data name="&gt;&gt;btnAndrBar3.Name" xml:space="preserve">
+    <value>btnAndrBar3</value>
+  </data>
+  <data name="&gt;&gt;btnAndrBar3.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ButtonTS, Thetis, Version=2.6.4.0, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;btnAndrBar3.Parent" xml:space="preserve">
+    <value>panelButtonBar</value>
+  </data>
+  <data name="&gt;&gt;btnAndrBar3.ZOrder" xml:space="preserve">
+    <value>5</value>
+  </data>
+  <data name="btnAndrBar2.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 10pt</value>
+  </data>
+  <data name="btnAndrBar2.Image" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="btnAndrBar2.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>Off</value>
+  </data>
+  <data name="btnAndrBar2.Location" type="System.Drawing.Point, System.Drawing">
+    <value>129, 2</value>
+  </data>
+  <data name="btnAndrBar2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>120, 46</value>
+  </data>
+  <data name="btnAndrBar2.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="btnAndrBar2.Text" xml:space="preserve">
+    <value>button 2</value>
+  </data>
+  <data name="&gt;&gt;btnAndrBar2.Name" xml:space="preserve">
+    <value>btnAndrBar2</value>
+  </data>
+  <data name="&gt;&gt;btnAndrBar2.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ButtonTS, Thetis, Version=2.6.4.0, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;btnAndrBar2.Parent" xml:space="preserve">
+    <value>panelButtonBar</value>
+  </data>
+  <data name="&gt;&gt;btnAndrBar2.ZOrder" xml:space="preserve">
+    <value>6</value>
+  </data>
+  <data name="btnAndrBar1.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 10pt</value>
+  </data>
+  <data name="btnAndrBar1.Image" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="btnAndrBar1.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>Off</value>
+  </data>
+  <data name="btnAndrBar1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>2, 2</value>
+  </data>
+  <data name="btnAndrBar1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>120, 46</value>
+  </data>
+  <data name="btnAndrBar1.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="btnAndrBar1.Text" xml:space="preserve">
+    <value>button 1</value>
+  </data>
+  <data name="&gt;&gt;btnAndrBar1.Name" xml:space="preserve">
+    <value>btnAndrBar1</value>
+  </data>
+  <data name="&gt;&gt;btnAndrBar1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ButtonTS, Thetis, Version=2.6.4.0, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;btnAndrBar1.Parent" xml:space="preserve">
+    <value>panelButtonBar</value>
+  </data>
+  <data name="&gt;&gt;btnAndrBar1.ZOrder" xml:space="preserve">
+    <value>7</value>
+  </data>
+  <data name="panelButtonBar.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 650</value>
+  </data>
+  <data name="panelButtonBar.Size" type="System.Drawing.Size, System.Drawing">
+    <value>1012, 50</value>
+  </data>
+  <data name="panelButtonBar.TabIndex" type="System.Int32, mscorlib">
+    <value>71</value>
+  </data>
+  <data name="panelButtonBar.Visible" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="&gt;&gt;panelButtonBar.Name" xml:space="preserve">
+    <value>panelButtonBar</value>
+  </data>
+  <data name="&gt;&gt;panelButtonBar.Type" xml:space="preserve">
+    <value>System.Windows.Forms.PanelTS, Thetis, Version=2.6.4.0, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;panelButtonBar.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;panelButtonBar.ZOrder" xml:space="preserve">
+    <value>48</value>
+  </data>
+  <data name="panelVFOLabels.AutoScrollMargin" type="System.Drawing.Size, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="panelVFOLabels.AutoScrollMinSize" type="System.Drawing.Size, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="lblStepValue.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 9pt</value>
+  </data>
+  <data name="lblStepValue.Image" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="lblStepValue.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>Off</value>
+  </data>
+  <data name="lblStepValue.Location" type="System.Drawing.Point, System.Drawing">
+    <value>34, 50</value>
+  </data>
+  <data name="lblStepValue.Size" type="System.Drawing.Size, System.Drawing">
+    <value>60, 19</value>
+  </data>
+  <data name="lblStepValue.TabIndex" type="System.Int32, mscorlib">
+    <value>134</value>
+  </data>
+  <data name="lblStepValue.Text" xml:space="preserve">
+    <value>12.5KHz</value>
+  </data>
+  <data name="&gt;&gt;lblStepValue.Name" xml:space="preserve">
+    <value>lblStepValue</value>
+  </data>
+  <data name="&gt;&gt;lblStepValue.Type" xml:space="preserve">
+    <value>System.Windows.Forms.LabelTS, Thetis, Version=2.6.4.0, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;lblStepValue.Parent" xml:space="preserve">
+    <value>panelVFOLabels</value>
+  </data>
+  <data name="&gt;&gt;lblStepValue.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="lblStep.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 9pt</value>
+  </data>
+  <data name="lblStep.Image" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="lblStep.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>Off</value>
+  </data>
+  <data name="lblStep.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 50</value>
+  </data>
+  <data name="lblStep.Size" type="System.Drawing.Size, System.Drawing">
+    <value>36, 15</value>
+  </data>
+  <data name="lblStep.TabIndex" type="System.Int32, mscorlib">
+    <value>133</value>
+  </data>
+  <data name="lblStep.Text" xml:space="preserve">
+    <value>Step</value>
+  </data>
+  <data name="&gt;&gt;lblStep.Name" xml:space="preserve">
+    <value>lblStep</value>
+  </data>
+  <data name="&gt;&gt;lblStep.Type" xml:space="preserve">
+    <value>System.Windows.Forms.LabelTS, Thetis, Version=2.6.4.0, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;lblStep.Parent" xml:space="preserve">
+    <value>panelVFOLabels</value>
+  </data>
+  <data name="&gt;&gt;lblStep.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="lblVFOSplit.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 9pt</value>
+  </data>
+  <data name="lblVFOSplit.Image" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="lblVFOSplit.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>Off</value>
+  </data>
+  <data name="lblVFOSplit.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 25</value>
+  </data>
+  <data name="lblVFOSplit.Size" type="System.Drawing.Size, System.Drawing">
+    <value>88, 18</value>
+  </data>
+  <data name="lblVFOSplit.TabIndex" type="System.Int32, mscorlib">
+    <value>132</value>
+  </data>
+  <data name="lblVFOSplit.Text" xml:space="preserve">
+    <value>SPLIT</value>
+  </data>
+  <data name="lblVFOSplit.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>TopCenter</value>
+  </data>
+  <data name="&gt;&gt;lblVFOSplit.Name" xml:space="preserve">
+    <value>lblVFOSplit</value>
+  </data>
+  <data name="&gt;&gt;lblVFOSplit.Type" xml:space="preserve">
+    <value>System.Windows.Forms.LabelTS, Thetis, Version=2.6.4.0, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;lblVFOSplit.Parent" xml:space="preserve">
+    <value>panelVFOLabels</value>
+  </data>
+  <data name="&gt;&gt;lblVFOSplit.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="lblXITValue.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 9pt</value>
+  </data>
+  <data name="lblXITValue.Image" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="lblXITValue.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>Off</value>
+  </data>
+  <data name="lblXITValue.Location" type="System.Drawing.Point, System.Drawing">
+    <value>34, 99</value>
+  </data>
+  <data name="lblXITValue.Size" type="System.Drawing.Size, System.Drawing">
+    <value>60, 16</value>
+  </data>
+  <data name="lblXITValue.TabIndex" type="System.Int32, mscorlib">
+    <value>131</value>
+  </data>
+  <data name="lblXITValue.Text" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;lblXITValue.Name" xml:space="preserve">
+    <value>lblXITValue</value>
+  </data>
+  <data name="&gt;&gt;lblXITValue.Type" xml:space="preserve">
+    <value>System.Windows.Forms.LabelTS, Thetis, Version=2.6.4.0, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;lblXITValue.Parent" xml:space="preserve">
+    <value>panelVFOLabels</value>
+  </data>
+  <data name="&gt;&gt;lblXITValue.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="lblRITValue.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 9pt</value>
+  </data>
+  <data name="lblRITValue.Image" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="lblRITValue.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>Off</value>
+  </data>
+  <data name="lblRITValue.Location" type="System.Drawing.Point, System.Drawing">
+    <value>34, 76</value>
+  </data>
+  <data name="lblRITValue.Size" type="System.Drawing.Size, System.Drawing">
+    <value>60, 16</value>
+  </data>
+  <data name="lblRITValue.TabIndex" type="System.Int32, mscorlib">
+    <value>130</value>
+  </data>
+  <data name="lblRITValue.Text" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;lblRITValue.Name" xml:space="preserve">
+    <value>lblRITValue</value>
+  </data>
+  <data name="&gt;&gt;lblRITValue.Type" xml:space="preserve">
+    <value>System.Windows.Forms.LabelTS, Thetis, Version=2.6.4.0, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;lblRITValue.Parent" xml:space="preserve">
+    <value>panelVFOLabels</value>
+  </data>
+  <data name="&gt;&gt;lblRITValue.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="lblRITLabel.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 9pt</value>
+  </data>
+  <data name="lblRITLabel.Image" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="lblRITLabel.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>Off</value>
+  </data>
+  <data name="lblRITLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>4, 76</value>
+  </data>
+  <data name="lblRITLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>26, 15</value>
+  </data>
+  <data name="lblRITLabel.TabIndex" type="System.Int32, mscorlib">
+    <value>129</value>
+  </data>
+  <data name="lblRITLabel.Text" xml:space="preserve">
+    <value>RIT</value>
+  </data>
+  <data name="&gt;&gt;lblRITLabel.Name" xml:space="preserve">
+    <value>lblRITLabel</value>
+  </data>
+  <data name="&gt;&gt;lblRITLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.LabelTS, Thetis, Version=2.6.4.0, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;lblRITLabel.Parent" xml:space="preserve">
+    <value>panelVFOLabels</value>
+  </data>
+  <data name="&gt;&gt;lblRITLabel.ZOrder" xml:space="preserve">
+    <value>5</value>
+  </data>
+  <data name="lblXITLabel.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 9pt</value>
+  </data>
+  <data name="lblXITLabel.Image" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="lblXITLabel.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>Off</value>
+  </data>
+  <data name="lblXITLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>4, 99</value>
+  </data>
+  <data name="lblXITLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>26, 15</value>
+  </data>
+  <data name="lblXITLabel.TabIndex" type="System.Int32, mscorlib">
+    <value>128</value>
+  </data>
+  <data name="lblXITLabel.Text" xml:space="preserve">
+    <value>XIT</value>
+  </data>
+  <data name="&gt;&gt;lblXITLabel.Name" xml:space="preserve">
+    <value>lblXITLabel</value>
+  </data>
+  <data name="&gt;&gt;lblXITLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.LabelTS, Thetis, Version=2.6.4.0, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;lblXITLabel.Parent" xml:space="preserve">
+    <value>panelVFOLabels</value>
+  </data>
+  <data name="&gt;&gt;lblXITLabel.ZOrder" xml:space="preserve">
+    <value>6</value>
+  </data>
+  <data name="lblVFOSyncLabel.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 9pt</value>
+  </data>
+  <data name="lblVFOSyncLabel.Image" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="lblVFOSyncLabel.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>Off</value>
+  </data>
+  <data name="lblVFOSyncLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>5, 4</value>
+  </data>
+  <data name="lblVFOSyncLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>82, 17</value>
+  </data>
+  <data name="lblVFOSyncLabel.TabIndex" type="System.Int32, mscorlib">
+    <value>127</value>
+  </data>
+  <data name="lblVFOSyncLabel.Text" xml:space="preserve">
+    <value>VFO SYNC</value>
+  </data>
+  <data name="lblVFOSyncLabel.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>TopCenter</value>
+  </data>
+  <data name="&gt;&gt;lblVFOSyncLabel.Name" xml:space="preserve">
+    <value>lblVFOSyncLabel</value>
+  </data>
+  <data name="&gt;&gt;lblVFOSyncLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.LabelTS, Thetis, Version=2.6.4.0, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;lblVFOSyncLabel.Parent" xml:space="preserve">
+    <value>panelVFOLabels</value>
+  </data>
+  <data name="&gt;&gt;lblVFOSyncLabel.ZOrder" xml:space="preserve">
+    <value>7</value>
+  </data>
+  <data name="panelVFOLabels.Location" type="System.Drawing.Point, System.Drawing">
+    <value>846, 123</value>
+  </data>
+  <data name="panelVFOLabels.Size" type="System.Drawing.Size, System.Drawing">
+    <value>97, 121</value>
+  </data>
+  <data name="panelVFOLabels.TabIndex" type="System.Int32, mscorlib">
+    <value>143</value>
+  </data>
+  <data name="panelVFOLabels.Visible" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="&gt;&gt;panelVFOLabels.Name" xml:space="preserve">
+    <value>panelVFOLabels</value>
+  </data>
+  <data name="&gt;&gt;panelVFOLabels.Type" xml:space="preserve">
+    <value>System.Windows.Forms.PanelTS, Thetis, Version=2.6.4.0, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;panelVFOLabels.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;panelVFOLabels.ZOrder" xml:space="preserve">
+    <value>47</value>
+  </data>
+
+  <data name="panelVFOALabels.AutoScrollMargin" type="System.Drawing.Size, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="panelVFOALabels.AutoScrollMinSize" type="System.Drawing.Size, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="lblLockLabel.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lblLockLabel.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 9pt</value>
+  </data>
+  <data name="lblLockLabel.Image" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="lblLockLabel.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>Off</value>
+  </data>
+  <data name="lblLockLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 4</value>
+  </data>
+  <data name="lblLockLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>39, 15</value>
+  </data>
+  <data name="lblLockLabel.TabIndex" type="System.Int32, mscorlib">
+    <value>136</value>
+  </data>
+  <data name="lblLockLabel.Text" xml:space="preserve">
+    <value>LOCK</value>
+  </data>
+  <data name="&gt;&gt;lblLockLabel.Name" xml:space="preserve">
+    <value>lblLockLabel</value>
+  </data>
+  <data name="&gt;&gt;lblLockLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.LabelTS, Thetis, Version=2.6.4.0, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;lblLockLabel.Parent" xml:space="preserve">
+    <value>panelVFOALabels</value>
+  </data>
+  <data name="&gt;&gt;lblLockLabel.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="lblAGCLabel.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lblAGCLabel.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 9pt</value>
+  </data>
+  <data name="lblAGCLabel.Image" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="lblAGCLabel.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>Off</value>
+  </data>
+  <data name="lblAGCLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>70, 22</value>
+  </data>
+  <data name="lblAGCLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>19, 15</value>
+  </data>
+  <data name="lblAGCLabel.TabIndex" type="System.Int32, mscorlib">
+    <value>133</value>
+  </data>
+  <data name="lblAGCLabel.Text" xml:space="preserve">
+    <value>---</value>
+  </data>
+  <data name="&gt;&gt;lblAGCLabel.Name" xml:space="preserve">
+    <value>lblAGCLabel</value>
+  </data>
+  <data name="&gt;&gt;lblAGCLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.LabelTS, Thetis, Version=2.6.4.0, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;lblAGCLabel.Parent" xml:space="preserve">
+    <value>panelVFOALabels</value>
+  </data>
+  <data name="&gt;&gt;lblAGCLabel.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="lblAttenLabel.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lblAttenLabel.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 9pt</value>
+  </data>
+  <data name="lblAttenLabel.Image" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="lblAttenLabel.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>Off</value>
+  </data>
+  <data name="lblAttenLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>190, 22</value>
+  </data>
+  <data name="lblAttenLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>19, 15</value>
+  </data>
+  <data name="lblAttenLabel.TabIndex" type="System.Int32, mscorlib">
+    <value>132</value>
+  </data>
+  <data name="lblAttenLabel.Text" xml:space="preserve">
+    <value>---</value>
+  </data>
+  <data name="&gt;&gt;lblAttenLabel.Name" xml:space="preserve">
+    <value>lblAttenLabel</value>
+  </data>
+  <data name="&gt;&gt;lblAttenLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.LabelTS, Thetis, Version=2.6.4.0, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;lblAttenLabel.Parent" xml:space="preserve">
+    <value>panelVFOALabels</value>
+  </data>
+  <data name="&gt;&gt;lblAttenLabel.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="lblCtunLabel.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lblCtunLabel.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 9pt</value>
+  </data>
+  <data name="lblCtunLabel.Image" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="lblCtunLabel.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>Off</value>
+  </data>
+  <data name="lblCtunLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>2, 22</value>
+  </data>
+  <data name="lblCtunLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>40, 15</value>
+  </data>
+  <data name="lblCtunLabel.TabIndex" type="System.Int32, mscorlib">
+    <value>131</value>
+  </data>
+  <data name="lblCtunLabel.Text" xml:space="preserve">
+    <value>CTUN</value>
+  </data>
+  <data name="&gt;&gt;lblCtunLabel.Name" xml:space="preserve">
+    <value>lblCtunLabel</value>
+  </data>
+  <data name="&gt;&gt;lblCtunLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.LabelTS, Thetis, Version=2.6.4.0, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;lblCtunLabel.Parent" xml:space="preserve">
+    <value>panelVFOALabels</value>
+  </data>
+  <data name="&gt;&gt;lblCtunLabel.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="lblANFLabel.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 9pt</value>
+  </data>
+  <data name="lblANFLabel.Image" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="lblANFLabel.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>Off</value>
+  </data>
+  <data name="lblANFLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>190, 4</value>
+  </data>
+  <data name="lblANFLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>36, 15</value>
+  </data>
+  <data name="lblANFLabel.TabIndex" type="System.Int32, mscorlib">
+    <value>127</value>
+  </data>
+  <data name="lblANFLabel.Text" xml:space="preserve">
+    <value>---</value>
+  </data>
+  <data name="&gt;&gt;lblANFLabel.Name" xml:space="preserve">
+    <value>lblANFLabel</value>
+  </data>
+  <data name="&gt;&gt;lblANFLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.LabelTS, Thetis, Version=2.6.4.0, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;lblANFLabel.Parent" xml:space="preserve">
+    <value>panelVFOALabels</value>
+  </data>
+  <data name="&gt;&gt;lblANFLabel.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="lblSNBLabel.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 9pt</value>
+  </data>
+  <data name="lblSNBLabel.Image" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="lblSNBLabel.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>Off</value>
+  </data>
+  <data name="lblSNBLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>150, 4</value>
+  </data>
+  <data name="lblSNBLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>36, 15</value>
+  </data>
+  <data name="lblSNBLabel.TabIndex" type="System.Int32, mscorlib">
+    <value>129</value>
+  </data>
+  <data name="lblSNBLabel.Text" xml:space="preserve">
+    <value>---</value>
+  </data>
+  <data name="&gt;&gt;lblSNBLabel.Name" xml:space="preserve">
+    <value>lblSNBLabel</value>
+  </data>
+  <data name="&gt;&gt;lblSNBLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.LabelTS, Thetis, Version=2.6.4.0, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;lblSNBLabel.Parent" xml:space="preserve">
+    <value>panelVFOALabels</value>
+  </data>
+  <data name="&gt;&gt;lblSNBLabel.ZOrder" xml:space="preserve">
+    <value>5</value>
+  </data>
+  <data name="lblNBLabel.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 9pt</value>
+  </data>
+  <data name="lblNBLabel.Image" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="lblNBLabel.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>Off</value>
+  </data>
+  <data name="lblNBLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>110, 4</value>
+  </data>
+  <data name="lblNBLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>36, 15</value>
+  </data>
+  <data name="lblNBLabel.TabIndex" type="System.Int32, mscorlib">
+    <value>128</value>
+  </data>
+  <data name="lblNBLabel.Text" xml:space="preserve">
+    <value>---</value>
+  </data>
+  <data name="&gt;&gt;lblNBLabel.Name" xml:space="preserve">
+    <value>lblNBLabel</value>
+  </data>
+  <data name="&gt;&gt;lblNBLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.LabelTS, Thetis, Version=2.6.4.0, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;lblNBLabel.Parent" xml:space="preserve">
+    <value>panelVFOALabels</value>
+  </data>
+  <data name="&gt;&gt;lblNBLabel.ZOrder" xml:space="preserve">
+    <value>6</value>
+  </data>
+  <data name="lblNRLabel.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 9pt</value>
+  </data>
+  <data name="lblNRLabel.Image" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="lblNRLabel.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>Off</value>
+  </data>
+  <data name="lblNRLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>70, 4</value>
+  </data>
+  <data name="lblNRLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>36, 15</value>
+  </data>
+  <data name="lblNRLabel.TabIndex" type="System.Int32, mscorlib">
+    <value>127</value>
+  </data>
+  <data name="lblNRLabel.Text" xml:space="preserve">
+    <value>---</value>
+  </data>
+  <data name="&gt;&gt;lblNRLabel.Name" xml:space="preserve">
+    <value>lblNRLabel</value>
+  </data>
+  <data name="&gt;&gt;lblNRLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.LabelTS, Thetis, Version=2.6.4.0, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;lblNRLabel.Parent" xml:space="preserve">
+    <value>panelVFOALabels</value>
+  </data>
+  <data name="&gt;&gt;lblNRLabel.ZOrder" xml:space="preserve">
+    <value>7</value>
+  </data>
+  <data name="panelVFOALabels.Location" type="System.Drawing.Point, System.Drawing">
+    <value>846, 81</value>
+  </data>
+  <data name="panelVFOALabels.Size" type="System.Drawing.Size, System.Drawing">
+    <value>232, 40</value>
+  </data>
+  <data name="panelVFOALabels.TabIndex" type="System.Int32, mscorlib">
+    <value>142</value>
+  </data>
+  <data name="panelVFOALabels.Visible" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="&gt;&gt;panelVFOALabels.Name" xml:space="preserve">
+    <value>panelVFOALabels</value>
+  </data>
+  <data name="&gt;&gt;panelVFOALabels.Type" xml:space="preserve">
+    <value>System.Windows.Forms.PanelTS, Thetis, Version=2.6.4.0, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;panelVFOALabels.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;panelVFOALabels.ZOrder" xml:space="preserve">
+    <value>44</value>
+  </data>
+  <data name="panelVFOBLabels.AutoScrollMargin" type="System.Drawing.Size, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="panelVFOBLabels.AutoScrollMinSize" type="System.Drawing.Size, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="lblRX2AttenLabel.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lblRX2AttenLabel.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 9pt</value>
+  </data>
+  <data name="lblRX2AttenLabel.Image" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="lblRX2AttenLabel.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>Off</value>
+  </data>
+  <data name="lblRX2AttenLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>190, 22</value>
+  </data>
+  <data name="lblRX2AttenLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>19, 15</value>
+  </data>
+  <data name="lblRX2AttenLabel.TabIndex" type="System.Int32, mscorlib">
+    <value>135</value>
+  </data>
+  <data name="lblRX2AttenLabel.Text" xml:space="preserve">
+    <value>---</value>
+  </data>
+  <data name="&gt;&gt;lblRX2AttenLabel.Name" xml:space="preserve">
+    <value>lblRX2AttenLabel</value>
+  </data>
+  <data name="&gt;&gt;lblRX2AttenLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.LabelTS, Thetis, Version=2.6.4.0, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;lblRX2AttenLabel.Parent" xml:space="preserve">
+    <value>panelVFOBLabels</value>
+  </data>
+  <data name="&gt;&gt;lblRX2AttenLabel.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="lblRX2LockLabel.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lblRX2LockLabel.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 9pt</value>
+  </data>
+  <data name="lblRX2LockLabel.Image" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="lblRX2LockLabel.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>Off</value>
+  </data>
+  <data name="lblRX2LockLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 4</value>
+  </data>
+  <data name="lblRX2LockLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>39, 15</value>
+  </data>
+  <data name="lblRX2LockLabel.TabIndex" type="System.Int32, mscorlib">
+    <value>137</value>
+  </data>
+  <data name="lblRX2LockLabel.Text" xml:space="preserve">
+    <value>LOCK</value>
+  </data>
+  <data name="&gt;&gt;lblRX2LockLabel.Name" xml:space="preserve">
+    <value>lblRX2LockLabel</value>
+  </data>
+  <data name="&gt;&gt;lblRX2LockLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.LabelTS, Thetis, Version=2.6.4.0, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;lblRX2LockLabel.Parent" xml:space="preserve">
+    <value>panelVFOBLabels</value>
+  </data>
+  <data name="&gt;&gt;lblRX2LockLabel.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="lblRX2AGCLabel.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lblRX2AGCLabel.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 9pt</value>
+  </data>
+  <data name="lblRX2AGCLabel.Image" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="lblRX2AGCLabel.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>Off</value>
+  </data>
+  <data name="lblRX2AGCLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>70, 22</value>
+  </data>
+  <data name="lblRX2AGCLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>19, 15</value>
+  </data>
+  <data name="lblRX2AGCLabel.TabIndex" type="System.Int32, mscorlib">
+    <value>134</value>
+  </data>
+  <data name="lblRX2AGCLabel.Text" xml:space="preserve">
+    <value>---</value>
+  </data>
+  <data name="&gt;&gt;lblRX2AGCLabel.Name" xml:space="preserve">
+    <value>lblRX2AGCLabel</value>
+  </data>
+  <data name="&gt;&gt;lblRX2AGCLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.LabelTS, Thetis, Version=2.6.4.0, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;lblRX2AGCLabel.Parent" xml:space="preserve">
+    <value>panelVFOBLabels</value>
+  </data>
+  <data name="&gt;&gt;lblRX2AGCLabel.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="lblRX2CtunLabel.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lblRX2CtunLabel.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 9pt</value>
+  </data>
+  <data name="lblRX2CtunLabel.Image" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="lblRX2CtunLabel.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>Off</value>
+  </data>
+  <data name="lblRX2CtunLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>2, 22</value>
+  </data>
+  <data name="lblRX2CtunLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>40, 15</value>
+  </data>
+  <data name="lblRX2CtunLabel.TabIndex" type="System.Int32, mscorlib">
+    <value>132</value>
+  </data>
+  <data name="lblRX2CtunLabel.Text" xml:space="preserve">
+    <value>CTUN</value>
+  </data>
+  <data name="&gt;&gt;lblRX2CtunLabel.Name" xml:space="preserve">
+    <value>lblRX2CtunLabel</value>
+  </data>
+  <data name="&gt;&gt;lblRX2CtunLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.LabelTS, Thetis, Version=2.6.4.0, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;lblRX2CtunLabel.Parent" xml:space="preserve">
+    <value>panelVFOBLabels</value>
+  </data>
+  <data name="&gt;&gt;lblRX2CtunLabel.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="lblRX2NRLabel.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 9pt</value>
+  </data>
+  <data name="lblRX2NRLabel.Image" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="lblRX2NRLabel.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>Off</value>
+  </data>
+  <data name="lblRX2NRLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>70, 4</value>
+  </data>
+  <data name="lblRX2NRLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>36, 15</value>
+  </data>
+  <data name="lblRX2NRLabel.TabIndex" type="System.Int32, mscorlib">
+    <value>127</value>
+  </data>
+  <data name="lblRX2NRLabel.Text" xml:space="preserve">
+    <value>---</value>
+  </data>
+  <data name="&gt;&gt;lblRX2NRLabel.Name" xml:space="preserve">
+    <value>lblRX2NRLabel</value>
+  </data>
+  <data name="&gt;&gt;lblRX2NRLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.LabelTS, Thetis, Version=2.6.4.0, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;lblRX2NRLabel.Parent" xml:space="preserve">
+    <value>panelVFOBLabels</value>
+  </data>
+  <data name="&gt;&gt;lblRX2NRLabel.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="lblRX2NBLabel.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 9pt</value>
+  </data>
+  <data name="lblRX2NBLabel.Image" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="lblRX2NBLabel.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>Off</value>
+  </data>
+  <data name="lblRX2NBLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>110, 4</value>
+  </data>
+  <data name="lblRX2NBLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>36, 15</value>
+  </data>
+  <data name="lblRX2NBLabel.TabIndex" type="System.Int32, mscorlib">
+    <value>128</value>
+  </data>
+  <data name="lblRX2NBLabel.Text" xml:space="preserve">
+    <value>---</value>
+  </data>
+  <data name="&gt;&gt;lblRX2NBLabel.Name" xml:space="preserve">
+    <value>lblRX2NBLabel</value>
+  </data>
+  <data name="&gt;&gt;lblRX2NBLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.LabelTS, Thetis, Version=2.6.4.0, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;lblRX2NBLabel.Parent" xml:space="preserve">
+    <value>panelVFOBLabels</value>
+  </data>
+  <data name="&gt;&gt;lblRX2NBLabel.ZOrder" xml:space="preserve">
+    <value>5</value>
+  </data>
+  <data name="lblRX2SNBLabel.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 9pt</value>
+  </data>
+  <data name="lblRX2SNBLabel.Image" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="lblRX2SNBLabel.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>Off</value>
+  </data>
+  <data name="lblRX2SNBLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>150, 4</value>
+  </data>
+  <data name="lblRX2SNBLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>36, 15</value>
+  </data>
+  <data name="lblRX2SNBLabel.TabIndex" type="System.Int32, mscorlib">
+    <value>129</value>
+  </data>
+  <data name="lblRX2SNBLabel.Text" xml:space="preserve">
+    <value>---</value>
+  </data>
+  <data name="&gt;&gt;lblRX2SNBLabel.Name" xml:space="preserve">
+    <value>lblRX2SNBLabel</value>
+  </data>
+  <data name="&gt;&gt;lblRX2SNBLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.LabelTS, Thetis, Version=2.6.4.0, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;lblRX2SNBLabel.Parent" xml:space="preserve">
+    <value>panelVFOBLabels</value>
+  </data>
+  <data name="&gt;&gt;lblRX2SNBLabel.ZOrder" xml:space="preserve">
+    <value>6</value>
+  </data>
+  <data name="lblRX2ANFLabel.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 9pt</value>
+  </data>
+  <data name="lblRX2ANFLabel.Image" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="lblRX2ANFLabel.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>Off</value>
+  </data>
+  <data name="lblRX2ANFLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>190, 4</value>
+  </data>
+  <data name="lblRX2ANFLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>36, 15</value>
+  </data>
+  <data name="lblRX2ANFLabel.TabIndex" type="System.Int32, mscorlib">
+    <value>127</value>
+  </data>
+  <data name="lblRX2ANFLabel.Text" xml:space="preserve">
+    <value>---</value>
+  </data>
+  <data name="&gt;&gt;lblRX2ANFLabel.Name" xml:space="preserve">
+    <value>lblRX2ANFLabel</value>
+  </data>
+  <data name="&gt;&gt;lblRX2ANFLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.LabelTS, Thetis, Version=2.6.4.0, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;lblRX2ANFLabel.Parent" xml:space="preserve">
+    <value>panelVFOBLabels</value>
+  </data>
+  <data name="&gt;&gt;lblRX2ANFLabel.ZOrder" xml:space="preserve">
+    <value>7</value>
+  </data>
+  <data name="panelVFOBLabels.Location" type="System.Drawing.Point, System.Drawing">
+    <value>840, 36</value>
+  </data>
+  <data name="panelVFOBLabels.Size" type="System.Drawing.Size, System.Drawing">
+    <value>232, 40</value>
+  </data>
+  <data name="panelVFOBLabels.TabIndex" type="System.Int32, mscorlib">
+    <value>142</value>
+  </data>
+  <data name="&gt;&gt;panelVFOBLabels.Name" xml:space="preserve">
+    <value>panelVFOBLabels</value>
+  </data>
+  <data name="&gt;&gt;panelVFOBLabels.Type" xml:space="preserve">
+    <value>System.Windows.Forms.PanelTS, Thetis, Version=2.6.4.0, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;panelVFOBLabels.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;panelVFOBLabels.ZOrder" xml:space="preserve">
+    <value>45</value>
+  </data>
   <data name="panelFilter.AutoScrollMargin" type="System.Drawing.Size, System.Drawing">
     <value>0, 0</value>
   </data>
@@ -13250,6 +14454,49 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
   <data name="&gt;&gt;txtVFOAFreq.ZOrder" xml:space="preserve">
     <value>10</value>
   </data>
+  <data name="lblModeBigLabel.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lblModeBigLabel.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 14pt, style=Bold</value>
+  </data>
+  <data name="lblModeBigLabel.Image" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="lblModeBigLabel.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>Off</value>
+  </data>
+  <data name="lblModeBigLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>13, 21</value>
+  </data>
+  <data name="lblModeBigLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>71, 24</value>
+  </data>
+  <data name="lblModeBigLabel.TabIndex" type="System.Int32, mscorlib">
+    <value>143</value>
+  </data>
+  <data name="lblModeBigLabel.Text" xml:space="preserve">
+    <value>MODE</value>
+  </data>
+  <data name="lblModeBigLabel.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleLeft</value>
+  </data>
+  <data name="lblModeBigLabel.Visible" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="&gt;&gt;lblModeBigLabel.Name" xml:space="preserve">
+    <value>lblModeBigLabel</value>
+  </data>
+  <data name="&gt;&gt;lblModeBigLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.LabelTS, Thetis, Version=2.6.4.0, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;lblModeBigLabel.Parent" xml:space="preserve">
+    <value>grpVFOA</value>
+  </data>
+  <data name="&gt;&gt;lblModeBigLabel.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+
   <data name="lblRX1APF.Font" type="System.Drawing.Font, System.Drawing">
     <value>Tahoma, 6.75pt, style=Bold</value>
   </data>
@@ -13594,6 +14841,48 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
   </data>
   <data name="&gt;&gt;grpVFOA.ZOrder" xml:space="preserve">
     <value>27</value>
+  </data>
+  <data name="lblRX2ModeBigLabel.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lblRX2ModeBigLabel.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 14pt, style=Bold</value>
+  </data>
+  <data name="lblRX2ModeBigLabel.Image" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="lblRX2ModeBigLabel.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>Off</value>
+  </data>
+  <data name="lblRX2ModeBigLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>13, 21</value>
+  </data>
+  <data name="lblRX2ModeBigLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>71, 24</value>
+  </data>
+  <data name="lblRX2ModeBigLabel.TabIndex" type="System.Int32, mscorlib">
+    <value>144</value>
+  </data>
+  <data name="lblRX2ModeBigLabel.Text" xml:space="preserve">
+    <value>MODE</value>
+  </data>
+  <data name="lblRX2ModeBigLabel.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleLeft</value>
+  </data>
+  <data name="lblRX2ModeBigLabel.Visible" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="&gt;&gt;lblRX2ModeBigLabel.Name" xml:space="preserve">
+    <value>lblRX2ModeBigLabel</value>
+  </data>
+  <data name="&gt;&gt;lblRX2ModeBigLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.LabelTS, Thetis, Version=2.6.4.0, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;lblRX2ModeBigLabel.Parent" xml:space="preserve">
+    <value>grpVFOB</value>
+  </data>
+  <data name="&gt;&gt;lblRX2ModeBigLabel.ZOrder" xml:space="preserve">
+    <value>0</value>
   </data>
   <data name="lblRX2APF.Font" type="System.Drawing.Font, System.Drawing">
     <value>Tahoma, 6.75pt, style=Bold</value>
@@ -15391,6 +16680,108 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
   </data>
   <data name="&gt;&gt;panelBandGEN.ZOrder" xml:space="preserve">
     <value>39</value>
+  </data>
+  <data name="panelMeterLabels.AutoScrollMargin" type="System.Drawing.Size, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="panelMeterLabels.AutoScrollMinSize" type="System.Drawing.Size, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="lblTXMeter.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 9pt</value>
+  </data>
+  <data name="lblTXMeter.Image" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="lblTXMeter.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>Off</value>
+  </data>
+  <data name="lblTXMeter.Location" type="System.Drawing.Point, System.Drawing">
+    <value>72, 1</value>
+  </data>
+  <data name="lblTXMeter.Size" type="System.Drawing.Size, System.Drawing">
+    <value>70, 15</value>
+  </data>
+  <data name="lblTXMeter.TabIndex" type="System.Int32, mscorlib">
+    <value>135</value>
+  </data>
+  <data name="lblTXMeter.Text" xml:space="preserve">
+    <value>Step</value>
+  </data>
+  <data name="lblTXMeter.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleRight</value>
+  </data>
+  <data name="&gt;&gt;lblTXMeter.Name" xml:space="preserve">
+    <value>lblTXMeter</value>
+  </data>
+  <data name="&gt;&gt;lblTXMeter.Type" xml:space="preserve">
+    <value>System.Windows.Forms.LabelTS, Thetis, Version=2.6.4.0, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;lblTXMeter.Parent" xml:space="preserve">
+    <value>panelMeterLabels</value>
+  </data>
+  <data name="&gt;&gt;lblTXMeter.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="lblRXMeter.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 9pt</value>
+  </data>
+  <data name="lblRXMeter.Image" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="lblRXMeter.ImageAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleLeft</value>
+  </data>
+  <data name="lblRXMeter.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>Off</value>
+  </data>
+  <data name="lblRXMeter.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 1</value>
+  </data>
+  <data name="lblRXMeter.Size" type="System.Drawing.Size, System.Drawing">
+    <value>70, 15</value>
+  </data>
+  <data name="lblRXMeter.TabIndex" type="System.Int32, mscorlib">
+    <value>134</value>
+  </data>
+  <data name="lblRXMeter.Text" xml:space="preserve">
+    <value>Step</value>
+  </data>
+  <data name="&gt;&gt;lblRXMeter.Name" xml:space="preserve">
+    <value>lblRXMeter</value>
+  </data>
+  <data name="&gt;&gt;lblRXMeter.Type" xml:space="preserve">
+    <value>System.Windows.Forms.LabelTS, Thetis, Version=2.6.4.0, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;lblRXMeter.Parent" xml:space="preserve">
+    <value>panelMeterLabels</value>
+  </data>
+  <data name="&gt;&gt;lblRXMeter.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="panelMeterLabels.Location" type="System.Drawing.Point, System.Drawing">
+    <value>675, 22</value>
+  </data>
+  <data name="panelMeterLabels.Size" type="System.Drawing.Size, System.Drawing">
+    <value>144, 20</value>
+  </data>
+  <data name="panelMeterLabels.TabIndex" type="System.Int32, mscorlib">
+    <value>144</value>
+  </data>
+  <data name="panelMeterLabels.Visible" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="&gt;&gt;panelMeterLabels.Name" xml:space="preserve">
+    <value>panelMeterLabels</value>
+  </data>
+  <data name="&gt;&gt;panelMeterLabels.Type" xml:space="preserve">
+    <value>System.Windows.Forms.PanelTS, Thetis, Version=2.6.4.0, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;panelMeterLabels.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;panelMeterLabels.ZOrder" xml:space="preserve">
+    <value>46</value>
   </data>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>

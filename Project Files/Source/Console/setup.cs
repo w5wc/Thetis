@@ -9969,6 +9969,8 @@ namespace Thetis
         private void chkShowTopControls_CheckedChanged(object sender, EventArgs e)
         {
             console.ShowTopControls = chkShowTopControls.Checked;
+            if (chkShowTopControls.Checked == true)
+                chkShowAndromedaTop.Checked = false;
             console.topControlsToolStripMenuItem.Checked = chkShowTopControls.Checked;
             console.bandToolStripMenuItem.Visible = !chkShowBandControls.Checked;
 
@@ -9978,6 +9980,8 @@ namespace Thetis
 
         private void chkShowBandControls_CheckedChanged(object sender, EventArgs e)
         {
+            if (chkShowBandControls.Checked == true)
+                chkShowAndromedaBar.Checked = false;
             console.ShowBandControls = chkShowBandControls.Checked;
             console.bandControlsToolStripMenuItem.Checked = chkShowBandControls.Checked;
             console.modeToolStripMenuItem.Visible = !chkShowModeControls.Checked;
@@ -9988,10 +9992,39 @@ namespace Thetis
 
         private void chkModeControls_CheckedChanged(object sender, EventArgs e)
         {
+            if (chkShowModeControls.Checked == true)
+                chkShowAndromedaBar.Checked = false;
             console.ShowModeControls = chkShowModeControls.Checked;
             console.modeControlsToolStripMenuItem.Checked = chkShowModeControls.Checked;
 
             if (console.CollapsedDisplay)
+                console.CollapseDisplay();
+        }
+
+        //
+        // G8NJJ: setup control to select an Andromeda top bar when display is collapsed
+        //
+        private void chkShowAndromedaTop_CheckedChanged(object sender, EventArgs e)
+        {
+            if(chkShowAndromedaTop.Checked == true)
+                chkShowTopControls.Checked = false;
+            console.ShowAndromedaTopControls = chkShowAndromedaTop.Checked;
+            if (console.CollapsedDisplay)                   // force a redraw
+                console.CollapseDisplay();
+        }
+
+        //
+        // G8NJJ: setup control to select an Andromeda top bar when display is collapsed
+        //
+        private void chkShowAndromedaBar_CheckedChanged(object sender, EventArgs e)
+        {
+            console.ShowAndromedaButtonBar = chkShowAndromedaBar.Checked;
+            if (chkShowAndromedaBar.Checked == true)
+            {
+                chkShowBandControls.Checked = false;
+                chkShowModeControls.Checked = false;
+            }
+            if (console.CollapsedDisplay)                   // force a redraw
                 console.CollapseDisplay();
         }
 
@@ -19153,6 +19186,7 @@ namespace Thetis
         {
             Audio.AntiVOXSourceVAC = chkAntiVoxSource.Checked;
         }
+
     }
 
     #region PADeviceInfo Helper Class

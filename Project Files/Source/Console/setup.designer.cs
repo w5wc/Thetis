@@ -1,5 +1,5 @@
 ﻿namespace Thetis
-{    
+{
     using System.Windows.Forms;
 
     partial class Setup
@@ -2843,6 +2843,7 @@
             this.clrbtnText = new Thetis.ColorButton();
             this.lblDisplayTextColor = new System.Windows.Forms.LabelTS();
             this.grpAppPanadapter = new System.Windows.Forms.GroupBoxTS();
+            this.chkShowZeroLine = new System.Windows.Forms.CheckBoxTS();
             this.tbGrayLineAlpha = new System.Windows.Forms.TrackBarTS();
             this.clrbtnGrayLine = new Thetis.ColorButton();
             this.labelgrayline = new System.Windows.Forms.LabelTS();
@@ -2927,6 +2928,8 @@
             this.txtCollapsedHeight = new System.Windows.Forms.TextBoxTS();
             this.txtCollapsedWidth = new System.Windows.Forms.TextBoxTS();
             this.grpBoxCollapsible = new System.Windows.Forms.GroupBox();
+            this.chkShowAndromedaBar = new System.Windows.Forms.CheckBoxTS();
+            this.chkShowAndromedaTop = new System.Windows.Forms.CheckBoxTS();
             this.chkShowModeControls = new System.Windows.Forms.CheckBoxTS();
             this.chkShowBandControls = new System.Windows.Forms.CheckBoxTS();
             this.chkShowTopControls = new System.Windows.Forms.CheckBoxTS();
@@ -3223,7 +3226,6 @@
             this.panelTS4 = new System.Windows.Forms.PanelTS();
             this.radioButtonTS5 = new System.Windows.Forms.RadioButtonTS();
             this.radioButtonTS6 = new System.Windows.Forms.RadioButtonTS();
-            this.chkShowZeroLine = new System.Windows.Forms.CheckBoxTS();
             tpAlexAntCtrl = new System.Windows.Forms.TabPage();
             numericUpDownTS3 = new System.Windows.Forms.NumericUpDownTS();
             numericUpDownTS4 = new System.Windows.Forms.NumericUpDownTS();
@@ -48264,6 +48266,20 @@
             this.grpAppPanadapter.TabStop = false;
             this.grpAppPanadapter.Text = "Panadapter                           Alpha";
             // 
+            // chkShowZeroLine
+            // 
+            this.chkShowZeroLine.AutoSize = true;
+            this.chkShowZeroLine.Checked = true;
+            this.chkShowZeroLine.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkShowZeroLine.Image = null;
+            this.chkShowZeroLine.Location = new System.Drawing.Point(6, 259);
+            this.chkShowZeroLine.Name = "chkShowZeroLine";
+            this.chkShowZeroLine.Size = new System.Drawing.Size(101, 17);
+            this.chkShowZeroLine.TabIndex = 84;
+            this.chkShowZeroLine.Text = "Show Zero Line";
+            this.chkShowZeroLine.UseVisualStyleBackColor = true;
+            this.chkShowZeroLine.CheckedChanged += new System.EventHandler(this.chkShowZeroLine_CheckedChanged);
+            // 
             // tbGrayLineAlpha
             // 
             this.tbGrayLineAlpha.AutoSize = false;
@@ -49242,15 +49258,41 @@
             // 
             // grpBoxCollapsible
             // 
+            this.grpBoxCollapsible.Controls.Add(this.chkShowAndromedaBar);
+            this.grpBoxCollapsible.Controls.Add(this.chkShowAndromedaTop);
             this.grpBoxCollapsible.Controls.Add(this.chkShowModeControls);
             this.grpBoxCollapsible.Controls.Add(this.chkShowBandControls);
             this.grpBoxCollapsible.Controls.Add(this.chkShowTopControls);
             this.grpBoxCollapsible.Location = new System.Drawing.Point(15, 15);
             this.grpBoxCollapsible.Name = "grpBoxCollapsible";
-            this.grpBoxCollapsible.Size = new System.Drawing.Size(162, 88);
+            this.grpBoxCollapsible.Size = new System.Drawing.Size(162, 141);
             this.grpBoxCollapsible.TabIndex = 1;
             this.grpBoxCollapsible.TabStop = false;
             this.grpBoxCollapsible.Text = "Show Additional Controls";
+            // 
+            // chkShowAndromedaBar
+            // 
+            this.chkShowAndromedaBar.AutoSize = true;
+            this.chkShowAndromedaBar.Image = null;
+            this.chkShowAndromedaBar.Location = new System.Drawing.Point(6, 111);
+            this.chkShowAndromedaBar.Name = "chkShowAndromedaBar";
+            this.chkShowAndromedaBar.Size = new System.Drawing.Size(119, 17);
+            this.chkShowAndromedaBar.TabIndex = 16;
+            this.chkShowAndromedaBar.Text = "Andromeda Buttons";
+            this.chkShowAndromedaBar.UseVisualStyleBackColor = true;
+            this.chkShowAndromedaBar.CheckedChanged += new System.EventHandler(this.chkShowAndromedaBar_CheckedChanged);
+            // 
+            // chkShowAndromedaTop
+            // 
+            this.chkShowAndromedaTop.AutoSize = true;
+            this.chkShowAndromedaTop.Image = null;
+            this.chkShowAndromedaTop.Location = new System.Drawing.Point(6, 88);
+            this.chkShowAndromedaTop.Name = "chkShowAndromedaTop";
+            this.chkShowAndromedaTop.Size = new System.Drawing.Size(102, 17);
+            this.chkShowAndromedaTop.TabIndex = 15;
+            this.chkShowAndromedaTop.Text = "Andromeda Top";
+            this.chkShowAndromedaTop.UseVisualStyleBackColor = true;
+            this.chkShowAndromedaTop.CheckedChanged += new System.EventHandler(this.chkShowAndromedaTop_CheckedChanged);
             // 
             // chkShowModeControls
             // 
@@ -53599,20 +53641,6 @@
             this.radioButtonTS6.Text = "Auto";
             this.radioButtonTS6.UseVisualStyleBackColor = true;
             // 
-            // chkShowZeroLine
-            // 
-            this.chkShowZeroLine.AutoSize = true;
-            this.chkShowZeroLine.Checked = true;
-            this.chkShowZeroLine.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkShowZeroLine.Image = null;
-            this.chkShowZeroLine.Location = new System.Drawing.Point(6, 259);
-            this.chkShowZeroLine.Name = "chkShowZeroLine";
-            this.chkShowZeroLine.Size = new System.Drawing.Size(101, 17);
-            this.chkShowZeroLine.TabIndex = 84;
-            this.chkShowZeroLine.Text = "Show Zero Line";
-            this.chkShowZeroLine.UseVisualStyleBackColor = true;
-            this.chkShowZeroLine.CheckedChanged += new System.EventHandler(this.chkShowZeroLine_CheckedChanged);
-            // 
             // Setup
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -57944,6 +57972,8 @@
         private LabelTS lblAntiVoxGain;
         private CheckBoxTS chkAntiVoxEnable;
         private CheckBoxTS chkAntiVoxSource;
+        private CheckBoxTS chkShowAndromedaBar;
+        private CheckBoxTS chkShowAndromedaTop;
         private CheckBoxTS chkShowZeroLine;
     }
 }
