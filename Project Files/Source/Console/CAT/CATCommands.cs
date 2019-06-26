@@ -2,7 +2,7 @@
 // CATCommands.cs
 //=================================================================
 // Copyright (C) 2005  Bob Tracy
-//
+//C:\Users\laure\Documents\software\github\Thetis\thetis\Project Files\Source\Console\CAT\CATCommands.cs
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
 // as published by the Free Software Foundation; either version 2
@@ -3626,6 +3626,12 @@ namespace Thetis
             if (s.Length == parser.nSet)
             {
                 console.PanMainRX = n;
+                if (n == 50)
+                    console.TitleBarEncoderString = "RX1 Stereo Balance = MID";
+                else if (n < 50)
+                    console.TitleBarEncoderString = "RX1 Stereo Balance = left " + 2*(50-n) + "%";
+                else
+                    console.TitleBarEncoderString = "RX1 Stereo Balance = right " + 2 * (n - 50) + "%";
                 return "";
             }
             else if (s.Length == parser.nGet)
@@ -3651,6 +3657,7 @@ namespace Thetis
             if (s.Length == parser.nSet)
             {
                 console.RX1Gain = n;
+                console.TitleBarEncoderString = "sub RX Gain = " + n + "%";
                 return "";
             }
             else if (s.Length == parser.nGet)
@@ -3676,6 +3683,12 @@ namespace Thetis
             if (s.Length == parser.nSet)
             {
                 console.PanSubRX = n;
+                if (n == 50)
+                    console.TitleBarEncoderString = "sub-RX Stereo Balance = MID";
+                else if (n < 50)
+                    console.TitleBarEncoderString = "sub-RX Stereo Balance = left " + 2 * (50 - n) + "%";
+                else
+                    console.TitleBarEncoderString = "sub-RX Stereo Balance = right " + 2 * (n - 50) + "%";
                 return "";
             }
             else if (s.Length == parser.nGet)
@@ -3727,6 +3740,12 @@ namespace Thetis
                 if (s.Length == parser.nSet)
                 {
                     console.RX2Pan = n;
+                    if (n == 50)
+                        console.TitleBarEncoderString = "RX2 Stereo Balance = MID";
+                    else if (n < 50)
+                        console.TitleBarEncoderString = "RX2 Stereo Balance = left " + 2 * (50 - n) + "%";
+                    else
+                        console.TitleBarEncoderString = "RX2 Stereo Balance = right " + 2 * (n - 50) + "%";
                     return "";
                 }
                 else if (s.Length == parser.nGet)
@@ -4896,6 +4915,7 @@ namespace Thetis
                 level = Math.Max(0, level);			// lower bound
                 level = Math.Min(1000, level);		    // upper bound
                 console.Pan = level;
+                console.TitleBarEncoderString = "Display pan =" + level/10 + "%";
                 return "";
             }
             else if (s.Length == parser.nGet)
@@ -5024,6 +5044,7 @@ namespace Thetis
                 level = Math.Max(10, level);			// lower bound
                 level = Math.Min(240, level);		    // upper bound
                 console.Zoom = level;
+                console.TitleBarEncoderString = "Display zoom =" + Convert.ToInt32(level/2.4) + "%";
                 return "";
             }
             else if (s.Length == parser.nGet)
@@ -7664,7 +7685,24 @@ namespace Thetis
             }
 
         }
-        
+        // Sets or reads the Rx1/RX2 radio button in collapsed mode
+        public string ZZYR(string s)
+        {
+            if (s.Length == parser.nSet && (s == "0" || s == "1"))
+            {
+                console.CATRX1RX2RadioButton = Convert.ToInt32(s);
+                return "";
+            }
+            else if (s.Length == parser.nGet)
+            {
+                return console.CATRX1RX2RadioButton.ToString();
+            }
+            else
+            {
+                return parser.Error1;
+            }
+        }
+
         public string ZZZB()
 		{
 			if(console.CATDisplayAvg == 1)

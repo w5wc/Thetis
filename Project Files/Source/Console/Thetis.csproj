@@ -627,9 +627,7 @@
     <EmbeddedResource Include="images\flex-3000.jpg" />
     <Content Include="hpsdr5-64.ico" />
     <Content Include="images\hpsdr.jpg" />
-    <Content Include="images\hpsdr5.png" />
     <Content Include="images\openhpsdr4_splash.png" />
-    <Content Include="images\openhpsdr_splash.png" />
     <Content Include="images\PowerSDR.ico" />
     <EmbeddedResource Include="Resources\swiss.ttf" />
     <EmbeddedResource Include="Resources\swissb.ttf" />

@@ -2716,6 +2716,13 @@
     <ngetparms>0</ngetparms>
     <nansparms>2</nansparms>
   </catstruct>
+  <catstruct code="ZZYR">
+    <desc>RX1/RX2 radio button</desc>
+    <active>true</active>
+    <nsetparms>1</nsetparms>
+    <ngetparms>0</ngetparms>
+    <nansparms>1</nansparms>
+  </catstruct>
   <catstruct code="ZZSZ">
     <desc>Zeros selected VFO to current step size</desc>
     <active>true</active>
