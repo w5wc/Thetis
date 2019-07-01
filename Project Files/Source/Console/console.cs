@@ -738,7 +738,7 @@ namespace Thetis
         // ======================================================
         // Variable Declarations
         // ======================================================
-        static private PrivateFontCollection fonts = null;
+        static private List<PrivateFontCollection> _fontCollections;
         Font LEDLFont = null;
         Font LEDSFont = null;
         Font LEDMFont = null;
@@ -1899,34 +1899,6 @@ namespace Thetis
         {
             get { return mic_ptt; }
             set { mic_ptt = value; }
-        }
-
-        private void LoadLEDFont()
-        {
-            //string[] names = Assembly.GetExecutingAssembly().GetManifestResourceNames();
-            Stream stmFont = Assembly.GetExecutingAssembly().GetManifestResourceStream(
-            "Thetis.Resources.digital7.ttf");
-            byte[] rgbyt = new Byte[stmFont.Length];
-            stmFont.Read(rgbyt, 0, rgbyt.Length);
-            uint cFonts;
-            Win32.AddFontMemResourceEx(rgbyt, rgbyt.Length, IntPtr.Zero, out cFonts);
-
-            IntPtr pbyt = Marshal.AllocCoTaskMem(rgbyt.Length);
-            Marshal.Copy(rgbyt, 0, pbyt, rgbyt.Length);
-            fonts = new PrivateFontCollection();
-            fonts.AddMemoryFont(pbyt, rgbyt.Length);
-
-            LEDLFont = new Font(fonts.Families[0], 24.0F);
-            //txtVFOAFreq.Font = new Font(LEDLFont, FontStyle.Regular);
-            //txtVFOBFreq.Font = new Font(LEDLFont, FontStyle.Regular);
-            //txtVFOAMSD.Font = new Font(LEDLFont, FontStyle.Regular);
-            //txtVFOBMSD.Font = new Font(LEDLFont, FontStyle.Regular);
-            LEDSFont = new Font(fonts.Families[0], 19.0F);
-            //txtVFOALSD.Font = new Font(LEDSFont, FontStyle.Regular);
-            //txtVFOBLSD.Font = new Font(LEDSFont, FontStyle.Regular);
-            LEDMFont = new Font(fonts.Families[0], 22.0F);
-            //txtMultiText.Font = new Font(LEDMFont, FontStyle.Regular);
-            //txtRX2Meter.Font = new Font(LEDMFont, FontStyle.Regular);
         }
 
         private void InitConsole()
@@ -20063,14 +20035,15 @@ namespace Thetis
                 enable_led_font = value;
                 if (value)
                 {
-                    txtVFOAFreq.Font = new Font(LEDLFont, FontStyle.Regular);
-                    txtVFOBFreq.Font = new Font(LEDLFont, FontStyle.Regular);
-                    txtVFOAMSD.Font = new Font(LEDLFont, FontStyle.Regular);
-                    txtVFOBMSD.Font = new Font(LEDLFont, FontStyle.Regular);
-                    txtVFOALSD.Font = new Font(LEDSFont, FontStyle.Regular);
-                    txtVFOBLSD.Font = new Font(LEDSFont, FontStyle.Regular);
-                    txtMultiText.Font = new Font(LEDMFont, FontStyle.Regular);
-                    txtRX2Meter.Font = new Font(LEDMFont, FontStyle.Regular);
+                    txtVFOAFreq.Font = LEDLFont;
+                    txtVFOBFreq.Font = LEDLFont;
+                    txtVFOAMSD.Font = LEDLFont;
+                    txtVFOBMSD.Font = LEDLFont;
+                    txtVFOALSD.Font = LEDSFont;
+                    txtVFOBLSD.Font = LEDSFont;
+                    txtMultiText.Font = LEDMFont;
+                    txtRX2Meter.Font = LEDMFont;
+
                 }
                 else
                 {
@@ -48586,6 +48559,26 @@ namespace Thetis
             if (collapsedDisplay)
                 RepositionControlsForCollapsedlDisplay();
 
+            if (!collapsedDisplay)
+            {
+                // set all Andromedia console controls to hidden
+                //btnAndrBar1.Hide();
+                //btnAndrBar2.Hide();
+                //btnAndrBar3.Hide();
+                //btnAndrBar4.Hide();
+                //btnAndrBar5.Hide();
+                //btnAndrBar6.Hide();
+                //btnAndrBar7.Hide();
+                //btnAndrBar8.Hide();
+                panelButtonBar.Hide();
+                lblRX2LockLabel.Hide();
+                lblRX2CtunLabel.Hide();
+                panelVFOALabels.Hide();
+                panelVFOBLabels.Hide();
+                lblSNBLabel.Hide();
+                lblVFOSyncLabel.Hide();
+            }
+
         }
 
         public int HDelta
@@ -52685,13 +52678,13 @@ namespace Thetis
             set { this.showModeControls = value; }
         }
 
-        private bool showAndromedaTopControls = true;
+        private bool showAndromedaTopControls = false;
         public bool ShowAndromedaTopControls
         {
             set { this.showAndromedaTopControls = value; }
         }
 
-        private bool showAndromedaButtonBar = true;
+        private bool showAndromedaButtonBar = false;
         public bool ShowAndromedaButtonBar
         {
             set { this.showAndromedaButtonBar = value; }
@@ -52737,8 +52730,24 @@ namespace Thetis
             panelButtonBar.Hide();
             lblModeBigLabel.Hide();
             lblRX2ModeBigLabel.Hide();
+
             // added G8NJJ to display Andromeda encoder settings in title bar
             this.Text = TitleBar.GetString() + TitleBarMultifunction;
+            //btnAndrBar1.Hide();
+            //btnAndrBar2.Hide();
+            //btnAndrBar3.Hide();
+            //btnAndrBar4.Hide();
+            //btnAndrBar5.Hide();
+            //btnAndrBar6.Hide();
+            //btnAndrBar7.Hide();
+            //btnAndrBar8.Hide();
+            panelButtonBar.Hide();
+            lblRX2LockLabel.Hide();
+            lblRX2CtunLabel.Hide();
+            panelVFOALabels.Hide();
+            panelVFOBLabels.Hide();
+            lblSNBLabel.Hide();
+            lblVFOSyncLabel.Hide();
 
             chkMUT.Show();
             radRX1Show.Hide();
@@ -55169,6 +55178,34 @@ namespace Thetis
             }
             WDSP.SetRXASNBARun(WDSP.id(2, 0), chkRX2NB2.Checked);
             cat_rx2snb_status = Convert.ToInt32(chkRX2NB2.Checked);
+        }
+
+        private void LoadLEDFont()
+        {
+            LEDLFont = GetCustomFont(Properties.Resources.digital7, 24, FontStyle.Regular);
+            LEDSFont = GetCustomFont(Properties.Resources.digital7, 19, FontStyle.Regular);
+            LEDMFont = GetCustomFont(Properties.Resources.digital7, 22, FontStyle.Regular);
+        }
+
+        static public Font GetCustomFont(byte[] fontData, float size, FontStyle style)
+        {
+            if (_fontCollections == null) _fontCollections = new List<PrivateFontCollection>();
+            PrivateFontCollection fontCol = new PrivateFontCollection();
+            IntPtr fontPtr = Marshal.AllocCoTaskMem(fontData.Length);
+            Marshal.Copy(fontData, 0, fontPtr, fontData.Length);
+            fontCol.AddMemoryFont(fontPtr, fontData.Length);
+            Marshal.FreeCoTaskMem(fontPtr);     //<-- It works!
+            _fontCollections.Add(fontCol);
+            return new Font(fontCol.Families[0], size, style);
+        }
+
+        static public Font GetCustomFont(string fontFile, float size, FontStyle style)
+        {
+            if (_fontCollections == null) _fontCollections = new List<PrivateFontCollection>();
+            PrivateFontCollection fontCol = new PrivateFontCollection();
+            fontCol.AddFontFile(fontFile);
+            _fontCollections.Add(fontCol);
+            return new Font(fontCol.Families[0], size, style);
         }
 
         //============================================================================ 
