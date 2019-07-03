@@ -342,11 +342,13 @@ namespace Thetis
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(80)))), ((int)(((byte)(80)))));
             this.ClientSize = new System.Drawing.Size(463, 270);
             this.Controls.Add(this.groupBoxTS1);
             this.Controls.Add(this.btnClose);
             this.Name = "FilterButtonsPopup";
             this.Text = "Select IF Filter";
+            this.TopMost = true;
             this.Activated += new System.EventHandler(this.FilterButtonsPopup_Activated);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FilterButtonsPopup_FormClosing);
             this.groupBoxTS1.ResumeLayout(false);

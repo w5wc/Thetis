@@ -621,13 +621,17 @@ namespace Thetis
         eBBCentreDisplay,           // centre the display
         eBBZoomStep,                // step between the zoom step buttons
         eBBRecordAudio,             // record audio
-        eBBTXAudio,                 // play audio (parameter identified which)
+        eBBPlayAudio,                 // play audio (parameter identified which)
         eBBModeForm,                // show MODE form
         eBBFilterForm,              // show FILTER form
         eBBBandForm,                // show BAND form
         eBBSliderForm,              // show "sliders" form
         eBBVFOSettingForm,          // show VFO Settings form
         eBBBandstackForm,           // show band stacks form
+        eBBBandstack,               // select next band stack
+        eBBQuickSave,               // save to "quick memory"
+        eBBQuickRestore,            // restore from "quick memory"
+        eBBRXAntenna,               // RX antenna button equivalent
         eBBDiversityForm,           // show the diversity form
         eBBModeSettingsForm,        // show the "mode dependent settings" form
         eBBPuresignalForm,          // show the Puresignal form
@@ -789,6 +793,10 @@ namespace Thetis
         public ModeButtonsPopup modePopupForm;
         public FilterButtonsPopup filterPopupForm;
         public BandButtonsPopup bandPopupForm;
+        public ModeDependentSettingsForm modeDependentSettingsForm;
+        public VFOSettingsPopup VFOSettingsForm;
+        public DisplaySettingsForm displaySettingsForm;
+
         public RAForm raForm;
         public Path_Illustrator path_Illustrator;
         // public RadioInfo radio_info;
@@ -21045,7 +21053,11 @@ namespace Thetis
         public bool QuickPlay
         {
             get { return ckQuickPlay.Checked; }
-            set { ckQuickPlay.Checked = value; }
+            set
+            {
+                ckQuickPlay.Checked = value;
+                UpdateButtonBarButtons();
+            }
         }
 
         public bool DX
@@ -22507,10 +22519,39 @@ namespace Thetis
             }
         }
 
+        // G8NJJ: return the set of strings in the combo box
+        public ComboBox.ObjectCollection DisplayModeItems
+        {
+            get { return comboDisplayMode.Items; }
+        }
+
+        
         public string DisplayModeText
         {
             get { return comboDisplayMode.Text; }
-            set { comboDisplayMode.Text = value; }
+            set
+            {
+                comboDisplayMode.Text = value;
+                UpdateButtonBarButtons();
+            }
+        }
+
+
+        // G8NJJ: return the set of strings in the combo box
+        public ComboBox.ObjectCollection DisplayRX2ModeItems
+        {
+            get { return comboRX2DisplayMode.Items; }
+        }
+
+        // added G8NJJ
+        public string DisplayRX2ModeText
+        {
+            get { return comboRX2DisplayMode.Text; }
+            set
+            {
+                comboRX2DisplayMode.Text = value;
+                UpdateButtonBarButtons();
+            }
         }
 
         //private bool auto_mute = false;
@@ -27203,6 +27244,17 @@ namespace Thetis
             }
         }
 
+        // G8NJJ
+        public String CurrentMeterRXModeText
+        {
+            get { return comboMeterRXMode.Text; }
+            set
+            {
+                comboMeterRXMode.Text = value;
+                UpdateButtonBarButtons();
+            }
+        }
+
         private MeterRXMode current_meter_rx_mode = MeterRXMode.SIGNAL_STRENGTH;
         public MeterRXMode CurrentMeterRXMode
         {
@@ -27241,6 +27293,24 @@ namespace Thetis
             }
         }
 
+        // G8NJJ: return the set of strings in the combo box
+        public ComboBox.ObjectCollection MeterRXModeItems
+        {
+            get { return comboMeterRXMode.Items; }
+        }
+
+        // G8NJJ
+        public String RX2MeterModeText
+        {
+            get { return comboRX2MeterMode.Text; }
+            set
+            {
+                comboRX2MeterMode.Text = value;
+                UpdateButtonBarButtons();
+            }
+        }
+
+
         private MeterRXMode rx2_meter_mode = MeterRXMode.SIGNAL_STRENGTH;
         public MeterRXMode RX2MeterMode
         {
@@ -27276,6 +27346,24 @@ namespace Thetis
                 if (text == "") return;
 
                 comboRX2MeterMode.Text = text;
+            }
+        }
+
+        // G8NJJ: return the set of strings in the combo box
+
+        public ComboBox.ObjectCollection RX2MeterModeItems
+        {
+            get { return comboRX2MeterMode.Items; }
+        }
+
+        // G8NJJ
+        public String CurrentMeterTXModeText
+        {
+            get { return comboMeterTXMode.Text; }
+            set
+            {
+                comboMeterTXMode.Text = value;
+                UpdateButtonBarButtons();
             }
         }
 
@@ -27336,6 +27424,15 @@ namespace Thetis
                 comboMeterTXMode.Text = text;
             }
         }
+
+        // G8NJJ: return the set of strings in the combo box
+
+        public ComboBox.ObjectCollection MeterTXModeItems
+        {
+            get { return comboMeterTXMode.Items; }
+        }
+
+
 
         private int cw_pitch = 600;
         public int CWPitch
@@ -52768,10 +52865,18 @@ namespace Thetis
             panelDSP.Show();
             panelDisplay2.Show();
             panelMultiRX.Show();
+            // G8NJJ
+            panelModeSpecificCW.Parent = this;
+            panelModeSpecificPhone.Parent = this;
+            panelModeSpecificDigital.Parent = this;
+            panelModeSpecificFM.Parent = this;
+
             panelModeSpecificCW.Show();
             panelModeSpecificPhone.Show();
             panelModeSpecificDigital.Show();
             panelModeSpecificFM.Show();
+            SelectModeDependentPanel();
+
             panelFilter.Show();
             panelMode.Show();
             panelBandHF.Show();
@@ -52807,6 +52912,7 @@ namespace Thetis
             udRX1StepAttData.Show();
             comboAGC.Show();
             comboMeterRXMode.Show();
+            comboMeterTXMode.Show();                    // added G8NJJ - I was hiding this for Andromeda but not bringing it back
             txtMultiText.Show();
 
             //RX2 Controls
@@ -56388,7 +56494,56 @@ namespace Thetis
             ExecuteButtonBarPress(8);
         }
 
+//
+// handle a button press from a front panel physical button
+// button = 1-99
+// state true if pressed
+//
+        public void HandleFrontPanelButtonPress(int Button, bool State)
+        {
+            switch(Button)
+            {
+                case 21:                    // softkey 1
+                    if (State == true)
+                        btnAndrBar1_Click(null, null);
+                    break;
 
+                case 22:                    // softkey 1
+                    if (State == true)
+                        btnAndrBar2_Click(null, null);
+                    break;
+
+                case 23:                    // softkey 1
+                    if (State == true)
+                        btnAndrBar3_Click(null, null);
+                    break;
+
+                case 24:                    // softkey 1
+                    if (State == true)
+                        btnAndrBar4_Click(null, null);
+                    break;
+
+                case 25:                    // softkey 1
+                    if (State == true)
+                        btnAndrBar5_Click(null, null);
+                    break;
+
+                case 26:                    // softkey 1
+                    if (State == true)
+                        btnAndrBar6_Click(null, null);
+                    break;
+
+                case 27:                    // softkey 1
+                    if (State == true)
+                        btnAndrBar7_Click(null, null);
+                    break;
+
+                case 28:                    // softkey 1
+                    if (State == true)
+                        btnAndrBar8_Click(null, null);
+                    break;
+            }
+        }
 
         //
         // G8NJJ: define the button bar menu
@@ -56418,7 +56573,7 @@ namespace Thetis
             ButtonBarMenu[11] = new SButtonBarEntry(EButtonBarActions.eBBSliderForm, "Gain Form", 0, 0);
             ButtonBarMenu[12] = new SButtonBarEntry(EButtonBarActions.eBBFilterForm, "Filter Form", 0, 0);
             ButtonBarMenu[13] = new SButtonBarEntry(EButtonBarActions.eBBMuteOnOff, "Mute", 0, 0);
-            ButtonBarMenu[14] = new SButtonBarEntry(EButtonBarActions.eBBNone, "----", 0, 0);
+            ButtonBarMenu[14] = new SButtonBarEntry(EButtonBarActions.eBBRXAntenna, "RX Ant", 0, 0);
             ButtonBarMenu[15] = new SButtonBarEntry(EButtonBarActions.eBBNone, "----", 0, 0);
 
             // menu 3 - VFO
@@ -56427,8 +56582,8 @@ namespace Thetis
             ButtonBarMenu[18] = new SButtonBarEntry(EButtonBarActions.eBBModeForm, "Mode Form", 0, 0);
             ButtonBarMenu[19] = new SButtonBarEntry(EButtonBarActions.eBBBandstackForm, "Bandstack Form", 0, 0);
             ButtonBarMenu[20] = new SButtonBarEntry(EButtonBarActions.eBBVFOSwap, "Swap A <--> B", 0, 0);
-            ButtonBarMenu[21] = new SButtonBarEntry(EButtonBarActions.eBBVFOSettingForm, "VFO Settings Form", 0, 0);
-            ButtonBarMenu[22] = new SButtonBarEntry(EButtonBarActions.eBBNone, "----", 0, 0);
+            ButtonBarMenu[21] = new SButtonBarEntry(EButtonBarActions.eBBVFOSettingForm, "Tune step Form", 0, 0);
+            ButtonBarMenu[22] = new SButtonBarEntry(EButtonBarActions.eBBBandstack, "Bandstack", 0, 0);
             ButtonBarMenu[23] = new SButtonBarEntry(EButtonBarActions.eBBNone, "----", 0, 0);
 
             // menu 4 - TX
@@ -56453,9 +56608,9 @@ namespace Thetis
 
             // menu 6 - audio
             ButtonBarMenu[40] = new SButtonBarEntry(EButtonBarActions.eBBMenu, "Audio Menu", 0, 7);
-            ButtonBarMenu[41] = new SButtonBarEntry(EButtonBarActions.eBBRecordAudio, "record audio", 0, 0);
-            ButtonBarMenu[42] = new SButtonBarEntry(EButtonBarActions.eBBTXAudio, "TX Audio 1", 0, 0);
-            ButtonBarMenu[43] = new SButtonBarEntry(EButtonBarActions.eBBTXAudio, "TX Audio 2", 0, 1);
+            ButtonBarMenu[41] = new SButtonBarEntry(EButtonBarActions.eBBRecordAudio, "Quick Record Audio", 0, 0);
+            ButtonBarMenu[42] = new SButtonBarEntry(EButtonBarActions.eBBPlayAudio, "Quick Play Audio", 0, 0);
+            ButtonBarMenu[43] = new SButtonBarEntry(EButtonBarActions.eBBNone, "----", 0, 0);
             ButtonBarMenu[44] = new SButtonBarEntry(EButtonBarActions.eBBAudioForm, "Audio rec/play Form", 0, 0);
             ButtonBarMenu[45] = new SButtonBarEntry(EButtonBarActions.eBBVAC1OnOff, "VAC1", 0, 0);
             ButtonBarMenu[46] = new SButtonBarEntry(EButtonBarActions.eBBVAC2OnOff, "VAC2", 0, 0);
@@ -56473,8 +56628,8 @@ namespace Thetis
 
             // menu 8 - extended / test
             ButtonBarMenu[56] = new SButtonBarEntry(EButtonBarActions.eBBMenu, "Test Menu", 0, 1);
-            ButtonBarMenu[57] = new SButtonBarEntry(EButtonBarActions.eBBModePlus, "Mode Up", 0, 0);
-            ButtonBarMenu[58] = new SButtonBarEntry(EButtonBarActions.eBBModeMinus, "mode down", 0, 0);
+            ButtonBarMenu[57] = new SButtonBarEntry(EButtonBarActions.eBBQuickSave, "Quick Save", 0, 0);
+            ButtonBarMenu[58] = new SButtonBarEntry(EButtonBarActions.eBBQuickRestore, "Quick Restore", 0, 0);
             ButtonBarMenu[59] = new SButtonBarEntry(EButtonBarActions.eBBFilterPlus, "filter up", 0, 0);
             ButtonBarMenu[60] = new SButtonBarEntry(EButtonBarActions.eBBFilterMinus, "filter down", 0, 0);
             ButtonBarMenu[61] = new SButtonBarEntry(EButtonBarActions.eBBBandPlus, "Band up", 0, 0);
@@ -56719,14 +56874,14 @@ namespace Thetis
                     // Band enum for HF covers b160m to b6m
                     case EButtonBarActions.eBBBandPlus:                // step up band
                         if (UseRX1)
-                            { if (RX1Band != Band.B6M) RX1Band = (Band)((int)RX1Band + 1); }
+                            { if (RX1Band != Band.B6M) SetCATBand((Band)((int)RX1Band + 1)); }
                         else
                             { if (RX2Band != Band.B6M) RX2Band = (Band)((int)RX2Band + 1); }
                         break;
 
                     case EButtonBarActions.eBBBandMinus:               // step down band
                         if (UseRX1)
-                        { if (RX1Band != Band.B160M) RX1Band = (Band)((int)RX1Band - 1); }
+                        { if (RX1Band != Band.B160M) SetCATBand((Band)((int)RX1Band - 1)); }
                         else
                         { if (RX2Band != Band.B160M) RX2Band = (Band)((int)RX2Band - 1); }
                         break;
@@ -56955,11 +57110,11 @@ namespace Thetis
                         break;
 
                     case EButtonBarActions.eBBRecordAudio:             // record audio
-                        // not yet written
+                        ckQuickRec.Checked = !ckQuickRec.Checked;
                         break;
 
-                    case EButtonBarActions.eBBTXAudio:                 // play audio: parameter identifies which audio
-                        // not yet written
+                    case EButtonBarActions.eBBPlayAudio:                 // play audio: parameter identifies which audio
+                        ckQuickPlay.Checked = !ckQuickPlay.Checked;
                         break;
 
                     case EButtonBarActions.eBBModeForm:
@@ -56984,37 +57139,57 @@ namespace Thetis
                         break;
 
                     case EButtonBarActions.eBBVFOSettingForm:          // show VFO Settings form
-                        // not yet written
+                        if (VFOSettingsForm == null) VFOSettingsForm = new VFOSettingsPopup(this);
+                        VFOSettingsForm.Show();
                         break;
 
                     case EButtonBarActions.eBBBandstackForm:           // show band stacks form
-                        // not yet written
+                        if (StackForm == null || StackForm.IsDisposed) StackForm = new StackControl(this);
+                        StackForm.Show();
+                        StackForm.Focus();
+                        StackForm.WindowState = FormWindowState.Normal; // ke9ns add
                         break;
 
+                    case EButtonBarActions.eBBBandstack:
+                        SetCATBand(RX1Band);
+                        break;
+
+                    case EButtonBarActions.eBBQuickSave:               // save to "quick memory"
+                        btnMemoryQuickSave_Click(null, null);
+                        break;
+
+                    case EButtonBarActions.eBBQuickRestore:            // restore from "quick memory"
+                        btnMemoryQuickRestore_Click(null, null);
+                        break;
+
+                    case EButtonBarActions.eBBRXAntenna:               // RX antenna button equivalent
+                        chkRxAnt.Checked = !chkRxAnt.Checked;
+                        break;
+
+                        
                     case EButtonBarActions.eBBDiversityForm:           // show the diversity form
                         eSCToolStripMenuItem_Click(null, null);
                         break;
 
                     case EButtonBarActions.eBBModeSettingsForm:        // show the "mode dependent settings" form
-                        if (panelModeSpecificCW.Visible == false)
-                        {
-                            panelModeSpecificCW.Show();
-                            panelModeSpecificPhone.Show();
-                            panelModeSpecificDigital.Show();
-                            panelModeSpecificFM.Show();
+                        if (modeDependentSettingsForm == null) modeDependentSettingsForm = new ModeDependentSettingsForm(this);
+                        modeDependentSettingsForm.Show();
 
-                            panelModeSpecificCW.Location = new Point(600, 350);
-                            panelModeSpecificPhone.Location = new Point(600, 350);
-                            panelModeSpecificDigital.Location = new Point(600, 350);
-                            panelModeSpecificFM.Location = new Point(600, 350);
-                        }
-                        else
-                        {
-                            panelModeSpecificCW.Hide();
-                            panelModeSpecificPhone.Hide();
-                            panelModeSpecificDigital.Hide();
-                            panelModeSpecificFM.Hide();
-                        }
+                        panelModeSpecificCW.Show();
+                        panelModeSpecificPhone.Show();
+                        panelModeSpecificDigital.Show();
+                        panelModeSpecificFM.Show();
+                        
+                        panelModeSpecificCW.Location = new Point(0, 0);
+                        panelModeSpecificPhone.Location = new Point(0, 0);
+                        panelModeSpecificDigital.Location = new Point(0, 0);
+                        panelModeSpecificFM.Location = new Point(0, 0);
+
+                        panelModeSpecificCW.Parent = modeDependentSettingsForm;
+                        panelModeSpecificPhone.Parent = modeDependentSettingsForm;
+                        panelModeSpecificDigital.Parent = modeDependentSettingsForm;
+                        panelModeSpecificFM.Parent = modeDependentSettingsForm;
+                        SelectModeDependentPanel();
                         break;
 
                     case EButtonBarActions.eBBPuresignalForm:          // show the Puresignal form
@@ -57026,7 +57201,8 @@ namespace Thetis
                         break;
 
                     case EButtonBarActions.eBBDisplaySettingsForm:    // show the display settings form
-                        // not yet written
+                        if (displaySettingsForm == null) displaySettingsForm = new DisplaySettingsForm(this);
+                        displaySettingsForm.Show();
                         break;
 
                     case EButtonBarActions.eBBAudioForm:               // open the audio record play form
@@ -57041,6 +57217,41 @@ namespace Thetis
                 UpdateButtonBarButtons();                               // re-check textx
             }
         }
+
+
+        //
+        // bring the right mode dependent panel to the front
+        //
+        private void SelectModeDependentPanel()
+        {
+            switch (RX1DSPMode)
+            {
+                case DSPMode.LSB:
+                case DSPMode.USB:
+                case DSPMode.DSB:
+                case DSPMode.AM:
+                case DSPMode.SAM:
+                case DSPMode.SPEC:
+                    panelModeSpecificPhone.BringToFront();
+                    break;
+
+                case DSPMode.CWL:
+                case DSPMode.CWU:
+                    panelModeSpecificCW.BringToFront();
+                    break;
+
+                case DSPMode.FM:
+                    panelModeSpecificFM.BringToFront();
+                    break;
+
+                case DSPMode.DIGU:
+                case DSPMode.DIGL:
+                case DSPMode.DRM:
+                    panelModeSpecificDigital.BringToFront();
+                    break;
+            }
+        }
+
 
 
         //
@@ -57149,6 +57360,21 @@ namespace Thetis
 
                 case EButtonBarActions.eBBDisplayDSPPeak:
                     if (UseRX1) NewString = "RX1 Display PEAK"; else NewString = "RX2 Display PEAK";
+                    break;
+
+                case EButtonBarActions.eBBBandstack:
+                    NewString = DefaultString + "  " +  regBox1.Text + "/" + regBox.Text;
+                    break;
+
+                case EButtonBarActions.eBBQuickRestore:               // restore from "quick memory"
+                    NewString = DefaultString + " " + txtMemoryQuick.Text;
+                    break;
+
+                case EButtonBarActions.eBBRXAntenna:               // RX antenna toggle
+                    if(Alex.trx_ant_not_same)
+                        NewString = chkRxAnt.Text;
+                    else
+                        NewString = DefaultString + " (disabled)";
                     break;
 
                 default:
@@ -57343,6 +57569,19 @@ namespace Thetis
                     if (UseRX1) State = chkDisplayPeak.Checked; else State = chkRX2DisplayPeak.Checked;
                     break;
 
+                case EButtonBarActions.eBBRXAntenna:                // toggle RX Ant button 
+                    State = chkRxAnt.Checked;
+                    break;
+
+                case EButtonBarActions.eBBRecordAudio:             // record audio
+                    State = ckQuickRec.Checked;
+                    break;
+
+                case EButtonBarActions.eBBPlayAudio:                 // play audio: parameter identifies which audio
+                    State = ckQuickPlay.Checked;
+                    break;
+
+
                 default:                        // not highlighted unless specific code added!
                     State = false;
                     break;
@@ -57361,64 +57600,67 @@ namespace Thetis
             String Text;
             Color Colour;
 
-            buttonNumber = currentButtonBarMenu * 8;            // point to 1st button
-            // for each button: get its text; give it an opportunity to edit; and set highlight
+            if (this.showAndromedaButtonBar)
+            {
+                buttonNumber = currentButtonBarMenu * 8;            // point to 1st button
+                                                                    // for each button: get its text; give it an opportunity to edit; and set highlight
 
-            Action = ButtonBarMenu[buttonNumber].Action;
-            if (ButtonBarMenu[buttonNumber].RXOverride == 0) UseRX1 = show_rx1; else if (ButtonBarMenu[buttonNumber].RXOverride == 1) UseRX1 = true; else UseRX1 = false;
-            Text = ButtonBarMenu[buttonNumber++].ButtonText;
-            btnAndrBar1.Text = UpdateButtonBarLabel(Action, Text, UseRX1);
-            if (CheckButtonHighlight(Action, UseRX1)) Colour = SystemColors.GradientActiveCaption; else Colour = SystemColors.ButtonFace;
-            btnAndrBar1.BackColor = Colour;
+                Action = ButtonBarMenu[buttonNumber].Action;
+                if (ButtonBarMenu[buttonNumber].RXOverride == 0) UseRX1 = show_rx1; else if (ButtonBarMenu[buttonNumber].RXOverride == 1) UseRX1 = true; else UseRX1 = false;
+                Text = ButtonBarMenu[buttonNumber++].ButtonText;
+                btnAndrBar1.Text = UpdateButtonBarLabel(Action, Text, UseRX1);
+                if (CheckButtonHighlight(Action, UseRX1)) Colour = SystemColors.GradientActiveCaption; else Colour = SystemColors.ButtonFace;
+                btnAndrBar1.BackColor = Colour;
 
-            Action = ButtonBarMenu[buttonNumber].Action;
-            if (ButtonBarMenu[buttonNumber].RXOverride == 0) UseRX1 = show_rx1; else if (ButtonBarMenu[buttonNumber].RXOverride == 1) UseRX1 = true; else UseRX1 = false;
-            Text = ButtonBarMenu[buttonNumber++].ButtonText;
-            btnAndrBar2.Text = UpdateButtonBarLabel(Action, Text, UseRX1);
-            if (CheckButtonHighlight(Action, UseRX1)) Colour = SystemColors.GradientActiveCaption; else Colour = SystemColors.ButtonFace;
-            btnAndrBar2.BackColor = Colour;
+                Action = ButtonBarMenu[buttonNumber].Action;
+                if (ButtonBarMenu[buttonNumber].RXOverride == 0) UseRX1 = show_rx1; else if (ButtonBarMenu[buttonNumber].RXOverride == 1) UseRX1 = true; else UseRX1 = false;
+                Text = ButtonBarMenu[buttonNumber++].ButtonText;
+                btnAndrBar2.Text = UpdateButtonBarLabel(Action, Text, UseRX1);
+                if (CheckButtonHighlight(Action, UseRX1)) Colour = SystemColors.GradientActiveCaption; else Colour = SystemColors.ButtonFace;
+                btnAndrBar2.BackColor = Colour;
 
-            Action = ButtonBarMenu[buttonNumber].Action;
-            if (ButtonBarMenu[buttonNumber].RXOverride == 0) UseRX1 = show_rx1; else if (ButtonBarMenu[buttonNumber].RXOverride == 1) UseRX1 = true; else UseRX1 = false;
-            Text = ButtonBarMenu[buttonNumber++].ButtonText;
-            btnAndrBar3.Text = UpdateButtonBarLabel(Action, Text, UseRX1);
-            if (CheckButtonHighlight(Action, UseRX1)) Colour = SystemColors.GradientActiveCaption; else Colour = SystemColors.ButtonFace;
-            btnAndrBar3.BackColor = Colour;
+                Action = ButtonBarMenu[buttonNumber].Action;
+                if (ButtonBarMenu[buttonNumber].RXOverride == 0) UseRX1 = show_rx1; else if (ButtonBarMenu[buttonNumber].RXOverride == 1) UseRX1 = true; else UseRX1 = false;
+                Text = ButtonBarMenu[buttonNumber++].ButtonText;
+                btnAndrBar3.Text = UpdateButtonBarLabel(Action, Text, UseRX1);
+                if (CheckButtonHighlight(Action, UseRX1)) Colour = SystemColors.GradientActiveCaption; else Colour = SystemColors.ButtonFace;
+                btnAndrBar3.BackColor = Colour;
 
-            Action = ButtonBarMenu[buttonNumber].Action;
-            if (ButtonBarMenu[buttonNumber].RXOverride == 0) UseRX1 = show_rx1; else if (ButtonBarMenu[buttonNumber].RXOverride == 1) UseRX1 = true; else UseRX1 = false;
-            Text = ButtonBarMenu[buttonNumber++].ButtonText;
-            btnAndrBar4.Text = UpdateButtonBarLabel(Action, Text, UseRX1);
-            if (CheckButtonHighlight(Action, UseRX1)) Colour = SystemColors.GradientActiveCaption; else Colour = SystemColors.ButtonFace;
-            btnAndrBar4.BackColor = Colour;
+                Action = ButtonBarMenu[buttonNumber].Action;
+                if (ButtonBarMenu[buttonNumber].RXOverride == 0) UseRX1 = show_rx1; else if (ButtonBarMenu[buttonNumber].RXOverride == 1) UseRX1 = true; else UseRX1 = false;
+                Text = ButtonBarMenu[buttonNumber++].ButtonText;
+                btnAndrBar4.Text = UpdateButtonBarLabel(Action, Text, UseRX1);
+                if (CheckButtonHighlight(Action, UseRX1)) Colour = SystemColors.GradientActiveCaption; else Colour = SystemColors.ButtonFace;
+                btnAndrBar4.BackColor = Colour;
 
-            Action = ButtonBarMenu[buttonNumber].Action;
-            if (ButtonBarMenu[buttonNumber].RXOverride == 0) UseRX1 = show_rx1; else if (ButtonBarMenu[buttonNumber].RXOverride == 1) UseRX1 = true; else UseRX1 = false;
-            Text = ButtonBarMenu[buttonNumber++].ButtonText;
-            btnAndrBar5.Text = UpdateButtonBarLabel(Action, Text, UseRX1);
-            if (CheckButtonHighlight(Action, UseRX1)) Colour = SystemColors.GradientActiveCaption; else Colour = SystemColors.ButtonFace;
-            btnAndrBar5.BackColor = Colour;
+                Action = ButtonBarMenu[buttonNumber].Action;
+                if (ButtonBarMenu[buttonNumber].RXOverride == 0) UseRX1 = show_rx1; else if (ButtonBarMenu[buttonNumber].RXOverride == 1) UseRX1 = true; else UseRX1 = false;
+                Text = ButtonBarMenu[buttonNumber++].ButtonText;
+                btnAndrBar5.Text = UpdateButtonBarLabel(Action, Text, UseRX1);
+                if (CheckButtonHighlight(Action, UseRX1)) Colour = SystemColors.GradientActiveCaption; else Colour = SystemColors.ButtonFace;
+                btnAndrBar5.BackColor = Colour;
 
-            Action = ButtonBarMenu[buttonNumber].Action;
-            if (ButtonBarMenu[buttonNumber].RXOverride == 0) UseRX1 = show_rx1; else if (ButtonBarMenu[buttonNumber].RXOverride == 1) UseRX1 = true; else UseRX1 = false;
-            Text = ButtonBarMenu[buttonNumber++].ButtonText;
-            btnAndrBar6.Text = UpdateButtonBarLabel(Action, Text, UseRX1);
-            if (CheckButtonHighlight(Action, UseRX1)) Colour = SystemColors.GradientActiveCaption; else Colour = SystemColors.ButtonFace;
-            btnAndrBar6.BackColor = Colour;
+                Action = ButtonBarMenu[buttonNumber].Action;
+                if (ButtonBarMenu[buttonNumber].RXOverride == 0) UseRX1 = show_rx1; else if (ButtonBarMenu[buttonNumber].RXOverride == 1) UseRX1 = true; else UseRX1 = false;
+                Text = ButtonBarMenu[buttonNumber++].ButtonText;
+                btnAndrBar6.Text = UpdateButtonBarLabel(Action, Text, UseRX1);
+                if (CheckButtonHighlight(Action, UseRX1)) Colour = SystemColors.GradientActiveCaption; else Colour = SystemColors.ButtonFace;
+                btnAndrBar6.BackColor = Colour;
 
-            Action = ButtonBarMenu[buttonNumber].Action;
-            if (ButtonBarMenu[buttonNumber].RXOverride == 0) UseRX1 = show_rx1; else if (ButtonBarMenu[buttonNumber].RXOverride == 1) UseRX1 = true; else UseRX1 = false;
-            Text = ButtonBarMenu[buttonNumber++].ButtonText;
-            btnAndrBar7.Text = UpdateButtonBarLabel(Action, Text, UseRX1);
-            if (CheckButtonHighlight(Action, UseRX1)) Colour = SystemColors.GradientActiveCaption; else Colour = SystemColors.ButtonFace;
-            btnAndrBar7.BackColor = Colour;
+                Action = ButtonBarMenu[buttonNumber].Action;
+                if (ButtonBarMenu[buttonNumber].RXOverride == 0) UseRX1 = show_rx1; else if (ButtonBarMenu[buttonNumber].RXOverride == 1) UseRX1 = true; else UseRX1 = false;
+                Text = ButtonBarMenu[buttonNumber++].ButtonText;
+                btnAndrBar7.Text = UpdateButtonBarLabel(Action, Text, UseRX1);
+                if (CheckButtonHighlight(Action, UseRX1)) Colour = SystemColors.GradientActiveCaption; else Colour = SystemColors.ButtonFace;
+                btnAndrBar7.BackColor = Colour;
 
-            Action = ButtonBarMenu[buttonNumber].Action;
-            if (ButtonBarMenu[buttonNumber].RXOverride == 0) UseRX1 = show_rx1; else if (ButtonBarMenu[buttonNumber].RXOverride == 1) UseRX1 = true; else UseRX1 = false;
-            Text = ButtonBarMenu[buttonNumber++].ButtonText;
-            btnAndrBar8.Text = UpdateButtonBarLabel(Action, Text, UseRX1);
-            if (CheckButtonHighlight(Action, UseRX1)) Colour = SystemColors.GradientActiveCaption; else Colour = SystemColors.ButtonFace;
-            btnAndrBar8.BackColor = Colour;
+                Action = ButtonBarMenu[buttonNumber].Action;
+                if (ButtonBarMenu[buttonNumber].RXOverride == 0) UseRX1 = show_rx1; else if (ButtonBarMenu[buttonNumber].RXOverride == 1) UseRX1 = true; else UseRX1 = false;
+                Text = ButtonBarMenu[buttonNumber++].ButtonText;
+                btnAndrBar8.Text = UpdateButtonBarLabel(Action, Text, UseRX1);
+                if (CheckButtonHighlight(Action, UseRX1)) Colour = SystemColors.GradientActiveCaption; else Colour = SystemColors.ButtonFace;
+                btnAndrBar8.BackColor = Colour;
+            }
         }
 
 

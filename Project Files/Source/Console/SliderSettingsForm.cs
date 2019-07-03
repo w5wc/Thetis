@@ -187,6 +187,7 @@ namespace Thetis
             // lblMasterAF
             // 
             this.lblMasterAF.AutoSize = true;
+            this.lblMasterAF.ForeColor = System.Drawing.SystemColors.ControlLight;
             this.lblMasterAF.Image = null;
             this.lblMasterAF.Location = new System.Drawing.Point(112, 299);
             this.lblMasterAF.Name = "lblMasterAF";
@@ -197,6 +198,7 @@ namespace Thetis
             // lblDrive
             // 
             this.lblDrive.AutoSize = true;
+            this.lblDrive.ForeColor = System.Drawing.SystemColors.ControlLight;
             this.lblDrive.Image = null;
             this.lblDrive.Location = new System.Drawing.Point(368, 299);
             this.lblDrive.Name = "lblDrive";
@@ -211,6 +213,7 @@ namespace Thetis
             this.grpSubRX.Controls.Add(this.labelTS4);
             this.grpSubRX.Controls.Add(this.tbSubRXPan);
             this.grpSubRX.Controls.Add(this.tbSubRXAF);
+            this.grpSubRX.ForeColor = System.Drawing.SystemColors.ControlLight;
             this.grpSubRX.Location = new System.Drawing.Point(478, 9);
             this.grpSubRX.Name = "grpSubRX";
             this.grpSubRX.Size = new System.Drawing.Size(155, 249);
@@ -221,6 +224,7 @@ namespace Thetis
             // chkSubRX
             // 
             this.chkSubRX.Appearance = System.Windows.Forms.Appearance.Button;
+            this.chkSubRX.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
             this.chkSubRX.Image = null;
             this.chkSubRX.Location = new System.Drawing.Point(30, 164);
             this.chkSubRX.Name = "chkSubRX";
@@ -293,6 +297,7 @@ namespace Thetis
             this.grpRX2.Controls.Add(this.tbRX2Sql);
             this.grpRX2.Controls.Add(this.tbRX2RF);
             this.grpRX2.Controls.Add(this.tbRX2AF);
+            this.grpRX2.ForeColor = System.Drawing.SystemColors.ControlLight;
             this.grpRX2.Location = new System.Drawing.Point(248, 9);
             this.grpRX2.Name = "grpRX2";
             this.grpRX2.Size = new System.Drawing.Size(218, 249);
@@ -333,6 +338,7 @@ namespace Thetis
             // chkRX2Mute
             // 
             this.chkRX2Mute.Appearance = System.Windows.Forms.Appearance.Button;
+            this.chkRX2Mute.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
             this.chkRX2Mute.Image = null;
             this.chkRX2Mute.Location = new System.Drawing.Point(6, 164);
             this.chkRX2Mute.Name = "chkRX2Mute";
@@ -376,6 +382,7 @@ namespace Thetis
             // chkRX2Sql
             // 
             this.chkRX2Sql.Appearance = System.Windows.Forms.Appearance.Button;
+            this.chkRX2Sql.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
             this.chkRX2Sql.Image = null;
             this.chkRX2Sql.Location = new System.Drawing.Point(111, 164);
             this.chkRX2Sql.Name = "chkRX2Sql";
@@ -450,6 +457,7 @@ namespace Thetis
             this.grpRX1.Controls.Add(this.tbRX1Sql);
             this.grpRX1.Controls.Add(this.tbRX1RF);
             this.grpRX1.Controls.Add(this.tbRX1AF);
+            this.grpRX1.ForeColor = System.Drawing.SystemColors.ControlLight;
             this.grpRX1.Location = new System.Drawing.Point(9, 9);
             this.grpRX1.Name = "grpRX1";
             this.grpRX1.Size = new System.Drawing.Size(226, 249);
@@ -490,6 +498,7 @@ namespace Thetis
             // chkRX1Mute
             // 
             this.chkRX1Mute.Appearance = System.Windows.Forms.Appearance.Button;
+            this.chkRX1Mute.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
             this.chkRX1Mute.Image = null;
             this.chkRX1Mute.Location = new System.Drawing.Point(6, 164);
             this.chkRX1Mute.Name = "chkRX1Mute";
@@ -533,6 +542,7 @@ namespace Thetis
             // chkRX1Sql
             // 
             this.chkRX1Sql.Appearance = System.Windows.Forms.Appearance.Button;
+            this.chkRX1Sql.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
             this.chkRX1Sql.Image = null;
             this.chkRX1Sql.Location = new System.Drawing.Point(110, 164);
             this.chkRX1Sql.Name = "chkRX1Sql";
@@ -588,7 +598,7 @@ namespace Thetis
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.SystemColors.Control;
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(80)))), ((int)(((byte)(80)))));
             this.ClientSize = new System.Drawing.Size(645, 313);
             this.Controls.Add(this.btnClose);
             this.Controls.Add(this.lblMasterAF);

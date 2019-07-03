@@ -226,6 +226,9 @@
     </Compile>
     <Compile Include="Channel.cs" />
     <Compile Include="cmaster.cs" />
+    <Compile Include="displaysettingsform.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="FilterButtonsPopup.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -381,6 +384,9 @@
     <Compile Include="ModeButtonsPopup.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="ModeDependentSettingsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="notch.cs" />
     <Compile Include="notchlist.cs" />
     <Compile Include="HPSDR\Penny.cs" />
@@ -457,6 +463,9 @@
     <Compile Include="ThreadedBindingList.cs" />
     <Compile Include="titlebar.cs" />
     <Compile Include="TuneStep.cs" />
+    <Compile Include="vfosettingspopup.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="wave.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -481,6 +490,9 @@
     <Compile Include="xvtr.cs">
       <SubType>Form</SubType>
     </Compile>
+    <EmbeddedResource Include="displaysettingsform.resx">
+      <DependentUpon>displaysettingsform.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FilterButtonsPopup.resx">
       <DependentUpon>FilterButtonsPopup.cs</DependentUpon>
     </EmbeddedResource>
@@ -490,6 +502,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ModeButtonsPopup.resx">
       <DependentUpon>ModeButtonsPopup.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ModeDependentSettingsForm.resx">
+      <DependentUpon>ModeDependentSettingsForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\picD1orig.png" />
     <Content Include="Resources\picD2.png" />
@@ -603,6 +618,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="KE9N\spot_options.resx">
       <DependentUpon>spot_options.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="vfosettingspopup.resx">
+      <DependentUpon>vfosettingspopup.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="wave.resx">
       <DependentUpon>wave.cs</DependentUpon>

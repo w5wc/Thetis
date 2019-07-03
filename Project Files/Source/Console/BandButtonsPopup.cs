@@ -401,11 +401,13 @@ namespace Thetis
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(80)))), ((int)(((byte)(80)))));
             this.ClientSize = new System.Drawing.Size(466, 326);
             this.Controls.Add(this.groupBoxTS1);
             this.Controls.Add(this.btnClose);
             this.Name = "BandButtonsPopup";
             this.Text = "Select Operating Band";
+            this.TopMost = true;
             this.Activated += new System.EventHandler(this.BandButtonsPopup_Activated);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.BandButtonsPopup_FormClosing);
             this.groupBoxTS1.ResumeLayout(false);

@@ -3985,10 +3985,27 @@ namespace Thetis
                 return parser.Error1;
         }
 
+        //Andromeda front panel pushbutton press
+        //write only
+        public string ZZZP(string s)
+        {
+            if (s.Length == parser.nSet)
+            {
+                int Button = Convert.ToInt32(s);
+                bool State = false;
+                if ((Button % 10) != 0)
+                    State = true;
+                Button = Button / 10;           // 1-99
+                console.HandleFrontPanelButtonPress(Button, State);
+                return "";
+            }
+            else
+                return parser.Error1;
+        }
 
 
-		//Sets or reads the Mic gain control
-		public string ZZMG(string s)
+        //Sets or reads the Mic gain control
+        public string ZZMG(string s)
 		{
 			int n=0;
             string sign;
