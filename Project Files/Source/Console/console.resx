@@ -8736,22 +8736,34 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
 </value>
   </data>
   <data name="topControlsToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>153, 22</value>
+    <value>208, 22</value>
   </data>
   <data name="topControlsToolStripMenuItem.Text" xml:space="preserve">
     <value>Top Controls</value>
   </data>
   <data name="bandControlsToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>153, 22</value>
+    <value>208, 22</value>
   </data>
   <data name="bandControlsToolStripMenuItem.Text" xml:space="preserve">
     <value>Band Controls</value>
   </data>
   <data name="modeControlsToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>153, 22</value>
+    <value>208, 22</value>
   </data>
   <data name="modeControlsToolStripMenuItem.Text" xml:space="preserve">
     <value>Mode Controls</value>
+  </data>
+  <data name="andromedaTopControlsToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>208, 22</value>
+  </data>
+  <data name="andromedaTopControlsToolStripMenuItem.Text" xml:space="preserve">
+    <value>Andromeda Top Controls</value>
+  </data>
+  <data name="andromedaButtonBarToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>208, 22</value>
+  </data>
+  <data name="andromedaButtonBarToolStripMenuItem.Text" xml:space="preserve">
+    <value>Andromeda Button Bar</value>
   </data>
   <data name="displayControlsToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
     <value>105, 20</value>
@@ -17047,6 +17059,18 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
     <value>modeControlsToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;modeControlsToolStripMenuItem.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;andromedaTopControlsToolStripMenuItem.Name" xml:space="preserve">
+    <value>andromedaTopControlsToolStripMenuItem</value>
+  </data>
+  <data name="&gt;&gt;andromedaTopControlsToolStripMenuItem.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;andromedaButtonBarToolStripMenuItem.Name" xml:space="preserve">
+    <value>andromedaButtonBarToolStripMenuItem</value>
+  </data>
+  <data name="&gt;&gt;andromedaButtonBarToolStripMenuItem.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;dSPToolStripMenuItem.Name" xml:space="preserve">

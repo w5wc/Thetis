@@ -48668,12 +48668,12 @@ namespace Thetis
                 //btnAndrBar7.Hide();
                 //btnAndrBar8.Hide();
                 panelButtonBar.Hide();
-                lblRX2LockLabel.Hide();
-                lblRX2CtunLabel.Hide();
+                panelMeterLabels.Hide();
                 panelVFOALabels.Hide();
+                lblModeBigLabel.Hide();
                 panelVFOBLabels.Hide();
-                lblSNBLabel.Hide();
-                lblVFOSyncLabel.Hide();
+                lblRX2ModeBigLabel.Hide();
+                panelVFOLabels.Hide();
             }
 
         }
@@ -52839,12 +52839,12 @@ namespace Thetis
             //btnAndrBar7.Hide();
             //btnAndrBar8.Hide();
             panelButtonBar.Hide();
-            lblRX2LockLabel.Hide();
-            lblRX2CtunLabel.Hide();
+            panelMeterLabels.Hide();
             panelVFOALabels.Hide();
+            lblModeBigLabel.Hide();
             panelVFOBLabels.Hide();
-            lblSNBLabel.Hide();
-            lblVFOSyncLabel.Hide();
+            lblRX2ModeBigLabel.Hide();
+            panelVFOLabels.Hide();
 
             chkMUT.Show();
             radRX1Show.Hide();
@@ -54736,6 +54736,16 @@ namespace Thetis
         private void mnuShowModeControls_Click(object sender, EventArgs e)
         {
             SetupForm.chkShowModeControls.Checked = !SetupForm.chkShowModeControls.Checked;
+        }
+
+        private void AndromedaTopControlsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SetupForm.chkShowAndromedaTop.Checked = !SetupForm.chkShowAndromedaTop.Checked;
+        }
+
+        private void AndromedaButtonBarToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SetupForm.chkShowAndromedaBar.Checked = !SetupForm.chkShowAndromedaBar.Checked;
         }
 
         private void radBand_CheckedChanged(object sender, EventArgs e)
@@ -57668,6 +57678,7 @@ namespace Thetis
         {
             UpdateButtonBarButtons();
         }
+
     }
     #endregion
 

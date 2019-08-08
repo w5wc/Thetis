@@ -57972,8 +57972,8 @@
         private LabelTS lblAntiVoxGain;
         private CheckBoxTS chkAntiVoxEnable;
         private CheckBoxTS chkAntiVoxSource;
-        private CheckBoxTS chkShowAndromedaBar;
-        private CheckBoxTS chkShowAndromedaTop;
         private CheckBoxTS chkShowZeroLine;
+        public CheckBoxTS chkShowAndromedaBar;
+        public CheckBoxTS chkShowAndromedaTop;
     }
 }

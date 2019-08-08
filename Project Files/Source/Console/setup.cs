@@ -10009,6 +10009,7 @@ namespace Thetis
             if(chkShowAndromedaTop.Checked == true)
                 chkShowTopControls.Checked = false;
             console.ShowAndromedaTopControls = chkShowAndromedaTop.Checked;
+            console.andromedaTopControlsToolStripMenuItem.Checked = chkShowAndromedaTop.Checked;
             if (console.CollapsedDisplay)                   // force a redraw
                 console.CollapseDisplay();
         }
@@ -10019,6 +10020,7 @@ namespace Thetis
         private void chkShowAndromedaBar_CheckedChanged(object sender, EventArgs e)
         {
             console.ShowAndromedaButtonBar = chkShowAndromedaBar.Checked;
+            console.andromedaButtonBarToolStripMenuItem.Checked = chkShowAndromedaBar.Checked;
             if (chkShowAndromedaBar.Checked == true)
             {
                 chkShowBandControls.Checked = false;

@@ -770,6 +770,8 @@
             this.topControlsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.bandControlsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.modeControlsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.andromedaTopControlsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.andromedaButtonBarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dSPToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.NRToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.NR2ToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
@@ -3905,7 +3907,9 @@
             this.displayControlsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.topControlsToolStripMenuItem,
             this.bandControlsToolStripMenuItem,
-            this.modeControlsToolStripMenuItem});
+            this.modeControlsToolStripMenuItem,
+            this.andromedaTopControlsToolStripMenuItem,
+            this.andromedaButtonBarToolStripMenuItem});
             this.displayControlsToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.displayControlsToolStripMenuItem.Name = "displayControlsToolStripMenuItem";
             resources.ApplyResources(this.displayControlsToolStripMenuItem, "displayControlsToolStripMenuItem");
@@ -3928,6 +3932,18 @@
             this.modeControlsToolStripMenuItem.Name = "modeControlsToolStripMenuItem";
             resources.ApplyResources(this.modeControlsToolStripMenuItem, "modeControlsToolStripMenuItem");
             this.modeControlsToolStripMenuItem.Click += new System.EventHandler(this.mnuShowModeControls_Click);
+            // 
+            // andromedaTopControlsToolStripMenuItem
+            // 
+            this.andromedaTopControlsToolStripMenuItem.Name = "andromedaTopControlsToolStripMenuItem";
+            resources.ApplyResources(this.andromedaTopControlsToolStripMenuItem, "andromedaTopControlsToolStripMenuItem");
+            this.andromedaTopControlsToolStripMenuItem.Click += new System.EventHandler(this.AndromedaTopControlsToolStripMenuItem_Click);
+            // 
+            // andromedaButtonBarToolStripMenuItem
+            // 
+            this.andromedaButtonBarToolStripMenuItem.Name = "andromedaButtonBarToolStripMenuItem";
+            resources.ApplyResources(this.andromedaButtonBarToolStripMenuItem, "andromedaButtonBarToolStripMenuItem");
+            this.andromedaButtonBarToolStripMenuItem.Click += new System.EventHandler(this.AndromedaButtonBarToolStripMenuItem_Click);
             // 
             // dSPToolStripMenuItem
             // 
@@ -6973,5 +6989,7 @@
         private PanelTS panelMeterLabels;
         private LabelTS lblTXMeter;
         private LabelTS lblRXMeter;
+        public ToolStripMenuItem andromedaTopControlsToolStripMenuItem;
+        public ToolStripMenuItem andromedaButtonBarToolStripMenuItem;
     }
 }
