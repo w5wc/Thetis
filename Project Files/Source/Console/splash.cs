@@ -27,6 +27,7 @@
 //=================================================================
 
 using System;
+using System.Runtime.InteropServices;
 using System.Collections;
 using System.Drawing;
 using System.Drawing.Drawing2D;
@@ -38,6 +39,10 @@ namespace Thetis
 {
 	public class Splash : System.Windows.Forms.Form
 	{
+        //MW0LGE
+        [DllImport("user32.dll")]
+        static extern bool InvalidateRect(IntPtr hWnd, IntPtr lpRect, bool bErase);
+
 		#region Variable Declarations
 
 		// Threading
@@ -117,10 +122,11 @@ namespace Thetis
             // 
             // pnlStatus
             // 
-            this.pnlStatus.BackColor = System.Drawing.Color.Transparent;
-            this.pnlStatus.Location = new System.Drawing.Point(42, 260);
+            this.pnlStatus.BackColor = System.Drawing.Color.White;
+            this.pnlStatus.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.pnlStatus.Location = new System.Drawing.Point(42, 259);
             this.pnlStatus.Name = "pnlStatus";
-            this.pnlStatus.Size = new System.Drawing.Size(300, 20);
+            this.pnlStatus.Size = new System.Drawing.Size(300, 17);
             this.pnlStatus.TabIndex = 2;
             this.pnlStatus.Paint += new System.Windows.Forms.PaintEventHandler(this.pnlStatus_Paint);
             // 
@@ -395,7 +401,11 @@ namespace Thetis
 				if( width > 0 && height > 0 )
 				{
 					m_rProgress = new Rectangle( x, y, width, height);
-					pnlStatus.Invalidate(m_rProgress);
+                    //MW0LGE pnlStatus.Invalidate(m_rProgress);
+                    // this call supresses background draw, which was causing the flicker
+                    // annoying that c# invalidate does not have this option.
+                    if(pnlStatus!=null)InvalidateRect(pnlStatus.Handle, IntPtr.Zero, false);
+
 					int iSecondsLeft = 1 + (int)(TIMER_INTERVAL * 
 						((1.0 - m_dblLastCompletionFraction)/
 						m_dblPBIncrementPerTimerInterval)) / 1000;
@@ -404,7 +414,6 @@ namespace Thetis
 					else
 						lblTimeRemaining.Text = string.Format( "{0} seconds", 
 							iSecondsLeft);
-
 				}
 			}
 		}

@@ -2242,6 +2242,9 @@
     <value>Waterfall</value>
   </data>
   <data name="comboRX2DisplayMode.Items2" xml:space="preserve">
+    <value>Panafall</value>
+  </data>
+  <data name="comboRX2DisplayMode.Items3" xml:space="preserve">
     <value>Off</value>
   </data>
   <data name="comboRX2DisplayMode.Location" type="System.Drawing.Point, System.Drawing">
@@ -3913,7 +3916,7 @@
     <value>panelMode</value>
   </data>
   <data name="&gt;&gt;radModeAM.ZOrder" xml:space="preserve">
-    <value>0</value>
+    <value>1</value>
   </data>
   <data name="radModeLSB.Appearance" type="System.Windows.Forms.Appearance, System.Windows.Forms">
     <value>Button</value>
@@ -3958,7 +3961,7 @@
     <value>panelMode</value>
   </data>
   <data name="&gt;&gt;radModeLSB.ZOrder" xml:space="preserve">
-    <value>1</value>
+    <value>2</value>
   </data>
   <data name="radModeSAM.Appearance" type="System.Windows.Forms.Appearance, System.Windows.Forms">
     <value>Button</value>
@@ -4003,7 +4006,7 @@
     <value>panelMode</value>
   </data>
   <data name="&gt;&gt;radModeSAM.ZOrder" xml:space="preserve">
-    <value>2</value>
+    <value>3</value>
   </data>
   <data name="radModeCWL.Appearance" type="System.Windows.Forms.Appearance, System.Windows.Forms">
     <value>Button</value>
@@ -4048,7 +4051,7 @@
     <value>panelMode</value>
   </data>
   <data name="&gt;&gt;radModeCWL.ZOrder" xml:space="preserve">
-    <value>3</value>
+    <value>4</value>
   </data>
   <data name="radModeDSB.Appearance" type="System.Windows.Forms.Appearance, System.Windows.Forms">
     <value>Button</value>
@@ -4093,7 +4096,7 @@
     <value>panelMode</value>
   </data>
   <data name="&gt;&gt;radModeDSB.ZOrder" xml:space="preserve">
-    <value>4</value>
+    <value>5</value>
   </data>
   <data name="radModeUSB.Appearance" type="System.Windows.Forms.Appearance, System.Windows.Forms">
     <value>Button</value>
@@ -4138,7 +4141,7 @@
     <value>panelMode</value>
   </data>
   <data name="&gt;&gt;radModeUSB.ZOrder" xml:space="preserve">
-    <value>5</value>
+    <value>6</value>
   </data>
   <data name="radModeCWU.Appearance" type="System.Windows.Forms.Appearance, System.Windows.Forms">
     <value>Button</value>
@@ -4183,7 +4186,7 @@
     <value>panelMode</value>
   </data>
   <data name="&gt;&gt;radModeCWU.ZOrder" xml:space="preserve">
-    <value>6</value>
+    <value>7</value>
   </data>
   <data name="radModeFMN.Appearance" type="System.Windows.Forms.Appearance, System.Windows.Forms">
     <value>Button</value>
@@ -4228,7 +4231,7 @@
     <value>panelMode</value>
   </data>
   <data name="&gt;&gt;radModeFMN.ZOrder" xml:space="preserve">
-    <value>7</value>
+    <value>8</value>
   </data>
   <data name="radModeDIGU.Appearance" type="System.Windows.Forms.Appearance, System.Windows.Forms">
     <value>Button</value>
@@ -4273,7 +4276,7 @@
     <value>panelMode</value>
   </data>
   <data name="&gt;&gt;radModeDIGU.ZOrder" xml:space="preserve">
-    <value>8</value>
+    <value>9</value>
   </data>
   <data name="radModeDRM.Appearance" type="System.Windows.Forms.Appearance, System.Windows.Forms">
     <value>Button</value>
@@ -4318,7 +4321,7 @@
     <value>panelMode</value>
   </data>
   <data name="&gt;&gt;radModeDRM.ZOrder" xml:space="preserve">
-    <value>9</value>
+    <value>10</value>
   </data>
   <data name="radModeDIGL.Appearance" type="System.Windows.Forms.Appearance, System.Windows.Forms">
     <value>Button</value>
@@ -4363,7 +4366,7 @@
     <value>panelMode</value>
   </data>
   <data name="&gt;&gt;radModeDIGL.ZOrder" xml:space="preserve">
-    <value>10</value>
+    <value>11</value>
   </data>
   <data name="radModeSPEC.Appearance" type="System.Windows.Forms.Appearance, System.Windows.Forms">
     <value>Button</value>
@@ -4408,7 +4411,7 @@
     <value>panelMode</value>
   </data>
   <data name="&gt;&gt;radModeSPEC.ZOrder" xml:space="preserve">
-    <value>11</value>
+    <value>12</value>
   </data>
   <data name="btnBandVHF.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
     <value>Flat</value>
@@ -4561,13 +4564,13 @@
     <value>grpVFOB</value>
   </data>
   <data name="&gt;&gt;chkVFOBTX.ZOrder" xml:space="preserve">
-    <value>3</value>
+    <value>2</value>
   </data>
   <data name="comboMeterTXMode.ItemHeight" type="System.Int32, mscorlib">
     <value>13</value>
   </data>
   <data name="comboMeterTXMode.Location" type="System.Drawing.Point, System.Drawing">
-    <value>80, 16</value>
+    <value>88, 11</value>
   </data>
   <data name="comboMeterTXMode.MaxDropDownItems" type="System.Int32, mscorlib">
     <value>12</value>
@@ -4588,16 +4591,16 @@
     <value>System.Windows.Forms.ComboBoxTS, Thetis, Version=2.6.8.0, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;comboMeterTXMode.Parent" xml:space="preserve">
-    <value>grpMultimeter</value>
+    <value>grpMultimeterMenus</value>
   </data>
   <data name="&gt;&gt;comboMeterTXMode.ZOrder" xml:space="preserve">
-    <value>1</value>
+    <value>0</value>
   </data>
   <data name="comboMeterRXMode.ItemHeight" type="System.Int32, mscorlib">
     <value>13</value>
   </data>
   <data name="comboMeterRXMode.Location" type="System.Drawing.Point, System.Drawing">
-    <value>8, 16</value>
+    <value>12, 11</value>
   </data>
   <data name="comboMeterRXMode.Size" type="System.Drawing.Size, System.Drawing">
     <value>72, 21</value>
@@ -4615,10 +4618,10 @@
     <value>System.Windows.Forms.ComboBoxTS, Thetis, Version=2.6.8.0, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;comboMeterRXMode.Parent" xml:space="preserve">
-    <value>grpMultimeter</value>
+    <value>grpMultimeterMenus</value>
   </data>
   <data name="&gt;&gt;comboMeterRXMode.ZOrder" xml:space="preserve">
-    <value>2</value>
+    <value>1</value>
   </data>
   <data name="chkSquelch.Appearance" type="System.Windows.Forms.Appearance, System.Windows.Forms">
     <value>Button</value>
@@ -8632,40 +8635,40 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
     <value>125, 54</value>
   </metadata>
   <data name="toolStripNotchDelete.Size" type="System.Drawing.Size, System.Drawing">
-    <value>148, 22</value>
+    <value>149, 22</value>
   </data>
   <data name="toolStripNotchDelete.Text" xml:space="preserve">
     <value>Delete</value>
   </data>
   <data name="toolStripNotchRemember.Size" type="System.Drawing.Size, System.Drawing">
-    <value>148, 22</value>
+    <value>149, 22</value>
   </data>
   <data name="toolStripNotchRemember.Text" xml:space="preserve">
     <value>Remember</value>
   </data>
   <data name="toolStripSeparator1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>145, 6</value>
+    <value>146, 6</value>
   </data>
   <data name="toolStripNotchNormal.Size" type="System.Drawing.Size, System.Drawing">
-    <value>148, 22</value>
+    <value>149, 22</value>
   </data>
   <data name="toolStripNotchNormal.Text" xml:space="preserve">
     <value>Normal (x1)</value>
   </data>
   <data name="toolStripNotchDeep.Size" type="System.Drawing.Size, System.Drawing">
-    <value>148, 22</value>
+    <value>149, 22</value>
   </data>
   <data name="toolStripNotchDeep.Text" xml:space="preserve">
     <value>Deep (x2)</value>
   </data>
   <data name="toolStripNotchVeryDeep.Size" type="System.Drawing.Size, System.Drawing">
-    <value>148, 22</value>
+    <value>149, 22</value>
   </data>
   <data name="toolStripNotchVeryDeep.Text" xml:space="preserve">
     <value>Very Deep (x3)</value>
   </data>
   <data name="contextMenuStripNotch.Size" type="System.Drawing.Size, System.Drawing">
-    <value>149, 120</value>
+    <value>150, 120</value>
   </data>
   <data name="&gt;&gt;contextMenuStripNotch.Name" xml:space="preserve">
     <value>contextMenuStripNotch</value>
@@ -8701,7 +8704,7 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
     <value>Equalizer</value>
   </data>
   <data name="xVTRsToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>52, 20</value>
+    <value>51, 20</value>
   </data>
   <data name="xVTRsToolStripMenuItem.Text" xml:space="preserve">
     <value>XVTRs</value>
@@ -8736,31 +8739,31 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
 </value>
   </data>
   <data name="topControlsToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>208, 22</value>
+    <value>207, 22</value>
   </data>
   <data name="topControlsToolStripMenuItem.Text" xml:space="preserve">
     <value>Top Controls</value>
   </data>
   <data name="bandControlsToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>208, 22</value>
+    <value>207, 22</value>
   </data>
   <data name="bandControlsToolStripMenuItem.Text" xml:space="preserve">
     <value>Band Controls</value>
   </data>
   <data name="modeControlsToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>208, 22</value>
+    <value>207, 22</value>
   </data>
   <data name="modeControlsToolStripMenuItem.Text" xml:space="preserve">
     <value>Mode Controls</value>
   </data>
   <data name="andromedaTopControlsToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>208, 22</value>
+    <value>207, 22</value>
   </data>
   <data name="andromedaTopControlsToolStripMenuItem.Text" xml:space="preserve">
     <value>Andromeda Top Controls</value>
   </data>
   <data name="andromedaButtonBarToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>208, 22</value>
+    <value>207, 22</value>
   </data>
   <data name="andromedaButtonBarToolStripMenuItem.Text" xml:space="preserve">
     <value>Andromeda Button Bar</value>
@@ -9384,7 +9387,7 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
     <value>0, 0</value>
   </data>
   <data name="menuStrip1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1017, 24</value>
+    <value>1018, 24</value>
   </data>
   <data name="menuStrip1.TabIndex" type="System.Int32, mscorlib">
     <value>136</value>
@@ -9723,7 +9726,7 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
     <value>$this</value>
   </data>
   <data name="&gt;&gt;panelButtonBar.ZOrder" xml:space="preserve">
-    <value>46</value>
+    <value>45</value>
   </data>
   <data name="panelFilter.AutoScrollMargin" type="System.Drawing.Size, System.Drawing">
     <value>0, 0</value>
@@ -10800,7 +10803,7 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
     <value>$this</value>
   </data>
   <data name="&gt;&gt;panelVFOLabels.ZOrder" xml:space="preserve">
-    <value>45</value>
+    <value>48</value>
   </data>
   <data name="panelVFOALabels.AutoScrollMargin" type="System.Drawing.Size, System.Drawing">
     <value>0, 0</value>
@@ -10916,6 +10919,138 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
   <data name="&gt;&gt;lblAttenLabel.ZOrder" xml:space="preserve">
     <value>2</value>
   </data>
+  <data name="lblANFLabel.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 9pt</value>
+  </data>
+  <data name="lblANFLabel.Image" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="lblANFLabel.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>Off</value>
+  </data>
+  <data name="lblANFLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>190, 4</value>
+  </data>
+  <data name="lblANFLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>36, 15</value>
+  </data>
+  <data name="lblANFLabel.TabIndex" type="System.Int32, mscorlib">
+    <value>127</value>
+  </data>
+  <data name="lblANFLabel.Text" xml:space="preserve">
+    <value>---</value>
+  </data>
+  <data name="&gt;&gt;lblANFLabel.Name" xml:space="preserve">
+    <value>lblANFLabel</value>
+  </data>
+  <data name="&gt;&gt;lblANFLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.LabelTS, Thetis, Version=2.6.8.0, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;lblANFLabel.Parent" xml:space="preserve">
+    <value>panelVFOALabels</value>
+  </data>
+  <data name="&gt;&gt;lblANFLabel.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="lblSNBLabel.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 9pt</value>
+  </data>
+  <data name="lblSNBLabel.Image" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="lblSNBLabel.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>Off</value>
+  </data>
+  <data name="lblSNBLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>150, 4</value>
+  </data>
+  <data name="lblSNBLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>36, 15</value>
+  </data>
+  <data name="lblSNBLabel.TabIndex" type="System.Int32, mscorlib">
+    <value>129</value>
+  </data>
+  <data name="lblSNBLabel.Text" xml:space="preserve">
+    <value>---</value>
+  </data>
+  <data name="&gt;&gt;lblSNBLabel.Name" xml:space="preserve">
+    <value>lblSNBLabel</value>
+  </data>
+  <data name="&gt;&gt;lblSNBLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.LabelTS, Thetis, Version=2.6.8.0, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;lblSNBLabel.Parent" xml:space="preserve">
+    <value>panelVFOALabels</value>
+  </data>
+  <data name="&gt;&gt;lblSNBLabel.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="lblNBLabel.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 9pt</value>
+  </data>
+  <data name="lblNBLabel.Image" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="lblNBLabel.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>Off</value>
+  </data>
+  <data name="lblNBLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>110, 4</value>
+  </data>
+  <data name="lblNBLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>36, 15</value>
+  </data>
+  <data name="lblNBLabel.TabIndex" type="System.Int32, mscorlib">
+    <value>128</value>
+  </data>
+  <data name="lblNBLabel.Text" xml:space="preserve">
+    <value>---</value>
+  </data>
+  <data name="&gt;&gt;lblNBLabel.Name" xml:space="preserve">
+    <value>lblNBLabel</value>
+  </data>
+  <data name="&gt;&gt;lblNBLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.LabelTS, Thetis, Version=2.6.8.0, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;lblNBLabel.Parent" xml:space="preserve">
+    <value>panelVFOALabels</value>
+  </data>
+  <data name="&gt;&gt;lblNBLabel.ZOrder" xml:space="preserve">
+    <value>5</value>
+  </data>
+  <data name="lblNRLabel.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 9pt</value>
+  </data>
+  <data name="lblNRLabel.Image" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="lblNRLabel.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>Off</value>
+  </data>
+  <data name="lblNRLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>70, 4</value>
+  </data>
+  <data name="lblNRLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>36, 15</value>
+  </data>
+  <data name="lblNRLabel.TabIndex" type="System.Int32, mscorlib">
+    <value>127</value>
+  </data>
+  <data name="lblNRLabel.Text" xml:space="preserve">
+    <value>---</value>
+  </data>
+  <data name="&gt;&gt;lblNRLabel.Name" xml:space="preserve">
+    <value>lblNRLabel</value>
+  </data>
+  <data name="&gt;&gt;lblNRLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.LabelTS, Thetis, Version=2.6.8.0, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;lblNRLabel.Parent" xml:space="preserve">
+    <value>panelVFOALabels</value>
+  </data>
+  <data name="&gt;&gt;lblNRLabel.ZOrder" xml:space="preserve">
+    <value>6</value>
+  </data>
   <data name="lblCtunLabel.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
@@ -10950,138 +11085,6 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
     <value>panelVFOALabels</value>
   </data>
   <data name="&gt;&gt;lblCtunLabel.ZOrder" xml:space="preserve">
-    <value>3</value>
-  </data>
-  <data name="lblANFLabel.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Microsoft Sans Serif, 9pt</value>
-  </data>
-  <data name="lblANFLabel.Image" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="lblANFLabel.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>Off</value>
-  </data>
-  <data name="lblANFLabel.Location" type="System.Drawing.Point, System.Drawing">
-    <value>190, 4</value>
-  </data>
-  <data name="lblANFLabel.Size" type="System.Drawing.Size, System.Drawing">
-    <value>36, 15</value>
-  </data>
-  <data name="lblANFLabel.TabIndex" type="System.Int32, mscorlib">
-    <value>127</value>
-  </data>
-  <data name="lblANFLabel.Text" xml:space="preserve">
-    <value>---</value>
-  </data>
-  <data name="&gt;&gt;lblANFLabel.Name" xml:space="preserve">
-    <value>lblANFLabel</value>
-  </data>
-  <data name="&gt;&gt;lblANFLabel.Type" xml:space="preserve">
-    <value>System.Windows.Forms.LabelTS, Thetis, Version=2.6.8.0, Culture=neutral, PublicKeyToken=null</value>
-  </data>
-  <data name="&gt;&gt;lblANFLabel.Parent" xml:space="preserve">
-    <value>panelVFOALabels</value>
-  </data>
-  <data name="&gt;&gt;lblANFLabel.ZOrder" xml:space="preserve">
-    <value>4</value>
-  </data>
-  <data name="lblSNBLabel.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Microsoft Sans Serif, 9pt</value>
-  </data>
-  <data name="lblSNBLabel.Image" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="lblSNBLabel.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>Off</value>
-  </data>
-  <data name="lblSNBLabel.Location" type="System.Drawing.Point, System.Drawing">
-    <value>150, 4</value>
-  </data>
-  <data name="lblSNBLabel.Size" type="System.Drawing.Size, System.Drawing">
-    <value>36, 15</value>
-  </data>
-  <data name="lblSNBLabel.TabIndex" type="System.Int32, mscorlib">
-    <value>129</value>
-  </data>
-  <data name="lblSNBLabel.Text" xml:space="preserve">
-    <value>---</value>
-  </data>
-  <data name="&gt;&gt;lblSNBLabel.Name" xml:space="preserve">
-    <value>lblSNBLabel</value>
-  </data>
-  <data name="&gt;&gt;lblSNBLabel.Type" xml:space="preserve">
-    <value>System.Windows.Forms.LabelTS, Thetis, Version=2.6.8.0, Culture=neutral, PublicKeyToken=null</value>
-  </data>
-  <data name="&gt;&gt;lblSNBLabel.Parent" xml:space="preserve">
-    <value>panelVFOALabels</value>
-  </data>
-  <data name="&gt;&gt;lblSNBLabel.ZOrder" xml:space="preserve">
-    <value>5</value>
-  </data>
-  <data name="lblNBLabel.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Microsoft Sans Serif, 9pt</value>
-  </data>
-  <data name="lblNBLabel.Image" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="lblNBLabel.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>Off</value>
-  </data>
-  <data name="lblNBLabel.Location" type="System.Drawing.Point, System.Drawing">
-    <value>110, 4</value>
-  </data>
-  <data name="lblNBLabel.Size" type="System.Drawing.Size, System.Drawing">
-    <value>36, 15</value>
-  </data>
-  <data name="lblNBLabel.TabIndex" type="System.Int32, mscorlib">
-    <value>128</value>
-  </data>
-  <data name="lblNBLabel.Text" xml:space="preserve">
-    <value>---</value>
-  </data>
-  <data name="&gt;&gt;lblNBLabel.Name" xml:space="preserve">
-    <value>lblNBLabel</value>
-  </data>
-  <data name="&gt;&gt;lblNBLabel.Type" xml:space="preserve">
-    <value>System.Windows.Forms.LabelTS, Thetis, Version=2.6.8.0, Culture=neutral, PublicKeyToken=null</value>
-  </data>
-  <data name="&gt;&gt;lblNBLabel.Parent" xml:space="preserve">
-    <value>panelVFOALabels</value>
-  </data>
-  <data name="&gt;&gt;lblNBLabel.ZOrder" xml:space="preserve">
-    <value>6</value>
-  </data>
-  <data name="lblNRLabel.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Microsoft Sans Serif, 9pt</value>
-  </data>
-  <data name="lblNRLabel.Image" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="lblNRLabel.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>Off</value>
-  </data>
-  <data name="lblNRLabel.Location" type="System.Drawing.Point, System.Drawing">
-    <value>70, 4</value>
-  </data>
-  <data name="lblNRLabel.Size" type="System.Drawing.Size, System.Drawing">
-    <value>36, 15</value>
-  </data>
-  <data name="lblNRLabel.TabIndex" type="System.Int32, mscorlib">
-    <value>127</value>
-  </data>
-  <data name="lblNRLabel.Text" xml:space="preserve">
-    <value>---</value>
-  </data>
-  <data name="&gt;&gt;lblNRLabel.Name" xml:space="preserve">
-    <value>lblNRLabel</value>
-  </data>
-  <data name="&gt;&gt;lblNRLabel.Type" xml:space="preserve">
-    <value>System.Windows.Forms.LabelTS, Thetis, Version=2.6.8.0, Culture=neutral, PublicKeyToken=null</value>
-  </data>
-  <data name="&gt;&gt;lblNRLabel.Parent" xml:space="preserve">
-    <value>panelVFOALabels</value>
-  </data>
-  <data name="&gt;&gt;lblNRLabel.ZOrder" xml:space="preserve">
     <value>7</value>
   </data>
   <data name="panelVFOALabels.Location" type="System.Drawing.Point, System.Drawing">
@@ -11106,7 +11109,7 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
     <value>$this</value>
   </data>
   <data name="&gt;&gt;panelVFOALabels.ZOrder" xml:space="preserve">
-    <value>48</value>
+    <value>49</value>
   </data>
   <data name="panelVFOBLabels.AutoScrollMargin" type="System.Drawing.Size, System.Drawing">
     <value>0, 0</value>
@@ -11412,7 +11415,7 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
     <value>$this</value>
   </data>
   <data name="&gt;&gt;panelVFOBLabels.ZOrder" xml:space="preserve">
-    <value>47</value>
+    <value>46</value>
   </data>
   <data name="panelRX2Power.AutoScrollMargin" type="System.Drawing.Size, System.Drawing">
     <value>0, 0</value>
@@ -14381,6 +14384,36 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
   <data name="panelMode.AutoScrollMinSize" type="System.Drawing.Size, System.Drawing">
     <value>0, 0</value>
   </data>
+  <data name="buttonTS1.Image" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="buttonTS1.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>Off</value>
+  </data>
+  <data name="buttonTS1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>512, 225</value>
+  </data>
+  <data name="buttonTS1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>10, 8</value>
+  </data>
+  <data name="buttonTS1.TabIndex" type="System.Int32, mscorlib">
+    <value>60</value>
+  </data>
+  <data name="buttonTS1.Text" xml:space="preserve">
+    <value>buttonTS1</value>
+  </data>
+  <data name="&gt;&gt;buttonTS1.Name" xml:space="preserve">
+    <value>buttonTS1</value>
+  </data>
+  <data name="&gt;&gt;buttonTS1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ButtonTS, Thetis, Version=2.6.8.0, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;buttonTS1.Parent" xml:space="preserve">
+    <value>panelMode</value>
+  </data>
+  <data name="&gt;&gt;buttonTS1.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
   <data name="panelMode.Font" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft Sans Serif, 8.25pt, style=Bold</value>
   </data>
@@ -14933,39 +14966,6 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
   <data name="&gt;&gt;lblRX2APF.ZOrder" xml:space="preserve">
     <value>1</value>
   </data>
-  <data name="lblRX2MuteVFOB.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Tahoma, 6.75pt, style=Bold</value>
-  </data>
-  <data name="lblRX2MuteVFOB.Image" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="lblRX2MuteVFOB.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>Off</value>
-  </data>
-  <data name="lblRX2MuteVFOB.Location" type="System.Drawing.Point, System.Drawing">
-    <value>45, 36</value>
-  </data>
-  <data name="lblRX2MuteVFOB.Size" type="System.Drawing.Size, System.Drawing">
-    <value>35, 11</value>
-  </data>
-  <data name="lblRX2MuteVFOB.TabIndex" type="System.Int32, mscorlib">
-    <value>125</value>
-  </data>
-  <data name="lblRX2MuteVFOB.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
-    <value>MiddleLeft</value>
-  </data>
-  <data name="&gt;&gt;lblRX2MuteVFOB.Name" xml:space="preserve">
-    <value>lblRX2MuteVFOB</value>
-  </data>
-  <data name="&gt;&gt;lblRX2MuteVFOB.Type" xml:space="preserve">
-    <value>System.Windows.Forms.LabelTS, Thetis, Version=2.6.8.0, Culture=neutral, PublicKeyToken=null</value>
-  </data>
-  <data name="&gt;&gt;lblRX2MuteVFOB.Parent" xml:space="preserve">
-    <value>grpVFOB</value>
-  </data>
-  <data name="&gt;&gt;lblRX2MuteVFOB.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
   <data name="panelVFOBHover.Location" type="System.Drawing.Point, System.Drawing">
     <value>63, 49</value>
   </data>
@@ -14985,7 +14985,7 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
     <value>grpVFOB</value>
   </data>
   <data name="&gt;&gt;panelVFOBHover.ZOrder" xml:space="preserve">
-    <value>4</value>
+    <value>3</value>
   </data>
   <data name="txtVFOBBand.Font" type="System.Drawing.Font, System.Drawing">
     <value>Arial, 12pt</value>
@@ -15015,7 +15015,7 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
     <value>grpVFOB</value>
   </data>
   <data name="&gt;&gt;txtVFOBBand.ZOrder" xml:space="preserve">
-    <value>5</value>
+    <value>4</value>
   </data>
   <data name="txtVFOBLSD.Font" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft Sans Serif, 15.75pt</value>
@@ -15045,7 +15045,7 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
     <value>grpVFOB</value>
   </data>
   <data name="&gt;&gt;txtVFOBLSD.ZOrder" xml:space="preserve">
-    <value>6</value>
+    <value>5</value>
   </data>
   <data name="lblRX2FilterLabel.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -15087,6 +15087,39 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
     <value>grpVFOB</value>
   </data>
   <data name="&gt;&gt;lblRX2FilterLabel.ZOrder" xml:space="preserve">
+    <value>6</value>
+  </data>
+  <data name="lblRX2MuteVFOB.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Tahoma, 6.75pt, style=Bold</value>
+  </data>
+  <data name="lblRX2MuteVFOB.Image" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="lblRX2MuteVFOB.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>Off</value>
+  </data>
+  <data name="lblRX2MuteVFOB.Location" type="System.Drawing.Point, System.Drawing">
+    <value>45, 36</value>
+  </data>
+  <data name="lblRX2MuteVFOB.Size" type="System.Drawing.Size, System.Drawing">
+    <value>35, 11</value>
+  </data>
+  <data name="lblRX2MuteVFOB.TabIndex" type="System.Int32, mscorlib">
+    <value>125</value>
+  </data>
+  <data name="lblRX2MuteVFOB.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleLeft</value>
+  </data>
+  <data name="&gt;&gt;lblRX2MuteVFOB.Name" xml:space="preserve">
+    <value>lblRX2MuteVFOB</value>
+  </data>
+  <data name="&gt;&gt;lblRX2MuteVFOB.Type" xml:space="preserve">
+    <value>System.Windows.Forms.LabelTS, Thetis, Version=2.6.8.0, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;lblRX2MuteVFOB.Parent" xml:space="preserve">
+    <value>grpVFOB</value>
+  </data>
+  <data name="&gt;&gt;lblRX2MuteVFOB.ZOrder" xml:space="preserve">
     <value>7</value>
   </data>
   <data name="lblRX2ModeLabel.AutoSize" type="System.Boolean, mscorlib">
@@ -15303,10 +15336,10 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
     <value>Off</value>
   </data>
   <data name="picMultiMeterDigital.Location" type="System.Drawing.Point, System.Drawing">
-    <value>8, 78</value>
+    <value>8, 52</value>
   </data>
   <data name="picMultiMeterDigital.Size" type="System.Drawing.Size, System.Drawing">
-    <value>144, 40</value>
+    <value>157, 30</value>
   </data>
   <data name="picMultiMeterDigital.TabIndex" type="System.Int32, mscorlib">
     <value>61</value>
@@ -15327,10 +15360,10 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
     <value>Microsoft Sans Serif, 18pt</value>
   </data>
   <data name="txtMultiText.Location" type="System.Drawing.Point, System.Drawing">
-    <value>8, 40</value>
+    <value>8, 16</value>
   </data>
   <data name="txtMultiText.Size" type="System.Drawing.Size, System.Drawing">
-    <value>144, 35</value>
+    <value>157, 35</value>
   </data>
   <data name="txtMultiText.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -15348,7 +15381,7 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
     <value>grpMultimeter</value>
   </data>
   <data name="&gt;&gt;txtMultiText.ZOrder" xml:space="preserve">
-    <value>3</value>
+    <value>1</value>
   </data>
   <data name="lblMultiSMeter.Image" type="System.Resources.ResXNullRef, System.Windows.Forms">
     <value />
@@ -15378,13 +15411,13 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
     <value>grpMultimeter</value>
   </data>
   <data name="&gt;&gt;lblMultiSMeter.ZOrder" xml:space="preserve">
-    <value>4</value>
+    <value>2</value>
   </data>
   <data name="grpMultimeter.Location" type="System.Drawing.Point, System.Drawing">
-    <value>848, 24</value>
+    <value>841, 24</value>
   </data>
   <data name="grpMultimeter.Size" type="System.Drawing.Size, System.Drawing">
-    <value>160, 120</value>
+    <value>172, 88</value>
   </data>
   <data name="grpMultimeter.TabIndex" type="System.Int32, mscorlib">
     <value>54</value>
@@ -16796,6 +16829,27 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
   <data name="&gt;&gt;panelMeterLabels.ZOrder" xml:space="preserve">
     <value>44</value>
   </data>
+  <data name="grpMultimeterMenus.Location" type="System.Drawing.Point, System.Drawing">
+    <value>841, 105</value>
+  </data>
+  <data name="grpMultimeterMenus.Size" type="System.Drawing.Size, System.Drawing">
+    <value>172, 40</value>
+  </data>
+  <data name="grpMultimeterMenus.TabIndex" type="System.Int32, mscorlib">
+    <value>142</value>
+  </data>
+  <data name="&gt;&gt;grpMultimeterMenus.Name" xml:space="preserve">
+    <value>grpMultimeterMenus</value>
+  </data>
+  <data name="&gt;&gt;grpMultimeterMenus.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBoxTS, Thetis, Version=2.6.8.0, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;grpMultimeterMenus.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;grpMultimeterMenus.ZOrder" xml:space="preserve">
+    <value>47</value>
+  </data>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
@@ -16809,7 +16863,7 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
     <value>Stretch</value>
   </data>
   <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
-    <value>1017, 700</value>
+    <value>1018, 701</value>
   </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>

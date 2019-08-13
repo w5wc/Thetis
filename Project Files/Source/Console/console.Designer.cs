@@ -1024,6 +1024,7 @@
             this.txtDisplayCursorOffset = new System.Windows.Forms.TextBoxTS();
             this.txtDisplayOrionMKIIPAVolts = new System.Windows.Forms.TextBoxTS();
             this.panelMode = new System.Windows.Forms.PanelTS();
+            this.buttonTS1 = new System.Windows.Forms.ButtonTS();
             this.panelBandHF = new System.Windows.Forms.PanelTS();
             this.txtVFOAFreq = new System.Windows.Forms.TextBoxTS();
             this.grpVFOA = new System.Windows.Forms.GroupBoxTS();
@@ -1094,6 +1095,7 @@
             this.panelMeterLabels = new System.Windows.Forms.PanelTS();
             this.lblTXMeter = new System.Windows.Forms.LabelTS();
             this.lblRXMeter = new System.Windows.Forms.LabelTS();
+            this.grpMultimeterMenus = new System.Windows.Forms.GroupBoxTS();
             ((System.ComponentModel.ISupportInitialize)(this.ptbFilterShift)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ptbFilterWidth)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.udFilterHigh)).BeginInit();
@@ -1189,6 +1191,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.ptbFMMic)).BeginInit();
             this.panelBandGEN.SuspendLayout();
             this.panelMeterLabels.SuspendLayout();
+            this.grpMultimeterMenus.SuspendLayout();
             this.SuspendLayout();
             // 
             // timer_cpu_meter
@@ -1861,7 +1864,8 @@
             this.comboRX2DisplayMode.Items.AddRange(new object[] {
             resources.GetString("comboRX2DisplayMode.Items"),
             resources.GetString("comboRX2DisplayMode.Items1"),
-            resources.GetString("comboRX2DisplayMode.Items2")});
+            resources.GetString("comboRX2DisplayMode.Items2"),
+            resources.GetString("comboRX2DisplayMode.Items3")});
             this.comboRX2DisplayMode.Name = "comboRX2DisplayMode";
             this.toolTip1.SetToolTip(this.comboRX2DisplayMode, resources.GetString("comboRX2DisplayMode.ToolTip"));
             this.comboRX2DisplayMode.SelectedIndexChanged += new System.EventHandler(this.comboRX2DisplayMode_SelectedIndexChanged);
@@ -2879,6 +2883,7 @@
             this.toolTip1.SetToolTip(this.ptbPanMainRX, resources.GetString("ptbPanMainRX.ToolTip"));
             this.ptbPanMainRX.Value = 50;
             this.ptbPanMainRX.Scroll += new Thetis.PrettyTrackBar.ScrollHandler(this.ptbPanMainRX_Scroll);
+            this.ptbPanMainRX.DoubleClick += new System.EventHandler(this.ptbPanMainRX_DoubleClick);
             // 
             // ptbPanSubRX
             // 
@@ -2894,6 +2899,7 @@
             this.toolTip1.SetToolTip(this.ptbPanSubRX, resources.GetString("ptbPanSubRX.ToolTip"));
             this.ptbPanSubRX.Value = 50;
             this.ptbPanSubRX.Scroll += new Thetis.PrettyTrackBar.ScrollHandler(this.ptbPanSubRX_Scroll);
+            this.ptbPanSubRX.DoubleClick += new System.EventHandler(this.ptbPanSubRX_DoubleClick);
             // 
             // ptbRX2Gain
             // 
@@ -2924,6 +2930,7 @@
             this.toolTip1.SetToolTip(this.ptbRX2Pan, resources.GetString("ptbRX2Pan.ToolTip"));
             this.ptbRX2Pan.Value = 50;
             this.ptbRX2Pan.Scroll += new Thetis.PrettyTrackBar.ScrollHandler(this.ptbRX2Pan_Scroll);
+            this.ptbRX2Pan.DoubleClick += new System.EventHandler(this.ptbRX2Pan_DoubleClick);
             // 
             // ptbRX0Gain
             // 
@@ -4998,11 +5005,11 @@
             this.panelVFOALabels.Controls.Add(this.lblLockLabel);
             this.panelVFOALabels.Controls.Add(this.lblAGCLabel);
             this.panelVFOALabels.Controls.Add(this.lblAttenLabel);
-            this.panelVFOALabels.Controls.Add(this.lblCtunLabel);
             this.panelVFOALabels.Controls.Add(this.lblANFLabel);
             this.panelVFOALabels.Controls.Add(this.lblSNBLabel);
             this.panelVFOALabels.Controls.Add(this.lblNBLabel);
             this.panelVFOALabels.Controls.Add(this.lblNRLabel);
+            this.panelVFOALabels.Controls.Add(this.lblCtunLabel);
             this.panelVFOALabels.Name = "panelVFOALabels";
             // 
             // lblLockLabel
@@ -6020,6 +6027,7 @@
             // 
             resources.ApplyResources(this.panelMode, "panelMode");
             this.panelMode.BackColor = System.Drawing.Color.Transparent;
+            this.panelMode.Controls.Add(this.buttonTS1);
             this.panelMode.Controls.Add(this.radModeAM);
             this.panelMode.Controls.Add(this.radModeLSB);
             this.panelMode.Controls.Add(this.radModeSAM);
@@ -6034,6 +6042,12 @@
             this.panelMode.Controls.Add(this.radModeSPEC);
             this.panelMode.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.panelMode.Name = "panelMode";
+            // 
+            // buttonTS1
+            // 
+            resources.ApplyResources(this.buttonTS1, "buttonTS1");
+            this.buttonTS1.Name = "buttonTS1";
+            this.buttonTS1.UseVisualStyleBackColor = true;
             // 
             // panelBandHF
             // 
@@ -6189,12 +6203,12 @@
             this.grpVFOB.BackColor = System.Drawing.Color.Transparent;
             this.grpVFOB.Controls.Add(this.lblRX2ModeBigLabel);
             this.grpVFOB.Controls.Add(this.lblRX2APF);
-            this.grpVFOB.Controls.Add(this.lblRX2MuteVFOB);
             this.grpVFOB.Controls.Add(this.chkVFOBTX);
             this.grpVFOB.Controls.Add(this.panelVFOBHover);
             this.grpVFOB.Controls.Add(this.txtVFOBBand);
             this.grpVFOB.Controls.Add(this.txtVFOBLSD);
             this.grpVFOB.Controls.Add(this.lblRX2FilterLabel);
+            this.grpVFOB.Controls.Add(this.lblRX2MuteVFOB);
             this.grpVFOB.Controls.Add(this.lblRX2ModeLabel);
             this.grpVFOB.Controls.Add(this.txtVFOBMSD);
             this.grpVFOB.Controls.Add(this.lblVFOBLSD);
@@ -6309,8 +6323,6 @@
             // 
             this.grpMultimeter.BackColor = System.Drawing.Color.Transparent;
             this.grpMultimeter.Controls.Add(this.picMultiMeterDigital);
-            this.grpMultimeter.Controls.Add(this.comboMeterTXMode);
-            this.grpMultimeter.Controls.Add(this.comboMeterRXMode);
             this.grpMultimeter.Controls.Add(this.txtMultiText);
             this.grpMultimeter.Controls.Add(this.lblMultiSMeter);
             this.grpMultimeter.ForeColor = System.Drawing.Color.White;
@@ -6762,6 +6774,15 @@
             this.lblRXMeter.ForeColor = System.Drawing.Color.DarkOrange;
             this.lblRXMeter.Name = "lblRXMeter";
             // 
+            // grpMultimeterMenus
+            // 
+            this.grpMultimeterMenus.BackColor = System.Drawing.Color.Transparent;
+            this.grpMultimeterMenus.Controls.Add(this.comboMeterTXMode);
+            this.grpMultimeterMenus.Controls.Add(this.comboMeterRXMode);
+            resources.ApplyResources(this.grpMultimeterMenus, "grpMultimeterMenus");
+            this.grpMultimeterMenus.Name = "grpMultimeterMenus";
+            this.grpMultimeterMenus.TabStop = false;
+            // 
             // Console
             // 
             resources.ApplyResources(this, "$this");
@@ -6809,9 +6830,10 @@
             this.Controls.Add(this.panelModeSpecificFM);
             this.Controls.Add(this.panelModeSpecificDigital);
             this.Controls.Add(this.panelMeterLabels);
-            this.Controls.Add(this.panelVFOLabels);
             this.Controls.Add(this.panelButtonBar);
             this.Controls.Add(this.panelVFOBLabels);
+            this.Controls.Add(this.grpMultimeterMenus);
+            this.Controls.Add(this.panelVFOLabels);
             this.Controls.Add(this.panelVFOALabels);
             this.KeyPreview = true;
             this.MainMenuStrip = this.menuStrip1;
@@ -6929,6 +6951,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.ptbFMMic)).EndInit();
             this.panelBandGEN.ResumeLayout(false);
             this.panelMeterLabels.ResumeLayout(false);
+            this.grpMultimeterMenus.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -6991,5 +7014,7 @@
         private LabelTS lblRXMeter;
         public ToolStripMenuItem andromedaTopControlsToolStripMenuItem;
         public ToolStripMenuItem andromedaButtonBarToolStripMenuItem;
-    }
+        private ButtonTS buttonTS1;
+        private GroupBoxTS grpMultimeterMenus;
+   }
 }

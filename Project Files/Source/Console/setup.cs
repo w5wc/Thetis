@@ -3,7 +3,7 @@
 //=================================================================
 // PowerSDR is a C# implementation of a Software Defined Radio.
 // Copyright (C) 2004-2009  FlexRadio Systems
-// Copyright (C) 2010-2018  Doug Wigley
+// Copyright (C) 2010-2019  Doug Wigley
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -44,6 +44,7 @@ namespace Thetis
     using System.IO;
     using System.IO.Ports;
     using Midi2Cat;
+    using RawInput_dll;
 
     public partial class Setup : Form
     {
@@ -319,6 +320,7 @@ namespace Thetis
             chkAlexPresent_CheckedChanged(this, e);
             chkApolloPresent_CheckedChanged(this, e);
             chkAlexAntCtrl_CheckedChanged(this, e);
+            TbDataFillAlpha_Scroll(this, e);
 
             for (int i = 0; i < 2; i++)
                 for (int j = 0; j < 2; j++)
@@ -384,6 +386,8 @@ namespace Thetis
         {
             chkGeneralRXOnly.Checked = console.RXOnly;
             chkGeneralDisablePTT.Checked = console.DisablePTT;
+            chkWheelTunesOutsideSpectral.Checked = console.WheelTunesOutsideSpectral; //MW0LGE
+            chkAlsoUseSpecificMouseWheel.Checked = console.AlsoUseSpecificMouseWheel; //MW0LGE
         }
 
         private void InitAudioTab()
@@ -504,6 +508,12 @@ namespace Thetis
             clrbtnZeroLine.Color = Display.GridZeroColor;
             clrbtnText.Color = Display.GridTextColor;
             clrbtnDataLine.Color = Display.DataLineColor;
+            clrbtnDataFill.Color = Display.DataFillColor;  //MW0LGE
+            chkDisablePicDisplayBackgroundImage.Checked = console.DisableBackgroundImage;  //MW0LGE
+            chkShowRXFilterOnWaterfall.Checked = Display.ShowRXFilterOnWaterfall; //MW0LGE
+            chkShowTXFilterOnWaterfall.Checked = Display.ShowTXFilterOnWaterfall; //MW0LGE
+            chkShowRXZeroLineOnWaterfall.Checked = Display.ShowRXZeroLineOnWaterfall; //MW0LGE
+            chkShowTXZeroLineOnWaterfall.Checked = Display.ShowTXZeroLineOnWaterfall; //MW0LGE
             clrbtnFilter.Color = Display.DisplayFilterColor;
             clrbtnMeterLeft.Color = console.MeterLeftColor;
             clrbtnMeterRight.Color = console.MeterRightColor;
@@ -680,6 +690,26 @@ namespace Thetis
         }
 
         private static bool saving = false;
+
+        //MW0LGE
+        public bool CompleteAnyExistingSave()
+        {
+            if (!saving) return true;
+            // we must be in middle of save already
+            // perhaps started by a thread
+            // we should hang here until it is done
+            // should we time out? wait for 15 secs;
+
+            int n=0;
+            while(saving && n<14)
+            {
+                Debug.Print("SETUP: WAITING FOR EXISTING SAVE TO COMPLETE");
+                Thread.Sleep(1000);
+                n++;
+            }
+
+            return !saving;
+        }
 
         public void SaveOptions()
         {
@@ -1106,6 +1136,8 @@ namespace Thetis
             radOrionMicTip_CheckedChanged(this, e);
             radOrionBiasOn_CheckedChanged(this, e);
             chkNetworkWDT_CheckedChanged(this, e);
+            //NAVigation-general
+            ChkAlsoUseSpecificMouseWheel_CheckedChanged(this, e); //MW0LGE
 
             // Audio Tab
             comboAudioBuffer2_SelectedIndexChanged(this, e);
@@ -1316,6 +1348,8 @@ namespace Thetis
             clrbtnGridTXFilter_Changed(this, e);
             clrbtnText_Changed(this, e);
             clrbtnDataLine_Changed(this, e);
+            clrbtnDataFill_Changed(this, e);//MW0LGE
+            chkDisablePicDisplayBackgroundImage_CheckedChanged(this, e);//MW0LGE
             udDisplayLineWidth_ValueChanged(this, e);
             udTXLineWidth_ValueChanged(this, e);
             clrbtnTXDataLine_Changed(this, e);
@@ -9974,8 +10008,12 @@ namespace Thetis
             console.topControlsToolStripMenuItem.Checked = chkShowTopControls.Checked;
             console.bandToolStripMenuItem.Visible = !chkShowBandControls.Checked;
 
-            if (console.CollapsedDisplay)
-                console.CollapseDisplay();
+            //MW0LGE moved to console.cs
+            //console.topControlsToolStripMenuItem.Checked = chkShowTopControls.Checked; 
+            //console.bandToolStripMenuItem.Visible = !chkShowBandControls.Checked;
+
+            //if (console.CollapsedDisplay)
+            //    console.CollapseDisplay();
         }
 
         private void chkShowBandControls_CheckedChanged(object sender, EventArgs e)
@@ -9986,8 +10024,12 @@ namespace Thetis
             console.bandControlsToolStripMenuItem.Checked = chkShowBandControls.Checked;
             console.modeToolStripMenuItem.Visible = !chkShowModeControls.Checked;
 
-            if (console.CollapsedDisplay)
-                console.CollapseDisplay();
+            //MW0LGE moved to console.cs
+            //console.bandControlsToolStripMenuItem.Checked = chkShowBandControls.Checked;
+            //console.modeToolStripMenuItem.Visible = !chkShowModeControls.Checked;
+
+            //if (console.CollapsedDisplay)
+            //    console.CollapseDisplay();
         }
 
         private void chkModeControls_CheckedChanged(object sender, EventArgs e)
@@ -9996,9 +10038,6 @@ namespace Thetis
                 chkShowAndromedaBar.Checked = false;
             console.ShowModeControls = chkShowModeControls.Checked;
             console.modeControlsToolStripMenuItem.Checked = chkShowModeControls.Checked;
-
-            if (console.CollapsedDisplay)
-                console.CollapseDisplay();
         }
 
         //
@@ -10026,8 +10065,12 @@ namespace Thetis
                 chkShowBandControls.Checked = false;
                 chkShowModeControls.Checked = false;
             }
-            if (console.CollapsedDisplay)                   // force a redraw
-                console.CollapseDisplay();
+
+          //MW0LGE moved to console.cs
+            //console.modeControlsToolStripMenuItem.Checked = chkShowModeControls.Checked;
+
+           // if (console.CollapsedDisplay)                   // force a redraw
+              //  console.CollapseDisplay();
         }
 
 
@@ -13284,6 +13327,8 @@ namespace Thetis
                 Skin.Restore(comboAppSkin.Text, path, console);
             console.CurrentSkin = comboAppSkin.Text;
             console.RadarColorUpdate = true;
+
+            console.DisableBackgroundImage = chkDisablePicDisplayBackgroundImage.Checked;  //MW0LGE
         }
 
         private void btnSkinExport_Click(object sender, EventArgs e)
@@ -19189,6 +19234,178 @@ namespace Thetis
             Audio.AntiVOXSourceVAC = chkAntiVoxSource.Checked;
         }
 
+        private void chkITSync_CheckedChanged(object sender, EventArgs e)
+        {
+            console.RITXITSync = chkITSync.Checked;
+        }
+
+        ///
+        ///MW0LGE
+        ///
+        private void chkDisablePicDisplayBackgroundImage_CheckedChanged(object sender, EventArgs e)
+        {
+            
+            console.DisableBackgroundImage = chkDisablePicDisplayBackgroundImage.Checked;
+        }
+
+        private void clrbtnDataFill_Changed(object sender, EventArgs e)
+        {
+            Display.DataFillColor = Color.FromArgb(tbDataFillAlpha.Value, clrbtnDataFill.Color);
+        }
+
+        private void TbDataFillAlpha_Scroll(object sender, EventArgs e)
+        {
+            toolTip1.SetToolTip(tbDataFillAlpha, tbDataFillAlpha.Value.ToString());
+            clrbtnDataFill_Changed(this, EventArgs.Empty);
+        }
+
+        private void chkWheelTunesOutsideSpectral_CheckedChanged(object sender, EventArgs e)
+        {
+            console.WheelTunesOutsideSpectral = chkWheelTunesOutsideSpectral.Checked;
+        }
+        
+        private void ComboHIDMouseWheel_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if(!(comboHIDMouseWheel.SelectedItem is HIDComboItem)) return;
+
+            HIDComboItem objItem = comboHIDMouseWheel.SelectedItem as HIDComboItem;
+
+            if (objItem != null)
+            {
+                console.SpecificMouseDeviceID = objItem.DeviceID;
+                console.SpecificMouseDeviceHandle = objItem.DeviceHandle;
+                lblDeviceHID.Text = objItem.DeviceID;
+                txtDeviceHID_hidden.Text = objItem.DeviceID; // this control will be saved out
+            }
+        }
+
+        #region RawInput WIP
+        ///--- RAWINPUT WIP
+        private void ChkGlobalListenForMouseWheel_CheckedChanged(object sender, EventArgs e)
+        {
+            console.GlobalListenForMouseWheel = chkGlobalListenForMouseWheel.Checked;
+        }
+
+        private void ChkWheelOnlyAdjustsVFO_CheckedChanged(object sender, EventArgs e)
+        {
+            console.WheelOnlyAdjustsVFO = chkWheelOnlyAdjustsVFO.Checked;
+        }
+
+        private void setupHIDControls(bool bEnabled)
+        {
+            comboHIDMouseWheel.Enabled = bEnabled;
+            lblDeviceHID.Enabled = bEnabled;
+            chkGlobalListenForMouseWheel.Enabled = bEnabled;
+            chkWheelOnlyAdjustsVFO.Enabled = bEnabled;
+            lblWheelActive.Enabled = bEnabled;
+        }
+
+        private void ChkAlsoUseSpecificMouseWheel_CheckedChanged(object sender, EventArgs e)
+        {
+            console.AlsoUseSpecificMouseWheel = chkAlsoUseSpecificMouseWheel.Checked;
+
+            setupHIDControls(console.AlsoUseSpecificMouseWheel);
+        }
+
+        public void UpdateRawInputMouseDevices(Dictionary<IntPtr, MouseEvent> mouseDevices)
+        {            
+            comboHIDMouseWheel.Items.Clear();
+
+            foreach (KeyValuePair<IntPtr, MouseEvent> entry in mouseDevices)
+            {
+                MouseEvent me = entry.Value;
+
+                HIDComboItem objItem = new HIDComboItem(me.Name, me.DeviceHandle, me.DeviceName);
+                int nIndex = comboHIDMouseWheel.Items.Add(objItem);
+
+                if(me.DeviceName == txtDeviceHID_hidden.Text) comboHIDMouseWheel.SelectedIndex = nIndex;
+            }
+        }
+
+        public void WheelChangeNotify()
+        {
+            lblWheelActive.BackColor = Color.Green;
+            timer_RawInputMouseWheel.Stop();
+            timer_RawInputMouseWheel.Start();
+        }
+
+        private class HIDComboItem : object
+        {
+            protected String m_sName;
+            protected IntPtr m_nValue;
+            protected String m_sID;
+
+            public HIDComboItem(String sName, IntPtr nValue, String sID)
+            {
+                m_sName = sName;
+                m_nValue = nValue;
+                m_sID = sID;
+            }
+            public override string ToString()
+            {
+                return m_sName;
+            }
+
+            public IntPtr DeviceHandle
+            {
+                get {
+                    return m_nValue;
+                }
+                private set {
+
+                }
+            }
+            public String DeviceID {
+                get {
+                    return m_sID;
+                }
+                private set {
+
+                }
+            }
+        }
+
+        private void Timer_RawInputMouseWheel_Tick(object sender, EventArgs e)
+        {
+            timer_RawInputMouseWheel.Stop();
+            lblWheelActive.BackColor = Color.Red;
+        }
+
+        private void TxtDeviceHID_hidden_TextChanged(object sender, EventArgs e)
+        {
+            //if (me.DeviceName == txtDeviceHID_hidden.Text) comboHIDMouseWheel.SelectedIndex = nIndex;
+            foreach (HIDComboItem item in comboHIDMouseWheel.Items)
+            {
+                if (item.DeviceID == txtDeviceHID_hidden.Text)
+                {
+                    comboHIDMouseWheel.SelectedItem = item;
+                    break;
+                }
+            }
+        }
+        #endregion
+
+        private void ChkShowRXFilterOnWaterfall_CheckedChanged(object sender, EventArgs e)
+        {
+            Display.ShowRXFilterOnWaterfall = chkShowRXFilterOnWaterfall.Checked;
+        }
+
+        private void ChkShowTXFilterOnWaterfall_CheckedChanged(object sender, EventArgs e)
+        {
+            Display.ShowTXFilterOnWaterfall = chkShowTXFilterOnWaterfall.Checked;
+        }
+
+        private void ChkShowRXZeroLineOnWaterfall_CheckedChanged(object sender, EventArgs e)
+        {
+            Display.ShowRXZeroLineOnWaterfall = chkShowRXZeroLineOnWaterfall.Checked;
+        }
+
+        private void ChkShowTXZeroLineOnWaterfall_CheckedChanged(object sender, EventArgs e)
+        {
+            Display.ShowTXZeroLineOnWaterfall = chkShowTXZeroLineOnWaterfall.Checked;
+        }
+
+        //--
     }
 
     #region PADeviceInfo Helper Class

@@ -59,9 +59,9 @@ namespace Thetis
     using System.Xml.Linq;
     using System.Timers;
     using System.Linq;
-   // using System.Speech.Synthesis;
+    //using System.Speech.Synthesis;
+    using RawInput_dll;
     using System.Media;
-
     #region Enums
 
     public enum FocusMasterMode
@@ -1139,6 +1139,12 @@ namespace Thetis
         private Point combo_rx2_band_basis = new Point(100, 100);
         public bool si570_used = false; // modif F8CHK
 
+        //MW0LGE
+        private Size txt_multi_text_size_basis = new Size(100, 100); // original size of miltimeter text
+        private Point gr_multi_meter_basis = new Point(100, 100);  // original pos of multimeter group
+        private Point gr_multi_meter_menus_basis = new Point(100, 100);  // original pos of multimeter menu group
+        private Size gr_multi_meter_menus_size_basis = new Size(100, 100); // original size of multimeter menu
+
         // :W1CEG:
         private Size gr_multi_meter_size_basis = new Size(100, 100);
         private Point pic_multi_meter_digital_basis = new Point(100, 100);
@@ -1156,6 +1162,7 @@ namespace Thetis
         private Size gr_options_size_basis = new Size(100, 100);
         private Point chk_mon_basis = new Point(100, 100);
         private Point chk_mut_basis = new Point(100, 100);
+        private Point chk_rx2_mut_basis = new Point(100, 100); // MW0LGE
         private Point chk_mox_basis = new Point(100, 100);
         private Point chk_tun_basis = new Point(100, 100);
         private Point chk_vox_basis = new Point(100, 100);
@@ -1277,6 +1284,19 @@ namespace Thetis
         private string TitleBarEncoder;                         // shows most recent encoder value change
         private SButtonBarEntry[] ButtonBarMenu;
 
+
+        // MW0LGE
+        // used to delay repaint of all controls, until after they have been moved
+        private const int WM_SETREDRAW = 11;
+        [DllImport("user32.dll")]
+        private static extern int SendMessage(IntPtr hWnd, Int32 wMsg, bool wParam, Int32 lParam);
+        [DllImport("user32.dll")]
+        static extern bool RedrawWindow(IntPtr hWnd, IntPtr lprcUpdate, IntPtr hrgnUpdate, uint flags);
+        // ----
+        // WIP for rawinput grabbing for mousewheel/keyboard
+        private RawInput m_objRawinput;
+        // ----
+
         #endregion
 
         #region Constructor and Destructor
@@ -1287,7 +1307,7 @@ namespace Thetis
         public Console(string[] args)
         {
             Display.specready = false;
-
+            
             // G8NJJ
             InitialiseButtonBarMenu();
 
@@ -1709,6 +1729,23 @@ namespace Thetis
             }
 
         }
+
+        //MW0LGE
+        //helper functions to suspend drawing/painting
+        //of controls. This is to help limit flicker during
+        //resize of console window
+        private void SuspendDrawing(Control parent)
+        {
+            if (initializing) return;
+            SendMessage(parent.Handle, WM_SETREDRAW, false, 0);
+        }
+        private void ResumeDrawing(Control parent)
+        {
+            if (initializing) return;
+            SendMessage(parent.Handle, WM_SETREDRAW, true, 0);
+            parent.Refresh();
+        }
+        //--
 
         void gmh_MouseUp()
         {
@@ -2453,6 +2490,8 @@ namespace Thetis
             else NetworkIO.SetCWSidetoneVolume(0);
 
             RX1_band_change = RX1Band;
+
+            initialiseRawInput(); // MW0LGE - WIP
         }
 
         public void Init60mChannels()
@@ -6047,7 +6086,6 @@ namespace Thetis
 
             ClickTuneDisplay = false;                               // Set CTUN off to restore center frequency - G3OQD
             chkFWCATU.Checked = ClickTuneDisplay;
-
             ptbDisplayZoom.Value = ZoomFactor;
             ptbDisplayZoom_Scroll(this, EventArgs.Empty);
             if (CTUN)
@@ -6066,7 +6104,6 @@ namespace Thetis
             txtVFOBFreq_LostFocus(this, EventArgs.Empty);
             ClickTuneDisplay = CTUN;
             chkFWCATU.Checked = ClickTuneDisplay;
-
             VFOAFreq = freq;                                       // Restore actual receive frequency after CTUN status restored - G3OQD
 
             // Continuation of QSK-related band/mode-change management - see also QSKEnabled()
@@ -15896,6 +15933,7 @@ namespace Thetis
                 case DisplayMode.SPECTRASCOPE:
                 case DisplayMode.PANADAPTER:
                 case DisplayMode.WATERFALL:
+                case DisplayMode.PANAFALL:
                     if (chkDisplayAVG.Checked)
                         Display.ResetRX1DisplayAverage();
                     if (chkDisplayPeak.Checked)
@@ -16164,7 +16202,8 @@ namespace Thetis
         public void CalcRX2DisplayFreq()
         {
             if (Display.CurrentDisplayModeBottom != DisplayMode.PANADAPTER &&
-                Display.CurrentDisplayModeBottom != DisplayMode.WATERFALL)
+                Display.CurrentDisplayModeBottom != DisplayMode.WATERFALL &&
+                Display.CurrentDisplayMode != DisplayMode.PANAFALL)
                 return;
 
             if (!initializing)
@@ -21282,6 +21321,13 @@ namespace Thetis
             set { zero_beat_rit = value; }
         }
 
+        private bool ritxit_sync = false;
+        public bool RITXITSync
+        {
+            get { return ritxit_sync; }
+            set { ritxit_sync = value; }
+        }
+
 
         //=========================================================
         // ke9ns add for display to check if Beacon needs an freq avg signal strength reading
@@ -21456,7 +21502,8 @@ namespace Thetis
             {
                 case DisplayMode.WATERFALL:
                 case DisplayMode.PANADAPTER:
-                    Display.RX2DisplayCalOffset = rx1_display_cal_offset + rx2_xvtr_gain_offset;
+                case DisplayMode.PANAFALL:
+                    Display.RX2DisplayCalOffset = rx1_display_cal_offset + rx2_xvtr_gain_offset + rx2_6m_gain_offset; //MW0LGE
                     break;
                 default:
                     Display.RX2DisplayCalOffset = rx1_display_cal_offset + rx2_path_offset + rx2_xvtr_gain_offset;
@@ -30441,7 +30488,7 @@ namespace Thetis
 
         #region Display Routines
 
-        public void UpdateDisplay()
+        public void UpdateDisplay(bool bInvalidate = true)
         {
             switch (current_display_engine)
             {
@@ -30450,7 +30497,7 @@ namespace Thetis
                     specRX.GetSpecRX(1).Pixels = picDisplay.Width;
                     specRX.GetSpecRX(cmaster.inid(1, 0)).Pixels = picDisplay.Width;
 
-                    picDisplay.Invalidate();
+                    if(bInvalidate) picDisplay.Invalidate();
                     break;
                 /*case DisplayEngine.DIRECT_X:
                     Display.RenderDirectX();
@@ -30812,14 +30859,29 @@ namespace Thetis
                     Display.CurrentDisplayMode == DisplayMode.HISTOGRAM)
                 // Display.CurrentDisplayMode != DisplayMode.SPECTRASCOPE)
                 {
-                    low = Display.TXSpectrumDisplayLow;
-                    high = Display.TXSpectrumDisplayHigh;
+                    if (display_duplex)
+                    {
+                        low = Display.RXSpectrumDisplayLow;
+                        high = Display.RXSpectrumDisplayHigh;
+                    }
+                    else
+                    {
+                        low = Display.TXSpectrumDisplayLow;
+                        high = Display.TXSpectrumDisplayHigh;
+                    }
                 }
                 else
                 {
-
-                    low = Display.TXDisplayLow;
-                    high = Display.TXDisplayHigh;
+                    if (display_duplex)
+                    {
+                        low = Display.RXDisplayLow;
+                        high = Display.RXDisplayHigh;
+                    }
+                    else
+                    {
+                        low = Display.TXDisplayLow;
+                        high = Display.TXDisplayHigh;
+                    }
                 }
             }
 
@@ -30901,16 +30963,19 @@ namespace Thetis
                 if (y <= picDisplay.Height / 2) y *= 2.0f;
                 else y = (y - picDisplay.Height / 2) * 2.0f;
             }
+            if (Display.CurrentDisplayMode == DisplayMode.PANAFALL && RX2Enabled) y *= 2f; //MW0LGE
             return (float)(Display.SpectrumGridMax - y * (double)(Display.SpectrumGridMax - Display.SpectrumGridMin) / picDisplay.Height);
         }
 
         private float PixelToRx2Db(float y)
         {
-            if (chkSplitDisplay.Checked)
+            if (chkSplitDisplay.Checked || Display.CurrentDisplayMode == DisplayMode.PANAFALL ||
+                Display.CurrentDisplayMode == DisplayMode.PANASCOPE)
             {
                 if (y <= picDisplay.Height / 2) y *= 2.0f;
                 else y = (y - picDisplay.Height / 2) * 2.0f;
             }
+            if (Display.CurrentDisplayModeBottom == DisplayMode.PANAFALL && RX2Enabled) y *= 2f; //MW0LGE
             return (float)(Display.RX2SpectrumGridMax - y * (double)(Display.RX2SpectrumGridMax - Display.RX2SpectrumGridMin) / picDisplay.Height);
         }
 
@@ -30959,588 +31024,1027 @@ namespace Thetis
             }
         }
 
-        private Font font7 = new Font("Arial", 7.0f, FontStyle.Bold);
-        private double avg_num = -130.0;
-        private void picMultiMeterDigital_Paint(object sender, System.Windows.Forms.PaintEventArgs e)
-        {
-            int H = picMultiMeterDigital.ClientSize.Height;
-            int W = picMultiMeterDigital.ClientSize.Width;
-            Graphics g = e.Graphics;
-            double num;
-            int pixel_x = 0;
-            int pixel_x_swr = 0;
-            string output = "";
-
-            switch (current_meter_display_mode)
+        private void drawOriginalMeterTextScale(Graphics g, int H, int W)
+        {   
+            //MW0LGE this is a copy of EDGE meter code just to display text scale along bottom, now used in ORIGINAL meter
+            //with lines and segments removed. TODO is having swr reading on original meter
+            //The old method of string '1  2  3' being padded with some spaces is removed.
+            if (!mox)
             {
-                case MultiMeterDisplayMode.Original:
-                    #region Original
+                switch (current_meter_rx_mode)
+                {
+                    case MeterRXMode.SIGNAL_STRENGTH:
+                    case MeterRXMode.SIGNAL_AVERAGE:
+                        double spacing = (W * 0.5 - 2.0) / 5.0;
+                        double string_height = 0;
+                        for (int i = 1; i < 6; i++)
+                        {
+                            SizeF size = g.MeasureString((-1 + i * 2).ToString(), font7, 1, StringFormat.GenericTypographic);
+                            double string_width = size.Width - 2.0;
+                            string_height = size.Height - 2.0;
 
-                    if (meter_data_ready)
+                            // 1 3 5 7 9
+                            g.DrawString((-1 + i * 2).ToString(), font7, low_brush, (int)(i * spacing - string_width + (int)(i / 5)), (int)(H - 2 - string_height));
+                        }
+                        spacing = ((double)W * 0.5 - 2.0 - 4.0) / 3.0;
+                        for (int i = 1; i < 4; i++)
+                        {
+                            SizeF size = g.MeasureString("+" + (i * 20).ToString(), font7, 3, StringFormat.GenericTypographic);
+                            double string_width = size.Width - 2.0;
+
+                            g.DrawString("+" + (i * 20).ToString(), font7, high_brush, (int)(W * 0.5 + i * spacing - (int)string_width * 3 - i / 3 * 2), (int)(H - 2 - string_height));
+                        }
+                        break;
+                    case MeterRXMode.ADC_L:
+                    case MeterRXMode.ADC_R:
+                    case MeterRXMode.ADC2_L:
+                    case MeterRXMode.ADC2_R:
+                        spacing = ((double)W - 5.0) / 6.0;
+                        for (int i = 1; i < 7; i++)
+                        {
+                            SolidBrush b = low_brush;
+                            if (i == 6) b = high_brush;
+
+                            string s = (-120 + i * 20).ToString();
+                            SizeF size = g.MeasureString(s, font7, 1, StringFormat.GenericTypographic);
+                            double string_width = size.Width - 2.0;
+                            size = g.MeasureString("0", font7, 1, StringFormat.GenericTypographic);
+                            string_height = size.Height - 2.0;
+
+                            g.DrawString(s, font7, b, (int)(i * spacing - (int)string_width * (s.Length)), (int)(H - 2 - string_height));
+                        }
+                        break;
+                    case MeterRXMode.OFF:
+                        break;
+                }
+            }
+            else
+            {
+                MeterTXMode mode = current_meter_tx_mode;
+                if (chkTUN.Checked) mode = tune_meter_tx_mode;
+                switch (mode)
+                {
+                    case MeterTXMode.MIC:
+                    case MeterTXMode.EQ:
+                    case MeterTXMode.LEVELER:
+                    case MeterTXMode.CFC_PK:
+                    case MeterTXMode.COMP:
+                    case MeterTXMode.ALC:
+                        double spacing = (W * 0.665 - 2.0) / 3.0;
+                        double string_height = 0;
+                        for (int i = 1; i < 4; i++)
+                        {
+                            string s = (-30 + i * 10).ToString();
+                            SizeF size = g.MeasureString("0", font7, 1, StringFormat.GenericTypographic);
+                            double string_width = size.Width - 2.0;
+                            string_height = size.Height - 2.0;
+
+                            g.DrawString(s, font7, low_brush, (int)(i * spacing - string_width * s.Length + 1.0 - (int)(i / 2) + (int)(i / 3)), (int)(H - 2 - string_height));
+                        }
+                        spacing = (W * 0.335 - 2.0 - 3.0) / 3.0;
+                        for (int i = 1; i < 4; i++)
+                        {
+                            string s = (i * 4).ToString();
+                            SizeF size = g.MeasureString(s, font7, 3, StringFormat.GenericTypographic);
+                            double string_width = size.Width - 2.0;
+
+                            g.TextRenderingHint = TextRenderingHint.SystemDefault;
+                            g.DrawString(s, font7, high_brush, (int)(W * 0.665 + i * spacing - (int)string_width * s.Length), (int)(H - 2 - string_height));
+                        }
+
+                        break;
+                    case MeterTXMode.FORWARD_POWER:
+                    case MeterTXMode.REVERSE_POWER:
+                        if (alexpresent && ((orionmkiipresent || anan8000dpresent) && tx_xvtr_index < 0))
+                        {
+                            spacing = (W * 0.75 - 2.0) / 4.0;
+                            string_height = 0;
+                            string[] list = { "10", "20", "100", "200" };
+                            for (int i = 1; i < 5; i++)
+                            {
+                                string s = list[i - 1];
+                                SizeF size = g.MeasureString("0", font7, 1, StringFormat.GenericTypographic);
+                                double string_width = size.Width - 2.0;
+                                string_height = size.Height - 2.0;
+
+                                g.DrawString(s, font7, low_brush, (int)(i * spacing - string_width * s.Length + (int)(i / 3) + (int)(i / 4)), (int)(H - 2 - string_height));
+                            }
+                            spacing = (W * 0.25 - 2.0 - 10.0) / 1.0;
+                            for (int i = 1; i < 2; i++)
+                            {
+                                SizeF size = g.MeasureString("0", font7, 3, StringFormat.GenericTypographic);
+                                double string_width = size.Width - 2.0;
+
+                                g.TextRenderingHint = TextRenderingHint.SystemDefault;
+                                g.DrawString("240+", font7, high_brush, (int)(W * 0.75 + i * spacing - (int)3.5 * string_width), (int)(H - 2 - string_height));
+                            }
+                        }
+
+                        else if ((alexpresent || pa_present) && (!anan10present && !anan10Epresent && !apollopresent))
+                        {
+                            spacing = (W * 0.75 - 2.0) / 4.0;
+                            string_height = 0;
+                            string[] list = { "5", "10", "50", "100" };
+                            for (int i = 1; i < 5; i++)
+                            {
+                                string s = list[i - 1];
+                                SizeF size = g.MeasureString("0", font7, 1, StringFormat.GenericTypographic);
+                                double string_width = size.Width - 2.0;
+                                string_height = size.Height - 2.0;
+
+                                g.DrawString(s, font7, low_brush, (int)(i * spacing - string_width * s.Length + (int)(i / 3) + (int)(i / 4)), (int)(H - 2 - string_height));
+                            }
+                            spacing = (W * 0.25 - 2.0 - 10.0) / 1.0;
+                            for (int i = 1; i < 2; i++)
+                            {
+                                SizeF size = g.MeasureString("0", font7, 3, StringFormat.GenericTypographic);
+                                double string_width = size.Width - 2.0;
+
+                                g.TextRenderingHint = TextRenderingHint.SystemDefault;
+                                g.DrawString("120+", font7, high_brush, (int)(W * 0.75 + i * spacing - (int)3.5 * string_width), (int)(H - 2 - string_height));
+                            }
+                        }
+                        else if (anan10present || anan10Epresent)// || apollopresent)
+                        {
+                            spacing = (W * 0.75 - 2.0) / 4.0;
+                            string_height = 0;
+                            string[] list = { "1", "5", "10", "15" };
+                            for (int i = 1; i < 5; i++)
+                            {
+                                string s = list[i - 1];
+                                SizeF size = g.MeasureString("0", font7, 1, StringFormat.GenericTypographic);
+                                double string_width = size.Width - 2.0;
+                                string_height = size.Height - 2.0;
+
+                                g.DrawString(s, font7, low_brush, (int)(i * spacing - string_width * s.Length + (int)(i / 3) + (int)(i / 4)), (int)(H - 2 - string_height));
+                            }
+                            spacing = (W * 0.25 - 2.0 - 10.0) / 1.0;
+                            for (int i = 1; i < 2; i++)
+                            {
+                                SizeF size = g.MeasureString("0", font7, 2, StringFormat.GenericTypographic);
+                                double string_width = size.Width - 2.0;
+
+                                g.TextRenderingHint = TextRenderingHint.SystemDefault;
+                                g.DrawString("25+", font7, high_brush, (int)(W * 0.75 + i * spacing - (int)3.5 * string_width), (int)(H - 2 - string_height));
+                            }
+                        }
+                        else if (apollopresent) //(anan10present || apollopresent) // 30W
+                        {
+                            spacing = (W * 0.75 - 2.0) / 4.0;
+                            string_height = 0;
+                            string[] list = { "5", "10", "20", "30" };
+                            for (int i = 1; i < 5; i++)
+                            {
+                                string s = list[i - 1];
+                                SizeF size = g.MeasureString("0", font7, 1, StringFormat.GenericTypographic);
+                                double string_width = size.Width - 2.0;
+                                string_height = size.Height - 2.0;
+
+                                g.DrawString(s, font7, low_brush, (int)(i * spacing - string_width * s.Length + (int)(i / 3) + (int)(i / 4)), (int)(H - 2 - string_height));
+                            }
+                            spacing = (W * 0.25 - 2.0 - 10.0) / 1.0;
+                            for (int i = 1; i < 2; i++)
+                            {
+                                SizeF size = g.MeasureString("0", font7, 2, StringFormat.GenericTypographic);
+                                double string_width = size.Width - 2.0;
+
+                                g.TextRenderingHint = TextRenderingHint.SystemDefault;
+                                g.DrawString("50+", font7, high_brush, (int)(W * 0.75 + i * spacing - (int)3.5 * string_width), (int)(H - 2 - string_height));
+                            }
+                        }
+                        else // 1W version
+                        {
+                            spacing = (W * 0.75 - 2.0) / 4.0;
+                            string_height = 0;
+                            string[] list = { "100", "250", "500", "800", "1000" };
+                            for (int i = 1; i < 5; i++)
+                            {
+                                string s = list[i - 1];
+                                SizeF size = g.MeasureString("0", font7, 1, StringFormat.GenericTypographic);
+                                double string_width = size.Width - 2.0;
+                                string_height = size.Height - 2.0;
+                                g.DrawString(s, font7, low_brush, (int)(i * spacing - string_width * s.Length + 1.0 + (int)(i / 2) - (int)(i / 4)), (int)(H - 2 - string_height));
+                            }
+                            spacing = (W * 0.25 - 2.0 - 9.0) / 1.0;
+                            for (int i = 1; i < 2; i++)
+                            {
+                                SizeF size = g.MeasureString("0", font7, 3, StringFormat.GenericTypographic);
+                                double string_width = size.Width - 2.0;
+                                g.DrawString("1000", font7, low_brush, (int)(W * 0.75 + 2 + i * spacing - (int)4.0 * string_width), (int)(H - 2 - string_height));
+                            }
+                        }
+                        break;
+                    case MeterTXMode.SWR_POWER:
+                        /* TODO !
+                        if ((alexpresent || pa_present) && (!anan10present && !anan10Epresent && !apollopresent))
+                        {
+                            // SWR stuff first
+                            string_height = 0;
+                            string[] swrx_list = { "1.5", "2" };
+                            spacing = (W * 0.5) / 2.0;
+                            for (int i = 1; i < 3; i++)
+                            {
+
+                                string s = swrx_list[i - 1];
+                                SizeF size = g.MeasureString("0", font7, 1, StringFormat.GenericTypographic);
+                                double string_width = size.Width - 2.0;
+                                string_height = size.Height - 2.0;
+                                g.DrawString(s, font7, low_brush, (int)(i * spacing - string_width * s.Length + 2.0 - 1 * (int)(i / 2) + 3 * (int)(i / 4)), (int)((H / 2) - 9 - string_height));
+                            }
+
+                            string[] swrx_hi_list = { "3", "4", "5" };
+                            spacing = (W * 0.25 - 6.0) / 2.0;
+
+                            for (int i = 1; i < 4; i++)
+                            {
+                                string s = swrx_hi_list[i - 1];
+                                SizeF size = g.MeasureString("0", font7, 1, StringFormat.GenericTypographic);
+                                double string_width = size.Width - 2.0;
+                                string_height = size.Height - 2.0;
+                                g.DrawString(s, font7, high_brush, (int)(W * 0.75 + i * spacing - spacing - (int)1.0 * string_width), (int)((H / 2) - 9 - string_height));
+                            }
+
+                            //PWR
+                            spacing = (W * 0.75 - 2.0) / 4.0;
+                            string_height = 0;
+                            string[] list = { "5", "10", "50", "100" };
+                            for (int i = 1; i < 5; i++)
+                            {
+                                string s = list[i - 1];
+                                SizeF size = g.MeasureString("0", font7, 1, StringFormat.GenericTypographic);
+                                double string_width = size.Width - 2.0;
+                                string_height = size.Height - 2.0;
+                                g.DrawString(s, font7, low_brush, (int)(i * spacing - string_width * s.Length + (int)(i / 3) + (int)(i / 4)), (int)(H - 1 - string_height));
+                            }
+                            spacing = (W * 0.25 - 2.0 - 10.0) / 1.0;
+                            for (int i = 1; i < 2; i++)
+                            {
+                                SizeF size = g.MeasureString("0", font7, 2, StringFormat.GenericTypographic);
+                                double string_width = size.Width - 2.0;
+
+                                g.TextRenderingHint = TextRenderingHint.SystemDefault;
+                                g.DrawString("120+", font7, high_brush, (int)(W * 0.75 + i * spacing - (int)3.5 * string_width), (int)(H - 1 - string_height));
+                            }
+                        }
+
+                        else if (anan10present || anan10Epresent)
+                        {
+                            // SWR stuff first
+                            spacing = (W * 0.5) / 2.0;
+                            string_height = 0;
+                            string[] swrx_list = { "1.5", "2" };
+                            for (int i = 1; i < 3; i++)
+                            {
+                                string s = swrx_list[i - 1];
+                                SizeF size = g.MeasureString("0", font7, 1, StringFormat.GenericTypographic);
+                                double string_width = size.Width - 2.0;
+                                string_height = size.Height - 2.0;
+                                g.DrawString(s, font7, low_brush, (int)(i * spacing - string_width * s.Length + 2.0 - 1 * (int)(i / 2) + 3 * (int)(i / 4)), (int)((H / 2) - 9 - string_height));
+                            }
+
+                            string[] swrx_hi_list = { "3", "4", "5" };
+
+                            spacing = (W * 0.25 - 6.0) / 2.0;
+
+                            for (int i = 1; i < 4; i++)
+                            {
+                                g.FillRectangle(high_brush, (int)((double)W * 0.75 + i * spacing - spacing * 0.5), (H / 2) - 4, 1, 3);
+                                g.FillRectangle(high_brush, (int)((double)W * 0.75 + i * spacing - spacing), (H / 2) - 7, 2, 6);
+                                string s = swrx_hi_list[i - 1];
+                                SizeF size = g.MeasureString("0", font7, 1, StringFormat.GenericTypographic);
+                                double string_width = size.Width - 2.0;
+                                string_height = size.Height - 2.0;
+                                g.DrawString(s, font7, high_brush, (int)(W * 0.75 + i * spacing - spacing - (int)1.0 * string_width), (int)((H / 2) - 9 - string_height));
+                            }
+
+                            // PWR
+                            spacing = (W * 0.75 - 2.0) / 4.0;
+                            string[] list = { "1", "5", "10", "15" };
+                            for (int i = 1; i < 5; i++)
+                            {
+                                string s = list[i - 1];
+                                SizeF size = g.MeasureString("0", font7, 1, StringFormat.GenericTypographic);
+                                double string_width = size.Width - 2.0;
+                                string_height = size.Height - 2.0;
+                                g.DrawString(s, font7, low_brush, (int)(i * spacing - string_width * s.Length + (int)(i / 3) + (int)(i / 4)), (int)(H - 1 - string_height));
+                            }
+                            spacing = (W * 0.25 - 2.0 - 10.0) / 1.0;
+                            for (int i = 1; i < 2; i++)
+                            {
+                                SizeF size = g.MeasureString("0", font7, 2, StringFormat.GenericTypographic);
+                                double string_width = size.Width - 2.0;
+
+                                g.TextRenderingHint = TextRenderingHint.SystemDefault;
+                                g.DrawString("25+", font7, high_brush, (int)(W * 0.75 + i * spacing - (int)3.5 * string_width), (int)(H - 1 - string_height));
+                            }
+                        }
+
+                        else if (apollopresent)
+                        {
+                            // SWR stuff first
+                            spacing = (W * 0.5) / 2.0;
+                            string_height = 0;
+                            string[] swrx_list = { "1.5", "2" };
+                            for (int i = 1; i < 3; i++)
+                            {
+                                g.FillRectangle(low_brush, (int)(i * spacing), (H / 2) - 7, 2, 6);
+
+                                string s = swrx_list[i - 1];
+                                SizeF size = g.MeasureString("0", font7, 1, StringFormat.GenericTypographic);
+                                double string_width = size.Width - 2.0;
+                                string_height = size.Height - 2.0;
+
+                                g.DrawString(s, font7, low_brush, (int)(i * spacing - string_width * s.Length + 2.0 - 1 * (int)(i / 2) + 3 * (int)(i / 4)), (int)((H / 2) - 9 - string_height));
+                            }
+                            g.FillRectangle(low_brush, (int)(W * 0.625), (H / 2) - 4, 1, 3); // small tic 2.5:1
+
+                            string[] swrx_hi_list = { "3", "4", "5" };
+
+                            spacing = (W * 0.25 - 6.0) / 2.0;
+
+                            for (int i = 1; i < 4; i++)
+                            {
+                                string s = swrx_hi_list[i - 1];
+                                SizeF size = g.MeasureString("0", font7, 1, StringFormat.GenericTypographic);
+                                double string_width = size.Width - 2.0;
+                                string_height = size.Height - 2.0;
+                                g.DrawString(s, font7, high_brush, (int)(W * 0.75 + i * spacing - spacing - (int)1.0 * string_width), (int)((H / 2) - 9 - string_height));
+                            }
+
+                            // PWR
+                            spacing = (W * 0.75 - 2.0) / 4.0;
+                            string[] list = { "5", "10", "20", "30" };
+                            for (int i = 1; i < 5; i++)
+                            {
+                                string s = list[i - 1];
+                                SizeF size = g.MeasureString("0", font7, 1, StringFormat.GenericTypographic);
+                                double string_width = size.Width - 2.0;
+                                string_height = size.Height - 2.0;
+                                g.DrawString(s, font7, low_brush, (int)(i * spacing - string_width * s.Length + (int)(i / 3) + (int)(i / 4)), (int)(H - 1 - string_height));
+                            }
+                            spacing = (W * 0.25 - 2.0 - 10.0) / 1.0;
+                            for (int i = 1; i < 2; i++)
+                            {
+                                SizeF size = g.MeasureString("0", font7, 2, StringFormat.GenericTypographic);
+                                double string_width = size.Width - 2.0;
+
+                                g.TextRenderingHint = TextRenderingHint.SystemDefault;
+                                g.DrawString("50+", font7, high_brush, (int)(W * 0.75 + i * spacing - (int)3.5 * string_width), (int)(H - 1 - string_height));
+                            }
+                        }*/
+                        break;
+                    case MeterTXMode.SWR:
+                        spacing = (W * 0.5) / 2.0;
+                        string_height = 0;
+                        string[] swr_list = { "1.5", "2" };
+                        for (int i = 1; i < 3; i++)
+                        {
+
+                            string s = swr_list[i - 1];
+                            SizeF size = g.MeasureString("0", font7, 1, StringFormat.GenericTypographic);
+                            double string_width = size.Width - 2.0;
+                            string_height = size.Height - 2.0;
+
+                            g.DrawString(s, font7, low_brush, (int)(i * spacing - string_width * s.Length + 2.0 - 1 * (int)(i / 2) + 3 * (int)(i / 4)), (int)(H - 2 - string_height));
+                        }
+
+                        string[] swr_hi_list = { "3", "4", "5" };
+
+                        spacing = (W * 0.25 - 6.0) / 2.0;
+                        for (int i = 1; i < 4; i++)
+                        {
+                            string s = swr_hi_list[i - 1];
+                            SizeF size = g.MeasureString("0", font7, 1, StringFormat.GenericTypographic);
+                            double string_width = size.Width - 2.0;
+                            string_height = size.Height - 2.0;
+                            g.DrawString(s, font7, high_brush, (int)(W * 0.75 + i * spacing - spacing - (int)1.0 * string_width), (int)(H - 2 - string_height));
+                        }
+                        break;
+                    case MeterTXMode.ALC_G:
+                    case MeterTXMode.LVL_G:
+                    case MeterTXMode.CFC_G:
+                        spacing = (W * 0.75 - 2.0) / 4.0;
+                        string_height = 0;
+                        string[] gain_list = { "5", "10", "15", "20", "25" };
+                        for (int i = 1; i < 5; i++)
+                        {
+                            string s = gain_list[i - 1];
+                            SizeF size = g.MeasureString("0", font7, 1, StringFormat.GenericTypographic);
+                            double string_width = size.Width - 2.0;
+                            string_height = size.Height - 2.0;
+                            g.DrawString(s, font7, low_brush, (int)(i * spacing - string_width * s.Length + (int)(i / 3)), (int)(H - 2 - string_height));
+                        }
+                        spacing = (W * 0.25 - 2.0 - 9.0) / 1.0;
+                        for (int i = 1; i < 2; i++)
+                        {
+                            SizeF size = g.MeasureString("0", font7, 3, StringFormat.GenericTypographic);
+                            double string_width = size.Width - 2.0;
+                            g.DrawString("25+", font7, high_brush, (int)(W * 0.75 + i * spacing - (int)2.5 * string_width), (int)(H - 2 - string_height));
+                        }
+
+                        break;
+                    case MeterTXMode.OFF:
+                        break;
+                }
+            }
+        }
+
+        private double handleOriginalMeter(int RXnumber, Graphics g, int H, int W)
+        {
+            // handle the ORIGINAL meter
+            // pass in 1 or 2 as RXnumber
+            // graphics object, and height/width of pic control that takes the output
+            // returns the current meter data
+            double dBmMeterReading  = 0;
+            int pixel_x = 0;
+            bool bAbove = false;
+            bool bReady = false;
+            MeterRXMode metRXMode = MeterRXMode.LAST; // set to something impossible
+            MeterTXMode metTXMode = MeterTXMode.LAST;
+
+            switch (RXnumber)
+            {
+                case 1:
+                    bReady = meter_data_ready;
+                    if (bReady)
                     {
                         current_meter_data = new_meter_data;
                         meter_data_ready = false;
                     }
-
-                    if (!mox)
+                    dBmMeterReading = current_meter_data;
+                    metRXMode = current_meter_rx_mode;
+                    metTXMode = current_meter_tx_mode;
+                    bAbove = rx1_above30;
+                    break;
+                case 2:
+                    bReady = rx2_meter_data_ready;
                     {
-                        num = current_meter_data;
-
-                        switch (current_meter_rx_mode)
-                        {
-                            case MeterRXMode.SIGNAL_STRENGTH:
-                            case MeterRXMode.SIGNAL_AVERAGE:
-                                switch ((int)g.DpiX)
-                                {
-                                    case 96:
-                                        double s;
-                                        if (rx1_above30)
-                                        {
-                                            if (collapsedDisplay)
-                                            {
-                                                s = (num + 147) / 6;
-                                                if (s <= 9.0F)
-                                                    pixel_x = (int)((s * 15) + 2);
-                                                else
-                                                {
-                                                    double over_s9 = num + 93;
-                                                    pixel_x = 138 + (int)(over_s9 * 2.10);
-                                                }
-                                            }
-                                            else
-                                            {
-                                                s = (num + 147) / 6;
-                                                if (s <= 9.0F)
-                                                    pixel_x = (int)((s * 7.5) + 2);
-                                                else
-                                                {
-                                                    double over_s9 = num + 93;
-                                                    pixel_x = 69 + (int)(over_s9 * 1.05);
-                                                }
-                                            }
-                                        }
-                                        else
-                                        {
-                                            if (collapsedDisplay)
-                                            {
-                                                s = (num + 127) / 6;
-                                                if (s <= 9.0F)
-                                                    pixel_x = (int)((s * 15) + 2);
-                                                else
-                                                {
-                                                    double over_s9 = num + 73;
-                                                    pixel_x = 138 + (int)(over_s9 * 2.10);
-                                                }
-                                            }
-                                            else
-                                            {
-                                                s = (num + 127) / 6;
-                                                if (s <= 9.0F)
-                                                    pixel_x = (int)((s * 7.5) + 2);
-                                                else
-                                                {
-                                                    double over_s9 = num + 73;
-                                                    pixel_x = 69 + (int)(over_s9 * 1.05);
-                                                }
-                                            }
-                                        }
-                                        break;
-                                    case 120:
-                                        if (num <= -97.0f)
-                                            pixel_x = (int)(0 + (num + 100.0) / 3.0 * 10);
-                                        else if (num <= -91.0f)
-                                            pixel_x = (int)(10 + (num + 97.0) / 6.0 * 17);
-                                        else if (num <= -85.0f)
-                                            pixel_x = (int)(27 + (num + 91.0) / 6.0 * 16);
-                                        else if (num <= -79.0f)
-                                            pixel_x = (int)(43 + (num + 85.0) / 6.0 * 17);
-                                        else if (num <= -73.0f)
-                                            pixel_x = (int)(60 + (num + 79.0) / 6.0 * 16);
-                                        else if (num <= -53.0f)
-                                            pixel_x = (int)(76 + (num + 73.0) / 20.0 * 24);
-                                        else if (num <= -33.0f)
-                                            pixel_x = (int)(100 + (num + 53.0) / 20.0 * 24);
-                                        else if (num <= -13.0f)
-                                            pixel_x = (int)(124 + (num + 33.0) / 20.0 * 24);
-                                        else
-                                            pixel_x = (int)(148 + (num + 13.0) / 20.0 * 19);
-                                        break;
-                                }
-                                break;
-                            case MeterRXMode.ADC_L:
-                            case MeterRXMode.ADC_R:
-                                switch ((int)g.DpiX)
-                                {
-                                    case 96:
-                                        if (collapsedDisplay)
-                                            pixel_x = (int)(((num + 100) * 2.4) + 24);
-                                        else pixel_x = (int)(((num + 100) * 1.2) + 12);
-                                        break;
-                                    case 120:
-                                        if (num <= -100.0f)
-                                            pixel_x = (int)(0 + (num + 110.0) / 10.0 * 14);
-                                        else if (num <= -80.0f)
-                                            pixel_x = (int)(14 + (num + 100.0) / 20.0 * 27);
-                                        else if (num <= -60.0f)
-                                            pixel_x = (int)(41 + (num + 80.0) / 20.0 * 28);
-                                        else if (num <= -40.0f)
-                                            pixel_x = (int)(69 + (num + 60.0) / 20.0 * 28);
-                                        else if (num <= -20.0f)
-                                            pixel_x = (int)(97 + (num + 40.0) / 20.0 * 27);
-                                        else if (num <= 0.0f)
-                                            pixel_x = (int)(124 + (num + 20.0) / 20.0 * 24);
-                                        else
-                                            pixel_x = (int)(148 + (num - 0.0) / 10.0 * 19);
-                                        break;
-                                }
-                                break;
-                            case MeterRXMode.OFF:
-                                break;
-                        }
+                        rx2_meter_current_data = rx2_meter_new_data;
+                        rx2_meter_data_ready = false;
                     }
-                    else
-                    {
-                        num = current_meter_data;
+                    dBmMeterReading = rx2_meter_current_data;
+                    metRXMode = rx2_meter_mode;
+                    bAbove = rx2_above30;
+                    break;
+            }
 
-                        MeterTXMode mode = current_meter_tx_mode;
-                        if (chkTUN.Checked) mode = tune_meter_tx_mode;
-                        switch (mode)
+            if (!mox || RXnumber==2)  // will not run the else for rx2 (which cant tx)
+            {
+                switch (metRXMode)
+                {
+                    case MeterRXMode.SIGNAL_STRENGTH:
+                    case MeterRXMode.SIGNAL_AVERAGE:
+                        switch ((int)g.DpiX)
                         {
-                            case MeterTXMode.MIC:
-                            case MeterTXMode.EQ:
-                            case MeterTXMode.LEVELER:
-                            case MeterTXMode.CFC_PK:
-                            case MeterTXMode.COMP:
-                            case MeterTXMode.ALC:
-                                //num += 3.0;  // number no longer has fudge factor added in the wdsp, must be remove
-                                switch ((int)g.DpiX)
+                            case 96:
+                                double s;
+                                if (bAbove)
                                 {
-                                    case 96:
-                                        if (collapsedDisplay)
-                                        {
-                                            if (num <= -20.0f)
-                                                pixel_x = (int)(0 + (num + 25.0) / 5.0 * 18);
-                                            else if (num <= -10.0f)
-                                                pixel_x = (int)(18 + (num + 20.0) / 10.0 * 54);
-                                            else if (num <= -5.0f)
-                                                pixel_x = (int)(72 + (num + 10.0) / 5.0 * 54);
-                                            else if (num <= 0.0f)
-                                                pixel_x = (int)(126 + (num + 5.0) / 5.0 * 48);
-                                            else if (num <= 4.0f)
-                                                pixel_x = (int)(174 + (num - 0.0) / 4.0 * 30);
-                                            else if (num <= 8.0f)
-                                                pixel_x = (int)(204 + (num - 4.0) / 4.0 * 30);
-                                            else if (num <= 12.0f)
-                                                pixel_x = (int)(234 + (num - 8.0) / 4.0 * 30);
-                                            else
-                                                pixel_x = (int)(264 + (num - 12.0) / 0.5 * 16);
-                                        }
+                                    if (collapsedDisplay)
+                                    {
+                                        s = (dBmMeterReading + 147) / 6;
+                                        if (s <= 9.0F)
+                                            pixel_x = (int)((s * 15) + 2);
                                         else
                                         {
-                                            if (num <= -20.0f)
-                                                pixel_x = (int)(0 + (num + 25.0) / 5.0 * 9);
-                                            else if (num <= -10.0f)
-                                                pixel_x = (int)(9 + (num + 20.0) / 10.0 * 27);
-                                            else if (num <= -5.0f)
-                                                pixel_x = (int)(36 + (num + 10.0) / 5.0 * 27);
-                                            else if (num <= 0.0f)
-                                                pixel_x = (int)(63 + (num + 5.0) / 5.0 * 24);
-                                            else if (num <= 4.0f)
-                                                pixel_x = (int)(87 + (num - 0.0) / 4.0 * 15);
-                                            else if (num <= 8.0f)
-                                                pixel_x = (int)(102 + (num - 4.0) / 4.0 * 15);
-                                            else if (num <= 12.0f)
-                                                pixel_x = (int)(117 + (num - 8.0) / 4.0 * 15);
-                                            else
-                                                pixel_x = (int)(132 + (num - 12.0) / 0.5 * 8);
+                                            double over_s9 = dBmMeterReading + 93;
+                                            pixel_x = 138 + (int)(over_s9 * 2.10);
                                         }
-                                        break;
-                                    case 120:
-                                        if (num <= -20.0f)
-                                            pixel_x = (int)(0 + (num + 25.0) / 5.0 * 10);
-                                        else if (num <= -10.0f)
-                                            pixel_x = (int)(10 + (num + 20.0) / 10.0 * 30);
-                                        else if (num <= -5.0f)
-                                            pixel_x = (int)(40 + (num + 10.0) / 5.0 * 30);
-                                        else if (num <= 0.0f)
-                                            pixel_x = (int)(70 + (num + 5.0) / 5.0 * 27);
-                                        else if (num <= 4.0f)
-                                            pixel_x = (int)(97 + (num - 0.0) / 4.0 * 17);
-                                        else if (num <= 8.0f)
-                                            pixel_x = (int)(114 + (num - 4.0) / 4.0 * 17);
-                                        else if (num <= 12.0f)
-                                            pixel_x = (int)(131 + (num - 8.0) / 4.0 * 17);
+                                    }
+                                    else
+                                    {
+                                        s = (dBmMeterReading + 147) / 6;
+                                        if (s <= 9.0F)
+                                            pixel_x = (int)((s * 7.5) + 2);
                                         else
-                                            pixel_x = (int)(148 + (num - 12.0) / 0.5 * 23);
-                                        break;
+                                        {
+                                            double over_s9 = dBmMeterReading + 93;
+                                            pixel_x = 69 + (int)(over_s9 * 1.05);
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    if (collapsedDisplay)
+                                    {
+                                        s = (dBmMeterReading + 127) / 6;
+                                        if (s <= 9.0F)
+                                            pixel_x = (int)((s * 15) + 2);
+                                        else
+                                        {
+                                            double over_s9 = dBmMeterReading + 73;
+                                            pixel_x = 138 + (int)(over_s9 * 2.10);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        s = (dBmMeterReading + 127) / 6;
+                                        if (s <= 9.0F)
+                                            pixel_x = (int)((s * 7.5) + 2);
+                                        else
+                                        {
+                                            double over_s9 = dBmMeterReading + 73;
+                                            pixel_x = 69 + (int)(over_s9 * 1.05);
+                                        }
+                                    }
                                 }
                                 break;
-                            case MeterTXMode.FORWARD_POWER:
-                            case MeterTXMode.REVERSE_POWER:
-                                // if (!alexpresent && !apollopresent)
-                                // num *= 1000;
-
-                                switch ((int)g.DpiX)
-                                {
-                                    case 96:
-                                        if (collapsedDisplay)
-                                        {
-                                            if (anan10present || anan10Epresent)
-                                            {
-                                                if (num <= 1.0f)
-                                                    pixel_x = (int)(0 + num * 16);
-                                                else if (num <= 5.0f)
-                                                    pixel_x = (int)(16 + (num - 1) / 4 * 48);
-                                                else if (num <= 10.0f)
-                                                    pixel_x = (int)(64 + (num - 5) / 5 * 48);
-                                                else if (num <= 15.0f)
-                                                    pixel_x = (int)(112 + (num - 10) / 5 * 48);
-                                                else if (num <= 20.0f)
-                                                    pixel_x = (int)(160 + (num - 15) / 5 * 48);
-                                                else if (num <= 25.0f)
-                                                    pixel_x = (int)(208 + (num - 20) / 5 * 48);
-                                                else
-                                                    pixel_x = (int)(256 + (num - 25) / 5 * 32);
-                                            }
-                                            else if (apollopresent)
-                                            {
-                                                if (num <= 1.0f)
-                                                    pixel_x = (int)(0 + num * 16);
-                                                else if (num <= 5.0f)
-                                                    pixel_x = (int)(16 + (num - 1) / 4 * 48);
-                                                else if (num <= 10.0f)
-                                                    pixel_x = (int)(64 + (num - 5) / 5 * 48);
-                                                else if (num <= 15.0f)
-                                                    pixel_x = (int)(112 + (num - 10) / 5 * 48);
-                                                else if (num <= 30.0f)
-                                                    pixel_x = (int)(160 + (num - 15) / 15 * 48);
-                                                else if (num <= 50.0f)
-                                                    pixel_x = (int)(208 + (num - 30) / 20 * 48);
-                                                else
-                                                    pixel_x = (int)(256 + (num - 50) / 50 * 32);
-                                            }
-                                            else if (anan8000dpresent && tx_xvtr_index < 0)
-                                            {
-                                                if (num <= 1.0f)
-                                                    pixel_x = (int)(0 + num * 16);
-                                                else if (num <= 5.0f)
-                                                    pixel_x = (int)(16 + (num - 1) / 4 * 48);
-                                                else if (num <= 10.0f)
-                                                    pixel_x = (int)(64 + (num - 5) / 5 * 48);
-                                                else if (num <= 50.0f)
-                                                    pixel_x = (int)(112 + (num - 10) / 40 * 48);
-                                                else if (num <= 100.0f)
-                                                    pixel_x = (int)(160 + (num - 50) / 50 * 48);
-                                                else if (num <= 200.0f)
-                                                    pixel_x = (int)(200 + (num - 100) / 20 * 48);
-                                                else
-                                                    pixel_x = (int)(256 + (num - 120) / 20 * 32);
-                                            }
-                                            else if (alexpresent && !anan8000dpresent)
-                                            {
-                                                if (num <= 1.0f)
-                                                    pixel_x = (int)(0 + num * 16);
-                                                else if (num <= 5.0f)
-                                                    pixel_x = (int)(16 + (num - 1) / 4 * 48);
-                                                else if (num <= 10.0f)
-                                                    pixel_x = (int)(64 + (num - 5) / 5 * 48);
-                                                else if (num <= 50.0f)
-                                                    pixel_x = (int)(112 + (num - 10) / 40 * 48);
-                                                else if (num <= 100.0f)
-                                                    pixel_x = (int)(160 + (num - 50) / 50 * 48);
-                                                else if (num <= 208.0f)
-                                                    pixel_x = (int)(208 + (num - 100) / 20 * 48);
-                                                else
-                                                    pixel_x = (int)(256 + (num - 120) / 20 * 32);
-                                            }
-                                            else
-                                            {
-                                                if (num <= 25.0f)
-                                                    pixel_x = (int)(0 + (num - 0.0) / 25.0 * 16);
-                                                else if (num <= 50.0f)
-                                                    pixel_x = (int)(16 + (num - 25.0) / 25.0 * 31);
-                                                else if (num <= 100.0f)
-                                                    pixel_x = (int)(31 + (num - 50.0) / 50.0 * 31);
-                                                else if (num <= 200.0f)
-                                                    pixel_x = (int)(62 + (num - 100.0) / 100.0 * 64);
-                                                else if (num <= 500.0f)
-                                                    pixel_x = (int)(126 + (num - 200.0) / 300.0 * 48);
-                                                else if (num <= 600.0f)
-                                                    pixel_x = (int)(174 + (num - 500.0) / 100.0 * 30);
-                                                else if (num <= 700.0f)
-                                                    pixel_x = (int)(204 + (num - 600.0) / 100.0 * 30);
-                                                else if (num <= 800.0f)
-                                                    pixel_x = (int)(234 + (num - 700.0) / 100.0 * 30);
-                                                else
-                                                    pixel_x = (int)(264 + (num - 800.0) / 100.0 * 16);
-                                            }
-                                        }
-                                        else
-                                        {
-                                            if (anan10present || anan10Epresent)
-                                            {
-                                                if (num <= 1.0f)
-                                                    pixel_x = (int)(0 + num * 2);
-                                                else if (num <= 5.0f)
-                                                    pixel_x = (int)(2 + (num - 1) / 4 * 24);
-                                                else if (num <= 10.0f)
-                                                    pixel_x = (int)(26 + (num - 5) / 5 * 24);
-                                                else if (num <= 15.0f)
-                                                    pixel_x = (int)(50 + (num - 10) / 5 * 24);
-                                                else if (num <= 20.0f)
-                                                    pixel_x = (int)(74 + (num - 15) / 5 * 24);
-                                                else if (num <= 25.0f)
-                                                    pixel_x = (int)(98 + (num - 20) / 5 * 24);
-                                                else
-                                                    pixel_x = (int)(122 + (num - 25) / 5 * 16);
-                                            }
-                                            else if (apollopresent)
-                                            {
-                                                if (num <= 1.0f)
-                                                    pixel_x = (int)(0 + num * 2);
-                                                else if (num <= 5.0f)
-                                                    pixel_x = (int)(2 + (num - 1) / 4 * 24);
-                                                else if (num <= 10.0f)
-                                                    pixel_x = (int)(26 + (num - 5) / 5 * 24);
-                                                else if (num <= 15.0f)
-                                                    pixel_x = (int)(50 + (num - 10) / 5 * 24);
-                                                else if (num <= 30.0f)
-                                                    pixel_x = (int)(74 + (num - 15) / 15 * 24);
-                                                else if (num <= 50.0f)
-                                                    pixel_x = (int)(98 + (num - 30) / 20 * 24);
-                                                else
-                                                    pixel_x = (int)(122 + (num - 50) / 50 * 16);
-                                            }
-                                            else if (anan8000dpresent && tx_xvtr_index < 0)
-                                            {
-                                                if (num <= 5.0f)
-                                                    pixel_x = (int)(0 + num * 2);
-                                                else if (num <= 10.0f)
-                                                    pixel_x = (int)(2 + (num - 1) / 4 * 24);
-                                                else if (num <= 20.0f)
-                                                    pixel_x = (int)(26 + (num - 10) / 5 * 24);
-                                                else if (num <= 100.0f)
-                                                    pixel_x = (int)(50 + (num - 20) / 40 * 24);
-                                                else if (num <= 200.0f)
-                                                    pixel_x = (int)(74 + (num - 100) / 50 * 24);
-                                                else if (num <= 250.0f)
-                                                    pixel_x = (int)(98 + (num - 200) / 20 * 24);
-                                                else
-                                                    pixel_x = (int)(122 + (num - 250) / 20 * 16);
-                                            }
-                                            else if (alexpresent && !anan8000dpresent)
-                                            {
-                                                if (num <= 1.0f)
-                                                    pixel_x = (int)(0 + num * 2);
-                                                else if (num <= 5.0f)
-                                                    pixel_x = (int)(2 + (num - 1) / 4 * 24);
-                                                else if (num <= 10.0f)
-                                                    pixel_x = (int)(26 + (num - 5) / 5 * 24);
-                                                else if (num <= 50.0f)
-                                                    pixel_x = (int)(50 + (num - 10) / 40 * 24);
-                                                else if (num <= 100.0f)
-                                                    pixel_x = (int)(74 + (num - 50) / 50 * 24);
-                                                else if (num <= 120.0f)
-                                                    pixel_x = (int)(98 + (num - 100) / 20 * 24);
-                                                else
-                                                    pixel_x = (int)(122 + (num - 120) / 20 * 16);
-                                            }
-                                            else
-                                            {
-                                                if (num <= 100.0f)
-                                                    pixel_x = (int)(0 + (num - 0.0) / 100.0 * 31);
-                                                else if (num <= 200.0f)
-                                                    pixel_x = (int)(31 + (num - 100.0) / 100.0 * 32);
-                                                else if (num <= 500.0f)
-                                                    pixel_x = (int)(63 + (num - 200.0) / 300.0 * 24);
-                                                else if (num <= 600.0f)
-                                                    pixel_x = (int)(87 + (num - 500.0) / 100.0 * 15);
-                                                else if (num <= 700.0f)
-                                                    pixel_x = (int)(102 + (num - 600.0) / 100.0 * 15);
-                                                else if (num <= 800.0f)
-                                                    pixel_x = (int)(117 + (num - 700.0) / 100.0 * 15);
-                                                else
-                                                    pixel_x = (int)(132 + (num - 800.0) / 100.0 * 8);
-                                            }
-                                        }
-                                        break;
-
-                                    case 120:
-                                        if (num <= 1.0f)
-                                            pixel_x = (int)(0 + num * 3);
-                                        else if (num <= 5.0f)
-                                            pixel_x = (int)(3 + (num - 1) / 4 * 26);
-                                        else if (num <= 10.0f)
-                                            pixel_x = (int)(29 + (num - 5) / 5 * 26);
-                                        else if (num <= 50.0f)
-                                            pixel_x = (int)(55 + (num - 10) / 40 * 27);
-                                        else if (num <= 100.0f)
-                                            pixel_x = (int)(82 + (num - 50) / 50 * 28);
-                                        else if (num <= 120.0f)
-                                            pixel_x = (int)(110 + (num - 100) / 20 * 27);
-                                        else
-                                            pixel_x = (int)(137 + (num - 120) / 20 * 30);
-                                        break;
-                                }
-                                break;
-                            case MeterTXMode.SWR:
-                                switch ((int)g.DpiX)
-                                {
-                                    case 96:
-                                        if (collapsedDisplay)
-                                        {
-                                            if (double.IsInfinity(num))
-                                                pixel_x = 200;
-                                            else if (num <= 1.0f)
-                                                pixel_x = (int)(0 + num * 6);
-                                            else if (num <= 1.5f)
-                                                pixel_x = (int)(6 + (num - 1.0) / 0.5 * 54);
-                                            else if (num <= 2.0f)
-                                                pixel_x = (int)(60 + (num - 1.5) / 0.5 * 40);
-                                            else if (num <= 3.0f)
-                                                pixel_x = (int)(100 + (num - 2.0) / 1.0 * 42);
-                                            else if (num <= 5.0f)
-                                                pixel_x = (int)(142 + (num - 3.0) / 2.0 * 42);
-                                            else if (num <= 10.0f)
-                                                pixel_x = (int)(184 + (num - 5.0) / 5.0 * 42);
-                                            else
-                                                pixel_x = (int)(226 + (num - 10.0) / 15.0 * 52);
-                                        }
-                                        else
-                                        {
-                                            if (double.IsInfinity(num))
-                                                pixel_x = 200;
-                                            else if (num <= 1.0f)
-                                                pixel_x = (int)(0 + num * 3);
-                                            else if (num <= 1.5f)
-                                                pixel_x = (int)(3 + (num - 1.0) / 0.5 * 27);
-                                            else if (num <= 2.0f)
-                                                pixel_x = (int)(30 + (num - 1.5) / 0.5 * 20);
-                                            else if (num <= 3.0f)
-                                                pixel_x = (int)(50 + (num - 2.0) / 1.0 * 21);
-                                            else if (num <= 5.0f)
-                                                pixel_x = (int)(71 + (num - 3.0) / 2.0 * 21);
-                                            else if (num <= 10.0f)
-                                                pixel_x = (int)(92 + (num - 5.0) / 5.0 * 21);
-                                            else
-                                                pixel_x = (int)(113 + (num - 10.0) / 15.0 * 26);
-                                        }
-                                        break;
-                                    case 120:
-                                        if (double.IsInfinity(num))
-                                            pixel_x = 200;
-                                        else if (num <= 1.0f)
-                                            pixel_x = (int)(0 + num * 3);
-                                        else if (num <= 1.5f)
-                                            pixel_x = (int)(3 + (num - 1.0) / 0.5 * 31);
-                                        else if (num <= 2.0f)
-                                            pixel_x = (int)(34 + (num - 1.5) / 0.5 * 22);
-                                        else if (num <= 3.0f)
-                                            pixel_x = (int)(56 + (num - 2.0) / 1.0 * 22);
-                                        else if (num <= 5.0f)
-                                            pixel_x = (int)(78 + (num - 3.0) / 2.0 * 23);
-                                        else if (num <= 10.0f)
-                                            pixel_x = (int)(101 + (num - 5.0) / 5.0 * 23);
-                                        else
-                                            pixel_x = (int)(124 + (num - 10.0) / 15.0 * 43);
-                                        break;
-                                }
-                                break;
-                            case MeterTXMode.SWR_POWER:
-                                break;
-                            case MeterTXMode.ALC_G:
-                            case MeterTXMode.LVL_G:
-                            case MeterTXMode.CFC_G:
-                                switch ((int)g.DpiX)
-                                {
-                                    case 96:
-                                        if (collapsedDisplay)
-                                        {
-                                            if (num <= 0.0f)
-                                                pixel_x = 6;
-                                            else if (num <= 5.0f)
-                                                pixel_x = (int)(6 + (num - 0.0) / 5.0 * 56);
-                                            else if (num <= 10.0f)
-                                                pixel_x = (int)(62 + (num - 5.0) / 5.0 * 58);
-                                            else if (num <= 15.0f)
-                                                pixel_x = (int)(120 + (num - 10.0) / 5.0 * 60);
-                                            else if (num <= 20.0f)
-                                                pixel_x = (int)(180 + (num - 15.0) / 5.0 * 62);
-                                            else
-                                                pixel_x = (int)(242 + (num - 20.0) / 5.0 * 58);
-                                        }
-                                        else
-                                        {
-                                            if (num <= 0.0f)
-                                                pixel_x = 3;
-                                            else if (num <= 5.0f)
-                                                pixel_x = (int)(3 + (num - 0.0) / 5.0 * 28);
-                                            else if (num <= 10.0f)
-                                                pixel_x = (int)(31 + (num - 5.0) / 5.0 * 29);
-                                            else if (num <= 15.0f)
-                                                pixel_x = (int)(60 + (num - 10.0) / 5.0 * 30);
-                                            else if (num <= 20.0f)
-                                                pixel_x = (int)(90 + (num - 15.0) / 5.0 * 31);
-                                            else
-                                                pixel_x = (int)(121 + (num - 20.0) / 5.0 * 29);
-                                        }
-                                        break;
-                                    case 120:
-                                        if (num <= 0.0f)
-                                            pixel_x = 3;
-                                        else if (num <= 5.0f)
-                                            pixel_x = (int)(3 + (num - 0.0) / 5.0 * 31);
-                                        else if (num <= 10.0f)
-                                            pixel_x = (int)(34 + (num - 5.0) / 5.0 * 33);
-                                        else if (num <= 15.0f)
-                                            pixel_x = (int)(77 + (num - 10.0) / 5.0 * 33);
-                                        else if (num <= 20.0f)
-                                            pixel_x = (int)(110 + (num - 15.0) / 5.0 * 35);
-                                        else
-                                            pixel_x = (int)(145 + (num - 20.0) / 5.0 * 32);
-                                        break;
-                                }
-                                break;
-                            case MeterTXMode.OFF:
+                            case 120:
+                                if (dBmMeterReading <= -97.0f)
+                                    pixel_x = (int)(0 + (dBmMeterReading + 100.0) / 3.0 * 10);
+                                else if (dBmMeterReading <= -91.0f)
+                                    pixel_x = (int)(10 + (dBmMeterReading + 97.0) / 6.0 * 17);
+                                else if (dBmMeterReading <= -85.0f)
+                                    pixel_x = (int)(27 + (dBmMeterReading + 91.0) / 6.0 * 16);
+                                else if (dBmMeterReading <= -79.0f)
+                                    pixel_x = (int)(43 + (dBmMeterReading + 85.0) / 6.0 * 17);
+                                else if (dBmMeterReading <= -73.0f)
+                                    pixel_x = (int)(60 + (dBmMeterReading + 79.0) / 6.0 * 16);
+                                else if (dBmMeterReading <= -53.0f)
+                                    pixel_x = (int)(76 + (dBmMeterReading + 73.0) / 20.0 * 24);
+                                else if (dBmMeterReading <= -33.0f)
+                                    pixel_x = (int)(100 + (dBmMeterReading + 53.0) / 20.0 * 24);
+                                else if (dBmMeterReading <= -13.0f)
+                                    pixel_x = (int)(124 + (dBmMeterReading + 33.0) / 20.0 * 24);
+                                else
+                                    pixel_x = (int)(148 + (dBmMeterReading + 13.0) / 20.0 * 19);
                                 break;
                         }
+                        break;
+                    case MeterRXMode.ADC_L:
+                    case MeterRXMode.ADC_R:
+                        switch ((int)g.DpiX)
+                        {
+                            case 96:
+                                if (collapsedDisplay)
+                                    pixel_x = (int)(((dBmMeterReading + 100) * 2.4) + 24);
+                                else pixel_x = (int)(((dBmMeterReading + 100) * 1.2) + 12);
+                                break;
+                            case 120:
+                                if (dBmMeterReading <= -100.0f)
+                                    pixel_x = (int)(0 + (dBmMeterReading + 110.0) / 10.0 * 14);
+                                else if (dBmMeterReading <= -80.0f)
+                                    pixel_x = (int)(14 + (dBmMeterReading + 100.0) / 20.0 * 27);
+                                else if (dBmMeterReading <= -60.0f)
+                                    pixel_x = (int)(41 + (dBmMeterReading + 80.0) / 20.0 * 28);
+                                else if (dBmMeterReading <= -40.0f)
+                                    pixel_x = (int)(69 + (dBmMeterReading + 60.0) / 20.0 * 28);
+                                else if (dBmMeterReading <= -20.0f)
+                                    pixel_x = (int)(97 + (dBmMeterReading + 40.0) / 20.0 * 27);
+                                else if (dBmMeterReading <= 0.0f)
+                                    pixel_x = (int)(124 + (dBmMeterReading + 20.0) / 20.0 * 24);
+                                else
+                                    pixel_x = (int)(148 + (dBmMeterReading - 0.0) / 10.0 * 19);
+                                break;
+                        }
+                        break;
+                    case MeterRXMode.OFF:
+                        break;
+                }
+            }
+            else
+            {
+                MeterTXMode mode = current_meter_tx_mode;
+                if (chkTUN.Checked) mode = tune_meter_tx_mode;
+                switch (mode)
+                {
+                    case MeterTXMode.MIC:
+                    case MeterTXMode.EQ:
+                    case MeterTXMode.LEVELER:
+                    case MeterTXMode.CFC_PK:
+                    case MeterTXMode.COMP:
+                    case MeterTXMode.ALC:
+                        //num += 3.0;  // number no longer has fudge factor added in the wdsp, must be remove
+                        switch ((int)g.DpiX)
+                        {
+                            case 96:
+                                if (collapsedDisplay)
+                                {
+                                    if (dBmMeterReading <= -20.0f)
+                                        pixel_x = (int)(0 + (dBmMeterReading + 25.0) / 5.0 * 18);
+                                    else if (dBmMeterReading <= -10.0f)
+                                        pixel_x = (int)(18 + (dBmMeterReading + 20.0) / 10.0 * 54);
+                                    else if (dBmMeterReading <= -5.0f)
+                                        pixel_x = (int)(72 + (dBmMeterReading + 10.0) / 5.0 * 54);
+                                    else if (dBmMeterReading <= 0.0f)
+                                        pixel_x = (int)(126 + (dBmMeterReading + 5.0) / 5.0 * 48);
+                                    else if (dBmMeterReading <= 4.0f)
+                                        pixel_x = (int)(174 + (dBmMeterReading - 0.0) / 4.0 * 30);
+                                    else if (dBmMeterReading <= 8.0f)
+                                        pixel_x = (int)(204 + (dBmMeterReading - 4.0) / 4.0 * 30);
+                                    else if (dBmMeterReading <= 12.0f)
+                                        pixel_x = (int)(234 + (dBmMeterReading - 8.0) / 4.0 * 30);
+                                    else
+                                        pixel_x = (int)(264 + (dBmMeterReading - 12.0) / 0.5 * 16);
+                                }
+                                else
+                                {
+                                    if (dBmMeterReading <= -20.0f)
+                                        pixel_x = (int)(0 + (dBmMeterReading + 25.0) / 5.0 * 9);
+                                    else if (dBmMeterReading <= -10.0f)
+                                        pixel_x = (int)(9 + (dBmMeterReading + 20.0) / 10.0 * 27);
+                                    else if (dBmMeterReading <= -5.0f)
+                                        pixel_x = (int)(36 + (dBmMeterReading + 10.0) / 5.0 * 27);
+                                    else if (dBmMeterReading <= 0.0f)
+                                        pixel_x = (int)(63 + (dBmMeterReading + 5.0) / 5.0 * 24);
+                                    else if (dBmMeterReading <= 4.0f)
+                                        pixel_x = (int)(87 + (dBmMeterReading - 0.0) / 4.0 * 15);
+                                    else if (dBmMeterReading <= 8.0f)
+                                        pixel_x = (int)(102 + (dBmMeterReading - 4.0) / 4.0 * 15);
+                                    else if (dBmMeterReading <= 12.0f)
+                                        pixel_x = (int)(117 + (dBmMeterReading - 8.0) / 4.0 * 15);
+                                    else
+                                        pixel_x = (int)(132 + (dBmMeterReading - 12.0) / 0.5 * 8);
+                                }
+                                break;
+                            case 120:
+                                if (dBmMeterReading <= -20.0f)
+                                    pixel_x = (int)(0 + (dBmMeterReading + 25.0) / 5.0 * 10);
+                                else if (dBmMeterReading <= -10.0f)
+                                    pixel_x = (int)(10 + (dBmMeterReading + 20.0) / 10.0 * 30);
+                                else if (dBmMeterReading <= -5.0f)
+                                    pixel_x = (int)(40 + (dBmMeterReading + 10.0) / 5.0 * 30);
+                                else if (dBmMeterReading <= 0.0f)
+                                    pixel_x = (int)(70 + (dBmMeterReading + 5.0) / 5.0 * 27);
+                                else if (dBmMeterReading <= 4.0f)
+                                    pixel_x = (int)(97 + (dBmMeterReading - 0.0) / 4.0 * 17);
+                                else if (dBmMeterReading <= 8.0f)
+                                    pixel_x = (int)(114 + (dBmMeterReading - 4.0) / 4.0 * 17);
+                                else if (dBmMeterReading <= 12.0f)
+                                    pixel_x = (int)(131 + (dBmMeterReading - 8.0) / 4.0 * 17);
+                                else
+                                    pixel_x = (int)(148 + (dBmMeterReading - 12.0) / 0.5 * 23);
+                                break;
+                        }
+                        break;
+                    case MeterTXMode.FORWARD_POWER:
+                    case MeterTXMode.REVERSE_POWER:
+                        // if (!alexpresent && !apollopresent)
+                        // num *= 1000;
+
+                        switch ((int)g.DpiX)
+                        {
+                            case 96:
+                                if (collapsedDisplay)
+                                {
+                                    if (anan10present || anan10Epresent)
+                                    {
+                                        if (dBmMeterReading <= 1.0f)
+                                            pixel_x = (int)(0 + dBmMeterReading * 16);
+                                        else if (dBmMeterReading <= 5.0f)
+                                            pixel_x = (int)(16 + (dBmMeterReading - 1) / 4 * 48);
+                                        else if (dBmMeterReading <= 10.0f)
+                                            pixel_x = (int)(64 + (dBmMeterReading - 5) / 5 * 48);
+                                        else if (dBmMeterReading <= 15.0f)
+                                            pixel_x = (int)(112 + (dBmMeterReading - 10) / 5 * 48);
+                                        else if (dBmMeterReading <= 20.0f)
+                                            pixel_x = (int)(160 + (dBmMeterReading - 15) / 5 * 48);
+                                        else if (dBmMeterReading <= 25.0f)
+                                            pixel_x = (int)(208 + (dBmMeterReading - 20) / 5 * 48);
+                                        else
+                                            pixel_x = (int)(256 + (dBmMeterReading - 25) / 5 * 32);
+                                    }
+                                    else if (apollopresent)
+                                    {
+                                        if (dBmMeterReading <= 1.0f)
+                                            pixel_x = (int)(0 + dBmMeterReading * 16);
+                                        else if (dBmMeterReading <= 5.0f)
+                                            pixel_x = (int)(16 + (dBmMeterReading - 1) / 4 * 48);
+                                        else if (dBmMeterReading <= 10.0f)
+                                            pixel_x = (int)(64 + (dBmMeterReading - 5) / 5 * 48);
+                                        else if (dBmMeterReading <= 15.0f)
+                                            pixel_x = (int)(112 + (dBmMeterReading - 10) / 5 * 48);
+                                        else if (dBmMeterReading <= 30.0f)
+                                            pixel_x = (int)(160 + (dBmMeterReading - 15) / 15 * 48);
+                                        else if (dBmMeterReading <= 50.0f)
+                                            pixel_x = (int)(208 + (dBmMeterReading - 30) / 20 * 48);
+                                        else
+                                            pixel_x = (int)(256 + (dBmMeterReading - 50) / 50 * 32);
+                                    }
+                                    else if (anan8000dpresent && tx_xvtr_index < 0)
+                                    {
+                                        if (dBmMeterReading <= 1.0f)
+                                            pixel_x = (int)(0 + dBmMeterReading * 16);
+                                        else if (dBmMeterReading <= 5.0f)
+                                            pixel_x = (int)(16 + (dBmMeterReading - 1) / 4 * 48);
+                                        else if (dBmMeterReading <= 10.0f)
+                                            pixel_x = (int)(64 + (dBmMeterReading - 5) / 5 * 48);
+                                        else if (dBmMeterReading <= 50.0f)
+                                            pixel_x = (int)(112 + (dBmMeterReading - 10) / 40 * 48);
+                                        else if (dBmMeterReading <= 100.0f)
+                                            pixel_x = (int)(160 + (dBmMeterReading - 50) / 50 * 48);
+                                        else if (dBmMeterReading <= 200.0f)
+                                            pixel_x = (int)(200 + (dBmMeterReading - 100) / 20 * 48);
+                                        else
+                                            pixel_x = (int)(256 + (dBmMeterReading - 120) / 20 * 32);
+                                    }
+                                    else if (alexpresent && !anan8000dpresent)
+                                    {
+                                        if (dBmMeterReading <= 1.0f)
+                                            pixel_x = (int)(0 + dBmMeterReading * 16);
+                                        else if (dBmMeterReading <= 5.0f)
+                                            pixel_x = (int)(16 + (dBmMeterReading - 1) / 4 * 48);
+                                        else if (dBmMeterReading <= 10.0f)
+                                            pixel_x = (int)(64 + (dBmMeterReading - 5) / 5 * 48);
+                                        else if (dBmMeterReading <= 50.0f)
+                                            pixel_x = (int)(112 + (dBmMeterReading - 10) / 40 * 48);
+                                        else if (dBmMeterReading <= 100.0f)
+                                            pixel_x = (int)(160 + (dBmMeterReading - 50) / 50 * 48);
+                                        else if (dBmMeterReading <= 208.0f)
+                                            pixel_x = (int)(208 + (dBmMeterReading - 100) / 20 * 48);
+                                        else
+                                            pixel_x = (int)(256 + (dBmMeterReading - 120) / 20 * 32);
+                                    }
+                                    else
+                                    {
+                                        if (dBmMeterReading <= 25.0f)
+                                            pixel_x = (int)(0 + (dBmMeterReading - 0.0) / 25.0 * 16);
+                                        else if (dBmMeterReading <= 50.0f)
+                                            pixel_x = (int)(16 + (dBmMeterReading - 25.0) / 25.0 * 31);
+                                        else if (dBmMeterReading <= 100.0f)
+                                            pixel_x = (int)(31 + (dBmMeterReading - 50.0) / 50.0 * 31);
+                                        else if (dBmMeterReading <= 200.0f)
+                                            pixel_x = (int)(62 + (dBmMeterReading - 100.0) / 100.0 * 64);
+                                        else if (dBmMeterReading <= 500.0f)
+                                            pixel_x = (int)(126 + (dBmMeterReading - 200.0) / 300.0 * 48);
+                                        else if (dBmMeterReading <= 600.0f)
+                                            pixel_x = (int)(174 + (dBmMeterReading - 500.0) / 100.0 * 30);
+                                        else if (dBmMeterReading <= 700.0f)
+                                            pixel_x = (int)(204 + (dBmMeterReading - 600.0) / 100.0 * 30);
+                                        else if (dBmMeterReading <= 800.0f)
+                                            pixel_x = (int)(234 + (dBmMeterReading - 700.0) / 100.0 * 30);
+                                        else
+                                            pixel_x = (int)(264 + (dBmMeterReading - 800.0) / 100.0 * 16);
+                                    }
+                                }
+                                else
+                                {
+                                    if (anan10present || anan10Epresent)
+                                    {
+                                        if (dBmMeterReading <= 1.0f)
+                                            pixel_x = (int)(0 + dBmMeterReading * 2);
+                                        else if (dBmMeterReading <= 5.0f)
+                                            pixel_x = (int)(2 + (dBmMeterReading - 1) / 4 * 24);
+                                        else if (dBmMeterReading <= 10.0f)
+                                            pixel_x = (int)(26 + (dBmMeterReading - 5) / 5 * 24);
+                                        else if (dBmMeterReading <= 15.0f)
+                                            pixel_x = (int)(50 + (dBmMeterReading - 10) / 5 * 24);
+                                        else if (dBmMeterReading <= 20.0f)
+                                            pixel_x = (int)(74 + (dBmMeterReading - 15) / 5 * 24);
+                                        else if (dBmMeterReading <= 25.0f)
+                                            pixel_x = (int)(98 + (dBmMeterReading - 20) / 5 * 24);
+                                        else
+                                            pixel_x = (int)(122 + (dBmMeterReading - 25) / 5 * 16);
+                                    }
+                                    else if (apollopresent)
+                                    {
+                                        if (dBmMeterReading <= 1.0f)
+                                            pixel_x = (int)(0 + dBmMeterReading * 2);
+                                        else if (dBmMeterReading <= 5.0f)
+                                            pixel_x = (int)(2 + (dBmMeterReading - 1) / 4 * 24);
+                                        else if (dBmMeterReading <= 10.0f)
+                                            pixel_x = (int)(26 + (dBmMeterReading - 5) / 5 * 24);
+                                        else if (dBmMeterReading <= 15.0f)
+                                            pixel_x = (int)(50 + (dBmMeterReading - 10) / 5 * 24);
+                                        else if (dBmMeterReading <= 30.0f)
+                                            pixel_x = (int)(74 + (dBmMeterReading - 15) / 15 * 24);
+                                        else if (dBmMeterReading <= 50.0f)
+                                            pixel_x = (int)(98 + (dBmMeterReading - 30) / 20 * 24);
+                                        else
+                                            pixel_x = (int)(122 + (dBmMeterReading - 50) / 50 * 16);
+                                    }
+                                    else if (anan8000dpresent && tx_xvtr_index < 0)
+                                    {
+                                        if (dBmMeterReading <= 5.0f)
+                                            pixel_x = (int)(0 + dBmMeterReading * 2);
+                                        else if (dBmMeterReading <= 10.0f)
+                                            pixel_x = (int)(2 + (dBmMeterReading - 1) / 4 * 24);
+                                        else if (dBmMeterReading <= 20.0f)
+                                            pixel_x = (int)(26 + (dBmMeterReading - 10) / 5 * 24);
+                                        else if (dBmMeterReading <= 100.0f)
+                                            pixel_x = (int)(50 + (dBmMeterReading - 20) / 40 * 24);
+                                        else if (dBmMeterReading <= 200.0f)
+                                            pixel_x = (int)(74 + (dBmMeterReading - 100) / 50 * 24);
+                                        else if (dBmMeterReading <= 250.0f)
+                                            pixel_x = (int)(98 + (dBmMeterReading - 200) / 20 * 24);
+                                        else
+                                            pixel_x = (int)(122 + (dBmMeterReading - 250) / 20 * 16);
+                                    }
+                                    else if (alexpresent && !anan8000dpresent)
+                                    {
+                                        if (dBmMeterReading <= 1.0f)
+                                            pixel_x = (int)(0 + dBmMeterReading * 2);
+                                        else if (dBmMeterReading <= 5.0f)
+                                            pixel_x = (int)(2 + (dBmMeterReading - 1) / 4 * 24);
+                                        else if (dBmMeterReading <= 10.0f)
+                                            pixel_x = (int)(26 + (dBmMeterReading - 5) / 5 * 24);
+                                        else if (dBmMeterReading <= 50.0f)
+                                            pixel_x = (int)(50 + (dBmMeterReading - 10) / 40 * 24);
+                                        else if (dBmMeterReading <= 100.0f)
+                                            pixel_x = (int)(74 + (dBmMeterReading - 50) / 50 * 24);
+                                        else if (dBmMeterReading <= 120.0f)
+                                            pixel_x = (int)(98 + (dBmMeterReading - 100) / 20 * 24);
+                                        else
+                                            pixel_x = (int)(122 + (dBmMeterReading - 120) / 20 * 16);
+                                    }
+                                    else
+                                    {
+                                        if (dBmMeterReading <= 100.0f)
+                                            pixel_x = (int)(0 + (dBmMeterReading - 0.0) / 100.0 * 31);
+                                        else if (dBmMeterReading <= 200.0f)
+                                            pixel_x = (int)(31 + (dBmMeterReading - 100.0) / 100.0 * 32);
+                                        else if (dBmMeterReading <= 500.0f)
+                                            pixel_x = (int)(63 + (dBmMeterReading - 200.0) / 300.0 * 24);
+                                        else if (dBmMeterReading <= 600.0f)
+                                            pixel_x = (int)(87 + (dBmMeterReading - 500.0) / 100.0 * 15);
+                                        else if (dBmMeterReading <= 700.0f)
+                                            pixel_x = (int)(102 + (dBmMeterReading - 600.0) / 100.0 * 15);
+                                        else if (dBmMeterReading <= 800.0f)
+                                            pixel_x = (int)(117 + (dBmMeterReading - 700.0) / 100.0 * 15);
+                                        else
+                                            pixel_x = (int)(132 + (dBmMeterReading - 800.0) / 100.0 * 8);
+                                    }
+                                }
+                                break;
+
+                            case 120:
+                                if (dBmMeterReading <= 1.0f)
+                                    pixel_x = (int)(0 + dBmMeterReading * 3);
+                                else if (dBmMeterReading <= 5.0f)
+                                    pixel_x = (int)(3 + (dBmMeterReading - 1) / 4 * 26);
+                                else if (dBmMeterReading <= 10.0f)
+                                    pixel_x = (int)(29 + (dBmMeterReading - 5) / 5 * 26);
+                                else if (dBmMeterReading <= 50.0f)
+                                    pixel_x = (int)(55 + (dBmMeterReading - 10) / 40 * 27);
+                                else if (dBmMeterReading <= 100.0f)
+                                    pixel_x = (int)(82 + (dBmMeterReading - 50) / 50 * 28);
+                                else if (dBmMeterReading <= 120.0f)
+                                    pixel_x = (int)(110 + (dBmMeterReading - 100) / 20 * 27);
+                                else
+                                    pixel_x = (int)(137 + (dBmMeterReading - 120) / 20 * 30);
+                                break;
+                        }
+                        break;
+                    case MeterTXMode.SWR:
+                        switch ((int)g.DpiX)
+                        {
+                            case 96:
+                                if (collapsedDisplay)
+                                {
+                                    if (double.IsInfinity(dBmMeterReading))
+                                        pixel_x = 200;
+                                    else if (dBmMeterReading <= 1.0f)
+                                        pixel_x = (int)(0 + dBmMeterReading * 6);
+                                    else if (dBmMeterReading <= 1.5f)
+                                        pixel_x = (int)(6 + (dBmMeterReading - 1.0) / 0.5 * 54);
+                                    else if (dBmMeterReading <= 2.0f)
+                                        pixel_x = (int)(60 + (dBmMeterReading - 1.5) / 0.5 * 40);
+                                    else if (dBmMeterReading <= 3.0f)
+                                        pixel_x = (int)(100 + (dBmMeterReading - 2.0) / 1.0 * 42);
+                                    else if (dBmMeterReading <= 5.0f)
+                                        pixel_x = (int)(142 + (dBmMeterReading - 3.0) / 2.0 * 42);
+                                    else if (dBmMeterReading <= 10.0f)
+                                        pixel_x = (int)(184 + (dBmMeterReading - 5.0) / 5.0 * 42);
+                                    else
+                                        pixel_x = (int)(226 + (dBmMeterReading - 10.0) / 15.0 * 52);
+                                }
+                                else
+                                {
+                                    if (double.IsInfinity(dBmMeterReading))
+                                        pixel_x = 200;
+                                    else if (dBmMeterReading <= 1.0f)
+                                        pixel_x = (int)(0 + dBmMeterReading * 3);
+                                    else if (dBmMeterReading <= 1.5f)
+                                        pixel_x = (int)(3 + (dBmMeterReading - 1.0) / 0.5 * 27);
+                                    else if (dBmMeterReading <= 2.0f)
+                                        pixel_x = (int)(30 + (dBmMeterReading - 1.5) / 0.5 * 20);
+                                    else if (dBmMeterReading <= 3.0f)
+                                        pixel_x = (int)(50 + (dBmMeterReading - 2.0) / 1.0 * 21);
+                                    else if (dBmMeterReading <= 5.0f)
+                                        pixel_x = (int)(71 + (dBmMeterReading - 3.0) / 2.0 * 21);
+                                    else if (dBmMeterReading <= 10.0f)
+                                        pixel_x = (int)(92 + (dBmMeterReading - 5.0) / 5.0 * 21);
+                                    else
+                                        pixel_x = (int)(113 + (dBmMeterReading - 10.0) / 15.0 * 26);
+                                }
+                                break;
+                            case 120:
+                                if (double.IsInfinity(dBmMeterReading))
+                                    pixel_x = 200;
+                                else if (dBmMeterReading <= 1.0f)
+                                    pixel_x = (int)(0 + dBmMeterReading * 3);
+                                else if (dBmMeterReading <= 1.5f)
+                                    pixel_x = (int)(3 + (dBmMeterReading - 1.0) / 0.5 * 31);
+                                else if (dBmMeterReading <= 2.0f)
+                                    pixel_x = (int)(34 + (dBmMeterReading - 1.5) / 0.5 * 22);
+                                else if (dBmMeterReading <= 3.0f)
+                                    pixel_x = (int)(56 + (dBmMeterReading - 2.0) / 1.0 * 22);
+                                else if (dBmMeterReading <= 5.0f)
+                                    pixel_x = (int)(78 + (dBmMeterReading - 3.0) / 2.0 * 23);
+                                else if (dBmMeterReading <= 10.0f)
+                                    pixel_x = (int)(101 + (dBmMeterReading - 5.0) / 5.0 * 23);
+                                else
+                                    pixel_x = (int)(124 + (dBmMeterReading - 10.0) / 15.0 * 43);
+                                break;
+                        }
+                        break;
+                    case MeterTXMode.SWR_POWER:
+                        break;
+                    case MeterTXMode.ALC_G:
+                    case MeterTXMode.LVL_G:
+                    case MeterTXMode.CFC_G:
+                        switch ((int)g.DpiX)
+                        {
+                            case 96:
+                                if (collapsedDisplay)
+                                {
+                                    if (dBmMeterReading <= 0.0f)
+                                        pixel_x = 6;
+                                    else if (dBmMeterReading <= 5.0f)
+                                        pixel_x = (int)(6 + (dBmMeterReading - 0.0) / 5.0 * 56);
+                                    else if (dBmMeterReading <= 10.0f)
+                                        pixel_x = (int)(62 + (dBmMeterReading - 5.0) / 5.0 * 58);
+                                    else if (dBmMeterReading <= 15.0f)
+                                        pixel_x = (int)(120 + (dBmMeterReading - 10.0) / 5.0 * 60);
+                                    else if (dBmMeterReading <= 20.0f)
+                                        pixel_x = (int)(180 + (dBmMeterReading - 15.0) / 5.0 * 62);
+                                    else
+                                        pixel_x = (int)(242 + (dBmMeterReading - 20.0) / 5.0 * 58);
+                                }
+                                else
+                                {
+                                    if (dBmMeterReading <= 0.0f)
+                                        pixel_x = 3;
+                                    else if (dBmMeterReading <= 5.0f)
+                                        pixel_x = (int)(3 + (dBmMeterReading - 0.0) / 5.0 * 28);
+                                    else if (dBmMeterReading <= 10.0f)
+                                        pixel_x = (int)(31 + (dBmMeterReading - 5.0) / 5.0 * 29);
+                                    else if (dBmMeterReading <= 15.0f)
+                                        pixel_x = (int)(60 + (dBmMeterReading - 10.0) / 5.0 * 30);
+                                    else if (dBmMeterReading <= 20.0f)
+                                        pixel_x = (int)(90 + (dBmMeterReading - 15.0) / 5.0 * 31);
+                                    else
+                                        pixel_x = (int)(121 + (dBmMeterReading - 20.0) / 5.0 * 29);
+                                }
+                                break;
+                            case 120:
+                                if (dBmMeterReading <= 0.0f)
+                                    pixel_x = 3;
+                                else if (dBmMeterReading <= 5.0f)
+                                    pixel_x = (int)(3 + (dBmMeterReading - 0.0) / 5.0 * 31);
+                                else if (dBmMeterReading <= 10.0f)
+                                    pixel_x = (int)(34 + (dBmMeterReading - 5.0) / 5.0 * 33);
+                                else if (dBmMeterReading <= 15.0f)
+                                    pixel_x = (int)(77 + (dBmMeterReading - 10.0) / 5.0 * 33);
+                                else if (dBmMeterReading <= 20.0f)
+                                    pixel_x = (int)(110 + (dBmMeterReading - 15.0) / 5.0 * 35);
+                                else
+                                    pixel_x = (int)(145 + (dBmMeterReading - 20.0) / 5.0 * 32);
+                                break;
+                        }
+                        break;
+                    case MeterTXMode.OFF:
+                        break;
+                }
+            }
+            
+            switch ((int)g.DpiX)
+            {
+                case 96:
+                    if (!collapsedDisplay)
+                    {
+                        if (pixel_x > 139) pixel_x = 139;
+                        pixel_x = (int)(((double)pixel_x / 139.0f) * W);  // MW0LGE proportional green bar over total width
                     }
+                    break;
+                case 120:
+                    if (pixel_x > 167) pixel_x = 167;
+                    pixel_x = (int)(((double)pixel_x / 167.0f) * W);  // MW0LGE proportional green bar over total width
+                    break;
+            }
 
-                    switch ((int)g.DpiX)
-                    {
-                        case 96:
-                            if (!collapsedDisplay)
-                                if (pixel_x > 139) pixel_x = 139;
-                            break;
-                        case 120:
-                            if (pixel_x > 167) pixel_x = 167;
-                            break;
-                    }
+            if ((!mox && metRXMode != MeterRXMode.OFF) ||
+                (mox && metTXMode != MeterTXMode.OFF) )
+            {
+                if (pixel_x <= 0) pixel_x = 1;
 
-                    if ((!mox && current_meter_rx_mode != MeterRXMode.OFF) ||
-                        (mox && current_meter_tx_mode != MeterTXMode.OFF))
-                    {
-                        if (pixel_x <= 0) pixel_x = 1;
+                // MW0LGE reworked size/heights
+                using (LinearGradientBrush brush = new LinearGradientBrush(new Rectangle(0, 0, pixel_x, H - 10),
+                    meter_left_color, meter_right_color, LinearGradientMode.Horizontal))
 
-                        using (LinearGradientBrush brush = new LinearGradientBrush(new Rectangle(0, 0, pixel_x, H),
-                            meter_left_color, meter_right_color, LinearGradientMode.Horizontal))
+                    g.FillRectangle(brush, 0, 0, pixel_x, H - 10);
 
-                            g.FillRectangle(brush, 0, 0, pixel_x, H);
+                g.FillRectangle(meter_background_pen.Brush, 0, H - 10, W, H);
 
-                        if (collapsedDisplay)
-                        {
-                            for (int i = 0; i < 35; i++)
-                                g.DrawLine(meter_background_pen, 6 + i * 8, 0, 6 + i * 8, H);
-                        }
-                        else
-                        {
-                            for (int i = 0; i < 21; i++)
-                                g.DrawLine(meter_background_pen, 6 + i * 8, 0, 6 + i * 8, H);
-                        }
+                for (int i = 0; i < (W / 8) - 6; i++)
+                    g.DrawLine(meter_background_pen, 6 + i * 8, 0, 6 + i * 8, H - 10);
 
-                        g.DrawLine(Pens.Red, pixel_x, 0, pixel_x, H);
-                        g.FillRectangle(meter_background_pen.Brush, pixel_x + 1, 0, W - pixel_x, H);
+                g.DrawLine(Pens.Red, pixel_x, 0, pixel_x, H - 10);
+                g.FillRectangle(meter_background_pen.Brush, pixel_x + 1, 0, W - pixel_x, H - 10);
 
+                switch (RXnumber)
+                {
+                    case 1:
                         if (pixel_x >= meter_peak_value)
                         {
                             meter_peak_count = 0;
@@ -31555,11 +32059,58 @@ namespace Thetis
                             }
                             else
                             {
-                                g.DrawLine(Pens.Red, meter_peak_value, 0, meter_peak_value, H);
-                                g.DrawLine(Pens.Red, meter_peak_value - 1, 0, meter_peak_value - 1, H);
+                                g.DrawLine(Pens.Red, meter_peak_value, 0, meter_peak_value, H - 10);
+                                g.DrawLine(Pens.Red, meter_peak_value - 1, 0, meter_peak_value - 1, H - 10);
                             }
                         }
-                    }
+                        break;
+                    case 2:
+                        if (pixel_x >= rx2_meter_peak_value)
+                        {
+                            rx2_meter_peak_count = 0;
+                            rx2_meter_peak_value = pixel_x;
+                        }
+                        else
+                        {
+                            if (rx2_meter_peak_count++ >= multimeter_peak_hold_samples)
+                            {
+                                rx2_meter_peak_count = 0;
+                                rx2_meter_peak_value = pixel_x;
+                            }
+                            else
+                            {
+                                g.DrawLine(Pens.Red, rx2_meter_peak_value, 0, rx2_meter_peak_value, H - 10);
+                                g.DrawLine(Pens.Red, rx2_meter_peak_value - 1, 0, rx2_meter_peak_value - 1, H - 10);
+                            }
+                        }
+                        break;
+                }
+            }
+
+            return dBmMeterReading;
+        }
+
+        private Font font7 = new Font("Arial", 7.0f, FontStyle.Bold);
+        private double avg_num = -130.0;
+        private void picMultiMeterDigital_Paint(object sender, System.Windows.Forms.PaintEventArgs e)
+        {
+            int H = picMultiMeterDigital.ClientSize.Height;
+            int W = picMultiMeterDigital.ClientSize.Width;
+            Graphics g = e.Graphics;
+            double dBmMeterReading;
+            int pixel_x = 0;
+            int pixel_x_swr = 0;
+            string output = "";
+
+            switch (current_meter_display_mode)
+            {
+                case MultiMeterDisplayMode.Original:
+                    #region Original                    
+
+                    //MW0LGE
+                    dBmMeterReading = handleOriginalMeter(1, g, H, W);
+                    drawOriginalMeterTextScale(g, H, W);
+                    //
 
                     meter_timer.Stop();
 
@@ -31578,52 +32129,52 @@ namespace Thetis
                                     {
                                         if (rx1_above30)
                                         {
-                                            if (num <= -124.0f) output = "    S 0";
-                                            else if (num > -144.0f & num <= -138.0f) output = "    S 1";
-                                            else if (num > -138.0f & num <= -132.0f) output = "    S 2";
-                                            else if (num > -132.0f & num <= -126.0f) output = "    S 3";
-                                            else if (num > -126.0f & num <= -120.0f) output = "    S 4";
-                                            else if (num > -120.0f & num <= -114.0f) output = "    S 5";
-                                            else if (num > -114.0f & num <= -108.0f) output = "    S 6";
-                                            else if (num > -108.0f & num <= -102.0f) output = "    S 7";
-                                            else if (num > -102.0f & num <= -96.0f) output = "    S 8";
-                                            else if (num > -96.0f & num <= -90.0f) output = "    S 9";
-                                            else if (num > -90.0f & num <= -86.0f) output = "    S 9 + 5";
-                                            else if (num > -86.0f & num <= -80.0f) output = "    S 9 + 10";
-                                            else if (num > -80.0f & num <= -76.0f) output = "    S 9 + 15";
-                                            else if (num > -76.0f & num <= -66.0f) output = "    S 9 + 20";
-                                            else if (num > -66.0f & num <= -56.0f) output = "    S 9 + 30";
-                                            else if (num > -56.0f & num <= -46.0f) output = "    S 9 + 40";
-                                            else if (num > -46.0f & num <= -36.0f) output = "    S 9 + 50";
-                                            else if (num > -36.0f) output = "    S 9 + 60";
+                                            if (dBmMeterReading <= -124.0f) output = "    S 0";
+                                            else if (dBmMeterReading > -144.0f & dBmMeterReading <= -138.0f) output = "    S 1";
+                                            else if (dBmMeterReading > -138.0f & dBmMeterReading <= -132.0f) output = "    S 2";
+                                            else if (dBmMeterReading > -132.0f & dBmMeterReading <= -126.0f) output = "    S 3";
+                                            else if (dBmMeterReading > -126.0f & dBmMeterReading <= -120.0f) output = "    S 4";
+                                            else if (dBmMeterReading > -120.0f & dBmMeterReading <= -114.0f) output = "    S 5";
+                                            else if (dBmMeterReading > -114.0f & dBmMeterReading <= -108.0f) output = "    S 6";
+                                            else if (dBmMeterReading > -108.0f & dBmMeterReading <= -102.0f) output = "    S 7";
+                                            else if (dBmMeterReading > -102.0f & dBmMeterReading <= -96.0f) output = "    S 8";
+                                            else if (dBmMeterReading > -96.0f & dBmMeterReading <= -90.0f) output = "    S 9";
+                                            else if (dBmMeterReading > -90.0f & dBmMeterReading <= -86.0f) output = "    S 9 + 5";
+                                            else if (dBmMeterReading > -86.0f & dBmMeterReading <= -80.0f) output = "    S 9 + 10";
+                                            else if (dBmMeterReading > -80.0f & dBmMeterReading <= -76.0f) output = "    S 9 + 15";
+                                            else if (dBmMeterReading > -76.0f & dBmMeterReading <= -66.0f) output = "    S 9 + 20";
+                                            else if (dBmMeterReading > -66.0f & dBmMeterReading <= -56.0f) output = "    S 9 + 30";
+                                            else if (dBmMeterReading > -56.0f & dBmMeterReading <= -46.0f) output = "    S 9 + 40";
+                                            else if (dBmMeterReading > -46.0f & dBmMeterReading <= -36.0f) output = "    S 9 + 50";
+                                            else if (dBmMeterReading > -36.0f) output = "    S 9 + 60";
                                         }
                                         else
                                         {
-                                            if (num <= -124.0f) output = "    S 0";
-                                            else if (num > -124.0f & num <= -118.0f) output = "    S 1";
-                                            else if (num > -118.0f & num <= -112.0f) output = "    S 2";
-                                            else if (num > -112.0f & num <= -106.0f) output = "    S 3";
-                                            else if (num > -106.0f & num <= -100.0f) output = "    S 4";
-                                            else if (num > -100.0f & num <= -94.0f) output = "    S 5";
-                                            else if (num > -94.0f & num <= -88.0f) output = "    S 6";
-                                            else if (num > -88.0f & num <= -82.0f) output = "    S 7";
-                                            else if (num > -82.0f & num <= -76.0f) output = "    S 8";
-                                            else if (num > -76.0f & num <= -70.0f) output = "    S 9";
-                                            else if (num > -70.0f & num <= -66.0f) output = "    S 9 + 5";
-                                            else if (num > -66.0f & num <= -60.0f) output = "    S 9 + 10";
-                                            else if (num > -60.0f & num <= -56.0f) output = "    S 9 + 15";
-                                            else if (num > -56.0f & num <= -46.0f) output = "    S 9 + 20";
-                                            else if (num > -46.0f & num <= -36.0f) output = "    S 9 + 30";
-                                            else if (num > -36.0f & num <= -26.0f) output = "    S 9 + 40";
-                                            else if (num > -26.0f & num <= -16.0f) output = "    S 9 + 50";
-                                            else if (num > -16.0f) output = "    S 9 + 60";
+                                            if (dBmMeterReading <= -124.0f) output = "    S 0";
+                                            else if (dBmMeterReading > -124.0f & dBmMeterReading <= -118.0f) output = "    S 1";
+                                            else if (dBmMeterReading > -118.0f & dBmMeterReading <= -112.0f) output = "    S 2";
+                                            else if (dBmMeterReading > -112.0f & dBmMeterReading <= -106.0f) output = "    S 3";
+                                            else if (dBmMeterReading > -106.0f & dBmMeterReading <= -100.0f) output = "    S 4";
+                                            else if (dBmMeterReading > -100.0f & dBmMeterReading <= -94.0f) output = "    S 5";
+                                            else if (dBmMeterReading > -94.0f & dBmMeterReading <= -88.0f) output = "    S 6";
+                                            else if (dBmMeterReading > -88.0f & dBmMeterReading <= -82.0f) output = "    S 7";
+                                            else if (dBmMeterReading > -82.0f & dBmMeterReading <= -76.0f) output = "    S 8";
+                                            else if (dBmMeterReading > -76.0f & dBmMeterReading <= -70.0f) output = "    S 9";
+                                            else if (dBmMeterReading > -70.0f & dBmMeterReading <= -66.0f) output = "    S 9 + 5";
+                                            else if (dBmMeterReading > -66.0f & dBmMeterReading <= -60.0f) output = "    S 9 + 10";
+                                            else if (dBmMeterReading > -60.0f & dBmMeterReading <= -56.0f) output = "    S 9 + 15";
+                                            else if (dBmMeterReading > -56.0f & dBmMeterReading <= -46.0f) output = "    S 9 + 20";
+                                            else if (dBmMeterReading > -46.0f & dBmMeterReading <= -36.0f) output = "    S 9 + 30";
+                                            else if (dBmMeterReading > -36.0f & dBmMeterReading <= -26.0f) output = "    S 9 + 40";
+                                            else if (dBmMeterReading > -26.0f & dBmMeterReading <= -16.0f) output = "    S 9 + 50";
+                                            else if (dBmMeterReading > -16.0f) output = "    S 9 + 60";
                                         }
                                     }
-                                    else output = num.ToString(format) + " dBm";
+                                    else output = dBmMeterReading.ToString(format) + " dBm";
                                     break;
                                 case MeterRXMode.ADC_L:
                                 case MeterRXMode.ADC_R:
-                                    output = num.ToString("f1") + " dBFS";
+                                    output = dBmMeterReading.ToString("f1") + " dBFS";
                                     break;
                                 case MeterRXMode.OFF:
                                     output = "";
@@ -31645,17 +32196,17 @@ namespace Thetis
                                 case MeterTXMode.COMP:
                                 case MeterTXMode.ALC:
                                 case MeterTXMode.ALC_G:
-                                    output = num.ToString(format) + " dB";
+                                    output = dBmMeterReading.ToString(format) + " dB";
                                     break;
                                 case MeterTXMode.FORWARD_POWER:
                                 case MeterTXMode.REVERSE_POWER:
                                     if (alexpresent || pa_present || apollopresent)
-                                        output = num.ToString(format) + " W";
+                                        output = dBmMeterReading.ToString(format) + " W";
                                     else
-                                        output = num.ToString(format) + " mW";
+                                        output = dBmMeterReading.ToString(format) + " mW";
                                     break;
                                 case MeterTXMode.SWR:
-                                    output = num.ToString("f1") + " : 1";
+                                    output = dBmMeterReading.ToString("f1") + " : 1";
                                     break;
                                 case MeterTXMode.OFF:
                                     output = "";
@@ -31684,14 +32235,14 @@ namespace Thetis
 
                     if (avg_num == Display.CLEAR_FLAG) // reset average -- just use new value
                     {
-                        num = avg_num = current_meter_data;
+                        dBmMeterReading = avg_num = current_meter_data;
                     }
                     else
                     {
                         if (current_meter_data > avg_num)
-                            num = avg_num = current_meter_data * 0.8 + avg_num * 0.2; // fast rise
+                            dBmMeterReading = avg_num = current_meter_data * 0.8 + avg_num * 0.2; // fast rise
                         else
-                            num = avg_num = current_meter_data * 0.2 + avg_num * 0.8; // slow decay
+                            dBmMeterReading = avg_num = current_meter_data * 0.2 + avg_num * 0.8; // slow decay
                     }
 
                     g.DrawRectangle(edge_meter_background_pen, 0, 0, W, H);
@@ -31740,24 +32291,24 @@ namespace Thetis
 
                                 if (rx1_above30)
                                 {
-                                    if (num > -93.0) // high area
+                                    if (dBmMeterReading > -93.0) // high area
                                     {
-                                        pixel_x = (int)(W * 0.5 + (93.0 + num) / 63.0 * (W * 0.5 - 3));
+                                        pixel_x = (int)(W * 0.5 + (93.0 + dBmMeterReading) / 63.0 * (W * 0.5 - 3));
                                     }
                                     else
                                     {
-                                        pixel_x = (int)((num + 153.0) / 60.0 * (W * 0.5));
+                                        pixel_x = (int)((dBmMeterReading + 153.0) / 60.0 * (W * 0.5));
                                     }
                                 }
                                 else
                                 {
-                                    if (num > -73.0) // high area
+                                    if (dBmMeterReading > -73.0) // high area
                                     {
-                                        pixel_x = (int)(W * 0.5 + (73.0 + num) / 63.0 * (W * 0.5 - 3));
+                                        pixel_x = (int)(W * 0.5 + (73.0 + dBmMeterReading) / 63.0 * (W * 0.5 - 3));
                                     }
                                     else
                                     {
-                                        pixel_x = (int)((num + 133.0) / 60.0 * (W * 0.5));
+                                        pixel_x = (int)((dBmMeterReading + 133.0) / 60.0 * (W * 0.5));
                                     }
                                 }
 
@@ -31786,7 +32337,7 @@ namespace Thetis
                                     g.DrawString(s, font7, b, (int)(i * spacing - (int)string_width * (s.Length)), (int)(H - 4 - 8 - string_height));
                                 }
 
-                                pixel_x = (int)((num + 120.0) / 120.0 * (W - 5.0));
+                                pixel_x = (int)((dBmMeterReading + 120.0) / 120.0 * (W - 5.0));
                                 break;
                             case MeterRXMode.OFF:
                                 break;
@@ -31838,18 +32389,18 @@ namespace Thetis
                                     g.DrawString(s, font7, high_brush, (int)(W * 0.665 + i * spacing - (int)string_width * s.Length), (int)(H - 4 - 8 - string_height));
                                 }
 
-                                if (num > 0.0) // high area
+                                if (dBmMeterReading > 0.0) // high area
                                 {
-                                    pixel_x = (int)(W * 0.665 + num / 12.0 * (W * 0.335 - 4));
+                                    pixel_x = (int)(W * 0.665 + dBmMeterReading / 12.0 * (W * 0.335 - 4));
                                 }
                                 else
                                 {
-                                    pixel_x = (int)((num + 30.0) / 30.0 * (W * 0.665 - 1.0));
+                                    pixel_x = (int)((dBmMeterReading + 30.0) / 30.0 * (W * 0.665 - 1.0));
                                 }
                                 break;
                             case MeterTXMode.FORWARD_POWER:
                             case MeterTXMode.REVERSE_POWER:
-                                if (alexpresent || apollopresent) num = Math.Round(num);
+                                if (alexpresent || apollopresent) dBmMeterReading = Math.Round(dBmMeterReading);
 
                                 if (alexpresent && ((orionmkiipresent || anan8000dpresent) && tx_xvtr_index < 0))
                                 {
@@ -31884,25 +32435,25 @@ namespace Thetis
                                         g.DrawString("240+", font7, high_brush, (int)(W * 0.75 + i * spacing - (int)3.5 * string_width), (int)(H - 4 - 8 - string_height));
                                     }
 
-                                    if (num <= 200.0) // low area
+                                    if (dBmMeterReading <= 200.0) // low area
                                     {
                                         spacing = (W * 0.75 - 2.0) / 4.0;
-                                        if (num <= 10.0)
-                                            pixel_x = (int)(num / 10.0 * (int)spacing);
-                                        else if (num <= 20.0)
-                                            pixel_x = (int)(spacing + (num - 10.0) / 10.0 * spacing);
-                                        else if (num <= 100.0)
-                                            pixel_x = (int)(2 * spacing + (num - 20.0) / 80.0 * spacing);
+                                        if (dBmMeterReading <= 10.0)
+                                            pixel_x = (int)(dBmMeterReading / 10.0 * (int)spacing);
+                                        else if (dBmMeterReading <= 20.0)
+                                            pixel_x = (int)(spacing + (dBmMeterReading - 10.0) / 10.0 * spacing);
+                                        else if (dBmMeterReading <= 100.0)
+                                            pixel_x = (int)(2 * spacing + (dBmMeterReading - 20.0) / 80.0 * spacing);
                                         else // <= 100
-                                            pixel_x = (int)(3 * spacing + (num - 100.0) / 100.0 * spacing);
+                                            pixel_x = (int)(3 * spacing + (dBmMeterReading - 100.0) / 100.0 * spacing);
                                     }
                                     else
                                     {
                                         spacing = (W * 0.25 - 2.0 - 10.0) / 1.0;
-                                        if (num <= 240.0)
-                                            pixel_x = (int)(W * 0.75 + (num - 200.0) / 40.0 * spacing);
+                                        if (dBmMeterReading <= 240.0)
+                                            pixel_x = (int)(W * 0.75 + (dBmMeterReading - 200.0) / 40.0 * spacing);
                                         else
-                                            pixel_x = (int)(W * 0.75 + spacing + (num - 240.0) / 120.0 * spacing);
+                                            pixel_x = (int)(W * 0.75 + spacing + (dBmMeterReading - 240.0) / 120.0 * spacing);
                                     }
                                 }
 
@@ -31943,25 +32494,25 @@ namespace Thetis
                                         g.DrawString("120+", font7, high_brush, (int)(W * 0.75 + i * spacing - (int)3.5 * string_width), (int)(H - 4 - 8 - string_height));
                                     }
 
-                                    if (num <= 100.0) // low area
+                                    if (dBmMeterReading <= 100.0) // low area
                                     {
                                         spacing = (W * 0.75 - 2.0) / 4.0;
-                                        if (num <= 5.0)
-                                            pixel_x = (int)(num / 5.0 * (int)spacing);
-                                        else if (num <= 10.0)
-                                            pixel_x = (int)(spacing + (num - 5.0) / 5.0 * spacing);
-                                        else if (num <= 50.0)
-                                            pixel_x = (int)(2 * spacing + (num - 10.0) / 40.0 * spacing);
+                                        if (dBmMeterReading <= 5.0)
+                                            pixel_x = (int)(dBmMeterReading / 5.0 * (int)spacing);
+                                        else if (dBmMeterReading <= 10.0)
+                                            pixel_x = (int)(spacing + (dBmMeterReading - 5.0) / 5.0 * spacing);
+                                        else if (dBmMeterReading <= 50.0)
+                                            pixel_x = (int)(2 * spacing + (dBmMeterReading - 10.0) / 40.0 * spacing);
                                         else // <= 100
-                                            pixel_x = (int)(3 * spacing + (num - 50.0) / 50.0 * spacing);
+                                            pixel_x = (int)(3 * spacing + (dBmMeterReading - 50.0) / 50.0 * spacing);
                                     }
                                     else
                                     {
                                         spacing = (W * 0.25 - 2.0 - 10.0) / 1.0;
-                                        if (num <= 120.0)
-                                            pixel_x = (int)(W * 0.75 + (num - 100.0) / 20.0 * spacing);
+                                        if (dBmMeterReading <= 120.0)
+                                            pixel_x = (int)(W * 0.75 + (dBmMeterReading - 100.0) / 20.0 * spacing);
                                         else
-                                            pixel_x = (int)(W * 0.75 + spacing + (num - 120.0) / 60.0 * spacing);
+                                            pixel_x = (int)(W * 0.75 + spacing + (dBmMeterReading - 120.0) / 60.0 * spacing);
                                     }
                                 }
                                 else if (anan10present || anan10Epresent)// || apollopresent)
@@ -32001,25 +32552,25 @@ namespace Thetis
                                         g.DrawString("25+", font7, high_brush, (int)(W * 0.75 + i * spacing - (int)3.5 * string_width), (int)(H - 4 - 8 - string_height));
                                     }
 
-                                    if (num <= 15.0) // low area
+                                    if (dBmMeterReading <= 15.0) // low area
                                     {
                                         spacing = (W * 0.75 - 2.0) / 4.0;
-                                        if (num <= 1.0)
-                                            pixel_x = (int)(num / 1.0 * (int)spacing);
-                                        else if (num <= 5.0)
-                                            pixel_x = (int)(spacing + (num - 1.0) / 4.0 * spacing);
-                                        else if (num <= 10.0)
-                                            pixel_x = (int)(2 * spacing + (num - 5.0) / 5.0 * spacing);
+                                        if (dBmMeterReading <= 1.0)
+                                            pixel_x = (int)(dBmMeterReading / 1.0 * (int)spacing);
+                                        else if (dBmMeterReading <= 5.0)
+                                            pixel_x = (int)(spacing + (dBmMeterReading - 1.0) / 4.0 * spacing);
+                                        else if (dBmMeterReading <= 10.0)
+                                            pixel_x = (int)(2 * spacing + (dBmMeterReading - 5.0) / 5.0 * spacing);
                                         else
-                                            pixel_x = (int)(3 * spacing + (num - 10.0) / 5.0 * spacing);
+                                            pixel_x = (int)(3 * spacing + (dBmMeterReading - 10.0) / 5.0 * spacing);
                                     }
                                     else
                                     {
                                         spacing = (W * 0.25 - 2.0 - 10.0) / 1.0;
-                                        if (num <= 25.0)
-                                            pixel_x = (int)(W * 0.75 + (num - 15.0) / 10.0 * spacing);
+                                        if (dBmMeterReading <= 25.0)
+                                            pixel_x = (int)(W * 0.75 + (dBmMeterReading - 15.0) / 10.0 * spacing);
                                         else
-                                            pixel_x = (int)(W * 0.75 + spacing + (num - 25.0) / 5.0 * spacing);
+                                            pixel_x = (int)(W * 0.75 + spacing + (dBmMeterReading - 25.0) / 5.0 * spacing);
                                     }
                                 }
                                 else if (apollopresent) //(anan10present || apollopresent) // 30W
@@ -32059,25 +32610,25 @@ namespace Thetis
                                         g.DrawString("50+", font7, high_brush, (int)(W * 0.75 + i * spacing - (int)3.5 * string_width), (int)(H - 4 - 8 - string_height));
                                     }
 
-                                    if (num <= 30.0) // low area
+                                    if (dBmMeterReading <= 30.0) // low area
                                     {
                                         spacing = (W * 0.75 - 2.0) / 4.0;
-                                        if (num <= 5.0)
-                                            pixel_x = (int)(num / 5.0 * (int)spacing);
-                                        else if (num <= 10.0)
-                                            pixel_x = (int)(spacing + (num - 5.0) / 5.0 * spacing);
-                                        else if (num <= 20.0)
-                                            pixel_x = (int)(2 * spacing + (num - 10.0) / 10.0 * spacing);
+                                        if (dBmMeterReading <= 5.0)
+                                            pixel_x = (int)(dBmMeterReading / 5.0 * (int)spacing);
+                                        else if (dBmMeterReading <= 10.0)
+                                            pixel_x = (int)(spacing + (dBmMeterReading - 5.0) / 5.0 * spacing);
+                                        else if (dBmMeterReading <= 20.0)
+                                            pixel_x = (int)(2 * spacing + (dBmMeterReading - 10.0) / 10.0 * spacing);
                                         else // <= 30
-                                            pixel_x = (int)(3 * spacing + (num - 20.0) / 10.0 * spacing);
+                                            pixel_x = (int)(3 * spacing + (dBmMeterReading - 20.0) / 10.0 * spacing);
                                     }
                                     else
                                     {
                                         spacing = (W * 0.25 - 2.0 - 10.0) / 1.0;
-                                        if (num <= 50.0)
-                                            pixel_x = (int)(W * 0.75 + (num - 30.0) / 20.0 * spacing);
+                                        if (dBmMeterReading <= 50.0)
+                                            pixel_x = (int)(W * 0.75 + (dBmMeterReading - 30.0) / 20.0 * spacing);
                                         else
-                                            pixel_x = (int)(W * 0.75 + spacing + (num - 50.0) / 25.0 * spacing);
+                                            pixel_x = (int)(W * 0.75 + spacing + (dBmMeterReading - 50.0) / 25.0 * spacing);
                                     }
 
                                 }
@@ -32119,22 +32670,22 @@ namespace Thetis
                                     }
 
                                     // num *= 1000;
-                                    if (num < 801.0) // low area
+                                    if (dBmMeterReading < 801.0) // low area
                                     {
                                         spacing = (W * 0.75 - 2.0) / 4.0;
-                                        if (num <= 100.0)
-                                            pixel_x = (int)(num / 100.0 * spacing);
-                                        else if (num <= 250.0)
-                                            pixel_x = (int)(spacing + (num - 100.0) / 150.0 * spacing);
-                                        else if (num <= 500.0)
-                                            pixel_x = (int)(2 * spacing + (num - 250.0) / 250.0 * spacing);
+                                        if (dBmMeterReading <= 100.0)
+                                            pixel_x = (int)(dBmMeterReading / 100.0 * spacing);
+                                        else if (dBmMeterReading <= 250.0)
+                                            pixel_x = (int)(spacing + (dBmMeterReading - 100.0) / 150.0 * spacing);
+                                        else if (dBmMeterReading <= 500.0)
+                                            pixel_x = (int)(2 * spacing + (dBmMeterReading - 250.0) / 250.0 * spacing);
                                         else // <801.0
-                                            pixel_x = (int)(3 * spacing + (num - 500.0) / 300.0 * spacing);
+                                            pixel_x = (int)(3 * spacing + (dBmMeterReading - 500.0) / 300.0 * spacing);
                                     }
                                     else // >801
                                     {
                                         spacing = (W * 0.25 - 2.0 - 9.0) / 1.0;
-                                        pixel_x = (int)(W * 0.75 + (num - 800.0) / 200.0 * spacing);
+                                        pixel_x = (int)(W * 0.75 + (dBmMeterReading - 800.0) / 200.0 * spacing);
                                     }
                                 }
                                 break;
@@ -32260,25 +32811,25 @@ namespace Thetis
                                         g.DrawString("120+", font7, high_brush, (int)(W * 0.75 + i * spacing - (int)3.5 * string_width), (int)(H - 1 - string_height));
                                     }
 
-                                    if (num <= 100.0) // low area
+                                    if (dBmMeterReading <= 100.0) // low area
                                     {
                                         spacing = (W * 0.75 - 2.0) / 4.0;
-                                        if (num <= 5.0)
-                                            pixel_x = (int)(num / 5.0 * (int)spacing);
-                                        else if (num <= 10.0)
-                                            pixel_x = (int)(spacing + (num - 5.0) / 5.0 * spacing);
-                                        else if (num <= 50.0)
-                                            pixel_x = (int)(2 * spacing + (num - 10.0) / 40.0 * spacing);
+                                        if (dBmMeterReading <= 5.0)
+                                            pixel_x = (int)(dBmMeterReading / 5.0 * (int)spacing);
+                                        else if (dBmMeterReading <= 10.0)
+                                            pixel_x = (int)(spacing + (dBmMeterReading - 5.0) / 5.0 * spacing);
+                                        else if (dBmMeterReading <= 50.0)
+                                            pixel_x = (int)(2 * spacing + (dBmMeterReading - 10.0) / 40.0 * spacing);
                                         else
-                                            pixel_x = (int)(3 * spacing + (num - 50.0) / 50.0 * spacing);
+                                            pixel_x = (int)(3 * spacing + (dBmMeterReading - 50.0) / 50.0 * spacing);
                                     }
                                     else
                                     {
                                         spacing = (W * 0.25 - 2.0 - 10.0) / 1.0;
-                                        if (num <= 120.0)
-                                            pixel_x = (int)(W * 0.75 + (num - 100.0) / 20.0 * spacing);
+                                        if (dBmMeterReading <= 120.0)
+                                            pixel_x = (int)(W * 0.75 + (dBmMeterReading - 100.0) / 20.0 * spacing);
                                         else
-                                            pixel_x = (int)(W * 0.75 + spacing + (num - 120.0) / 60.0 * spacing);
+                                            pixel_x = (int)(W * 0.75 + spacing + (dBmMeterReading - 120.0) / 60.0 * spacing);
                                     }
                                 }
 
@@ -32403,25 +32954,25 @@ namespace Thetis
                                         g.DrawString("25+", font7, high_brush, (int)(W * 0.75 + i * spacing - (int)3.5 * string_width), (int)(H - 1 - string_height));
                                     }
 
-                                    if (num <= 15.0) // low area
+                                    if (dBmMeterReading <= 15.0) // low area
                                     {
                                         spacing = (W * 0.75 - 2.0) / 4.0;
-                                        if (num <= 1.0)
-                                            pixel_x = (int)(num / 1.0 * (int)spacing);
-                                        else if (num <= 5.0)
-                                            pixel_x = (int)(spacing + (num - 1.0) / 4.0 * spacing);
-                                        else if (num <= 10.0)
-                                            pixel_x = (int)(2 * spacing + (num - 5.0) / 5.0 * spacing);
+                                        if (dBmMeterReading <= 1.0)
+                                            pixel_x = (int)(dBmMeterReading / 1.0 * (int)spacing);
+                                        else if (dBmMeterReading <= 5.0)
+                                            pixel_x = (int)(spacing + (dBmMeterReading - 1.0) / 4.0 * spacing);
+                                        else if (dBmMeterReading <= 10.0)
+                                            pixel_x = (int)(2 * spacing + (dBmMeterReading - 5.0) / 5.0 * spacing);
                                         else
-                                            pixel_x = (int)(3 * spacing + (num - 10.0) / 5.0 * spacing);
+                                            pixel_x = (int)(3 * spacing + (dBmMeterReading - 10.0) / 5.0 * spacing);
                                     }
                                     else
                                     {
                                         spacing = (W * 0.25 - 2.0 - 10.0) / 1.0;
-                                        if (num <= 25.0)
-                                            pixel_x = (int)(W * 0.75 + (num - 15.0) / 10.0 * spacing);
+                                        if (dBmMeterReading <= 25.0)
+                                            pixel_x = (int)(W * 0.75 + (dBmMeterReading - 15.0) / 10.0 * spacing);
                                         else
-                                            pixel_x = (int)(W * 0.75 + spacing + (num - 25.0) / 5.0 * spacing);
+                                            pixel_x = (int)(W * 0.75 + spacing + (dBmMeterReading - 25.0) / 5.0 * spacing);
                                     }
                                 }
 
@@ -32545,25 +33096,25 @@ namespace Thetis
                                         g.DrawString("50+", font7, high_brush, (int)(W * 0.75 + i * spacing - (int)3.5 * string_width), (int)(H - 1 - string_height));
                                     }
 
-                                    if (num <= 30.0) // low area
+                                    if (dBmMeterReading <= 30.0) // low area
                                     {
                                         spacing = (W * 0.75 - 2.0) / 4.0;
-                                        if (num <= 5.0)
-                                            pixel_x = (int)(num / 5.0 * (int)spacing);
-                                        else if (num <= 10.0)
-                                            pixel_x = (int)(spacing + (num - 5.0) / 5.0 * spacing);
-                                        else if (num <= 20.0)
-                                            pixel_x = (int)(2 * spacing + (num - 10.0) / 10.0 * spacing);
+                                        if (dBmMeterReading <= 5.0)
+                                            pixel_x = (int)(dBmMeterReading / 5.0 * (int)spacing);
+                                        else if (dBmMeterReading <= 10.0)
+                                            pixel_x = (int)(spacing + (dBmMeterReading - 5.0) / 5.0 * spacing);
+                                        else if (dBmMeterReading <= 20.0)
+                                            pixel_x = (int)(2 * spacing + (dBmMeterReading - 10.0) / 10.0 * spacing);
                                         else // <= 30
-                                            pixel_x = (int)(3 * spacing + (num - 20.0) / 10.0 * spacing);
+                                            pixel_x = (int)(3 * spacing + (dBmMeterReading - 20.0) / 10.0 * spacing);
                                     }
                                     else
                                     {
                                         spacing = (W * 0.25 - 2.0 - 10.0) / 1.0;
-                                        if (num <= 50.0)
-                                            pixel_x = (int)(W * 0.75 + (num - 30.0) / 20.0 * spacing);
+                                        if (dBmMeterReading <= 50.0)
+                                            pixel_x = (int)(W * 0.75 + (dBmMeterReading - 30.0) / 20.0 * spacing);
                                         else
-                                            pixel_x = (int)(W * 0.75 + spacing + (num - 50.0) / 25.0 * spacing);
+                                            pixel_x = (int)(W * 0.75 + spacing + (dBmMeterReading - 50.0) / 25.0 * spacing);
                                     }
                                 }
                                 break;
@@ -32642,30 +33193,30 @@ namespace Thetis
                                     //  g.DrawString("5+", font7, high_brush, (int)(W * 0.75 + i * spacing - (int)2.5 * string_width), (int)(H - 4 - 8 - string_height));
                                   } */
 
-                                if (num <= 3.0) // low area
+                                if (dBmMeterReading <= 3.0) // low area
                                 {
                                     spacing = (W * 0.75) / 3.0;
 
-                                    if (num <= 1.5)
-                                        pixel_x = (int)((num - 1.0) / 0.5 * spacing);
-                                    else if (num <= 2.0)
-                                        pixel_x = (int)(spacing + (num - 1.5) / 0.5 * spacing);
+                                    if (dBmMeterReading <= 1.5)
+                                        pixel_x = (int)((dBmMeterReading - 1.0) / 0.5 * spacing);
+                                    else if (dBmMeterReading <= 2.0)
+                                        pixel_x = (int)(spacing + (dBmMeterReading - 1.5) / 0.5 * spacing);
                                     else //if (num <= 3.0)
-                                        pixel_x = (int)(2 * spacing + (num - 2.0) / 1.0 * spacing);
+                                        pixel_x = (int)(2 * spacing + (dBmMeterReading - 2.0) / 1.0 * spacing);
                                     // else //  num <= 4.0
                                     //  pixel_x = (int)(3 * spacing + (num - 3.0) / 1.0 * spacing);
                                 }
                                 else
                                 {
                                     spacing = (W * 0.25 - 6.0) / 2.0;
-                                    if (num <= 4.0)
-                                        pixel_x = (int)(W * 0.75 + (num - 3.0) / 1.0 * spacing);
-                                    else if (num <= 5.0)
-                                        pixel_x = (int)(W * 0.75 + spacing + (num - 4.0) / 1.0 * spacing);
+                                    if (dBmMeterReading <= 4.0)
+                                        pixel_x = (int)(W * 0.75 + (dBmMeterReading - 3.0) / 1.0 * spacing);
+                                    else if (dBmMeterReading <= 5.0)
+                                        pixel_x = (int)(W * 0.75 + spacing + (dBmMeterReading - 4.0) / 1.0 * spacing);
                                     else
-                                        pixel_x = (int)(W * 0.75 + 2 * spacing + (num - 5.0) / 4.0 * spacing);
+                                        pixel_x = (int)(W * 0.75 + 2 * spacing + (dBmMeterReading - 5.0) / 4.0 * spacing);
                                 }
-                                if (double.IsInfinity(num)) pixel_x = W - 2;
+                                if (double.IsInfinity(dBmMeterReading)) pixel_x = W - 2;
                                 break;
                             // spacing = (W * 0.25 - 2.0 - 10.0) / 1.0;
                             // if (num <= 25.0)
@@ -32770,7 +33321,7 @@ namespace Thetis
 
 
                                 spacing = (W * 0.75 - 2.0) / 4.0;
-                                pixel_x = (int)(num / 5.0 * spacing);
+                                pixel_x = (int)(dBmMeterReading / 5.0 * spacing);
                                 break;
                             case MeterTXMode.OFF:
                                 break;
@@ -32853,54 +33404,54 @@ namespace Thetis
                                     {
                                         if (rx1_above30)
                                         {
-                                            if (num <= -124.0f) output = "    S 0";
-                                            else if (num > -144.0f & num <= -138.0f) output = "    S 1";
-                                            else if (num > -138.0f & num <= -132.0f) output = "    S 2";
-                                            else if (num > -132.0f & num <= -126.0f) output = "    S 3";
-                                            else if (num > -126.0f & num <= -120.0f) output = "    S 4";
-                                            else if (num > -120.0f & num <= -114.0f) output = "    S 5";
-                                            else if (num > -114.0f & num <= -108.0f) output = "    S 6";
-                                            else if (num > -108.0f & num <= -102.0f) output = "    S 7";
-                                            else if (num > -102.0f & num <= -96.0f) output = "    S 8";
-                                            else if (num > -96.0f & num <= -90.0f) output = "    S 9";
-                                            else if (num > -90.0f & num <= -86.0f) output = "    S 9 + 5";
-                                            else if (num > -86.0f & num <= -80.0f) output = "    S 9 + 10";
-                                            else if (num > -80.0f & num <= -76.0f) output = "    S 9 + 15";
-                                            else if (num > -76.0f & num <= -66.0f) output = "    S 9 + 20";
-                                            else if (num > -66.0f & num <= -56.0f) output = "    S 9 + 30";
-                                            else if (num > -56.0f & num <= -46.0f) output = "    S 9 + 40";
-                                            else if (num > -46.0f & num <= -36.0f) output = "    S 9 + 50";
-                                            else if (num > -36.0f) output = "    S 9 + 60";
+                                            if (dBmMeterReading <= -124.0f) output = "    S 0";
+                                            else if (dBmMeterReading > -144.0f & dBmMeterReading <= -138.0f) output = "    S 1";
+                                            else if (dBmMeterReading > -138.0f & dBmMeterReading <= -132.0f) output = "    S 2";
+                                            else if (dBmMeterReading > -132.0f & dBmMeterReading <= -126.0f) output = "    S 3";
+                                            else if (dBmMeterReading > -126.0f & dBmMeterReading <= -120.0f) output = "    S 4";
+                                            else if (dBmMeterReading > -120.0f & dBmMeterReading <= -114.0f) output = "    S 5";
+                                            else if (dBmMeterReading > -114.0f & dBmMeterReading <= -108.0f) output = "    S 6";
+                                            else if (dBmMeterReading > -108.0f & dBmMeterReading <= -102.0f) output = "    S 7";
+                                            else if (dBmMeterReading > -102.0f & dBmMeterReading <= -96.0f) output = "    S 8";
+                                            else if (dBmMeterReading > -96.0f & dBmMeterReading <= -90.0f) output = "    S 9";
+                                            else if (dBmMeterReading > -90.0f & dBmMeterReading <= -86.0f) output = "    S 9 + 5";
+                                            else if (dBmMeterReading > -86.0f & dBmMeterReading <= -80.0f) output = "    S 9 + 10";
+                                            else if (dBmMeterReading > -80.0f & dBmMeterReading <= -76.0f) output = "    S 9 + 15";
+                                            else if (dBmMeterReading > -76.0f & dBmMeterReading <= -66.0f) output = "    S 9 + 20";
+                                            else if (dBmMeterReading > -66.0f & dBmMeterReading <= -56.0f) output = "    S 9 + 30";
+                                            else if (dBmMeterReading > -56.0f & dBmMeterReading <= -46.0f) output = "    S 9 + 40";
+                                            else if (dBmMeterReading > -46.0f & dBmMeterReading <= -36.0f) output = "    S 9 + 50";
+                                            else if (dBmMeterReading > -36.0f) output = "    S 9 + 60";
                                         }
                                         else
                                         {
-                                            if (num <= -124.0f) output = "    S 0";
-                                            else if (num > -124.0f & num <= -118.0f) output = "    S 1";
-                                            else if (num > -118.0f & num <= -112.0f) output = "    S 2";
-                                            else if (num > -112.0f & num <= -106.0f) output = "    S 3";
-                                            else if (num > -106.0f & num <= -100.0f) output = "    S 4";
-                                            else if (num > -100.0f & num <= -94.0f) output = "    S 5";
-                                            else if (num > -94.0f & num <= -88.0f) output = "    S 6";
-                                            else if (num > -88.0f & num <= -82.0f) output = "    S 7";
-                                            else if (num > -82.0f & num <= -76.0f) output = "    S 8";
-                                            else if (num > -76.0f & num <= -70.0f) output = "    S 9";
-                                            else if (num > -70.0f & num <= -66.0f) output = "    S 9 + 5";
-                                            else if (num > -66.0f & num <= -60.0f) output = "    S 9 + 10";
-                                            else if (num > -60.0f & num <= -56.0f) output = "    S 9 + 15";
-                                            else if (num > -56.0f & num <= -46.0f) output = "    S 9 + 20";
-                                            else if (num > -46.0f & num <= -36.0f) output = "    S 9 + 30";
-                                            else if (num > -36.0f & num <= -26.0f) output = "    S 9 + 40";
-                                            else if (num > -26.0f & num <= -16.0f) output = "    S 9 + 50";
-                                            else if (num > -16.0f) output = "    S 9 + 60";
+                                            if (dBmMeterReading <= -124.0f) output = "    S 0";
+                                            else if (dBmMeterReading > -124.0f & dBmMeterReading <= -118.0f) output = "    S 1";
+                                            else if (dBmMeterReading > -118.0f & dBmMeterReading <= -112.0f) output = "    S 2";
+                                            else if (dBmMeterReading > -112.0f & dBmMeterReading <= -106.0f) output = "    S 3";
+                                            else if (dBmMeterReading > -106.0f & dBmMeterReading <= -100.0f) output = "    S 4";
+                                            else if (dBmMeterReading > -100.0f & dBmMeterReading <= -94.0f) output = "    S 5";
+                                            else if (dBmMeterReading > -94.0f & dBmMeterReading <= -88.0f) output = "    S 6";
+                                            else if (dBmMeterReading > -88.0f & dBmMeterReading <= -82.0f) output = "    S 7";
+                                            else if (dBmMeterReading > -82.0f & dBmMeterReading <= -76.0f) output = "    S 8";
+                                            else if (dBmMeterReading > -76.0f & dBmMeterReading <= -70.0f) output = "    S 9";
+                                            else if (dBmMeterReading > -70.0f & dBmMeterReading <= -66.0f) output = "    S 9 + 5";
+                                            else if (dBmMeterReading > -66.0f & dBmMeterReading <= -60.0f) output = "    S 9 + 10";
+                                            else if (dBmMeterReading > -60.0f & dBmMeterReading <= -56.0f) output = "    S 9 + 15";
+                                            else if (dBmMeterReading > -56.0f & dBmMeterReading <= -46.0f) output = "    S 9 + 20";
+                                            else if (dBmMeterReading > -46.0f & dBmMeterReading <= -36.0f) output = "    S 9 + 30";
+                                            else if (dBmMeterReading > -36.0f & dBmMeterReading <= -26.0f) output = "    S 9 + 40";
+                                            else if (dBmMeterReading > -26.0f & dBmMeterReading <= -16.0f) output = "    S 9 + 50";
+                                            else if (dBmMeterReading > -16.0f) output = "    S 9 + 60";
                                         }
                                     }
-                                    else output = num.ToString(format) + " dBm";
+                                    else output = dBmMeterReading.ToString(format) + " dBm";
                                     break;
                                 case MeterRXMode.ADC_L:
                                 case MeterRXMode.ADC_R:
                                 case MeterRXMode.ADC2_L:
                                 case MeterRXMode.ADC2_R:
-                                    output = num.ToString("f1") + " dBFS";
+                                    output = dBmMeterReading.ToString("f1") + " dBFS";
                                     break;
                                 case MeterRXMode.OFF:
                                     output = "";
@@ -32922,17 +33473,17 @@ namespace Thetis
                                 case MeterTXMode.COMP:
                                 case MeterTXMode.ALC:
                                 case MeterTXMode.ALC_G:
-                                    output = num.ToString(format) + " dB";
+                                    output = dBmMeterReading.ToString(format) + " dB";
                                     break;
                                 case MeterTXMode.FORWARD_POWER:
                                 case MeterTXMode.REVERSE_POWER:
                                 case MeterTXMode.SWR_POWER:
-                                    if (anan10present || anan10Epresent || apollopresent) output = num.ToString(format) + " W";
-                                    else if (alexpresent || pa_present) output = num.ToString(format) + " W";
-                                    else output = num.ToString(format) + " mW";
+                                    if (anan10present || anan10Epresent || apollopresent) output = dBmMeterReading.ToString(format) + " W";
+                                    else if (alexpresent || pa_present) output = dBmMeterReading.ToString(format) + " W";
+                                    else output = dBmMeterReading.ToString(format) + " mW";
                                     break;
                                 case MeterTXMode.SWR:
-                                    output = num.ToString("f1") + " : 1";
+                                    output = dBmMeterReading.ToString("f1") + " : 1";
                                     break;
                                 case MeterTXMode.OFF:
                                     output = "";
@@ -32964,7 +33515,7 @@ namespace Thetis
             int H = picRX2Meter.ClientSize.Height;
             int W = picRX2Meter.ClientSize.Width;
             Graphics g = e.Graphics;
-            double num;
+            double dBmMeterReading;
             int pixel_x = 0;
             string output = "";
 
@@ -32973,169 +33524,10 @@ namespace Thetis
                 case MultiMeterDisplayMode.Original:
                     #region Original
 
-                    if (rx2_meter_data_ready)
-                    {
-                        rx2_meter_current_data = rx2_meter_new_data;
-                        rx2_meter_data_ready = false;
-                    }
-
-                    num = rx2_meter_current_data;
-
-                    switch (rx2_meter_mode)
-                    {
-                        case MeterRXMode.SIGNAL_STRENGTH:
-                        case MeterRXMode.SIGNAL_AVERAGE:
-                            switch ((int)g.DpiX)
-                            {
-                                case 96:
-                                    double s;
-                                    if (rx2_above30)
-                                    {
-                                        if (collapsedDisplay)
-                                        {
-                                            s = (num + 147) / 6;
-                                            if (s <= 9.0F)
-                                                pixel_x = (int)((s * 15) + 2);
-                                            else
-                                            {
-                                                double over_s9 = num + 93;
-                                                pixel_x = 138 + (int)(over_s9 * 2.10);
-                                            }
-                                        }
-                                        else
-                                        {
-                                            s = (num + 147) / 6;
-                                            if (s <= 9.0F)
-                                                pixel_x = (int)((s * 15) + 2);
-                                            else
-                                            {
-                                                double over_s9 = num + 93;
-                                                pixel_x = 69 + (int)(over_s9 * 1.05);
-                                            }
-                                        }
-                                    }
-                                    else
-                                    {
-                                        if (collapsedDisplay)
-                                        {
-                                            s = (num + 127) / 6;
-                                            if (s <= 9.0F)
-                                                pixel_x = (int)((s * 15) + 2);
-                                            else
-                                            {
-                                                double over_s9 = num + 73;
-                                                pixel_x = 138 + (int)(over_s9 * 2.10);
-                                            }
-                                        }
-                                        else
-                                        {
-                                            s = (num + 127) / 6;
-                                            if (s <= 9.0F)
-                                                pixel_x = (int)((s * 7.5) + 2);
-                                            else
-                                            {
-                                                double over_s9 = num + 73;
-                                                pixel_x = 69 + (int)(over_s9 * 1.05);
-                                            }
-                                        }
-                                    }
-                                    break;
-                                case 120:
-                                    if (num <= -97.0f)
-                                        pixel_x = (int)(0 + (num + 100.0) / 3.0 * 10);
-                                    else if (num <= -91.0f)
-                                        pixel_x = (int)(10 + (num + 97.0) / 6.0 * 17);
-                                    else if (num <= -85.0f)
-                                        pixel_x = (int)(27 + (num + 91.0) / 6.0 * 16);
-                                    else if (num <= -79.0f)
-                                        pixel_x = (int)(43 + (num + 85.0) / 6.0 * 17);
-                                    else if (num <= -73.0f)
-                                        pixel_x = (int)(60 + (num + 79.0) / 6.0 * 16);
-                                    else if (num <= -53.0f)
-                                        pixel_x = (int)(76 + (num + 73.0) / 20.0 * 24);
-                                    else if (num <= -33.0f)
-                                        pixel_x = (int)(100 + (num + 53.0) / 20.0 * 24);
-                                    else if (num <= -13.0f)
-                                        pixel_x = (int)(124 + (num + 33.0) / 20.0 * 24);
-                                    else
-                                        pixel_x = (int)(148 + (num + 13.0) / 20.0 * 19);
-                                    break;
-                            }
-                            break;
-                        case MeterRXMode.ADC_L:
-                        case MeterRXMode.ADC_R:
-                            switch ((int)g.DpiX)
-                            {
-                                case 96:
-                                    if (collapsedDisplay)
-                                        pixel_x = (int)(((num + 100) * 2.4) + 24);
-                                    else pixel_x = (int)(((num + 100) * 1.2) + 12);
-                                    break;
-                                case 120:
-                                    if (num <= -100.0f)
-                                        pixel_x = (int)(0 + (num + 110.0) / 10.0 * 14);
-                                    else if (num <= -80.0f)
-                                        pixel_x = (int)(14 + (num + 100.0) / 20.0 * 27);
-                                    else if (num <= -60.0f)
-                                        pixel_x = (int)(41 + (num + 80.0) / 20.0 * 28);
-                                    else if (num <= -40.0f)
-                                        pixel_x = (int)(69 + (num + 60.0) / 20.0 * 28);
-                                    else if (num <= -20.0f)
-                                        pixel_x = (int)(97 + (num + 40.0) / 20.0 * 27);
-                                    else if (num <= 0.0f)
-                                        pixel_x = (int)(124 + (num + 20.0) / 20.0 * 24);
-                                    else
-                                        pixel_x = (int)(148 + (num - 0.0) / 10.0 * 19);
-                                    break;
-                            }
-                            break;
-                        case MeterRXMode.OFF:
-                            break;
-                    }
-
-                    switch ((int)g.DpiX)
-                    {
-                        case 96:
-                            if (pixel_x > 139) pixel_x = 139;
-                            break;
-                        case 120:
-                            if (pixel_x > 167) pixel_x = 167;
-                            break;
-                    }
-
-                    if (rx2_meter_mode != MeterRXMode.OFF)
-                    {
-                        if (pixel_x <= 0) pixel_x = 1;
-
-                        using (LinearGradientBrush brush = new LinearGradientBrush(new Rectangle(0, 0, pixel_x, H),
-                            meter_left_color, meter_right_color, LinearGradientMode.Horizontal))
-                            g.FillRectangle(brush, 0, 0, pixel_x, H);
-
-                        for (int i = 0; i < 21; i++)
-                            g.DrawLine(meter_background_pen, 6 + i * 8, 0, 6 + i * 8, H);
-
-                        g.DrawLine(Pens.Red, pixel_x, 0, pixel_x, H);
-                        g.FillRectangle(meter_background_pen.Brush, pixel_x + 1, 0, W - pixel_x, H);
-
-                        if (pixel_x >= rx2_meter_peak_value)
-                        {
-                            rx2_meter_peak_count = 0;
-                            rx2_meter_peak_value = pixel_x;
-                        }
-                        else
-                        {
-                            if (rx2_meter_peak_count++ >= multimeter_peak_hold_samples)
-                            {
-                                rx2_meter_peak_count = 0;
-                                rx2_meter_peak_value = pixel_x;
-                            }
-                            else
-                            {
-                                g.DrawLine(Pens.Red, rx2_meter_peak_value, 0, rx2_meter_peak_value, H);
-                                g.DrawLine(Pens.Red, rx2_meter_peak_value - 1, 0, rx2_meter_peak_value - 1, H);
-                            }
-                        }
-                    }
+                    //MW0LGE
+                    dBmMeterReading = handleOriginalMeter(2, g, H, W);
+                    drawOriginalMeterTextScale(g, H, W);
+                    //
 
                     rx2_meter_timer.Stop();
 
@@ -33152,53 +33544,53 @@ namespace Thetis
                                 {
                                     if (rx1_above30)
                                     {
-                                        if (num <= -124.0f) output = "    S 0";
-                                        else if (num > -144.0f & num <= -138.0f) output = "    S 1";
-                                        else if (num > -138.0f & num <= -132.0f) output = "    S 2";
-                                        else if (num > -132.0f & num <= -126.0f) output = "    S 3";
-                                        else if (num > -126.0f & num <= -120.0f) output = "    S 4";
-                                        else if (num > -120.0f & num <= -114.0f) output = "    S 5";
-                                        else if (num > -114.0f & num <= -108.0f) output = "    S 6";
-                                        else if (num > -108.0f & num <= -102.0f) output = "    S 7";
-                                        else if (num > -102.0f & num <= -96.0f) output = "    S 8";
-                                        else if (num > -96.0f & num <= -90.0f) output = "    S 9";
-                                        else if (num > -90.0f & num <= -86.0f) output = "    S 9 + 5";
-                                        else if (num > -86.0f & num <= -80.0f) output = "    S 9 + 10";
-                                        else if (num > -80.0f & num <= -76.0f) output = "    S 9 + 15";
-                                        else if (num > -76.0f & num <= -66.0f) output = "    S 9 + 20";
-                                        else if (num > -66.0f & num <= -56.0f) output = "    S 9 + 30";
-                                        else if (num > -56.0f & num <= -46.0f) output = "    S 9 + 40";
-                                        else if (num > -46.0f & num <= -36.0f) output = "    S 9 + 50";
-                                        else if (num > -36.0f) output = "    S 9 + 60";
+                                        if (dBmMeterReading <= -124.0f) output = "    S 0";
+                                        else if (dBmMeterReading > -144.0f & dBmMeterReading <= -138.0f) output = "    S 1";
+                                        else if (dBmMeterReading > -138.0f & dBmMeterReading <= -132.0f) output = "    S 2";
+                                        else if (dBmMeterReading > -132.0f & dBmMeterReading <= -126.0f) output = "    S 3";
+                                        else if (dBmMeterReading > -126.0f & dBmMeterReading <= -120.0f) output = "    S 4";
+                                        else if (dBmMeterReading > -120.0f & dBmMeterReading <= -114.0f) output = "    S 5";
+                                        else if (dBmMeterReading > -114.0f & dBmMeterReading <= -108.0f) output = "    S 6";
+                                        else if (dBmMeterReading > -108.0f & dBmMeterReading <= -102.0f) output = "    S 7";
+                                        else if (dBmMeterReading > -102.0f & dBmMeterReading <= -96.0f) output = "    S 8";
+                                        else if (dBmMeterReading > -96.0f & dBmMeterReading <= -90.0f) output = "    S 9";
+                                        else if (dBmMeterReading > -90.0f & dBmMeterReading <= -86.0f) output = "    S 9 + 5";
+                                        else if (dBmMeterReading > -86.0f & dBmMeterReading <= -80.0f) output = "    S 9 + 10";
+                                        else if (dBmMeterReading > -80.0f & dBmMeterReading <= -76.0f) output = "    S 9 + 15";
+                                        else if (dBmMeterReading > -76.0f & dBmMeterReading <= -66.0f) output = "    S 9 + 20";
+                                        else if (dBmMeterReading > -66.0f & dBmMeterReading <= -56.0f) output = "    S 9 + 30";
+                                        else if (dBmMeterReading > -56.0f & dBmMeterReading <= -46.0f) output = "    S 9 + 40";
+                                        else if (dBmMeterReading > -46.0f & dBmMeterReading <= -36.0f) output = "    S 9 + 50";
+                                        else if (dBmMeterReading > -36.0f) output = "    S 9 + 60";
                                     }
                                     else
                                     {
-                                        if (num <= -124.0f) output = "    S 0";
-                                        else if (num > -124.0f & num <= -118.0f) output = "    S 1";
-                                        else if (num > -118.0f & num <= -112.0f) output = "    S 2";
-                                        else if (num > -112.0f & num <= -106.0f) output = "    S 3";
-                                        else if (num > -106.0f & num <= -100.0f) output = "    S 4";
-                                        else if (num > -100.0f & num <= -94.0f) output = "    S 5";
-                                        else if (num > -94.0f & num <= -88.0f) output = "    S 6";
-                                        else if (num > -88.0f & num <= -82.0f) output = "    S 7";
-                                        else if (num > -82.0f & num <= -76.0f) output = "    S 8";
-                                        else if (num > -76.0f & num <= -70.0f) output = "    S 9";
-                                        else if (num > -70.0f & num <= -66.0f) output = "    S 9 + 5";
-                                        else if (num > -66.0f & num <= -60.0f) output = "    S 9 + 10";
-                                        else if (num > -60.0f & num <= -56.0f) output = "    S 9 + 15";
-                                        else if (num > -56.0f & num <= -46.0f) output = "    S 9 + 20";
-                                        else if (num > -46.0f & num <= -36.0f) output = "    S 9 + 30";
-                                        else if (num > -36.0f & num <= -26.0f) output = "    S 9 + 40";
-                                        else if (num > -26.0f & num <= -16.0f) output = "    S 9 + 50";
-                                        else if (num > -16.0f) output = "    S 9 + 60";
+                                        if (dBmMeterReading <= -124.0f) output = "    S 0";
+                                        else if (dBmMeterReading > -124.0f & dBmMeterReading <= -118.0f) output = "    S 1";
+                                        else if (dBmMeterReading > -118.0f & dBmMeterReading <= -112.0f) output = "    S 2";
+                                        else if (dBmMeterReading > -112.0f & dBmMeterReading <= -106.0f) output = "    S 3";
+                                        else if (dBmMeterReading > -106.0f & dBmMeterReading <= -100.0f) output = "    S 4";
+                                        else if (dBmMeterReading > -100.0f & dBmMeterReading <= -94.0f) output = "    S 5";
+                                        else if (dBmMeterReading > -94.0f & dBmMeterReading <= -88.0f) output = "    S 6";
+                                        else if (dBmMeterReading > -88.0f & dBmMeterReading <= -82.0f) output = "    S 7";
+                                        else if (dBmMeterReading > -82.0f & dBmMeterReading <= -76.0f) output = "    S 8";
+                                        else if (dBmMeterReading > -76.0f & dBmMeterReading <= -70.0f) output = "    S 9";
+                                        else if (dBmMeterReading > -70.0f & dBmMeterReading <= -66.0f) output = "    S 9 + 5";
+                                        else if (dBmMeterReading > -66.0f & dBmMeterReading <= -60.0f) output = "    S 9 + 10";
+                                        else if (dBmMeterReading > -60.0f & dBmMeterReading <= -56.0f) output = "    S 9 + 15";
+                                        else if (dBmMeterReading > -56.0f & dBmMeterReading <= -46.0f) output = "    S 9 + 20";
+                                        else if (dBmMeterReading > -46.0f & dBmMeterReading <= -36.0f) output = "    S 9 + 30";
+                                        else if (dBmMeterReading > -36.0f & dBmMeterReading <= -26.0f) output = "    S 9 + 40";
+                                        else if (dBmMeterReading > -26.0f & dBmMeterReading <= -16.0f) output = "    S 9 + 50";
+                                        else if (dBmMeterReading > -16.0f) output = "    S 9 + 60";
                                     }
                                 }
                                 else
-                                    output = num.ToString(format) + " dBm";
+                                    output = dBmMeterReading.ToString(format) + " dBm";
                                 break;
                             case MeterRXMode.ADC_L:
                             case MeterRXMode.ADC_R:
-                                output = num.ToString("f1") + " dBFS";
+                                output = dBmMeterReading.ToString("f1") + " dBFS";
                                 break;
                             case MeterRXMode.OFF:
                                 output = "";
@@ -33224,14 +33616,14 @@ namespace Thetis
 
                     if (rx2_avg_num == Display.CLEAR_FLAG) // reset average -- just use new value
                     {
-                        num = rx2_avg_num = rx2_meter_current_data;
+                        dBmMeterReading = rx2_avg_num = rx2_meter_current_data;
                     }
                     else
                     {
                         if (rx2_meter_current_data > rx2_avg_num)
-                            num = rx2_avg_num = rx2_meter_current_data * 0.8 + rx2_avg_num * 0.2; // fast rise
+                            dBmMeterReading = rx2_avg_num = rx2_meter_current_data * 0.8 + rx2_avg_num * 0.2; // fast rise
                         else
-                            num = rx2_avg_num = rx2_meter_current_data * 0.2 + rx2_avg_num * 0.8; // slow decay
+                            dBmMeterReading = rx2_avg_num = rx2_meter_current_data * 0.2 + rx2_avg_num * 0.8; // slow decay
                     }
                     //using (Pen p = new Pen(edge_meter_background_color))
                     g.DrawRectangle(edge_meter_background_pen, 0, 0, W, H);
@@ -33279,25 +33671,25 @@ namespace Thetis
 
                             if (rx2_above30)
                             {
-                                if (num > -93.0) // high area
+                                if (dBmMeterReading > -93.0) // high area
                                 {
-                                    pixel_x = (int)(W * 0.5 + (93.0 + num) / 63.0 * (W * 0.5 - 3));
+                                    pixel_x = (int)(W * 0.5 + (93.0 + dBmMeterReading) / 63.0 * (W * 0.5 - 3));
                                 }
                                 else
                                 {
-                                    pixel_x = (int)((num + 153.0) / 60.0 * (W * 0.5));
+                                    pixel_x = (int)((dBmMeterReading + 153.0) / 60.0 * (W * 0.5));
                                 }
                             }
                             else
                             {
 
-                                if (num > -73.0) // high area
+                                if (dBmMeterReading > -73.0) // high area
                                 {
-                                    pixel_x = (int)(W * 0.5 + (73.0 + num) / 63.0 * (W * 0.5 - 3));
+                                    pixel_x = (int)(W * 0.5 + (73.0 + dBmMeterReading) / 63.0 * (W * 0.5 - 3));
                                 }
                                 else
                                 {
-                                    pixel_x = (int)((num + 133.0) / 60.0 * (W * 0.5));
+                                    pixel_x = (int)((dBmMeterReading + 133.0) / 60.0 * (W * 0.5));
                                 }
                             }
                             break;
@@ -33325,7 +33717,7 @@ namespace Thetis
                                 g.DrawString(s, font7, b, (int)(i * spacing - (int)string_width * (s.Length)), (int)(H - 4 - 8 - string_height));
                             }
 
-                            pixel_x = (int)((num + 120.0) / 120.0 * (W - 5.0));
+                            pixel_x = (int)((dBmMeterReading + 120.0) / 120.0 * (W - 5.0));
                             break;
                         case MeterRXMode.OFF:
                             break;
@@ -33367,55 +33759,55 @@ namespace Thetis
                                 {
                                     if (rx2_above30)
                                     {
-                                        if (num <= -124.0f) output = "    S 0";
-                                        else if (num > -144.0f & num <= -138.0f) output = "    S 1";
-                                        else if (num > -138.0f & num <= -132.0f) output = "    S 2";
-                                        else if (num > -132.0f & num <= -126.0f) output = "    S 3";
-                                        else if (num > -126.0f & num <= -120.0f) output = "    S 4";
-                                        else if (num > -120.0f & num <= -114.0f) output = "    S 5";
-                                        else if (num > -114.0f & num <= -108.0f) output = "    S 6";
-                                        else if (num > -108.0f & num <= -102.0f) output = "    S 7";
-                                        else if (num > -102.0f & num <= -96.0f) output = "    S 8";
-                                        else if (num > -96.0f & num <= -90.0f) output = "    S 9";
-                                        else if (num > -90.0f & num <= -86.0f) output = "    S 9 + 5";
-                                        else if (num > -86.0f & num <= -80.0f) output = "    S 9 + 10";
-                                        else if (num > -80.0f & num <= -76.0f) output = "    S 9 + 15";
-                                        else if (num > -76.0f & num <= -66.0f) output = "    S 9 + 20";
-                                        else if (num > -66.0f & num <= -56.0f) output = "    S 9 + 30";
-                                        else if (num > -56.0f & num <= -46.0f) output = "    S 9 + 40";
-                                        else if (num > -46.0f & num <= -36.0f) output = "    S 9 + 50";
-                                        else if (num > -36.0f) output = "    S 9 + 60";
+                                        if (dBmMeterReading <= -124.0f) output = "    S 0";
+                                        else if (dBmMeterReading > -144.0f & dBmMeterReading <= -138.0f) output = "    S 1";
+                                        else if (dBmMeterReading > -138.0f & dBmMeterReading <= -132.0f) output = "    S 2";
+                                        else if (dBmMeterReading > -132.0f & dBmMeterReading <= -126.0f) output = "    S 3";
+                                        else if (dBmMeterReading > -126.0f & dBmMeterReading <= -120.0f) output = "    S 4";
+                                        else if (dBmMeterReading > -120.0f & dBmMeterReading <= -114.0f) output = "    S 5";
+                                        else if (dBmMeterReading > -114.0f & dBmMeterReading <= -108.0f) output = "    S 6";
+                                        else if (dBmMeterReading > -108.0f & dBmMeterReading <= -102.0f) output = "    S 7";
+                                        else if (dBmMeterReading > -102.0f & dBmMeterReading <= -96.0f) output = "    S 8";
+                                        else if (dBmMeterReading > -96.0f & dBmMeterReading <= -90.0f) output = "    S 9";
+                                        else if (dBmMeterReading > -90.0f & dBmMeterReading <= -86.0f) output = "    S 9 + 5";
+                                        else if (dBmMeterReading > -86.0f & dBmMeterReading <= -80.0f) output = "    S 9 + 10";
+                                        else if (dBmMeterReading > -80.0f & dBmMeterReading <= -76.0f) output = "    S 9 + 15";
+                                        else if (dBmMeterReading > -76.0f & dBmMeterReading <= -66.0f) output = "    S 9 + 20";
+                                        else if (dBmMeterReading > -66.0f & dBmMeterReading <= -56.0f) output = "    S 9 + 30";
+                                        else if (dBmMeterReading > -56.0f & dBmMeterReading <= -46.0f) output = "    S 9 + 40";
+                                        else if (dBmMeterReading > -46.0f & dBmMeterReading <= -36.0f) output = "    S 9 + 50";
+                                        else if (dBmMeterReading > -36.0f) output = "    S 9 + 60";
                                     }
                                     else
                                     {
-                                        if (num <= -124.0f) output = "    S 0";
-                                        else if (num > -124.0f & num <= -118.0f) output = "    S 1";
-                                        else if (num > -118.0f & num <= -112.0f) output = "    S 2";
-                                        else if (num > -112.0f & num <= -106.0f) output = "    S 3";
-                                        else if (num > -106.0f & num <= -100.0f) output = "    S 4";
-                                        else if (num > -100.0f & num <= -94.0f) output = "    S 5";
-                                        else if (num > -94.0f & num <= -88.0f) output = "    S 6";
-                                        else if (num > -88.0f & num <= -82.0f) output = "    S 7";
-                                        else if (num > -82.0f & num <= -76.0f) output = "    S 8";
-                                        else if (num > -76.0f & num <= -70.0f) output = "    S 9";
-                                        else if (num > -70.0f & num <= -66.0f) output = "    S 9 + 5";
-                                        else if (num > -66.0f & num <= -60.0f) output = "    S 9 + 10";
-                                        else if (num > -60.0f & num <= -56.0f) output = "    S 9 + 15";
-                                        else if (num > -56.0f & num <= -46.0f) output = "    S 9 + 20";
-                                        else if (num > -46.0f & num <= -36.0f) output = "    S 9 + 30";
-                                        else if (num > -36.0f & num <= -26.0f) output = "    S 9 + 40";
-                                        else if (num > -26.0f & num <= -16.0f) output = "    S 9 + 50";
-                                        else if (num > -16.0f) output = "    S 9 + 60";
+                                        if (dBmMeterReading <= -124.0f) output = "    S 0";
+                                        else if (dBmMeterReading > -124.0f & dBmMeterReading <= -118.0f) output = "    S 1";
+                                        else if (dBmMeterReading > -118.0f & dBmMeterReading <= -112.0f) output = "    S 2";
+                                        else if (dBmMeterReading > -112.0f & dBmMeterReading <= -106.0f) output = "    S 3";
+                                        else if (dBmMeterReading > -106.0f & dBmMeterReading <= -100.0f) output = "    S 4";
+                                        else if (dBmMeterReading > -100.0f & dBmMeterReading <= -94.0f) output = "    S 5";
+                                        else if (dBmMeterReading > -94.0f & dBmMeterReading <= -88.0f) output = "    S 6";
+                                        else if (dBmMeterReading > -88.0f & dBmMeterReading <= -82.0f) output = "    S 7";
+                                        else if (dBmMeterReading > -82.0f & dBmMeterReading <= -76.0f) output = "    S 8";
+                                        else if (dBmMeterReading > -76.0f & dBmMeterReading <= -70.0f) output = "    S 9";
+                                        else if (dBmMeterReading > -70.0f & dBmMeterReading <= -66.0f) output = "    S 9 + 5";
+                                        else if (dBmMeterReading > -66.0f & dBmMeterReading <= -60.0f) output = "    S 9 + 10";
+                                        else if (dBmMeterReading > -60.0f & dBmMeterReading <= -56.0f) output = "    S 9 + 15";
+                                        else if (dBmMeterReading > -56.0f & dBmMeterReading <= -46.0f) output = "    S 9 + 20";
+                                        else if (dBmMeterReading > -46.0f & dBmMeterReading <= -36.0f) output = "    S 9 + 30";
+                                        else if (dBmMeterReading > -36.0f & dBmMeterReading <= -26.0f) output = "    S 9 + 40";
+                                        else if (dBmMeterReading > -26.0f & dBmMeterReading <= -16.0f) output = "    S 9 + 50";
+                                        else if (dBmMeterReading > -16.0f) output = "    S 9 + 60";
                                     }
                                 }
                                 else
-                                    output = num.ToString(format) + " dBm";
+                                    output = dBmMeterReading.ToString(format) + " dBm";
                                 break;
                             case MeterRXMode.ADC_L:
                             case MeterRXMode.ADC_R:
                             case MeterRXMode.ADC2_L:
                             case MeterRXMode.ADC2_R:
-                                output = num.ToString("f1") + " dBFS";
+                                output = dBmMeterReading.ToString("f1") + " dBFS";
                                 break;
                             case MeterRXMode.OFF:
                                 output = "";
@@ -33921,7 +34313,6 @@ namespace Thetis
                             case DisplayMode.WATERFALL:
                                 if (mox && VFOBTX)
                                 {
-
                                     fixed (float* ptr = &Display.new_waterfall_data_bottom[0])
                                         SpecHPSDRDLL.GetPixels(cmaster.inid(1, 0), 1, ptr, ref flag);
                                 }
@@ -33944,6 +34335,25 @@ namespace Thetis
                                     fixed (float* ptr = &Display.new_display_data_bottom[0])
                                         SpecHPSDRDLL.GetPixels(1, 0, ptr, ref flag);
                                 }
+                                Display.DataReadyBottom = true; //MW0LGE
+                                break;
+                            case DisplayMode.PANAFALL:  // MW0LGE
+                                if (mox && VFOBTX)
+                                {
+                                    fixed (float* ptr = &Display.new_display_data_bottom[0])
+                                        SpecHPSDRDLL.GetPixels(cmaster.inid(1, 0), 0, ptr, ref flag);
+                                    fixed (float* ptr = &Display.new_waterfall_data_bottom[0])
+                                        SpecHPSDRDLL.GetPixels(cmaster.inid(1, 0), 1, ptr, ref flag);
+                                }
+                                else
+                                {
+                                    fixed (float* ptr = &Display.new_display_data_bottom[0])
+                                        SpecHPSDRDLL.GetPixels(1, 0, ptr, ref flag);
+                                    fixed (float* ptr = &Display.new_waterfall_data_bottom[0])
+                                        SpecHPSDRDLL.GetPixels(1, 1, ptr, ref flag);
+                                }
+                                Display.DataReadyBottom = true;
+                                Display.WaterfallDataReadyBottom = true;
                                 break;
                             case DisplayMode.SCOPE:
                             case DisplayMode.SCOPE2:
@@ -33976,8 +34386,9 @@ namespace Thetis
                                 //Audio.phase_mutex.ReleaseMutex();
                                 break;
                         }
-                        if (Display.CurrentDisplayModeBottom != DisplayMode.WATERFALL)
-                            Display.DataReadyBottom = true;
+                        if (Display.CurrentDisplayModeBottom != DisplayMode.PANAFALL &&
+                            Display.CurrentDisplayModeBottom != DisplayMode.WATERFALL)
+                            Display.DataReady = true; //MW0LGE
                     }
                     if (displaydidit)
                     {
@@ -37817,6 +38228,24 @@ namespace Thetis
             }
         }
 
+        static private void resizeWaterfallBitmaps(bool bIsPanafall = false)
+        {
+            if (!bIsPanafall)
+            {
+                if (Display.RX2Enabled)
+                    Display.ResetWaterfallBmp(2);
+                else
+                    Display.ResetWaterfallBmp(1);
+            }
+            else
+            {
+                if (Display.RX2Enabled)
+                    Display.ResetWaterfallBmp(4);
+                else
+                    Display.ResetWaterfallBmp(2);
+            }
+        }
+
         public void comboDisplayMode_SelectedIndexChanged(object sender, System.EventArgs e)
         {
             pause_DisplayThread = true;
@@ -37942,6 +38371,9 @@ namespace Thetis
                     //chkDisplayPeak.Checked = false;
                     break;
                 case DisplayMode.WATERFALL:
+                    //MW0LGE
+                    resizeWaterfallBitmaps();
+
                     chkDisplayAVG.Enabled = true;
                     if (chkDisplayAVG.Checked)
                         chkDisplayAVG.BackColor = button_selected_color;
@@ -38015,6 +38447,9 @@ namespace Thetis
                     RX1Filter = rx1_filter;
                     break;
                 case DisplayMode.PANAFALL:
+                    //MW0LGE
+                    resizeWaterfallBitmaps(true);
+
                     chkDisplayAVG.Enabled = true;
                     if (chkDisplayAVG.Checked)
                         chkDisplayAVG.BackColor = button_selected_color;
@@ -38307,7 +38742,20 @@ namespace Thetis
             if (cmaster.Getwb(0).WBdisplay != null) cmaster.Hidewb(0);
 
             if (CWXForm != null) CWXForm.Close();
-            if (SetupForm != null) SetupForm.SaveOptions();
+
+            //MW0LGE
+            //Change to check if existing save is happening. Without this
+            //it is possible to crash on save and corrupt settings file
+            //There is a timeout in CompleteAnyExistingSave, so not 100% failure
+            //resistant
+            if (SetupForm != null)
+            {
+                if(SetupForm.CompleteAnyExistingSave()) SetupForm.SaveOptions();
+            }
+            else
+            {
+                // TODO display warning here that save didnt happen?
+            }
             if (EQForm != null) EQForm.Close();
             if (memoryForm != null) memoryForm.Close();
             if (diversityForm != null) diversityForm.Close();
@@ -39526,41 +39974,43 @@ namespace Thetis
                     lblRXMeter.Text = comboMeterRXMode.Text;
                 if (!mox)
                 {
-                    if (collapsedDisplay)
-                    {
-                        switch (mode)
-                        {
-                            case MeterRXMode.SIGNAL_STRENGTH:
-                            case MeterRXMode.SIGNAL_AVERAGE:
-                                lblMultiSMeter.Text = "     1       3         5        7        9          +20         +40         +60";
-                                break;
-                            case MeterRXMode.ADC_L:
-                            case MeterRXMode.ADC_R:
-                                lblMultiSMeter.Text = "   -100           -80           -60           -40           -20             0";
-                                break;
-                            case MeterRXMode.OFF:
-                                lblMultiSMeter.Text = "";
-                                break;
-                        }
+                    // MW0LGE not used
+                    //if (collapsedDisplay)
+                    //{
+                    //    switch (mode)
+                    //    {
+                    //        case MeterRXMode.SIGNAL_STRENGTH:
+                    //        case MeterRXMode.SIGNAL_AVERAGE:
+                    //            //MW0LGE lblMultiSMeter.Text = "     1       3         5        7        9          +20         +40         +60";
+                    //            break;
+                    //        case MeterRXMode.ADC_L:
+                    //        case MeterRXMode.ADC_R:
+                    //            //MW0LGE lblMultiSMeter.Text = "   -100           -80           -60           -40           -20             0";
+                    //            break;
+                    //        case MeterRXMode.OFF:
+                    //            //MW0LGE lblMultiSMeter.Text = "";
+                    //            break;
+                    //    }
 
-                    }
-                    else
-                    {
-                        switch (mode)
-                        {
-                            case MeterRXMode.SIGNAL_STRENGTH:
-                            case MeterRXMode.SIGNAL_AVERAGE:
-                                lblMultiSMeter.Text = "  1   3   5   7   9  +20 +40 +60";
-                                break;
-                            case MeterRXMode.ADC_L:
-                            case MeterRXMode.ADC_R:
-                                lblMultiSMeter.Text = "-100  -80   -60   -40   -20    0";
-                                break;
-                            case MeterRXMode.OFF:
-                                lblMultiSMeter.Text = "";
-                                break;
-                        }
-                    }
+                    //}
+                    //else
+                    //{
+                    //    switch (mode)
+                    //    {
+                    //        case MeterRXMode.SIGNAL_STRENGTH:
+                    //        case MeterRXMode.SIGNAL_AVERAGE:
+                    //            //MW0LGE lblMultiSMeter.Text = "   1   3   5   7   9  +20 +40 +60";
+                    //            break;
+                    //        case MeterRXMode.ADC_L:
+                    //        case MeterRXMode.ADC_R:
+                    //            //MW0LGE lblMultiSMeter.Text = "-100  -80   -60   -40   -20    0";
+                    //            break;
+                    //        case MeterRXMode.OFF:
+                    //            //MW0LGE lblMultiSMeter.Text = "";
+                    //            break;
+                    //    }
+                    //}
+
                     ResetMultiMeterPeak();
                 }
             }
@@ -39645,7 +40095,7 @@ namespace Thetis
                     switch (mode)
                     {
                         case MeterTXMode.FIRST:
-                            lblMultiSMeter.Text = "";
+                            //MW0LGE lblMultiSMeter.Text = "";
                             break;
                         case MeterTXMode.MIC:
                         case MeterTXMode.EQ:
@@ -39653,12 +40103,14 @@ namespace Thetis
                         case MeterTXMode.CFC_PK:
                         case MeterTXMode.COMP:
                         case MeterTXMode.ALC:
-                            lblMultiSMeter.Text = "   -20            -10               -5              0        4        8       12";
+                            //MW0LGE lblMultiSMeter.Text = "   -20            -10               -5              0        4        8       12";
                             // lblMultiSMeter.Text = "   -20            -10               -5              0        1        2        3";
                             break;
                         case MeterTXMode.FORWARD_POWER:
                         case MeterTXMode.REVERSE_POWER:
                         case MeterTXMode.SWR_POWER:
+                            //MW0LGE 
+                            /*
                             if (anan10present || anan10Epresent)
                                 lblMultiSMeter.Text = "    1              5             10            15            20            25+";
                             else if (apollopresent)
@@ -39666,18 +40118,19 @@ namespace Thetis
                             else if (alexpresent || pa_present)
                                 lblMultiSMeter.Text = "    1              5             10            50           100          120+";
                             else
-                                lblMultiSMeter.Text = "   25    50   100     150       200     400         600           800+";
-                            break;
+                                        lblMultiSMeter.Text = "   25    50   100     150       200     400         600           800+";
+                                        */
+                                        break;
                         case MeterTXMode.SWR:
-                            lblMultiSMeter.Text = " 1               1.5         2            3            5            10";
+                            //MW0LGE lblMultiSMeter.Text = " 1               1.5         2            3            5            10";
                             //  lblMultiSMeter.Text = "0             10              20";
                             break;
                         case MeterTXMode.OFF:
-                            lblMultiSMeter.Text = "";
+                            //MW0LGE lblMultiSMeter.Text = "";
                             break;
                         case MeterTXMode.LVL_G:
                         case MeterTXMode.ALC_G:
-                            lblMultiSMeter.Text = "0                  5                10                15                20";
+                            //MW0LGE lblMultiSMeter.Text = "0                  5                10                15                20";
                             break;
                     }
                 }
@@ -39686,7 +40139,7 @@ namespace Thetis
                     switch (mode)
                     {
                         case MeterTXMode.FIRST:
-                            lblMultiSMeter.Text = "";
+                            //MW0LGE lblMultiSMeter.Text = "";
                             break;
                         case MeterTXMode.MIC:
                         case MeterTXMode.EQ:
@@ -39694,12 +40147,14 @@ namespace Thetis
                         case MeterTXMode.CFC_PK:
                         case MeterTXMode.COMP:
                         case MeterTXMode.ALC:
-                            lblMultiSMeter.Text = "-20    -10     -5      0   4   8  12";
+                            //MW0LGE lblMultiSMeter.Text = "-20    -10     -5      0   4   8  12";
                             // lblMultiSMeter.Text = "-20    -10     -5      0   1   2   3";
                             break;
                         case MeterTXMode.FORWARD_POWER:
                         case MeterTXMode.REVERSE_POWER:
                         case MeterTXMode.SWR_POWER:
+                            //MW0LGE
+                            /*
                             if (anan10present || anan10Epresent)
                                 lblMultiSMeter.Text = "1      5     10    15   20    25+";
                             else if (apollopresent)
@@ -39708,18 +40163,19 @@ namespace Thetis
                                 lblMultiSMeter.Text = "1      5     10    50   100  120+";
                             else
                                 lblMultiSMeter.Text = "0      0.1     0.2     0.5        0.8";
+                                */
                             break;
                         case MeterTXMode.SWR:
-                            lblMultiSMeter.Text = "1      1.5   2     3     5    10";
+                            //MW0LGE lblMultiSMeter.Text = "1      1.5   2     3     5    10";
                             //  lblMultiSMeter.Text = "0             10              20";
                             break;
                         case MeterTXMode.OFF:
-                            lblMultiSMeter.Text = "";
+                            //MW0LGE lblMultiSMeter.Text = "";
                             break;
                         case MeterTXMode.LVL_G:
                         case MeterTXMode.CFC_G:
                         case MeterTXMode.ALC_G:
-                            lblMultiSMeter.Text = "0       5       10      15      20";
+                            //MW0LGE lblMultiSMeter.Text = "0       5       10      15      20";
                             break;
                     }
                 }
@@ -40813,6 +41269,7 @@ namespace Thetis
             VFOB,
             VFOASub,
             DisplayBottom,
+            DisplayTop,
             Other,
         }
 
@@ -40823,7 +41280,8 @@ namespace Thetis
             right = left + txtVFOAFreq.Width;
             top = grpVFOA.Top + txtVFOAFreq.Top;
             bottom = top + txtVFOAFreq.Height;
-            if (x > left && x < right && y > top && y < bottom)
+            // MW0LGE in collapsed mode this is only true if we are showing rx1, technically correct to add similar to vfoB, but not required as fall through will handle it
+            if ((!collapsedDisplay && x > left && x < right && y > top && y < bottom) || (collapsedDisplay && show_rx1 && x > left && x < right && y > top && y < bottom))
                 return TuneLocation.VFOA;
 
             left = grpVFOB.Left + txtVFOBFreq.Left;
@@ -40846,6 +41304,13 @@ namespace Thetis
             bottom = top + picDisplay.Height / 2;
             if (x > left && x < right && y > top && y < bottom)
                 return TuneLocation.DisplayBottom;
+
+            left = panelDisplay.Left + picDisplay.Left;
+            right = left + picDisplay.Width;
+            top = panelDisplay.Top + picDisplay.Top;
+            bottom = top + picDisplay.Height;
+            if (x > left && x < right && y > top && y < bottom)
+                return TuneLocation.DisplayTop;
 
             return TuneLocation.Other;
         }
@@ -40994,6 +41459,11 @@ namespace Thetis
                     break;
 
                 case TuneLocation.Other:
+                    // MW0LGE
+                    if (!m_bWheelTunesOutsideSpectral) break; // break out because we are not permitted to tune outside spectral/vfo boxes
+                    goto case TuneLocation.DisplayTop;        // give me fall through c# gods
+                case TuneLocation.DisplayTop:
+                    // MW0LGE this was other, but now we assume it is top of spectral display
                     if (current_click_tune_mode == ClickTuneMode.VFOB && wheel_tunes_vfob)
                     {
                         if (rx2_enabled && chkVFOSplit.Checked)
@@ -41033,9 +41503,9 @@ namespace Thetis
         private void txtVFOAFreq_LostFocus(object sender, System.EventArgs e)
         {
             if (current_hpsdr_model == HPSDRModel.ANAN200D ||
-                current_hpsdr_model == HPSDRModel.ORIONMKII ||
-                current_hpsdr_model == HPSDRModel.ANAN7000D ||
-                current_hpsdr_model == HPSDRModel.ANAN8000D) UpdateRXADCCtrl();
+                 current_hpsdr_model == HPSDRModel.ORIONMKII ||
+                 current_hpsdr_model == HPSDRModel.ANAN7000D ||
+                 current_hpsdr_model == HPSDRModel.ANAN8000D) UpdateRXADCCtrl();
 
             if (txtVFOAFreq.Text == "." || txtVFOAFreq.Text == "")
             {
@@ -41053,44 +41523,84 @@ namespace Thetis
                 update_centerfreq = false;
             }
 
-            // Lock the display
-            if (click_tune_display &&
+            double passbandWidth = (Convert.ToDouble(Display.RX1FilterHigh) - Convert.ToDouble(Display.RX1FilterLow));
+            double dispWidth = Convert.ToDouble(Display.RXDisplayHigh) - Convert.ToDouble(Display.RXDisplayLow);
+            double dispMargin = 0.025; // Margin from display edge to start scrolling - in fraction of total display width   
+
+            // Lock the display //-W2PA Don't freeze display if we are zoomed in too far to fit the passband
+            //if (!initializing && click_tune_display && (passbandWidth < (dispWidth * (1.0 - 2.0 * dispMargin))) &&
+            //    ((Display.CurrentDisplayMode == DisplayMode.PANADAPTER && mox && VFOBTX) ||
+            //     (Display.CurrentDisplayMode == DisplayMode.PANADAPTER && display_duplex) ||
+            //     (Display.CurrentDisplayMode == DisplayMode.PANADAPTER && !mox) ||
+            //     (Display.CurrentDisplayMode == DisplayMode.PANAFALL) ||
+            //     (Display.CurrentDisplayMode == DisplayMode.WATERFALL)))
+            //{
+            if (!initializing && click_tune_display && (passbandWidth < (dispWidth * (1.0 - 2.0 * dispMargin))) &&
                 ((Display.CurrentDisplayMode == DisplayMode.PANADAPTER && mox && VFOBTX) ||
-                 (Display.CurrentDisplayMode == DisplayMode.PANADAPTER && display_duplex) ||
-                 (Display.CurrentDisplayMode == DisplayMode.PANADAPTER && !mox) ||
-                 (Display.CurrentDisplayMode == DisplayMode.PANAFALL && mox && VFOBTX) ||
-                 (Display.CurrentDisplayMode == DisplayMode.PANAFALL && display_duplex) ||
-                 (Display.CurrentDisplayMode == DisplayMode.PANAFALL && !mox) ||
-                 (Display.CurrentDisplayMode == DisplayMode.WATERFALL)))
+                (Display.CurrentDisplayMode == DisplayMode.PANADAPTER && display_duplex) ||
+                (Display.CurrentDisplayMode == DisplayMode.PANADAPTER && !mox) ||
+                (Display.CurrentDisplayMode == DisplayMode.PANAFALL && mox && VFOBTX) ||
+                (Display.CurrentDisplayMode == DisplayMode.PANAFALL && display_duplex) ||
+                (Display.CurrentDisplayMode == DisplayMode.PANAFALL && !mox) ||
+                (Display.CurrentDisplayMode == DisplayMode.WATERFALL && mox && VFOBTX) ||
+                (Display.CurrentDisplayMode == DisplayMode.WATERFALL && display_duplex) ||
+                (Display.CurrentDisplayMode == DisplayMode.WATERFALL && !mox)))
             {
-                double rx1_osc = Math.Round(-(VFOAFreq - center_frequency) * 1e6);
+                double rx1_osc = Math.Round(-(VFOAFreq - center_frequency) * 1.0e6);
+                double zoom_factor = 1.0 / ((ptbDisplayZoom.Maximum + ptbDisplayZoom.Minimum - ptbDisplayZoom.Value) * 0.01);
 
-                //if (rx1_osc < -sample_rate1 / 2)
-                //{
-                //    VFOAFreq = center_frequency + ((sample_rate1 / 2) - 1) * 0.0000010; 
-                //    return;
-                //}
-                //else if (rx1_osc > sample_rate1 / 2)
-                //{
-                //    VFOAFreq = center_frequency + ((-sample_rate1 / 2) + 1) * 0.0000010;
-                //    return;
-                //}
-
-                //-W2PA If we tune beyond the display limits, re-center and keep going.  Original code above just stops tuning at edges.
+                // MW0LGE
                 double Lmargin = Convert.ToDouble(-Display.RX1FilterLow);
                 double Hmargin = Convert.ToDouble(Display.RX1FilterHigh);
                 if (Lmargin < 0.0) Lmargin = 0.0;
                 if (Hmargin < 0.0) Hmargin = 0.0;
-                //double Lmargin = 50.0;
-                //double Hmargin = 50.0;
-                double Ldisp = Convert.ToDouble(Display.RXDisplayLow);
-                double Hdisp = Convert.ToDouble(Display.RXDisplayHigh);
-                if (((-rx1_osc) - Lmargin) < Ldisp || ((-rx1_osc) + Hmargin) > Hdisp)
+                Lmargin += dispMargin;
+                Hmargin += dispMargin;
+                double Ldisp = Convert.ToDouble(Display.RXDisplayLow) + dispWidth * dispMargin;
+                double Hdisp = Convert.ToDouble(Display.RXDisplayHigh) - dispWidth * dispMargin;
+                double freqJumpThresh = 0.5e6;  // definition of jumping far, e.g. with memory recall - causes a re-centering
+
+                if (!ClickTuneDrag) // || zoom_factor > 4.0)
                 {
-                    center_frequency = freq;
-                    update_centerfreq = false;
-                    //VFOAFreq = freq;
-                    rx1_osc = 0.0;
+                    if (((-rx1_osc) - Lmargin) < Ldisp || ((-rx1_osc) + Hmargin) > Hdisp) // re-center if we've jumped far
+                    {
+                        center_frequency = freq;
+                        update_centerfreq = false;
+                        //MW0LGE VFOAFreq = freq; 
+                        rx1_osc = 0.0;
+                    }
+                }
+                else
+                {
+                    //-W2PA If we tune beyond the display limits, re-center or scroll display, and keep going.  Original code above just stops tuning at edges.
+                    if (((-rx1_osc) - Lmargin) < (Ldisp - freqJumpThresh) || ((-rx1_osc) + Hmargin) > (Hdisp + freqJumpThresh)) // re-center if we've jumped far
+                    {
+                        center_frequency = freq;
+                        update_centerfreq = false;
+                        //MW0LGE VFOAFreq = freq;
+                        rx1_osc = 0.0;
+                    }
+                    else  // not a jump - more like tuning
+                    if (((-rx1_osc) - Lmargin) < Ldisp) // scroll the spectrum display smoothly at the edge and keep going
+                    {
+                        double adjustFreq = Ldisp - ((-rx1_osc) - Lmargin);
+                        //center_frequency -= CurrentTuneStepMHz;
+                        center_frequency -= 1.0e-6 * adjustFreq;
+                        update_centerfreq = false;
+                        //MW0LGE VFOAFreq = freq;
+                        //rx1_osc += CurrentTuneStepHz;
+                        rx1_osc += adjustFreq;
+                    }
+                    else if (((-rx1_osc) + Hmargin) > Hdisp)
+                    {
+                        double adjustFreq = ((-rx1_osc) + Hmargin) - Hdisp;
+                        //center_frequency += CurrentTuneStepMHz;
+                        center_frequency += 1.0e-6 * adjustFreq;
+                        update_centerfreq = false;
+                        //MW0LGE VFOAFreq = freq;
+                        //rx1_osc -= CurrentTuneStepHz;
+                        rx1_osc -= adjustFreq;
+                    }
                 }
 
                 if (chkRIT.Checked)
@@ -41121,12 +41631,12 @@ namespace Thetis
             UpdateVFOAFreq(freq.ToString("f6"));
 
             if (click_tune_display &&
-                ((Display.CurrentDisplayMode == DisplayMode.PANADAPTER && mox && VFOBTX) ||
-                 (Display.CurrentDisplayMode == DisplayMode.PANADAPTER && display_duplex) ||
-                 (Display.CurrentDisplayMode == DisplayMode.PANADAPTER && !mox) ||
-                 (Display.CurrentDisplayMode == DisplayMode.PANAFALL && mox && VFOBTX) ||
-                 (Display.CurrentDisplayMode == DisplayMode.PANAFALL && display_duplex) ||
-                 (Display.CurrentDisplayMode == DisplayMode.PANAFALL && !mox) ||
+                                ((Display.CurrentDisplayMode == DisplayMode.PANADAPTER && mox && VFOBTX) ||
+                (Display.CurrentDisplayMode == DisplayMode.PANADAPTER && display_duplex) ||
+                (Display.CurrentDisplayMode == DisplayMode.PANADAPTER && !mox) ||
+                (Display.CurrentDisplayMode == DisplayMode.PANAFALL && mox && VFOBTX) ||
+                (Display.CurrentDisplayMode == DisplayMode.PANAFALL && display_duplex) ||
+                (Display.CurrentDisplayMode == DisplayMode.PANAFALL && !mox) ||
                  (Display.CurrentDisplayMode == DisplayMode.WATERFALL)))
                 Display.VFOA = (long)(center_frequency * 1e6); // freeze display vfo
             else
@@ -41311,7 +41821,6 @@ namespace Thetis
                     //  if (alex_ant_ctrl_enabled)
                     //  Alex.getAlex().UpdateAlexAntSelection(lo_band, mox, true);
                     Alex.getAlex().UpdateAlexAntSelection(lo_band, mox, alex_ant_ctrl_enabled, true);
-
                 }
                 else
                 {
@@ -41545,8 +42054,8 @@ namespace Thetis
             // UpdateRX1Notches();
             WDSP.RXANBPSetTuneFrequency(WDSP.id(0, 0), (FWCDDSFreq + f_LO) * 1.0e6);
             WDSP.RXANBPSetTuneFrequency(WDSP.id(0, 1), (FWCDDSFreq + f_LO) * 1.0e6);
-            UpdatePreamps();
 
+            UpdatePreamps();
         }
 
         private static double tuned_freq;
@@ -41854,47 +42363,82 @@ namespace Thetis
                 else RX26mGainOffset = 0;
             }
 
-            if (!click_tune_rx2_display || update_rx2_centerfreq)
+            if (!click_tune_rx2_display || update_rx2_centerfreq || (initializing && !click_tune_rx2_display))
             {
                 center_rx2_frequency = freq;
                 update_rx2_centerfreq = false;
             }
 
-            // Lock the display
-            if ((click_tune_rx2_display) &&
-                             ((Display.CurrentDisplayModeBottom == DisplayMode.PANADAPTER && mox && !VFOBTX) ||
-                             (Display.CurrentDisplayModeBottom == DisplayMode.WATERFALL && mox && !VFOBTX) ||
-                             (Display.CurrentDisplayModeBottom == DisplayMode.PANADAPTER && !mox) ||
-                             (Display.CurrentDisplayModeBottom == DisplayMode.WATERFALL && !mox)))
+            double passbandWidth = (Convert.ToDouble(Display.RX2FilterHigh) - Convert.ToDouble(Display.RX2FilterLow));
+            double dispWidth = Convert.ToDouble(Display.RX2DisplayHigh) - Convert.ToDouble(Display.RX2DisplayLow);
+            double dispMargin = 0.05; // Margin from display edge to start scrolling - in fraction of total display width   
+
+            // Lock the display //-W2PA Don't freeze display if we are zoomed in too far to fit the passband
+            if (!initializing && (click_tune_rx2_display) && (passbandWidth < dispWidth) &&
+                            ((Display.CurrentDisplayModeBottom == DisplayMode.PANADAPTER && mox && !VFOBTX) ||
+                            (Display.CurrentDisplayModeBottom == DisplayMode.WATERFALL && mox && !VFOBTX) ||
+                            (Display.CurrentDisplayModeBottom == DisplayMode.PANAFALL && mox && !VFOBTX) ||
+                            (Display.CurrentDisplayModeBottom == DisplayMode.PANADAPTER && !mox) ||
+                            (Display.CurrentDisplayModeBottom == DisplayMode.WATERFALL && !mox) ||
+                            (Display.CurrentDisplayModeBottom == DisplayMode.PANAFALL && !mox) ||
+                            (Display.CurrentDisplayModeBottom == DisplayMode.PANADAPTER && !display_duplex) ||
+                            (Display.CurrentDisplayModeBottom == DisplayMode.WATERFALL && !display_duplex) ||
+                            (Display.CurrentDisplayModeBottom == DisplayMode.PANAFALL && !display_duplex)
+                            ))
             {
                 double rx2_osc = Math.Round(-(VFOBFreq - center_rx2_frequency) * 1e6);
 
-                //if (rx2_osc < -sample_rate1 / 2)
-                //{
-                //    VFOBFreq = center_rx2_frequency + ((sample_rate1 / 2) - 1) * 0.0000010;
-                //    return;
-                //}
-                //else if (rx2_osc > sample_rate1 / 2)
-                //{
-                //    VFOBFreq = center_rx2_frequency + ((-sample_rate1 / 2) + 1) * 0.0000010;
-                //    return;
-                //}
-
-                //-W2PA If we tune beyond the display limits, re-center and keep going.  Original code above just stops tuning at edges.
+                //MW0LGE
                 double Lmargin = Convert.ToDouble(-Display.RX2FilterLow);
                 double Hmargin = Convert.ToDouble(Display.RX2FilterHigh);
                 if (Lmargin < 0.0) Lmargin = 0.0;
                 if (Hmargin < 0.0) Hmargin = 0.0;
-                //double Lmargin = 50.0;
-                //double Hmargin = 50.0;
-                double Ldisp = Convert.ToDouble(Display.RX2DisplayLow);
-                double Hdisp = Convert.ToDouble(Display.RX2DisplayHigh);
-                if (((-rx2_osc) - Lmargin) < Ldisp || ((-rx2_osc) + Hmargin) > Hdisp)
+                double Ldisp = Convert.ToDouble(Display.RX2DisplayLow) + dispWidth * dispMargin;
+                double Hdisp = Convert.ToDouble(Display.RX2DisplayHigh) - dispWidth * dispMargin;
+                double freqJumpThresh = 0.5e6;  // Definition of jumping far, e.g. with memory recall - causes a re-centering
+
+                if (!ClickTuneDrag)
                 {
-                    center_rx2_frequency = freq;
-                    update_rx2_centerfreq = false;
-                    VFOBFreq = freq;
-                    rx2_osc = 0.0;
+                    //-W2PA Original 3.4.1 code
+                    if (((-rx2_osc) - Lmargin) < Ldisp || ((-rx2_osc) + Hmargin) > Hdisp) // re-center if we've jumped far
+                    {
+                        center_rx2_frequency = freq;
+                        update_rx2_centerfreq = false;
+                        //MW0LGE VFOBFreq = freq;
+                        rx2_osc = 0.0;
+                    }
+                }
+                else
+                {
+                    //-W2PA If we tune beyond the display limits, re-center or scroll display, and keep going.  Original code above just stops tuning at edges.
+                    if (((-rx2_osc) - Lmargin) < (Ldisp - freqJumpThresh) || ((-rx2_osc) + Hmargin) > (Hdisp + freqJumpThresh)) // re-center if we've jumped far
+                    {
+                        center_rx2_frequency = freq;
+                        update_rx2_centerfreq = false;
+                        //MW0LGE VFOBFreq = freq;
+                        rx2_osc = 0.0;
+                    }
+                    else  // not a jump - more like tuning
+                    if (((-rx2_osc) - Lmargin) < Ldisp) // scroll the spectrum display smoothly at the edge and keep going
+                    {
+                        double adjustFreq = Ldisp - ((-rx2_osc) - Lmargin);
+                        //center_rx2_frequency -= CurrentTuneStepMHz;
+                        center_rx2_frequency -= 1.0e-6 * adjustFreq;
+                        update_rx2_centerfreq = false;
+                        //MW0LGE VFOBFreq = freq;
+                        //rx2_osc += CurrentTuneStepHz;
+                        rx2_osc += adjustFreq;
+                    }
+                    else if (((-rx2_osc) + Hmargin) > Hdisp)
+                    {
+                        double adjustFreq = ((-rx2_osc) + Hmargin) - Hdisp;
+                        //center_rx2_frequency += CurrentTuneStepMHz;
+                        center_rx2_frequency += 1.0e-6 * adjustFreq;
+                        update_rx2_centerfreq = false;
+                        //MW0LGE VFOBFreq = freq;
+                        //rx2_osc -= CurrentTuneStepHz;
+                        rx2_osc -= adjustFreq;
+                    }
                 }
 
                 if (chkRIT.Checked && VFOSync)
@@ -41946,11 +42490,18 @@ namespace Thetis
             {
                 if (!stereo_diversity)
                 {
-                    if ((click_tune_rx2_display) &&
+                    //-W2PA Freeze display unless we are zoomed in too far to fit the passband
+                    if ((click_tune_rx2_display) && (passbandWidth < dispWidth) &&
                                      ((Display.CurrentDisplayModeBottom == DisplayMode.PANADAPTER && mox && !VFOBTX) ||
                                      (Display.CurrentDisplayModeBottom == DisplayMode.WATERFALL && mox && !VFOBTX) ||
+                        (Display.CurrentDisplayModeBottom == DisplayMode.PANAFALL && mox && !VFOBTX) ||
                                      (Display.CurrentDisplayModeBottom == DisplayMode.PANADAPTER && !mox) ||
-                                     (Display.CurrentDisplayModeBottom == DisplayMode.WATERFALL && !mox)))
+                        (Display.CurrentDisplayModeBottom == DisplayMode.WATERFALL && !mox) ||
+                        (Display.CurrentDisplayModeBottom == DisplayMode.PANAFALL && !mox) ||
+                      (Display.CurrentDisplayModeBottom == DisplayMode.PANADAPTER && !display_duplex) ||
+                            (Display.CurrentDisplayModeBottom == DisplayMode.WATERFALL && !display_duplex) ||
+                            (Display.CurrentDisplayModeBottom == DisplayMode.PANAFALL && !display_duplex)
+                        ))
                     {
                         Display.VFOB = (long)(center_rx2_frequency * 1e6);
                     }
@@ -42007,7 +42558,6 @@ namespace Thetis
                         else
                             txtVFOAFreq_LostFocus(this, EventArgs.Empty);
                     }
-
                 }
             }
             else
@@ -42042,11 +42592,11 @@ namespace Thetis
                             Display.VFOASub = (long)(VFOAFreq * 1e6);
                     }
                     else if (display_duplex)
-                       // Display.VFOASub = (long)(VFOAFreq * 1e6);
+                        // Display.VFOASub = (long)(VFOAFreq * 1e6);
                         Display.VFOASub = (long)(center_frequency * 1e6);
                 }
                 else
-                    Display.VFOASub = (long)(freq * 1e6);
+                    Display.VFOASub = (long)(freq * 1e6);              
 
                 if (chkTUN.Checked && chkVFOBTX.Checked)
                 {
@@ -42115,7 +42665,7 @@ namespace Thetis
                 //{
                 // Fix Penny O/C VHF control Vk4xv
                 lo_band = BandByFreq(XVTRForm.TranslateFreq(VFOBFreq), rx2_xvtr_index, false, current_region, false);
-                lo_banda = BandByFreq(XVTRForm.TranslateFreq(VFOAFreq), rx1_xvtr_index, false, current_region, false);
+                lo_banda = BandByFreq(XVTRForm.TranslateFreq(VFOAFreq), rx1_xvtr_index, false, current_region, false);  //SHOULD this be true MW0LGE?
 
                 if (penny_ext_ctrl_enabled)
                     Penny.getPenny().UpdateExtCtrl(lo_banda, lo_band, mox);
@@ -42136,12 +42686,12 @@ namespace Thetis
             else if (chkVFOSplit.Checked || full_duplex)
                 goto set_tx_freq;
             else goto end;
-        // }
-        //  else if (mox && chkVFOSplit.Checked)
-        //     goto set_tx_freq;
-        // else goto end;
+            // }
+            //  else if (mox && chkVFOSplit.Checked)
+            //     goto set_tx_freq;
+            // else goto end;
 
-        set_tx_freq:
+            set_tx_freq:
             // int last_tx_xvtr_index = tx_xvtr_index;
             tx_xvtr_index = rx2_xvtr_index;
             double tx_freq = freq;
@@ -42303,7 +42853,7 @@ namespace Thetis
             if (!rx1_sub_drag)
             {
                 tx_dds_freq_mhz = tx_freq;
-                tx_dds_freq_updated = true;
+                // tx_dds_freq_updated = true;
                 UpdateTXDDSFreq();
 
                 //if (rx2_enabled) 
@@ -42388,7 +42938,7 @@ namespace Thetis
             last_tx_xvtr_index = tx_xvtr_index;
             last_rx2_xvtr_index = rx2_xvtr_index;
         }
-
+        
         private void txtVFOBFreq_KeyPress(object sender, System.Windows.Forms.KeyPressEventArgs e)
         {
             string separator = System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
@@ -42703,212 +43253,84 @@ namespace Thetis
                     vfob_high_x = vfob_x + (HzToPixel(radio.GetDSPRX(1, 0).RXFilterHigh) - HzToPixel(0.0f));
                 }
 
+                /// MW0LGE
+                ///
+                rx1_grid_adjust = false;
+                rx2_grid_adjust = false;
+
+                int nMinHeightRX1 = 0;
+                int nMaxHeightRX1 = picDisplay.Height;
+
+                int nMinHeightRX2 = picDisplay.Height / 2;
+                int nMaxHeightRX2 = picDisplay.Height;
+
+                if (rx2_enabled)
+                {
+                    // top half only
+                    nMaxHeightRX1 = picDisplay.Height / 2;
+
+                    if (Display.CurrentDisplayModeBottom == DisplayMode.PANAFALL)
+                    {
+                        //top half, of bottom half is available only
+                        nMaxHeightRX2 = (picDisplay.Height / 4) * 3;
+                    }
+                }
+
+                if (Display.CurrentDisplayMode == DisplayMode.PANAFALL)
+                {
+                    if (!rx2_enabled)
+                    {
+                        // top half is available only
+                        nMaxHeightRX1 = picDisplay.Height / 2;
+                    }
+                    else
+                    {
+                        // top half, of top half is available only
+                        nMaxHeightRX1 = picDisplay.Height / 4;
+                    }
+                }
+
                 switch (Display.CurrentDisplayMode)
                 {
                     case DisplayMode.PANADAPTER:
                     case DisplayMode.SPECTRUM:
                     case DisplayMode.HISTOGRAM:
                     case DisplayMode.PANAFALL:
-
-                        switch (Display.CurrentDisplayMode)
-                        {
-                            case DisplayMode.PANAFALL:
-                                if ((e.X > display_grid_x && e.X < display_grid_w) &&
-                                    (e.Y < picDisplay.Height / 2 && e.Y > 10))
-                                {
-                                    if (gridminmaxadjust || gridmaxadjust) Cursor = grabbing;
-                                    else Cursor = grab;
-                                    rx1_grid_adjust = true;
-                                    rx2_grid_adjust = false;
-                                }
-                                else
-                                {
-                                    rx1_grid_adjust = false;
-                                    rx2_grid_adjust = false;
-                                }
-                                break;
-                            default:
-                                if (rx2_enabled && (e.Y > (picDisplay.Height / 2) && e.Y > 10) &&
-                                   (e.X > display_grid_x && e.X < display_grid_w))
-                                {
-                                    if (gridminmaxadjust || gridmaxadjust) Cursor = grabbing;
-                                    else Cursor = grab;
-                                    rx2_grid_adjust = true;
-                                    rx1_grid_adjust = false;
-                                }
-                                else if ((e.X > display_grid_x && e.X < display_grid_w) &&
-                                    (e.Y < picDisplay.Height && e.Y > 10))
-                                {
-                                    if (gridminmaxadjust || gridmaxadjust) Cursor = grabbing;
-                                    else Cursor = grab;
-                                    rx1_grid_adjust = true;
-                                    rx2_grid_adjust = false;
-                                }
-                                else
-                                {
-                                    rx1_grid_adjust = false;
-                                    rx2_grid_adjust = false;
-                                }
-                                break;
-                        }
-
-                        if (rx1_grid_adjust && gridminmaxadjust && !tx1_grid_adjust)
-                        {
-                           // bool update = true;
-                            //  double db_per_pixel = PixelToDb(1) - PixelToDb(0);
-                            int delta_y = e.Y - grid_minmax_drag_start_point.Y;
-                            double delta_db = (delta_y / 10) * 5;
-                            float val = grid_minmax_max_y;
-                            val += (float)delta_db;
-                            float min_val = grid_minmax_min_y;
-                            min_val += (float)delta_db;
-
-                           // if (update)
-                           // {
-                                SetupForm.DisplayGridMax = val;
-                                SetupForm.DisplayGridMin = min_val;
-                           // }
-                        }
-
-                        if (rx2_grid_adjust && gridminmaxadjust && !tx2_grid_adjust)
-                        {
-                          //  bool update = true;
-                            //  double db_per_pixel = PixelToDb(1) - PixelToDb(0);
-                            int delta_y = e.Y - grid_minmax_drag_start_point.Y;
-
-                            double delta_db = (delta_y / 10) * 5;
-                            float val = grid_minmax_max_y;
-                            val += (float)delta_db;
-                            float min_val = grid_minmax_min_y;
-                            min_val += (float)delta_db;
-
-                          //  if (update)
-                          //  {
-                                SetupForm.RX2DisplayGridMax = val;
-                                SetupForm.RX2DisplayGridMin= min_val;
-                           // }
-                        }
-
-                        if (rx1_grid_adjust && gridmaxadjust && !tx1_grid_adjust)
-                        {
-                           // bool update = true;
-                            //  double db_per_pixel = PixelToDb(1) - PixelToDb(0);
-                            int delta_y = e.Y - grid_minmax_drag_start_point.Y;
-                            double delta_db = (delta_y / 10) * 5;
-                            float val = grid_minmax_max_y;
-                            val += (float)delta_db;
-                          //  if (update)
-                          //  {
-                                SetupForm.DisplayGridMax = val;
-                          //  }
-                        }
-
-                        if (rx2_grid_adjust && gridmaxadjust && !tx2_grid_adjust)
-                        {
-                          //  bool update = true;
-                            //  double db_per_pixel = PixelToDb(1) - PixelToDb(0);
-                            int delta_y = e.Y - grid_minmax_drag_start_point.Y;
-
-                            double delta_db = (delta_y / 10) * 5;
-                            float val = grid_minmax_max_y;
-                            val += (float)delta_db;
-
-                         //   if (update)
-                         //   {
-                                SetupForm.RX2DisplayGridMax = val;
-                         //   }
-                        }
-
-                        if (rx1_grid_adjust && gridminmaxadjust && tx1_grid_adjust)
-                        {
-                        //    bool update = true;
-                            //  double db_per_pixel = PixelToDb(1) - PixelToDb(0);
-                            int delta_y = e.Y - grid_minmax_drag_start_point.Y;
-                            double delta_db = (delta_y / 10) * 5;
-                            float val = grid_minmax_max_y;
-                            val += (float)delta_db;
-                            float min_val = grid_minmax_min_y;
-                            min_val += (float)delta_db;
-
-                        //    if (update)
-                        //    {
-                                SetupForm.TXGridMax = val;
-                                SetupForm.TXGridMin = min_val;
-                         //   }
-                        }
-
-                        if (rx2_grid_adjust && gridminmaxadjust && tx2_grid_adjust)
-                        {
-                          //  bool update = true;
-                            //  double db_per_pixel = PixelToDb(1) - PixelToDb(0);
-                            int delta_y = e.Y - grid_minmax_drag_start_point.Y;
-
-                            double delta_db = (delta_y / 10) * 5;
-                            float val = grid_minmax_max_y;
-                            val += (float)delta_db;
-                            float min_val = grid_minmax_min_y;
-                            min_val += (float)delta_db;
-
-                          //  if (update)
-                          //  {
-                                SetupForm.TXGridMax = val;
-                                SetupForm.TXGridMin = min_val;
-                         //   }
-                        }
-
-                        if (rx1_grid_adjust && gridmaxadjust && tx1_grid_adjust)
-                        {
-                        //    bool update = true;
-                            int delta_y = e.Y - grid_minmax_drag_start_point.Y;
-                            double delta_db = (delta_y / 10) * 5;
-                            float val = grid_minmax_max_y;
-                            val += (float)delta_db;
-
-                          //  if (update)
-                          //  {
-                                SetupForm.TXGridMax = val;
-                          //  }
-                        }
-
-                        if (rx2_grid_adjust && gridmaxadjust && tx2_grid_adjust)
-                        {
-                       //     bool update = true;
-                            int delta_y = e.Y - grid_minmax_drag_start_point.Y;
-                            double delta_db = (delta_y / 10) * 5;
-                            float val = grid_minmax_max_y;
-                            val += (float)delta_db;
-
-                         //   if (update)
-                          //  {
-                                SetupForm.TXGridMax = val;
-                          //  }
-                        }
-
-                        break;
-                }
-
-         /*       switch (Display.CurrentDisplayMode)
-                {
-                    case DisplayMode.PANAFALL:
-                       
-                        if ((e.X > display_grid_x && e.X < display_grid_w) &&
-                            (e.Y < picDisplay.Height / 2 && e.Y > 10))
+                        if ( (e.X > display_grid_x && e.X < display_grid_w) && 
+                             (e.Y < nMaxHeightRX1 && e.Y > nMinHeightRX1 + 10)  )
                         {
                             if (gridminmaxadjust || gridmaxadjust) Cursor = grabbing;
                             else Cursor = grab;
                             rx1_grid_adjust = true;
-                            rx2_grid_adjust = false;
                         }
-                        else
-                        {
-                            rx1_grid_adjust = false;
-                            rx2_grid_adjust = false;
-                        }
+                        break;
+                }
 
-                        if (rx1_grid_adjust && gridminmaxadjust)// && !tx1_grid_adjust)
+                if (rx2_enabled)
+                {
+                    switch (Display.CurrentDisplayModeBottom)
+                    {
+                        case DisplayMode.PANADAPTER:
+                        case DisplayMode.SPECTRUM:
+                        case DisplayMode.HISTOGRAM:
+                        case DisplayMode.PANAFALL:
+                            if ((e.X > display_grid_x && e.X < display_grid_w) &&
+                                 (e.Y < nMaxHeightRX2 && e.Y > nMinHeightRX2 + 10))
+                            {
+                                if (gridminmaxadjust || gridmaxadjust) Cursor = grabbing;
+                                else Cursor = grab;
+                                rx2_grid_adjust = true;
+                            }
+                            break;
+                    }
+                }
+
+                if(rx1_grid_adjust || rx2_grid_adjust)
+                {
+                    if(rx1_grid_adjust)
+                    {
+                        if(gridminmaxadjust)
                         {
-                            bool update = true;
-                            //  double db_per_pixel = PixelToDb(1) - PixelToDb(0);
                             int delta_y = e.Y - grid_minmax_drag_start_point.Y;
                             double delta_db = (delta_y / 10) * 5;
                             float val = grid_minmax_max_y;
@@ -42916,30 +43338,440 @@ namespace Thetis
                             float min_val = grid_minmax_min_y;
                             min_val += (float)delta_db;
 
-                            if (update)
+                            if (!tx1_grid_adjust)
                             {
                                 SetupForm.DisplayGridMax = val;
                                 SetupForm.DisplayGridMin = min_val;
                             }
+                            else
+                            {
+                                SetupForm.TXGridMax = val;
+                                SetupForm.TXGridMin = min_val;
+                            }
                         }
 
-                        if (rx1_grid_adjust && gridmaxadjust)// && !tx1_grid_adjust)
+                        if (gridmaxadjust)
                         {
-                            bool update = true;
-                            //  double db_per_pixel = PixelToDb(1) - PixelToDb(0);
                             int delta_y = e.Y - grid_minmax_drag_start_point.Y;
                             double delta_db = (delta_y / 10) * 5;
                             float val = grid_minmax_max_y;
                             val += (float)delta_db;
 
-                            if (update)
+                            if (!tx1_grid_adjust)
                             {
                                 SetupForm.DisplayGridMax = val;
                             }
+                            else
+                            {
+                                SetupForm.TXGridMax = val;
+                            }
                         }
 
-                        break;
-                } */
+                    }
+                    else if(rx2_grid_adjust) // hard to adjust 2 grids at a time, so use else //MW0LGE
+                    {
+                        if(gridminmaxadjust)
+                        {
+                            int delta_y = e.Y - grid_minmax_drag_start_point.Y;
+                            double delta_db = (delta_y / 10) * 5;
+                            float val = grid_minmax_max_y;
+                            val += (float)delta_db;
+                            float min_val = grid_minmax_min_y;
+                            min_val += (float)delta_db;
+
+                            if (!tx2_grid_adjust)
+                            {
+                                SetupForm.RX2DisplayGridMax = val;
+                                SetupForm.RX2DisplayGridMin = min_val;
+                            }
+                            else
+                            {
+                                SetupForm.TXGridMax = val;
+                                SetupForm.TXGridMin = min_val;
+                            }
+                        }
+                        if(gridmaxadjust)
+                        {
+                            int delta_y = e.Y - grid_minmax_drag_start_point.Y;
+                            double delta_db = (delta_y / 10) * 5;
+                            float val = grid_minmax_max_y;
+                            val += (float)delta_db;
+
+                            if (!tx2_grid_adjust)
+                            {
+                                SetupForm.RX2DisplayGridMax = val;
+                            }
+                            else
+                            {
+                                SetupForm.TXGridMax = val;
+                            }
+                        }
+                    }
+                }
+                ///
+
+                //switch (Display.CurrentDisplayMode)
+                //{
+                //    case DisplayMode.PANADAPTER:
+                //    case DisplayMode.SPECTRUM:
+                //    case DisplayMode.HISTOGRAM:
+                //    case DisplayMode.PANAFALL:
+                //        switch (Display.CurrentDisplayMode)
+                //        {
+                //            default:
+                //                if (rx2_enabled && (e.Y > (picDisplay.Height / 2) && e.Y > 10) &&
+                //                   (e.X > display_grid_x && e.X < display_grid_w))
+                //                {
+                //                    if (gridminmaxadjust || gridmaxadjust) Cursor = grabbing;
+                //                    else Cursor = grab;
+                //                    rx2_grid_adjust = true;
+                //                    rx1_grid_adjust = false;
+                //                }
+                //                else if ((e.X > display_grid_x && e.X < display_grid_w) &&
+                //                    (e.Y < picDisplay.Height && e.Y > 10))
+                //                {
+                //                    if (gridminmaxadjust || gridmaxadjust) Cursor = grabbing;
+                //                    else Cursor = grab;
+                //                    rx1_grid_adjust = true;
+                //                    rx2_grid_adjust = false;
+                //                }
+                //                else
+                //                {
+                //                    rx1_grid_adjust = false;
+                //                    rx2_grid_adjust = false;
+                //                }
+                //                break;
+                //        }
+
+                //        if (rx1_grid_adjust && gridminmaxadjust && !tx1_grid_adjust)
+                //        {
+                //            //bool update = true;
+                //            //  double db_per_pixel = PixelToDb(1) - PixelToDb(0);
+                //            int delta_y = e.Y - grid_minmax_drag_start_point.Y;
+                //            double delta_db = (delta_y / 10) * 5;
+                //            float val = grid_minmax_max_y;
+                //            val += (float)delta_db;
+                //            float min_val = grid_minmax_min_y;
+                //            min_val += (float)delta_db;
+
+                //            //if (val > SetupForm.DisplayGridMax)
+                //            //{
+                //            //    val = SetupForm.DisplayGridMax;
+                //            //    update = false;
+                //            //}
+                //            //if (min_val > SetupForm.DisplayGridMax)
+                //            //{
+                //            //    min_val = SetupForm.DisplayGridMax;
+                //            //    update = false;
+                //            //}
+                //            //if (val < SetupForm.DisplayGridMin)
+                //            //{
+                //            //    val = SetupForm.DisplayGridMin;
+                //            //    update = false;
+                //            //}
+                //            //if (min_val < SetupForm.DisplayGridMin)
+                //            //{
+                //            //    min_val = SetupForm.DisplayGridMin;
+                //            //    update = false;
+                //            //}
+
+                //            // SetupForm.txtFwdPower.Text = val.ToString();
+                //            //if (update)
+                //            {
+                //                SetupForm.DisplayGridMax = val;
+                //                SetupForm.DisplayGridMin = min_val;
+                //            }
+                //        }
+
+                //        if (rx2_grid_adjust && gridminmaxadjust && !tx2_grid_adjust)
+                //        {
+                //            //bool update = true;
+                //            //  double db_per_pixel = PixelToDb(1) - PixelToDb(0);
+                //            int delta_y = e.Y - grid_minmax_drag_start_point.Y;
+
+                //            double delta_db = (delta_y / 10) * 5;
+                //            float val = grid_minmax_max_y;
+                //            val += (float)delta_db;
+                //            float min_val = grid_minmax_min_y;
+                //            min_val += (float)delta_db;
+
+                //            //if (val > SetupForm.RX2DisplayGridMax)
+                //            //{
+                //            //    val = SetupForm.RX2DisplayGridMax;
+                //            //    update = false;
+                //            //}
+                //            //if (min_val > SetupForm.RX2DisplayGridMax)
+                //            //{
+                //            //    min_val = SetupForm.RX2DisplayGridMax;
+                //            //    update = false;
+                //            //}
+                //            //if (val < SetupForm.RX2DisplayGridMin)
+                //            //{
+                //            //    val = SetupForm.RX2DisplayGridMin;
+                //            //    update = false;
+                //            //}
+                //            //if (min_val < SetupForm.RX2DisplayGridMin)
+                //            //{
+                //            //    min_val = SetupForm.RX2DisplayGridMin;
+                //            //    update = false;
+                //            //}
+
+                //            // SetupForm.txtFwdPower.Text = val.ToString();
+                //            //if (update)
+                //            {
+                //                SetupForm.RX2DisplayGridMax = val;
+                //                SetupForm.RX2DisplayGridMin = min_val;
+                //            }
+                //        }
+
+                //        if (rx1_grid_adjust && gridmaxadjust && !tx1_grid_adjust)
+                //        {
+                //            //bool update = true;
+                //            //  double db_per_pixel = PixelToDb(1) - PixelToDb(0);
+                //            int delta_y = e.Y - grid_minmax_drag_start_point.Y;
+                //            double delta_db = (delta_y / 10) * 5;
+                //            float val = grid_minmax_max_y;
+                //            val += (float)delta_db;
+                //            //  decimal min_val = grid_minmax_min_y;
+                //            //  min_val += (decimal)delta_db;
+
+                //            //if (val > SetupForm.DisplayGridMax)
+                //            //{
+                //            //    val = SetupForm.DisplayGridMax;
+                //            //    update = false;
+                //            //}
+                //            //if (val < SetupForm.DisplayGridMax)
+                //            //{
+                //            //    val = SetupForm.DisplayGridMax;
+                //            //    update = false;
+                //            //}
+
+                //            //  SetupForm.txtFwdPower.Text = val.ToString();
+                //            //if (update)
+                //            {
+                //                SetupForm.DisplayGridMax = val;
+                //                //  SetupForm.udDisplayGridMin.Value = min_val;
+                //            }
+                //        }
+
+                //        if (rx2_grid_adjust && gridmaxadjust && !tx2_grid_adjust)
+                //        {
+                //            //bool update = true;
+                //            //  double db_per_pixel = PixelToDb(1) - PixelToDb(0);
+                //            int delta_y = e.Y - grid_minmax_drag_start_point.Y;
+
+                //            double delta_db = (delta_y / 10) * 5;
+                //            float val = grid_minmax_max_y;
+                //            val += (float)delta_db;
+                //            //  decimal min_val = grid_minmax_min_y;
+                //            //  min_val += (decimal)delta_db;
+
+                //            //if (val > SetupForm.RX2DisplayGridMax)
+                //            //{
+                //            //    val = SetupForm.RX2DisplayGridMax;
+                //            //    update = false;
+                //            //}
+                //            //if (val < SetupForm.RX2DisplayGridMax)
+                //            //{
+                //            //    val = SetupForm.RX2DisplayGridMax;
+                //            //    update = false;
+                //            //}
+
+                //            // SetupForm.txtFwdPower.Text = val.ToString();
+                //            //if (update)
+                //            {
+                //                SetupForm.RX2DisplayGridMax = val;
+                //                // SetupForm.udRX2DisplayGridMin.Value = min_val;
+                //            }
+                //        }
+
+                //        if (rx1_grid_adjust && gridminmaxadjust && tx1_grid_adjust)
+                //        {
+                //            //bool update = true;
+                //            //  double db_per_pixel = PixelToDb(1) - PixelToDb(0);
+                //            int delta_y = e.Y - grid_minmax_drag_start_point.Y;
+                //            double delta_db = (delta_y / 10) * 5;
+                //            float val = grid_minmax_max_y;
+                //            val += (float)delta_db;
+                //            float min_val = grid_minmax_min_y;
+                //            min_val += (float)delta_db;
+
+                //            //if (val > SetupForm.TXGridMax)
+                //            //{
+                //            //    val = SetupForm.TXGridMax;
+                //            //    update = false;
+                //            //}
+                //            //if (min_val > SetupForm.TXGridMax)
+                //            //{
+                //            //    min_val = SetupForm.TXGridMax;
+                //            //    update = false;
+                //            //}
+                //            //if (val < SetupForm.TXGridMin)
+                //            //{
+                //            //    val = SetupForm.TXGridMin;
+                //            //    update = false;
+                //            //}
+                //            //if (min_val < SetupForm.TXGridMin)
+                //            //{
+                //            //    min_val = SetupForm.TXGridMin;
+                //            //    update = false;
+                //            //}
+
+                //            // SetupForm.txtFwdPower.Text = val.ToString();
+                //            //if (update)
+                //            {
+                //                SetupForm.TXGridMax = val;
+                //                SetupForm.TXGridMin = min_val;
+                //            }
+                //        }
+
+                //        if (rx2_grid_adjust && gridminmaxadjust && tx2_grid_adjust)
+                //        {
+                //            //bool update = true;
+                //            //  double db_per_pixel = PixelToDb(1) - PixelToDb(0);
+                //            int delta_y = e.Y - grid_minmax_drag_start_point.Y;
+
+                //            double delta_db = (delta_y / 10) * 5;
+                //            float val = grid_minmax_max_y;
+                //            val += (float)delta_db;
+                //            float min_val = grid_minmax_min_y;
+                //            min_val += (float)delta_db;
+
+                //            //if (val > SetupForm.TXGridMax)
+                //            //{
+                //            //    val = SetupForm.TXGridMax;
+                //            //    update = false;
+                //            //}
+                //            //if (min_val > SetupForm.TXGridMax)
+                //            //{
+                //            //    min_val = SetupForm.TXGridMax;
+                //            //    update = false;
+                //            //}
+                //            //if (val < SetupForm.TXGridMin)
+                //            //{
+                //            //    val = SetupForm.TXGridMin;
+                //            //    update = false;
+                //            //}
+                //            //if (min_val < SetupForm.TXGridMin)
+                //            //{
+                //            //    min_val = SetupForm.TXGridMin;
+                //            //    update = false;
+                //            //}
+
+                //            //if (update)
+                //            {
+                //                SetupForm.TXGridMax = val;
+                //                SetupForm.TXGridMin = min_val;
+                //            }
+                //        }
+
+                //        if (rx1_grid_adjust && gridmaxadjust && tx1_grid_adjust)
+                //        {
+                //            //bool update = true;
+                //            int delta_y = e.Y - grid_minmax_drag_start_point.Y;
+                //            double delta_db = (delta_y / 10) * 5;
+                //            float val = grid_minmax_max_y;
+                //            val += (float)delta_db;
+
+                //            //if (val > SetupForm.TXGridMax)
+                //            //{
+                //            //    val = SetupForm.TXGridMax;
+                //            //    update = false;
+                //            //}
+                //            //if (val < SetupForm.TXGridMax)
+                //            //{
+                //            //    val = SetupForm.TXGridMax;
+                //            //    update = false;
+                //            //}
+
+                //            //if (update)
+                //            {
+                //                SetupForm.TXGridMax = val;
+                //            }
+                //        }
+
+                //        if (rx2_grid_adjust && gridmaxadjust && tx2_grid_adjust)
+                //        {
+                //            //bool update = true;
+                //            int delta_y = e.Y - grid_minmax_drag_start_point.Y;
+                //            double delta_db = (delta_y / 10) * 5;
+                //            float val = grid_minmax_max_y;
+                //            val += (float)delta_db;
+
+                //            //if (val > SetupForm.TXGridMax)
+                //            //{
+                //            //    val = SetupForm.TXGridMax;
+                //            //    update = false;
+                //            //}
+                //            //if (val < SetupForm.TXGridMax)
+                //            //{
+                //            //    val = SetupForm.TXGridMax;
+                //            //    update = false;
+                //            //}
+
+                //            // SetupForm.txtFwdPower.Text = val.ToString();
+                //            //if (update)
+                //            {
+                //                SetupForm.TXGridMax = val;
+                //            }
+                //        }
+
+                //        break;
+                //}              
+
+                /*       switch (Display.CurrentDisplayMode)
+                       {
+                           case DisplayMode.PANAFALL:
+
+                               if ((e.X > display_grid_x && e.X < display_grid_w) &&
+                                   (e.Y < picDisplay.Height / 2 && e.Y > 10))
+                               {
+                                   if (gridminmaxadjust || gridmaxadjust) Cursor = grabbing;
+                                   else Cursor = grab;
+                                   rx1_grid_adjust = true;
+                                   rx2_grid_adjust = false;
+                               }
+                               else
+                               {
+                                   rx1_grid_adjust = false;
+                                   rx2_grid_adjust = false;
+                               }
+
+                               if (rx1_grid_adjust && gridminmaxadjust)// && !tx1_grid_adjust)
+                               {
+                                   bool update = true;
+                                   //  double db_per_pixel = PixelToDb(1) - PixelToDb(0);
+                                   int delta_y = e.Y - grid_minmax_drag_start_point.Y;
+                                   double delta_db = (delta_y / 10) * 5;
+                                   float val = grid_minmax_max_y;
+                                   val += (float)delta_db;
+                                   float min_val = grid_minmax_min_y;
+                                   min_val += (float)delta_db;
+
+                                   if (update)
+                                   {
+                                       SetupForm.DisplayGridMax = val;
+                                       SetupForm.DisplayGridMin = min_val;
+                                   }
+                               }
+
+                               if (rx1_grid_adjust && gridmaxadjust)// && !tx1_grid_adjust)
+                               {
+                                   bool update = true;
+                                   //  double db_per_pixel = PixelToDb(1) - PixelToDb(0);
+                                   int delta_y = e.Y - grid_minmax_drag_start_point.Y;
+                                   double delta_db = (delta_y / 10) * 5;
+                                   float val = grid_minmax_max_y;
+                                   val += (float)delta_db;
+
+                                   if (update)
+                                   {
+                                       SetupForm.DisplayGridMax = val;
+                                   }
+                               }
+
+                               break;
+                       } */
 
                 switch (Display.CurrentDisplayMode)
                 {
@@ -44468,9 +45300,12 @@ namespace Thetis
                     {
                         Thread.Sleep(100);
                         Display.Init();
+
+                        comboDisplayMode_SelectedIndexChanged(this, EventArgs.Empty); // MW0LGE - this needs work TODO CHECK
+
                         if (!booting)
                         {
-                            UpdateDisplay();
+                            UpdateDisplay(false);
                         }
                         picDisplay.Invalidate();
                     }
@@ -47436,7 +48271,6 @@ namespace Thetis
                 lblXITLabel.BackColor = System.Drawing.Color.Transparent;
                 Display.XIT = 0;
             }
-
 #if false
 			// wjtFIXME!
 			if ( current_model == Model.SOFTROCK40 )			
@@ -47471,7 +48305,7 @@ namespace Thetis
                 chkRIT.BackColor = button_selected_color;
                 chkRIT.ForeColor = Color.Red;
                 lblRITLabel.BackColor = System.Drawing.Color.Blue;
-// if (!click_tune_display)
+                // if (!click_tune_display)
                 Display.RIT = (int)udRIT.Value;
             }
             else
@@ -47504,11 +48338,11 @@ namespace Thetis
             setRIT_LEDs();  //-W2PA Behringer LEDs
 
             //-W2PA Sync XIT/XIT if selected
-            //if (chkSyncIT.Checked)
-            //{
-            //    udXIT.Value = udRIT.Value;
-            //    setXIT_LEDs();
-            //}
+             if (RITXITSync)
+                {
+                    udXIT.Value = udRIT.Value;
+                    setXIT_LEDs();
+                }
         }
 
         private void udXIT_ValueChanged(object sender, System.EventArgs e)
@@ -47538,11 +48372,11 @@ namespace Thetis
             setXIT_LEDs(); //-W2PA Behringer LEDs
 
             //-W2PA Sync XIT/XIT if selected
-            //if (chkSyncIT.Checked)
-            //{
-            //    udRIT.Value = udXIT.Value;
-            //    setRIT_LEDs();
-            //}
+            if (RITXITSync)
+            {
+                udRIT.Value = udXIT.Value;
+                setRIT_LEDs();
+            }
         }
 
         private void btnXITReset_Click(object sender, System.EventArgs e)
@@ -48536,6 +49370,8 @@ namespace Thetis
 
         private void ResizeConsole(int h_delta, int v_delta)		//k6jca 1/15/08
         {
+            // MW0LGE changes made to this function so that RX1 meter fills space to right of VFOB box, also delay repaint until all controls moved
+            SuspendDrawing(this); //MW0LGE
 
             // This routine captures the size and location parameters *after* windows
             // has resized the image, (if the video is set for "120 dpi" in lieu of the
@@ -48551,13 +49387,13 @@ namespace Thetis
             }
             else
             {
-
                 //this.Size = new Size (console_basis_size.Width + h_delta,console_basis_size.Height + v_delta);
                 //this.Width = console_basis_size.Width + h_delta;
                 //this.Height = console_basis_size.Height + v_delta;
                 panelFilter.Location = new Point(gr_filter_basis_location.X + h_delta, gr_filter_basis_location.Y + v_delta);
 
-                grpMultimeter.Location = new Point(gr_Multimeter_basis_location.X + h_delta, gr_Multimeter_basis_location.Y);
+                //grpMultimeter.Location = new Point(gr_Multimeter_basis_location.X + h_delta, gr_Multimeter_basis_location.Y);  // MW0LGE commented out 
+
                 panelBandHF.Location = new Point(gr_BandHF_basis_location.X + h_delta, gr_BandHF_basis_location.Y + (v_delta / 4));
                 panelBandGEN.Location = new Point(gr_BandGEN_basis_location.X + h_delta, gr_BandGEN_basis_location.Y + (v_delta / 4));
                 panelBandVHF.Location = new Point(gr_BandVHF_basis_location.X + h_delta, gr_BandVHF_basis_location.Y + (v_delta / 4));
@@ -48571,12 +49407,25 @@ namespace Thetis
                 panelModeSpecificFM.Location = new Point(gr_ModeFM_basis_location.X + h_delta - (h_delta / 4), gr_ModeFM_basis_location.Y + v_delta);
 
                 panelVFO.Location = new Point(gr_VFO_basis_location.X + (h_delta / 4), gr_VFO_basis_location.Y + v_delta);
+
                 grpVFOBetween.Location = new Point(gr_vfobetween_basis_location.X + (h_delta / 2), gr_vfobetween_basis_location.Y);
 
                 if (!this.collapsedDisplay)
                 {
                     grpVFOB.Location = new Point(gr_VFOB_basis_location.X + h_delta - (h_delta / 4), gr_VFOB_basis_location.Y);
                     grpVFOA.Location = new Point(gr_VFOA_basis_location.X + (h_delta / 4), gr_VFOA_basis_location.Y);
+
+                    //MW0LGE
+                    //need to make loaction of grpMultimeter just after right side of vfoB group
+                    //meter will now fill to the right of VFOB
+                    //size /4 as based off VFOB
+                    grpMultimeter.Location = new Point(grpVFOB.Location.X + grpVFOB.Size.Width + 8, gr_Multimeter_basis_location.Y);
+                    grpMultimeter.Size = new Size(gr_multi_meter_size_basis.Width + (h_delta/4), gr_multi_meter_size_basis.Height);
+                    grpMultimeterMenus.Location = new Point(grpMultimeter.Location.X + grpMultimeter.Size.Width - gr_multi_meter_menus_size_basis.Width, gr_multi_meter_menus_basis.Y);
+
+                    txtMultiText.Size = new Size(txt_multi_text_size_basis.Width + (h_delta / 4), txt_multi_text_size_basis.Height);
+                    picMultiMeterDigital.Size = new Size(pic_multi_meter_size_basis.Width + (h_delta / 4), pic_multi_meter_size_basis.Height);
+                    //
 
                     //btnDisplayPanCenter.Location = new Point(btn_display_pan_center_basis.X+(h_delta),btn_display_pan_center_basis.Y+v_delta);
                     btnDisplayPanCenter.Location = new Point(btn_display_pan_center_basis.X, btn_display_pan_center_basis.Y + v_delta);
@@ -48659,23 +49508,16 @@ namespace Thetis
             if (!collapsedDisplay)
             {
                 // set all Andromedia console controls to hidden
-                //btnAndrBar1.Hide();
-                //btnAndrBar2.Hide();
-                //btnAndrBar3.Hide();
-                //btnAndrBar4.Hide();
-                //btnAndrBar5.Hide();
-                //btnAndrBar6.Hide();
-                //btnAndrBar7.Hide();
-                //btnAndrBar8.Hide();
                 panelButtonBar.Hide();
-                panelMeterLabels.Hide();
+                lblRX2LockLabel.Hide();
+                lblRX2CtunLabel.Hide();
                 panelVFOALabels.Hide();
-                lblModeBigLabel.Hide();
                 panelVFOBLabels.Hide();
-                lblRX2ModeBigLabel.Hide();
-                panelVFOLabels.Hide();
+                lblSNBLabel.Hide();
+                lblVFOSyncLabel.Hide();
             }
 
+            ResumeDrawing(this); //MW0LGE
         }
 
         public int HDelta
@@ -48786,21 +49628,28 @@ namespace Thetis
             lbl_rx2_band_basis = this.lblRX2Band.Location;
             combo_rx2_band_basis = this.comboRX2Band.Location;
 
-            // :W1CEG:
+            //MW0LGE
+            txt_multi_text_size_basis = this.txtMultiText.Size;
+            gr_multi_meter_basis = this.grpMultimeter.Location;
+            gr_multi_meter_menus_basis = this.grpMultimeterMenus.Location;
+            gr_multi_meter_menus_size_basis = this.grpMultimeterMenus.Size;
+
+        // :W1CEG:
             gr_multi_meter_size_basis = this.grpMultimeter.Size;
             pic_multi_meter_digital_basis = this.picMultiMeterDigital.Location;
             pic_multi_meter_size_basis = this.picMultiMeterDigital.Size;
-            lbl_multi_smeter_basis = this.lblMultiSMeter.Location;
-            lbl_multi_smeter_size_basis = this.lblMultiSMeter.Size;
+            //MW0LGE lbl_multi_smeter_basis = this.lblMultiSMeter.Location;
+            //MW0LGE lbl_multi_smeter_size_basis = this.lblMultiSMeter.Size;
             pic_rx2meter_basis = this.picRX2Meter.Location;
             pic_rx2meter_size_basis = this.picRX2Meter.Size;
-            lbl_rx2meter_basis = this.lblRX2Meter.Location;
-            lbl_rx2meter_size_basis = this.lblRX2Meter.Size;
+            //MW0LGE lbl_rx2meter_basis = this.lblRX2Meter.Location;
+            //MW0LGE lbl_rx2meter_size_basis = this.lblRX2Meter.Size;
             txt_multi_text_basis = this.txtMultiText.Location;
             txt_rx2meter_basis = this.txtRX2Meter.Location;
             gr_options_size_basis = this.panelOptions.Size;
             chk_mon_basis = this.chkMON.Location;
             chk_mut_basis = this.chkMUT.Location;
+            chk_rx2_mut_basis = chkRX2Mute.Location; //MW0LGE
             chk_mox_basis = this.chkMOX.Location;
             chk_tun_basis = this.chkTUN.Location;
             chk_vox_basis = this.chkVOX.Location;
@@ -48995,8 +49844,8 @@ namespace Thetis
                     if (chkEnableMultiRX.Checked)
                         txtVFOABand_LostFocus(this, EventArgs.Empty);
 
-                    if (comboDisplayMode.Items.Contains("Panafall"))
-                        comboDisplayMode.Items.Remove("Panafall");
+                    /*if (comboDisplayMode.Items.Contains("Panafall"))
+                        comboDisplayMode.Items.Remove("Panafall");*/  //MW0LGE - rx2
                     if (comboDisplayMode.SelectedIndex < 0)
                         comboDisplayMode.Text = "Panadapter";
 
@@ -49105,20 +49954,30 @@ namespace Thetis
             {
                 if (chkRX2.Checked)
                 {
+                    if (this.Height <= MinimumSize.Height + panelRX2Filter.Height + 8)
+                        this.Height += (panelRX2Filter.Height + 8);
+
                     console_basis_size.Height += (panelRX2Filter.Height + 8);
                     if (!(this.WindowState == FormWindowState.Maximized))
                         this.Height += (panelRX2Filter.Height + 8);
+
+                    resizeWaterfallBitmaps(Display.CurrentDisplayModeBottom == DisplayMode.PANAFALL); //MW0LGE
                 }
                 else
                 {
+                    if (this.Height <= MinimumSize.Height + panelRX2Filter.Height + 8)
+                        this.Height -= (panelRX2Filter.Height + 8);
+
                     console_basis_size.Height -= (panelRX2Filter.Height + 8);
                     if (!(this.WindowState == FormWindowState.Maximized))
                         this.Height -= (panelRX2Filter.Height + 8);
+
+                    resizeWaterfallBitmaps(Display.CurrentDisplayMode == DisplayMode.PANAFALL); //MW0LGE
                 }
+
                 Console_Resize(this, EventArgs.Empty);
             }
             update_rx2_display = true;
-
         }
 
         private void chkRX2SR_CheckedChanged(object sender, System.EventArgs e)
@@ -50212,7 +51071,8 @@ namespace Thetis
                 if (!show_rx1)                                          // collapsed meter is RX1/RX2 shared
                     lblRXMeter.Text = comboRX2MeterMode.Text;
 
-                if (collapsedDisplay)
+                //MW0LGE
+                /*if (collapsedDisplay)
                 {
                     switch (mode)
                     {
@@ -50245,7 +51105,7 @@ namespace Thetis
                             lblRX2Meter.Text = "";
                             break;
                     }
-                }
+                }*/
                 ResetRX2MeterPeak();
             }
 
@@ -50501,11 +51361,17 @@ namespace Thetis
                     Display.CurrentDisplayModeBottom = DisplayMode.PHASE2;
                     break;
                 case "Waterfall":
+                    Display.ResetWaterfallBmp2(2);
                     Display.CurrentDisplayModeBottom = DisplayMode.WATERFALL;
                     if (chkSplitDisplay.Checked) CalcDisplayFreq();
                     break;
                 case "Histogram":
                     Display.CurrentDisplayModeBottom = DisplayMode.HISTOGRAM;
+                    break;
+                case "Panafall":
+                    Display.ResetWaterfallBmp2(4);
+                    Display.CurrentDisplayModeBottom = DisplayMode.PANAFALL;
+                    if (chkSplitDisplay.Checked) CalcDisplayFreq();
                     break;
                 case "Off":
                     Display.CurrentDisplayModeBottom = DisplayMode.OFF;
@@ -51321,15 +52187,25 @@ namespace Thetis
                 return;
             }
 
-            if (chkRX2.Checked)
+            //MW0LGE
+            //modified so that window can not be shrunk too much so that rx2 becomes hidden
+            //this is all ignored if collapseddisplay is shown
+            //we dont need to do anything special for collapsed view as console_basis_size is modified by RX2 button
+            if (!this.collapsedDisplay)
             {
-                if (this.Height < console_basis_size.Height - (panelRX2Filter.Height + 8))
-                    this.Height = console_basis_size.Height - (panelRX2Filter.Height + 8);
-            }
-            else if (this.Height < console_basis_size.Height && !this.collapsedDisplay)
-            {
-                this.Height = console_basis_size.Height;
-                return;
+//                if (chkRX2.Checked)
+//                {
+//                    if (this.Height < console_basis_size.Height + (panelRX2Filter.Height + 8))
+//                    {
+//                        this.Height = console_basis_size.Height + (panelRX2Filter.Height + 8);
+//                        return;
+//                    }
+//                }
+                /*else*/ if (this.Height < console_basis_size.Height)
+                {
+                    this.Height = console_basis_size.Height;
+                    return;
+                }
             }
 
             int h_delta = this.Width - console_basis_size.Width;
@@ -52757,25 +53633,51 @@ namespace Thetis
             get { return this.collapsedDisplay; }
         }
 
-        private bool showTopControls = true;
+        private bool m_bShowTopControls = true;
         public bool ShowTopControls
         {
-            set { this.showTopControls = value; }
+            set {
+                this.m_bShowTopControls = value;
+
+                //MW0LGE
+                this.topControlsToolStripMenuItem.Checked = value;
+                this.bandToolStripMenuItem.Visible = !m_bShowBandControls; 
+
+                if (this.CollapsedDisplay)
+                    this.CollapseDisplay();
+            }
         }
 
-        private bool showBandControls = true;
+        private bool m_bShowBandControls = true;
         public bool ShowBandControls
         {
-            set { this.showBandControls = value; }
+            set {
+                this.m_bShowBandControls = value;
+
+                //MW0LGE
+                this.bandControlsToolStripMenuItem.Checked = value;
+                this.modeToolStripMenuItem.Visible = !m_bShowModeControls;
+
+                if (this.CollapsedDisplay)
+                    this.CollapseDisplay();
+            }
         }
 
-        private bool showModeControls = true;
+        private bool m_bShowModeControls = true;
         public bool ShowModeControls
         {
-            set { this.showModeControls = value; }
+            set {
+                this.m_bShowModeControls = value;
+
+                //MW0LGE
+                this.modeControlsToolStripMenuItem.Checked = value;
+
+                if (this.CollapsedDisplay)
+                    this.CollapseDisplay();
+            }
         }
 
-        private bool showAndromedaTopControls = false;
+         private bool showAndromedaTopControls = false;
         public bool ShowAndromedaTopControls
         {
             set { this.showAndromedaTopControls = value; }
@@ -52787,7 +53689,7 @@ namespace Thetis
             set { this.showAndromedaButtonBar = value; }
         }
 
-        private void mnuCollapse_Click(object sender, EventArgs e)
+       private void mnuCollapse_Click(object sender, EventArgs e)
         {
             if (this.collapsedDisplay)
                 this.ExpandDisplay();
@@ -52815,6 +53717,7 @@ namespace Thetis
             comboMeterRXMode_SelectedIndexChanged(this, EventArgs.Empty);
             comboRX2MeterMode_SelectedIndexChanged(this, EventArgs.Empty);
             comboMeterTXMode_SelectedIndexChanged(this, EventArgs.Empty);
+
             lblModeLabel.Hide();
             lblFilterLabel.Hide();
             lblRX2ModeLabel.Hide();
@@ -52828,23 +53731,17 @@ namespace Thetis
             lblModeBigLabel.Hide();
             lblRX2ModeBigLabel.Hide();
 
-            // added G8NJJ to display Andromeda encoder settings in title bar
+// added G8NJJ to display Andromeda encoder settings in title bar
             this.Text = TitleBar.GetString() + TitleBarMultifunction;
-            //btnAndrBar1.Hide();
-            //btnAndrBar2.Hide();
-            //btnAndrBar3.Hide();
-            //btnAndrBar4.Hide();
-            //btnAndrBar5.Hide();
-            //btnAndrBar6.Hide();
-            //btnAndrBar7.Hide();
-            //btnAndrBar8.Hide();
             panelButtonBar.Hide();
-            panelMeterLabels.Hide();
+            lblRX2LockLabel.Hide();
+            lblRX2CtunLabel.Hide();
             panelVFOALabels.Hide();
-            lblModeBigLabel.Hide();
             panelVFOBLabels.Hide();
-            lblRX2ModeBigLabel.Hide();
-            panelVFOLabels.Hide();
+            lblSNBLabel.Hide();
+            lblVFOSyncLabel.Hide();
+
+            grpMultimeterMenus.Show(); //MW0LGE
 
             chkMUT.Show();
             radRX1Show.Hide();
@@ -52935,6 +53832,8 @@ namespace Thetis
             picRX2Meter.Show();
             panelRX2RF.Show();
             ptbRX2AF.Show();
+            chkX2TR.Show();//MW0LGE
+            chkRX2Mute.Show();//MW0LGE
 
             if (rx2_preamp_present)
             {
@@ -52949,11 +53848,23 @@ namespace Thetis
             grpVFOA.Location = new Point(gr_VFOA_basis_location.X + (h_delta / 4), gr_VFOA_basis_location.Y);
             grpVFOB.Location = new Point(gr_VFOB_basis_location.X + h_delta - (h_delta / 4), gr_VFOB_basis_location.Y);
             grpVFOBetween.Location = gr_vfobetween_basis_location;
-
-            grpMultimeter.Size = gr_multi_meter_size_basis;
+            //grpMultimeter.Size = gr_multi_meter_size_basis;  //MW0LGE
             picMultiMeterDigital.Parent = grpMultimeter;
-            picMultiMeterDigital.Size = pic_multi_meter_size_basis;
+            //picMultiMeterDigital.Size = pic_multi_meter_size_basis;  //MW0LGE
             picMultiMeterDigital.Location = pic_multi_meter_digital_basis;
+
+            //MW0LGE
+            //need to make loaction of grpMultimeter just after right side of vfoB group
+            //meter will now fill to the right of VFOB
+            //size /4 as based off VFOB
+            grpMultimeter.Location = new Point(grpVFOB.Location.X + grpVFOB.Size.Width + 8, gr_Multimeter_basis_location.Y);
+            grpMultimeter.Size = new Size(gr_multi_meter_size_basis.Width + (h_delta / 4), gr_multi_meter_size_basis.Height);
+            grpMultimeterMenus.Location = new Point(grpMultimeter.Location.X + grpMultimeter.Size.Width - gr_multi_meter_menus_size_basis.Width, gr_multi_meter_menus_basis.Y);
+
+            txtMultiText.Size = new Size(txt_multi_text_size_basis.Width + (h_delta / 4), txt_multi_text_size_basis.Height);
+            picMultiMeterDigital.Size = new Size(pic_multi_meter_size_basis.Width + (h_delta / 4), pic_multi_meter_size_basis.Height);
+            //end MW0LGE
+
             lblMultiSMeter.Parent = grpMultimeter;
             lblMultiSMeter.Location = lbl_multi_smeter_basis;
             lblMultiSMeter.Size = lbl_multi_smeter_size_basis;
@@ -52974,12 +53885,14 @@ namespace Thetis
             txtMultiText.Location = txt_multi_text_basis;
             txtRX2Meter.Parent = grpRX2Meter;
             txtRX2Meter.Location = txt_rx2meter_basis;
-            comboMeterRXMode.Parent = grpMultimeter;
+            //comboMeterRXMode.Parent = grpMultimeter; //MW0LGE
+            comboMeterRXMode.Parent = grpMultimeterMenus; //MW0LGE
             comboMeterRXMode.Location = combo_meter_rxmode_basis;
             comboRX2MeterMode.Location = combo_rx2meter_mode_basis;
             comboRX2MeterMode.Parent = grpRX2Meter;
             comboRX2MeterMode.Location = combo_rx2meter_mode_basis;
-            comboMeterTXMode.Parent = grpMultimeter;
+            //comboMeterTXMode.Parent = grpMultimeter; //MW0LGE
+            comboMeterTXMode.Parent = grpMultimeterMenus; //MW0LGE
             comboMeterTXMode.Location = combo_meter_txmode_basis;
             //txtMultiText.Show();
             chkPower.Parent = panelPower;
@@ -52990,6 +53903,8 @@ namespace Thetis
             chkMON.Location = chk_mon_basis;
             chkMUT.Parent = panelDSP;
             chkMUT.Location = chk_mut_basis;
+            chkRX2Mute.Parent = panelRX2DSP; // MW0LGE
+            chkRX2Mute.Location = chk_rx2_mut_basis; // MW0LGE
 
             chkMOX.Parent = panelOptions;
             chkMOX.Location = chk_mox_basis;
@@ -53253,7 +54168,7 @@ namespace Thetis
             // added G8NJJ to show encoder and multifunction encoder settings in the title bar
             this.Text = TitleBar.GetString() + TitleBarMultifunction + "    " + TitleBarEncoder;
 
-            if (this.showTopControls)
+            if (this.m_bShowTopControls)
             {
                 minWidth = Math.Max(minWidth, console_basis_size.Width);
                 if (show_rx1)
@@ -53287,20 +54202,22 @@ namespace Thetis
             }
             else
             {
-                if (this.showBandControls)
-                {
-                    minWidth = Math.Max(minWidth, radBand160.Width * 14 + this.Width - this.ClientSize.Width);
-                    minHeight += 5 + radBand160.Height;
-                }
+                if (this.m_bShowBandControls)
+            {
+                minWidth = Math.Max(minWidth, radBand160.Width * 14 + this.Width - this.ClientSize.Width);
+                minHeight += 5 + radBand160.Height;
+            }
 
-                if (this.showModeControls)
-                {
-                    minWidth = Math.Max(minWidth, radModeLSB.Width * 12 + this.Width - this.ClientSize.Width);
-                    minHeight += 5 + radModeLSB.Height;
-                }
+            if (this.m_bShowModeControls)
+            {
+                minWidth = Math.Max(minWidth, radModeLSB.Width * 12 + this.Width - this.ClientSize.Width);
+                minHeight += 5 + radModeLSB.Height;
+            }
             }
 
             this.MinimumSize = new Size(minWidth, minHeight);
+
+            grpMultimeterMenus.Hide(); //MW0LGE
 
             panelPower.Hide();
             panelRX2Power.Hide();
@@ -53319,6 +54236,7 @@ namespace Thetis
             panelModeSpecificDigital.Hide();
             panelModeSpecificFM.Hide();
             panelFilter.Hide();
+
             if (panelBandHF.Visible)  //w3sz added
             {
                 panelBandVHF.Hide();
@@ -53486,7 +54404,7 @@ namespace Thetis
                     lblRXMeter.Text = comboRX2MeterMode.Text;
                 }
             }
-            else if (this.showTopControls)
+            else if (this.m_bShowTopControls)
             {
                 comboPreamp.Parent = this;
                 comboRX2Preamp.Parent = this;
@@ -53537,18 +54455,24 @@ namespace Thetis
                     // grpVFOBetween.Show();
                     //grpMultimeter.Show();
                     picMultiMeterDigital.Parent = this;
+                    picMultiMeterDigital.Size = pic_multi_meter_size_basis;//MW0LGE
                     picMultiMeterDigital.Show();
                     // picRX2Meter.Parent = this;
                     picRX2Meter.Hide();
                     txtMultiText.Parent = this;
+                    txtMultiText.Size = txt_multi_text_size_basis;//MW0LGE
                     txtMultiText.Show();
                     // txtRX2Meter.Parent = this;
                     txtRX2Meter.Hide();
 
                     chkMON.Parent = this;
                     chkMON.Show();
-                    //chkMUT.Parent = this;
-                    chkMUT.Hide();
+
+                    chkRX2Mute.Hide(); // MW0LGE
+                    chkMUT.Parent = this; // MW0LGE
+                    //chkMUT.Hide();
+                    chkMUT.Show(); // MW0LGE
+
                     chkMOX.Parent = this;
                     chkMOX.Show();
                     chkTUN.Parent = this;
@@ -53612,10 +54536,10 @@ namespace Thetis
                         // current_meter_display_mode = MultiMeterDisplayMode.Edge;
                         // SetupForm.comboMeterType.Text = "Edge";
                         //picMultiMeterDigital.Hide();
-                        lblMultiSMeter.Parent = this;
+                        //MW0LGE lblMultiSMeter.Parent = this;
                         picMultiMeterDigital.SendToBack();
-                        lblMultiSMeter.Show();
-                        lblMultiSMeter.BringToFront();
+                        //MW0LGE lblMultiSMeter.Show();
+                        //MW0LGE lblMultiSMeter.BringToFront();
                     }
                     /*      picMultiMeterDigital.Hide();
                           lblMultiSMeter.Show();
@@ -53627,7 +54551,7 @@ namespace Thetis
                           lblMultiSMeter.Hide();
                       }*/
                     // changed G8NJJ to pick up RX1 or RX2 mode
-                    if (this.showModeControls)
+                    if (this.m_bShowModeControls)
                     {
                         panelMode.Show();
                         panelButtonBar.Hide();
@@ -53667,8 +54591,12 @@ namespace Thetis
 
                     chkMON.Parent = this;
                     chkMON.Show();
-                    //chkMUT.Parent = this;
+
                     chkMUT.Hide();
+                    chkRX2Mute.Parent = this; // MW0LGE
+                    //chkMUT.Hide();
+                    chkRX2Mute.Show(); // MW0LGE
+
                     chkMOX.Parent = this;
                     chkMOX.Show();
                     chkTUN.Parent = this;
@@ -53726,7 +54654,7 @@ namespace Thetis
                     }
                     // lblMultiSMeter.Parent = this;
                     //lblMultiSMeter.Hide();
-                    lblRX2Meter.Hide();
+                    //MW0LGE lblRX2Meter.Hide();
                     // comboMeterRXMode.Parent = this;
                     comboMeterRXMode.Hide();
                     comboRX2MeterMode.Parent = this;
@@ -53742,10 +54670,10 @@ namespace Thetis
                     {
                         //current_meter_display_mode = MultiMeterDisplayMode.Edge;
                         //SetupForm.comboMeterType.Text = "Edge";
-                        lblRX2Meter.Parent = this;
-                        picRX2Meter.SendToBack();
-                        lblRX2Meter.Show();
-                        lblRX2Meter.BringToFront();
+                        //MW0LGE lblRX2Meter.Parent = this;
+                        //MW0LGE picRX2Meter.SendToBack();
+                        //MW0LGE lblRX2Meter.Show();
+                        //MW0LGE lblRX2Meter.BringToFront();
                     }
                     /*      picMultiMeterDigital.Hide();
                           lblMultiSMeter.Show();
@@ -53757,11 +54685,11 @@ namespace Thetis
                           lblMultiSMeter.Hide();
                       }*/
                     // changed G8NJJ to pick up RX1 or RX2 mode
-                    if (this.showModeControls)
+                    if (this.m_bShowModeControls)
                     {
                         panelRX2Mode.Show();
                         panelButtonBar.Hide();
-                    }
+                }
                     else
                         panelRX2Mode.Hide();
                     panelMode.Hide();
@@ -53770,6 +54698,7 @@ namespace Thetis
             }
             else
             {
+                comboDisplayMode.Show();
                 //chkPower.Hide();
                 grpVFOBetween.Hide();
                 grpMultimeter.Hide();
@@ -53779,7 +54708,7 @@ namespace Thetis
                 //radRX1Show.Hide();
                 // radRX2Show.Hide();
             }
-            
+
             //
             // G8NJJ: if Andromeda button bar, show its button panel
             //
@@ -53791,7 +54720,7 @@ namespace Thetis
                 panelMode.Hide();
                 panelButtonBar.Show();
             }
-            else if (this.showBandControls)
+            else if (this.m_bShowBandControls)
             {
                 panelButtonBar.Hide();
                 if (whatisVHF)  //w3sz added; G8NJJ changed to use stored bool because sometimes all 3 are hidden)
@@ -53820,6 +54749,10 @@ namespace Thetis
                 panelBandGEN.Hide();
             }
 
+            if (this.m_bShowModeControls)
+                panelMode.Show();
+            else
+                panelMode.Hide();
 
             RepositionControlsForCollapsedlDisplay();
 
@@ -53915,7 +54848,7 @@ namespace Thetis
                     // G8NJJ
                 }
             }
-            else if (showTopControls)
+            else if (m_bShowModeControls)
             {
                 if (show_rx1)
                 {
@@ -53933,16 +54866,16 @@ namespace Thetis
                         (picMultiMeterDigital.Width / 6)) * 2, txtMultiText.Location.Y + txtMultiText.Height + 9);
                     // picMultiMeterDigital.Size = new Size(pic_multi_meter_size_basis.Width * 2, pic_multi_meter_size_basis.Height);
                     //grpMultimeter.Size = new Size(grpMultimeter.Width, grpVFOB.Height);
-                    if (current_meter_display_mode == MultiMeterDisplayMode.Original)
-                    {
-                        picMultiMeterDigital.Size = new Size(pic_multi_meter_size_basis.Width * 2, pic_multi_meter_size_basis.Height - lblMultiSMeter.Height);
-                        lblMultiSMeter.Size = new Size(lbl_multi_smeter_size_basis.Width * 2, lbl_multi_smeter_size_basis.Height);
-                        lblMultiSMeter.Location = new Point(picMultiMeterDigital.Location.X, picMultiMeterDigital.Location.Y +
-                                                            picMultiMeterDigital.Height);
-                        lblMultiSMeter.Show();
-                        lblMultiSMeter.BringToFront();
-                    }
-                    else lblMultiSMeter.Hide();
+                    
+                    ////if (current_meter_display_mode == MultiMeterDisplayMode.Original)
+                    //{
+                    //MW0LGE picMultiMeterDigital.Size = new Size(pic_multi_meter_size_basis.Width * 2, pic_multi_meter_size_basis.Height - lblMultiSMeter.Height);
+                    //MW0LGE lblMultiSMeter.Size = new Size(lbl_multi_smeter_size_basis.Width * 2, lbl_multi_smeter_size_basis.Height);
+                    //MW0LGE lblMultiSMeter.Location = new Point(picMultiMeterDigital.Location.X, picMultiMeterDigital.Location.Y + picMultiMeterDigital.Height);
+                    //MW0LGE lblMultiSMeter.Show();
+                    //MW0LGE lblMultiSMeter.BringToFront();
+                    //}
+                    //MW0LGE else lblMultiSMeter.Hide();
 
                     comboMeterRXMode.Location = new Point(txtMultiText.Location.X - comboMeterRXMode.Width - 5,
                         txtMultiText.Location.Y + 2);
@@ -53975,6 +54908,7 @@ namespace Thetis
                     ptbRF.Location = new Point(lblRF2.Location.X + lblRF2.Width, ptbRX1AF.Location.Y + ptbRX1AF.Height + 2);
                     comboAGC.Location = new Point(ptbRF.Location.X + ptbRF.Width + 2, ptbRF.Location.Y + 3);
                     //chkMUT.Location = new Point(ptbAF.Location.X + ptbAF.Width + 2, ptbAF.Location.Y);
+                    chkMUT.Location = new Point(grpVFOA.Location.X + grpVFOA.Width + 4, chkMON.Location.Y);  //MW0LGE -- move mute to right side of vfo box
 
                     udRX1StepAttData.Location = new Point(comboAGC.Location.X + udRX1StepAttData.Width + 2, comboAGC.Location.Y);
                     comboPreamp.Location = new Point(comboAGC.Location.X + comboPreamp.Width + 2, comboAGC.Location.Y);
@@ -53999,65 +54933,67 @@ namespace Thetis
                     btnRITReset.Location = new Point(chkRIT.Location.X + chkRIT.Width, chkRIT.Location.Y);
 
                 }
-                else if (show_rx2)
-                {
-                    top = grpVFOB.Height + 10;
-                    //top = grpMultimeter.Location.Y + grpMultimeter.Height + 5;
-                    //grpVFOA.Location = new Point(gr_VFOA_basis_location.X + (h_delta / 4), gr_VFOA_basis_location.Y);
-                    grpVFOB.Location = new Point((this.ClientSize.Width - grpVFOB.Width) / 2, gr_VFOB_basis_location.Y);
-                    //grpVFOB.Location = new Point(gr_VFOB_basis_location.X + h_delta - (h_delta / 4), gr_VFOB_basis_location.Y);
-                    txtRX2Meter.Location = new Point(((this.ClientSize.Width - (grpVFOB.Location.X + grpVFOB.Width)) -
-                        (txtRX2Meter.Width / 12)) * 2, grpVFOB.Location.Y + 5);
-                    // picMultiMeterDigital.Location = txtMultiText.Location;
-                    // picMultiMeterDigital.Location = new Point(txtMultiText.Location.X, txtMultiText.Location.Y + txtMultiText.Height + 8);
-                    picRX2Meter.Size = new Size(pic_rx2meter_size_basis.Width * 2, pic_rx2meter_size_basis.Height);
-                    picRX2Meter.Location = new Point(((this.ClientSize.Width - (grpVFOB.Location.X + grpVFOB.Width)) -
-                        (picRX2Meter.Width / 6)) * 2, txtRX2Meter.Location.Y + txtRX2Meter.Height + 9);
-                    // picMultiMeterDigital.Size = new Size(pic_multi_meter_size_basis.Width * 2, pic_multi_meter_size_basis.Height);
-                    //grpMultimeter.Size = new Size(grpMultimeter.Width, grpVFOB.Height);
-                    if (current_meter_display_mode == MultiMeterDisplayMode.Original)
+                else
+                    if (show_rx2)
                     {
-                        picRX2Meter.Size = new Size(pic_rx2meter_size_basis.Width * 2, pic_rx2meter_size_basis.Height - lblRX2Meter.Height);
-                        lblRX2Meter.Size = new Size(lbl_rx2meter_size_basis.Width * 2, lbl_rx2meter_size_basis.Height);
-                        lblRX2Meter.Location = new Point(picRX2Meter.Location.X, picRX2Meter.Location.Y +
-                                                            picRX2Meter.Height);
-                        lblRX2Meter.Show();
-                        lblRX2Meter.BringToFront();
-                    }
-                    else
-                        lblRX2Meter.Hide();
-                    comboRX2MeterMode.Location = new Point(txtRX2Meter.Location.X - comboRX2MeterMode.Width - 5,
-                        txtRX2Meter.Location.Y + 2);
-                    // comboMeterTXMode.Location = new Point(comboMeterRXMode.Location.X, 
-                    //     comboMeterRXMode.Location.Y + comboMeterRXMode.Height + 1);
-                    comboMeterTXMode.Location = new Point(txtRX2Meter.Location.X + txtRX2Meter.Width + 5,
-                        txtRX2Meter.Location.Y + 2);
-                    chkPower.Location = new Point(30, grpVFOB.Location.Y + 2);
-                    chkRX2.Location = new Point(chkPower.Location.X + chkRX2.Width + 5, chkPower.Location.Y);
-                    radRX1Show.Location = new Point(chkRX2.Location.X + radRX1Show.Width + 15, chkRX2.Location.Y + 4);
-                    radRX2Show.Location = new Point(radRX1Show.Location.X + radRX1Show.Width + 5, radRX1Show.Location.Y);
-                    //chkMON.Location = new Point(10, chkPower.Location.Y + chkPower.Height + 5);
-                    chkMON.Location = new Point(grpVFOB.Location.X - chkMON.Width - 10, grpVFOB.Location.Y + 8);
-                    //chkMUT.Location = new Point(chkMON.Location.X + chkMON.Width, chkPower.Location.Y + chkPower.Height + 5);
-                    chkTUN.Location = new Point(chkMON.Location.X, chkMON.Location.Y + chkMON.Height + 4);
-                    chkMOX.Location = new Point(chkTUN.Location.X, chkTUN.Location.Y + chkTUN.Height + 4);
+                        top = grpVFOB.Height + 10;
+                        //top = grpMultimeter.Location.Y + grpMultimeter.Height + 5;
+                        //grpVFOA.Location = new Point(gr_VFOA_basis_location.X + (h_delta / 4), gr_VFOA_basis_location.Y);
+                        grpVFOB.Location = new Point((this.ClientSize.Width - grpVFOB.Width) / 2, gr_VFOB_basis_location.Y);
+                        //grpVFOB.Location = new Point(gr_VFOB_basis_location.X + h_delta - (h_delta / 4), gr_VFOB_basis_location.Y);
+                        txtRX2Meter.Location = new Point(((this.ClientSize.Width - (grpVFOB.Location.X + grpVFOB.Width)) -
+                            (txtRX2Meter.Width / 12)) * 2, grpVFOB.Location.Y + 5);
+                        // picMultiMeterDigital.Location = txtMultiText.Location;
+                        // picMultiMeterDigital.Location = new Point(txtMultiText.Location.X, txtMultiText.Location.Y + txtMultiText.Height + 8);
+                        picRX2Meter.Size = new Size(pic_rx2meter_size_basis.Width * 2, pic_rx2meter_size_basis.Height);
+                        picRX2Meter.Location = new Point(((this.ClientSize.Width - (grpVFOB.Location.X + grpVFOB.Width)) -
+                            (picRX2Meter.Width / 6)) * 2, txtRX2Meter.Location.Y + txtRX2Meter.Height + 9);
+                        // picMultiMeterDigital.Size = new Size(pic_multi_meter_size_basis.Width * 2, pic_multi_meter_size_basis.Height);
+                        //grpMultimeter.Size = new Size(grpMultimeter.Width, grpVFOB.Height);
+                        if (current_meter_display_mode == MultiMeterDisplayMode.Original)
+                        {
+                            picRX2Meter.Size = new Size(pic_rx2meter_size_basis.Width * 2, pic_rx2meter_size_basis.Height);//MW0LGE  - lblRX2Meter.Height);
+                            //MW0LGE lblRX2Meter.Size = new Size(lbl_rx2meter_size_basis.Width * 2, lbl_rx2meter_size_basis.Height);
+                            //MW0LGE lblRX2Meter.Location = new Point(picRX2Meter.Location.X, picRX2Meter.Location.Y + picRX2Meter.Height);
+                            //MW0LGE lblRX2Meter.Show();
+                            //MW0LGE lblRX2Meter.BringToFront();
+                        }
+                        //MW0LGE else lblRX2Meter.Hide();
+
+                        comboRX2MeterMode.Location = new Point(txtRX2Meter.Location.X - comboRX2MeterMode.Width - 5,
+                            txtRX2Meter.Location.Y + 2);
+                        // comboMeterTXMode.Location = new Point(comboMeterRXMode.Location.X, 
+                        //     comboMeterRXMode.Location.Y + comboMeterRXMode.Height + 1);
+                        comboMeterTXMode.Location = new Point(txtRX2Meter.Location.X + txtRX2Meter.Width + 5,
+                            txtRX2Meter.Location.Y + 2);
+                        chkPower.Location = new Point(30, grpVFOB.Location.Y + 2);
+                        chkRX2.Location = new Point(chkPower.Location.X + chkRX2.Width + 5, chkPower.Location.Y);
+                        radRX1Show.Location = new Point(chkRX2.Location.X + radRX1Show.Width + 15, chkRX2.Location.Y + 4);
+                        radRX2Show.Location = new Point(radRX1Show.Location.X + radRX1Show.Width + 5, radRX1Show.Location.Y);
+                        //chkMON.Location = new Point(10, chkPower.Location.Y + chkPower.Height + 5);
+                        chkMON.Location = new Point(grpVFOB.Location.X - chkMON.Width - 10, grpVFOB.Location.Y + 8);
+                        //chkMUT.Location = new Point(chkMON.Location.X + chkMON.Width, chkPower.Location.Y + chkPower.Height + 5);
+                        chkRX2Mute.Location = new Point(grpVFOB.Location.X + grpVFOB.Width + 4, chkMON.Location.Y);  //MW0LGE -- move mute to right side of vfo box
+
+                        chkTUN.Location = new Point(chkMON.Location.X, chkMON.Location.Y + chkMON.Height + 4);
+                        chkMOX.Location = new Point(chkTUN.Location.X, chkTUN.Location.Y + chkTUN.Height + 4);
                     //                        chkVOX.Location = new Point(chkMON.Location.X - chkVOX.Width - 10, chkMON.Location.Y);
                     chkFWCATUBypass.Location = new Point(chkMON.Location.X - chkVOX.Width - 10, chkMON.Location.Y);
 
-                    chkRX2SR.Location = new Point(chkTUN.Location.X - chkRX2SR.Width - 10, chkTUN.Location.Y); //DUP
-                                                                                                               //  chkFWCATU.Location = new Point(chkMOX.Location.X - chkFWCATU.Width - 10, chkMOX.Location.Y); //CTUN
-                    chkX2TR.Location = new Point(chkMOX.Location.X - chkX2TR.Width - 10, chkMOX.Location.Y); //RX2 CTUN
-                    lblAF2.Location = new Point(5, chkPower.Location.Y + chkPower.Height + 5);
-                    //ptbAF.Location = new Point(lblAF2.Location.X + lblAF2.Width, lblAF2.Location.Y); 
-                    ptbRX2AF.Location = new Point(lblAF2.Location.X + lblAF2.Width, lblAF2.Location.Y);
-                    //ptbAF.Location = new Point(10, chkPower.Location.Y + chkPower.Height + 2);
-                    lblPWR2.Location = new Point(ptbRX2AF.Location.X + ptbRX2AF.Width + 2, ptbRX2AF.Location.Y);
-                    ptbPWR.Location = new Point(lblPWR2.Location.X + lblPWR2.Width, lblPWR2.Location.Y);
-                    lblRF2.Location = new Point(5, lblAF2.Location.Y + lblAF2.Height + 2);
-                    ptbRX2RF.Location = new Point(lblRF2.Location.X + lblRF2.Width, ptbRX2AF.Location.Y + ptbRX2AF.Height + 2);
-                    comboRX2AGC.Location = new Point(ptbRX2RF.Location.X + ptbRX2RF.Width + 2, ptbRX2RF.Location.Y + 3);
-                    //chkMUT.Location = new Point(ptbAF.Location.X + ptbAF.Width + 2, ptbAF.Location.Y);
-                    //comboPreamp.Location = new Point(comboRX2AGC.Location.X + comboPreamp.Width + 2, comboRX2AGC.Location.Y);
+                        chkRX2SR.Location = new Point(chkTUN.Location.X - chkRX2SR.Width - 10, chkTUN.Location.Y); //DUP
+                        //  chkFWCATU.Location = new Point(chkMOX.Location.X - chkFWCATU.Width - 10, chkMOX.Location.Y); //CTUN
+                        chkX2TR.Location = new Point(chkMOX.Location.X - chkX2TR.Width - 10, chkMOX.Location.Y); //RX2 CTUN
+                        lblAF2.Location = new Point(5, chkPower.Location.Y + chkPower.Height + 5);
+                        //ptbAF.Location = new Point(lblAF2.Location.X + lblAF2.Width, lblAF2.Location.Y); 
+                        ptbRX2AF.Location = new Point(lblAF2.Location.X + lblAF2.Width, lblAF2.Location.Y);
+                        //ptbAF.Location = new Point(10, chkPower.Location.Y + chkPower.Height + 2);
+                        lblPWR2.Location = new Point(ptbRX2AF.Location.X + ptbRX2AF.Width + 2, ptbRX2AF.Location.Y);
+                        ptbPWR.Location = new Point(lblPWR2.Location.X + lblPWR2.Width, lblPWR2.Location.Y);
+                        lblRF2.Location = new Point(5, lblAF2.Location.Y + lblAF2.Height + 2);
+                        ptbRX2RF.Location = new Point(lblRF2.Location.X + lblRF2.Width, ptbRX2AF.Location.Y + ptbRX2AF.Height + 2);
+                        comboRX2AGC.Location = new Point(ptbRX2RF.Location.X + ptbRX2RF.Width + 2, ptbRX2RF.Location.Y + 3);
+                        //chkMUT.Location = new Point(ptbAF.Location.X + ptbAF.Width + 2, ptbAF.Location.Y);
+                        //comboPreamp.Location = new Point(comboRX2AGC.Location.X + comboPreamp.Width + 2, comboRX2AGC.Location.Y);
                     udXIT.Location = new Point(grpVFOB.Location.X + grpVFOB.Width + 6, comboRX2AGC.Location.Y);     // XIT bottom, to right of VFO
                     chkXIT.Location = new Point(udXIT.Location.X, udXIT.Location.Y - chkXIT.Height);             // chkXIT above it
                     btnXITReset.Location = new Point(chkXIT.Location.X + chkXIT.Width, chkXIT.Location.Y);      // btnXIT to its right
@@ -54065,56 +55001,56 @@ namespace Thetis
                     chkRIT.Location = new Point(udRIT.Location.X, udRIT.Location.Y - chkRIT.Height);
                     btnRITReset.Location = new Point(chkRIT.Location.X + chkRIT.Width, chkRIT.Location.Y);
 
-                    comboPreamp.Location = new Point(comboRX2AGC.Location.X + comboPreamp.Width + 2, comboRX2AGC.Location.Y);
-                    udRX1StepAttData.Location = new Point(comboRX2AGC.Location.X + udRX1StepAttData.Width + 2, comboRX2AGC.Location.Y);
-                    comboRX2Preamp.Location = new Point(comboRX2AGC.Location.X + comboRX2Preamp.Width + 2, comboRX2AGC.Location.Y);
-                    udRX2StepAttData.Location = new Point(comboRX2AGC.Location.X + udRX2StepAttData.Width + 2, comboRX2AGC.Location.Y);
+                        comboPreamp.Location = new Point(comboRX2AGC.Location.X + comboPreamp.Width + 2, comboRX2AGC.Location.Y);
+                        udRX1StepAttData.Location = new Point(comboRX2AGC.Location.X + udRX1StepAttData.Width + 2, comboRX2AGC.Location.Y);
+                        comboRX2Preamp.Location = new Point(comboRX2AGC.Location.X + comboRX2Preamp.Width + 2, comboRX2AGC.Location.Y);
+                        udRX2StepAttData.Location = new Point(comboRX2AGC.Location.X + udRX2StepAttData.Width + 2, comboRX2AGC.Location.Y);
 
-                    if (rx2_preamp_present)
-                    {
-                        if (rx2_step_att_present)
+                        if (rx2_preamp_present)
                         {
-                            comboPreamp.Hide();
-                            udRX1StepAttData.Hide();
-                            comboRX2Preamp.Hide();
-                            udRX2StepAttData.Show();
-                            // udRX2StepAttData.Location = new Point(comboRX2AGC.Location.X + udRX2StepAttData.Width + 2, comboRX2AGC.Location.Y);
+                            if (rx2_step_att_present)
+                            {
+                                comboPreamp.Hide();
+                                udRX1StepAttData.Hide();
+                                comboRX2Preamp.Hide();
+                                udRX2StepAttData.Show();
+                                // udRX2StepAttData.Location = new Point(comboRX2AGC.Location.X + udRX2StepAttData.Width + 2, comboRX2AGC.Location.Y);
+                            }
+                            else
+                            {
+                                comboPreamp.Hide();
+                                udRX1StepAttData.Hide();
+                                udRX2StepAttData.Hide();
+                                comboRX2Preamp.Show();
+                                // comboRX2Preamp.Location = new Point(comboRX2AGC.Location.X + comboRX2Preamp.Width + 2, comboRX2AGC.Location.Y);
+                            }
                         }
                         else
                         {
-                            comboPreamp.Hide();
-                            udRX1StepAttData.Hide();
-                            udRX2StepAttData.Hide();
-                            comboRX2Preamp.Show();
-                            // comboRX2Preamp.Location = new Point(comboRX2AGC.Location.X + comboRX2Preamp.Width + 2, comboRX2AGC.Location.Y);
+                            if (rx1_step_att_present)
+                            {
+                                comboPreamp.Hide();
+                                comboRX2Preamp.Hide();
+                                udRX2StepAttData.Hide();
+                                udRX1StepAttData.Show();
+                                //udRX1StepAttData.Location = new Point(comboRX2AGC.Location.X + udRX1StepAttData.Width + 2, comboRX2AGC.Location.Y);
+                            }
+                            else
+                            {
+                                udRX1StepAttData.Hide();
+                                comboRX2Preamp.Hide();
+                                udRX2StepAttData.Hide();
+                                comboPreamp.Show();
+                                // comboPreamp.Location = new Point(comboRX2AGC.Location.X + comboPreamp.Width + 2, comboRX2AGC.Location.Y);
+                            }
                         }
                     }
-                    else
-                    {
-                        if (rx1_step_att_present)
-                        {
-                            comboPreamp.Hide();
-                            comboRX2Preamp.Hide();
-                            udRX2StepAttData.Hide();
-                            udRX1StepAttData.Show();
-                            //udRX1StepAttData.Location = new Point(comboRX2AGC.Location.X + udRX1StepAttData.Width + 2, comboRX2AGC.Location.Y);
-                        }
-                        else
-                        {
-                            udRX1StepAttData.Hide();
-                            comboRX2Preamp.Hide();
-                            udRX2StepAttData.Hide();
-                            comboPreamp.Show();
-                            // comboPreamp.Location = new Point(comboRX2AGC.Location.X + comboPreamp.Width + 2, comboRX2AGC.Location.Y);
-                        }
-                    }
-                }
                 // G8NJJ
             }
 
-                panelDisplay.Location = new Point(0, top + 20);
+            panelDisplay.Location = new Point(0, top + 20);
 
-                int height = this.ClientSize.Height - (top + 25);
+            int height = this.ClientSize.Height - (top + 25);
 
                 if (showAndromedaButtonBar)
                 {
@@ -54122,67 +55058,67 @@ namespace Thetis
                 }
                 else
                 {
-                    if (this.showBandControls)
-                        height -= radBand160.Height;
+                    if (this.m_bShowBandControls)
+                height -= radBand160.Height;
 
-                    if (this.showModeControls)
-                        height -= radModeLSB.Height;
+            if (this.m_bShowModeControls)
+                height -= radModeLSB.Height;
                 }
 
-                panelDisplay.Size = new Size(this.ClientSize.Width, height);
+            panelDisplay.Size = new Size(this.ClientSize.Width, height);
 
-                picDisplay.Location = new Point(0, 0);
-                picDisplay.Size = new Size(panelDisplay.Size.Width, panelDisplay.Size.Height - (txtOverload_size_basis.Height + 5 + tb_display_pan_size_basis.Height + 5));
-                picWaterfall.Location = new Point(0, 0);
-                picWaterfall.Size = new Size(panelDisplay.Size.Width, panelDisplay.Size.Height - (txtOverload_size_basis.Height + 5 + tb_display_pan_size_basis.Height + 5));
+            picDisplay.Location = new Point(0, 0);
+            picDisplay.Size = new Size(panelDisplay.Size.Width, panelDisplay.Size.Height - (txtOverload_size_basis.Height + 5 + tb_display_pan_size_basis.Height + 5));
+            picWaterfall.Location = new Point(0, 0);
+            picWaterfall.Size = new Size(panelDisplay.Size.Width, panelDisplay.Size.Height - (txtOverload_size_basis.Height + 5 + tb_display_pan_size_basis.Height + 5));
 
-                top = picDisplay.Location.Y + picDisplay.Height;
-                txtDisplayCursorOffset.Location = new Point(picDisplay.Location.X, top);
-                txtDisplayCursorPower.Location = new Point(txtDisplayCursorOffset.Location.X + txtDisplayCursorOffset.Width, top);
-                txtDisplayCursorFreq.Location = new Point(txtDisplayCursorPower.Location.X + txtDisplayCursorPower.Width, top);
-                txtOverload.Location = new Point(txtDisplayCursorFreq.Location.X + txtDisplayCursorFreq.Width, top);
-                txtOverload.Size = new Size(picDisplay.Width - (txtDisplayPeakOffset.Width + txtDisplayPeakPower.Width + txtDisplayPeakFreq.Width + txtDisplayCursorOffset.Width + txtDisplayCursorPower.Width + txtDisplayCursorFreq.Width), txtOverload_size_basis.Height);
-                txtDisplayPeakOffset.Location = new Point(txtOverload.Location.X + txtOverload.Width, top);
-                txtDisplayPeakPower.Location = new Point(txtDisplayPeakOffset.Location.X + txtDisplayPeakOffset.Width, top);
-                txtDisplayPeakFreq.Location = new Point(txtDisplayPeakPower.Location.X + txtDisplayPeakPower.Width, top);
+            top = picDisplay.Location.Y + picDisplay.Height;
+            txtDisplayCursorOffset.Location = new Point(picDisplay.Location.X, top);
+            txtDisplayCursorPower.Location = new Point(txtDisplayCursorOffset.Location.X + txtDisplayCursorOffset.Width, top);
+            txtDisplayCursorFreq.Location = new Point(txtDisplayCursorPower.Location.X + txtDisplayCursorPower.Width, top);
+            txtOverload.Location = new Point(txtDisplayCursorFreq.Location.X + txtDisplayCursorFreq.Width, top);
+            txtOverload.Size = new Size(picDisplay.Width - (txtDisplayPeakOffset.Width + txtDisplayPeakPower.Width + txtDisplayPeakFreq.Width + txtDisplayCursorOffset.Width + txtDisplayCursorPower.Width + txtDisplayCursorFreq.Width), txtOverload_size_basis.Height);
+            txtDisplayPeakOffset.Location = new Point(txtOverload.Location.X + txtOverload.Width, top);
+            txtDisplayPeakPower.Location = new Point(txtDisplayPeakOffset.Location.X + txtDisplayPeakOffset.Width, top);
+            txtDisplayPeakFreq.Location = new Point(txtDisplayPeakPower.Location.X + txtDisplayPeakPower.Width, top);
 
-                txtDisplayOrionMKIIPAVolts.Location = new Point(picDisplay.Location.X, top);
-                txtDisplayOrionMKIIPAAmps.Location = new Point(txtDisplayOrionMKIIPAVolts.Location.X + txtDisplayOrionMKIIPAVolts.Width, top);
-                txtDisplayOrionMKIIBlank.Location = new Point(txtDisplayOrionMKIIPAAmps.Location.X + txtDisplayOrionMKIIPAAmps.Width, top);
+            txtDisplayOrionMKIIPAVolts.Location = new Point(picDisplay.Location.X, top);
+            txtDisplayOrionMKIIPAAmps.Location = new Point(txtDisplayOrionMKIIPAVolts.Location.X + txtDisplayOrionMKIIPAVolts.Width, top);
+            txtDisplayOrionMKIIBlank.Location = new Point(txtDisplayOrionMKIIPAAmps.Location.X + txtDisplayOrionMKIIPAAmps.Width, top);
 
-                top = txtDisplayPeakOffset.Location.Y + txtDisplayPeakOffset.Height + 5;
-                int dynamicWidth = picDisplay.Width - (lblDisplayPan.Width + btnDisplayPanCenter.Width + 5 +
-                    comboDisplayMode.Width + 5 + lblDisplayZoom.Width + radDisplayZoom05.Width * 4);
+            top = txtDisplayPeakOffset.Location.Y + txtDisplayPeakOffset.Height + 5;
+            int dynamicWidth = picDisplay.Width - (lblDisplayPan.Width + btnDisplayPanCenter.Width + 5 +
+                comboDisplayMode.Width + 5 + lblDisplayZoom.Width + radDisplayZoom05.Width * 4);
 
-                lblDisplayPan.Location = new Point(picDisplay.Location.X, top);
-                ptbDisplayPan.Location = new Point(lblDisplayPan.Location.X + lblDisplayPan.Width, top);
-                ptbDisplayPan.Size = new Size(dynamicWidth / 2, tb_display_pan_size_basis.Height);
-                btnDisplayPanCenter.Location = new Point(ptbDisplayPan.Location.X + ptbDisplayPan.Width, top);
-                //			btnDisplayPanCenter_Click(this, EventArgs.Empty);
+            lblDisplayPan.Location = new Point(picDisplay.Location.X, top);
+            ptbDisplayPan.Location = new Point(lblDisplayPan.Location.X + lblDisplayPan.Width, top);
+            ptbDisplayPan.Size = new Size(dynamicWidth / 2, tb_display_pan_size_basis.Height);
+            btnDisplayPanCenter.Location = new Point(ptbDisplayPan.Location.X + ptbDisplayPan.Width, top);
+            //			btnDisplayPanCenter_Click(this, EventArgs.Empty);
 
-                // :NOTE: Force update on pan control
-                ptbDisplayPan.Value = ptbDisplayPan.Value;
-                ptbDisplayPan_Scroll(this, EventArgs.Empty);
+            // :NOTE: Force update on pan control
+            ptbDisplayPan.Value = ptbDisplayPan.Value;
+            ptbDisplayPan_Scroll(this, EventArgs.Empty);
 
-                comboDisplayMode.Parent = panelDisplay;
-                comboDisplayMode.Location = new Point(btnDisplayPanCenter.Location.X + btnDisplayPanCenter.Width + 5, top);
+            comboDisplayMode.Parent = panelDisplay;
+            comboDisplayMode.Location = new Point(btnDisplayPanCenter.Location.X + btnDisplayPanCenter.Width + 5, top);
                 comboRX2DisplayMode.Parent = panelDisplay;
                 comboRX2DisplayMode.Location = new Point(btnDisplayPanCenter.Location.X + btnDisplayPanCenter.Width + 5, top);
 
-                lblDisplayZoom.Location = new Point(comboDisplayMode.Location.X + comboDisplayMode.Width + 5, top);
-                ptbDisplayZoom.Location = new Point(lblDisplayZoom.Location.X + lblDisplayZoom.Width, top);
-                ptbDisplayZoom.Size = new Size(dynamicWidth / 2, tb_display_zoom_size_basis.Height);
+            lblDisplayZoom.Location = new Point(comboDisplayMode.Location.X + comboDisplayMode.Width + 5, top);
+            ptbDisplayZoom.Location = new Point(lblDisplayZoom.Location.X + lblDisplayZoom.Width, top);
+            ptbDisplayZoom.Size = new Size(dynamicWidth / 2, tb_display_zoom_size_basis.Height);
 
-                // :NOTE: Force update on zoom control
-                ptbDisplayZoom.Value = ptbDisplayZoom.Value;
-                ptbDisplayZoom_Scroll(this, EventArgs.Empty);
+            // :NOTE: Force update on zoom control
+            ptbDisplayZoom.Value = ptbDisplayZoom.Value;
+            ptbDisplayZoom_Scroll(this, EventArgs.Empty);
 
-                radDisplayZoom05.Location = new Point(ptbDisplayZoom.Location.X + ptbDisplayZoom.Width, top);
-                radDisplayZoom1x.Location = new Point(radDisplayZoom05.Location.X + radDisplayZoom05.Width, top);
-                radDisplayZoom2x.Location = new Point(radDisplayZoom1x.Location.X + radDisplayZoom1x.Width, top);
-                radDisplayZoom4x.Location = new Point(radDisplayZoom2x.Location.X + radDisplayZoom2x.Width, top);
+            radDisplayZoom05.Location = new Point(ptbDisplayZoom.Location.X + ptbDisplayZoom.Width, top);
+            radDisplayZoom1x.Location = new Point(radDisplayZoom05.Location.X + radDisplayZoom05.Width, top);
+            radDisplayZoom2x.Location = new Point(radDisplayZoom1x.Location.X + radDisplayZoom1x.Width, top);
+            radDisplayZoom4x.Location = new Point(radDisplayZoom2x.Location.X + radDisplayZoom2x.Width, top);
 
-                top = panelDisplay.Location.Y + panelDisplay.Height;
+            top = panelDisplay.Location.Y + panelDisplay.Height;
                 // G8NJJ to add new Andromeda button bar in place of band, mode controls
                 if (this.showAndromedaButtonBar)
                 {
@@ -54191,96 +55127,96 @@ namespace Thetis
 
                 }
                 else
-                {
-                    if (this.showBandControls)
+            {
+                    if (this.m_bShowBandControls)
                     {
                         lblRX2Band.Location = new Point(5, top);
                         comboRX2Band.Location = new Point(lblRX2Band.Location.X + lblRX2Band.Width + 5, top);
 
-                        if (panelBandVHF.Visible)  //w3sz added
-                        {
+                if (panelBandVHF.Visible)  //w3sz added
+                {
                             panelBandVHF.Location = new Point(this.ClientSize.Width / 2 - radBandVHF0.Width * 7 + 100, top); //w3sz added "V"
-                            panelBandVHF.Size = new Size(radBandVHF0.Width * 15, radBandVHF0.Height); //w3sz added "V" 
-                            radBandVHF0.Location = new Point(0, 0);//w3sz added
-                            radBandVHF1.Location = new Point(radBandVHF0.Location.X + radBandVHF0.Width, 0);//w3sz added
-                            radBandVHF2.Location = new Point(radBandVHF1.Location.X + radBandVHF1.Width, 0);//w3sz added
-                            radBandVHF3.Location = new Point(radBandVHF2.Location.X + radBandVHF2.Width, 0);//w3sz added
-                            radBandVHF4.Location = new Point(radBandVHF3.Location.X + radBandVHF3.Width, 0);//w3sz added
-                            radBandVHF5.Location = new Point(radBandVHF4.Location.X + radBandVHF4.Width, 0);//w3sz added
-                            radBandVHF6.Location = new Point(radBandVHF5.Location.X + radBandVHF5.Width, 0);//w3sz added
-                            radBandVHF7.Location = new Point(radBandVHF6.Location.X + radBandVHF6.Width, 0);//w3sz added
-                            radBandVHF8.Location = new Point(radBandVHF7.Location.X + radBandVHF7.Width, 0);//w3sz added
-                            radBandVHF9.Location = new Point(radBandVHF8.Location.X + radBandVHF8.Width, 0);//w3sz added
-                            radBandVHF10.Location = new Point(radBandVHF9.Location.X + radBandVHF9.Width, 0);//w3sz added
-                            radBandVHF11.Location = new Point(radBandVHF10.Location.X + radBandVHF10.Width, 0);//w3sz added
-                            radBandVHF12.Location = new Point(radBandVHF11.Location.X + radBandVHF11.Width, 0);//w3sz added
-                            radBandVHF13.Location = new Point(radBandVHF12.Location.X + radBandVHF12.Width, 0);//w3sz added 
-                            btnBandHF.Location = new Point(radBandVHF13.Location.X + radBandVHF13.Width, 0);//w3sz added
-                            top = panelBandVHF.Location.Y + panelBandVHF.Height;//w3sz added "V"
-                        }
-                        else if (panelBandHF.Visible)
-                        {
+                    panelBandVHF.Size = new Size(radBandVHF0.Width * 15, radBandVHF0.Height); //w3sz added "V" 
+                    radBandVHF0.Location = new Point(0, 0);//w3sz added
+                    radBandVHF1.Location = new Point(radBandVHF0.Location.X + radBandVHF0.Width, 0);//w3sz added
+                    radBandVHF2.Location = new Point(radBandVHF1.Location.X + radBandVHF1.Width, 0);//w3sz added
+                    radBandVHF3.Location = new Point(radBandVHF2.Location.X + radBandVHF2.Width, 0);//w3sz added
+                    radBandVHF4.Location = new Point(radBandVHF3.Location.X + radBandVHF3.Width, 0);//w3sz added
+                    radBandVHF5.Location = new Point(radBandVHF4.Location.X + radBandVHF4.Width, 0);//w3sz added
+                    radBandVHF6.Location = new Point(radBandVHF5.Location.X + radBandVHF5.Width, 0);//w3sz added
+                    radBandVHF7.Location = new Point(radBandVHF6.Location.X + radBandVHF6.Width, 0);//w3sz added
+                    radBandVHF8.Location = new Point(radBandVHF7.Location.X + radBandVHF7.Width, 0);//w3sz added
+                    radBandVHF9.Location = new Point(radBandVHF8.Location.X + radBandVHF8.Width, 0);//w3sz added
+                    radBandVHF10.Location = new Point(radBandVHF9.Location.X + radBandVHF9.Width, 0);//w3sz added
+                    radBandVHF11.Location = new Point(radBandVHF10.Location.X + radBandVHF10.Width, 0);//w3sz added
+                    radBandVHF12.Location = new Point(radBandVHF11.Location.X + radBandVHF11.Width, 0);//w3sz added
+                    radBandVHF13.Location = new Point(radBandVHF12.Location.X + radBandVHF12.Width, 0);//w3sz added 
+                    btnBandHF.Location = new Point(radBandVHF13.Location.X + radBandVHF13.Width, 0);//w3sz added
+                    top = panelBandVHF.Location.Y + panelBandVHF.Height;//w3sz added "V"
+                }
+                else if (panelBandHF.Visible)
+                {
                             panelBandHF.Location = new Point(this.ClientSize.Width / 2 - radBand160.Width * 7 + 100, top);
-                            panelBandHF.Size = new Size(radBand160.Width * 15, radBand160.Height);
-                            radBand160.Location = new Point(0, 0);
-                            radBand80.Location = new Point(radBand160.Location.X + radBand160.Width, 0);
-                            radBand60.Location = new Point(radBand80.Location.X + radBand80.Width, 0);
-                            radBand40.Location = new Point(radBand60.Location.X + radBand60.Width, 0);
-                            radBand30.Location = new Point(radBand40.Location.X + radBand40.Width, 0);
-                            radBand20.Location = new Point(radBand30.Location.X + radBand30.Width, 0);
-                            radBand17.Location = new Point(radBand20.Location.X + radBand20.Width, 0);
-                            radBand15.Location = new Point(radBand17.Location.X + radBand17.Width, 0);
-                            radBand12.Location = new Point(radBand15.Location.X + radBand15.Width, 0);
-                            radBand10.Location = new Point(radBand12.Location.X + radBand12.Width, 0);
-                            radBand6.Location = new Point(radBand10.Location.X + radBand10.Width, 0);
-                            radBandWWV.Location = new Point(radBand6.Location.X + radBand2.Width, 0);
-                            radBandGEN.Location = new Point(radBandWWV.Location.X + radBandWWV.Width, 0);
-                            btnBandVHF.Location = new Point(radBandGEN.Location.X + radBandGEN.Width, 0);//w3sz added
-                            top = panelBandHF.Location.Y + panelBandHF.Height;
-                        }
-                        else
-                        {
+                    panelBandHF.Size = new Size(radBand160.Width * 15, radBand160.Height);
+                    radBand160.Location = new Point(0, 0);
+                    radBand80.Location = new Point(radBand160.Location.X + radBand160.Width, 0);
+                    radBand60.Location = new Point(radBand80.Location.X + radBand80.Width, 0);
+                    radBand40.Location = new Point(radBand60.Location.X + radBand60.Width, 0);
+                    radBand30.Location = new Point(radBand40.Location.X + radBand40.Width, 0);
+                    radBand20.Location = new Point(radBand30.Location.X + radBand30.Width, 0);
+                    radBand17.Location = new Point(radBand20.Location.X + radBand20.Width, 0);
+                    radBand15.Location = new Point(radBand17.Location.X + radBand17.Width, 0);
+                    radBand12.Location = new Point(radBand15.Location.X + radBand15.Width, 0);
+                    radBand10.Location = new Point(radBand12.Location.X + radBand12.Width, 0);
+                    radBand6.Location = new Point(radBand10.Location.X + radBand10.Width, 0);
+                    radBandWWV.Location = new Point(radBand6.Location.X + radBand2.Width, 0);
+                    radBandGEN.Location = new Point(radBandWWV.Location.X + radBandWWV.Width, 0);
+                    btnBandVHF.Location = new Point(radBandGEN.Location.X + radBandGEN.Width, 0);//w3sz added
+                    top = panelBandHF.Location.Y + panelBandHF.Height;
+                }
+                else
+                {
                             panelBandGEN.Location = new Point(this.ClientSize.Width / 2 - radBandGEN0.Width * 7 + 100, top);
-                            panelBandGEN.Size = new Size(radBandGEN0.Width * 15, radBandGEN0.Height);
-                            radBandGEN0.Location = new Point(0, 0);
-                            radBandGEN1.Location = new Point(radBandGEN0.Location.X + radBandGEN0.Width, 0);
-                            radBandGEN2.Location = new Point(radBandGEN1.Location.X + radBandGEN1.Width, 0);
-                            radBandGEN3.Location = new Point(radBandGEN2.Location.X + radBandGEN2.Width, 0);
-                            radBandGEN4.Location = new Point(radBandGEN3.Location.X + radBandGEN3.Width, 0);
-                            radBandGEN5.Location = new Point(radBandGEN4.Location.X + radBandGEN4.Width, 0);
-                            radBandGEN6.Location = new Point(radBandGEN5.Location.X + radBandGEN5.Width, 0);
-                            radBandGEN7.Location = new Point(radBandGEN6.Location.X + radBandGEN6.Width, 0);
-                            radBandGEN8.Location = new Point(radBandGEN7.Location.X + radBandGEN7.Width, 0);
-                            radBandGEN9.Location = new Point(radBandGEN8.Location.X + radBandGEN8.Width, 0);
-                            radBandGEN10.Location = new Point(radBandGEN9.Location.X + radBandGEN9.Width, 0);
-                            radBandGEN11.Location = new Point(radBandGEN10.Location.X + radBandGEN10.Width, 0);
-                            radBandGEN12.Location = new Point(radBandGEN11.Location.X + radBandGEN11.Width, 0);
-                            radBandGEN13.Location = new Point(radBandGEN12.Location.X + radBandGEN12.Width, 0);
-                            btnBandHF1.Location = new Point(radBandGEN13.Location.X + radBandGEN13.Width, 0);
-                            top = panelBandGEN.Location.Y + panelBandGEN.Height;
-                        }
+                    panelBandGEN.Size = new Size(radBandGEN0.Width * 15, radBandGEN0.Height);
+                    radBandGEN0.Location = new Point(0, 0);
+                    radBandGEN1.Location = new Point(radBandGEN0.Location.X + radBandGEN0.Width, 0);
+                    radBandGEN2.Location = new Point(radBandGEN1.Location.X + radBandGEN1.Width, 0);
+                    radBandGEN3.Location = new Point(radBandGEN2.Location.X + radBandGEN2.Width, 0);
+                    radBandGEN4.Location = new Point(radBandGEN3.Location.X + radBandGEN3.Width, 0);
+                    radBandGEN5.Location = new Point(radBandGEN4.Location.X + radBandGEN4.Width, 0);
+                    radBandGEN6.Location = new Point(radBandGEN5.Location.X + radBandGEN5.Width, 0);
+                    radBandGEN7.Location = new Point(radBandGEN6.Location.X + radBandGEN6.Width, 0);
+                    radBandGEN8.Location = new Point(radBandGEN7.Location.X + radBandGEN7.Width, 0);
+                    radBandGEN9.Location = new Point(radBandGEN8.Location.X + radBandGEN8.Width, 0);
+                    radBandGEN10.Location = new Point(radBandGEN9.Location.X + radBandGEN9.Width, 0);
+                    radBandGEN11.Location = new Point(radBandGEN10.Location.X + radBandGEN10.Width, 0);
+                    radBandGEN12.Location = new Point(radBandGEN11.Location.X + radBandGEN11.Width, 0);
+                    radBandGEN13.Location = new Point(radBandGEN12.Location.X + radBandGEN12.Width, 0);
+                    btnBandHF1.Location = new Point(radBandGEN13.Location.X + radBandGEN13.Width, 0);
+                    top = panelBandGEN.Location.Y + panelBandGEN.Height;
+                }
 
-                    }
+            }
 
-                    if (this.showModeControls)
-                    {
+            if (this.m_bShowModeControls)
+            {
                         panelMode.Location = new Point(this.ClientSize.Width / 2 - radModeLSB.Width * 6 + 100, top);
-                        panelMode.Size = new Size(radModeLSB.Width * 12, radModeLSB.Height);
+                panelMode.Size = new Size(radModeLSB.Width * 12, radModeLSB.Height);
                         panelRX2Mode.Location = new Point(this.ClientSize.Width / 2 - radModeLSB.Width * 6 + 100, top);
                         panelRX2Mode.Size = new Size(radModeLSB.Width * 12, radModeLSB.Height);
 
-                        radModeLSB.Location = new Point(0, 0);
-                        radModeUSB.Location = new Point(radModeLSB.Location.X + radModeLSB.Width, 0);
-                        radModeDSB.Location = new Point(radModeUSB.Location.X + radModeUSB.Width, 0);
-                        radModeCWL.Location = new Point(radModeDSB.Location.X + radModeDSB.Width, 0);
-                        radModeCWU.Location = new Point(radModeCWL.Location.X + radModeCWL.Width, 0);
-                        radModeFMN.Location = new Point(radModeCWU.Location.X + radModeCWU.Width, 0);
-                        radModeAM.Location = new Point(radModeFMN.Location.X + radModeFMN.Width, 0);
-                        radModeSAM.Location = new Point(radModeAM.Location.X + radModeAM.Width, 0);
-                        radModeSPEC.Location = new Point(radModeSAM.Location.X + radModeSAM.Width, 0);
-                        radModeDIGL.Location = new Point(radModeSPEC.Location.X + radModeSPEC.Width, 0);
-                        radModeDIGU.Location = new Point(radModeDIGL.Location.X + radModeDIGL.Width, 0);
-                        radModeDRM.Location = new Point(radModeDIGU.Location.X + radModeDIGU.Width, 0);
+                radModeLSB.Location = new Point(0, 0);
+                radModeUSB.Location = new Point(radModeLSB.Location.X + radModeLSB.Width, 0);
+                radModeDSB.Location = new Point(radModeUSB.Location.X + radModeUSB.Width, 0);
+                radModeCWL.Location = new Point(radModeDSB.Location.X + radModeDSB.Width, 0);
+                radModeCWU.Location = new Point(radModeCWL.Location.X + radModeCWL.Width, 0);
+                radModeFMN.Location = new Point(radModeCWU.Location.X + radModeCWU.Width, 0);
+                radModeAM.Location = new Point(radModeFMN.Location.X + radModeFMN.Width, 0);
+                radModeSAM.Location = new Point(radModeAM.Location.X + radModeAM.Width, 0);
+                radModeSPEC.Location = new Point(radModeSAM.Location.X + radModeSAM.Width, 0);
+                radModeDIGL.Location = new Point(radModeSPEC.Location.X + radModeSPEC.Width, 0);
+                radModeDIGU.Location = new Point(radModeDIGL.Location.X + radModeDIGL.Width, 0);
+                radModeDRM.Location = new Point(radModeDIGU.Location.X + radModeDIGU.Width, 0);
                         radRX2ModeLSB.Location = new Point(0, 0);
                         radRX2ModeUSB.Location = new Point(radRX2ModeLSB.Location.X + radRX2ModeLSB.Width, 0);
                         radRX2ModeDSB.Location = new Point(radRX2ModeUSB.Location.X + radRX2ModeUSB.Width, 0);
@@ -54294,26 +55230,26 @@ namespace Thetis
                         radRX2ModeDIGU.Location = new Point(radRX2ModeDIGL.Location.X + radRX2ModeDIGL.Width, 0);
                         radRX2ModeDRM.Location = new Point(radRX2ModeDIGU.Location.X + radRX2ModeDIGU.Width, 0);
 
-                        top = panelMode.Location.Y + panelMode.Height;
-                    }
-
-                }
-
-                if ((!this.showTopControls) && (!this.showAndromedaTopControls))
-                {
-                    grpVFOA.Location = new Point(grpVFOA.Location.X, -200);
-                    grpVFOB.Location = new Point(grpVFOB.Location.X, -200);
-                    radRX1Show.Location = new Point(radRX1Show.Location.X, -200);
-                    radRX2Show.Location = new Point(radRX2Show.Location.X, -200);
-                }
+                top = panelMode.Location.Y + panelMode.Height;
             }
 
+                }
+
+                if ((!this.m_bShowTopControls) && (!this.showAndromedaTopControls))
+            {
+                grpVFOA.Location = new Point(grpVFOA.Location.X, -200);
+                grpVFOB.Location = new Point(grpVFOB.Location.X, -200);
+                radRX1Show.Location = new Point(radRX1Show.Location.X, -200);
+                radRX2Show.Location = new Point(radRX2Show.Location.X, -200);
+            }
+        }
 
 
-            // W1CEG:  End
-            #endregion Collapsible Display
 
-            private void mnuFilter_Click(object sender, EventArgs e)
+        // W1CEG:  End
+        #endregion Collapsible Display
+
+        private void mnuFilter_Click(object sender, EventArgs e)
         {
             if (sender == null) return;
             if (sender.GetType() != typeof(ToolStripMenuItem)) return;
@@ -56459,7 +57395,7 @@ namespace Thetis
         }
 
 
-        #region Andromeda Button Bar functions
+       #region Andromeda Button Bar functions
 
         //
         // andromeda button bar button event handlers
@@ -57185,11 +58121,11 @@ namespace Thetis
                         if (modeDependentSettingsForm == null) modeDependentSettingsForm = new ModeDependentSettingsForm(this);
                         modeDependentSettingsForm.Show();
 
-                        panelModeSpecificCW.Show();
-                        panelModeSpecificPhone.Show();
-                        panelModeSpecificDigital.Show();
-                        panelModeSpecificFM.Show();
-                        
+                            panelModeSpecificCW.Show();
+                            panelModeSpecificPhone.Show();
+                            panelModeSpecificDigital.Show();
+                            panelModeSpecificFM.Show();
+
                         panelModeSpecificCW.Location = new Point(0, 0);
                         panelModeSpecificPhone.Location = new Point(0, 0);
                         panelModeSpecificDigital.Location = new Point(0, 0);
@@ -57612,65 +58548,65 @@ namespace Thetis
 
             if (this.showAndromedaButtonBar)
             {
-                buttonNumber = currentButtonBarMenu * 8;            // point to 1st button
-                                                                    // for each button: get its text; give it an opportunity to edit; and set highlight
+            buttonNumber = currentButtonBarMenu * 8;            // point to 1st button
+            // for each button: get its text; give it an opportunity to edit; and set highlight
 
-                Action = ButtonBarMenu[buttonNumber].Action;
-                if (ButtonBarMenu[buttonNumber].RXOverride == 0) UseRX1 = show_rx1; else if (ButtonBarMenu[buttonNumber].RXOverride == 1) UseRX1 = true; else UseRX1 = false;
-                Text = ButtonBarMenu[buttonNumber++].ButtonText;
-                btnAndrBar1.Text = UpdateButtonBarLabel(Action, Text, UseRX1);
-                if (CheckButtonHighlight(Action, UseRX1)) Colour = SystemColors.GradientActiveCaption; else Colour = SystemColors.ButtonFace;
-                btnAndrBar1.BackColor = Colour;
+            Action = ButtonBarMenu[buttonNumber].Action;
+            if (ButtonBarMenu[buttonNumber].RXOverride == 0) UseRX1 = show_rx1; else if (ButtonBarMenu[buttonNumber].RXOverride == 1) UseRX1 = true; else UseRX1 = false;
+            Text = ButtonBarMenu[buttonNumber++].ButtonText;
+            btnAndrBar1.Text = UpdateButtonBarLabel(Action, Text, UseRX1);
+            if (CheckButtonHighlight(Action, UseRX1)) Colour = SystemColors.GradientActiveCaption; else Colour = SystemColors.ButtonFace;
+            btnAndrBar1.BackColor = Colour;
 
-                Action = ButtonBarMenu[buttonNumber].Action;
-                if (ButtonBarMenu[buttonNumber].RXOverride == 0) UseRX1 = show_rx1; else if (ButtonBarMenu[buttonNumber].RXOverride == 1) UseRX1 = true; else UseRX1 = false;
-                Text = ButtonBarMenu[buttonNumber++].ButtonText;
-                btnAndrBar2.Text = UpdateButtonBarLabel(Action, Text, UseRX1);
-                if (CheckButtonHighlight(Action, UseRX1)) Colour = SystemColors.GradientActiveCaption; else Colour = SystemColors.ButtonFace;
-                btnAndrBar2.BackColor = Colour;
+            Action = ButtonBarMenu[buttonNumber].Action;
+            if (ButtonBarMenu[buttonNumber].RXOverride == 0) UseRX1 = show_rx1; else if (ButtonBarMenu[buttonNumber].RXOverride == 1) UseRX1 = true; else UseRX1 = false;
+            Text = ButtonBarMenu[buttonNumber++].ButtonText;
+            btnAndrBar2.Text = UpdateButtonBarLabel(Action, Text, UseRX1);
+            if (CheckButtonHighlight(Action, UseRX1)) Colour = SystemColors.GradientActiveCaption; else Colour = SystemColors.ButtonFace;
+            btnAndrBar2.BackColor = Colour;
 
-                Action = ButtonBarMenu[buttonNumber].Action;
-                if (ButtonBarMenu[buttonNumber].RXOverride == 0) UseRX1 = show_rx1; else if (ButtonBarMenu[buttonNumber].RXOverride == 1) UseRX1 = true; else UseRX1 = false;
-                Text = ButtonBarMenu[buttonNumber++].ButtonText;
-                btnAndrBar3.Text = UpdateButtonBarLabel(Action, Text, UseRX1);
-                if (CheckButtonHighlight(Action, UseRX1)) Colour = SystemColors.GradientActiveCaption; else Colour = SystemColors.ButtonFace;
-                btnAndrBar3.BackColor = Colour;
+            Action = ButtonBarMenu[buttonNumber].Action;
+            if (ButtonBarMenu[buttonNumber].RXOverride == 0) UseRX1 = show_rx1; else if (ButtonBarMenu[buttonNumber].RXOverride == 1) UseRX1 = true; else UseRX1 = false;
+            Text = ButtonBarMenu[buttonNumber++].ButtonText;
+            btnAndrBar3.Text = UpdateButtonBarLabel(Action, Text, UseRX1);
+            if (CheckButtonHighlight(Action, UseRX1)) Colour = SystemColors.GradientActiveCaption; else Colour = SystemColors.ButtonFace;
+            btnAndrBar3.BackColor = Colour;
 
-                Action = ButtonBarMenu[buttonNumber].Action;
-                if (ButtonBarMenu[buttonNumber].RXOverride == 0) UseRX1 = show_rx1; else if (ButtonBarMenu[buttonNumber].RXOverride == 1) UseRX1 = true; else UseRX1 = false;
-                Text = ButtonBarMenu[buttonNumber++].ButtonText;
-                btnAndrBar4.Text = UpdateButtonBarLabel(Action, Text, UseRX1);
-                if (CheckButtonHighlight(Action, UseRX1)) Colour = SystemColors.GradientActiveCaption; else Colour = SystemColors.ButtonFace;
-                btnAndrBar4.BackColor = Colour;
+            Action = ButtonBarMenu[buttonNumber].Action;
+            if (ButtonBarMenu[buttonNumber].RXOverride == 0) UseRX1 = show_rx1; else if (ButtonBarMenu[buttonNumber].RXOverride == 1) UseRX1 = true; else UseRX1 = false;
+            Text = ButtonBarMenu[buttonNumber++].ButtonText;
+            btnAndrBar4.Text = UpdateButtonBarLabel(Action, Text, UseRX1);
+            if (CheckButtonHighlight(Action, UseRX1)) Colour = SystemColors.GradientActiveCaption; else Colour = SystemColors.ButtonFace;
+            btnAndrBar4.BackColor = Colour;
 
-                Action = ButtonBarMenu[buttonNumber].Action;
-                if (ButtonBarMenu[buttonNumber].RXOverride == 0) UseRX1 = show_rx1; else if (ButtonBarMenu[buttonNumber].RXOverride == 1) UseRX1 = true; else UseRX1 = false;
-                Text = ButtonBarMenu[buttonNumber++].ButtonText;
-                btnAndrBar5.Text = UpdateButtonBarLabel(Action, Text, UseRX1);
-                if (CheckButtonHighlight(Action, UseRX1)) Colour = SystemColors.GradientActiveCaption; else Colour = SystemColors.ButtonFace;
-                btnAndrBar5.BackColor = Colour;
+            Action = ButtonBarMenu[buttonNumber].Action;
+            if (ButtonBarMenu[buttonNumber].RXOverride == 0) UseRX1 = show_rx1; else if (ButtonBarMenu[buttonNumber].RXOverride == 1) UseRX1 = true; else UseRX1 = false;
+            Text = ButtonBarMenu[buttonNumber++].ButtonText;
+            btnAndrBar5.Text = UpdateButtonBarLabel(Action, Text, UseRX1);
+            if (CheckButtonHighlight(Action, UseRX1)) Colour = SystemColors.GradientActiveCaption; else Colour = SystemColors.ButtonFace;
+            btnAndrBar5.BackColor = Colour;
 
-                Action = ButtonBarMenu[buttonNumber].Action;
-                if (ButtonBarMenu[buttonNumber].RXOverride == 0) UseRX1 = show_rx1; else if (ButtonBarMenu[buttonNumber].RXOverride == 1) UseRX1 = true; else UseRX1 = false;
-                Text = ButtonBarMenu[buttonNumber++].ButtonText;
-                btnAndrBar6.Text = UpdateButtonBarLabel(Action, Text, UseRX1);
-                if (CheckButtonHighlight(Action, UseRX1)) Colour = SystemColors.GradientActiveCaption; else Colour = SystemColors.ButtonFace;
-                btnAndrBar6.BackColor = Colour;
+            Action = ButtonBarMenu[buttonNumber].Action;
+            if (ButtonBarMenu[buttonNumber].RXOverride == 0) UseRX1 = show_rx1; else if (ButtonBarMenu[buttonNumber].RXOverride == 1) UseRX1 = true; else UseRX1 = false;
+            Text = ButtonBarMenu[buttonNumber++].ButtonText;
+            btnAndrBar6.Text = UpdateButtonBarLabel(Action, Text, UseRX1);
+            if (CheckButtonHighlight(Action, UseRX1)) Colour = SystemColors.GradientActiveCaption; else Colour = SystemColors.ButtonFace;
+            btnAndrBar6.BackColor = Colour;
 
-                Action = ButtonBarMenu[buttonNumber].Action;
-                if (ButtonBarMenu[buttonNumber].RXOverride == 0) UseRX1 = show_rx1; else if (ButtonBarMenu[buttonNumber].RXOverride == 1) UseRX1 = true; else UseRX1 = false;
-                Text = ButtonBarMenu[buttonNumber++].ButtonText;
-                btnAndrBar7.Text = UpdateButtonBarLabel(Action, Text, UseRX1);
-                if (CheckButtonHighlight(Action, UseRX1)) Colour = SystemColors.GradientActiveCaption; else Colour = SystemColors.ButtonFace;
-                btnAndrBar7.BackColor = Colour;
+            Action = ButtonBarMenu[buttonNumber].Action;
+            if (ButtonBarMenu[buttonNumber].RXOverride == 0) UseRX1 = show_rx1; else if (ButtonBarMenu[buttonNumber].RXOverride == 1) UseRX1 = true; else UseRX1 = false;
+            Text = ButtonBarMenu[buttonNumber++].ButtonText;
+            btnAndrBar7.Text = UpdateButtonBarLabel(Action, Text, UseRX1);
+            if (CheckButtonHighlight(Action, UseRX1)) Colour = SystemColors.GradientActiveCaption; else Colour = SystemColors.ButtonFace;
+            btnAndrBar7.BackColor = Colour;
 
-                Action = ButtonBarMenu[buttonNumber].Action;
-                if (ButtonBarMenu[buttonNumber].RXOverride == 0) UseRX1 = show_rx1; else if (ButtonBarMenu[buttonNumber].RXOverride == 1) UseRX1 = true; else UseRX1 = false;
-                Text = ButtonBarMenu[buttonNumber++].ButtonText;
-                btnAndrBar8.Text = UpdateButtonBarLabel(Action, Text, UseRX1);
-                if (CheckButtonHighlight(Action, UseRX1)) Colour = SystemColors.GradientActiveCaption; else Colour = SystemColors.ButtonFace;
-                btnAndrBar8.BackColor = Colour;
-            }
+            Action = ButtonBarMenu[buttonNumber].Action;
+            if (ButtonBarMenu[buttonNumber].RXOverride == 0) UseRX1 = show_rx1; else if (ButtonBarMenu[buttonNumber].RXOverride == 1) UseRX1 = true; else UseRX1 = false;
+            Text = ButtonBarMenu[buttonNumber++].ButtonText;
+            btnAndrBar8.Text = UpdateButtonBarLabel(Action, Text, UseRX1);
+            if (CheckButtonHighlight(Action, UseRX1)) Colour = SystemColors.GradientActiveCaption; else Colour = SystemColors.ButtonFace;
+            btnAndrBar8.BackColor = Colour;
+        }
         }
 
 
@@ -57678,10 +58614,211 @@ namespace Thetis
         {
             UpdateButtonBarButtons();
         }
+    
+        #endregion
 
+
+        //MW0LGE
+        private void ptbPanMainRX_DoubleClick(object sender, EventArgs e)
+        {
+            ptbPanMainRX.Value = 50;
+            radio.GetDSPRX(0, 0).Pan = 0.5f;
+            if (sender.GetType() == typeof(PrettyTrackBar))
+            {
+                ptbPanMainRX.Focus();
+            }
+        }
+
+        private void ptbPanSubRX_DoubleClick(object sender, EventArgs e)
+        {
+            ptbPanSubRX.Value = 50;
+            radio.GetDSPRX(0, 1).Pan = 0.5f;
+            if (sender.GetType() == typeof(PrettyTrackBar))
+            {
+                ptbPanSubRX.Focus();
+            }
+        }
+
+        private void ptbRX2Pan_DoubleClick(object sender, EventArgs e)
+        {
+            ptbRX2Pan.Value = 50;
+            radio.GetDSPRX(1, 0).Pan = 0.5f;
+            if (sender.GetType() == typeof(PrettyTrackBar))
+            {
+                ptbRX2Pan.Focus();
+            }
+        }
+
+        private Image m_objBackgroundImage = null;
+        private bool m_bDisableBackgroundImage = false;
+        public bool DisableBackgroundImage
+        {
+            get { return m_bDisableBackgroundImage; }
+            set
+            {
+                m_bDisableBackgroundImage = value;
+                if (m_bDisableBackgroundImage)
+                {
+                    if (picDisplay.BackgroundImage != null)
+                    {
+                        m_objBackgroundImage = picDisplay.BackgroundImage;
+                        picDisplay.BackgroundImageLayout = ImageLayout.None;
+                        picDisplay.BackgroundImage = null;
+                    }
+                }
+                else
+                {
+                    if (m_objBackgroundImage != null)
+                    {
+                        picDisplay.BackgroundImageLayout = ImageLayout.Stretch;
+                        picDisplay.BackgroundImage = m_objBackgroundImage;
+                        m_objBackgroundImage = null;
+                    }
+                }
+            }
+        }
+
+        #region RawInput
+        // MW0LGE
+        // RAWINPUT - WIP
+        private void initialiseRawInput()
+        {
+            if (m_objRawinput != null)
+            {
+                m_objRawinput.MouseMoved -= OnMouseWheelChanged;
+                m_objRawinput.DevicesChanged -= OnDevicesChanged;
+
+                m_objRawinput.RemoveMessageFilter();
+
+                m_objRawinput = null;
+            }
+
+            m_objRawinput = new RawInput(this.Handle, !m_bGlobalListenForMouseWheel);
+
+            m_objRawinput.AddMessageFilter();
+
+            updateRawInputDevices();
+
+            m_objRawinput.MouseMoved += OnMouseWheelChanged;
+            m_objRawinput.DevicesChanged += OnDevicesChanged;
+        }
+
+        private void updateRawInputDevices()
+        {
+            if (SetupForm == null || m_objRawinput == null) return;
+
+            SetupForm.UpdateRawInputMouseDevices(m_objRawinput.MouseDevices());
+        }
+
+        private bool m_bWheelTunesOutsideSpectral = true;
+        public bool WheelTunesOutsideSpectral
+        {
+            get { return m_bWheelTunesOutsideSpectral; }
+            set
+            {
+                m_bWheelTunesOutsideSpectral = value;
+            }
+        }
+
+        private bool m_bGlobalListenForMouseWheel;
+        public bool GlobalListenForMouseWheel
+        {
+            get
+            {
+                return m_bGlobalListenForMouseWheel;
+            }
+            set
+            {
+                m_bGlobalListenForMouseWheel = value;
+
+                initialiseRawInput();
+            }
+        }
+
+        private bool m_bWheelOnlyAdjustsVFO;
+        public bool WheelOnlyAdjustsVFO
+        {
+            get
+            {
+                return m_bWheelOnlyAdjustsVFO;
+            }
+            set
+            {
+                m_bWheelOnlyAdjustsVFO = value;
+            }
+        }
+
+        private bool m_bAlsoUseSpecificMouseWheel;
+        public bool AlsoUseSpecificMouseWheel
+        {
+            get
+            {
+                return m_bAlsoUseSpecificMouseWheel;
+            }
+            set
+            {
+                m_bAlsoUseSpecificMouseWheel = value;
+            }
+        }
+
+        private String m_sSpecificMouseDeviceID;
+        public String SpecificMouseDeviceID
+        {
+            get
+            {
+                return m_sSpecificMouseDeviceID;
+            }
+            set
+            {
+                m_sSpecificMouseDeviceID = value;
+            }
+        }
+        private IntPtr m_nSpecificMouseDeviceHandle;
+        public IntPtr SpecificMouseDeviceHandle
+        {
+            get
+            {
+                return m_nSpecificMouseDeviceHandle;
+            }
+            set
+            {
+                m_nSpecificMouseDeviceHandle = value;
+            }
+        }
+
+        private void OnDevicesChanged(object sender)
+        {
+            updateRawInputDevices();
+        }
+
+        private void OnMouseWheelChanged(object sender, RawInputEventArg e)
+        {
+            if (!m_bAlsoUseSpecificMouseWheel) return; // ignore because we are not also using a specific mouse wheel
+
+            //if(e.MouseEvent.DeviceHandle == m_nSpecificMouseDeviceHandle)  // handle can change dont use
+            if (e.MouseEvent.DeviceName == m_sSpecificMouseDeviceID)
+            {
+                // this is a bit of a cludge, but next mouse wheel event is ignored
+                // this will 'arrive' as the next wm_mousewheel and will be the same
+                // one associateed with this rawinput event
+                m_objRawinput.IgnoreNextWheelEvent = m_bWheelOnlyAdjustsVFO;
+
+                if (SetupForm != null)
+                {
+                    if (SetupForm.Visible)
+                    {
+                        SetupForm.WheelChangeNotify();
+                    }
+                }
+
+                bool bTemp = m_bWheelTunesOutsideSpectral;
+                m_bWheelTunesOutsideSpectral = true; // allow outside spectral display for this secondary tuning device
+                Console_MouseWheel(this, new MouseEventArgs(MouseButtons.None, 0, 0, 0, e.MouseEvent.buttonData));
+                m_bWheelTunesOutsideSpectral = bTemp;
+            }
+        }
+        #endregion
     }
-    #endregion
-
 
     public class DigiMode
     {
@@ -57702,3 +58839,4 @@ namespace Thetis
         public bool PhaseRotEnabled { get; set; }
     }
 }
+

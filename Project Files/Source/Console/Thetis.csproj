@@ -712,6 +712,10 @@
       <Project>{66ade184-31ba-4f5b-8007-f39ef1b90f95}</Project>
       <Name>Midi2Cat</Name>
     </ProjectReference>
+    <ProjectReference Include="..\RawInput\RawInput.csproj">
+      <Project>{4143d085-38cf-4640-bb05-2fdffaf94d76}</Project>
+      <Name>RawInput</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
