@@ -53847,7 +53847,10 @@ namespace Thetis
 
             grpVFOA.Location = new Point(gr_VFOA_basis_location.X + (h_delta / 4), gr_VFOA_basis_location.Y);
             grpVFOB.Location = new Point(gr_VFOB_basis_location.X + h_delta - (h_delta / 4), gr_VFOB_basis_location.Y);
-            grpVFOBetween.Location = gr_vfobetween_basis_location;
+
+            //grpVFOBetween.Location = gr_vfobetween_basis_location;
+            //grpVFOBetween.Location = new Point(gr_vfobetween_basis_location.X + (h_delta / 2), gr_vfobetween_basis_location.Y);
+
             //grpMultimeter.Size = gr_multi_meter_size_basis;  //MW0LGE
             picMultiMeterDigital.Parent = grpMultimeter;
             //picMultiMeterDigital.Size = pic_multi_meter_size_basis;  //MW0LGE

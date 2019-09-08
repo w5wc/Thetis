@@ -1408,10 +1408,14 @@ int IOThreadStop() {
 }
 
 DWORD WINAPI ReadThreadMain(LPVOID n) {
+	DWORD taskIndex = 0;
+	HANDLE hTask = AvSetMmThreadCharacteristics(TEXT("Pro Audio"), &taskIndex);
+	if (hTask != 0) AvSetMmThreadPriority(hTask, 2);
+
 	io_keep_running = 1;
 	IOThreadRunning = 1;
 
-	SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_TIME_CRITICAL);
+	//SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_TIME_CRITICAL);
 	ReleaseSemaphore(prn->hReadThreadInitSem, 1, NULL);
 
 	ReadThreadMainLoop();
