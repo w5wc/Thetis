@@ -59,7 +59,6 @@
         private System.Windows.Forms.Timer timer_cpu_meter;
         private System.Windows.Forms.LabelTS lblFilterHigh;
         private System.Windows.Forms.LabelTS lblFilterLow;
-        private System.Windows.Forms.LabelTS lblMultiSMeter;
         private System.Windows.Forms.PictureBox picMultiMeterDigital;
         private System.Windows.Forms.CheckBoxTS chkSquelch;
         private System.Windows.Forms.Timer timer_peak_text;
@@ -199,7 +198,6 @@
         private System.Windows.Forms.CheckBoxTS chkRX2NR;
         private System.Windows.Forms.PictureBox picRX2Meter;
         private System.Windows.Forms.TextBoxTS txtRX2Meter;
-        private System.Windows.Forms.LabelTS lblRX2Meter;
         public CheckBoxTS chkRX2Preamp;
         private System.Windows.Forms.LabelTS lblRX2RF;
         private System.Windows.Forms.PictureBox picSquelch;
@@ -915,11 +913,11 @@
             this.lblLockLabel = new System.Windows.Forms.LabelTS();
             this.lblAGCLabel = new System.Windows.Forms.LabelTS();
             this.lblAttenLabel = new System.Windows.Forms.LabelTS();
-            this.lblCtunLabel = new System.Windows.Forms.LabelTS();
             this.lblANFLabel = new System.Windows.Forms.LabelTS();
             this.lblSNBLabel = new System.Windows.Forms.LabelTS();
             this.lblNBLabel = new System.Windows.Forms.LabelTS();
             this.lblNRLabel = new System.Windows.Forms.LabelTS();
+            this.lblCtunLabel = new System.Windows.Forms.LabelTS();
             this.panelVFOBLabels = new System.Windows.Forms.PanelTS();
             this.lblRX2AttenLabel = new System.Windows.Forms.LabelTS();
             this.lblRX2LockLabel = new System.Windows.Forms.LabelTS();
@@ -1042,11 +1040,11 @@
             this.grpVFOB = new System.Windows.Forms.GroupBoxTS();
             this.lblRX2ModeBigLabel = new System.Windows.Forms.LabelTS();
             this.lblRX2APF = new System.Windows.Forms.LabelTS();
-            this.lblRX2MuteVFOB = new System.Windows.Forms.LabelTS();
             this.panelVFOBHover = new System.Windows.Forms.Panel();
             this.txtVFOBBand = new System.Windows.Forms.TextBoxTS();
             this.txtVFOBLSD = new System.Windows.Forms.TextBoxTS();
             this.lblRX2FilterLabel = new System.Windows.Forms.LabelTS();
+            this.lblRX2MuteVFOB = new System.Windows.Forms.LabelTS();
             this.lblRX2ModeLabel = new System.Windows.Forms.LabelTS();
             this.txtVFOBMSD = new System.Windows.Forms.TextBoxTS();
             this.lblVFOBLSD = new System.Windows.Forms.LabelTS();
@@ -1055,7 +1053,6 @@
             this.grpMultimeter = new System.Windows.Forms.GroupBoxTS();
             this.picMultiMeterDigital = new System.Windows.Forms.PictureBox();
             this.txtMultiText = new System.Windows.Forms.TextBoxTS();
-            this.lblMultiSMeter = new System.Windows.Forms.LabelTS();
             this.lblTuneStep = new System.Windows.Forms.LabelTS();
             this.grpVFOBetween = new System.Windows.Forms.GroupBoxTS();
             this.labelTS1 = new System.Windows.Forms.LabelTS();
@@ -1065,7 +1062,6 @@
             this.grpRX2Meter = new System.Windows.Forms.GroupBoxTS();
             this.picRX2Meter = new System.Windows.Forms.PictureBox();
             this.txtRX2Meter = new System.Windows.Forms.TextBoxTS();
-            this.lblRX2Meter = new System.Windows.Forms.LabelTS();
             this.panelBandVHF = new System.Windows.Forms.PanelTS();
             this.radBandVHF13 = new System.Windows.Forms.RadioButtonTS();
             this.radBandVHF12 = new System.Windows.Forms.RadioButtonTS();
@@ -5030,12 +5026,6 @@
             this.lblAttenLabel.ForeColor = System.Drawing.Color.DarkOrange;
             this.lblAttenLabel.Name = "lblAttenLabel";
             // 
-            // lblCtunLabel
-            // 
-            resources.ApplyResources(this.lblCtunLabel, "lblCtunLabel");
-            this.lblCtunLabel.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.lblCtunLabel.Name = "lblCtunLabel";
-            // 
             // lblANFLabel
             // 
             this.lblANFLabel.BackColor = System.Drawing.Color.Transparent;
@@ -5063,6 +5053,12 @@
             resources.ApplyResources(this.lblNRLabel, "lblNRLabel");
             this.lblNRLabel.ForeColor = System.Drawing.Color.DarkOrange;
             this.lblNRLabel.Name = "lblNRLabel";
+            // 
+            // lblCtunLabel
+            // 
+            resources.ApplyResources(this.lblCtunLabel, "lblCtunLabel");
+            this.lblCtunLabel.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.lblCtunLabel.Name = "lblCtunLabel";
             // 
             // panelVFOBLabels
             // 
@@ -6232,13 +6228,6 @@
             this.lblRX2APF.ForeColor = System.Drawing.Color.DarkOrange;
             this.lblRX2APF.Name = "lblRX2APF";
             // 
-            // lblRX2MuteVFOB
-            // 
-            this.lblRX2MuteVFOB.BackColor = System.Drawing.Color.Black;
-            resources.ApplyResources(this.lblRX2MuteVFOB, "lblRX2MuteVFOB");
-            this.lblRX2MuteVFOB.ForeColor = System.Drawing.Color.DarkOrange;
-            this.lblRX2MuteVFOB.Name = "lblRX2MuteVFOB";
-            // 
             // panelVFOBHover
             // 
             this.panelVFOBHover.BackColor = System.Drawing.Color.Black;
@@ -6273,6 +6262,13 @@
             this.lblRX2FilterLabel.BackColor = System.Drawing.Color.Black;
             this.lblRX2FilterLabel.ForeColor = System.Drawing.Color.DarkOrange;
             this.lblRX2FilterLabel.Name = "lblRX2FilterLabel";
+            // 
+            // lblRX2MuteVFOB
+            // 
+            this.lblRX2MuteVFOB.BackColor = System.Drawing.Color.Black;
+            resources.ApplyResources(this.lblRX2MuteVFOB, "lblRX2MuteVFOB");
+            this.lblRX2MuteVFOB.ForeColor = System.Drawing.Color.DarkOrange;
+            this.lblRX2MuteVFOB.Name = "lblRX2MuteVFOB";
             // 
             // lblRX2ModeLabel
             // 
@@ -6324,7 +6320,6 @@
             this.grpMultimeter.BackColor = System.Drawing.Color.Transparent;
             this.grpMultimeter.Controls.Add(this.picMultiMeterDigital);
             this.grpMultimeter.Controls.Add(this.txtMultiText);
-            this.grpMultimeter.Controls.Add(this.lblMultiSMeter);
             this.grpMultimeter.ForeColor = System.Drawing.Color.White;
             resources.ApplyResources(this.grpMultimeter, "grpMultimeter");
             this.grpMultimeter.Name = "grpMultimeter";
@@ -6348,13 +6343,6 @@
             this.txtMultiText.Name = "txtMultiText";
             this.txtMultiText.ReadOnly = true;
             this.txtMultiText.GotFocus += new System.EventHandler(this.HideFocus);
-            // 
-            // lblMultiSMeter
-            // 
-            this.lblMultiSMeter.BackColor = System.Drawing.Color.Transparent;
-            this.lblMultiSMeter.ForeColor = System.Drawing.Color.White;
-            resources.ApplyResources(this.lblMultiSMeter, "lblMultiSMeter");
-            this.lblMultiSMeter.Name = "lblMultiSMeter";
             // 
             // lblTuneStep
             // 
@@ -6418,7 +6406,6 @@
             this.grpRX2Meter.Controls.Add(this.picRX2Meter);
             this.grpRX2Meter.Controls.Add(this.comboRX2MeterMode);
             this.grpRX2Meter.Controls.Add(this.txtRX2Meter);
-            this.grpRX2Meter.Controls.Add(this.lblRX2Meter);
             this.grpRX2Meter.ForeColor = System.Drawing.Color.White;
             resources.ApplyResources(this.grpRX2Meter, "grpRX2Meter");
             this.grpRX2Meter.Name = "grpRX2Meter";
@@ -6441,13 +6428,6 @@
             this.txtRX2Meter.ForeColor = System.Drawing.Color.Yellow;
             this.txtRX2Meter.Name = "txtRX2Meter";
             this.txtRX2Meter.ReadOnly = true;
-            // 
-            // lblRX2Meter
-            // 
-            this.lblRX2Meter.BackColor = System.Drawing.Color.Transparent;
-            this.lblRX2Meter.ForeColor = System.Drawing.Color.White;
-            resources.ApplyResources(this.lblRX2Meter, "lblRX2Meter");
-            this.lblRX2Meter.Name = "lblRX2Meter";
             // 
             // panelBandVHF
             // 

@@ -15383,36 +15383,6 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
   <data name="&gt;&gt;txtMultiText.ZOrder" xml:space="preserve">
     <value>1</value>
   </data>
-  <data name="lblMultiSMeter.Image" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="lblMultiSMeter.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>Off</value>
-  </data>
-  <data name="lblMultiSMeter.Location" type="System.Drawing.Point, System.Drawing">
-    <value>8, 104</value>
-  </data>
-  <data name="lblMultiSMeter.Size" type="System.Drawing.Size, System.Drawing">
-    <value>150, 14</value>
-  </data>
-  <data name="lblMultiSMeter.TabIndex" type="System.Int32, mscorlib">
-    <value>4</value>
-  </data>
-  <data name="lblMultiSMeter.Text" xml:space="preserve">
-    <value>  1   3   5   7   9  +20 +40 +60</value>
-  </data>
-  <data name="&gt;&gt;lblMultiSMeter.Name" xml:space="preserve">
-    <value>lblMultiSMeter</value>
-  </data>
-  <data name="&gt;&gt;lblMultiSMeter.Type" xml:space="preserve">
-    <value>System.Windows.Forms.LabelTS, Thetis, Version=2.6.8.0, Culture=neutral, PublicKeyToken=null</value>
-  </data>
-  <data name="&gt;&gt;lblMultiSMeter.Parent" xml:space="preserve">
-    <value>grpMultimeter</value>
-  </data>
-  <data name="&gt;&gt;lblMultiSMeter.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
   <data name="grpMultimeter.Location" type="System.Drawing.Point, System.Drawing">
     <value>841, 24</value>
   </data>
@@ -15658,36 +15628,6 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
   </data>
   <data name="&gt;&gt;txtRX2Meter.ZOrder" xml:space="preserve">
     <value>2</value>
-  </data>
-  <data name="lblRX2Meter.Image" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="lblRX2Meter.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>Off</value>
-  </data>
-  <data name="lblRX2Meter.Location" type="System.Drawing.Point, System.Drawing">
-    <value>8, 91</value>
-  </data>
-  <data name="lblRX2Meter.Size" type="System.Drawing.Size, System.Drawing">
-    <value>150, 14</value>
-  </data>
-  <data name="lblRX2Meter.TabIndex" type="System.Int32, mscorlib">
-    <value>4</value>
-  </data>
-  <data name="lblRX2Meter.Text" xml:space="preserve">
-    <value>  1   3   5   7   9  +20 +40 +60</value>
-  </data>
-  <data name="&gt;&gt;lblRX2Meter.Name" xml:space="preserve">
-    <value>lblRX2Meter</value>
-  </data>
-  <data name="&gt;&gt;lblRX2Meter.Type" xml:space="preserve">
-    <value>System.Windows.Forms.LabelTS, Thetis, Version=2.6.8.0, Culture=neutral, PublicKeyToken=null</value>
-  </data>
-  <data name="&gt;&gt;lblRX2Meter.Parent" xml:space="preserve">
-    <value>grpRX2Meter</value>
-  </data>
-  <data name="&gt;&gt;lblRX2Meter.ZOrder" xml:space="preserve">
-    <value>3</value>
   </data>
   <data name="grpRX2Meter.Location" type="System.Drawing.Point, System.Drawing">
     <value>848, 588</value>

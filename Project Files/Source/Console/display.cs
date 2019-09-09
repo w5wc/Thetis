@@ -130,7 +130,7 @@ namespace Thetis
         public static float[] current_waterfall_data_bottom;
         // public static float[] waterfall_display_data;
         // public static float[] average_waterfall_buffer;
-        // private static int waterfall_counter; //MW0LGE TAG3
+        // private static int waterfall_counter; //MW0LGE removed
         private static Bitmap waterfall_bmp = null;					// saved waterfall picture for display
         private static Bitmap waterfall_bmp2 = null;
         private static float[] waterfall_data;
@@ -180,25 +180,25 @@ namespace Thetis
         //Color notch_highlight_color = Color.Chartreuse;
         //Color notch_perm_on_color = Color.DarkRed;
         //Color notch_perm_highlight_color = Color.DeepPink;
-        private static Color notch_on_color = Color.Olive;
-        private static Color notch_on_color_zoomed = Color.FromArgb(190, 128, 128, 0);
-        private static Color notch_highlight_color = Color.YellowGreen;
-        private static Color notch_highlight_color_zoomed = Color.FromArgb(190, 154, 205, 50);
-        private static Color notch_perm_on_color = Color.DarkGreen;
-        private static Color notch_perm_highlight_color = Color.Chartreuse;
-        private static Color notch_off_color = Color.Gray;
+        //private static Color notch_on_color = Color.Olive;
+        //private static Color notch_on_color_zoomed = Color.FromArgb(190, 128, 128, 0);
+        //private static Color notch_highlight_color = Color.YellowGreen;
+        //private static Color notch_highlight_color_zoomed = Color.FromArgb(190, 154, 205, 50);
+        //private static Color notch_perm_on_color = Color.DarkGreen;
+        //private static Color notch_perm_highlight_color = Color.Chartreuse;
+        //private static Color notch_off_color = Color.Gray;
 
 
         private static Color channel_background_on = Color.FromArgb(150, Color.DodgerBlue);
         private static Color channel_background_off = Color.FromArgb(100, Color.RoyalBlue);
         private static Color channel_foreground = Color.Cyan;
 
-        private static double notch_zoom_start_freq;
-        public static double NotchZoomStartFreq
-        {
-            get { return notch_zoom_start_freq; }
-            set { notch_zoom_start_freq = value; }
-        }
+        //private static double notch_zoom_start_freq;
+        //public static double NotchZoomStartFreq
+        //{
+        //    get { return notch_zoom_start_freq; }
+        //    set { notch_zoom_start_freq = value; }
+        //}
 
         private static ColorSheme color_sheme = ColorSheme.enhanced;
         public static ColorSheme ColorSheme
@@ -1601,6 +1601,14 @@ namespace Thetis
                 m_bShowRXZeroLineOnWaterfall = value;
             }
         }
+        private static bool m_bShowTXFilterOnRXWaterfall = true;
+        public static bool ShowTXFilterOnRXWaterfall {
+            get { return m_bShowTXFilterOnRXWaterfall; }
+            set {
+                m_bShowTXFilterOnRXWaterfall = value;
+            }
+        }
+        
         //-
 
         private static bool draw_tx_filter = true;
@@ -6347,132 +6355,132 @@ namespace Thetis
             }*/
         }
 
-        // This draws a little callout on the notch to show it's frequency and bandwidth
-        // xlimit is the right side of the picDisplay
-        private static void drawNotchStatus(Graphics g, Notch n, int x, int y, int x_limit, int height)
-        {
-            // if we're not supposed to be drawing this, return to caller
-            if (!n.Details) return;
-            // in case notch is showing on RX1 & RX2, just show it for the one that was clicked
-            if ((y < height && n.RX == 2) || (y > height && n.RX == 1)) return;
-            // first we need to test if it is OK to draw the box to the right of the notch ... I don't
-            // know the panadapter limits in x, so I will use a constant.  This needs to be replaced
-            int x_distance_from_notch = 40;
-            int y_distance_from_bot = 20;
-            int box_width = 120;
-            int box_height = 55;
-            int x_start, y_start, x_pin, y_pin;
-            // determine if it will fit in the panadapter to the right of the notch
-            if (x + box_width + x_distance_from_notch > x_limit)
-            {
-                // draw to the left
-                x_pin = x - x_distance_from_notch;
-                y_pin = y - y_distance_from_bot;
-                x_start = x_pin - box_width;
-                y_start = y_pin - (box_height / 2);
-            }
-            else
-            {
-                // draw to the right
-                x_start = x + x_distance_from_notch;
-                x_pin = x_start;
-                y_pin = y - y_distance_from_bot;
-                y_start = y_pin - (box_height / 2);
-            }
+        //// This draws a little callout on the notch to show it's frequency and bandwidth
+        //// xlimit is the right side of the picDisplay
+        //private static void drawNotchStatus(Graphics g, Notch n, int x, int y, int x_limit, int height)
+        //{
+        //    // if we're not supposed to be drawing this, return to caller
+        //    if (!n.Details) return;
+        //    // in case notch is showing on RX1 & RX2, just show it for the one that was clicked
+        //    if ((y < height && n.RX == 2) || (y > height && n.RX == 1)) return;
+        //    // first we need to test if it is OK to draw the box to the right of the notch ... I don't
+        //    // know the panadapter limits in x, so I will use a constant.  This needs to be replaced
+        //    int x_distance_from_notch = 40;
+        //    int y_distance_from_bot = 20;
+        //    int box_width = 120;
+        //    int box_height = 55;
+        //    int x_start, y_start, x_pin, y_pin;
+        //    // determine if it will fit in the panadapter to the right of the notch
+        //    if (x + box_width + x_distance_from_notch > x_limit)
+        //    {
+        //        // draw to the left
+        //        x_pin = x - x_distance_from_notch;
+        //        y_pin = y - y_distance_from_bot;
+        //        x_start = x_pin - box_width;
+        //        y_start = y_pin - (box_height / 2);
+        //    }
+        //    else
+        //    {
+        //        // draw to the right
+        //        x_start = x + x_distance_from_notch;
+        //        x_pin = x_start;
+        //        y_pin = y - y_distance_from_bot;
+        //        y_start = y_pin - (box_height / 2);
+        //    }
 
-            // such pretty colors of green, hardcoded for your viewing pleasure
-            Color c = Color.DarkOliveGreen;
-            Pen p = new Pen(Color.DarkOliveGreen, 1);
-            Brush b = new SolidBrush(Color.Chartreuse);
-            // Draw a nice rectangle to write into
-            g.FillRectangle(new SolidBrush(c), x_start, y_start, box_width, box_height);
-            // draw a left and right line on the side of the rectancle
-            g.DrawLine(p, x, y, x_pin, y_pin);
-            // get the Hz part of the frequescy because we want to set it off from the actual number so it looks neato
-            int right_three = (int)(n.Freq * 1e6) - (int)(n.Freq * 1e3) * 1000;
-            double left_three = (((int)(n.Freq * 1e3)) / 1e3);
-            //string perm = n.Permanent ? "*" : "";
-            g.DrawString("RF Tracking Notch", // + perm,
-                new System.Drawing.Font("Trebuchet MS", 9, FontStyle.Underline),
-                b, new Point(x_start + 5, y_start + 5));
-            g.DrawString(left_three.ToString("f3") + " " + right_three.ToString("d3") + " MHz",
-                new System.Drawing.Font("Trebuchet MS", 9, FontStyle.Regular),
-                b, new Point(x_start + 5, y_start + 20));
-            g.DrawString(n.BW.ToString("d") + " Hz wide",
-                new System.Drawing.Font("Trebuchet MS", 9, FontStyle.Regular),
-                b, new Point(x_start + 5, y_start + 35));
-        }
+        //    // such pretty colors of green, hardcoded for your viewing pleasure
+        //    Color c = Color.DarkOliveGreen;
+        //    Pen p = new Pen(Color.DarkOliveGreen, 1);
+        //    Brush b = new SolidBrush(Color.Chartreuse);
+        //    // Draw a nice rectangle to write into
+        //    g.FillRectangle(new SolidBrush(c), x_start, y_start, box_width, box_height);
+        //    // draw a left and right line on the side of the rectancle
+        //    g.DrawLine(p, x, y, x_pin, y_pin);
+        //    // get the Hz part of the frequescy because we want to set it off from the actual number so it looks neato
+        //    int right_three = (int)(n.Freq * 1e6) - (int)(n.Freq * 1e3) * 1000;
+        //    double left_three = (((int)(n.Freq * 1e3)) / 1e3);
+        //    //string perm = n.Permanent ? "*" : "";
+        //    g.DrawString("RF Tracking Notch", // + perm,
+        //        new System.Drawing.Font("Trebuchet MS", 9, FontStyle.Underline),
+        //        b, new Point(x_start + 5, y_start + 5));
+        //    g.DrawString(left_three.ToString("f3") + " " + right_three.ToString("d3") + " MHz",
+        //        new System.Drawing.Font("Trebuchet MS", 9, FontStyle.Regular),
+        //        b, new Point(x_start + 5, y_start + 20));
+        //    g.DrawString(n.BW.ToString("d") + " Hz wide",
+        //        new System.Drawing.Font("Trebuchet MS", 9, FontStyle.Regular),
+        //        b, new Point(x_start + 5, y_start + 35));
+        //}
 
-        /// <summary>
-        /// draws the vertical bar to highlight where a notch is on the panadapter
-        /// </summary>
-        /// <param name="g">Graphics object reference</param>
-        /// <param name="left">left side of notch in pixel location</param>
-        /// <param name="right">right side of notch, pixel location</param>
-        /// <param name="top">top of bar</param>
-        /// <param name="H">height of bar</param>
-        /// <param name="on">color for notch on</param>
-        /// <param name="off">color for notch off</param>
-        /// <param name="highlight">highlight color to draw highlights on bar</param>
-        /// <param name="active">true if notches are turned on</param>
-        static void drawNotchBar(Graphics g, Notch n, int left, int right, int top, int height, Color c, Color h)
-        {
-            int width = right - left;
-            int hash_spacing_pixels = 1;
-            switch (n.Depth)
-            {
-                case 1:
-                    hash_spacing_pixels = 12;
-                    break;
-                case 2:
-                    hash_spacing_pixels = 8;
-                    break;
-                case 3:
-                    hash_spacing_pixels = 4;
-                    break;
-            }
+        ///// <summary>
+        ///// draws the vertical bar to highlight where a notch is on the panadapter
+        ///// </summary>
+        ///// <param name="g">Graphics object reference</param>
+        ///// <param name="left">left side of notch in pixel location</param>
+        ///// <param name="right">right side of notch, pixel location</param>
+        ///// <param name="top">top of bar</param>
+        ///// <param name="H">height of bar</param>
+        ///// <param name="on">color for notch on</param>
+        ///// <param name="off">color for notch off</param>
+        ///// <param name="highlight">highlight color to draw highlights on bar</param>
+        ///// <param name="active">true if notches are turned on</param>
+        //static void drawNotchBar(Graphics g, Notch n, int left, int right, int top, int height, Color c, Color h)
+        //{
+        //    int width = right - left;
+        //    int hash_spacing_pixels = 1;
+        //    switch (n.Depth)
+        //    {
+        //        case 1:
+        //            hash_spacing_pixels = 12;
+        //            break;
+        //        case 2:
+        //            hash_spacing_pixels = 8;
+        //            break;
+        //        case 3:
+        //            hash_spacing_pixels = 4;
+        //            break;
+        //    }
 
-            // get a purty pen to draw with 
-            Pen p = new Pen(h, 1);
+        //    // get a purty pen to draw with 
+        //    Pen p = new Pen(h, 1);
 
-            // shade in the notch
-            g.FillRectangle(new SolidBrush(c), left, top, width, height);
+        //    // shade in the notch
+        //    g.FillRectangle(new SolidBrush(c), left, top, width, height);
 
-            // draw a left and right line on the side of the rectangle if wide enough
-            if (width > 2 && tnf_active)
-            {
-                g.DrawLine(p, left, top, left, top + height - 1);
-                g.DrawLine(p, right, top, right, top + height - 1);
+        //    // draw a left and right line on the side of the rectangle if wide enough
+        //    if (width > 2 && tnf_active)
+        //    {
+        //        g.DrawLine(p, left, top, left, top + height - 1);
+        //        g.DrawLine(p, right, top, right, top + height - 1);
 
-                // first draw down left side of notch indicator horizontal lines -- a series of 45-degree hashes
-                for (int y = top + hash_spacing_pixels; y < top + height - 1 + width; y += hash_spacing_pixels)
-                {
-                    int start_y = y;
-                    int start_x = left;
-                    int end_x = right;
-                    int end_y = start_y - width;
+        //        // first draw down left side of notch indicator horizontal lines -- a series of 45-degree hashes
+        //        for (int y = top + hash_spacing_pixels; y < top + height - 1 + width; y += hash_spacing_pixels)
+        //        {
+        //            int start_y = y;
+        //            int start_x = left;
+        //            int end_x = right;
+        //            int end_y = start_y - width;
 
-                    int min_y = top;
-                    int max_y = top + height - 1;
+        //            int min_y = top;
+        //            int max_y = top + height - 1;
 
-                    // if we are about to over-draw past the top of the rectangle, we must restrain ourselves!
-                    if (end_y < min_y)
-                    {
-                        end_x -= (min_y - end_y);
-                        end_y = top;
-                    }
+        //            // if we are about to over-draw past the top of the rectangle, we must restrain ourselves!
+        //            if (end_y < min_y)
+        //            {
+        //                end_x -= (min_y - end_y);
+        //                end_y = top;
+        //            }
 
-                    // if we are about to over-draw past the bottom of the rectangle, we must restrain ourselves!
-                    if (start_y > max_y)
-                    {
-                        start_x += (start_y - max_y);
-                        start_y = max_y;
-                    }
+        //            // if we are about to over-draw past the bottom of the rectangle, we must restrain ourselves!
+        //            if (start_y > max_y)
+        //            {
+        //                start_x += (start_y - max_y);
+        //                start_y = max_y;
+        //            }
 
-                    g.DrawLine(p, start_x, start_y, end_x, end_y);
-                }
-            }
-        }
+        //            g.DrawLine(p, start_x, start_y, end_x, end_y);
+        //        }
+        //    }
+        //}
 
         /// <summary>
         /// draws the vertical bar to highlight where a channel is on the panadapter
@@ -6494,7 +6502,7 @@ namespace Thetis
             // get a purty pen to draw with 
             Pen p = new Pen(h, 1);
 
-            // shade in the notch
+            // shade in the channel
             g.FillRectangle(new SolidBrush(c), left, top, width, height);
 
             // draw a left and right line on the side of the rectancle if wide enough
@@ -7287,35 +7295,20 @@ namespace Thetis
 
         static float zoom_height = 1.5f;   // Should be > 1.  H = H/zoom_height
 
-        private static void drawFilterOverlay(ref Graphics g, SolidBrush brush, int filter_left_x, int filter_right_x, int W, int H, int rx, int top, bool bottom)
+        private static void drawFilterOverlay(ref Graphics g, SolidBrush brush, int filter_left_x, int filter_right_x, int W, int H, int rx, int top, bool bottom, int nVerticalShfit)
         {
             // make sure something visible
             if (filter_left_x == filter_right_x) filter_right_x = filter_left_x + 1;
 
             // draw rx filter
-            if (bottom)
-            {
-                //g.FillRectangle(brush, filter_left_x, H + top, filter_right_x - filter_left_x, H + H - top);
-                if (current_display_mode_bottom == DisplayMode.PANAFALL && rx == 2)
-                    g.FillRectangle(brush,   // draw filter overlay
-                        filter_left_x, 3 * H + top, filter_right_x - filter_left_x, H  - top);
-                else
-                    g.FillRectangle(brush,   // draw filter overlay
-                        filter_left_x, H + top, filter_right_x - filter_left_x, H - top);
-            }
-            else
-            {
-                if (current_display_mode_bottom == DisplayMode.PANAFALL && rx == 2)
-                    g.FillRectangle(brush,   // draw filter overlay
-                        filter_left_x, 2 * H + top, filter_right_x - filter_left_x, H - top);
-                else
-                    g.FillRectangle(brush,   // draw filter overlay
-                        filter_left_x, top, filter_right_x - filter_left_x, H - top);
-            }
+            int nWidth = filter_right_x - filter_left_x;
+
+            g.FillRectangle(brush, filter_left_x, nVerticalShfit + top, nWidth, H - top);
         }
 
         private static int getVerticalShift(int rx, bool bottom, int W, int H)
         {
+            // return how much we have to shift down by based on display mode, and height;
             int nVerticalShift = 0;
 
             if(rx==1)
@@ -7683,7 +7676,7 @@ namespace Thetis
                     int filter_left_x = (int)((float)(filter_low - Low + vfoa_sub_hz - vfoa_hz - rit_hz) / width * W);
                     int filter_right_x = (int)((float)(filter_high - Low + vfoa_sub_hz - vfoa_hz - rit_hz) / width * W);
 
-                    drawFilterOverlay(ref g, sub_rx_filter_brush, filter_left_x, filter_right_x, W, H, rx, top, bottom);
+                    drawFilterOverlay(ref g, sub_rx_filter_brush, filter_left_x, filter_right_x, W, H, rx, top, bottom, nVerticalShift);
                 }
 
                 if ((bIsWaterfall && m_bShowRXZeroLineOnWaterfall) || !bIsWaterfall)
@@ -7700,6 +7693,7 @@ namespace Thetis
                     }
                 }
             }
+
             if ((bIsWaterfall && m_bShowRXFilterOnWaterfall) || !bIsWaterfall)
             {
                 if (!local_mox)// && (rx1_dsp_mode == DSPMode.CWL || rx1_dsp_mode == DSPMode.CWU))
@@ -7708,7 +7702,7 @@ namespace Thetis
                     int filter_left_x = (int)((float)(filter_low - Low - f_diff) / width * W);
                     int filter_right_x = (int)((float)(filter_high - Low - f_diff) / width * W);
 
-                    drawFilterOverlay(ref g, display_filter_brush, filter_left_x, filter_right_x, W, H, rx, top, bottom);
+                    drawFilterOverlay(ref g, display_filter_brush, filter_left_x, filter_right_x, W, H, rx, top, bottom, nVerticalShift);
                 }
             }
             if ((bIsWaterfall && m_bShowTXFilterOnWaterfall) || !bIsWaterfall)
@@ -7721,11 +7715,12 @@ namespace Thetis
                     int filter_left_x = (int)((float)(filter_low - Low - f_diff + xit_hz) / width * W);
                     int filter_right_x = (int)((float)(filter_high - Low - f_diff + xit_hz) / width * W);
 
-                    drawFilterOverlay(ref g, tx_filter_brush, filter_left_x, filter_right_x, W, H, rx, top, bottom);
+                    drawFilterOverlay(ref g, tx_filter_brush, filter_left_x, filter_right_x, W, H, rx, top, bottom, nVerticalShift);
                 }
             }
 
-            if (!mox && draw_tx_filter &&
+            if( (!bIsWaterfall || (bIsWaterfall && m_bShowTXFilterOnRXWaterfall)) && //MW0LGE
+                !mox && draw_tx_filter &&
                 (rx1_dsp_mode != DSPMode.CWL && rx1_dsp_mode != DSPMode.CWU))
             {
                 // get tx filter limits
@@ -7879,7 +7874,7 @@ namespace Thetis
                         }
 
                         //MW0LGE
-                        drawChannelBar(g, c, chan_left_x, chan_right_x, nVerticalShift + top, nVerticalShift + H - top, c1, c2);
+                        drawChannelBar(g, c, chan_left_x, chan_right_x, nVerticalShift + top, H - top, c1, c2);
 
                         //if (bottom)
                         //    drawNotchStatus(g, n, (notch_left_x + notch_right_x) / 2, H + top + 75, W, H);
@@ -7889,201 +7884,201 @@ namespace Thetis
                 }
             }
 
-            // draw notches if in RX
-            if (!local_mox && !bIsWaterfall)
-            {
-                List<Notch> notches;
-                if (!bottom)
-                    notches = NotchList.NotchesInBW((double)vfoa_hz * 1e-6, Low, High);
-                else
-                    notches = NotchList.NotchesInBW((double)vfob_hz * 1e-6, Low, High);
+            //// draw notches if in RX
+            //if (!local_mox && !bIsWaterfall)
+            //{
+            //    List<Notch> notches;
+            //    if (!bottom)
+            //        notches = NotchList.NotchesInBW((double)vfoa_hz * 1e-6, Low, High);
+            //    else
+            //        notches = NotchList.NotchesInBW((double)vfob_hz * 1e-6, Low, High);
 
-                //draw notch bars in this for loop
-                foreach (Notch n in notches)
-                {
-                    long rf_freq = vfoa_hz;
-                    int rit = rit_hz;
+            //    //draw notch bars in this for loop
+            //    foreach (Notch n in notches)
+            //    {
+            //        long rf_freq = vfoa_hz;
+            //        int rit = rit_hz;
 
-                    if (bottom)
-                    {
-                        rf_freq = vfob_hz;
-                    }
+            //        if (bottom)
+            //        {
+            //            rf_freq = vfob_hz;
+            //        }
 
-                    if (bottom)
-                    {
-                        switch (rx2_dsp_mode)
-                        {
-                            case (DSPMode.CWL):
-                                rf_freq += cw_pitch;
-                                break;
-                            case (DSPMode.CWU):
-                                rf_freq -= cw_pitch;
-                                break;
-                        }
-                    }
-                    else
-                    {
-                        switch (rx1_dsp_mode)
-                        {
-                            case (DSPMode.CWL):
-                                rf_freq += cw_pitch;
-                                break;
-                            case (DSPMode.CWU):
-                                rf_freq -= cw_pitch;
-                                break;
-                        }
-                    }
+            //        if (bottom)
+            //        {
+            //            switch (rx2_dsp_mode)
+            //            {
+            //                case (DSPMode.CWL):
+            //                    rf_freq += cw_pitch;
+            //                    break;
+            //                case (DSPMode.CWU):
+            //                    rf_freq -= cw_pitch;
+            //                    break;
+            //            }
+            //        }
+            //        else
+            //        {
+            //            switch (rx1_dsp_mode)
+            //            {
+            //                case (DSPMode.CWL):
+            //                    rf_freq += cw_pitch;
+            //                    break;
+            //                case (DSPMode.CWU):
+            //                    rf_freq -= cw_pitch;
+            //                    break;
+            //            }
+            //        }
 
-                    int notch_left_x = (int)((float)(n.Freq * 1e6 - rf_freq - n.BW / 2 - Low - rit) / width * W);
-                    int notch_right_x = (int)((float)(n.Freq * 1e6 - rf_freq + n.BW / 2 - Low - rit) / width * W);
+            //        int notch_left_x = (int)((float)(n.Freq * 1e6 - rf_freq - n.BW / 2 - Low - rit) / width * W);
+            //        int notch_right_x = (int)((float)(n.Freq * 1e6 - rf_freq + n.BW / 2 - Low - rit) / width * W);
 
-                    if (notch_right_x == notch_left_x)
-                        notch_right_x = notch_left_x + 1;
+            //        if (notch_right_x == notch_left_x)
+            //            notch_right_x = notch_left_x + 1;
 
-                    if (tnf_zoom && n.Details &&
-                        ((bottom && n.RX == 2) ||
-                        (!bottom && n.RX == 1)))
-                    {
-                        int zoomed_notch_center_freq = (int)(notch_zoom_start_freq * 1e6 - rf_freq - rit);
+            //        if (tnf_zoom && n.Details &&
+            //            ((bottom && n.RX == 2) ||
+            //            (!bottom && n.RX == 1)))
+            //        {
+            //            int zoomed_notch_center_freq = (int)(notch_zoom_start_freq * 1e6 - rf_freq - rit);
 
-                        int original_bw = High - Low;
-                        int zoom_bw = original_bw / 10;
+            //            int original_bw = High - Low;
+            //            int zoom_bw = original_bw / 10;
 
-                        int low = zoomed_notch_center_freq - zoom_bw / 2;
-                        int high = zoomed_notch_center_freq + zoom_bw / 2;
+            //            int low = zoomed_notch_center_freq - zoom_bw / 2;
+            //            int high = zoomed_notch_center_freq + zoom_bw / 2;
 
-                        if (low < Low) // check left limit
-                        {
-                            low = Low;
-                            high = Low + zoom_bw;
-                        }
-                        else if (high > High) // check right limit
-                        {
-                            high = High;
-                            low = High - zoom_bw;
-                        }
+            //            if (low < Low) // check left limit
+            //            {
+            //                low = Low;
+            //                high = Low + zoom_bw;
+            //            }
+            //            else if (high > High) // check right limit
+            //            {
+            //                high = High;
+            //                low = High - zoom_bw;
+            //            }
 
-                        int zoom_bw_left_x = (int)((float)(low - Low) / width * W);
-                        int zoom_bw_right_x = (int)((float)(high - Low) / width * W);
+            //            int zoom_bw_left_x = (int)((float)(low - Low) / width * W);
+            //            int zoom_bw_right_x = (int)((float)(high - Low) / width * W);
 
-                        Pen p = new Pen(Color.White, 2.0f);
+            //            Pen p = new Pen(Color.White, 2.0f);
 
-                        if (!bottom)
-                        {
-                            // draw zoomed bandwidth outline
-                            Point[] left_zoom_line_points = {
-                                new Point(0, (int)(H/zoom_height)),
-                                new Point(zoom_bw_left_x-1,(int)(0.5*H*(1+1/zoom_height))),
-                                new Point(zoom_bw_left_x-1, H) };
-                            g.DrawLines(p, left_zoom_line_points);
+            //            if (!bottom)
+            //            {
+            //                // draw zoomed bandwidth outline
+            //                Point[] left_zoom_line_points = {
+            //                    new Point(0, (int)(H/zoom_height)),
+            //                    new Point(zoom_bw_left_x-1,(int)(0.5*H*(1+1/zoom_height))),
+            //                    new Point(zoom_bw_left_x-1, H) };
+            //                g.DrawLines(p, left_zoom_line_points);
 
-                            Point[] right_zoom_line_points = {
-                                new Point(W, (int)(H/zoom_height)),
-                                new Point(zoom_bw_right_x+1, (int)(0.5*H*(1+1/zoom_height))),
-                                new Point(zoom_bw_right_x+1, H) };
-                            g.DrawLines(p, right_zoom_line_points);
+            //                Point[] right_zoom_line_points = {
+            //                    new Point(W, (int)(H/zoom_height)),
+            //                    new Point(zoom_bw_right_x+1, (int)(0.5*H*(1+1/zoom_height))),
+            //                    new Point(zoom_bw_right_x+1, H) };
+            //                g.DrawLines(p, right_zoom_line_points);
 
-                            //grey out non-zoomed in area on actual panadapter
-                            g.FillRectangle(new SolidBrush(Color.FromArgb(150, 0, 0, 0)), 0, H / zoom_height, zoom_bw_left_x, H - H / zoom_height);
-                            g.FillRectangle(new SolidBrush(Color.FromArgb(150, 0, 0, 0)), zoom_bw_right_x, H / zoom_height, W - zoom_bw_right_x, H - H / zoom_height);
-                        }
-                        else
-                        {
-                            // draw zoomed bandwidth outline
-                            Point[] left_zoom_line_points = {
-                                new Point(0, H+(int)(H/zoom_height)),
-                                new Point(zoom_bw_left_x-1, H+(int)(0.5*H*(1+1/zoom_height))),
-                                new Point(zoom_bw_left_x-1, H+H) };
-                            g.DrawLines(p, left_zoom_line_points);
+            //                //grey out non-zoomed in area on actual panadapter
+            //                g.FillRectangle(new SolidBrush(Color.FromArgb(150, 0, 0, 0)), 0, H / zoom_height, zoom_bw_left_x, H - H / zoom_height);
+            //                g.FillRectangle(new SolidBrush(Color.FromArgb(150, 0, 0, 0)), zoom_bw_right_x, H / zoom_height, W - zoom_bw_right_x, H - H / zoom_height);
+            //            }
+            //            else
+            //            {
+            //                // draw zoomed bandwidth outline
+            //                Point[] left_zoom_line_points = {
+            //                    new Point(0, H+(int)(H/zoom_height)),
+            //                    new Point(zoom_bw_left_x-1, H+(int)(0.5*H*(1+1/zoom_height))),
+            //                    new Point(zoom_bw_left_x-1, H+H) };
+            //                g.DrawLines(p, left_zoom_line_points);
 
-                            Point[] right_zoom_line_points = {
-                                new Point(W, H+(int)(H/zoom_height)),
-                                new Point(zoom_bw_right_x+1, H+(int)(0.5*H*(1+1/zoom_height))),
-                                new Point(zoom_bw_right_x+1, H+H) };
-                            g.DrawLines(p, right_zoom_line_points);
+            //                Point[] right_zoom_line_points = {
+            //                    new Point(W, H+(int)(H/zoom_height)),
+            //                    new Point(zoom_bw_right_x+1, H+(int)(0.5*H*(1+1/zoom_height))),
+            //                    new Point(zoom_bw_right_x+1, H+H) };
+            //                g.DrawLines(p, right_zoom_line_points);
 
-                            g.FillRectangle(new SolidBrush(Color.FromArgb(160, 0, 0, 0)), 0, H + H / zoom_height, zoom_bw_left_x, H + H - H / zoom_height);
-                            g.FillRectangle(new SolidBrush(Color.FromArgb(160, 0, 0, 0)), zoom_bw_right_x, H + H / zoom_height, W - zoom_bw_right_x, H + H - H / zoom_height);
-                        }
-                    }
+            //                g.FillRectangle(new SolidBrush(Color.FromArgb(160, 0, 0, 0)), 0, H + H / zoom_height, zoom_bw_left_x, H + H - H / zoom_height);
+            //                g.FillRectangle(new SolidBrush(Color.FromArgb(160, 0, 0, 0)), zoom_bw_right_x, H + H / zoom_height, W - zoom_bw_right_x, H + H - H / zoom_height);
+            //            }
+            //        }
 
-                    // decide colors to draw notch
-                    Color c1 = notch_on_color;
-                    Color c2 = notch_highlight_color;
+            //        // decide colors to draw notch
+            //        Color c1 = notch_on_color;
+            //        Color c2 = notch_highlight_color;
 
-                    if (!tnf_active)
-                    {
-                        c1 = notch_off_color;
-                        c2 = Color.Black;
-                    }
-                    else if (n.Permanent)
-                    {
-                        c1 = notch_perm_on_color;
-                        c2 = notch_perm_highlight_color;
-                    }
+            //        if (!tnf_active)
+            //        {
+            //            c1 = notch_off_color;
+            //            c2 = Color.Black;
+            //        }
+            //        else if (n.Permanent)
+            //        {
+            //            c1 = notch_perm_on_color;
+            //            c2 = notch_perm_highlight_color;
+            //        }
 
-                    if (bottom)
-                        drawNotchBar(g, n, notch_left_x, notch_right_x, H + top, H - top, c1, c2);
-                    else
-                        drawNotchBar(g, n, notch_left_x, notch_right_x, top, H - top, c1, c2);
+            //        if (bottom)
+            //            drawNotchBar(g, n, notch_left_x, notch_right_x, H + top, H - top, c1, c2);
+            //        else
+            //            drawNotchBar(g, n, notch_left_x, notch_right_x, top, H - top, c1, c2);
 
-                    //if (bottom)
-                    //    drawNotchStatus(g, n, (notch_left_x + notch_right_x) / 2, H + top + 75, W, H);
-                    //else
-                    //    drawNotchStatus(g, n, (notch_left_x + notch_right_x) / 2, top + 75, W, H);
-                }
+            //        //if (bottom)
+            //        //    drawNotchStatus(g, n, (notch_left_x + notch_right_x) / 2, H + top + 75, W, H);
+            //        //else
+            //        //    drawNotchStatus(g, n, (notch_left_x + notch_right_x) / 2, top + 75, W, H);
+            //    }
 
-                //draw notch statuses in this for loop
-                if (!tnf_zoom)
-                {
-                    foreach (Notch n in notches)
-                    {
-                        long rf_freq = vfoa_hz;
-                        int rit = rit_hz;
+            //    //draw notch statuses in this for loop
+            //    if (!tnf_zoom)
+            //    {
+            //        foreach (Notch n in notches)
+            //        {
+            //            long rf_freq = vfoa_hz;
+            //            int rit = rit_hz;
 
-                        if (bottom)
-                        {
-                            rf_freq = vfob_hz;
-                        }
+            //            if (bottom)
+            //            {
+            //                rf_freq = vfob_hz;
+            //            }
 
-                        if (bottom)
-                        {
-                            switch (rx2_dsp_mode)
-                            {
-                                case (DSPMode.CWL):
-                                    rf_freq += cw_pitch;
-                                    break;
-                                case (DSPMode.CWU):
-                                    rf_freq -= cw_pitch;
-                                    break;
-                            }
-                        }
-                        else
-                        {
-                            switch (rx1_dsp_mode)
-                            {
-                                case (DSPMode.CWL):
-                                    rf_freq += cw_pitch;
-                                    break;
-                                case (DSPMode.CWU):
-                                    rf_freq -= cw_pitch;
-                                    break;
-                            }
-                        }
+            //            if (bottom)
+            //            {
+            //                switch (rx2_dsp_mode)
+            //                {
+            //                    case (DSPMode.CWL):
+            //                        rf_freq += cw_pitch;
+            //                        break;
+            //                    case (DSPMode.CWU):
+            //                        rf_freq -= cw_pitch;
+            //                        break;
+            //                }
+            //            }
+            //            else
+            //            {
+            //                switch (rx1_dsp_mode)
+            //                {
+            //                    case (DSPMode.CWL):
+            //                        rf_freq += cw_pitch;
+            //                        break;
+            //                    case (DSPMode.CWU):
+            //                        rf_freq -= cw_pitch;
+            //                        break;
+            //                }
+            //            }
 
-                        int notch_left_x = (int)((float)(n.Freq * 1e6 - rf_freq - n.BW / 2 - Low - rit) / width * W);
-                        int notch_right_x = (int)((float)(n.Freq * 1e6 - rf_freq + n.BW / 2 - Low - rit) / width * W);
+            //            int notch_left_x = (int)((float)(n.Freq * 1e6 - rf_freq - n.BW / 2 - Low - rit) / width * W);
+            //            int notch_right_x = (int)((float)(n.Freq * 1e6 - rf_freq + n.BW / 2 - Low - rit) / width * W);
 
-                        if (notch_right_x == notch_left_x)
-                            notch_right_x = notch_left_x + 1;
+            //            if (notch_right_x == notch_left_x)
+            //                notch_right_x = notch_left_x + 1;
 
-                        if (bottom)
-                            drawNotchStatus(g, n, (notch_left_x + notch_right_x) / 2, H + top + 75, W, H);
-                        else
-                            drawNotchStatus(g, n, (notch_left_x + notch_right_x) / 2, top + 75, W, H);
-                    }
-                }
-            }
+            //            if (bottom)
+            //                drawNotchStatus(g, n, (notch_left_x + notch_right_x) / 2, H + top + 75, W, H);
+            //            else
+            //                drawNotchStatus(g, n, (notch_left_x + notch_right_x) / 2, top + 75, W, H);
+            //        }
+            //    }
+            //}
 
             // Draw a Zero Beat line on CW filter
             if (!local_mox && show_cwzero_line &&
@@ -9757,7 +9752,7 @@ namespace Thetis
             try
             {
                 float max;
-                //MW0LGE TAG1
+                //MW0LGE block of code pulled from loop, += in there for now - TODO
                 float fOffset = 0;
                 int nOffset2 = 0;
 
@@ -9789,29 +9784,7 @@ namespace Thetis
                 //---
                 for (int i = 0; i < W; i++)
                 {
-                    max = data[i] + fOffset; //MW0LGE ... block below, moved above, we dont need to do this every for loop
-
-                    //if (rx == 1)
-                    //{
-                    //    if (local_mox) max += tx_display_cal_offset;
-                    //    else if (mox && tx_on_vfob && !displayduplex)
-                    //    {
-                    //        if (console.RX2Enabled) max += rx1_display_cal_offset;
-                    //        else max += tx_display_cal_offset;
-                    //    }
-                    //    else max += rx1_display_cal_offset;
-                    //}
-                    //else if (rx == 2)
-                    //{
-                    //    if (local_mox) max += tx_display_cal_offset;
-                    //    else max += rx2_display_cal_offset;
-                    //}
-
-                    //if (!local_mox || (local_mox && displayduplex))
-                    //{
-                    //    if (rx == 1) max += rx1_preamp_offset;
-                    //    else if (rx == 2) max += rx2_preamp_offset;
-                    //}
+                    max = data[i] + fOffset;
 
                     if (max > local_max_y)
                     {
@@ -10149,7 +10122,7 @@ namespace Thetis
                     }
 
                     float max;
-                    float fOffset = 0; ///MW0LGE - TAG2
+                    float fOffset = 0; ///MW0LGE - block of code moved out of for loop +- for now, TODO
 
                     if (!local_mox)
                     {
@@ -10175,27 +10148,6 @@ namespace Thetis
                     for (int i = 0; i < W; i++)
                     {                        
                         max = data[i] + fOffset; //MW0LGE
-
-                        //if (!local_mox)
-                        //{
-                        //    if (rx == 1) max += rx1_display_cal_offset;
-                        //    else if (rx == 2) max += rx2_display_cal_offset;
-                        //}
-                        //else
-                        //{
-                        //    if (rx == 1) max += rx1_display_cal_offset;
-                        //    else if (rx == 2) max += tx_display_cal_offset;
-                        //}
-
-                        //if (!local_mox)
-                        //{
-                        //    if (rx == 1) max += (rx1_preamp_offset - alex_preamp_offset);
-                        //    else if (rx == 2) max += (rx2_preamp_offset);
-                        //}
-                        //else
-                        //{
-                        //    if (rx == 1) max += (rx1_preamp_offset - alex_preamp_offset);
-                        //}
 
                         if (max > local_max_y)
                         {
@@ -11170,7 +11122,7 @@ namespace Thetis
                 }
                 //-
             }
-            //waterfall_counter++; //MW0LGE TAG3
+            //waterfall_counter++; //MW0LGE removed
 
             //MW0LGE
             //// draw long cursor

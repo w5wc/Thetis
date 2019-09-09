@@ -59,7 +59,8 @@ namespace Thetis
     using System.Xml.Linq;
     using System.Timers;
     using System.Linq;
-    //using System.Speech.Synthesis;
+    using System.Data;
+    // using System.Speech.Synthesis;
     using RawInput_dll;
     using System.Media;
     #region Enums
@@ -538,126 +539,6 @@ namespace Thetis
         elsewhere
     }
 
-    //
-    // G8NJJ: define the button bar menu
-    //
-    public enum EButtonBarActions
-    {
-        eBBNone = 0,                // no action
-        eBBStartStop,               // start/stop the radio
-        eBBRX2OnOff,                // toggle RX2 on/off
-        eBBDUP,                     // press DUP button
-        eBBMON,                     // press MON button
-        eBBTune,                    // Tune on/off
-        eBBMOX,                     // MOX on/off
-        eBBPuresignalOnOff,         // toggle Puresignal on/off
-        eBBPuresignal2Tone,         // puresignal 2 tone test on/off
-        eBBMenu,                    // activate another menu
-        eBBNR,                      // press NR button
-        eBBNB,                      // press NB button
-        eBBSNB,                     // press SNB button
-        eBBANF,                     // press ANF button
-        eBBMNF,                     // press MNF button
-        eBBVFOSwap,                 // press VFO swap button
-        eBBVFOSplit,                // split operation
-        eBBVFOAtoB,                 // copy A to B
-        eBBVFOBtoA,                 // copy B to A
-        eBBVFOZeroBeat,             // operate zero beat button
-        eBBIFtoV,                   // operate IF->V button
-        eBBVFOSyncOnOff,            // VFO sync
-        eBBVFOLockOnOff,            // VFO Lock
-        eBBVFOCTUNEOnOff,           // Click Tune
-        eBBToggleAB,                // toggle betwee A & B
-        eBBRITOnOff,                // toggle RIT on/off
-        eBBXITOnOff,                // toggle XIT on/off
-        eBBRITXITToggle,            // step off-RIT-XIT
-        eBBClearRITXIT,             // clear RIT and XIT
-        eBBClearRIT,                // clear RIT only
-        eBBClearXIT,                // clear XIT only
-        eBBRITPlus,                 // RIT step up
-        eBBRITMinus,                // RIT step down
-        eBBXITPlus,                 // XIT step up
-        eBBXITMinus,                // XIT step down
-        eBBRITXITPlus,              // increment whichever is selected
-        eBBRITXITMinus,             // decrement whichever is selected
-        eBBFilterReset,             // reset variable filter
-        eBBFilterPlus,              // select next filter
-        eBBFilterMinus,             // select next lower filter
-        eBBBandPlus,                // step up band
-        eBBBandMinus,               // step down bans
-        eBBModePlus,                // step up mode
-        eBBModeMinus,               // step down mode
-        eBBAttenStep,               // step the attenuation value in 6dB steps
-        eBBMuteOnOff,               // mute on/off
-        eBBBINOnOff,                // Binaural on/off
-        eBBSDOnOff,                 // stereo diversity on/off
-        eBBVAC1OnOff,               // toggle VAC1 on/off
-        eBBVAC2OnOff,               // toggle VAC2 on/off
-        eBBAGCStep,                 // step the aGC setting
-        eBBSqlOnOff,                // step the squelch setting
-        eBBRXEQOnOff,               // RX equaliser on/off
-        eBBTXEQOnOff,               // TX equaliser on/off
-        eBBTXFLShow,                // show TX filter
-        eBBMICOnOff,                // MIC button on/off
-        eBBCOMPOnOff,               // COMP button on/off
-        eBBVOXOnOff,                // VOX on/off
-        eBBDEXPOnOff,               // DEXP on/off
-        eBBCWIambic,                // iambic keyer selected
-        eBBCWSidetone,              // CW sidetone
-        eBBCWShowTX,                // CW show tX frequency
-        eBBCWShowZero,              // show CW zero freq
-        eBBCWSemiBreakin,           // semi breakin on/off
-        eBBCWQSK,                   // QSK on/off
-        eBBRX1APF,                  // RX1 APF on/off
-        eBBCTCSSOnOff,              // FM CTCSS tone on/off
-        eBBFMDeviation,             // Toggle FM deviation
-        eBBDiversityOnOff,          // toggle diversity on/off
-        eBBSubRXOnOff,              // toggle sub-RX on/off
-        eBBRXMeterStep,             // step the setting of the RX meter
-        eBBTXMeterStep,             // step the setting of the TX meter
-        eBBDisplayModeStep,         // step the display mode
-        eBBDisplayDSPAVG,           // AVG button
-        eBBDisplayDSPPeak,          // AVG button
-        eBBCentreDisplay,           // centre the display
-        eBBZoomStep,                // step between the zoom step buttons
-        eBBRecordAudio,             // record audio
-        eBBPlayAudio,                 // play audio (parameter identified which)
-        eBBModeForm,                // show MODE form
-        eBBFilterForm,              // show FILTER form
-        eBBBandForm,                // show BAND form
-        eBBSliderForm,              // show "sliders" form
-        eBBVFOSettingForm,          // show VFO Settings form
-        eBBBandstackForm,           // show band stacks form
-        eBBBandstack,               // select next band stack
-        eBBQuickSave,               // save to "quick memory"
-        eBBQuickRestore,            // restore from "quick memory"
-        eBBRXAntenna,               // RX antenna button equivalent
-        eBBDiversityForm,           // show the diversity form
-        eBBModeSettingsForm,        // show the "mode dependent settings" form
-        eBBPuresignalForm,          // show the Puresignal form
-        eBBEqualiserForm,           // show equaliser form
-        eBBDisplaySettingsForm,     // show the display settings form
-        eBBAudioForm,               // open the audio record play form
-        eBBSetupForm                // open the setup form
-    }
-
-    public struct SButtonBarEntry
-    {
-        public EButtonBarActions Action;           // assigned action
-        public string ButtonText;                  // text for the button itself
-        public int RXOverride;                     // 0: use show_RX1 setting; 1: use RX1; 2: use RX2
-        public int ButtonParameter;                // a numerical param for menu buttons
-
-        //constructor
-        public SButtonBarEntry(EButtonBarActions action, string str, int rxovr, int param)
-        {
-            Action = action;
-            ButtonText = str;
-            RXOverride = rxovr;
-            ButtonParameter = param;
-        }
-    }
-
 
     #endregion
 
@@ -759,6 +640,7 @@ namespace Thetis
         private SIO2ListenerII sio2listen = null;
         private SIO3ListenerII sio3listen = null;
         private SIO4ListenerII sio4listen = null;
+		private SIO5ListenerII andromedasiolisten = null;
 
         private System.Timers.Timer n1mm_delay;             // timer for setting delay on focus
         private Thread draw_display_thread;					// draws the main display 
@@ -976,7 +858,7 @@ namespace Thetis
 
         public double[] FM_deviation_array = { 5000, 2500 };
 
-        private bool shift_down;							// used to modify tuning rate
+        //private bool shift_down;							// used to modify tuning rate           // MW0LGE scrap this, now use m_bShiftKeyDown
         private bool calibrating;							// true if running a calibration routine
         private bool manual_mox;							// True if the MOX button was clicked on (not PTT)		
 
@@ -1157,6 +1039,7 @@ namespace Thetis
         private Size lbl_rx2meter_size_basis = new Size(100, 100);
         private Point txt_multi_text_basis = new Point(100, 100);
         private Point txt_rx2meter_basis = new Point(100, 100);
+		private Size txt_rx2meter_size_basis = new Size(100, 100);
         private Point chk_power_basis = new Point(100, 100);		//k6jca
         private Point gr_power_basis = new Point(100, 100);		//k6jca
         private Size gr_options_size_basis = new Size(100, 100);
@@ -1278,11 +1161,10 @@ namespace Thetis
         private Point lbl_RX1_APF_VFOA_basis = new Point(100, 100);
         private Point lbl_RX2_APF_VFOB_basis = new Point(100, 100);
         //
-        // G8NJJ: Titlebar strings for Andromeda
+        // G8NJJ: Titlebar strings and button/encoder/menu definitions for Andromeda
         //
         private string TitleBarMultifunction;                   // shows action assigned to multi encoder
         private string TitleBarEncoder;                         // shows most recent encoder value change
-        private SButtonBarEntry[] ButtonBarMenu;
 
 
         // MW0LGE
@@ -1296,6 +1178,8 @@ namespace Thetis
         // WIP for rawinput grabbing for mousewheel/keyboard
         private RawInput m_objRawinput;
         // ----
+        private bool m_bShiftKeyDown = false;
+        // ----
 
         #endregion
 
@@ -1307,11 +1191,8 @@ namespace Thetis
         public Console(string[] args)
         {
             Display.specready = false;
-            
-            // G8NJJ
-            InitialiseButtonBarMenu();
 
-            //        ButtonBarMenu[0] = {EButtonBarActions.eBBMenu, "Menu 1", 2};
+
 
             foreach (string s in args)
             {
@@ -1379,6 +1260,10 @@ namespace Thetis
 #endif
             if (!Directory.Exists(app_data_path))
                 Directory.CreateDirectory(app_data_path);
+
+            // G8NJJ
+            InitialiseAndromedaMenus();
+
 
             if (db_file_name == "")
                 DBFileName = AppDataPath + "database.xml";
@@ -2225,6 +2110,7 @@ namespace Thetis
             sio2listen = new SIO2ListenerII(this);
             sio3listen = new SIO3ListenerII(this);
             sio4listen = new SIO4ListenerII(this);
+			andromedasiolisten = new SIO5ListenerII(this);
 
             EQForm = new EQForm(this);
 
@@ -20752,6 +20638,22 @@ namespace Thetis
             }
         }
 
+        public decimal CATDiversityGain
+        {
+            get
+            {
+                if (diversityForm != null)
+                    return diversityForm.CATDiversityGain;
+                else
+                    return 0.0m;
+            }
+            set
+            {
+                if (diversityForm != null)
+                    diversityForm.CATDiversityGain = value;
+            }
+        }
+        
         public decimal CATDiversityRX1Gain
         {
             get
@@ -21693,12 +21595,12 @@ namespace Thetis
                             case MultiMeterDisplayMode.Edge:
                                 break;
                             default:
-                                picMultiMeterDigital.Height -= lblMultiSMeter.ClientSize.Height;
+                                //MW0LGE picMultiMeterDigital.Height -= lblMultiSMeter.ClientSize.Height;
                                 picMultiMeterDigital.BackColor = meter_background_color;
-                                picRX2Meter.Height -= lblRX2Meter.ClientSize.Height;
+                                //MW0LGE picRX2Meter.Height -= lblRX2Meter.ClientSize.Height;
                                 picRX2Meter.BackColor = meter_background_color;
-                                lblMultiSMeter.Show();
-                                lblRX2Meter.Show();
+                                //MW0LGE lblMultiSMeter.Show();
+                                //MW0LGE lblRX2Meter.Show();
                                 if (comboMeterTXMode.Items.Contains("Fwd SWR"))
                                     comboMeterTXMode.Items.Remove("Fwd SWR");
                                 break;
@@ -21708,12 +21610,12 @@ namespace Thetis
                         switch (value)
                         {
                             case MultiMeterDisplayMode.Edge:
-                                picMultiMeterDigital.Height += lblMultiSMeter.ClientSize.Height;
+                                //MW0LGE picMultiMeterDigital.Height += lblMultiSMeter.ClientSize.Height;
                                 picMultiMeterDigital.BackColor = edge_meter_background_color;
-                                picRX2Meter.Height += lblRX2Meter.ClientSize.Height;
+                                //MW0LGE picRX2Meter.Height += lblRX2Meter.ClientSize.Height;
                                 picRX2Meter.BackColor = edge_meter_background_color;
-                                lblMultiSMeter.Hide();
-                                lblRX2Meter.Hide();
+                                //MW0LGE lblMultiSMeter.Hide();
+                                //MW0LGE lblRX2Meter.Hide();
                                 if (!comboMeterTXMode.Items.Contains("Fwd SWR"))
                                     comboMeterTXMode.Items.Insert(3, "Fwd SWR");
                                 break;
@@ -22555,6 +22457,17 @@ namespace Thetis
                 //Keyer.Siolisten = value;
             }
         }
+
+        public SIO5ListenerII AndromedaSiolisten
+        {
+            get { return andromedasiolisten; }
+            set
+            {
+                andromedasiolisten = value;
+                //Keyer.Siolisten = value;
+            }
+        }
+        
 
         public bool HideTuneStep
         {
@@ -26129,6 +26042,41 @@ namespace Thetis
             get { return cat_enabled; }
         }
 
+        private bool andromeda_cat_enabled;
+        public bool AndromedaCATEnabled
+        {
+            set
+            {
+                try
+                {
+                    andromeda_cat_enabled = value;
+                    // Keyer.CATEnabled = value;
+                    if (andromedasiolisten != null)  // if we've got a listener tell them about state change
+                    {
+                        if (andromeda_cat_enabled)
+                        {
+                            AndromedaSiolisten.enableCAT5();
+                            InitialiseAndromedaIndicators(true);           // initialise the panel LEDs
+                        }
+                        else
+                        {
+                            AndromedaSiolisten.disableCAT5();
+                        }
+                    }
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("Error enabling Andromeda on COM" + cat_port + ".\n" +
+                        "Please check settings and try again.",
+                        "Andromeda CAT Error",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
+                    if (SetupForm != null) SetupForm.AndromedaCATEnabled = false;
+                }
+            }
+            get { return andromeda_cat_enabled; }
+        }
+
         private bool cat2_enabled;
         public bool CAT2Enabled
         {
@@ -26265,6 +26213,14 @@ namespace Thetis
             get { return cat4_port; }
             set { cat4_port = value; }
         }
+
+        private int andromeda_cat_port;
+        public int AndromedaCATPort
+        {
+            get { return andromeda_cat_port; }
+            set { andromeda_cat_port = value; }
+        }
+
 
         private bool cat_ptt_rts = false;
         public bool CATPTTRTS
@@ -31012,6 +30968,12 @@ namespace Thetis
                     //e.Graphics.CompositingQuality = CompositingQuality.Default;
                     //e.Graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
                     //e.Graphics.SmoothingMode = SmoothingMode.HighQuality;
+/* TESTING MW0LGE
+                    e.Graphics.CompositingMode = CompositingMode.SourceOver;
+                    e.Graphics.CompositingQuality = CompositingQuality.HighSpeed;
+                    e.Graphics.SmoothingMode = SmoothingMode.HighSpeed;
+                    e.Graphics.PixelOffsetMode = PixelOffsetMode.HighSpeed;
+*/
                     Display.RenderGDIPlus(ref e);
                     break;
                 case DisplayEngine.DIRECT_X:
@@ -36260,19 +36222,27 @@ namespace Thetis
 
         private void Console_KeyUp(object sender, System.Windows.Forms.KeyEventArgs e)
         {
+            //MW0LGE
+            m_bShiftKeyDown = e.Shift;
+            //----
+
             regBand = 0;  // ke9ns add
             ToggleFocusMasterTimer();
             if (callsignfocus == 1) return; // ke9ns add to focus on waterfall ID text
 
-            if (e.Shift == false && shift_down)
-                shift_down = false;
+            //if (e.Shift == false && shift_down)
+            //    shift_down = false;
         }
 
         private static byte regBand = 0; // ke9ns add (used for an extra right click + CTRL function: add bandstacking and hyperlinking)
         public static bool ALTM = false; // ke9ns add
         private void Console_KeyDown(object sender, System.Windows.Forms.KeyEventArgs e)
         {
-            if ((e.Shift == true) && (callsignfocus == 0))// ke9ns add (check for CTRL key but not while callsign text box is in focus)
+            //MW0LGE
+            m_bShiftKeyDown = e.Shift;
+            //----
+
+            if (m_bShiftKeyDown && (callsignfocus == 0))// ke9ns add (check for CTRL key but not while callsign text box is in focus) //MW0LGE
             {
                 if (DXR == 0) DXR = 1; // show Spotters on panadapter (and now also display the world map with lat/long coords)
                 else DXR = 0; // clear
@@ -36282,7 +36252,7 @@ namespace Thetis
                 //    DXR = 0; // show DX on panadapter
             }
 
-            Debug.WriteLine("keypressedCODE " + e.KeyCode);
+            //Debug.WriteLine("keypressedCODE " + e.KeyCode);
 
             if (e.Alt == true) // ke9ns add
             {
@@ -36693,46 +36663,47 @@ namespace Thetis
 
             //==================================================================
 
-            if (e.Shift == true && !shift_down)
-                shift_down = true;
+            //if (e.Shift == true && !shift_down)   // MW0LGE scrap this
+            //    shift_down = true;
 
-            if (e.Control == true && e.Shift == true)
-            {
-                switch (e.KeyCode)
-                {
-                    case Keys.A:
-                        break;
-                    case Keys.C:
-                        break;
-                    case Keys.D:
-                        break;
-                    case Keys.F:
-                        break;
-                    case Keys.I:
-                        break;
-                    case Keys.O:
-                        break;
-                    case Keys.P:
-                        break;
-                    case Keys.R:
-                        break;
-                    case Keys.S:
-                        break;
-                    case Keys.T:
-                        break;
-                    /*  case Keys.V:
-                          if (fwc_init && current_model == Model.FLEX5000 && FWCEEPROM.VUOK)
-                          {
-                              if (flex5000VUCalForm == null || flex5000VUCalForm.IsDisposed)
-                                  flex5000VUCalForm = new FLEX5000VUCalForm(this);
-                              flex5000VUCalForm.Show();
-                              flex5000VUCalForm.Focus();
-                          }
-                          break;*/
-                }
-                shift_down = false;
-            }
-            else if (e.Control == true && e.Alt == true)
+            //if (e.Control == true && e.Shift == true)
+            //{
+            //    switch (e.KeyCode)
+            //    {
+            //        case Keys.A:
+            //            break;
+            //        case Keys.C:
+            //            break;
+            //        case Keys.D:
+            //            break;
+            //        case Keys.F:
+            //            break;
+            //        case Keys.I:
+            //            break;
+            //        case Keys.O:
+            //            break;
+            //        case Keys.P:
+            //            break;
+            //        case Keys.R:
+            //            break;
+            //        case Keys.S:
+            //            break;
+            //        case Keys.T:
+            //            break;
+            //        /*  case Keys.V:
+            //              if (fwc_init && current_model == Model.FLEX5000 && FWCEEPROM.VUOK)
+            //              {
+            //                  if (flex5000VUCalForm == null || flex5000VUCalForm.IsDisposed)
+            //                      flex5000VUCalForm = new FLEX5000VUCalForm(this);
+            //                  flex5000VUCalForm.Show();
+            //                  flex5000VUCalForm.Focus();
+            //              }
+            //              break;*/
+            //    }
+            //    shift_down = false;
+            //}
+            //else 
+            if (e.Control == true && e.Alt == true)
             {
                 switch (e.KeyCode)
                 {
@@ -38720,6 +38691,7 @@ namespace Thetis
             this.Hide(); 
             Audio.callback_return = 2;
             CATEnabled = false;
+			AndromedaCATEnabled = false;
 
             if (chkPower.Checked == true)  // If we're quitting without first clicking off the "Power" button            
                 chkPower.Checked = false;
@@ -39911,7 +39883,7 @@ namespace Thetis
 
             if (tx) UIMOXChangedTrue();
             else UIMOXChangedFalse();
-
+			AndromedaIndicatorCheck(EIndicatorActions.eINMOX, false, tx);
         }
 
         //private Thread mox_update_thread;
@@ -40281,7 +40253,7 @@ namespace Thetis
             if (rx1_dsp_mode == DSPMode.FM) rx1_fm_squelch_on = chkSquelch.Checked;
             if (sliderForm != null)
                 sliderForm.RX1SquelchOnOff = chkSquelch.Checked;
-
+			AndromedaIndicatorCheck(EIndicatorActions.eINSquelch, true, chkSquelch.Checked);
         }
 
         private MeterTXMode old_tune_meter_tx_mode;
@@ -40440,6 +40412,8 @@ namespace Thetis
 
                 manual_mox = false;
             }
+			AndromedaIndicatorCheck(EIndicatorActions.eINTune, false, chkTUN.Checked);
+
         }
 
         private void chkTUN_CheckedChanged_old(object sender, System.EventArgs e)
@@ -40688,6 +40662,8 @@ namespace Thetis
                 lblLockLabel.BackColor = System.Drawing.Color.Blue;
             else
                 lblLockLabel.BackColor = System.Drawing.Color.Transparent;
+			AndromedaIndicatorCheck(EIndicatorActions.eINVFOLock, true, chkVFOLock.Checked);
+
         }
 
         private void chkVFOBLock_CheckedChanged(object sender, EventArgs e)
@@ -40697,6 +40673,7 @@ namespace Thetis
                 lblRX2LockLabel.BackColor = System.Drawing.Color.Blue;
             else
                 lblRX2LockLabel.BackColor = System.Drawing.Color.Transparent;
+			AndromedaIndicatorCheck(EIndicatorActions.eINVFOLock, false, chkVFOBLock.Checked);
         }
 
         private void btnBandVHF_Click(object sender, System.EventArgs e)
@@ -40996,9 +40973,20 @@ namespace Thetis
 
         private void comboVACSampleRate_SelectedIndexChanged(object sender, System.EventArgs e)
         {
-            if (SetupForm != null) SetupForm.VACSampleRate = comboVACSampleRate.Text;
+            if (SetupForm != null)
+            {
+                // G8NJJ: change so that it sets the correct VAC 1 or 2 sample rate in setup
+                if (!(chkRX2.Checked && chkVAC2.Checked && chkVFOBTX.Checked))
+                    SetupForm.VACSampleRate = comboVACSampleRate.Text;
+                else
+                    SetupForm.VAC2SampleRate = comboVACSampleRate.Text;
+            }
             if (comboVACSampleRate.Focused) btnHidden.Focus();
+
+
         }
+
+
 
         private void chkX2TR_CheckedChanged(object sender, System.EventArgs e)
         {
@@ -41014,6 +41002,7 @@ namespace Thetis
                 lblRX2CtunLabel.BackColor = System.Drawing.Color.Transparent;
 
             txtVFOBFreq_LostFocus(this, EventArgs.Empty);
+			AndromedaIndicatorCheck(EIndicatorActions.eINCTune, false, chkX2TR.Checked);
         }
 
         private void chkShowTXCWFreq_CheckedChanged(object sender, System.EventArgs e)
@@ -41351,7 +41340,7 @@ namespace Thetis
 
             if (num_steps == 0) return;
             int step = CurrentTuneStepHz;
-            if (shift_down && step >= 10) step /= 10;
+            if (m_bShiftKeyDown && step >= 10) step /= 10; //MW0LGE
 
             switch (TuneHitTest(e.X, e.Y))
             {
@@ -43156,13 +43145,13 @@ namespace Thetis
         private int spectrum_drag_last_x = 0;
         private double sub_drag_start_freq = 0.0;
 
-        private bool notch_drag = false;
-        private Point notch_drag_start_point = new Point(0, 0);
-        private Notch notch_drag_start; // starting settings for notch
-        private Notch notch_drag_active; // notch to use for modifying
-        private int notch_drag_max_delta_x = 0;
-        private int notch_drag_max_delta_y = 0;
-        private bool notch_zoom = false;
+        //private bool notch_drag = false;
+        //private Point notch_drag_start_point = new Point(0, 0);
+        //private Notch notch_drag_start; // starting settings for notch
+        //private Notch notch_drag_active; // notch to use for modifying
+        //private int notch_drag_max_delta_x = 0;
+        //private int notch_drag_max_delta_y = 0;
+        //private bool notch_zoom = false;
         private bool agc_knee_drag = false;
         private Point agc_knee_drag_start_point = new Point(0, 0);
         private bool agc_hang_drag = false;
@@ -43186,6 +43175,78 @@ namespace Thetis
         private float grid_minmax_min_y = 0;
         private Cursor grab = new Cursor(msgrab);
         private Cursor grabbing = new Cursor(msgrabbing);
+
+        private bool overRX(int x, int y, int rx, bool bIncludePanafallCheck = true)
+        {
+            int nMinHeightRX1 = 0;
+            int nMaxHeightRX1 = picDisplay.Height;
+            int nMinHeightRX2 = picDisplay.Height / 2;
+            int nMaxHeightRX2 = picDisplay.Height;
+
+            if (rx2_enabled)
+            {
+                // top half only
+                nMaxHeightRX1 = picDisplay.Height / 2;
+
+                if (Display.CurrentDisplayModeBottom == DisplayMode.PANAFALL && bIncludePanafallCheck)
+                {
+                    //top half, of bottom half is available only
+                    nMaxHeightRX2 = (picDisplay.Height / 4) * 3;
+                }
+            }
+
+            if (Display.CurrentDisplayMode == DisplayMode.PANAFALL && bIncludePanafallCheck)
+            {
+                if (!rx2_enabled)
+                {
+                    // top half is available only
+                    nMaxHeightRX1 = picDisplay.Height / 2;
+                }
+                else
+                {
+                    // top half, of top half is available only
+                    nMaxHeightRX1 = picDisplay.Height / 4;
+                }
+            }
+
+            if (rx == 1)
+            {
+                switch (Display.CurrentDisplayMode)
+                {
+                    case DisplayMode.PANADAPTER:
+                    case DisplayMode.SPECTRUM:
+                    case DisplayMode.HISTOGRAM:
+                    case DisplayMode.PANAFALL:
+                        // check if we are anywhere over area that filters etc can be adjusted
+                        if ((x >= 0 && x < picDisplay.Width) &&
+                         (y < nMaxHeightRX1 && y > nMinHeightRX1 + 10))
+                        {
+                            return true;
+                        }
+
+                        break;
+                }
+            }
+            else if (rx2_enabled && rx == 2)
+            {
+                switch (Display.CurrentDisplayModeBottom)
+                {
+                    case DisplayMode.PANADAPTER:
+                    case DisplayMode.SPECTRUM:
+                    case DisplayMode.HISTOGRAM:
+                    case DisplayMode.PANAFALL:
+                        // check if we are anywhere over area that filters etc can be adjusted
+                        if ((x >= 0 && x < picDisplay.Width) &&
+                         (y < nMaxHeightRX2 && y > nMinHeightRX2 + 10))
+                        {
+                            return true;
+                        }
+                        break;
+                }
+            }
+
+            return false;
+        }
 
         private void picDisplay_MouseMove(object sender, MouseEventArgs e)
         {
@@ -43258,55 +43319,61 @@ namespace Thetis
                 rx1_grid_adjust = false;
                 rx2_grid_adjust = false;
 
-                int nMinHeightRX1 = 0;
-                int nMaxHeightRX1 = picDisplay.Height;
+                //int nMinHeightRX1 = 0;
+                //int nMaxHeightRX1 = picDisplay.Height;
 
-                int nMinHeightRX2 = picDisplay.Height / 2;
-                int nMaxHeightRX2 = picDisplay.Height;
+                //int nMinHeightRX2 = picDisplay.Height / 2;
+                //int nMaxHeightRX2 = picDisplay.Height;
 
-                if (rx2_enabled)
+                //if (rx2_enabled)
+                //{
+                //    // top half only
+                //    nMaxHeightRX1 = picDisplay.Height / 2;
+
+                //    if (Display.CurrentDisplayModeBottom == DisplayMode.PANAFALL)
+                //    {
+                //        //top half, of bottom half is available only
+                //        nMaxHeightRX2 = (picDisplay.Height / 4) * 3;
+                //    }
+                //}
+
+                //if (Display.CurrentDisplayMode == DisplayMode.PANAFALL)
+                //{
+                //    if (!rx2_enabled)
+                //    {
+                //        // top half is available only
+                //        nMaxHeightRX1 = picDisplay.Height / 2;
+                //    }
+                //    else
+                //    {
+                //        // top half, of top half is available only
+                //        nMaxHeightRX1 = picDisplay.Height / 4;
+                //    }
+                //}
+
+                bool bOverRX1 = overRX(e.X, e.Y, 1);
+                bool bOverRX2 = overRX(e.X, e.Y, 2);
+
+                if (bOverRX1)
                 {
-                    // top half only
-                    nMaxHeightRX1 = picDisplay.Height / 2;
-
-                    if (Display.CurrentDisplayModeBottom == DisplayMode.PANAFALL)
+                    switch (Display.CurrentDisplayMode)
                     {
-                        //top half, of bottom half is available only
-                        nMaxHeightRX2 = (picDisplay.Height / 4) * 3;
+                        case DisplayMode.PANADAPTER:
+                        case DisplayMode.SPECTRUM:
+                        case DisplayMode.HISTOGRAM:
+                        case DisplayMode.PANAFALL:
+                            // check if we are over scale on left
+                            if (e.X > display_grid_x && e.X < display_grid_w)
+                            {
+                                if (gridminmaxadjust || gridmaxadjust) Cursor = grabbing;
+                                else Cursor = grab;
+                                rx1_grid_adjust = true;
+                            }
+                            break;
                     }
                 }
 
-                if (Display.CurrentDisplayMode == DisplayMode.PANAFALL)
-                {
-                    if (!rx2_enabled)
-                    {
-                        // top half is available only
-                        nMaxHeightRX1 = picDisplay.Height / 2;
-                    }
-                    else
-                    {
-                        // top half, of top half is available only
-                        nMaxHeightRX1 = picDisplay.Height / 4;
-                    }
-                }
-
-                switch (Display.CurrentDisplayMode)
-                {
-                    case DisplayMode.PANADAPTER:
-                    case DisplayMode.SPECTRUM:
-                    case DisplayMode.HISTOGRAM:
-                    case DisplayMode.PANAFALL:
-                        if ( (e.X > display_grid_x && e.X < display_grid_w) && 
-                             (e.Y < nMaxHeightRX1 && e.Y > nMinHeightRX1 + 10)  )
-                        {
-                            if (gridminmaxadjust || gridmaxadjust) Cursor = grabbing;
-                            else Cursor = grab;
-                            rx1_grid_adjust = true;
-                        }
-                        break;
-                }
-
-                if (rx2_enabled)
+                if (rx2_enabled && bOverRX2)
                 {
                     switch (Display.CurrentDisplayModeBottom)
                     {
@@ -43314,8 +43381,8 @@ namespace Thetis
                         case DisplayMode.SPECTRUM:
                         case DisplayMode.HISTOGRAM:
                         case DisplayMode.PANAFALL:
-                            if ((e.X > display_grid_x && e.X < display_grid_w) &&
-                                 (e.Y < nMaxHeightRX2 && e.Y > nMinHeightRX2 + 10))
+                            // check if we are over scale on left
+                            if (e.X > display_grid_x && e.X < display_grid_w)
                             {
                                 if (gridminmaxadjust || gridmaxadjust) Cursor = grabbing;
                                 else Cursor = grab;
@@ -43325,7 +43392,59 @@ namespace Thetis
                     }
                 }
 
-                if(rx1_grid_adjust || rx2_grid_adjust)
+                //switch (Display.CurrentDisplayMode)
+                //{
+                //    case DisplayMode.PANADAPTER:
+                //    case DisplayMode.SPECTRUM:
+                //    case DisplayMode.HISTOGRAM:
+                //    case DisplayMode.PANAFALL:
+                //        // check if we are over scale on left
+                //        if ( (e.X > display_grid_x && e.X < display_grid_w) && 
+                //             (e.Y < nMaxHeightRX1 && e.Y > nMinHeightRX1 + 10)  )
+                //        {
+                //            if (gridminmaxadjust || gridmaxadjust) Cursor = grabbing;
+                //            else Cursor = grab;
+                //            rx1_grid_adjust = true;
+                //        }
+
+                //        // check if we are anywhere over area that filters etc can be adjusted
+                //        if ( (e.X >= 0 && e.X < picDisplay.Width) && // we would not get event if not inside, but check anyway as makes code easier to see what is going on
+                //         (e.Y < nMaxHeightRX1 && e.Y > nMinHeightRX1 + 10))
+                //        {
+                //            bOverRX1 = true;
+                //        }
+
+                //        break;
+                //}
+
+                //if (rx2_enabled)
+                //{
+                //    switch (Display.CurrentDisplayModeBottom)
+                //    {
+                //        case DisplayMode.PANADAPTER:
+                //        case DisplayMode.SPECTRUM:
+                //        case DisplayMode.HISTOGRAM:
+                //        case DisplayMode.PANAFALL:
+                //            // check if we are over scale on left
+                //            if ((e.X > display_grid_x && e.X < display_grid_w) &&
+                //                 (e.Y < nMaxHeightRX2 && e.Y > nMinHeightRX2 + 10))
+                //            {
+                //                if (gridminmaxadjust || gridmaxadjust) Cursor = grabbing;
+                //                else Cursor = grab;
+                //                rx2_grid_adjust = true;
+                //            }
+
+                //            // check if we are anywhere over area that filters etc can be adjusted
+                //            if ( (e.X >= 0 && e.X < picDisplay.Width) && // we would not get event if not inside, but check anyway as makes code easier to see what is going on
+                //             (e.Y < nMaxHeightRX2 && e.Y > nMinHeightRX2 + 10))
+                //            {
+                //                bOverRX2 = true;
+                //            }
+                //            break;
+                //    }
+                //}
+
+                if (rx1_grid_adjust || rx2_grid_adjust)
                 {
                     if(rx1_grid_adjust)
                     {
@@ -44075,108 +44194,117 @@ namespace Thetis
                         jper = temp_text.IndexOf(separator) + 4;
                         txtDisplayCursorFreq.Text = String.Copy(temp_text.Insert(jper, " "));
 
-                        // if near a notch and not already doing something else, display appropriate cursor
-                        if (Cursor != Cursors.Hand && !mox)
-                        {
-                            if (!rx1_low_filter_drag && !rx1_high_filter_drag && !rx1_whole_filter_drag &&
-                                !rx2_low_filter_drag && !rx2_high_filter_drag && !rx2_whole_filter_drag &&
-                                !tx_low_filter_drag && !tx_high_filter_drag && !tx_whole_filter_drag &&
-                                !rx1_sub_drag && !notch_drag)
-                            {
-                                rf_freq = VFOAFreq;
+                        //// if near a notch and not already doing something else, display appropriate cursor
+                        //if (Cursor != Cursors.Hand && !mox)
+                        //{
+                        //    if (!rx1_low_filter_drag && !rx1_high_filter_drag && !rx1_whole_filter_drag &&
+                        //        !rx2_low_filter_drag && !rx2_high_filter_drag && !rx2_whole_filter_drag &&
+                        //        !tx_low_filter_drag && !tx_high_filter_drag && !tx_whole_filter_drag &&
+                        //        !rx1_sub_drag && !notch_drag)
+                        //    {
+                        //        rf_freq = VFOAFreq;
 
-                                if (rx2_enabled && e.Y > picDisplay.Height / 2)
-                                {
-                                    rf_freq = VFOBFreq;
+                        //        if (rx2_enabled && e.Y > picDisplay.Height / 2)
+                        //        {
+                        //            rf_freq = VFOBFreq;
 
-                                    switch (rx2_dsp_mode)
-                                    {
-                                        case (DSPMode.CWL):
-                                            rf_freq += cw_pitch * 1e-6;
-                                            break;
-                                        case (DSPMode.CWU):
-                                            rf_freq -= cw_pitch * 1e-6; ;
-                                            break;
-                                    }
-                                }
-                                else
-                                {
-                                    switch (rx1_dsp_mode)
-                                    {
-                                        case (DSPMode.CWL):
-                                            rf_freq += cw_pitch * 1e-6; ;
-                                            break;
-                                        case (DSPMode.CWU):
-                                            rf_freq -= cw_pitch * 1e-6; ;
-                                            break;
-                                    }
-                                }
+                        //            switch (rx2_dsp_mode)
+                        //            {
+                        //                case (DSPMode.CWL):
+                        //                    rf_freq += cw_pitch * 1e-6;
+                        //                    break;
+                        //                case (DSPMode.CWU):
+                        //                    rf_freq -= cw_pitch * 1e-6; ;
+                        //                    break;
+                        //            }
+                        //        }
+                        //        else
+                        //        {
+                        //            switch (rx1_dsp_mode)
+                        //            {
+                        //                case (DSPMode.CWL):
+                        //                    rf_freq += cw_pitch * 1e-6; ;
+                        //                    break;
+                        //                case (DSPMode.CWU):
+                        //                    rf_freq -= cw_pitch * 1e-6; ;
+                        //                    break;
+                        //            }
+                        //        }
 
-                                //Debug.WriteLine("x: " + e.X);
-                                int low = (int)PixelToHz(e.X - 3);
-                                int high = (int)PixelToHz(e.X + 3);
+                        //        //Debug.WriteLine("x: " + e.X);
+                        //        int low = (int)PixelToHz(e.X - 3);
+                        //        int high = (int)PixelToHz(e.X + 3);
 
-                                // NEW !!!!
-                                if (click_tune_display)    // Correct Notch frequency when CTUN on -G3OQD
-                                    rf_freq = rf_freq + (center_frequency - freq);
+                        //        // NEW !!!!
+                        //        if (click_tune_display)    // Correct Notch frequency when CTUN on -G3OQD
+                        //            rf_freq = rf_freq + (center_frequency - freq);
 
-                                List<Notch> list = NotchList.NotchesInBW(rf_freq, low, high);
-                                if (list.Count > 0)
-                                {
-                                    next_cursor = Cursors.VSplit;
-                                }
-                                else
-                                {
-                                    next_cursor = Cursors.Cross;
-                                }
-                            }
-                        }
+                        //        List<Notch> list = NotchList.NotchesInBW(rf_freq, low, high);
+                        //        if (list.Count > 0)
+                        //        {
+                        //            next_cursor = Cursors.VSplit;
+                        //        }
+                        //        else
+                        //        {
+                        //            next_cursor = Cursors.Cross;
+                        //        }
+                        //    }
+                        //}
 
-                        if (notch_drag)
-                        {
-                            double hz_per_pixel = PixelToHz(1) - PixelToHz(0);
-                            int delta_x = e.X - notch_drag_start_point.X;
-                            int delta_y = e.Y - notch_drag_start_point.Y;
+                        //if (notch_drag)
+                        //{
+                        //    double hz_per_pixel = PixelToHz(1) - PixelToHz(0);
+                        //    int delta_x = e.X - notch_drag_start_point.X;
+                        //    int delta_y = e.Y - notch_drag_start_point.Y;
 
-                            if (Math.Abs(delta_x) > notch_drag_max_delta_x)
-                                notch_drag_max_delta_x = Math.Abs(delta_x);
-                            if (Math.Abs(delta_y) > notch_drag_max_delta_y)
-                                notch_drag_max_delta_y = Math.Abs(delta_y);
+                        //    if (Math.Abs(delta_x) > notch_drag_max_delta_x)
+                        //        notch_drag_max_delta_x = Math.Abs(delta_x);
+                        //    if (Math.Abs(delta_y) > notch_drag_max_delta_y)
+                        //        notch_drag_max_delta_y = Math.Abs(delta_y);
 
-                            // offset the notch frequency based on the current mouse position
-                            double delta_freq = delta_x * hz_per_pixel;
-                            if (notch_zoom) delta_freq /= 10.0;
-                            notch_drag_active.Freq = notch_drag_start.Freq + delta_freq * 1e-6;
+                        //    // offset the notch frequency based on the current mouse position
+                        //    double delta_freq = delta_x * hz_per_pixel;
+                        //    if (notch_zoom) delta_freq /= 10.0;
+                        //    notch_drag_active.Freq = notch_drag_start.Freq + delta_freq * 1e-6;
 
-                            // change the BW of the notch filter once outside a 20 pixel boundary
-                            if (delta_y > 10)
-                            {
-                                notch_drag_active.BW = notch_drag_start.BW - (delta_y - 10) * 5;
-                                // don't go negative or less than 10Hz
-                                if (notch_drag_active.BW < 10) notch_drag_active.BW = 10;
-                            }
-                            else if (delta_y < -10)
-                                notch_drag_active.BW = notch_drag_start.BW - (delta_y + 10) * 5;
+                        //    // change the BW of the notch filter once outside a 20 pixel boundary
+                        //    if (delta_y > 10)
+                        //    {
+                        //        notch_drag_active.BW = notch_drag_start.BW - (delta_y - 10) * 5;
+                        //        // don't go negative or less than 10Hz
+                        //        if (notch_drag_active.BW < 10) notch_drag_active.BW = 10;
+                        //    }
+                        //    else if (delta_y < -10)
+                        //        notch_drag_active.BW = notch_drag_start.BW - (delta_y + 10) * 5;
 
-                            // UpdateRX1Notches();
-                            //UpdateRX1SubNotches();
-                            // UpdateRX2Notches();
-                        }
+                        //    // UpdateRX1Notches();
+                        //    //UpdateRX1SubNotches();
+                        //    // UpdateRX2Notches();
+                        //}
 
-                        if (((!rx2_enabled && rx1_dsp_mode != DSPMode.DRM) || // exclude DRM for RX1
-                            (rx2_enabled && rx1_dsp_mode != DSPMode.DRM && e.Y < picDisplay.Height / 2) ||
-                            (rx2_enabled && rx2_dsp_mode != DSPMode.DRM && e.Y >= picDisplay.Height / 2)))
-                        {
-                            if (!click_tune_display && !click_tune_rx2_display && current_click_tune_mode == ClickTuneMode.Off &&
+                        bool bDragRX1Filter = bOverRX1 && /*rx1_enabled &&*/ (rx1_dsp_mode != DSPMode.DRM) && !click_tune_display;
+                        bool bDragRX2Filter = bOverRX2 && rx2_enabled && (rx2_dsp_mode != DSPMode.DRM) && !click_tune_rx2_display;
+
+                        //if (((!rx2_enabled && rx1_dsp_mode != DSPMode.DRM) || // exclude DRM for RX1
+                        //    (rx2_enabled && rx1_dsp_mode != DSPMode.DRM && e.Y < picDisplay.Height / 2) ||
+                        //    (rx2_enabled && rx2_dsp_mode != DSPMode.DRM && e.Y >= picDisplay.Height / 2)))
+                        //{
+                        if (bDragRX1Filter || bDragRX2Filter)
+                        { 
+                            if (/*!click_tune_display && !click_tune_rx2_display &&*/ current_click_tune_mode == ClickTuneMode.Off &&
                                 picDisplay.Cursor != Cursors.Hand && next_cursor != Cursors.SizeNS && next_cursor != Cursors.VSplit)
                             {
                                 if (Math.Abs(e.X - filt_low_x) < 3 || // RX low filter edge
                                     Math.Abs(e.X - filt_high_x) < 3 || // RX high filter edge
+
                                     rx1_high_filter_drag || rx1_low_filter_drag || // already dragging a filter edge
+
                                     (chkEnableMultiRX.Checked && // RX1 Sub
                                         ((rx2_enabled && e.Y < picDisplay.Height / 2) || !rx2_enabled) && (e.X > vfoa_sub_low_x - 3 && e.X < vfoa_sub_high_x + 3)) ||
+
                                     (rx2_enabled && e.Y > picDisplay.Height / 2 && (Math.Abs(e.X - vfob_low_x) < 3)) || // RX2 low filter edge
                                     (rx2_enabled && e.Y > picDisplay.Height / 2 && (Math.Abs(e.X - vfob_high_x) < 3)) ||
+
                                     rx2_high_filter_drag || rx2_low_filter_drag) // already dragging a filter edge
                                 {
                                     next_cursor = Cursors.SizeWE;
@@ -44191,11 +44319,12 @@ namespace Thetis
                                 }
                             }
 
-                            if (notch_drag)
-                            {
-                                // do nothing -- already handled above
-                            }
-                            else if (rx1_high_filter_drag)
+                            //if (notch_drag)
+                            //{
+                            //    // do nothing -- already handled above
+                            //}
+                            //else 
+                            if (rx1_high_filter_drag)
                             {
                                 SelectRX1VarFilter();
                                 int new_high = (int)Math.Max(PixelToHz(e.X), radio.GetDSPRX(0, 0).RXFilterLow + 10);
@@ -44381,80 +44510,80 @@ namespace Thetis
             switch (e.Button)
             {
                 case MouseButtons.Left:
-                    bool near_notch = false;
-                    if (!mox && !agc_knee_drag && !agc_hang_drag)
-                    {
-                        switch (Display.CurrentDisplayMode)
-                        {
-                            case DisplayMode.PANADAPTER:
-                            case DisplayMode.WATERFALL:
-                            case DisplayMode.PANAFALL:
-                            case DisplayMode.PANASCOPE:
-                                // check first for being near a Notch
-                                double rf_freq = VFOAFreq;
-                                if (rx2_enabled && e.Y > picDisplay.Height / 2)
-                                {
-                                    rf_freq = VFOBFreq;
+                    ////bool near_notch = false;
+                    //if (!mox && !agc_knee_drag && !agc_hang_drag)
+                    //{
+                    //    switch (Display.CurrentDisplayMode)
+                    //    {
+                    //        case DisplayMode.PANADAPTER:
+                    //        case DisplayMode.WATERFALL:
+                    //        case DisplayMode.PANAFALL:
+                    //        case DisplayMode.PANASCOPE:
+                    //            //// check first for being near a Notch
+                    //            //double rf_freq = VFOAFreq;
+                    //            //if (rx2_enabled && e.Y > picDisplay.Height / 2)
+                    //            //{
+                    //            //    rf_freq = VFOBFreq;
 
-                                    switch (rx2_dsp_mode)
-                                    {
-                                        case (DSPMode.CWL):
-                                            rf_freq += cw_pitch * 1e-6;
-                                            break;
-                                        case (DSPMode.CWU):
-                                            rf_freq -= cw_pitch * 1e-6;
-                                            break;
-                                    }
-                                }
-                                else
-                                {
-                                    switch (rx1_dsp_mode)
-                                    {
-                                        case (DSPMode.CWL):
-                                            rf_freq += cw_pitch * 1e-6;
-                                            break;
-                                        case (DSPMode.CWU):
-                                            rf_freq -= cw_pitch * 1e-6;
-                                            break;
-                                    }
-                                }
+                    //            //    switch (rx2_dsp_mode)
+                    //            //    {
+                    //            //        case (DSPMode.CWL):
+                    //            //            rf_freq += cw_pitch * 1e-6;
+                    //            //            break;
+                    //            //        case (DSPMode.CWU):
+                    //            //            rf_freq -= cw_pitch * 1e-6;
+                    //            //            break;
+                    //            //    }
+                    //            //}
+                    //            //else
+                    //            //{
+                    //            //    switch (rx1_dsp_mode)
+                    //            //    {
+                    //            //        case (DSPMode.CWL):
+                    //            //            rf_freq += cw_pitch * 1e-6;
+                    //            //            break;
+                    //            //        case (DSPMode.CWU):
+                    //            //            rf_freq -= cw_pitch * 1e-6;
+                    //            //            break;
+                    //            //    }
+                    //            //}
 
-                                int low = (int)PixelToHz(e.X - 3);
-                                int high = (int)PixelToHz(e.X + 3);
+                    //            //int low = (int)PixelToHz(e.X - 3);
+                    //            //int high = (int)PixelToHz(e.X + 3);
 
-                                // NEW !!!!
-                                double freq = double.Parse(txtVFOAFreq.Text);
-                                if (click_tune_display)    // Correct Notch frequency when CTUN on -G3OQD
-                                    rf_freq = rf_freq + (center_frequency - freq);
+                    //            //// NEW !!!!
+                    //            //double freq = double.Parse(txtVFOAFreq.Text);
+                    //            //if (click_tune_display)    // Correct Notch frequency when CTUN on -G3OQD
+                    //            //    rf_freq = rf_freq + (center_frequency - freq);
 
-                                //List<Notch> list = NotchList.NotchesInBW(rf_freq, low, high);
-                                //if (list.Count > 0)
-                                //{
-                                //    near_notch = true;
+                    //            //List<Notch> list = NotchList.NotchesInBW(rf_freq, low, high);
+                    //            //if (list.Count > 0)
+                    //            //{
+                    //            //    near_notch = true;
 
-                                //    int index = 0;
-                                //    if (list[index].Permanent)
-                                //    {
-                                //        list[index].Details = true;
-                                //        notch_drag_active = list[index];
-                                //    }
-                                //    else
-                                //    {
-                                //        notch_drag = true;
-                                //        timerNotchZoom.Enabled = true;
-                                //        notch_drag_active = list[index];
-                                //        notch_drag_start = list[index].Copy();
-                                //        notch_drag_start_point = new Point(e.X, e.Y);
-                                //        list[index].Details = true;
-                                //        // mark which receiver the click occurred on so that we can show the callout only there
-                                //        list[index].RX = 1;
-                                //        if (rx2_enabled && e.Y > picDisplay.Height / 2)
-                                //            list[index].RX = 2;
-                                //    }
-                                //}
-                                break;
-                        }
-                    }
+                    //            //    int index = 0;
+                    //            //    if (list[index].Permanent)
+                    //            //    {
+                    //            //        list[index].Details = true;
+                    //            //        notch_drag_active = list[index];
+                    //            //    }
+                    //            //    else
+                    //            //    {
+                    //            //        notch_drag = true;
+                    //            //        timerNotchZoom.Enabled = true;
+                    //            //        notch_drag_active = list[index];
+                    //            //        notch_drag_start = list[index].Copy();
+                    //            //        notch_drag_start_point = new Point(e.X, e.Y);
+                    //            //        list[index].Details = true;
+                    //            //        // mark which receiver the click occurred on so that we can show the callout only there
+                    //            //        list[index].RX = 1;
+                    //            //        if (rx2_enabled && e.Y > picDisplay.Height / 2)
+                    //            //            list[index].RX = 2;
+                    //            //    }
+                    //            //}
+                    //            break;
+                    //    }
+                    //}
 
                     // if (!mox)
                     // {
@@ -44594,12 +44723,15 @@ namespace Thetis
                         }
                     }
 
-                    if (!near_notch &&
+                    bool bOverRX1 = overRX(e.X, e.Y, 1, false);  //MW0LGE
+                    bool bOverRX2 = overRX(e.X, e.Y, 2, false);
+
+                    if (/*!near_notch &&*/
                         !agc_knee_drag &&
                         !agc_hang_drag &&
                         !gridminmaxadjust &&
                         !gridmaxadjust &&
-                        (current_click_tune_mode != ClickTuneMode.Off || click_tune_display || click_tune_rx2_display))
+                        (current_click_tune_mode != ClickTuneMode.Off || (click_tune_display && bOverRX1) || (click_tune_rx2_display && bOverRX2)))
                     {
                         switch (Display.CurrentDisplayMode)
                         {
@@ -44799,7 +44931,7 @@ namespace Thetis
                                 break;
                         }
                     }
-                    else if (!near_notch &&
+                    else if (/*!near_notch &&*/
                               !agc_knee_drag &&
                               !agc_hang_drag &&
                               !gridminmaxadjust &&
@@ -45018,13 +45150,13 @@ namespace Thetis
                         }
                     }
 
-                    int clow = (int)PixelToHz(e.X - 3);
-                    int chigh = (int)PixelToHz(e.X + 3);
+                    //int clow = (int)PixelToHz(e.X - 3);
+                    //int chigh = (int)PixelToHz(e.X + 3);
 
-                    // NEW !!!!
-                    double Freq = double.Parse(txtVFOAFreq.Text);
-                    if (click_tune_display)    // Correct Notch frequency when CTUN on -G3OQD
-                        cfreq = cfreq + (center_frequency - Freq);
+                    //// NEW !!!!
+                    //double Freq = double.Parse(txtVFOAFreq.Text);
+                    //if (click_tune_display)    // Correct Notch frequency when CTUN on -G3OQD
+                    //    cfreq = cfreq + (center_frequency - Freq);
 
                     //List<Notch> lst = NotchList.NotchesInBW(cfreq, clow, chigh);
 
@@ -45120,7 +45252,7 @@ namespace Thetis
                 case MouseButtons.Middle:
                     if (mouse_tune_step)
                     {
-                        if (shift_down) ChangeTuneStepDown();
+                        if (m_bShiftKeyDown) ChangeTuneStepDown(); //MW0LGE
                         else ChangeTuneStepUp();
                     }
                     break;
@@ -45206,21 +45338,21 @@ namespace Thetis
 
                         // grid_minmax_drag_max_delta_y = 0;
 
-                        notch_drag = false;
-                        notch_drag_max_delta_x = 0;
-                        notch_drag_max_delta_y = 0;
-                        timerNotchZoom.Enabled = false;
-                        notch_zoom = false;
-                        if (Display.TNFZoom)
-                        {
-                            Display.TNFZoom = false;
-                        }
+                        //notch_drag = false;
+                        //notch_drag_max_delta_x = 0;
+                        //notch_drag_max_delta_y = 0;
+                        //timerNotchZoom.Enabled = false;
+                        //notch_zoom = false;
+                        //if (Display.TNFZoom)
+                        //{
+                        //    Display.TNFZoom = false;
+                        //}
                         // stop showing details for this notch in the panadapter
-                        if (notch_drag_active != null)
-                        {
-                            notch_drag_active.Details = false;
-                            notch_drag_active = null;
-                        }
+                        //if (notch_drag_active != null)
+                        //{
+                        //    notch_drag_active.Details = false;
+                        //    notch_drag_active = null;
+                        //}
                         //rx2_sub_drag = false;
                         break;
                 }
@@ -45402,10 +45534,19 @@ namespace Thetis
 
             if (initializing) lastZoom = zoom_factor;
             Boolean zoomingIn = (zoom_factor > lastZoom);
-            if (ClickTuneDisplay && zoomingIn)  //-W2PA Force centering display when zooming in with CTUN on, to keep the vfo within the display
+
+            // MW0LGE shift modifier
+            bool bCentre = !m_bZoomShiftModifier || (m_bZoomShiftModifier && ((!m_bShiftKeyDown && !m_bZoomShiftModifierReverse) || (m_bShiftKeyDown && m_bZoomShiftModifierReverse)));
+
+            if ((ClickTuneDisplay && zoomingIn) && bCentre )  //-W2PA Force centering display when zooming in with CTUN on, to keep the vfo within the display
             {
                 center_frequency = VFOAFreq;
                 txtVFOAFreq_LostFocus(this, EventArgs.Empty);
+            }
+            if (rx2_enabled && (ClickTuneRX2Display && zoomingIn) && bCentre)  //MW0LGE - we should do rx2 as well !
+            {                
+                center_rx2_frequency = VFOBFreq;
+                txtVFOBFreq_LostFocus(this, EventArgs.Empty);
             }
             lastZoom = zoom_factor;
 
@@ -48252,6 +48393,7 @@ namespace Thetis
 				SetSoftRockOscFreqs();
 			}
 #endif
+			AndromedaIndicatorCheck(EIndicatorActions.eINSplit, false, chkVFOSplit.Checked);
         }
 
 
@@ -48271,6 +48413,9 @@ namespace Thetis
                 lblXITLabel.BackColor = System.Drawing.Color.Transparent;
                 Display.XIT = 0;
             }
+			AndromedaIndicatorCheck(EIndicatorActions.eINXIT, false, chkXIT.Checked);
+
+
 #if false
 			// wjtFIXME!
 			if ( current_model == Model.SOFTROCK40 )			
@@ -48321,6 +48466,8 @@ namespace Thetis
                 txtVFOAFreq_LostFocus(this, EventArgs.Empty);
                 txtVFOBFreq_LostFocus(this, EventArgs.Empty);
             }
+			AndromedaIndicatorCheck(EIndicatorActions.eINRIT, false, chkRIT.Checked);
+
         }
 
         private void udRIT_ValueChanged(object sender, System.EventArgs e)
@@ -48700,6 +48847,7 @@ namespace Thetis
             radio.GetDSPRX(0, 1).AutoNotchFilter = chkANF.Checked;
             cat_anf_status = Convert.ToInt32(chkANF.Checked);
             ANFToolStripMenuItem.Checked = chkANF.Checked;
+			AndromedaIndicatorCheck(EIndicatorActions.eINANF, true, chkANF.Checked);
         }
 
         private void chkDSPNB2_CheckedChanged(object sender, EventArgs e)
@@ -48720,6 +48868,7 @@ namespace Thetis
             cat_snb_status = Convert.ToInt32(chkDSPNB2.Checked);
             SNBtoolStripMenuItem.Checked = chkDSPNB2.Checked;
             SNBtoolStripMenuItem1.Checked = chkRX2NB2.Checked;
+			AndromedaIndicatorCheck(EIndicatorActions.eINSNB, true, chkDSPNB2.Checked);
         }
 
         private void chkRX2NB2_CheckedChanged(object sender, EventArgs e)
@@ -48737,6 +48886,7 @@ namespace Thetis
             }
             WDSP.SetRXASNBARun(WDSP.id(2, 0), chkRX2NB2.Checked);
             cat_rx2snb_status = Convert.ToInt32(chkRX2NB2.Checked);
+			AndromedaIndicatorCheck(EIndicatorActions.eINSNB, false, chkRX2NB2.Checked);
         }
 
         #endregion
@@ -48778,6 +48928,8 @@ namespace Thetis
                 radio.GetDSPTX(0).TXOsctrlOn = false;
             }
             cat_cmpd_status = Convert.ToInt32(chkCPDR.Checked);
+			AndromedaIndicatorCheck(EIndicatorActions.eINCompanderEnabled, false, chkCPDR.Checked);
+
         }
 
         private void ptbCPDR_Scroll(object sender, System.EventArgs e)
@@ -49509,12 +49661,12 @@ namespace Thetis
             {
                 // set all Andromedia console controls to hidden
                 panelButtonBar.Hide();
-                lblRX2LockLabel.Hide();
-                lblRX2CtunLabel.Hide();
+                panelMeterLabels.Hide();
                 panelVFOALabels.Hide();
+                lblModeBigLabel.Hide();
                 panelVFOBLabels.Hide();
-                lblSNBLabel.Hide();
-                lblVFOSyncLabel.Hide();
+                lblRX2ModeBigLabel.Hide();
+                panelVFOLabels.Hide();
             }
 
             ResumeDrawing(this); //MW0LGE
@@ -49646,6 +49798,7 @@ namespace Thetis
             //MW0LGE lbl_rx2meter_size_basis = this.lblRX2Meter.Size;
             txt_multi_text_basis = this.txtMultiText.Location;
             txt_rx2meter_basis = this.txtRX2Meter.Location;
+			txt_rx2meter_size_basis = this.txtRX2Meter.Size;
             gr_options_size_basis = this.panelOptions.Size;
             chk_mon_basis = this.chkMON.Location;
             chk_mut_basis = this.chkMUT.Location;
@@ -51020,7 +51173,9 @@ namespace Thetis
             radio.GetDSPRX(1, 0).AutoNotchFilter = chkRX2ANF.Checked;
             radio.GetDSPRX(1, 1).AutoNotchFilter = chkRX2ANF.Checked;
             //cat_anf_status = Convert.ToInt32(chkRX2ANF.Checked);
+            catrx2_anf_status = Convert.ToInt32(chkRX2ANF.Checked);
             aNF2ToolStripMenuItem.Checked = chkRX2ANF.Checked;
+			AndromedaIndicatorCheck(EIndicatorActions.eINANF, false, chkRX2ANF.Checked);
         }
 
         private void chkRX2BIN_CheckedChanged(object sender, System.EventArgs e)
@@ -51212,8 +51367,7 @@ namespace Thetis
             // else rx2_squelch_on = chkRX2Squelch.Checked;
             if (sliderForm != null)
                 sliderForm.RX2SquelchOnOff = chkRX2Squelch.Checked;
-
-
+			AndromedaIndicatorCheck(EIndicatorActions.eINSquelch, false, chkRX2Squelch.Checked);
         }
 
         private void ptbRX2Squelch_Scroll(object sender, System.EventArgs e)
@@ -52353,6 +52507,7 @@ namespace Thetis
                 chkVFOSync.BackColor = SystemColors.Control;
                 lblVFOSyncLabel.BackColor = System.Drawing.Color.Transparent;
             }
+			AndromedaIndicatorCheck(EIndicatorActions.eINVFOSync, false, chkVFOSync.Checked);
         }
 
         private bool mute_rx1_on_vfob_tx = true;
@@ -53372,16 +53527,16 @@ namespace Thetis
 
         private void timerNotchZoom_Tick(object sender, EventArgs e)
         {
-            const int TOL = 10;
+            //const int TOL = 10;
 
-            timerNotchZoom.Enabled = false;
-            if (notch_drag_max_delta_x < TOL &&
-                notch_drag_max_delta_y < TOL)
-            {
-                Display.TNFZoom = true;
-                notch_zoom = true;
-                Display.NotchZoomStartFreq = notch_drag_start.Freq;
-            }
+            //timerNotchZoom.Enabled = false;
+            //if (notch_drag_max_delta_x < TOL &&
+            //    notch_drag_max_delta_y < TOL)
+            //{
+            //    Display.TNFZoom = true;
+            //    notch_zoom = true;
+            //    Display.NotchZoomStartFreq = notch_drag_start.Freq;
+            //}
         }
 
         private void setupToolStripMenuItem_Click(object sender, EventArgs e)
@@ -53636,12 +53791,12 @@ namespace Thetis
         private bool m_bShowTopControls = true;
         public bool ShowTopControls
         {
-            set {
+            set
+            {
                 this.m_bShowTopControls = value;
-
-                //MW0LGE
                 this.topControlsToolStripMenuItem.Checked = value;
-                this.bandToolStripMenuItem.Visible = !m_bShowBandControls; 
+                if (value == true)                      // if ON, turn andromeda top bar OFF
+                    if (SetupForm != null) SetupForm.chkShowAndromedaTop.Checked = false;
 
                 if (this.CollapsedDisplay)
                     this.CollapseDisplay();
@@ -53651,12 +53806,13 @@ namespace Thetis
         private bool m_bShowBandControls = true;
         public bool ShowBandControls
         {
-            set {
+            set
+            {
                 this.m_bShowBandControls = value;
-
-                //MW0LGE
                 this.bandControlsToolStripMenuItem.Checked = value;
-                this.modeToolStripMenuItem.Visible = !m_bShowModeControls;
+                this.bandToolStripMenuItem.Visible = !m_bShowBandControls;
+                if (value == true)                      // if ON, turn andromeda menu button bar OFF
+                    if (SetupForm != null) SetupForm.chkShowAndromedaBar.Checked = false;
 
                 if (this.CollapsedDisplay)
                     this.CollapseDisplay();
@@ -53666,11 +53822,13 @@ namespace Thetis
         private bool m_bShowModeControls = true;
         public bool ShowModeControls
         {
-            set {
+            set
+            {
                 this.m_bShowModeControls = value;
-
-                //MW0LGE
                 this.modeControlsToolStripMenuItem.Checked = value;
+                this.modeToolStripMenuItem.Visible = !m_bShowModeControls;
+                if (value == true)                      // if ON, turn andromeda menu button bar OFF
+                    if (SetupForm != null) SetupForm.chkShowAndromedaBar.Checked = false;
 
                 if (this.CollapsedDisplay)
                     this.CollapseDisplay();
@@ -53680,13 +53838,36 @@ namespace Thetis
          private bool showAndromedaTopControls = false;
         public bool ShowAndromedaTopControls
         {
-            set { this.showAndromedaTopControls = value; }
+            set
+            {
+                this.showAndromedaTopControls = value;
+                this.andromedaTopControlsToolStripMenuItem.Checked = value;
+                if (value == true)                  // if andromeda ON, turn the "normal" top bar OFF
+                    if (SetupForm != null) SetupForm.chkShowTopControls.Checked = false;
+                if (this.CollapsedDisplay)
+                    this.CollapseDisplay();
+
+            }
         }
 
         private bool showAndromedaButtonBar = false;
         public bool ShowAndromedaButtonBar
         {
-            set { this.showAndromedaButtonBar = value; }
+            set
+            {
+                this.showAndromedaButtonBar = value;
+                this.andromedaButtonBarToolStripMenuItem.Checked = value;
+                if (value == true)                  // if andromeda bar ON, turn mode and band OFF
+                {
+                    if (SetupForm != null)
+                    {
+                        SetupForm.chkShowBandControls.Checked = false;
+                        SetupForm.chkShowModeControls.Checked = false;
+                    }
+                }
+                if (this.CollapsedDisplay)
+                    this.CollapseDisplay();
+            }
         }
 
        private void mnuCollapse_Click(object sender, EventArgs e)
@@ -53734,12 +53915,12 @@ namespace Thetis
 // added G8NJJ to display Andromeda encoder settings in title bar
             this.Text = TitleBar.GetString() + TitleBarMultifunction;
             panelButtonBar.Hide();
-            lblRX2LockLabel.Hide();
-            lblRX2CtunLabel.Hide();
+            panelMeterLabels.Hide();
             panelVFOALabels.Hide();
+            lblModeBigLabel.Hide();
             panelVFOBLabels.Hide();
-            lblSNBLabel.Hide();
-            lblVFOSyncLabel.Hide();
+            lblRX2ModeBigLabel.Hide();
+            panelVFOLabels.Hide();
 
             grpMultimeterMenus.Show(); //MW0LGE
 
@@ -53811,7 +53992,7 @@ namespace Thetis
             comboMeterRXMode.Show();
             comboMeterTXMode.Show();                    // added G8NJJ - I was hiding this for Andromeda but not bringing it back
             txtMultiText.Show();
-
+			chkFWCATU.Show();
             //RX2 Controls
             chkRX2.Show();
             lblRX2Band.Show();
@@ -53847,10 +54028,7 @@ namespace Thetis
 
             grpVFOA.Location = new Point(gr_VFOA_basis_location.X + (h_delta / 4), gr_VFOA_basis_location.Y);
             grpVFOB.Location = new Point(gr_VFOB_basis_location.X + h_delta - (h_delta / 4), gr_VFOB_basis_location.Y);
-
             //grpVFOBetween.Location = gr_vfobetween_basis_location;
-            //grpVFOBetween.Location = new Point(gr_vfobetween_basis_location.X + (h_delta / 2), gr_vfobetween_basis_location.Y);
-
             //grpMultimeter.Size = gr_multi_meter_size_basis;  //MW0LGE
             picMultiMeterDigital.Parent = grpMultimeter;
             //picMultiMeterDigital.Size = pic_multi_meter_size_basis;  //MW0LGE
@@ -53868,20 +54046,20 @@ namespace Thetis
             picMultiMeterDigital.Size = new Size(pic_multi_meter_size_basis.Width + (h_delta / 4), pic_multi_meter_size_basis.Height);
             //end MW0LGE
 
-            lblMultiSMeter.Parent = grpMultimeter;
-            lblMultiSMeter.Location = lbl_multi_smeter_basis;
-            lblMultiSMeter.Size = lbl_multi_smeter_size_basis;
+            //MW0LGE lblMultiSMeter.Parent = grpMultimeter;
+            //MW0LGE lblMultiSMeter.Location = lbl_multi_smeter_basis;
+            //MW0LGE lblMultiSMeter.Size = lbl_multi_smeter_size_basis;
             picRX2Meter.Parent = grpRX2Meter;
             picRX2Meter.Location = pic_rx2meter_basis;
             picRX2Meter.Size = pic_rx2meter_size_basis;
-            lblRX2Meter.Parent = grpRX2Meter;
-            lblRX2Meter.Location = lbl_rx2meter_basis;
-            lblRX2Meter.Size = lbl_rx2meter_size_basis;
-            if (current_meter_display_mode == MultiMeterDisplayMode.Original)
+            //MW0LGE lblRX2Meter.Parent = grpRX2Meter;
+            //MW0LGE lblRX2Meter.Location = lbl_rx2meter_basis;
+            //MW0LGE lblRX2Meter.Size = lbl_rx2meter_size_basis;
+            /*if (current_meter_display_mode == MultiMeterDisplayMode.Original)
             {
                 picMultiMeterDigital.Height -= lblMultiSMeter.ClientSize.Height;
                 picRX2Meter.Height -= lblRX2Meter.ClientSize.Height;
-            }
+            }*/
             lblRX2RF.Parent = panelRX2RF;
             lblRX2RF.Location = lbl_rx2_rf_basis;
             txtMultiText.Parent = grpMultimeter;
@@ -54362,7 +54540,7 @@ namespace Thetis
                     // txtRX2Meter.Parent = this;
                     txtRX2Meter.Hide();
                     // lblMultiSMeter.Parent = this;
-                    lblMultiSMeter.Hide();
+                    //MW0LGE lblMultiSMeter.Hide();
                     //lblRX2Meter.Hide();
 
                     if (current_meter_display_mode == MultiMeterDisplayMode.Original)
@@ -54370,10 +54548,10 @@ namespace Thetis
                         // current_meter_display_mode = MultiMeterDisplayMode.Edge;
                         // SetupForm.comboMeterType.Text = "Edge";
                         //picMultiMeterDigital.Hide();
-                        lblMultiSMeter.Parent = this;
+                        //MW0LGE lblMultiSMeter.Parent = this;
                         picMultiMeterDigital.SendToBack();
-                        lblMultiSMeter.Show();
-                        lblMultiSMeter.BringToFront();
+                        //MW0LGE lblMultiSMeter.Show();
+                        //MW0LGE lblMultiSMeter.BringToFront();
                     }
                     lblRXMeter.Text = comboMeterRXMode.Text;
                 }
@@ -54393,16 +54571,16 @@ namespace Thetis
 
                     // lblMultiSMeter.Parent = this;
                     //lblMultiSMeter.Hide();
-                    lblRX2Meter.Hide();
+                    //MW0LGE lblRX2Meter.Hide();
 
                     if (current_meter_display_mode == MultiMeterDisplayMode.Original)
                     {
                         //current_meter_display_mode = MultiMeterDisplayMode.Edge;
                         //SetupForm.comboMeterType.Text = "Edge";
-                        lblRX2Meter.Parent = this;
+                        //MW0LGE lblRX2Meter.Parent = this;
                         picRX2Meter.SendToBack();
-                        lblRX2Meter.Show();
-                        lblRX2Meter.BringToFront();
+                        //MW0LGE lblRX2Meter.Show();
+                        //MW0LGE lblRX2Meter.BringToFront();
                     }
                     lblRXMeter.Text = comboRX2MeterMode.Text;
                 }
@@ -54520,7 +54698,7 @@ namespace Thetis
                     udRX1StepAttData.Show();
 
                     // lblMultiSMeter.Parent = this;
-                    lblMultiSMeter.Hide();
+                    //MW0LGE lblMultiSMeter.Hide();
                     //lblRX2Meter.Hide();
                     comboMeterRXMode.Parent = this;
                     comboMeterRXMode.Show();
@@ -54811,37 +54989,41 @@ namespace Thetis
                 panelMeterLabels.Location = new Point(panelVFOLabels.Location.X + panelVFOLabels.Width + 10, grpVFOA.Location.Y + 3 - panelMeterLabels.Height);
                 if (show_rx1)
                 {
+                    // G8NJJ: deliberately set RX1 meter and txt size to RX2 ones size in Andromeda
+                    // they do get resized back later!
                     txtMultiText.Location = new Point(panelVFOLabels.Location.X + panelVFOLabels.Width + 10, grpVFOA.Location.Y + 5);
+                    txtMultiText.Size = txt_rx2meter_size_basis;
                     picMultiMeterDigital.Location = new Point(txtMultiText.Location.X, txtMultiText.Location.Y + txtMultiText.Height + 4);
-                    picMultiMeterDigital.Size = pic_multi_meter_size_basis;
+                    picMultiMeterDigital.Size = pic_rx2meter_size_basis;
                     if (current_meter_display_mode == MultiMeterDisplayMode.Original)
                     {
-                        picMultiMeterDigital.Size = new Size(pic_multi_meter_size_basis.Width * 2, pic_multi_meter_size_basis.Height - lblMultiSMeter.Height);
-                        lblMultiSMeter.Size = new Size(lbl_multi_smeter_size_basis.Width * 2, lbl_multi_smeter_size_basis.Height);
-                        lblMultiSMeter.Location = new Point(picMultiMeterDigital.Location.X, picMultiMeterDigital.Location.Y +
-                                                            picMultiMeterDigital.Height);
-                        lblMultiSMeter.Show();
-                        lblMultiSMeter.BringToFront();
+                        picMultiMeterDigital.Size = new Size(pic_multi_meter_size_basis.Width * 2, pic_multi_meter_size_basis.Height);//MW0LGE  - lblMultiSMeter.Height);
+                        //MW0LGE lblMultiSMeter.Size = new Size(lbl_multi_smeter_size_basis.Width * 2, lbl_multi_smeter_size_basis.Height);
+                        //MW0LGE lblMultiSMeter.Location = new Point(picMultiMeterDigital.Location.X, picMultiMeterDigital.Location.Y +
+                        //MW0LGE picMultiMeterDigital.Height);
+                        //MW0LGE lblMultiSMeter.Show();
+                        //MW0LGE lblMultiSMeter.BringToFront();
                     }
-                    else
-                        lblMultiSMeter.Hide();
+                    //MW0LGE else
+                    //MW0LGE lblMultiSMeter.Hide();
                 }
                 else if (show_rx2)
                 {
                     txtRX2Meter.Location = new Point(panelVFOLabels.Location.X + panelVFOLabels.Width + 10, grpVFOA.Location.Y + 5);
+					txtRX2Meter.Size = txt_rx2meter_size_basis;
                     picRX2Meter.Location = new Point(txtRX2Meter.Location.X, txtRX2Meter.Location.Y + txtRX2Meter.Height + 4);
                     picRX2Meter.Size = pic_rx2meter_size_basis;
                     if (current_meter_display_mode == MultiMeterDisplayMode.Original)
                     {
-                        picRX2Meter.Size = new Size(pic_rx2meter_size_basis.Width * 2, pic_rx2meter_size_basis.Height - lblRX2Meter.Height);
-                        lblRX2Meter.Size = new Size(lbl_rx2meter_size_basis.Width * 2, lbl_rx2meter_size_basis.Height);
-                        lblRX2Meter.Location = new Point(picRX2Meter.Location.X, picRX2Meter.Location.Y +
-                                                            picRX2Meter.Height);
-                        lblRX2Meter.Show();
-                        lblRX2Meter.BringToFront();
+                        picRX2Meter.Size = new Size(pic_rx2meter_size_basis.Width * 2, pic_rx2meter_size_basis.Height);//MW0LGE  - lblRX2Meter.Height);
+                        //MW0LGE lblRX2Meter.Size = new Size(lbl_rx2meter_size_basis.Width * 2, lbl_rx2meter_size_basis.Height);
+                        //MW0LGE lblRX2Meter.Location = new Point(picRX2Meter.Location.X, picRX2Meter.Location.Y +
+                        //MW0LGE picRX2Meter.Height);
+                        //MW0LGE lblRX2Meter.Show();
+                        //MW0LGE lblRX2Meter.BringToFront();
                     }
-                    else
-                        lblRX2Meter.Hide();
+                    //MW0LGE else
+                    //MW0LGE lblRX2Meter.Hide();
                     comboRX2MeterMode.Location = new Point(txtRX2Meter.Location.X - comboRX2MeterMode.Width - 5,
                         txtRX2Meter.Location.Y + 2);
                     // comboMeterTXMode.Location = new Point(comboMeterRXMode.Location.X, 
@@ -54851,7 +55033,8 @@ namespace Thetis
                     // G8NJJ
                 }
             }
-            else if (m_bShowModeControls)
+//            else if (m_bShowModeControls)         /// changed G8NJJ - wrong variable used?
+            else if (m_bShowTopControls)
             {
                 if (show_rx1)
                 {
@@ -55661,7 +55844,7 @@ namespace Thetis
                     break;
             }
         }
-
+// handlers for menu display controls events. The persistent state is held on the setup form matching controls
         private void mnuShowTopControls_Click(object sender, EventArgs e)
         {
             SetupForm.chkShowTopControls.Checked = !SetupForm.chkShowTopControls.Checked;
@@ -55773,6 +55956,8 @@ namespace Thetis
                     CollapseDisplay();
             }
             UpdateButtonBarButtons();               // G8NJJ - update the button bar
+            AndromedaIndicatorCheck(EIndicatorActions.eINVFOAB, true, show_rx1);
+            InitialiseAndromedaIndicators(false);           // initialise the panel LEDs
         }
 
         private void radRX2Show_CheckedChanged(object sender, EventArgs e)
@@ -55792,6 +55977,8 @@ namespace Thetis
                     CollapseDisplay();
             }
             UpdateButtonBarButtons();               // G8NJJ - update the button bar
+            AndromedaIndicatorCheck(EIndicatorActions.eINVFOAB, true, show_rx1);
+            InitialiseAndromedaIndicators(false);           // initialise the panel LEDs
         }
 
         private void ptbAF_DoubleClick(object sender, EventArgs e)
@@ -55930,6 +56117,7 @@ namespace Thetis
             txtVFOAFreq_LostFocus(this, EventArgs.Empty);
             if (stereo_diversity)
                 txtVFOBFreq_LostFocus(this, EventArgs.Empty);
+            AndromedaIndicatorCheck(EIndicatorActions.eINCTune, true, chkFWCATU.Checked);
         }
 
         private void linearityToolStripMenuItem_Click(object sender, EventArgs e)
@@ -56075,6 +56263,8 @@ namespace Thetis
                     lblNRLabel.Text = "--";
                     break;
             }
+            AndromedaIndicatorCheck(EIndicatorActions.eINNR, true, (chkNR.CheckState != CheckState.Unchecked));
+
         }
 
         private void chkRX2NR_CheckStateChanged(object sender, EventArgs e)
@@ -56119,6 +56309,7 @@ namespace Thetis
                     break;
 
             }
+            AndromedaIndicatorCheck(EIndicatorActions.eINNR, false, (chkRX2NR.CheckState != CheckState.Unchecked));
         }
 
         private void wBToolStripMenuItem_Click(object sender, EventArgs e)
@@ -56176,6 +56367,8 @@ namespace Thetis
             }
             cmaster.CMSetFRXNBRun(0);
             cmaster.CMSetFRXNB2Run(0);
+			AndromedaIndicatorCheck(EIndicatorActions.eINNB, true, (chkNB.CheckState != CheckState.Unchecked));
+			
         }
 
         private void chkRX2NB_CheckStateChanged(object sender, EventArgs e)
@@ -56215,6 +56408,7 @@ namespace Thetis
             }
             cmaster.CMSetFRXNBRun(1);
             cmaster.CMSetFRXNB2Run(1);
+			AndromedaIndicatorCheck(EIndicatorActions.eINNB, false, (chkRX2NB.CheckState != CheckState.Unchecked));
         }
 
         // RX2 Spectral Noise Blanker (SNB)
@@ -57370,6 +57564,8 @@ namespace Thetis
         private void chkFWCATUBypass_CheckedChanged(object sender, EventArgs e)
         {
             psform.AutoCalEnabled = chkFWCATUBypass.Checked;
+            AndromedaIndicatorCheck(EIndicatorActions.eINPuresignalEnabled, false, chkFWCATUBypass.Checked);
+
         }
 
         public bool PureSignalEnabled
@@ -57399,6 +57595,683 @@ namespace Thetis
 
 
        #region Andromeda Button Bar functions
+
+        // G8NJJ: define the Andromeda button bar menu
+        public enum EButtonBarActions
+        {
+            eBBNone = 0,                // no action
+            eBBStartStop,               // start/stop the radio
+            eBBRX2OnOff,                // toggle RX2 on/off
+            eBBDUP,                     // press DUP button
+            eBBMON,                     // press MON button
+            eBBTune,                    // Tune on/off
+            eBBMOX,                     // MOX on/off
+            eBBPuresignalOnOff,         // toggle Puresignal on/off
+            eBBPuresignal2Tone,         // puresignal 2 tone test on/off
+            eBBMenu,                    // activate another menu
+            eBBNR,                      // press NR button
+            eBBNB,                      // press NB button
+            eBBSNB,                     // press SNB button
+            eBBANF,                     // press ANF button
+            eBBMNF,                     // press MNF button
+            eBBVFOSwap,                 // press VFO swap button
+            eBBVFOSplit,                // split operation
+            eBBVFOAtoB,                 // copy A to B
+            eBBVFOBtoA,                 // copy B to A
+            eBBVFOZeroBeat,             // operate zero beat button
+            eBBIFtoV,                   // operate IF->V button
+            eBBVFOSyncOnOff,            // VFO sync
+            eBBVFOLockOnOff,            // VFO Lock
+            eBBVFOCTUNEOnOff,           // Click Tune
+            eBBToggleAB,                // toggle betwee A & B
+            eBBRITOnOff,                // toggle RIT on/off
+            eBBXITOnOff,                // toggle XIT on/off
+            eBBRITXITToggle,            // step off-RIT-XIT
+            eBBClearRITXIT,             // clear RIT and XIT
+            eBBClearRIT,                // clear RIT only
+            eBBClearXIT,                // clear XIT only
+            eBBRITPlus,                 // RIT step up
+            eBBRITMinus,                // RIT step down
+            eBBXITPlus,                 // XIT step up
+            eBBXITMinus,                // XIT step down
+            eBBRITXITPlus,              // increment whichever is selected
+            eBBRITXITMinus,             // decrement whichever is selected
+            eBBFilterReset,             // reset variable filter
+            eBBFilterPlus,              // select next filter
+            eBBFilterMinus,             // select next lower filter
+            eBBBandPlus,                // step up band
+            eBBBandMinus,               // step down band
+            eBBModePlus,                // step up mode
+            eBBModeMinus,               // step down mode
+            eBBAttenStep,               // step the attenuation value in 6dB steps
+            eBBMuteOnOff,               // mute on/off
+            eBBBINOnOff,                // Binaural on/off
+            eBBSDOnOff,                 // stereo diversity on/off
+            eBBVAC1OnOff,               // toggle VAC1 on/off
+            eBBVAC2OnOff,               // toggle VAC2 on/off
+            eBBAGCStep,                 // step the aGC setting
+            eBBSqlOnOff,                // step the squelch setting
+            eBBRXEQOnOff,               // RX equaliser on/off
+            eBBTXEQOnOff,               // TX equaliser on/off
+            eBBTXFLShow,                // show TX filter
+            eBBMICOnOff,                // MIC button on/off
+            eBBCOMPOnOff,               // COMP button on/off
+            eBBVOXOnOff,                // VOX on/off
+            eBBDEXPOnOff,               // DEXP on/off
+            eBBCWIambic,                // iambic keyer selected
+            eBBCWSidetone,              // CW sidetone
+            eBBCWShowTX,                // CW show tX frequency
+            eBBCWShowZero,              // show CW zero freq
+            eBBCWSemiBreakin,           // semi breakin on/off
+            eBBCWQSK,                   // QSK on/off
+            eBBRX1APF,                  // RX1 APF on/off
+            eBBCTCSSOnOff,              // FM CTCSS tone on/off
+            eBBFMDeviation,             // Toggle FM deviation
+            eBBDiversityOnOff,          // toggle diversity on/off
+            eBBSubRXOnOff,              // toggle sub-RX on/off
+            eBBRXMeterStep,             // step the setting of the RX meter
+            eBBTXMeterStep,             // step the setting of the TX meter
+            eBBDisplayModeStep,         // step the display mode
+            eBBDisplayDSPAVG,           // AVG button
+            eBBDisplayDSPPeak,          // AVG button
+            eBBCentreDisplay,           // centre the display
+            eBBZoomStep,                // step between the zoom step buttons
+            eBBRecordAudio,             // record audio
+            eBBPlayAudio,                 // play audio (parameter identified which)
+            eBBModeForm,                // show MODE form
+            eBBFilterForm,              // show FILTER form
+            eBBBandForm,                // show BAND form
+            eBBSliderForm,              // show "sliders" form
+            eBBVFOSettingForm,          // show VFO Settings form
+            eBBBandstackForm,           // show band stacks form
+            eBBBandstack,               // select next band stack
+            eBBQuickSave,               // save to "quick memory"
+            eBBQuickRestore,            // restore from "quick memory"
+            eBBRXAntenna,               // RX antenna button equivalent
+            eBBDiversityForm,           // show the diversity form
+            eBBModeSettingsForm,        // show the "mode dependent settings" form
+            eBBPuresignalForm,          // show the Puresignal form
+            eBBEqualiserForm,           // show equaliser form
+            eBBDisplaySettingsForm,     // show the display settings form
+            eBBAudioForm,               // open the audio record play form
+            eBBSetupForm,               // open the setup form
+            eBBATUOnOff,                // Auto ATU on/off
+            eBBMenuButton,              // menu button below screen
+            eBBMultiEncoderButton       // multifunction encoder button
+        }
+
+        // G8NJJ: define the actons an Andromeda encoder can have
+        public enum EEncoderActions
+        {
+            eENNoAction,
+            eENMasterGain,
+            eENAFGain,
+            eENStereoBalance,
+            eENAGCLevel,
+            eENStepAtten,
+            eENFilterHigh,
+            eENFilterLow,
+            eENDrive,
+            eENMicGain,
+            eENVFOATune,
+            eENVFOBTune,
+            eENVOXGain,
+            eENVOXHold,
+            eENCWSidetone,
+            eENCWSpeed,
+            eENSquelch,
+            eENDiversityGain,
+            eENDiversityPhase,
+            eENCompanderThreshold,
+            eENRIT,
+            eENXIT,
+            eENRITXIT,
+            eENDisplayPan,
+            eENDisplayZoom,
+            eENMulti                      // multifunction - this MUST be the last!
+        }
+
+
+        // define the indications a front panel indicator (LED) can have
+        public enum EIndicatorActions
+        {
+            eINNone,
+            eINMOX,
+            eINTune,
+            eINRIT,
+            eINXIT,
+            eINSplit,
+            eINCTune,
+            eINVFOSync,
+            eINVFOAB,
+            eINVFOLock,
+            eINNB,
+            eINNR,
+            eINSNB,
+            eINANF,
+            eINSquelch,
+            eINCompanderEnabled,
+            eINPuresignalEnabled
+        }
+
+
+        // access the dataset from outside: to allow future editing of menus, encoders, pushbuttons etc
+        public DataSet AndromedaSettings
+        {
+            get {return AndromedaSet;}
+
+            set
+            {
+                AndromedaSet = value;
+                SaveAndromedaDataset();
+            }
+        }
+
+
+        DataSet AndromedaSet = new DataSet("Andromeda Data");           // settings held in 5 tables here
+        private int currentButtonBarMenu = 0;                       // current menu sohwn (points to 1st entry shown)
+        private int CurrentMultifunctionOption = 0;                 // index to current multifunction control
+
+
+        private bool AndromedaMultiEncoderState;                // true if a step chages the multi action
+        private int AndromedaPanelHWVersion = 0;                // front panel H/W version
+        private int AndromedaPanelSWVersion = 0;                // front panel S/W version
+
+
+        // initialise the data structures for andromeda.
+        // there are 5 tables:
+        // "Menu Bar Settings": softkey menus, for the bottom of the screen;
+        // "Indicators": front panel indicator actions
+        // "Encoders": front panel encoder actions
+        // "Pushbuttons": front panel pushbutton actions
+        // "Multifunction Settings": actions that can be assigned to the "multifunction" encoder
+        private void InitialiseAndromedaMenus()
+        {
+            string Filename = AppDataPath + "andromedadata.xml";            // XML file for the settings
+            if (File.Exists(Filename))                          // if we have a file, read it
+            {
+                try
+                {
+                    AndromedaSet.ReadXml(Filename);
+                }
+                catch
+                { }
+            }
+            else
+            {
+                MakeNewAndromedaDataset();              // if no XML file, create dataset
+                SaveAndromedaDataset();         //  and save file
+            }
+        }
+
+
+
+// create a new Andromeda dataset from scratch, if one doesn't yet exist
+// this is like a "factory reset" for the dataset if it can't be read from file
+// create tables, and add initial data to them
+        private void MakeNewAndromedaDataset()
+        {
+            // this table holds settings for LED indicators
+            DataTable IndicatorTable = new DataTable("Indicators");
+            IndicatorTable.Columns.Add("Indicator Number", typeof(int));            // console indicator number
+            IndicatorTable.Columns.Add("Indicator Action", typeof(int));            // function indicated by it (from EIndicatorActions)
+            IndicatorTable.Columns.Add("Indicator Description", typeof(String));    // useful text?
+            IndicatorTable.Columns.Add("Indicator RX Selector", typeof(int));       // 0: insensitive to RX; 1: indicator uses show_RX1 setting; 2: for RX1; 3: for RX2
+            IndicatorTable.Rows.Add(0, (int)EIndicatorActions.eINVFOLock, "VFO Lock", 1);
+            IndicatorTable.Rows.Add(1, (int)EIndicatorActions.eINPuresignalEnabled, "PureSignal on/off", 0);
+            IndicatorTable.Rows.Add(2, (int)EIndicatorActions.eINMOX, "MOX", 0);
+            IndicatorTable.Rows.Add(3, (int)EIndicatorActions.eINTune, "Tune", 0);
+            IndicatorTable.Rows.Add(4, (int)EIndicatorActions.eINCTune, "Click Tune", 1);
+            IndicatorTable.Rows.Add(5, (int)EIndicatorActions.eINCompanderEnabled, "Compander", 0);
+            IndicatorTable.Rows.Add(6, (int)EIndicatorActions.eINSquelch, "Squelch", 1);      // pick up RX1 or 2
+            IndicatorTable.Rows.Add(7, (int)EIndicatorActions.eINRIT, "RIT", 0);
+            IndicatorTable.Rows.Add(8, (int)EIndicatorActions.eINNone, "no indicator", 0);
+            IndicatorTable.Rows.Add(9, (int)EIndicatorActions.eINNone, "no indicator", 0);
+            IndicatorTable.Rows.Add(10, (int)EIndicatorActions.eINNone, "no indicator", 0);
+            IndicatorTable.Rows.Add(11, (int)EIndicatorActions.eINNone, "no indicator", 0);
+            IndicatorTable.Rows.Add(12, (int)EIndicatorActions.eINNone, "no indicator", 0);
+            IndicatorTable.Rows.Add(13, (int)EIndicatorActions.eINNone, "no indicator", 0);
+            IndicatorTable.Rows.Add(14, (int)EIndicatorActions.eINNone, "no indicator", 0);
+            IndicatorTable.Rows.Add(15, (int)EIndicatorActions.eINNone, "no indicator", 0);
+            IndicatorTable.Rows.Add(16, (int)EIndicatorActions.eINNone, "no indicator", 0);
+            IndicatorTable.Rows.Add(17, (int)EIndicatorActions.eINNone, "no indicator", 0);
+            IndicatorTable.Rows.Add(18, (int)EIndicatorActions.eINNone, "no indicator", 0);
+            IndicatorTable.Rows.Add(19, (int)EIndicatorActions.eINNone, "no indicator", 0);
+
+            // this table holds settings for pushbuttons
+            // this set for prototype V2; 0-19 = encoders; 20-98 = pushbuttons
+            DataTable ButtonTable = new DataTable("Pushbuttons");
+            ButtonTable.Columns.Add("Pushbutton Number", typeof(int));          // front panel pushbutton number
+            ButtonTable.Columns.Add("Pushbutton Action", typeof(int));          // action assigned to button (from EButtonBarActions)
+            ButtonTable.Columns.Add("Pushbutton Description", typeof(String));   // descriptive text
+            ButtonTable.Columns.Add("Pushbutton RX Selector", typeof(int));     // overrides softkey number or RX1/RX2 assignment (0: use A/B; 1: use RX1; 2: use RX2)
+            ButtonTable.Rows.Add(0, EButtonBarActions.eBBMuteOnOff, "dual encoder 1 press", 1);
+            ButtonTable.Rows.Add(1, EButtonBarActions.eBBNone, "reserved if single encoder", 0);
+            ButtonTable.Rows.Add(2, EButtonBarActions.eBBFilterReset, "dual encoder 2 press", 0);
+            ButtonTable.Rows.Add(3, EButtonBarActions.eBBNone, "reserved if single encoder", 0);
+            ButtonTable.Rows.Add(4, EButtonBarActions.eBBDiversityOnOff, "dual encoder 3 press", 0);
+            ButtonTable.Rows.Add(5, EButtonBarActions.eBBNone, "reserved if single encoder", 0);
+            ButtonTable.Rows.Add(6, EButtonBarActions.eBBNone, "dual encoder 4 press", 0);
+            ButtonTable.Rows.Add(7, EButtonBarActions.eBBNone, "reserved if single encoder", 0);
+            ButtonTable.Rows.Add(8, EButtonBarActions.eBBMuteOnOff, "dual encoder 5 press", 2);
+            ButtonTable.Rows.Add(9, EButtonBarActions.eBBNone, "reserved if single encoder", 0);
+            ButtonTable.Rows.Add(10, EButtonBarActions.eBBCOMPOnOff, "dual encoder 6 press", 0);
+            ButtonTable.Rows.Add(11, EButtonBarActions.eBBNone, "reserved if single encoder", 0);
+            ButtonTable.Rows.Add(12, EButtonBarActions.eBBMultiEncoderButton, "dual encoder 7 press", 0);
+            ButtonTable.Rows.Add(13, EButtonBarActions.eBBNone, "encoder 14 press", 0);
+            ButtonTable.Rows.Add(14, EButtonBarActions.eBBNone, "encoder 15 press", 0);
+            ButtonTable.Rows.Add(15, EButtonBarActions.eBBNone, "encoder 16 press", 0);
+            ButtonTable.Rows.Add(16, EButtonBarActions.eBBNone, "encoder 17 press", 0);
+            ButtonTable.Rows.Add(17, EButtonBarActions.eBBNone, "encoder 18 press", 0);
+            ButtonTable.Rows.Add(18, EButtonBarActions.eBBNone, "encoder 19 press", 0);
+            ButtonTable.Rows.Add(19, EButtonBarActions.eBBNone, "encoder 20 press", 0);
+            ButtonTable.Rows.Add(20, EButtonBarActions.eBBMenuButton, "softkey 1 press", 0);
+            ButtonTable.Rows.Add(21, EButtonBarActions.eBBMenuButton, "softkey 2 press", 1);
+            ButtonTable.Rows.Add(22, EButtonBarActions.eBBMenuButton, "softkey 3 press", 2);
+            ButtonTable.Rows.Add(23, EButtonBarActions.eBBMenuButton, "softkey 4 press", 3);
+            ButtonTable.Rows.Add(24, EButtonBarActions.eBBMenuButton, "softkey 5 press", 4);
+            ButtonTable.Rows.Add(25, EButtonBarActions.eBBMenuButton, "softkey 6 press", 5);
+            ButtonTable.Rows.Add(26, EButtonBarActions.eBBMenuButton, "softkey 7 press", 7);
+            ButtonTable.Rows.Add(27, EButtonBarActions.eBBMenuButton, "softkey 8 press", 6);
+            ButtonTable.Rows.Add(28, EButtonBarActions.eBBRITMinus, "pushbutton press", 0);
+            ButtonTable.Rows.Add(29, EButtonBarActions.eBBNR, "pushbutton press", 0);
+            ButtonTable.Rows.Add(30, EButtonBarActions.eBBRITPlus, "pushbutton press", 0);
+            ButtonTable.Rows.Add(31, EButtonBarActions.eBBBandMinus, "pushbutton press", 0);
+            ButtonTable.Rows.Add(32, EButtonBarActions.eBBModeMinus, "pushbutton press", 0);
+            ButtonTable.Rows.Add(33, EButtonBarActions.eBBStartStop, "pushbutton press", 0);
+            ButtonTable.Rows.Add(34, EButtonBarActions.eBBBandPlus, "pushbutton press", 0);
+            ButtonTable.Rows.Add(35, EButtonBarActions.eBBModePlus, "pushbutton press", 0);
+            ButtonTable.Rows.Add(36, EButtonBarActions.eBBNB, "pushbutton press", 0);
+            ButtonTable.Rows.Add(37, EButtonBarActions.eBBRITOnOff, "pushbutton press", 0);
+            ButtonTable.Rows.Add(38, EButtonBarActions.eBBToggleAB, "pushbutton press", 0);
+            ButtonTable.Rows.Add(39, EButtonBarActions.eBBMOX, "pushbutton press", 0);
+            ButtonTable.Rows.Add(40, EButtonBarActions.eBBTune, "pushbutton press", 0);
+            ButtonTable.Rows.Add(41, EButtonBarActions.eBBVFOCTUNEOnOff, "pushbutton press", 0);
+            ButtonTable.Rows.Add(42, EButtonBarActions.eBBVFOLockOnOff, "pushbutton press", 0);
+            ButtonTable.Rows.Add(43, EButtonBarActions.eBBVFOAtoB, "pushbutton press", 0);
+            ButtonTable.Rows.Add(44, EButtonBarActions.eBBVFOSplit, "pushbutton press", 0);
+            ButtonTable.Rows.Add(45, EButtonBarActions.eBBVFOBtoA, "pushbutton press", 0);
+            ButtonTable.Rows.Add(46, EButtonBarActions.eBBSNB, "pushbutton press", 0);
+            ButtonTable.Rows.Add(47, EButtonBarActions.eBBNone, "pushbutton press", 0);
+            ButtonTable.Rows.Add(48, EButtonBarActions.eBBNone, "pushbutton press", 0);
+            ButtonTable.Rows.Add(49, EButtonBarActions.eBBNone, "pushbutton press", 0);
+
+            // this table holds settings for rotary encoders
+            DataTable EncoderTable = new DataTable("Encoders");
+            EncoderTable.Columns.Add("Encoder Number", typeof(int));          // front panel pushbutton number
+            EncoderTable.Columns.Add("Encoder Action", typeof(int));          // action assigned to button (from EEncoderActions)
+            EncoderTable.Columns.Add("Encoder Description", typeof(String));   // descriptive text
+            EncoderTable.Columns.Add("Encoder RX Selector", typeof(int));     // overrides softkey number or RX1/RX2 assignment (0: use A/B; 1: use RX1; 2: use RX2)
+            EncoderTable.Rows.Add(0, EEncoderActions.eENAFGain, "RX1 AF", 1);                 // 2A: RX1 AF
+            EncoderTable.Rows.Add(1, EEncoderActions.eENAGCLevel, "RX1 AGC", 1);              // 2B: RX1 AGC
+            EncoderTable.Rows.Add(2, EEncoderActions.eENFilterHigh, "Filter high cut", 0);    // 3A: filter high
+            EncoderTable.Rows.Add(3, EEncoderActions.eENFilterLow, "Filter low cut", 0);      // 3B: filter low
+            EncoderTable.Rows.Add(4, EEncoderActions.eENDiversityGain, "Diversity gain", 0);  // 4A: diversity gain
+            EncoderTable.Rows.Add(5, EEncoderActions.eENDiversityPhase, "Diversity Phase", 0); // 4B: diversity phase
+            EncoderTable.Rows.Add(6, EEncoderActions.eENMicGain, "Mic Gain", 0);              // 5A: mic gain
+            EncoderTable.Rows.Add(7, EEncoderActions.eENDrive, "Drive", 0);                   // 5B: drive
+            EncoderTable.Rows.Add(8, EEncoderActions.eENAFGain, "RX2 AF", 2);                 // 6A: RX2 AF
+            EncoderTable.Rows.Add(9, EEncoderActions.eENAGCLevel, "RX2 AGC", 2);              // 6B: RX2 AGC
+
+            EncoderTable.Rows.Add(10, EEncoderActions.eENCompanderThreshold, "Compander Gain", 0);  // 7A: compander
+            EncoderTable.Rows.Add(11, EEncoderActions.eENMasterGain, "Master AF", 0);         // 7B: master AF gain
+            EncoderTable.Rows.Add(12, EEncoderActions.eENMulti, "Multifunction", 0);          // 8A: multifunction
+            EncoderTable.Rows.Add(13, EEncoderActions.eENSquelch, "Squelch", 0);              // 8B: squelch
+            EncoderTable.Rows.Add(14, EEncoderActions.eENNoAction, "no encoder", 0);
+            EncoderTable.Rows.Add(15, EEncoderActions.eENNoAction, "no encoder", 0);
+            EncoderTable.Rows.Add(16, EEncoderActions.eENNoAction, "no encoder", 0);
+            EncoderTable.Rows.Add(17, EEncoderActions.eENNoAction, "no encoder", 0);
+            EncoderTable.Rows.Add(18, EEncoderActions.eENNoAction, "no encoder", 0);
+            EncoderTable.Rows.Add(19, EEncoderActions.eENNoAction, "no encoder", 0);
+
+            // this table is all the allowed options for the multifunction encoder
+            DataTable MultiTable = new DataTable("Multifunction Settings");
+            MultiTable.Columns.Add("Multi Number", typeof(int));          // front panel pushbutton number
+            MultiTable.Columns.Add("Multi Action", typeof(int));          // action assigned to button (from EEncoderActions)
+            MultiTable.Columns.Add("Multi Description", typeof(String));   // descriptive text
+            MultiTable.Columns.Add("Multi RX Selector", typeof(int));     // overrides softkey number or RX1/RX2 assignment (0: use A/B; 1: use RX1; 2: use RX2)
+            MultiTable.Rows.Add(0, EEncoderActions.eENMasterGain, "Master AF Gain", 0);
+            MultiTable.Rows.Add(1, EEncoderActions.eENAFGain, "RX1 AF Gain", 1);
+            MultiTable.Rows.Add(2, EEncoderActions.eENAFGain, "RX2 AF Gain", 2);
+            MultiTable.Rows.Add(3, EEncoderActions.eENAFGain, "Sub-RX AF Gain", 3);
+            MultiTable.Rows.Add(4, EEncoderActions.eENAGCLevel, "RX1 AGC", 1);
+            MultiTable.Rows.Add(5, EEncoderActions.eENAGCLevel, "RX2 AGC", 2);
+            MultiTable.Rows.Add(6, EEncoderActions.eENStepAtten, "RX1 Step Atten", 1);
+            MultiTable.Rows.Add(7, EEncoderActions.eENStepAtten, "RX2 Step Atten", 2);
+            MultiTable.Rows.Add(8, EEncoderActions.eENFilterHigh, "RX1 Filter High Cut", 1);
+            MultiTable.Rows.Add(9, EEncoderActions.eENFilterLow, "RX1 Filter Low Cut", 1);
+
+            MultiTable.Rows.Add(10, EEncoderActions.eENFilterHigh, "RX2 Filter High Cut", 2);
+            MultiTable.Rows.Add(11, EEncoderActions.eENFilterLow, "RX2 Filter Low Cut", 2);
+            MultiTable.Rows.Add(12, EEncoderActions.eENSquelch, "RX1 Squelch", 1);
+            MultiTable.Rows.Add(13, EEncoderActions.eENSquelch, "RX2 Squelch", 2);
+            MultiTable.Rows.Add(14, EEncoderActions.eENDiversityGain, "Diversity Gain", 0);
+            MultiTable.Rows.Add(15, EEncoderActions.eENDiversityPhase, "Diversity Phase", 0);
+            MultiTable.Rows.Add(16, EEncoderActions.eENRIT, "RIT", 0);
+            MultiTable.Rows.Add(17, EEncoderActions.eENXIT, "XIT", 0);
+            MultiTable.Rows.Add(18, EEncoderActions.eENRITXIT, "RIT or XIT", 0);
+            MultiTable.Rows.Add(19, EEncoderActions.eENDrive, "TX Drive", 0);
+
+            MultiTable.Rows.Add(20, EEncoderActions.eENMicGain, "Mic Gain", 0);
+            MultiTable.Rows.Add(21, EEncoderActions.eENVFOATune, "VFO A Tune", 0);
+            MultiTable.Rows.Add(22, EEncoderActions.eENVFOBTune, "VFO B Tune", 0);
+            MultiTable.Rows.Add(23, EEncoderActions.eENVOXGain, "VOX Gain", 0);
+            MultiTable.Rows.Add(24, EEncoderActions.eENVOXHold, "VOX Hold", 0);
+            MultiTable.Rows.Add(25, EEncoderActions.eENCWSidetone, "CW sidetone pitch", 0);
+            MultiTable.Rows.Add(26, EEncoderActions.eENCWSpeed, "CW Speed", 0);
+            MultiTable.Rows.Add(27, EEncoderActions.eENCompanderThreshold, "COMP Gain", 0);
+            MultiTable.Rows.Add(28, EEncoderActions.eENDisplayPan, "Display Pan", 0);
+            MultiTable.Rows.Add(29, EEncoderActions.eENDisplayZoom, "Display Zoom", 0);
+
+            MultiTable.Rows.Add(30, EEncoderActions.eENStereoBalance, "RX1 Stereo Balance", 1);
+            MultiTable.Rows.Add(31, EEncoderActions.eENStereoBalance, "RX2 Stereo Balance", 2);
+            MultiTable.Rows.Add(32, EEncoderActions.eENStereoBalance, "Sub-RX Stereo Balance", 3);
+
+            // this table describes the menu bar entries
+            DataTable MenubarTable = new DataTable("Menu Bar Settings");
+            MenubarTable.Columns.Add("Menu button Number", typeof(int));      // front panel pushbutton number
+            MenubarTable.Columns.Add("Menu Action", typeof(int));             // action assigned to button (from EButtonBarActions)
+            MenubarTable.Columns.Add("Menu Text", typeof(String));            // descriptive text
+            MenubarTable.Columns.Add("Menu RX Selector", typeof(int));        // overrides softkey number or RX1/RX2 assignment (0: use A/B; 1: use RX1; 2: use RX2)
+            MenubarTable.Columns.Add("Menu Number", typeof(int));             // softkey number to change menu to
+
+            // create the menus, in groups of 8
+            // menu 1 - quick access
+            MenubarTable.Rows.Add(0, EButtonBarActions.eBBMenu, "Quick Menu", 0, 2);             // numerical paramter only for "menu" entries - points to next
+            MenubarTable.Rows.Add(1, EButtonBarActions.eBBNR, "NR", 0, 0);
+            MenubarTable.Rows.Add(2, EButtonBarActions.eBBNB, "NB", 0, 0);
+            MenubarTable.Rows.Add(3, EButtonBarActions.eBBSNB, "SNB", 0, 0);
+            MenubarTable.Rows.Add(4, EButtonBarActions.eBBANF, "ANF", 0, 0);
+            MenubarTable.Rows.Add(5, EButtonBarActions.eBBAGCStep, "AGC Step", 0, 0);
+            MenubarTable.Rows.Add(6, EButtonBarActions.eBBAttenStep, "Atten Step", 0, 0);
+            MenubarTable.Rows.Add(7, EButtonBarActions.eBBToggleAB, "Toggle A/B", 0, 0);
+
+            // menu 2 - RX
+            MenubarTable.Rows.Add(8, EButtonBarActions.eBBMenu, "RX Menu", 0, 3);
+            MenubarTable.Rows.Add(9, EButtonBarActions.eBBDiversityOnOff, "Diversity", 0, 0);
+            MenubarTable.Rows.Add(10, EButtonBarActions.eBBDiversityForm, "Diversity Form", 0, 0);
+            MenubarTable.Rows.Add(11, EButtonBarActions.eBBSliderForm, "Gain Form", 0, 0);
+            MenubarTable.Rows.Add(12, EButtonBarActions.eBBFilterForm, "Filter Form", 0, 0);
+            MenubarTable.Rows.Add(13, EButtonBarActions.eBBMuteOnOff, "Mute", 0, 0);
+            MenubarTable.Rows.Add(14, EButtonBarActions.eBBRXAntenna, "RX Ant", 0, 0);
+            MenubarTable.Rows.Add(15, EButtonBarActions.eBBNone, "----", 0, 0);
+
+            // menu 3 - VFO
+            MenubarTable.Rows.Add(16, EButtonBarActions.eBBMenu, "VFO Menu", 0, 4);
+            MenubarTable.Rows.Add(17, EButtonBarActions.eBBBandForm, "Band Form", 0, 0);
+            MenubarTable.Rows.Add(18, EButtonBarActions.eBBModeForm, "Mode Form", 0, 0);
+            MenubarTable.Rows.Add(19, EButtonBarActions.eBBBandstackForm, "Bandstack Form", 0, 0);
+            MenubarTable.Rows.Add(20, EButtonBarActions.eBBVFOSwap, "Swap A <--> B", 0, 0);
+            MenubarTable.Rows.Add(21, EButtonBarActions.eBBVFOSettingForm, "Tune step Form", 0, 0);
+            MenubarTable.Rows.Add(22, EButtonBarActions.eBBBandstack, "Bandstack", 0, 0);
+            MenubarTable.Rows.Add(23, EButtonBarActions.eBBNone, "----", 0, 0);
+
+            // menu 4 - TX
+            MenubarTable.Rows.Add(24, EButtonBarActions.eBBMenu, "TX Menu", 0, 5);
+            MenubarTable.Rows.Add(25, EButtonBarActions.eBBModeSettingsForm, "Mode settings form", 0, 0);
+            MenubarTable.Rows.Add(26, EButtonBarActions.eBBPuresignalForm, "Puresignal Form", 0, 0);
+            MenubarTable.Rows.Add(27, EButtonBarActions.eBBPuresignalOnOff, "Puresignal select", 0, 0);
+            MenubarTable.Rows.Add(28, EButtonBarActions.eBBMOX, "MOX", 0, 0);
+            MenubarTable.Rows.Add(29, EButtonBarActions.eBBTune, "TUNE", 0, 0);
+            MenubarTable.Rows.Add(30, EButtonBarActions.eBBPuresignal2Tone, "PS 2 Tone test", 0, 0);
+            MenubarTable.Rows.Add(31, EButtonBarActions.eBBNone, "----", 0, 0);
+
+            // menu 5 - display
+            MenubarTable.Rows.Add(32, EButtonBarActions.eBBMenu, "Display Menu", 0, 6);
+            MenubarTable.Rows.Add(33, EButtonBarActions.eBBRXMeterStep, "RX Meter Mode Step", 0, 0);
+            MenubarTable.Rows.Add(34, EButtonBarActions.eBBTXMeterStep, "TX Meter mode step", 0, 0);
+            MenubarTable.Rows.Add(35, EButtonBarActions.eBBDisplayModeStep, "Display Mode Step", 0, 0);
+            MenubarTable.Rows.Add(36, EButtonBarActions.eBBCentreDisplay, "Centre Display", 0, 0);
+            MenubarTable.Rows.Add(37, EButtonBarActions.eBBDisplaySettingsForm, "Display Form", 0, 0);
+            MenubarTable.Rows.Add(38, EButtonBarActions.eBBZoomStep, "Zoom", 0, 0);
+            MenubarTable.Rows.Add(39, EButtonBarActions.eBBNone, "----", 0, 0);
+
+            // menu 6 - audio
+            MenubarTable.Rows.Add(40, EButtonBarActions.eBBMenu, "Audio Menu", 0, 7);
+            MenubarTable.Rows.Add(41, EButtonBarActions.eBBRecordAudio, "Quick Record Audio", 0, 0);
+            MenubarTable.Rows.Add(42, EButtonBarActions.eBBPlayAudio, "Quick Play Audio", 0, 0);
+            MenubarTable.Rows.Add(43, EButtonBarActions.eBBNone, "----", 0, 0);
+            MenubarTable.Rows.Add(44, EButtonBarActions.eBBAudioForm, "Audio rec/play Form", 0, 0);
+            MenubarTable.Rows.Add(45, EButtonBarActions.eBBVAC1OnOff, "VAC1", 0, 0);
+            MenubarTable.Rows.Add(46, EButtonBarActions.eBBVAC2OnOff, "VAC2", 0, 0);
+            MenubarTable.Rows.Add(47, EButtonBarActions.eBBNone, "----", 0, 0);
+
+            // menu 7 - setup
+            MenubarTable.Rows.Add(48, EButtonBarActions.eBBMenu, "Setup Menu", 0, 1);
+            MenubarTable.Rows.Add(49, EButtonBarActions.eBBDUP, "Duplex", 0, 0);
+            MenubarTable.Rows.Add(50, EButtonBarActions.eBBMON, "TX Monitor", 0, 0);
+            MenubarTable.Rows.Add(51, EButtonBarActions.eBBRX2OnOff, "RX2", 0, 0);
+            MenubarTable.Rows.Add(52, EButtonBarActions.eBBSubRXOnOff, "Sub RX", 0, 0);
+            MenubarTable.Rows.Add(53, EButtonBarActions.eBBEqualiserForm, "Equaliser Form", 0, 0);
+            MenubarTable.Rows.Add(54, EButtonBarActions.eBBSetupForm, "Setup Form", 0, 0);
+            MenubarTable.Rows.Add(55, EButtonBarActions.eBBMenu, "Extended Menu", 0, 8);
+
+            // menu 8 - extended / test
+            MenubarTable.Rows.Add(56, EButtonBarActions.eBBMenu, "Test Menu", 0, 1);
+            MenubarTable.Rows.Add(57, EButtonBarActions.eBBQuickSave, "Quick Save", 0, 0);
+            MenubarTable.Rows.Add(58, EButtonBarActions.eBBQuickRestore, "Quick Restore", 0, 0);
+            MenubarTable.Rows.Add(59, EButtonBarActions.eBBFilterPlus, "filter up", 0, 0);
+            MenubarTable.Rows.Add(60, EButtonBarActions.eBBFilterMinus, "filter down", 0, 0);
+            MenubarTable.Rows.Add(61, EButtonBarActions.eBBBandPlus, "Band up", 0, 0);
+            MenubarTable.Rows.Add(62, EButtonBarActions.eBBBandMinus, "Band down", 0, 0);
+            MenubarTable.Rows.Add(63, EButtonBarActions.eBBNone, "----", 0, 0);
+
+            // add the data tables to the dataset, and save it for next time
+            AndromedaSet.Tables.Add(IndicatorTable);
+            AndromedaSet.Tables.Add(ButtonTable);
+            AndromedaSet.Tables.Add(EncoderTable);
+            AndromedaSet.Tables.Add(MultiTable);
+            AndromedaSet.Tables.Add(MenubarTable);
+        }
+
+        void SaveAndromedaDataset()
+        {
+            string Filename = AppDataPath + "andromedadata.xml";            // XML file for the settings
+            AndromedaSet.WriteXml(Filename, XmlWriteMode.WriteSchema);
+        }
+
+        //
+        // indicator check
+        // this is called from control CheckedChanged() handlers to see if an Andromeda indicator needs to be updated
+        // this PUSHes the indicator setting to Andromeda rather than periodic polling
+        // IsRX1: true for controls belonging to RX1; ignored otherwise
+        // State: true if indicator should be lit
+        // search the indicator table, and send message to front panel if a match is found
+        //
+        void AndromedaIndicatorCheck(EIndicatorActions IndicatorType, bool IsRX1, bool State)
+        {
+            int Cntr;
+            int Override;                                                   // indicator table setting
+            bool Selected = true;                                           // true if RX1/2 test matches
+            EIndicatorActions action;
+
+            DataTable table = AndromedaSet.Tables["Indicators"];
+            int RowCount = table.Rows.Count;
+
+            for (Cntr=0; Cntr < RowCount; Cntr++)
+            {
+                action = (EIndicatorActions)table.Rows[Cntr]["Indicator Action"];
+                if (action == IndicatorType)           // found a match
+                {
+                    Override = (int)table.Rows[Cntr]["Indicator RX Selector"];
+                    if (Override == 1)                  // use show_RX1
+                        Selected = (show_rx1 == IsRX1);
+                    else if (Override == 2)
+                        Selected = IsRX1;
+                    else if (Override == 3)
+                        Selected = !IsRX1;
+
+                    if (Selected)
+                        MakeIndicatorCATMsg(Cntr+1, State);         // +1 because the s/w numbers start at zero
+                }
+            }
+        }
+
+        // send a CAT message to Andromeda asking for h/w and s/w versions
+        private void MakeAndromedaVersionRequestMsg()
+        {
+            string CATMsg;
+
+            CATMsg = "ZZZH;ZZZS;";
+            try
+            {
+                andromedasiolisten.SIO5.put(CATMsg);
+            }
+            catch { }
+        }
+
+        // send a CAT message to Andromeda if enabled
+        // indicator number = number to send (0-19)
+        // State true if indicator should be lit
+        void MakeIndicatorCATMsg(int IndicatorNumber, bool State)
+        {
+            string CATMsg;
+
+            CATMsg = "ZZZI";
+            CATMsg += IndicatorNumber.ToString("D2");
+            if (State == true)
+                CATMsg += "1;";
+            else
+                CATMsg += "0;";
+            try
+            {
+                andromedasiolisten.SIO5.put(CATMsg);
+            }
+            catch { }
+        }
+
+        //
+        // initialise indicators after console initialised.
+        // scan through list and send required state.
+        // the CAT port should have been created by this point.
+        // InitialiseAll: if true, updates all; otherwise only indicators which should change when RX1/RX2 is toggled
+        private void InitialiseAndromedaIndicators(bool InitialiseAll)
+        {
+            EIndicatorActions IndicatorType;
+            int Cntr;
+            int Override;
+            bool Use_RX1 = false;
+            bool State = false;                             // indicator state to report
+            bool IsABSensitive = false;
+            if (AndromedaCATEnabled)                        // only process if we have a CAT port assigned
+            {
+                DataTable table = AndromedaSet.Tables["Indicators"];
+                int RowCount = table.Rows.Count;
+
+                for (Cntr=0; Cntr < RowCount; Cntr++)
+                {
+                    IsABSensitive = false;
+                    IndicatorType = (EIndicatorActions)table.Rows[Cntr]["Indicator Action"];
+                    Override = (int)table.Rows[Cntr]["Indicator RX Selector"];
+                    // work out which or RX1/2 or VFO A/B buttons to use
+                    if (Override == 1)               // use show_rx1 setting
+                    {
+                        Use_RX1 = show_rx1;
+                        IsABSensitive = true;
+                    }
+                    else if (Override == 2)         // use RX1
+                        Use_RX1 = true;
+                    else if (Override == 3)         // use RX2
+                        Use_RX1 = false;
+                    switch (IndicatorType)
+                    {
+                        case EIndicatorActions.eINNone:
+                            State = false;
+                            break;
+
+                        case EIndicatorActions.eINMOX:
+                            State = chkMOX.Checked;
+                            break;
+
+                        case EIndicatorActions.eINTune:
+                            State = chkTUN.Checked;
+                            break;
+
+                        case EIndicatorActions.eINRIT:
+                            State = chkRIT.Checked;
+                            break;
+
+                        case EIndicatorActions.eINXIT:
+                            State = chkXIT.Checked;
+                            break;
+
+                        case EIndicatorActions.eINSplit:
+                            State = chkVFOSplit.Checked;
+                            break;
+
+                        case EIndicatorActions.eINCTune:
+                            if (Use_RX1)
+                                State = chkFWCATU.Checked;
+                            else
+                                State = chkX2TR.Checked;
+                            break;
+
+                        case EIndicatorActions.eINVFOSync:
+                            State = chkVFOSync.Checked;
+                            break;
+
+                        case EIndicatorActions.eINVFOAB:
+                            State = show_rx1;
+                            break;
+
+                        case EIndicatorActions.eINVFOLock:
+                            if (Use_RX1)
+                                State = chkVFOLock.Checked;
+                            else
+                                State = chkVFOBLock.Checked;
+                            break;
+
+                        case EIndicatorActions.eINNB:
+                            if (Use_RX1)
+                                State = chkNB.Checked;
+                            else
+                                State = chkRX2NB.Checked;
+                            break;
+
+                        case EIndicatorActions.eINNR:
+                            if (Use_RX1)
+                                State = chkNR.Checked;
+                            else
+                                State = chkRX2NR.Checked;
+                            break;
+
+                        case EIndicatorActions.eINSNB:
+                            if (Use_RX1)
+                                State = chkDSPNB2.Checked;
+                            else
+                                State = chkRX2NB2.Checked;
+                            break;
+
+                        case EIndicatorActions.eINANF:
+                            if (Use_RX1)
+                                State = chkANF.Checked;
+                            else
+                                State = chkRX2ANF.Checked;
+                            break;
+
+                        case EIndicatorActions.eINSquelch:
+                            if (Use_RX1)
+                                State = chkSquelch.Checked;
+                            else
+                                State = chkRX2Squelch.Checked;
+                            break;
+
+                        case EIndicatorActions.eINCompanderEnabled:
+                            State = chkCPDR.Checked;
+                            break;
+
+                        case EIndicatorActions.eINPuresignalEnabled:
+                            State = chkFWCATUBypass.Checked;
+                            break;
+                    }
+                    if((InitialiseAll) || (IsABSensitive))       // send message if we are scanning all, or if A/B sensitive
+                        MakeIndicatorCATMsg(Cntr + 1, State);
+                }
+                if (InitialiseAll)
+                    MakeAndromedaVersionRequestMsg();
+            }
+        }
+
 
         //
         // andromeda button bar button event handlers
@@ -57443,728 +58316,1042 @@ namespace Thetis
             ExecuteButtonBarPress(8);
         }
 
-//
-// handle a button press from a front panel physical button
-// button = 1-99
-// state true if pressed
-//
-        public void HandleFrontPanelButtonPress(int Button, bool State)
+        //
+        // handle a rotational step from a front panel encoder, sent by CAT command
+        // encoder = 0-19; steps = number of turns; +ve = clockwise
+        //
+        public void HandleFrontPanelEncoderStep(int Encoder, int Steps)
         {
-            switch(Button)
+            int Override = 0;                                                     // RX number override if needed
+            EEncoderActions Action = EEncoderActions.eENNoAction;                 // assigned action for this encoder
+            DataTable table = AndromedaSet.Tables["Encoders"];
+            int RowCount = table.Rows.Count;
+            // check the number range provided; lookup the encoder action from a table;
+            // if multifunction, either update the action assigned to multi or execute that function
+            if ((Encoder >= 0) && (Encoder < RowCount))
             {
-                case 21:                    // softkey 1
-                    if (State == true)
-                        btnAndrBar1_Click(null, null);
-                    break;
-
-                case 22:                    // softkey 1
-                    if (State == true)
-                        btnAndrBar2_Click(null, null);
-                    break;
-
-                case 23:                    // softkey 1
-                    if (State == true)
-                        btnAndrBar3_Click(null, null);
-                    break;
-
-                case 24:                    // softkey 1
-                    if (State == true)
-                        btnAndrBar4_Click(null, null);
-                    break;
-
-                case 25:                    // softkey 1
-                    if (State == true)
-                        btnAndrBar5_Click(null, null);
-                    break;
-
-                case 26:                    // softkey 1
-                    if (State == true)
-                        btnAndrBar6_Click(null, null);
-                    break;
-
-                case 27:                    // softkey 1
-                    if (State == true)
-                        btnAndrBar7_Click(null, null);
-                    break;
-
-                case 28:                    // softkey 1
-                    if (State == true)
-                        btnAndrBar8_Click(null, null);
-                    break;
+                Action = (EEncoderActions)table.Rows[Encoder]["Encoder Action"];
+                Override = (int)table.Rows[Encoder]["Encoder RX Selector"];
+                if (Action == EEncoderActions.eENMulti)                         // if multifunction
+                {
+                    DataTable multitable = AndromedaSet.Tables["Multifunction Settings"];
+                    int MultiCount = multitable.Rows.Count;
+                    if (AndromedaMultiEncoderState == true)                     // if encoder button pressed, update the assigned option
+                    {
+                        EncoderUpdate(Steps, ref CurrentMultifunctionOption, 0, MultiCount - 1);      // update the selected option for multi
+                        TitleBarMultifunctionString = "   multifunction encoder = " + multitable.Rows[CurrentMultifunctionOption]["Multi Description"];
+                    }
+                    else
+                    {
+                        Action = (EEncoderActions)multitable.Rows[CurrentMultifunctionOption]["Multi Action"];           // get the action multi is set to
+                        Override = (int)multitable.Rows[CurrentMultifunctionOption]["Multi RX Selector"];           // get the RX override that multi is set to
+                    }
+                }
+                if (Action != EEncoderActions.eENMulti)                         // if not multifunction, execute it
+                    ExecuteEncoderStep(Action, Steps, Override);
             }
         }
 
-        //
-        // G8NJJ: define the button bar menu
-        // each menu has 8 buttons, and they chain together using the menu button to call up another set of 8
-        //
 
-        public const int VNUMButtonMenuEntries = 64;                // total number of buttons listed
-        private int currentButtonBarMenu = 0;                       // current menu sohwn (points to 1st entry shown)
-        // create the menus, in groups of 8
-        private void InitialiseButtonBarMenu()
+        //
+        // handle a rotational step from a front panel VFO encoder
+        // steps = number of turns; +ve = clockwise
+        //
+        public void HandleFrontPanelVFOEncoderStep(int Steps)
         {
-            ButtonBarMenu = new SButtonBarEntry[VNUMButtonMenuEntries];
-            // menu 1 - quick access
-            ButtonBarMenu[0] = new SButtonBarEntry(EButtonBarActions.eBBMenu, "Quick Menu", 0, 2);             // numerical paramter only for "menu" entries - points to next
-            ButtonBarMenu[1] = new SButtonBarEntry(EButtonBarActions.eBBNR, "NR", 0, 0);
-            ButtonBarMenu[2] = new SButtonBarEntry(EButtonBarActions.eBBNB, "NB", 0, 0);
-            ButtonBarMenu[3] = new SButtonBarEntry(EButtonBarActions.eBBSNB, "SNB", 0, 0);
-            ButtonBarMenu[4] = new SButtonBarEntry(EButtonBarActions.eBBANF, "ANF", 0, 0);
-            ButtonBarMenu[5] = new SButtonBarEntry(EButtonBarActions.eBBAGCStep, "AGC Step", 0, 0);
-            ButtonBarMenu[6] = new SButtonBarEntry(EButtonBarActions.eBBAttenStep, "Atten Step", 0, 0);
-            ButtonBarMenu[7] = new SButtonBarEntry(EButtonBarActions.eBBNone, "----", 0, 0);
+            if (show_rx1)
+                VFOAFreq = CATVFOA + (double)Steps * TuneStepList[TuneStepIndex].StepHz * 10e-7;
+            else
+                VFOBFreq = CATVFOB + (double)Steps * TuneStepList[TuneStepIndex].StepHz * 10e-7;
+        }
 
-            // menu 2 - RX
-            ButtonBarMenu[8] = new SButtonBarEntry(EButtonBarActions.eBBMenu, "RX Menu", 0, 3);
-            ButtonBarMenu[9] = new SButtonBarEntry(EButtonBarActions.eBBDiversityOnOff, "Diversity", 0, 0);
-            ButtonBarMenu[10] = new SButtonBarEntry(EButtonBarActions.eBBDiversityForm, "Diversity Form", 0, 0);
-            ButtonBarMenu[11] = new SButtonBarEntry(EButtonBarActions.eBBSliderForm, "Gain Form", 0, 0);
-            ButtonBarMenu[12] = new SButtonBarEntry(EButtonBarActions.eBBFilterForm, "Filter Form", 0, 0);
-            ButtonBarMenu[13] = new SButtonBarEntry(EButtonBarActions.eBBMuteOnOff, "Mute", 0, 0);
-            ButtonBarMenu[14] = new SButtonBarEntry(EButtonBarActions.eBBRXAntenna, "RX Ant", 0, 0);
-            ButtonBarMenu[15] = new SButtonBarEntry(EButtonBarActions.eBBNone, "----", 0, 0);
 
-            // menu 3 - VFO
-            ButtonBarMenu[16] = new SButtonBarEntry(EButtonBarActions.eBBMenu, "VFO Menu", 0, 4);
-            ButtonBarMenu[17] = new SButtonBarEntry(EButtonBarActions.eBBBandForm, "Band Form", 0, 0);
-            ButtonBarMenu[18] = new SButtonBarEntry(EButtonBarActions.eBBModeForm, "Mode Form", 0, 0);
-            ButtonBarMenu[19] = new SButtonBarEntry(EButtonBarActions.eBBBandstackForm, "Bandstack Form", 0, 0);
-            ButtonBarMenu[20] = new SButtonBarEntry(EButtonBarActions.eBBVFOSwap, "Swap A <--> B", 0, 0);
-            ButtonBarMenu[21] = new SButtonBarEntry(EButtonBarActions.eBBVFOSettingForm, "Tune step Form", 0, 0);
-            ButtonBarMenu[22] = new SButtonBarEntry(EButtonBarActions.eBBBandstack, "Bandstack", 0, 0);
-            ButtonBarMenu[23] = new SButtonBarEntry(EButtonBarActions.eBBNone, "----", 0, 0);
+        //
+        // handle software and hardware versions from fromt panel Arduino controller
+        //
+        public void HandleFrontPanelSWVersion(int Version)
+        {
+            AndromedaPanelSWVersion = Version;                // front panel S/W version
+            MakeAndromedaVersionString();
+        }
+        public void HandleFrontPanelHWVersion(int Version)
+        {
+            AndromedaPanelHWVersion = Version;                // front panel H/W version
+            MakeAndromedaVersionString();
+        }
 
-            // menu 4 - TX
-            ButtonBarMenu[24] = new SButtonBarEntry(EButtonBarActions.eBBMenu, "TX Menu", 0, 5);
-            ButtonBarMenu[25] = new SButtonBarEntry(EButtonBarActions.eBBModeSettingsForm, "Mode settings form", 0, 0);
-            ButtonBarMenu[26] = new SButtonBarEntry(EButtonBarActions.eBBPuresignalForm, "Puresignal Form", 0, 0);
-            ButtonBarMenu[27] = new SButtonBarEntry(EButtonBarActions.eBBPuresignalOnOff, "Puresignal select", 0, 0);
-            ButtonBarMenu[28] = new SButtonBarEntry(EButtonBarActions.eBBMOX, "MOX", 0, 0);
-            ButtonBarMenu[29] = new SButtonBarEntry(EButtonBarActions.eBBTune, "TUNE", 0, 0);
-            ButtonBarMenu[30] = new SButtonBarEntry(EButtonBarActions.eBBPuresignal2Tone, "PS 2 Tone test", 0, 0);
-            ButtonBarMenu[31] = new SButtonBarEntry(EButtonBarActions.eBBNone, "----", 0, 0);
 
-            // menu 5 - display
-            ButtonBarMenu[32] = new SButtonBarEntry(EButtonBarActions.eBBMenu, "Display Menu", 0, 6);
-            ButtonBarMenu[33] = new SButtonBarEntry(EButtonBarActions.eBBRXMeterStep, "RX Meter Mode Step", 0, 0);
-            ButtonBarMenu[34] = new SButtonBarEntry(EButtonBarActions.eBBTXMeterStep, "TX Meter mode step", 0, 0);
-            ButtonBarMenu[35] = new SButtonBarEntry(EButtonBarActions.eBBDisplayModeStep, "Display Mode Step", 0, 0);
-            ButtonBarMenu[36] = new SButtonBarEntry(EButtonBarActions.eBBCentreDisplay, "Centre Display", 0, 0);
-            ButtonBarMenu[37] = new SButtonBarEntry(EButtonBarActions.eBBDisplaySettingsForm, "Display Form", 0, 0);
-            ButtonBarMenu[38] = new SButtonBarEntry(EButtonBarActions.eBBZoomStep, "Zoom", 0, 0);
-            ButtonBarMenu[39] = new SButtonBarEntry(EButtonBarActions.eBBNone, "----", 0, 0);
 
-            // menu 6 - audio
-            ButtonBarMenu[40] = new SButtonBarEntry(EButtonBarActions.eBBMenu, "Audio Menu", 0, 7);
-            ButtonBarMenu[41] = new SButtonBarEntry(EButtonBarActions.eBBRecordAudio, "Quick Record Audio", 0, 0);
-            ButtonBarMenu[42] = new SButtonBarEntry(EButtonBarActions.eBBPlayAudio, "Quick Play Audio", 0, 0);
-            ButtonBarMenu[43] = new SButtonBarEntry(EButtonBarActions.eBBNone, "----", 0, 0);
-            ButtonBarMenu[44] = new SButtonBarEntry(EButtonBarActions.eBBAudioForm, "Audio rec/play Form", 0, 0);
-            ButtonBarMenu[45] = new SButtonBarEntry(EButtonBarActions.eBBVAC1OnOff, "VAC1", 0, 0);
-            ButtonBarMenu[46] = new SButtonBarEntry(EButtonBarActions.eBBVAC2OnOff, "VAC2", 0, 0);
-            ButtonBarMenu[47] = new SButtonBarEntry(EButtonBarActions.eBBNone, "----", 0, 0);
+        //
+        // handle a button press from a front panel physical button, sent by CAT command
+        // button = 0-98
+        // state true if pressed normally
+        // LongPress = true if a "long press" event
+        //
+        public void HandleFrontPanelButtonPress(int Button, bool State, bool LongPress)
+        {
+            EButtonBarActions BtnAction;            // assigned action for button
+            int BtnParam;                           // paramter override
+            DataTable table = AndromedaSet.Tables["Pushbuttons"];
+            int RowCount = table.Rows.Count;
 
-            // menu 7 - setup
-            ButtonBarMenu[48] = new SButtonBarEntry(EButtonBarActions.eBBMenu, "Setup Menu", 0, 1);
-            ButtonBarMenu[49] = new SButtonBarEntry(EButtonBarActions.eBBDUP, "Duplex", 0, 0);
-            ButtonBarMenu[50] = new SButtonBarEntry(EButtonBarActions.eBBMON, "TX Monitor", 0, 0);
-            ButtonBarMenu[51] = new SButtonBarEntry(EButtonBarActions.eBBRX2OnOff, "RX2", 0, 0);
-            ButtonBarMenu[52] = new SButtonBarEntry(EButtonBarActions.eBBSubRXOnOff, "Sub RX", 0, 0);
-            ButtonBarMenu[53] = new SButtonBarEntry(EButtonBarActions.eBBEqualiserForm, "Equaliser Form", 0, 0);
-            ButtonBarMenu[54] = new SButtonBarEntry(EButtonBarActions.eBBSetupForm, "Setup Form", 0, 0);
-            ButtonBarMenu[55] = new SButtonBarEntry(EButtonBarActions.eBBMenu, "Extended Menu", 0, 8);
+            if ((Button >= 0) && (Button < RowCount))           // check range
+            {
+                BtnAction = (EButtonBarActions)table.Rows[Button]["Pushbutton Action"];
+                BtnParam = (int)table.Rows[Button]["Pushbutton RX Selector"];
 
-            // menu 8 - extended / test
-            ButtonBarMenu[56] = new SButtonBarEntry(EButtonBarActions.eBBMenu, "Test Menu", 0, 1);
-            ButtonBarMenu[57] = new SButtonBarEntry(EButtonBarActions.eBBQuickSave, "Quick Save", 0, 0);
-            ButtonBarMenu[58] = new SButtonBarEntry(EButtonBarActions.eBBQuickRestore, "Quick Restore", 0, 0);
-            ButtonBarMenu[59] = new SButtonBarEntry(EButtonBarActions.eBBFilterPlus, "filter up", 0, 0);
-            ButtonBarMenu[60] = new SButtonBarEntry(EButtonBarActions.eBBFilterMinus, "filter down", 0, 0);
-            ButtonBarMenu[61] = new SButtonBarEntry(EButtonBarActions.eBBBandPlus, "Band up", 0, 0);
-            ButtonBarMenu[62] = new SButtonBarEntry(EButtonBarActions.eBBBandMinus, "Band down", 0, 0);
-            ButtonBarMenu[63] = new SButtonBarEntry(EButtonBarActions.eBBNone, "----", 0, 0);
+                if (State == true)              // action button press only
+                {
+                    if (BtnAction == EButtonBarActions.eBBMenuButton)     // if a menu softkey button press:
+                    {
+                        switch (BtnParam)
+                        {
+                            case 0:                    // softkey 1
+                                btnAndrBar1_Click(null, null);
+                                break;
 
-            currentButtonBarMenu = 0;
+                            case 1:                    // softkey 2
+                                btnAndrBar2_Click(null, null);
+                                break;
+
+                            case 2:                    // softkey 3
+                                btnAndrBar3_Click(null, null);
+                                break;
+
+                            case 3:                    // softkey 4
+                                btnAndrBar4_Click(null, null);
+                                break;
+
+                            case 4:                    // softkey 5
+                                btnAndrBar5_Click(null, null);
+                                break;
+
+                            case 5:                    // softkey 6
+                                btnAndrBar6_Click(null, null);
+                                break;
+
+                            case 6:                    // softkey 7
+                                btnAndrBar7_Click(null, null);
+                                break;
+
+                            case 7:                    // softkey 8
+                                btnAndrBar8_Click(null, null);
+                                break;
+                        }
+                    }
+                    else                // not a menu softkey
+                    {
+                        ExecuteButtonAction(BtnAction, BtnParam);       // implement the button action
+                    }
+                }
+            }
+        }
+
+
+        //
+        // make version string for Andromeda
+        //
+        public void MakeAndromedaVersionString()
+        {
+            string Result;
+
+            Result = "Andromeda: h/w=" + AndromedaPanelHWVersion;
+            Result += "  s/w=" + AndromedaPanelSWVersion;
+            if (SetupForm != null)
+                SetupForm.AndromedaVersionNumber = Result;
+        }
+
+        //
+        // handler for encoder steps
+        // OverrideRX sets how to select the RX control used
+        //   OverrideRX=0: use setting set by show_rx1 variable (from radio button)
+        //   OverrideRX = 1: use RX1
+        //   OverrideRX = 2: use RX2
+        //   OverrideRX = 3: use Sub-RX
+        // these are only relevant to some controls!
+        private void ExecuteEncoderStep (EEncoderActions Action, int Steps, int OverrideRX)
+        {
+            bool UseRX1 = false;                                      // true if we should process actions for RX1
+            bool UseSubRX = false;
+            int Value;
+            decimal DecValue;
+
+            if (OverrideRX == 0)          // no override
+                UseRX1 = show_rx1;
+            else if (OverrideRX == 3)
+                UseSubRX = true;
+            else if (OverrideRX == 1)     // override to RX1
+                UseRX1 = true;
+            else
+                UseRX1 = false;
+
+            switch (Action)
+            {
+                case EEncoderActions.eENNoAction:
+                    break;
+
+                case EEncoderActions.eENMasterGain:
+                    Value = AF;
+                    EncoderUpdate(Steps, ref Value, ptbAF.Minimum, ptbAF.Maximum);
+                    AF = Value;
+                    break;
+
+                case EEncoderActions.eENAFGain:
+                    if (UseSubRX)
+                    {
+                        Value = RX1Gain;
+                        EncoderUpdate(Steps, ref Value, ptbRX1Gain.Minimum, ptbRX1Gain.Maximum);
+                        RX1Gain = Value;
+                    }
+                    else if (UseRX1)
+                    {
+                        Value = RX0Gain;
+                        EncoderUpdate(Steps, ref Value, ptbRX0Gain.Minimum, ptbRX0Gain.Maximum);
+                        RX0Gain = Value;
+                    }
+                    else
+                    {
+                        Value = RX2Gain;
+                        EncoderUpdate(Steps, ref Value, ptbRX2Gain.Minimum, ptbRX2Gain.Maximum);
+                        RX2Gain = Value;
+                    }
+                    break;
+
+                case EEncoderActions.eENStereoBalance:
+                    if (UseSubRX)
+                    {
+                        Value = PanSubRX;
+                        EncoderUpdate(Steps, ref Value, ptbPanSubRX.Minimum, ptbPanSubRX.Maximum);
+                        PanSubRX = Value;
+                    }
+                    else if (UseRX1)
+                    {
+                        Value = PanMainRX;
+                        EncoderUpdate(Steps, ref Value, ptbPanMainRX.Minimum, ptbPanMainRX.Maximum);
+                        PanMainRX = Value;
+                    }
+                    else
+                    {
+                        Value = RX2Pan;
+                        EncoderUpdate(Steps, ref Value, ptbRX2Pan.Minimum, ptbRX2Pan.Maximum);
+                        RX2Pan = Value;
+                    }
+                    break;
+
+                case EEncoderActions.eENAGCLevel:
+                    if (UseRX1)
+                    {
+                        Value = RF;
+                        EncoderUpdate(Steps, ref Value, ptbRF.Minimum, ptbRF.Maximum);
+                        RF = Value;
+                    }
+                    else
+                    {
+                        Value = RX2RF;
+                        EncoderUpdate(Steps, ref Value, ptbRX2RF.Minimum, ptbRX2RF.Maximum);
+                        RX2RF = Value;
+                    }
+                    break;
+
+                case EEncoderActions.eENStepAtten:
+                    if (UseRX1)
+                    {
+                        Value = SetupForm.HermesAttenuatorData;
+                        EncoderUpdate(Steps, ref Value, (int)udRX1StepAttData.Minimum, (int)udRX1StepAttData.Maximum);
+                        SetupForm.HermesAttenuatorData = Value;
+                    }
+                    else
+                    {
+                        Value = RX2ATT;
+                        EncoderUpdate(Steps, ref Value, (int)udRX2StepAttData.Minimum, (int)udRX2StepAttData.Maximum);
+                        RX2ATT = Value;
+                    }
+                    break;
+
+                case EEncoderActions.eENFilterHigh:
+                    if (UseRX1)
+                    {
+                        Value = RX1FilterHigh;
+                        EncoderUpdate(Steps*20, ref Value, (int)udFilterHigh.Minimum, (int)udFilterHigh.Maximum);
+                        RX1FilterHigh = Value;
+                    }
+                    else
+                    {
+                        Value = RX2FilterHigh;
+                        EncoderUpdate(Steps*20, ref Value, (int)udRX2FilterHigh.Minimum, (int)udRX2FilterHigh.Maximum);
+                        RX2FilterHigh = Value;
+                    }
+                    break;
+
+                case EEncoderActions.eENFilterLow:
+                    if (UseRX1)
+                    {
+                        Value = RX1FilterLow;
+                        EncoderUpdate(Steps*20, ref Value, (int)udFilterLow.Minimum, (int)udFilterLow.Maximum);
+                        RX1FilterLow = Value;
+                    }
+                    else
+                    {
+                        Value = RX2FilterLow;
+                        EncoderUpdate(Steps*20, ref Value, (int)udRX2FilterLow.Minimum, (int)udRX2FilterLow.Maximum);
+                        RX2FilterLow = Value;
+                    }
+                    break;
+
+                case EEncoderActions.eENDrive:
+                    Value = PWR;
+                    EncoderUpdate(Steps, ref Value, ptbPWR.Minimum, ptbPWR.Maximum);
+                    PWR = Value;
+                    break;
+
+                case EEncoderActions.eENMicGain:
+                    Value = CATMIC;
+                    EncoderUpdate(Steps, ref Value, ptbMic.Minimum, ptbMic.Maximum);
+                    CATMIC = Value;
+                    break;
+
+                case EEncoderActions.eENVFOATune:
+                    VFOAFreq = CATVFOA + (double)Steps * TuneStepList[TuneStepIndex].StepHz * 10e-7;
+                    break;
+
+                case EEncoderActions.eENVFOBTune:
+                    VFOBFreq = CATVFOB + (double)Steps * TuneStepList[TuneStepIndex].StepHz * 10e-7;
+                    break;
+
+                case EEncoderActions.eENVOXGain:
+                    Value = VOXSens;
+                    EncoderUpdate(Steps, ref Value, ptbVOX.Minimum, ptbVOX.Maximum);
+                    VOXSens = Value;
+                    break;
+
+                // use steps of 50ms; and own assigned mix, max values
+                case EEncoderActions.eENVOXHold:
+                    Value = (int)VOXHangTime;
+                    EncoderUpdate(Steps*50, ref Value, 100, 4000);
+                    VOXHangTime = Value;
+                    break;
+
+                case EEncoderActions.eENCWSidetone:
+                    Value = SetupForm.CATCWPitch;
+                    EncoderUpdate(Steps, ref Value, (int)udCWPitch.Minimum, (int)udCWPitch.Maximum);
+                    SetupForm.CATCWPitch = Value;
+                    break;
+
+                case EEncoderActions.eENCWSpeed:
+                    Value = CATCWSpeed;
+                    EncoderUpdate(Steps, ref Value, ptbCWSpeed.Minimum, ptbCWSpeed.Maximum);
+                    CATCWSpeed = Value;
+                    break;
+
+                case EEncoderActions.eENSquelch:
+                    if (UseRX1)
+                    {
+                        Value = Squelch;
+                        EncoderUpdate(Steps, ref Value, ptbSquelch.Minimum, ptbSquelch.Maximum);
+                        Squelch = Value;
+                    }
+                    else
+                    {
+                        Value = Squelch2;
+                        EncoderUpdate(Steps, ref Value, ptbRX2Squelch.Minimum, ptbRX2Squelch.Maximum);
+                        Squelch2 = Value;
+                    }
+                    break;
+
+                // increase/decrease gain in multiples of 0.025; limits of 0, 5.000
+                case EEncoderActions.eENDiversityGain:
+                    DecValue = CATDiversityGain;
+                    DecValue += Steps * 0.025m;
+                    if (DecValue < 0.0m)
+                        DecValue = 0.0m;
+                    if (DecValue > 5.0m)
+                        DecValue = 5.0m;
+                    CATDiversityGain = DecValue;
+                    break;
+
+                // increase phase in 5 degree steps, then wrap at +/- 180
+                case EEncoderActions.eENDiversityPhase:
+                    DecValue = CATDiversityPhase;
+                    DecValue += Steps * 5.0m;
+                    if (DecValue >= 180.0m) DecValue -= 360.0m;
+                    if (DecValue <= -180.0m) DecValue += 360.0m;
+                    CATDiversityPhase = DecValue;
+                    break;
+
+                case EEncoderActions.eENCompanderThreshold:
+                    Value = CPDRVal;
+                    EncoderUpdate(Steps, ref Value, ptbCPDR.Minimum, ptbCPDR.Maximum);
+                    CPDRVal = Value;
+                    break;
+
+                // RIT - change in steps of 10Hz
+                case EEncoderActions.eENRIT:
+                    Value = RITValue;
+                    EncoderUpdate(Steps*10, ref Value, (int)udRIT.Minimum, (int)udRIT.Maximum);
+                    RITValue = Value;
+                    break;
+
+                // XIT - change in steps of 10Hz
+                case EEncoderActions.eENXIT:
+                    Value = XITValue;
+                    EncoderUpdate(Steps * 10, ref Value, (int)udXIT.Minimum, (int)udXIT.Maximum);
+                    XITValue = Value;
+                    break;
+
+                case EEncoderActions.eENRITXIT:
+                    if(chkRIT.Checked)
+                    {
+                        Value = RITValue;
+                        EncoderUpdate(Steps * 10, ref Value, (int)udRIT.Minimum, (int)udRIT.Maximum);
+                        RITValue = Value;
+                    }
+                    else if (chkXIT.Checked)
+                    {
+                        Value = XITValue;
+                        EncoderUpdate(Steps * 10, ref Value, (int)udXIT.Minimum, (int)udXIT.Maximum);
+                        XITValue = Value;
+                    }
+                    break;
+
+                case EEncoderActions.eENDisplayPan:
+                    Value = Pan;
+                    EncoderUpdate(Steps, ref Value, ptbDisplayPan.Minimum, ptbDisplayPan.Maximum);
+                    Pan = Value;
+                    break;
+
+                case EEncoderActions.eENDisplayZoom:
+                    Value = Zoom;
+                    EncoderUpdate(Steps, ref Value, ptbDisplayZoom.Minimum, ptbDisplayZoom.Maximum);
+                    Zoom = Value;
+                    break;
+
+                // this should never be called - handled before this!
+                case EEncoderActions.eENMulti:                      // multifunction - this MUST be the last!
+                    break;
+
+            }
+
+        }
+
+        //
+        // helper to clip an encoder adjusted value at the min and max allowed
+        // Steps     number of encoder steps to add/subtract
+        // value     the control value being edited
+        // Minimum   min allowed value for control
+        // maximum   max allowed value for control
+        public void EncoderUpdate(int Steps, ref int Value, int Minimum, int Maximum)
+        {
+            Value += Steps;
+            if (Value < Minimum)                    // clip at lower limit
+                Value = Minimum;
+            if (Value > Maximum)                    // clip at upper limit
+                Value = Maximum;
         }
 
         //
         // execute events for menu button bar presses
-        // called with a button number; fins the action assigned and implements it
+        // called with a button number; finds the action assigned and implements it
         //
         private void ExecuteButtonBarPress(int ButtonNumber)
         {
             int button;                                             // button to press
-            bool UseRX1;                                            // true if we should process actions for RX1
             EButtonBarActions assignedAction;
+            int Override;                                           // 0: no override; 1: RX1; 2: RX2
+            DataTable table = AndromedaSet.Tables["Menu Bar Settings"];
+            int RowCount = table.Rows.Count;
+
+
             if ((ButtonNumber >= 1) && (ButtonNumber <= 8))         // check range!
             {
                 button = (ButtonNumber - 1) + currentButtonBarMenu * 8;
-                assignedAction = ButtonBarMenu[button].Action;
-                if (ButtonBarMenu[button].RXOverride == 0)          // no override
-                    UseRX1 = show_rx1;
-                else if (ButtonBarMenu[button].RXOverride == 1)     // override to RX1
-                    UseRX1 = true;
-                else
-                    UseRX1 = false;
+                assignedAction = (EButtonBarActions)table.Rows[button]["Menu Action"];
+                Override = (int)table.Rows[button]["Menu RX Selector"];
 
-                switch (assignedAction)
+                if (assignedAction == EButtonBarActions.eBBMenu)
                 {
-                    case EButtonBarActions.eBBNone:
-                        break;
-
-                    case EButtonBarActions.eBBStartStop:               // start/stop the radio
-                        chkPower.Checked = !chkPower.Checked;
-                        break;
-
-                    case EButtonBarActions.eBBRX2OnOff:                // toggle RX2 on/off
-                        chkRX2.Checked = !chkRX2.Checked;
-                        break;
-
-                    case EButtonBarActions.eBBDUP:                      // DUPlex on/off
-                        chkRX2SR.Checked = !chkRX2SR.Checked;
-                        break;
-
-                    case EButtonBarActions.eBBMON:                      // monitor on/off
-                        chkMON.Checked = !chkMON.Checked;
-                        break;
-
-                    case EButtonBarActions.eBBTune:                    // Tune on/off
-                        chkTUN.Checked = !chkTUN.Checked;
-                        break;
-
-                    case EButtonBarActions.eBBMOX:                     // MOX on/off
-                        chkMOX.Checked = !chkMOX.Checked;
-                        break;
-
-                    case EButtonBarActions.eBBPuresignalOnOff:         // toggle Puresignal on/off
-                        chkFWCATUBypass.Checked = !chkFWCATUBypass.Checked;
-                        break;
-
-                    case EButtonBarActions.eBBPuresignal2Tone:         // puresignal 2 tone test on/off
-                        if (CATTTTest == 0) CATTTTest = 1; else CATTTTest = 0;
-                        break;
-                        
-
-                    case EButtonBarActions.eBBMenu:
-                        currentButtonBarMenu = ButtonBarMenu[button].ButtonParameter - 1;     // menu number turned into row number
-                        UpdateButtonBarButtons();
-                        break;
-
-                    case EButtonBarActions.eBBNR:
-                        if (UseRX1)
-                        {
-                            if (chkNR.CheckState == CheckState.Unchecked) chkNR.CheckState = CheckState.Checked;       // off to NR
-                            else if (chkNR.CheckState == CheckState.Checked) chkNR.CheckState = CheckState.Indeterminate;       // NR to NR2
-                            else chkNR.CheckState = CheckState.Unchecked;
-                        }
-                        else
-                        {
-                            if (chkRX2NR.CheckState == CheckState.Unchecked) chkRX2NR.CheckState = CheckState.Checked;       // off to NR
-                            else if (chkRX2NR.CheckState == CheckState.Checked) chkRX2NR.CheckState = CheckState.Indeterminate;       // NR to NR2
-                            else chkRX2NR.CheckState = CheckState.Unchecked;
-                        }
-                        break;
-
-                    case EButtonBarActions.eBBNB:
-                        if (UseRX1)
-                        {
-                            if (chkNB.CheckState == CheckState.Unchecked) chkNB.CheckState = CheckState.Checked;       // off to NR
-                            else if (chkNB.CheckState == CheckState.Checked) chkNB.CheckState = CheckState.Indeterminate;       // NR to NR2
-                            else chkNB.CheckState = CheckState.Unchecked;
-                        }
-                        else
-                        {
-                            if (chkRX2NB.CheckState == CheckState.Unchecked) chkRX2NB.CheckState = CheckState.Checked;       // off to NR
-                            else if (chkRX2NB.CheckState == CheckState.Checked) chkRX2NB.CheckState = CheckState.Indeterminate;       // NR to NR2
-                            else chkRX2NB.CheckState = CheckState.Unchecked;
-                        }
-                        break;
-
-                    case EButtonBarActions.eBBSNB:
-                        if (UseRX1) chkDSPNB2.Checked = !chkDSPNB2.Checked; else chkRX2NB2.Checked = !chkRX2NB2.Checked;
-                        break;
-
-                    case EButtonBarActions.eBBANF:
-                        if (UseRX1) chkANF.Checked = !chkANF.Checked; else chkRX2ANF.Checked = !chkRX2ANF.Checked;
-                        break;
-
-                    case EButtonBarActions.eBBMNF:
-                        chkTNF.Checked = !chkTNF.Checked;
-                        break;
-
-                    case EButtonBarActions.eBBVFOSwap:                 // press VFO swap button
-                        btnVFOSwap_Click(null, null);
-                        break;
-
-                    case EButtonBarActions.eBBVFOSplit:                // split operation
-                        chkVFOSplit.Checked = !chkVFOSplit.Checked;
-                        break;
-
-                    case EButtonBarActions.eBBVFOAtoB:                 // copy A to B
-                        btnVFOAtoB_Click(null, null);
-                        break;
-
-                    case EButtonBarActions.eBBVFOBtoA:                 // copy B to A
-                        btnVFOBtoA_Click(null, null);
-                        break;
-
-                    case EButtonBarActions.eBBVFOZeroBeat:             // operate zero beat button
-                        btnZeroBeat_Click(null, null);
-                        break;
-
-                    case EButtonBarActions.eBBIFtoV:                   // operate IF->V button
-                        btnIFtoVFO_Click(null, null);
-                        break;
-
-                    case EButtonBarActions.eBBVFOSyncOnOff:            // VFO sync
-                        chkVFOSync.Checked = !chkVFOSync.Checked;
-                        break;
-
-                    case EButtonBarActions.eBBVFOLockOnOff:            // VFO Lock
-                        if (UseRX1)
-                            chkVFOLock.Checked = !chkVFOLock.Checked;
-                        else
-                            chkVFOBLock.Checked = !chkVFOBLock.Checked;
-                        break;
-
-                    case EButtonBarActions.eBBVFOCTUNEOnOff:           // Click Tune
-                        if (UseRX1)
-                            chkFWCATU.Checked = !chkFWCATU.Checked;
-                        else
-                            chkX2TR.Checked = !chkX2TR.Checked;
-                        break;
-
-                    case EButtonBarActions.eBBToggleAB:                // toggle between A & B
-                        if (CATRX1RX2RadioButton == 0) CATRX1RX2RadioButton = 1; else CATRX1RX2RadioButton = 0;
-                        break;
-
-                    case EButtonBarActions.eBBRITOnOff:                // toggle RIT on/off
-                        chkRIT.Checked = !chkRIT.Checked;
-                        break;
-
-                    case EButtonBarActions.eBBXITOnOff:                // toggle XIT on/off
-                        chkXIT.Checked = !chkXIT.Checked;
-                        break;
-
-                    case EButtonBarActions.eBBRITXITToggle:            // step off-RIT-XIT
-                        if(chkRIT.Checked)
-                        {
-                            chkRIT.Checked = false;
-                            chkXIT.Checked = true;
-                        }
-                        else if (chkXIT.Checked)
-                        {
-                            chkRIT.Checked = false;
-                            chkXIT.Checked = false;
-                        }
-                        else
-                        {
-                            chkRIT.Checked = true;
-                            chkXIT.Checked = false;
-                        }
-                        break;
-
-                    case EButtonBarActions.eBBClearRITXIT:             // clear RIT and XIT
-                        udRIT.Value = 0;
-                        udXIT.Value = 0;
-                        break;
-
-                    case EButtonBarActions.eBBClearRIT:                // clear RIT only
-                        udRIT.Value = 0;
-                        break;
-
-                    case EButtonBarActions.eBBClearXIT:                // clear XIT only
-                        udXIT.Value = 0;
-                        break;
-
-                    case EButtonBarActions.eBBRITPlus:                 // RIT step up
-                        RITValue += 10;                                 // same code as CATCommands
-                        break;
-
-                    case EButtonBarActions.eBBRITMinus:                // RIT step down
-                        RITValue -= 10;                                 // same code as CATCommands
-                        break;
-
-                    case EButtonBarActions.eBBXITPlus:                 // XIT step up
-                        XITValue += 10;                                 // same code as CATCommands
-                        break;
-
-                    case EButtonBarActions.eBBXITMinus:                // XIT step down
-                        XITValue -= 10;                                 // same code as CATCommands
-                        break;
-
-                    case EButtonBarActions.eBBRITXITPlus:              // RIT/XIT up - whichever is selected
-                        if (chkRIT.Checked) RITValue += 10; else if (chkXIT.Checked) XITValue += 10;
-                        break;
-
-                    case EButtonBarActions.eBBRITXITMinus:             // RIT/XIT down - whichever is selected
-                        if (chkRIT.Checked) RITValue -= 10; else if (chkXIT.Checked) XITValue -= 10;
-                        break;
-
-                    case EButtonBarActions.eBBFilterReset:             // reset variable filter
-                        btnFilterShiftReset_Click(null, null);
-                        break;
-                    
-                        // filter enum runs from F1 to VAR2
-                    case EButtonBarActions.eBBFilterPlus:              // select next filter
-                        if (UseRX1)
-                            { if (RX1Filter != Filter.VAR2) RX1Filter = (Filter)((int)RX1Filter+1); }
-                        else
-                            { if (RX2Filter != Filter.VAR2) RX2Filter = (Filter)((int)RX2Filter+1); }
-                        break;
-
-                    case EButtonBarActions.eBBFilterMinus:             // select next lower filter
-                        if (UseRX1)
-                            { if (RX1Filter != Filter.F1) RX1Filter = (Filter)((int)RX1Filter-1); }
-                        else
-                            { if (RX2Filter != Filter.F1) RX2Filter = (Filter)((int)RX2Filter-1); }
-                        break;
-                    // Band enum for HF covers b160m to b6m
-                    case EButtonBarActions.eBBBandPlus:                // step up band
-                        if (UseRX1)
-                            { if (RX1Band != Band.B6M) SetCATBand((Band)((int)RX1Band + 1)); }
-                        else
-                            { if (RX2Band != Band.B6M) RX2Band = (Band)((int)RX2Band + 1); }
-                        break;
-
-                    case EButtonBarActions.eBBBandMinus:               // step down band
-                        if (UseRX1)
-                        { if (RX1Band != Band.B160M) SetCATBand((Band)((int)RX1Band - 1)); }
-                        else
-                        { if (RX2Band != Band.B160M) RX2Band = (Band)((int)RX2Band - 1); }
-                        break;
-                    // DSPMode enum runs from LSB to DRM
-                    case EButtonBarActions.eBBModePlus:                // step up mode
-                        if (UseRX1)
-                            { if (RX1DSPMode != DSPMode.DRM) RX1DSPMode = (DSPMode)((int)RX1DSPMode+1); }
-                        else
-                            { if (RX2DSPMode != DSPMode.DRM) RX2DSPMode = (DSPMode)((int)RX2DSPMode+1); }
-                        break;
-
-                    case EButtonBarActions.eBBModeMinus:               // step down mode
-                        if (UseRX1)
-                            { if (RX1DSPMode != DSPMode.LSB) RX1DSPMode = (DSPMode)((int)RX1DSPMode-1); }
-                        else
-                            { if (RX2DSPMode != DSPMode.LSB) RX2DSPMode = (DSPMode)((int)RX2DSPMode-1); }
-                        break;
-
-                    case EButtonBarActions.eBBAttenStep:               // step the attenuation value in 6dB steps
-                        if(UseRX1)
-                        {
-                            if (udRX1StepAttData.Value < 6) udRX1StepAttData.Value = 6;
-                            else if(udRX1StepAttData.Value < 12) udRX1StepAttData.Value = 12;
-                            else if (udRX1StepAttData.Value < 18) udRX1StepAttData.Value = 18;
-                            else if (udRX1StepAttData.Value < 24) udRX1StepAttData.Value = 24;
-                            else if (udRX1StepAttData.Value < 30) udRX1StepAttData.Value = 30;
-                            else udRX1StepAttData.Value = 0;
-                        }
-                        else
-                        {
-                            if (udRX2StepAttData.Value < 6) udRX2StepAttData.Value = 6;
-                            else if (udRX2StepAttData.Value < 12) udRX2StepAttData.Value = 12;
-                            else if (udRX2StepAttData.Value < 18) udRX2StepAttData.Value = 18;
-                            else if (udRX2StepAttData.Value < 24) udRX2StepAttData.Value = 24;
-                            else if (udRX2StepAttData.Value < 30) udRX2StepAttData.Value = 30;
-                            else udRX2StepAttData.Value = 0;
-                        }
-                        break;
-
-                    case EButtonBarActions.eBBMuteOnOff:               // mute on/off
-                        if (UseRX1)
-                            chkMUT.Checked = !chkMUT.Checked;
-                        else
-                            chkRX2Mute.Checked = !chkRX2Mute.Checked;
-                        break;
-
-                    case EButtonBarActions.eBBBINOnOff:                // Binaural on/off
-                        if (UseRX1)
-                            chkBIN.Checked = !chkBIN.Checked;
-                        else
-                            chkRX2BIN.Checked = !chkRX2BIN.Checked;
-                        break;
-
-                    case EButtonBarActions.eBBSDOnOff:                 // stereo diversity on/off
-                        chkDX.Checked = !chkDX.Checked;
-                        break;
-
-                    case EButtonBarActions.eBBVAC1OnOff:               // toggle VAC1 on/off
-                        chkVAC1.Checked = !chkVAC1.Checked;
-                        break;
-
-                    case EButtonBarActions.eBBVAC2OnOff:               // toggle VAC2 on/off
-                        chkVAC2.Checked = !chkVAC2.Checked;
-                        break;
-
-                    case EButtonBarActions.eBBAGCStep:                 // step the AGC setting
-                        if (UseRX1)
-                        {
-                            if (comboAGC.SelectedIndex < comboAGC.Items.Count - 1)
-                                comboAGC.SelectedIndex++;
-                            else
-                                comboAGC.SelectedIndex = 0;
-                        }
-                        else
-                        {
-                            if (comboRX2AGC.SelectedIndex < comboRX2AGC.Items.Count - 1)
-                                comboRX2AGC.SelectedIndex++;
-                            else
-                                comboRX2AGC.SelectedIndex = 0;
-                        }
-                        break;
-
-                    case EButtonBarActions.eBBSqlOnOff:                // step the squelch setting
-                        if (UseRX1)
-                            chkSquelch.Checked = !chkSquelch.Checked;
-                        else
-                            chkRX2Squelch.Checked = !chkRX2Squelch.Checked;
-                        break;
-
-                    case EButtonBarActions.eBBRXEQOnOff:               // RX equaliser on/off
-                        chkRXEQ.Checked = !chkRXEQ.Checked;
-                        break;
-
-                    case EButtonBarActions.eBBTXEQOnOff:               // TX equaliser on/off
-                        chkTXEQ.Checked = !chkTXEQ.Checked;
-                        break;
-
-                    case EButtonBarActions.eBBTXFLShow:                // show TX filter
-                        chkShowTXFilter.Checked = !chkShowTXFilter.Checked;
-                        break;
-
-                    case EButtonBarActions.eBBMICOnOff:                // MIC button on/off
-                        chkMicMute.Checked = !chkMicMute.Checked;
-                        break;
-
-                    case EButtonBarActions.eBBCOMPOnOff:               // COMP button on/off
-                        chkCPDR.Checked = !chkCPDR.Checked;
-                        break;
-
-                    case EButtonBarActions.eBBVOXOnOff:                // VOX on/off
-                        chkVOX.Checked = !chkVOX.Checked;
-                        break;
-
-                    case EButtonBarActions.eBBDEXPOnOff:               // DEXP on/off
-                        chkNoiseGate.Checked = !chkNoiseGate.Checked;
-                        break;
-
-                    case EButtonBarActions.eBBCWIambic:                // iambic keyer selected
-                        chkCWIambic.Checked = !chkCWIambic.Checked;
-                        break;
-
-                    case EButtonBarActions.eBBCWSidetone:              // CW sidetone
-                        chkCWSidetone.Checked = !chkCWSidetone.Checked;
-                        break;
-
-                    case EButtonBarActions.eBBCWShowTX:                // CW show tX frequency
-                        chkShowTXCWFreq.Checked = !chkShowTXCWFreq.Checked;
-                        break;
-
-                    case EButtonBarActions.eBBCWShowZero:              // show CW zero freq
-                        chkShowCWZero.Checked = !chkShowCWZero.Checked;
-                        break;
-
-                    case EButtonBarActions.eBBCWSemiBreakin:           // semi breakin on/off
-                        chkCWBreakInEnabled.Checked = !chkCWBreakInEnabled.Checked;
-                        break;
-
-                    case EButtonBarActions.eBBCWQSK:                   // QSK on/off
-                        chkQSK.Checked = !chkQSK.Checked;
-                        break;
-
-                    case EButtonBarActions.eBBRX1APF:                  // RX1 APF on/off
-                        chkCWAPFEnabled.Checked = !chkCWAPFEnabled.Checked;
-                        break;
-
-                    case EButtonBarActions.eBBCTCSSOnOff:              // FM CTCSS tone on/off
-                        chkFMCTCSS.Checked = !chkFMCTCSS.Checked;
-                        break;
-
-                    case EButtonBarActions.eBBFMDeviation:             // Toggle FM Deviation
-                        if (radFMDeviation2kHz.Checked) radFMDeviation5kHz.Checked = true; else radFMDeviation2kHz.Checked = true;
-                        break;
-
-                    case EButtonBarActions.eBBDiversityOnOff:          // toggle diversity on/off
-                        CATDiversityEnable = !CATDiversityEnable;
-                        break;
-
-                    case EButtonBarActions.eBBSubRXOnOff:              // toggle sub-RX on/off
-                        chkEnableMultiRX.Checked = !chkEnableMultiRX.Checked;
-                        break;
-
-                    case EButtonBarActions.eBBRXMeterStep:             // step the setting of the RX meter
-                        if (UseRX1)
-                        {
-                            if (comboMeterRXMode.SelectedIndex < comboMeterRXMode.Items.Count - 1)
-                                comboMeterRXMode.SelectedIndex++;
-                            else
-                                comboMeterRXMode.SelectedIndex = 0;
-                        }
-                        else
-                        {
-                            if (comboRX2MeterMode.SelectedIndex < comboRX2MeterMode.Items.Count - 1)
-                                comboRX2MeterMode.SelectedIndex++;
-                            else
-                                comboRX2MeterMode.SelectedIndex = 0;
-                        }
-                        break;
-
-                    case EButtonBarActions.eBBTXMeterStep:             // step the setting of the TX meter
-                        if (comboMeterTXMode.SelectedIndex < comboMeterTXMode.Items.Count - 1)
-                            comboMeterTXMode.SelectedIndex++;
-                        else
-                            comboMeterTXMode.SelectedIndex = 0;
-                        break;
-
-                    case EButtonBarActions.eBBDisplayModeStep:         // step the display mode
-                        if (UseRX1)
-                        {
-                            if (comboDisplayMode.SelectedIndex < comboDisplayMode.Items.Count - 1)
-                                comboDisplayMode.SelectedIndex++;
-                            else
-                                comboDisplayMode.SelectedIndex = 0;
-                        }
-                        else
-                        {
-                            if (comboRX2DisplayMode.SelectedIndex < comboRX2DisplayMode.Items.Count - 1)
-                                comboRX2DisplayMode.SelectedIndex++;
-                            else
-                                comboRX2DisplayMode.SelectedIndex = 0;
-                        }
-                        break;
-
-                    case EButtonBarActions.eBBDisplayDSPAVG:           // display DSP AVG button
-                        if (UseRX1)
-                            chkDisplayAVG.Checked = !chkDisplayAVG.Checked;
-                        else
-                            chkRX2DisplayAVG.Checked = !chkRX2DisplayAVG.Checked;
-                        break;
-
-                    case EButtonBarActions.eBBDisplayDSPPeak:          // display DSP PEAK button
-                        if (UseRX1)
-                            chkDisplayPeak.Checked = !chkDisplayPeak.Checked;
-                        else
-                            chkRX2DisplayPeak.Checked = !chkRX2DisplayPeak.Checked;
-                        break;
-
-                    case EButtonBarActions.eBBCentreDisplay:           // centre the display
-                        btnDisplayPanCenter_Click(null, null);
-                        break;
-
-                    case EButtonBarActions.eBBZoomStep:                // step between the zoom step buttons
-                        if (radDisplayZoom05.Checked) radDisplayZoom1x.Checked = true;
-                        else if (radDisplayZoom1x.Checked) radDisplayZoom2x.Checked = true;
-                        else if (radDisplayZoom2x.Checked) radDisplayZoom4x.Checked = true;
-                        else radDisplayZoom05.Checked = true;
-                        break;
-
-                    case EButtonBarActions.eBBRecordAudio:             // record audio
-                        ckQuickRec.Checked = !ckQuickRec.Checked;
-                        break;
-
-                    case EButtonBarActions.eBBPlayAudio:                 // play audio: parameter identifies which audio
-                        ckQuickPlay.Checked = !ckQuickPlay.Checked;
-                        break;
-
-                    case EButtonBarActions.eBBModeForm:
-                        if (modePopupForm == null) modePopupForm = new ModeButtonsPopup(this);
-                        modePopupForm.Show();
-                        break;
-
-                    case EButtonBarActions.eBBFilterForm:
-                        if (filterPopupForm == null) filterPopupForm = new FilterButtonsPopup(this);
-                        filterPopupForm.Show();
-                        break;
-
-                    case EButtonBarActions.eBBBandForm:
-                        if (bandPopupForm == null) bandPopupForm = new BandButtonsPopup(this);
-                        bandPopupForm.RepopulateForm();
-                        bandPopupForm.Show();
-                        break;
-
-                    case EButtonBarActions.eBBSliderForm:
-                        if (sliderForm == null) sliderForm = new SliderSettingsForm(this);
-                        sliderForm.Show();
-                        break;
-
-                    case EButtonBarActions.eBBVFOSettingForm:          // show VFO Settings form
-                        if (VFOSettingsForm == null) VFOSettingsForm = new VFOSettingsPopup(this);
-                        VFOSettingsForm.Show();
-                        break;
-
-                    case EButtonBarActions.eBBBandstackForm:           // show band stacks form
-                        if (StackForm == null || StackForm.IsDisposed) StackForm = new StackControl(this);
-                        StackForm.Show();
-                        StackForm.Focus();
-                        StackForm.WindowState = FormWindowState.Normal; // ke9ns add
-                        break;
-
-                    case EButtonBarActions.eBBBandstack:
-                        SetCATBand(RX1Band);
-                        break;
-
-                    case EButtonBarActions.eBBQuickSave:               // save to "quick memory"
-                        btnMemoryQuickSave_Click(null, null);
-                        break;
-
-                    case EButtonBarActions.eBBQuickRestore:            // restore from "quick memory"
-                        btnMemoryQuickRestore_Click(null, null);
-                        break;
-
-                    case EButtonBarActions.eBBRXAntenna:               // RX antenna button equivalent
-                        chkRxAnt.Checked = !chkRxAnt.Checked;
-                        break;
-
-                        
-                    case EButtonBarActions.eBBDiversityForm:           // show the diversity form
-                        eSCToolStripMenuItem_Click(null, null);
-                        break;
-
-                    case EButtonBarActions.eBBModeSettingsForm:        // show the "mode dependent settings" form
-                        if (modeDependentSettingsForm == null) modeDependentSettingsForm = new ModeDependentSettingsForm(this);
-                        modeDependentSettingsForm.Show();
-
-                            panelModeSpecificCW.Show();
-                            panelModeSpecificPhone.Show();
-                            panelModeSpecificDigital.Show();
-                            panelModeSpecificFM.Show();
-
-                        panelModeSpecificCW.Location = new Point(0, 0);
-                        panelModeSpecificPhone.Location = new Point(0, 0);
-                        panelModeSpecificDigital.Location = new Point(0, 0);
-                        panelModeSpecificFM.Location = new Point(0, 0);
-
-                        panelModeSpecificCW.Parent = modeDependentSettingsForm;
-                        panelModeSpecificPhone.Parent = modeDependentSettingsForm;
-                        panelModeSpecificDigital.Parent = modeDependentSettingsForm;
-                        panelModeSpecificFM.Parent = modeDependentSettingsForm;
-                        SelectModeDependentPanel();
-                        break;
-
-                    case EButtonBarActions.eBBPuresignalForm:          // show the Puresignal form
-                        linearityToolStripMenuItem_Click(null, null);
-                        break;
-
-                    case EButtonBarActions.eBBEqualiserForm:           // show equaliser form
-                        equalizerToolStripMenuItem_Click(null, null);
-                        break;
-
-                    case EButtonBarActions.eBBDisplaySettingsForm:    // show the display settings form
-                        if (displaySettingsForm == null) displaySettingsForm = new DisplaySettingsForm(this);
-                        displaySettingsForm.Show();
-                        break;
-
-                    case EButtonBarActions.eBBAudioForm:               // open the audio record play form
-                        waveToolStripMenuItem_Click(null, null);
-                        break;
-
-                    case EButtonBarActions.eBBSetupForm:               // open the setup form
-                        setupToolStripMenuItem_Click(null, null);
-                        break;
-
+                    currentButtonBarMenu = (int)table.Rows[button]["Menu Number"] - 1;     // menu number turned into row number
+                    UpdateButtonBarButtons();
                 }
-                UpdateButtonBarButtons();                               // re-check textx
+                else
+                    ExecuteButtonAction(assignedAction, Override);
             }
+        }
+
+        //
+        // execute a single button press action
+        // this can be invoked by a menu button press or front panel button press
+        private void ExecuteButtonAction(EButtonBarActions assignedAction, int OverrideRX)
+        {
+            bool UseRX1;                                            // true if we should process actions for RX1
+            if (OverrideRX == 0)          // no override
+                UseRX1 = show_rx1;
+            else if (OverrideRX == 1)     // override to RX1
+                UseRX1 = true;
+            else
+                UseRX1 = false;
+
+            switch (assignedAction)
+            {
+                case EButtonBarActions.eBBNone:
+                    break;
+
+                case EButtonBarActions.eBBStartStop:               // start/stop the radio
+                    chkPower.Checked = !chkPower.Checked;
+                    break;
+
+                case EButtonBarActions.eBBRX2OnOff:                // toggle RX2 on/off
+                    chkRX2.Checked = !chkRX2.Checked;
+                    break;
+
+                case EButtonBarActions.eBBDUP:                      // DUPlex on/off
+                    chkRX2SR.Checked = !chkRX2SR.Checked;
+                    break;
+
+                case EButtonBarActions.eBBMON:                      // monitor on/off
+                    chkMON.Checked = !chkMON.Checked;
+                    break;
+
+                case EButtonBarActions.eBBTune:                    // Tune on/off
+                    chkTUN.Checked = !chkTUN.Checked;
+                    break;
+
+                case EButtonBarActions.eBBMOX:                     // MOX on/off
+                    chkMOX.Checked = !chkMOX.Checked;
+                    break;
+
+                case EButtonBarActions.eBBPuresignalOnOff:         // toggle Puresignal on/off
+                    chkFWCATUBypass.Checked = !chkFWCATUBypass.Checked;
+                    break;
+
+                case EButtonBarActions.eBBPuresignal2Tone:         // puresignal 2 tone test on/off
+                    if (CATTTTest == 0) CATTTTest = 1; else CATTTTest = 0;
+                    break;
+
+                case EButtonBarActions.eBBNR:
+                    if (UseRX1)
+                    {
+                        if (chkNR.CheckState == CheckState.Unchecked) chkNR.CheckState = CheckState.Checked;       // off to NR
+                        else if (chkNR.CheckState == CheckState.Checked) chkNR.CheckState = CheckState.Indeterminate;       // NR to NR2
+                        else chkNR.CheckState = CheckState.Unchecked;
+                    }
+                    else
+                    {
+                        if (chkRX2NR.CheckState == CheckState.Unchecked) chkRX2NR.CheckState = CheckState.Checked;       // off to NR
+                        else if (chkRX2NR.CheckState == CheckState.Checked) chkRX2NR.CheckState = CheckState.Indeterminate;       // NR to NR2
+                        else chkRX2NR.CheckState = CheckState.Unchecked;
+                    }
+                    break;
+
+                case EButtonBarActions.eBBNB:
+                    if (UseRX1)
+                    {
+                        if (chkNB.CheckState == CheckState.Unchecked) chkNB.CheckState = CheckState.Checked;       // off to NR
+                        else if (chkNB.CheckState == CheckState.Checked) chkNB.CheckState = CheckState.Indeterminate;       // NR to NR2
+                        else chkNB.CheckState = CheckState.Unchecked;
+                    }
+                    else
+                    {
+                        if (chkRX2NB.CheckState == CheckState.Unchecked) chkRX2NB.CheckState = CheckState.Checked;       // off to NR
+                        else if (chkRX2NB.CheckState == CheckState.Checked) chkRX2NB.CheckState = CheckState.Indeterminate;       // NR to NR2
+                        else chkRX2NB.CheckState = CheckState.Unchecked;
+                    }
+                    break;
+
+                case EButtonBarActions.eBBSNB:
+                    if (UseRX1) chkDSPNB2.Checked = !chkDSPNB2.Checked; else chkRX2NB2.Checked = !chkRX2NB2.Checked;
+                    break;
+
+                case EButtonBarActions.eBBANF:
+                    if (UseRX1) chkANF.Checked = !chkANF.Checked; else chkRX2ANF.Checked = !chkRX2ANF.Checked;
+                    break;
+
+                case EButtonBarActions.eBBMNF:
+                    chkTNF.Checked = !chkTNF.Checked;
+                    break;
+
+                case EButtonBarActions.eBBVFOSwap:                 // press VFO swap button
+                    btnVFOSwap_Click(null, null);
+                    break;
+
+                case EButtonBarActions.eBBVFOSplit:                // split operation
+                    chkVFOSplit.Checked = !chkVFOSplit.Checked;
+                    break;
+
+                case EButtonBarActions.eBBVFOAtoB:                 // copy A to B
+                    btnVFOAtoB_Click(null, null);
+                    break;
+
+                case EButtonBarActions.eBBVFOBtoA:                 // copy B to A
+                    btnVFOBtoA_Click(null, null);
+                    break;
+
+                case EButtonBarActions.eBBVFOZeroBeat:             // operate zero beat button
+                    btnZeroBeat_Click(null, null);
+                    break;
+
+                case EButtonBarActions.eBBIFtoV:                   // operate IF->V button
+                    btnIFtoVFO_Click(null, null);
+                    break;
+
+                case EButtonBarActions.eBBVFOSyncOnOff:            // VFO sync
+                    chkVFOSync.Checked = !chkVFOSync.Checked;
+                    break;
+
+                case EButtonBarActions.eBBVFOLockOnOff:            // VFO Lock
+                    if (UseRX1)
+                        chkVFOLock.Checked = !chkVFOLock.Checked;
+                    else
+                        chkVFOBLock.Checked = !chkVFOBLock.Checked;
+                    break;
+
+                case EButtonBarActions.eBBVFOCTUNEOnOff:           // Click Tune
+                    if (UseRX1)
+                        chkFWCATU.Checked = !chkFWCATU.Checked;
+                    else
+                        chkX2TR.Checked = !chkX2TR.Checked;
+                    break;
+
+                case EButtonBarActions.eBBToggleAB:                // toggle between A & B
+                    if (CATRX1RX2RadioButton == 0) CATRX1RX2RadioButton = 1; else CATRX1RX2RadioButton = 0;
+                    break;
+
+                case EButtonBarActions.eBBRITOnOff:                // toggle RIT on/off
+                    chkRIT.Checked = !chkRIT.Checked;
+                    break;
+
+                case EButtonBarActions.eBBXITOnOff:                // toggle XIT on/off
+                    chkXIT.Checked = !chkXIT.Checked;
+                    break;
+
+                case EButtonBarActions.eBBRITXITToggle:            // step off-RIT-XIT
+                    if(chkRIT.Checked)
+                    {
+                        chkRIT.Checked = false;
+                        chkXIT.Checked = true;
+                    }
+                    else if (chkXIT.Checked)
+                    {
+                        chkRIT.Checked = false;
+                        chkXIT.Checked = false;
+                    }
+                    else
+                    {
+                        chkRIT.Checked = true;
+                        chkXIT.Checked = false;
+                    }
+                    break;
+
+                case EButtonBarActions.eBBClearRITXIT:             // clear RIT and XIT
+                    udRIT.Value = 0;
+                    udXIT.Value = 0;
+                    break;
+
+                case EButtonBarActions.eBBClearRIT:                // clear RIT only
+                    udRIT.Value = 0;
+                    break;
+
+                case EButtonBarActions.eBBClearXIT:                // clear XIT only
+                    udXIT.Value = 0;
+                    break;
+
+                case EButtonBarActions.eBBRITPlus:                 // RIT step up
+                    RITValue += 10;                                 // same code as CATCommands
+                    break;
+
+                case EButtonBarActions.eBBRITMinus:                // RIT step down
+                    RITValue -= 10;                                 // same code as CATCommands
+                    break;
+
+                case EButtonBarActions.eBBXITPlus:                 // XIT step up
+                    XITValue += 10;                                 // same code as CATCommands
+                    break;
+
+                case EButtonBarActions.eBBXITMinus:                // XIT step down
+                    XITValue -= 10;                                 // same code as CATCommands
+                    break;
+
+                case EButtonBarActions.eBBRITXITPlus:              // RIT/XIT up - whichever is selected
+                    if (chkRIT.Checked) RITValue += 10; else if (chkXIT.Checked) XITValue += 10;
+                    break;
+
+                case EButtonBarActions.eBBRITXITMinus:             // RIT/XIT down - whichever is selected
+                    if (chkRIT.Checked) RITValue -= 10; else if (chkXIT.Checked) XITValue -= 10;
+                    break;
+
+                case EButtonBarActions.eBBFilterReset:             // reset variable filter
+                    btnFilterShiftReset_Click(null, null);
+                    break;
+
+                        // filter enum runs from F1 to VAR2
+                case EButtonBarActions.eBBFilterPlus:              // select next filter
+                    if (UseRX1)
+                        { if (RX1Filter != Filter.VAR2) RX1Filter = (Filter)((int)RX1Filter+1); }
+                    else
+                        { if (RX2Filter != Filter.VAR2) RX2Filter = (Filter)((int)RX2Filter+1); }
+                    break;
+
+                case EButtonBarActions.eBBFilterMinus:             // select next lower filter
+                    if (UseRX1)
+                        { if (RX1Filter != Filter.F1) RX1Filter = (Filter)((int)RX1Filter-1); }
+                    else
+                        { if (RX2Filter != Filter.F1) RX2Filter = (Filter)((int)RX2Filter-1); }
+                    break;
+
+                // Band enum for HF covers b160m to b6m
+                case EButtonBarActions.eBBBandPlus:                // step up band
+                    if (UseRX1)
+                        { if (RX1Band != Band.B6M) SetCATBand((Band)((int)RX1Band + 1)); }
+                    else
+                        { if (RX2Band != Band.B6M) RX2Band = (Band)((int)RX2Band + 1); }
+                    break;
+
+                case EButtonBarActions.eBBBandMinus:               // step down band
+                    if (UseRX1)
+                        { if (RX1Band != Band.B160M) SetCATBand((Band)((int)RX1Band - 1)); }
+                    else
+                        { if (RX2Band != Band.B160M) RX2Band = (Band)((int)RX2Band - 1); }
+                    break;
+
+                // DSPMode enum runs from LSB to DRM
+                case EButtonBarActions.eBBModePlus:                // step up mode
+                    if (UseRX1)
+                        { if (RX1DSPMode != DSPMode.DRM) RX1DSPMode = (DSPMode)((int)RX1DSPMode+1); }
+                    else
+                        { if (RX2DSPMode != DSPMode.DRM) RX2DSPMode = (DSPMode)((int)RX2DSPMode+1); }
+                    break;
+
+                case EButtonBarActions.eBBModeMinus:               // step down mode
+                    if (UseRX1)
+                        { if (RX1DSPMode != DSPMode.LSB) RX1DSPMode = (DSPMode)((int)RX1DSPMode-1); }
+                    else
+                        { if (RX2DSPMode != DSPMode.LSB) RX2DSPMode = (DSPMode)((int)RX2DSPMode-1); }
+                    break;
+
+                case EButtonBarActions.eBBAttenStep:               // step the attenuation value in 6dB steps
+                    if(UseRX1)
+                    {
+                        if (udRX1StepAttData.Value < 6) udRX1StepAttData.Value = 6;
+                        else if(udRX1StepAttData.Value < 12) udRX1StepAttData.Value = 12;
+                        else if (udRX1StepAttData.Value < 18) udRX1StepAttData.Value = 18;
+                        else if (udRX1StepAttData.Value < 24) udRX1StepAttData.Value = 24;
+                        else if (udRX1StepAttData.Value < 30) udRX1StepAttData.Value = 30;
+                        else udRX1StepAttData.Value = 0;
+                    }
+                    else
+                    {
+                        if (udRX2StepAttData.Value < 6) udRX2StepAttData.Value = 6;
+                        else if (udRX2StepAttData.Value < 12) udRX2StepAttData.Value = 12;
+                        else if (udRX2StepAttData.Value < 18) udRX2StepAttData.Value = 18;
+                        else if (udRX2StepAttData.Value < 24) udRX2StepAttData.Value = 24;
+                        else if (udRX2StepAttData.Value < 30) udRX2StepAttData.Value = 30;
+                        else udRX2StepAttData.Value = 0;
+                    }
+                    break;
+
+                case EButtonBarActions.eBBMuteOnOff:               // mute on/off
+                    if (UseRX1)
+                        chkMUT.Checked = !chkMUT.Checked;
+                    else
+                        chkRX2Mute.Checked = !chkRX2Mute.Checked;
+                    break;
+
+                case EButtonBarActions.eBBBINOnOff:                // Binaural on/off
+                    if (UseRX1)
+                        chkBIN.Checked = !chkBIN.Checked;
+                    else
+                        chkRX2BIN.Checked = !chkRX2BIN.Checked;
+                    break;
+
+                case EButtonBarActions.eBBSDOnOff:                 // stereo diversity on/off
+                    chkDX.Checked = !chkDX.Checked;
+                    break;
+
+                case EButtonBarActions.eBBVAC1OnOff:               // toggle VAC1 on/off
+                    chkVAC1.Checked = !chkVAC1.Checked;
+                    break;
+
+                case EButtonBarActions.eBBVAC2OnOff:               // toggle VAC2 on/off
+                    chkVAC2.Checked = !chkVAC2.Checked;
+                    break;
+
+                case EButtonBarActions.eBBAGCStep:                 // step the AGC setting
+                    if (UseRX1)
+                    {
+                        if (comboAGC.SelectedIndex < comboAGC.Items.Count - 1)
+                            comboAGC.SelectedIndex++;
+                        else
+                            comboAGC.SelectedIndex = 0;
+                    }
+                    else
+                    {
+                        if (comboRX2AGC.SelectedIndex < comboRX2AGC.Items.Count - 1)
+                            comboRX2AGC.SelectedIndex++;
+                        else
+                            comboRX2AGC.SelectedIndex = 0;
+                    }
+                    break;
+
+                case EButtonBarActions.eBBSqlOnOff:                // step the squelch setting
+                    if (UseRX1)
+                        chkSquelch.Checked = !chkSquelch.Checked;
+                    else
+                        chkRX2Squelch.Checked = !chkRX2Squelch.Checked;
+                    break;
+
+                case EButtonBarActions.eBBRXEQOnOff:               // RX equaliser on/off
+                    chkRXEQ.Checked = !chkRXEQ.Checked;
+                    break;
+
+                case EButtonBarActions.eBBTXEQOnOff:               // TX equaliser on/off
+                    chkTXEQ.Checked = !chkTXEQ.Checked;
+                    break;
+
+                case EButtonBarActions.eBBTXFLShow:                // show TX filter
+                    chkShowTXFilter.Checked = !chkShowTXFilter.Checked;
+                    break;
+
+                case EButtonBarActions.eBBMICOnOff:                // MIC button on/off
+                    chkMicMute.Checked = !chkMicMute.Checked;
+                    break;
+
+                case EButtonBarActions.eBBCOMPOnOff:               // COMP button on/off
+                    chkCPDR.Checked = !chkCPDR.Checked;
+                    break;
+
+                case EButtonBarActions.eBBVOXOnOff:                // VOX on/off
+                    chkVOX.Checked = !chkVOX.Checked;
+                    break;
+
+                case EButtonBarActions.eBBDEXPOnOff:               // DEXP on/off
+                    chkNoiseGate.Checked = !chkNoiseGate.Checked;
+                    break;
+
+                case EButtonBarActions.eBBCWIambic:                // iambic keyer selected
+                    chkCWIambic.Checked = !chkCWIambic.Checked;
+                    break;
+
+                case EButtonBarActions.eBBCWSidetone:              // CW sidetone
+                    chkCWSidetone.Checked = !chkCWSidetone.Checked;
+                    break;
+
+                case EButtonBarActions.eBBCWShowTX:                // CW show tX frequency
+                    chkShowTXCWFreq.Checked = !chkShowTXCWFreq.Checked;
+                    break;
+
+                case EButtonBarActions.eBBCWShowZero:              // show CW zero freq
+                    chkShowCWZero.Checked = !chkShowCWZero.Checked;
+                    break;
+
+                case EButtonBarActions.eBBCWSemiBreakin:           // semi breakin on/off
+                    chkCWBreakInEnabled.Checked = !chkCWBreakInEnabled.Checked;
+                    break;
+
+                case EButtonBarActions.eBBCWQSK:                   // QSK on/off
+                    chkQSK.Checked = !chkQSK.Checked;
+                    break;
+
+                case EButtonBarActions.eBBRX1APF:                  // RX1 APF on/off
+                    chkCWAPFEnabled.Checked = !chkCWAPFEnabled.Checked;
+                    break;
+
+                case EButtonBarActions.eBBCTCSSOnOff:              // FM CTCSS tone on/off
+                    chkFMCTCSS.Checked = !chkFMCTCSS.Checked;
+                    break;
+
+                case EButtonBarActions.eBBFMDeviation:             // Toggle FM Deviation
+                    if (radFMDeviation2kHz.Checked) radFMDeviation5kHz.Checked = true; else radFMDeviation2kHz.Checked = true;
+                    break;
+
+                case EButtonBarActions.eBBDiversityOnOff:          // toggle diversity on/off
+                    CATDiversityEnable = !CATDiversityEnable;
+                    break;
+
+                case EButtonBarActions.eBBSubRXOnOff:              // toggle sub-RX on/off
+                    chkEnableMultiRX.Checked = !chkEnableMultiRX.Checked;
+                    break;
+
+                case EButtonBarActions.eBBRXMeterStep:             // step the setting of the RX meter
+                    if (UseRX1)
+                    {
+                        if (comboMeterRXMode.SelectedIndex < comboMeterRXMode.Items.Count - 1)
+                            comboMeterRXMode.SelectedIndex++;
+                        else
+                            comboMeterRXMode.SelectedIndex = 0;
+                    }
+                    else
+                    {
+                        if (comboRX2MeterMode.SelectedIndex < comboRX2MeterMode.Items.Count - 1)
+                            comboRX2MeterMode.SelectedIndex++;
+                        else
+                            comboRX2MeterMode.SelectedIndex = 0;
+                    }
+                    break;
+
+                case EButtonBarActions.eBBTXMeterStep:             // step the setting of the TX meter
+                    if (comboMeterTXMode.SelectedIndex < comboMeterTXMode.Items.Count - 1)
+                        comboMeterTXMode.SelectedIndex++;
+                    else
+                        comboMeterTXMode.SelectedIndex = 0;
+                    break;
+
+                case EButtonBarActions.eBBDisplayModeStep:         // step the display mode
+                    if (UseRX1)
+                    {
+                        if (comboDisplayMode.SelectedIndex < comboDisplayMode.Items.Count - 1)
+                            comboDisplayMode.SelectedIndex++;
+                        else
+                            comboDisplayMode.SelectedIndex = 0;
+                    }
+                    else
+                    {
+                        if (comboRX2DisplayMode.SelectedIndex < comboRX2DisplayMode.Items.Count - 1)
+                            comboRX2DisplayMode.SelectedIndex++;
+                        else
+                            comboRX2DisplayMode.SelectedIndex = 0;
+                    }
+                    break;
+
+                case EButtonBarActions.eBBDisplayDSPAVG:           // display DSP AVG button
+                    if (UseRX1)
+                        chkDisplayAVG.Checked = !chkDisplayAVG.Checked;
+                    else
+                        chkRX2DisplayAVG.Checked = !chkRX2DisplayAVG.Checked;
+                    break;
+
+                case EButtonBarActions.eBBDisplayDSPPeak:          // display DSP PEAK button
+                    if (UseRX1)
+                        chkDisplayPeak.Checked = !chkDisplayPeak.Checked;
+                    else
+                        chkRX2DisplayPeak.Checked = !chkRX2DisplayPeak.Checked;
+                    break;
+
+                case EButtonBarActions.eBBCentreDisplay:           // centre the display
+                    btnDisplayPanCenter_Click(null, null);
+                    break;
+
+                case EButtonBarActions.eBBZoomStep:                // step between the zoom step buttons
+                    if (radDisplayZoom05.Checked) radDisplayZoom1x.Checked = true;
+                    else if (radDisplayZoom1x.Checked) radDisplayZoom2x.Checked = true;
+                    else if (radDisplayZoom2x.Checked) radDisplayZoom4x.Checked = true;
+                    else radDisplayZoom05.Checked = true;
+                    break;
+
+                case EButtonBarActions.eBBRecordAudio:             // record audio
+                    ckQuickRec.Checked = !ckQuickRec.Checked;
+                    break;
+
+                case EButtonBarActions.eBBPlayAudio:                 // play audio: parameter identifies which audio
+                    ckQuickPlay.Checked = !ckQuickPlay.Checked;
+                    break;
+
+                case EButtonBarActions.eBBModeForm:
+                    if (modePopupForm == null) modePopupForm = new ModeButtonsPopup(this);
+                    modePopupForm.Show();
+                    break;
+
+                case EButtonBarActions.eBBFilterForm:
+                    if (filterPopupForm == null) filterPopupForm = new FilterButtonsPopup(this);
+                    filterPopupForm.Show();
+                    break;
+
+                case EButtonBarActions.eBBBandForm:
+                    if (bandPopupForm == null) bandPopupForm = new BandButtonsPopup(this);
+                    bandPopupForm.RepopulateForm();
+                    bandPopupForm.Show();
+                    break;
+
+                case EButtonBarActions.eBBSliderForm:
+                    if (sliderForm == null) sliderForm = new SliderSettingsForm(this);
+                    sliderForm.Show();
+                    break;
+
+                case EButtonBarActions.eBBVFOSettingForm:          // show VFO Settings form
+                    if (VFOSettingsForm == null) VFOSettingsForm = new VFOSettingsPopup(this);
+                    VFOSettingsForm.Show();
+                    break;
+
+                case EButtonBarActions.eBBBandstackForm:           // show band stacks form
+                    if (StackForm == null || StackForm.IsDisposed) StackForm = new StackControl(this);
+                    StackForm.Show();
+                    StackForm.Focus();
+                    StackForm.WindowState = FormWindowState.Normal; // ke9ns add
+                    break;
+
+                case EButtonBarActions.eBBBandstack:
+                    SetCATBand(RX1Band);
+                    break;
+
+                case EButtonBarActions.eBBQuickSave:               // save to "quick memory"
+                    btnMemoryQuickSave_Click(null, null);
+                    break;
+
+                case EButtonBarActions.eBBQuickRestore:            // restore from "quick memory"
+                    btnMemoryQuickRestore_Click(null, null);
+                    break;
+
+                case EButtonBarActions.eBBRXAntenna:               // RX antenna button equivalent
+                    chkRxAnt.Checked = !chkRxAnt.Checked;
+                    break;
+
+
+                case EButtonBarActions.eBBDiversityForm:           // show the diversity form
+                    eSCToolStripMenuItem_Click(null, null);
+                    break;
+
+                case EButtonBarActions.eBBModeSettingsForm:        // show the "mode dependent settings" form
+                    if (modeDependentSettingsForm == null) modeDependentSettingsForm = new ModeDependentSettingsForm(this);
+                    modeDependentSettingsForm.Show();
+
+                    panelModeSpecificCW.Show();
+                    panelModeSpecificPhone.Show();
+                    panelModeSpecificDigital.Show();
+                    panelModeSpecificFM.Show();
+
+                    panelModeSpecificCW.Location = new Point(0, 0);
+                    panelModeSpecificPhone.Location = new Point(0, 0);
+                    panelModeSpecificDigital.Location = new Point(0, 0);
+                    panelModeSpecificFM.Location = new Point(0, 0);
+
+                    panelModeSpecificCW.Parent = modeDependentSettingsForm;
+                    panelModeSpecificPhone.Parent = modeDependentSettingsForm;
+                    panelModeSpecificDigital.Parent = modeDependentSettingsForm;
+                    panelModeSpecificFM.Parent = modeDependentSettingsForm;
+                    SelectModeDependentPanel();
+                    break;
+
+                case EButtonBarActions.eBBPuresignalForm:          // show the Puresignal form
+                    linearityToolStripMenuItem_Click(null, null);
+                    break;
+
+                case EButtonBarActions.eBBEqualiserForm:           // show equaliser form
+                    equalizerToolStripMenuItem_Click(null, null);
+                    break;
+
+                case EButtonBarActions.eBBDisplaySettingsForm:    // show the display settings form
+                    if (displaySettingsForm == null) displaySettingsForm = new DisplaySettingsForm(this);
+                    displaySettingsForm.Show();
+                    break;
+
+                case EButtonBarActions.eBBAudioForm:               // open the audio record play form
+                    waveToolStripMenuItem_Click(null, null);
+                    break;
+
+                case EButtonBarActions.eBBSetupForm:               // open the setup form
+                    setupToolStripMenuItem_Click(null, null);
+                    break;
+
+                case EButtonBarActions.eBBATUOnOff:                  // Auto ATU on/off - not implemented yet
+                    break;
+
+                case EButtonBarActions.eBBMenuButton:                // menu button below screen - shouldn't be called!
+                    break;
+
+                case EButtonBarActions.eBBMultiEncoderButton:        // multifunction encoder button
+                    AndromedaMultiEncoderState = !AndromedaMultiEncoderState;
+                    break;
+
+            }
+            UpdateButtonBarButtons();                               // re-check texts
         }
 
 
@@ -58206,7 +59393,7 @@ namespace Thetis
         //
         // update text for button bar buttons
         // most will be labelled with default text; but they get an opportunity to rename themselves
-        // 
+        //
         private String UpdateButtonBarLabel(EButtonBarActions assignedAction, String DefaultString, bool UseRX1)
         {
             String NewString = "";
@@ -58327,11 +59514,12 @@ namespace Thetis
                     break;
 
                 default:
-                    NewString = DefaultString;                     // for the others - just use the default stribng from the menu entry 
+                    NewString = DefaultString;                     // for the others - just use the default stribng from the menu entry
                     break;
             }
             return NewString;
         }
+
 
         //
         // check if buttons on button bar should be highlighted (generally to indicate on/off state).
@@ -58410,6 +59598,10 @@ namespace Thetis
                     if (UseRX1) State = chkFWCATU.Checked; else State = chkX2TR.Checked;
                     break;
 
+                case EButtonBarActions.eBBToggleAB:
+                    if (CATRX1RX2RadioButton == 1) State = true;
+                    break;
+
                 case EButtonBarActions.eBBRITOnOff:                // toggle RIT on/off
                     State = chkRIT.Checked;
                     break;
@@ -58478,11 +59670,11 @@ namespace Thetis
                     State = chkCWSidetone.Checked;
                     break;
 
-                case EButtonBarActions.eBBCWShowTX:                 // toggle show TX freq 
+                case EButtonBarActions.eBBCWShowTX:                 // toggle show TX freq
                     State = chkShowTXCWFreq.Checked;
                     break;
 
-                case EButtonBarActions.eBBCWShowZero:               // toggle show zero line 
+                case EButtonBarActions.eBBCWShowZero:               // toggle show zero line
                     State = chkShowCWZero.Checked;
                     break;
 
@@ -58494,11 +59686,11 @@ namespace Thetis
                     State = chkQSK.Checked;
                     break;
 
-                case EButtonBarActions.eBBRX1APF:                   // toggle CW APF 
+                case EButtonBarActions.eBBRX1APF:                   // toggle CW APF
                     State = chkCWAPFEnabled.Checked;
                     break;
 
-                case EButtonBarActions.eBBCTCSSOnOff:               // toggle CTCSS 
+                case EButtonBarActions.eBBCTCSSOnOff:               // toggle CTCSS
                     State = chkFMCTCSS.Checked;
                     break;
 
@@ -58506,19 +59698,19 @@ namespace Thetis
                     State = CATDiversityEnable;
                     break;
 
-                case EButtonBarActions.eBBSubRXOnOff:               // toggle sub-RX on/off 
+                case EButtonBarActions.eBBSubRXOnOff:               // toggle sub-RX on/off
                     State = chkEnableMultiRX.Checked;
                     break;
 
-                case EButtonBarActions.eBBDisplayDSPAVG:            // toggle display AVERAGE on/off 
+                case EButtonBarActions.eBBDisplayDSPAVG:            // toggle display AVERAGE on/off
                     if (UseRX1) State = chkDisplayAVG.Checked; else State = chkRX2DisplayAVG.Checked;
                     break;
 
-                case EButtonBarActions.eBBDisplayDSPPeak:           // toggle display PEAK on/off 
+                case EButtonBarActions.eBBDisplayDSPPeak:           // toggle display PEAK on/off
                     if (UseRX1) State = chkDisplayPeak.Checked; else State = chkRX2DisplayPeak.Checked;
                     break;
 
-                case EButtonBarActions.eBBRXAntenna:                // toggle RX Ant button 
+                case EButtonBarActions.eBBRXAntenna:                // toggle RX Ant button
                     State = chkRxAnt.Checked;
                     break;
 
@@ -58530,6 +59722,17 @@ namespace Thetis
                     State = ckQuickPlay.Checked;
                     break;
 
+                case EButtonBarActions.eBBATUOnOff:                  // Auto ATU on/off
+                    State = false;                                   // not yet implemented
+                    break;
+
+                case EButtonBarActions.eBBMenuButton:                // menu button below screen
+                    State = false;                                   // no indicators available!
+                    break;
+
+                case EButtonBarActions.eBBMultiEncoderButton:        // multifunction encoder button
+                    State = AndromedaMultiEncoderState;              // this can eventually be true if multi active
+                    break;
 
                 default:                        // not highlighted unless specific code added!
                     State = false;
@@ -58548,68 +59751,87 @@ namespace Thetis
             EButtonBarActions Action;                           // assigned action for one button
             String Text;
             Color Colour;
+            int Override;
+
+            DataTable table = AndromedaSet.Tables["Menu Bar Settings"];
+            int RowCount = table.Rows.Count;
 
             if (this.showAndromedaButtonBar)
             {
-            buttonNumber = currentButtonBarMenu * 8;            // point to 1st button
-            // for each button: get its text; give it an opportunity to edit; and set highlight
+                buttonNumber = currentButtonBarMenu * 8;            // point to 1st button
+                                                                    // for each button: get its text; give it an opportunity to edit; and set highlight
+                Action = (EButtonBarActions)table.Rows[buttonNumber]["Menu Action"];
+                Override = (int)table.Rows[buttonNumber]["Menu RX Selector"];
+                Text = (string)table.Rows[buttonNumber]["Menu Text"];
+                if (Override == 0) UseRX1 = show_rx1; else if (Override == 1) UseRX1 = true; else UseRX1 = false;
+                btnAndrBar1.Text = UpdateButtonBarLabel(Action, Text, UseRX1);
+                if (CheckButtonHighlight(Action, UseRX1)) Colour = SystemColors.GradientActiveCaption; else Colour = SystemColors.ButtonFace;
+                btnAndrBar1.BackColor = Colour;
+                buttonNumber++;
 
-            Action = ButtonBarMenu[buttonNumber].Action;
-            if (ButtonBarMenu[buttonNumber].RXOverride == 0) UseRX1 = show_rx1; else if (ButtonBarMenu[buttonNumber].RXOverride == 1) UseRX1 = true; else UseRX1 = false;
-            Text = ButtonBarMenu[buttonNumber++].ButtonText;
-            btnAndrBar1.Text = UpdateButtonBarLabel(Action, Text, UseRX1);
-            if (CheckButtonHighlight(Action, UseRX1)) Colour = SystemColors.GradientActiveCaption; else Colour = SystemColors.ButtonFace;
-            btnAndrBar1.BackColor = Colour;
+                Action = (EButtonBarActions)table.Rows[buttonNumber]["Menu Action"];
+                Override = (int)table.Rows[buttonNumber]["Menu RX Selector"];
+                Text = (string)table.Rows[buttonNumber]["Menu Text"];
+                if (Override == 0) UseRX1 = show_rx1; else if (Override == 1) UseRX1 = true; else UseRX1 = false;
+                btnAndrBar2.Text = UpdateButtonBarLabel(Action, Text, UseRX1);
+                if (CheckButtonHighlight(Action, UseRX1)) Colour = SystemColors.GradientActiveCaption; else Colour = SystemColors.ButtonFace;
+                btnAndrBar2.BackColor = Colour;
+                buttonNumber++;
 
-            Action = ButtonBarMenu[buttonNumber].Action;
-            if (ButtonBarMenu[buttonNumber].RXOverride == 0) UseRX1 = show_rx1; else if (ButtonBarMenu[buttonNumber].RXOverride == 1) UseRX1 = true; else UseRX1 = false;
-            Text = ButtonBarMenu[buttonNumber++].ButtonText;
-            btnAndrBar2.Text = UpdateButtonBarLabel(Action, Text, UseRX1);
-            if (CheckButtonHighlight(Action, UseRX1)) Colour = SystemColors.GradientActiveCaption; else Colour = SystemColors.ButtonFace;
-            btnAndrBar2.BackColor = Colour;
+                Action = (EButtonBarActions)table.Rows[buttonNumber]["Menu Action"];
+                Override = (int)table.Rows[buttonNumber]["Menu RX Selector"];
+                Text = (string)table.Rows[buttonNumber]["Menu Text"];
+                if (Override == 0) UseRX1 = show_rx1; else if (Override == 1) UseRX1 = true; else UseRX1 = false;
+                btnAndrBar3.Text = UpdateButtonBarLabel(Action, Text, UseRX1);
+                if (CheckButtonHighlight(Action, UseRX1)) Colour = SystemColors.GradientActiveCaption; else Colour = SystemColors.ButtonFace;
+                btnAndrBar3.BackColor = Colour;
+                buttonNumber++;
 
-            Action = ButtonBarMenu[buttonNumber].Action;
-            if (ButtonBarMenu[buttonNumber].RXOverride == 0) UseRX1 = show_rx1; else if (ButtonBarMenu[buttonNumber].RXOverride == 1) UseRX1 = true; else UseRX1 = false;
-            Text = ButtonBarMenu[buttonNumber++].ButtonText;
-            btnAndrBar3.Text = UpdateButtonBarLabel(Action, Text, UseRX1);
-            if (CheckButtonHighlight(Action, UseRX1)) Colour = SystemColors.GradientActiveCaption; else Colour = SystemColors.ButtonFace;
-            btnAndrBar3.BackColor = Colour;
+                Action = (EButtonBarActions)table.Rows[buttonNumber]["Menu Action"];
+                Override = (int)table.Rows[buttonNumber]["Menu RX Selector"];
+                Text = (string)table.Rows[buttonNumber]["Menu Text"];
+                if (Override == 0) UseRX1 = show_rx1; else if (Override == 1) UseRX1 = true; else UseRX1 = false;
+                btnAndrBar4.Text = UpdateButtonBarLabel(Action, Text, UseRX1);
+                if (CheckButtonHighlight(Action, UseRX1)) Colour = SystemColors.GradientActiveCaption; else Colour = SystemColors.ButtonFace;
+                btnAndrBar4.BackColor = Colour;
+                buttonNumber++;
 
-            Action = ButtonBarMenu[buttonNumber].Action;
-            if (ButtonBarMenu[buttonNumber].RXOverride == 0) UseRX1 = show_rx1; else if (ButtonBarMenu[buttonNumber].RXOverride == 1) UseRX1 = true; else UseRX1 = false;
-            Text = ButtonBarMenu[buttonNumber++].ButtonText;
-            btnAndrBar4.Text = UpdateButtonBarLabel(Action, Text, UseRX1);
-            if (CheckButtonHighlight(Action, UseRX1)) Colour = SystemColors.GradientActiveCaption; else Colour = SystemColors.ButtonFace;
-            btnAndrBar4.BackColor = Colour;
+                Action = (EButtonBarActions)table.Rows[buttonNumber]["Menu Action"];
+                Override = (int)table.Rows[buttonNumber]["Menu RX Selector"];
+                Text = (string)table.Rows[buttonNumber]["Menu Text"];
+                if (Override == 0) UseRX1 = show_rx1; else if (Override == 1) UseRX1 = true; else UseRX1 = false;
+                btnAndrBar5.Text = UpdateButtonBarLabel(Action, Text, UseRX1);
+                if (CheckButtonHighlight(Action, UseRX1)) Colour = SystemColors.GradientActiveCaption; else Colour = SystemColors.ButtonFace;
+                btnAndrBar5.BackColor = Colour;
+                buttonNumber++;
 
-            Action = ButtonBarMenu[buttonNumber].Action;
-            if (ButtonBarMenu[buttonNumber].RXOverride == 0) UseRX1 = show_rx1; else if (ButtonBarMenu[buttonNumber].RXOverride == 1) UseRX1 = true; else UseRX1 = false;
-            Text = ButtonBarMenu[buttonNumber++].ButtonText;
-            btnAndrBar5.Text = UpdateButtonBarLabel(Action, Text, UseRX1);
-            if (CheckButtonHighlight(Action, UseRX1)) Colour = SystemColors.GradientActiveCaption; else Colour = SystemColors.ButtonFace;
-            btnAndrBar5.BackColor = Colour;
+                Action = (EButtonBarActions)table.Rows[buttonNumber]["Menu Action"];
+                Override = (int)table.Rows[buttonNumber]["Menu RX Selector"];
+                Text = (string)table.Rows[buttonNumber]["Menu Text"];
+                if (Override == 0) UseRX1 = show_rx1; else if (Override == 1) UseRX1 = true; else UseRX1 = false;
+                btnAndrBar6.Text = UpdateButtonBarLabel(Action, Text, UseRX1);
+                if (CheckButtonHighlight(Action, UseRX1)) Colour = SystemColors.GradientActiveCaption; else Colour = SystemColors.ButtonFace;
+                btnAndrBar6.BackColor = Colour;
+                buttonNumber++;
 
-            Action = ButtonBarMenu[buttonNumber].Action;
-            if (ButtonBarMenu[buttonNumber].RXOverride == 0) UseRX1 = show_rx1; else if (ButtonBarMenu[buttonNumber].RXOverride == 1) UseRX1 = true; else UseRX1 = false;
-            Text = ButtonBarMenu[buttonNumber++].ButtonText;
-            btnAndrBar6.Text = UpdateButtonBarLabel(Action, Text, UseRX1);
-            if (CheckButtonHighlight(Action, UseRX1)) Colour = SystemColors.GradientActiveCaption; else Colour = SystemColors.ButtonFace;
-            btnAndrBar6.BackColor = Colour;
+                Action = (EButtonBarActions)table.Rows[buttonNumber]["Menu Action"];
+                Override = (int)table.Rows[buttonNumber]["Menu RX Selector"];
+                Text = (string)table.Rows[buttonNumber]["Menu Text"];
+                if (Override == 0) UseRX1 = show_rx1; else if (Override == 1) UseRX1 = true; else UseRX1 = false;
+                btnAndrBar7.Text = UpdateButtonBarLabel(Action, Text, UseRX1);
+                if (CheckButtonHighlight(Action, UseRX1)) Colour = SystemColors.GradientActiveCaption; else Colour = SystemColors.ButtonFace;
+                btnAndrBar7.BackColor = Colour;
+                buttonNumber++;
 
-            Action = ButtonBarMenu[buttonNumber].Action;
-            if (ButtonBarMenu[buttonNumber].RXOverride == 0) UseRX1 = show_rx1; else if (ButtonBarMenu[buttonNumber].RXOverride == 1) UseRX1 = true; else UseRX1 = false;
-            Text = ButtonBarMenu[buttonNumber++].ButtonText;
-            btnAndrBar7.Text = UpdateButtonBarLabel(Action, Text, UseRX1);
-            if (CheckButtonHighlight(Action, UseRX1)) Colour = SystemColors.GradientActiveCaption; else Colour = SystemColors.ButtonFace;
-            btnAndrBar7.BackColor = Colour;
-
-            Action = ButtonBarMenu[buttonNumber].Action;
-            if (ButtonBarMenu[buttonNumber].RXOverride == 0) UseRX1 = show_rx1; else if (ButtonBarMenu[buttonNumber].RXOverride == 1) UseRX1 = true; else UseRX1 = false;
-            Text = ButtonBarMenu[buttonNumber++].ButtonText;
-            btnAndrBar8.Text = UpdateButtonBarLabel(Action, Text, UseRX1);
-            if (CheckButtonHighlight(Action, UseRX1)) Colour = SystemColors.GradientActiveCaption; else Colour = SystemColors.ButtonFace;
-            btnAndrBar8.BackColor = Colour;
-        }
+                Action = (EButtonBarActions)table.Rows[buttonNumber]["Menu Action"];
+                Override = (int)table.Rows[buttonNumber]["Menu RX Selector"];
+                Text = (string)table.Rows[buttonNumber]["Menu Text"];
+                if (Override == 0) UseRX1 = show_rx1; else if (Override == 1) UseRX1 = true; else UseRX1 = false;
+                btnAndrBar8.Text = UpdateButtonBarLabel(Action, Text, UseRX1);
+                if (CheckButtonHighlight(Action, UseRX1)) Colour = SystemColors.GradientActiveCaption; else Colour = SystemColors.ButtonFace;
+                btnAndrBar8.BackColor = Colour;
+                buttonNumber++;
+            }
         }
 
 
@@ -58678,6 +59900,25 @@ namespace Thetis
                         m_objBackgroundImage = null;
                     }
                 }
+            }
+        }
+
+        private bool m_bZoomShiftModifier = false;
+        public bool ZoomShiftModifier {
+            // enable/disable the use of the shift key zoom modifier
+            // where holding shift will prevent the zoom from auto centering
+            get { return m_bZoomShiftModifier; }
+            set {
+                m_bZoomShiftModifier = value;
+            }
+        }
+        
+        private bool m_bZoomShiftModifierReverse = false;
+        public bool ZoomShiftModifierReverse {
+            // reverses the action of the shiftzoom modifier
+            get { return m_bZoomShiftModifierReverse; }
+            set {
+                m_bZoomShiftModifierReverse = value;
             }
         }
 

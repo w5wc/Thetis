@@ -242,6 +242,7 @@
             this.radGenModelHPSDR = new System.Windows.Forms.RadioButtonTS();
             this.chkGeneralRXOnly = new System.Windows.Forms.CheckBoxTS();
             this.grpMetisAddr = new System.Windows.Forms.GroupBoxTS();
+			this.lblAndromedaVersion = new System.Windows.Forms.LabelTS();
             this.lblMetisBoardID = new System.Windows.Forms.LabelTS();
             this.labelTS88 = new System.Windows.Forms.LabelTS();
             this.lblMetisCodeVersion = new System.Windows.Forms.LabelTS();
@@ -282,7 +283,11 @@
             this.chkHermesStepAttenuator = new System.Windows.Forms.CheckBoxTS();
             this.grpGenCustomTitleText = new System.Windows.Forms.GroupBoxTS();
             this.txtGenCustomTitle = new System.Windows.Forms.TextBoxTS();
+            this.grpGeneralProcessPriority = new System.Windows.Forms.GroupBoxTS();
+            this.comboGeneralProcessPriority = new System.Windows.Forms.ComboBoxTS();
             this.grpOptMisc = new System.Windows.Forms.GroupBoxTS();
+            this.chkReverseShiftZoomModifier = new System.Windows.Forms.CheckBoxTS();
+            this.chkZoomShiftModifier = new System.Windows.Forms.CheckBoxTS();
             this.chkITSync = new System.Windows.Forms.CheckBoxTS();
             this.chkWheelTunesOutsideSpectral = new System.Windows.Forms.CheckBoxTS();
             this.chkWheelReverse = new System.Windows.Forms.CheckBoxTS();
@@ -313,8 +318,6 @@
             this.chkGeneralDisablePTT = new System.Windows.Forms.CheckBoxTS();
             this.chkSplitOff = new System.Windows.Forms.CheckBoxTS();
             this.lblPTTOutDelay = new System.Windows.Forms.LabelTS();
-            this.grpGeneralProcessPriority = new System.Windows.Forms.GroupBoxTS();
-            this.comboGeneralProcessPriority = new System.Windows.Forms.ComboBoxTS();
             this.tpGeneralCalibration = new System.Windows.Forms.TabPage();
             this.panelRX2LevelCal = new System.Windows.Forms.PanelTS();
             this.labelTS135 = new System.Windows.Forms.LabelTS();
@@ -2833,6 +2836,7 @@
             this.lblAppearanceGenBtnSel = new System.Windows.Forms.LabelTS();
             this.tpAppearanceDisplay = new System.Windows.Forms.TabPage();
             this.grpAppRXWaterfall = new System.Windows.Forms.GroupBoxTS();
+            this.chkShowTXFilterOnRXWaterfall = new System.Windows.Forms.CheckBoxTS();
             this.chkShowRXZeroLineOnWaterfall = new System.Windows.Forms.CheckBoxTS();
             this.chkShowRXFilterOnWaterfall = new System.Windows.Forms.CheckBoxTS();
             this.lblMultiRXFilterAlpha = new System.Windows.Forms.LabelTS();
@@ -3023,6 +3027,11 @@
             this.tpCATControl = new System.Windows.Forms.TabPage();
             this.tcCAT = new System.Windows.Forms.TabControl();
             this.tpCAT = new System.Windows.Forms.TabPage();
+            this.grpAndr = new System.Windows.Forms.GroupBoxTS();
+            this.buttonAndromeda = new System.Windows.Forms.ButtonTS();
+            this.comboAndromedaCATPort = new System.Windows.Forms.ComboBoxTS();
+            this.labelTSPort = new System.Windows.Forms.LabelTS();
+            this.chkEnableAndromeda = new System.Windows.Forms.CheckBoxTS();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.udUpdatesPerStepMin = new System.Windows.Forms.NumericUpDownTS();
             this.labelTS512 = new System.Windows.Forms.LabelTS();
@@ -3327,6 +3336,7 @@
             this.grpHermesStepAttenuator.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.udHermesStepAttenuatorData)).BeginInit();
             this.grpGenCustomTitleText.SuspendLayout();
+            this.grpGeneralProcessPriority.SuspendLayout();
             this.grpOptMisc.SuspendLayout();
             this.grpOptQuickQSY.SuspendLayout();
             this.grpGenTuningOptions.SuspendLayout();
@@ -3336,7 +3346,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.udRFDelay)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.udMoxDelay)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.udGenPTTOutDelay)).BeginInit();
-            this.grpGeneralProcessPriority.SuspendLayout();
             this.tpGeneralCalibration.SuspendLayout();
             this.panelRX2LevelCal.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.udGeneralCalRX2Level)).BeginInit();
@@ -4154,6 +4163,7 @@
             this.tpCATControl.SuspendLayout();
             this.tcCAT.SuspendLayout();
             this.tpCAT.SuspendLayout();
+			this.grpAndr.SuspendLayout();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.udUpdatesPerStepMin)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.udUpdatesPerStepMax)).BeginInit();
@@ -7357,6 +7367,7 @@
             // 
             // grpMetisAddr
             // 
+			this.grpMetisAddr.Controls.Add(this.lblAndromedaVersion);
             this.grpMetisAddr.Controls.Add(this.lblMetisBoardID);
             this.grpMetisAddr.Controls.Add(this.labelTS88);
             this.grpMetisAddr.Controls.Add(this.lblMetisCodeVersion);
@@ -7367,11 +7378,19 @@
             this.grpMetisAddr.Controls.Add(this.lblMetisMAC);
             this.grpMetisAddr.Location = new System.Drawing.Point(326, 258);
             this.grpMetisAddr.Name = "grpMetisAddr";
-            this.grpMetisAddr.Size = new System.Drawing.Size(251, 56);
+            this.grpMetisAddr.Size = new System.Drawing.Size(251, 77);
             this.grpMetisAddr.TabIndex = 35;
             this.grpMetisAddr.TabStop = false;
             this.grpMetisAddr.Text = "Metis  Address";
             this.grpMetisAddr.Visible = false;
+            // 
+            // lblAndromedaVersion
+            // 
+            this.lblAndromedaVersion.Image = null;
+            this.lblAndromedaVersion.Location = new System.Drawing.Point(11, 52);
+            this.lblAndromedaVersion.Name = "lblAndromedaVersion";
+            this.lblAndromedaVersion.Size = new System.Drawing.Size(221, 16);
+            this.lblAndromedaVersion.TabIndex = 8;
             // 
             // lblMetisBoardID
             // 
@@ -7880,8 +7899,38 @@
             this.txtGenCustomTitle.TabIndex = 0;
             this.txtGenCustomTitle.TextChanged += new System.EventHandler(this.txtGenCustomTitle_TextChanged);
             // 
+            // grpGeneralProcessPriority
+            // 
+            this.grpGeneralProcessPriority.Controls.Add(this.comboGeneralProcessPriority);
+            this.grpGeneralProcessPriority.Location = new System.Drawing.Point(8, 283);
+            this.grpGeneralProcessPriority.Name = "grpGeneralProcessPriority";
+            this.grpGeneralProcessPriority.Size = new System.Drawing.Size(144, 47);
+            this.grpGeneralProcessPriority.TabIndex = 23;
+            this.grpGeneralProcessPriority.TabStop = false;
+            this.grpGeneralProcessPriority.Text = "Process Priority";
+            // 
+            // comboGeneralProcessPriority
+            // 
+            this.comboGeneralProcessPriority.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboGeneralProcessPriority.DropDownWidth = 112;
+            this.comboGeneralProcessPriority.Items.AddRange(new object[] {
+            "Idle",
+            "Below Normal",
+            "Normal",
+            "Above Normal",
+            "High",
+            "Real Time"});
+            this.comboGeneralProcessPriority.Location = new System.Drawing.Point(16, 19);
+            this.comboGeneralProcessPriority.Name = "comboGeneralProcessPriority";
+            this.comboGeneralProcessPriority.Size = new System.Drawing.Size(112, 21);
+            this.comboGeneralProcessPriority.TabIndex = 0;
+            this.toolTip1.SetToolTip(this.comboGeneralProcessPriority, "Sets the process priority of the Thetis software.");
+            this.comboGeneralProcessPriority.SelectedIndexChanged += new System.EventHandler(this.comboGeneralProcessPriority_SelectedIndexChanged);
+            // 
             // grpOptMisc
             // 
+            this.grpOptMisc.Controls.Add(this.chkReverseShiftZoomModifier);
+            this.grpOptMisc.Controls.Add(this.chkZoomShiftModifier);
             this.grpOptMisc.Controls.Add(this.chkITSync);
             this.grpOptMisc.Controls.Add(this.chkWheelTunesOutsideSpectral);
             this.grpOptMisc.Controls.Add(this.chkWheelReverse);
@@ -7900,6 +7949,33 @@
             this.grpOptMisc.TabIndex = 28;
             this.grpOptMisc.TabStop = false;
             this.grpOptMisc.Text = "Miscellaneous";
+            // 
+            // chkReverseShiftZoomModifier
+            // 
+            this.chkReverseShiftZoomModifier.AutoSize = true;
+            this.chkReverseShiftZoomModifier.Enabled = false;
+            this.chkReverseShiftZoomModifier.Image = null;
+            this.chkReverseShiftZoomModifier.Location = new System.Drawing.Point(34, 304);
+            this.chkReverseShiftZoomModifier.Name = "chkReverseShiftZoomModifier";
+            this.chkReverseShiftZoomModifier.Size = new System.Drawing.Size(66, 17);
+            this.chkReverseShiftZoomModifier.TabIndex = 13;
+            this.chkReverseShiftZoomModifier.Text = "Reverse";
+            this.toolTip1.SetToolTip(this.chkReverseShiftZoomModifier, "Reverse the action, shift will casue zoom to  recentre");
+            this.chkReverseShiftZoomModifier.UseVisualStyleBackColor = true;
+            this.chkReverseShiftZoomModifier.CheckedChanged += new System.EventHandler(this.ChkReverseShiftZoomModifier_CheckedChanged);
+            // 
+            // chkZoomShiftModifier
+            // 
+            this.chkZoomShiftModifier.AutoSize = true;
+            this.chkZoomShiftModifier.Image = null;
+            this.chkZoomShiftModifier.Location = new System.Drawing.Point(16, 285);
+            this.chkZoomShiftModifier.Name = "chkZoomShiftModifier";
+            this.chkZoomShiftModifier.Size = new System.Drawing.Size(114, 17);
+            this.chkZoomShiftModifier.TabIndex = 12;
+            this.chkZoomShiftModifier.Text = "Shift zoom modifier";
+            this.toolTip1.SetToolTip(this.chkZoomShiftModifier, "Holding shift will not recentre on zoom");
+            this.chkZoomShiftModifier.UseVisualStyleBackColor = true;
+            this.chkZoomShiftModifier.CheckedChanged += new System.EventHandler(this.ChkZoomShiftModifier_CheckedChanged);
             // 
             // chkITSync
             // 
@@ -8338,34 +8414,6 @@
             this.lblPTTOutDelay.TabIndex = 18;
             this.lblPTTOutDelay.Text = "RX Delay";
             this.lblPTTOutDelay.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // grpGeneralProcessPriority
-            // 
-            this.grpGeneralProcessPriority.Controls.Add(this.comboGeneralProcessPriority);
-            this.grpGeneralProcessPriority.Location = new System.Drawing.Point(8, 283);
-            this.grpGeneralProcessPriority.Name = "grpGeneralProcessPriority";
-            this.grpGeneralProcessPriority.Size = new System.Drawing.Size(144, 47);
-            this.grpGeneralProcessPriority.TabIndex = 23;
-            this.grpGeneralProcessPriority.TabStop = false;
-            this.grpGeneralProcessPriority.Text = "Process Priority";
-            // 
-            // comboGeneralProcessPriority
-            // 
-            this.comboGeneralProcessPriority.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboGeneralProcessPriority.DropDownWidth = 112;
-            this.comboGeneralProcessPriority.Items.AddRange(new object[] {
-            "Idle",
-            "Below Normal",
-            "Normal",
-            "Above Normal",
-            "High",
-            "Real Time"});
-            this.comboGeneralProcessPriority.Location = new System.Drawing.Point(16, 19);
-            this.comboGeneralProcessPriority.Name = "comboGeneralProcessPriority";
-            this.comboGeneralProcessPriority.Size = new System.Drawing.Size(112, 21);
-            this.comboGeneralProcessPriority.TabIndex = 0;
-            this.toolTip1.SetToolTip(this.comboGeneralProcessPriority, "Sets the process priority of the Thetis software.");
-            this.comboGeneralProcessPriority.SelectedIndexChanged += new System.EventHandler(this.comboGeneralProcessPriority_SelectedIndexChanged);
             // 
             // tpGeneralCalibration
             // 
@@ -48119,14 +48167,27 @@
             // 
             // grpAppRXWaterfall
             // 
+            this.grpAppRXWaterfall.Controls.Add(this.chkShowTXFilterOnRXWaterfall);
             this.grpAppRXWaterfall.Controls.Add(this.chkShowRXZeroLineOnWaterfall);
             this.grpAppRXWaterfall.Controls.Add(this.chkShowRXFilterOnWaterfall);
             this.grpAppRXWaterfall.Location = new System.Drawing.Point(444, 107);
             this.grpAppRXWaterfall.Name = "grpAppRXWaterfall";
-            this.grpAppRXWaterfall.Size = new System.Drawing.Size(132, 78);
+            this.grpAppRXWaterfall.Size = new System.Drawing.Size(132, 88);
             this.grpAppRXWaterfall.TabIndex = 84;
             this.grpAppRXWaterfall.TabStop = false;
             this.grpAppRXWaterfall.Text = "Waterfall";
+            // 
+            // chkShowTXFilterOnRXWaterfall
+            // 
+            this.chkShowTXFilterOnRXWaterfall.AutoSize = true;
+            this.chkShowTXFilterOnRXWaterfall.Image = null;
+            this.chkShowTXFilterOnRXWaterfall.Location = new System.Drawing.Point(6, 65);
+            this.chkShowTXFilterOnRXWaterfall.Name = "chkShowTXFilterOnRXWaterfall";
+            this.chkShowTXFilterOnRXWaterfall.Size = new System.Drawing.Size(95, 17);
+            this.chkShowTXFilterOnRXWaterfall.TabIndex = 2;
+            this.chkShowTXFilterOnRXWaterfall.Text = "Show TX Filter";
+            this.chkShowTXFilterOnRXWaterfall.UseVisualStyleBackColor = true;
+            this.chkShowTXFilterOnRXWaterfall.CheckedChanged += new System.EventHandler(this.ChkShowTXFilterOnRXWaterfall_CheckedChanged);
             // 
             // chkShowRXZeroLineOnWaterfall
             // 
@@ -49097,7 +49158,7 @@
             this.grpAppTXWaterfall.Controls.Add(this.chkShowTXFilterOnWaterfall);
             this.grpAppTXWaterfall.Location = new System.Drawing.Point(444, 6);
             this.grpAppTXWaterfall.Name = "grpAppTXWaterfall";
-            this.grpAppTXWaterfall.Size = new System.Drawing.Size(132, 78);
+            this.grpAppTXWaterfall.Size = new System.Drawing.Size(132, 67);
             this.grpAppTXWaterfall.TabIndex = 85;
             this.grpAppTXWaterfall.TabStop = false;
             this.grpAppTXWaterfall.Text = "Waterfall";
@@ -50381,6 +50442,7 @@
             // tpCAT
             // 
             this.tpCAT.BackColor = System.Drawing.SystemColors.Control;
+			this.tpCAT.Controls.Add(this.grpAndr);
             this.tpCAT.Controls.Add(this.groupBox1);
             this.tpCAT.Controls.Add(this.grpFocusMaster);
             this.tpCAT.Controls.Add(this.labelTS323);
@@ -50401,6 +50463,60 @@
             this.tpCAT.TabIndex = 0;
             this.tpCAT.Text = "CAT";
             // 
+            // grpAndr
+            // 
+            this.grpAndr.Controls.Add(this.buttonAndromeda);
+            this.grpAndr.Controls.Add(this.comboAndromedaCATPort);
+            this.grpAndr.Controls.Add(this.labelTSPort);
+            this.grpAndr.Controls.Add(this.chkEnableAndromeda);
+            this.grpAndr.Location = new System.Drawing.Point(320, 91);
+            this.grpAndr.Name = "grpAndr";
+            this.grpAndr.Size = new System.Drawing.Size(117, 99);
+            this.grpAndr.TabIndex = 106;
+            this.grpAndr.TabStop = false;
+            this.grpAndr.Text = "Andromeda";
+            // 
+            // buttonAndromeda
+            // 
+            this.buttonAndromeda.Image = null;
+            this.buttonAndromeda.Location = new System.Drawing.Point(13, 63);
+            this.buttonAndromeda.Name = "buttonAndromeda";
+            this.buttonAndromeda.Size = new System.Drawing.Size(91, 30);
+            this.buttonAndromeda.TabIndex = 98;
+            this.buttonAndromeda.Text = "Edit Controls";
+            this.buttonAndromeda.UseVisualStyleBackColor = true;
+            // 
+            // comboAndromedaCATPort
+            // 
+            this.comboAndromedaCATPort.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboAndromedaCATPort.DropDownWidth = 56;
+            this.comboAndromedaCATPort.Location = new System.Drawing.Point(32, 36);
+            this.comboAndromedaCATPort.Name = "comboAndromedaCATPort";
+            this.comboAndromedaCATPort.Size = new System.Drawing.Size(80, 21);
+            this.comboAndromedaCATPort.TabIndex = 97;
+            this.toolTip1.SetToolTip(this.comboAndromedaCATPort, "Selects the COM port for use with PTT control");
+            this.comboAndromedaCATPort.SelectedIndexChanged += new System.EventHandler(this.ComboAndromedaCATPort_SelectedIndexChanged);
+            this.comboAndromedaCATPort.Click += new System.EventHandler(this.ComboAndromedaCATPort_Click);
+            // 
+            // labelTSPort
+            // 
+            this.labelTSPort.Image = null;
+            this.labelTSPort.Location = new System.Drawing.Point(1, 40);
+            this.labelTSPort.Name = "labelTSPort";
+            this.labelTSPort.Size = new System.Drawing.Size(40, 15);
+            this.labelTSPort.TabIndex = 7;
+            this.labelTSPort.Text = "Port:";
+            // 
+            // chkEnableAndromeda
+            // 
+            this.chkEnableAndromeda.Image = null;
+            this.chkEnableAndromeda.Location = new System.Drawing.Point(2, 14);
+            this.chkEnableAndromeda.Name = "chkEnableAndromeda";
+            this.chkEnableAndromeda.Size = new System.Drawing.Size(99, 24);
+            this.chkEnableAndromeda.TabIndex = 1;
+            this.chkEnableAndromeda.Text = "Enable Panel";
+            this.chkEnableAndromeda.CheckedChanged += new System.EventHandler(this.ChkEnableAndromeda_CheckedChanged);
+            // 
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.udUpdatesPerStepMin);
@@ -50411,7 +50527,7 @@
             this.groupBox1.Controls.Add(this.btnConfigure);
             this.groupBox1.Location = new System.Drawing.Point(346, 6);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(225, 90);
+            this.groupBox1.Size = new System.Drawing.Size(225, 82);
             this.groupBox1.TabIndex = 105;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "User Interface Controller";
@@ -50423,7 +50539,7 @@
             0,
             0,
             0});
-            this.udUpdatesPerStepMin.Location = new System.Drawing.Point(138, 45);
+            this.udUpdatesPerStepMin.Location = new System.Drawing.Point(138, 40);
             this.udUpdatesPerStepMin.Maximum = new decimal(new int[] {
             9,
             0,
@@ -50450,7 +50566,7 @@
             // 
             this.labelTS512.AutoSize = true;
             this.labelTS512.Image = null;
-            this.labelTS512.Location = new System.Drawing.Point(178, 68);
+            this.labelTS512.Location = new System.Drawing.Point(178, 63);
             this.labelTS512.Name = "labelTS512";
             this.labelTS512.Size = new System.Drawing.Size(27, 13);
             this.labelTS512.TabIndex = 110;
@@ -50460,7 +50576,7 @@
             // 
             this.labelTS515.AutoSize = true;
             this.labelTS515.Image = null;
-            this.labelTS515.Location = new System.Drawing.Point(143, 68);
+            this.labelTS515.Location = new System.Drawing.Point(143, 63);
             this.labelTS515.Name = "labelTS515";
             this.labelTS515.Size = new System.Drawing.Size(24, 13);
             this.labelTS515.TabIndex = 111;
@@ -50470,7 +50586,7 @@
             // 
             this.labelTS511.AutoSize = true;
             this.labelTS511.Image = null;
-            this.labelTS511.Location = new System.Drawing.Point(135, 14);
+            this.labelTS511.Location = new System.Drawing.Point(135, 10);
             this.labelTS511.Name = "labelTS511";
             this.labelTS511.Size = new System.Drawing.Size(70, 26);
             this.labelTS511.TabIndex = 108;
@@ -50483,7 +50599,7 @@
             0,
             0,
             0});
-            this.udUpdatesPerStepMax.Location = new System.Drawing.Point(175, 45);
+            this.udUpdatesPerStepMax.Location = new System.Drawing.Point(175, 40);
             this.udUpdatesPerStepMax.Maximum = new decimal(new int[] {
             64,
             0,
@@ -50638,7 +50754,7 @@
             // chkKWAI
             // 
             this.chkKWAI.Image = null;
-            this.chkKWAI.Location = new System.Drawing.Point(182, 200);
+            this.chkKWAI.Location = new System.Drawing.Point(182, 211);
             this.chkKWAI.Name = "chkKWAI";
             this.chkKWAI.Size = new System.Drawing.Size(176, 24);
             this.chkKWAI.TabIndex = 98;
@@ -50911,7 +51027,7 @@
             // chkDigUIsUSB
             // 
             this.chkDigUIsUSB.Image = null;
-            this.chkDigUIsUSB.Location = new System.Drawing.Point(182, 177);
+            this.chkDigUIsUSB.Location = new System.Drawing.Point(182, 188);
             this.chkDigUIsUSB.Name = "chkDigUIsUSB";
             this.chkDigUIsUSB.Size = new System.Drawing.Size(160, 24);
             this.chkDigUIsUSB.TabIndex = 96;
@@ -50986,7 +51102,7 @@
             // btnCATTest
             // 
             this.btnCATTest.Image = null;
-            this.btnCATTest.Location = new System.Drawing.Point(430, 135);
+            this.btnCATTest.Location = new System.Drawing.Point(481, 135);
             this.btnCATTest.Name = "btnCATTest";
             this.btnCATTest.Size = new System.Drawing.Size(77, 40);
             this.btnCATTest.TabIndex = 92;
@@ -50997,9 +51113,9 @@
             // lblCATRigType
             // 
             this.lblCATRigType.Image = null;
-            this.lblCATRigType.Location = new System.Drawing.Point(388, 111);
+            this.lblCATRigType.Location = new System.Drawing.Point(443, 111);
             this.lblCATRigType.Name = "lblCATRigType";
-            this.lblCATRigType.Size = new System.Drawing.Size(40, 23);
+            this.lblCATRigType.Size = new System.Drawing.Size(36, 23);
             this.lblCATRigType.TabIndex = 95;
             this.lblCATRigType.Text = "ID as:";
             // 
@@ -51012,7 +51128,7 @@
             "TS-2000",
             "TS-50S",
             "TS-480"});
-            this.comboCATRigType.Location = new System.Drawing.Point(430, 108);
+            this.comboCATRigType.Location = new System.Drawing.Point(481, 108);
             this.comboCATRigType.Name = "comboCATRigType";
             this.comboCATRigType.Size = new System.Drawing.Size(88, 21);
             this.comboCATRigType.TabIndex = 94;
@@ -54016,6 +54132,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.udHermesStepAttenuatorData)).EndInit();
             this.grpGenCustomTitleText.ResumeLayout(false);
             this.grpGenCustomTitleText.PerformLayout();
+            this.grpGeneralProcessPriority.ResumeLayout(false);
             this.grpOptMisc.ResumeLayout(false);
             this.grpOptMisc.PerformLayout();
             this.grpOptQuickQSY.ResumeLayout(false);
@@ -54026,7 +54143,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.udRFDelay)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.udMoxDelay)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.udGenPTTOutDelay)).EndInit();
-            this.grpGeneralProcessPriority.ResumeLayout(false);
             this.tpGeneralCalibration.ResumeLayout(false);
             this.panelRX2LevelCal.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.udGeneralCalRX2Level)).EndInit();
@@ -54937,6 +55053,7 @@
             this.tcCAT.ResumeLayout(false);
             this.tpCAT.ResumeLayout(false);
             this.tpCAT.PerformLayout();
+			this.grpAndr.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.udUpdatesPerStepMin)).EndInit();
@@ -58257,6 +58374,11 @@
         private CheckBoxTS chkShowZeroLine;
         public CheckBoxTS chkShowAndromedaBar;
         public CheckBoxTS chkShowAndromedaTop;
+        private LabelTS lblAndromedaVersion;
+        private GroupBoxTS grpAndr;
+        private ComboBoxTS comboAndromedaCATPort;
+        private LabelTS labelTSPort;
+        private CheckBoxTS chkEnableAndromeda;
         private CheckBoxTS chkDisablePicDisplayBackgroundImage;
         private ColorButton clrbtnDataFill;
         private LabelTS lblDisplayDataFill;
@@ -58279,5 +58401,9 @@
         private CheckBoxTS chkShowRXZeroLineOnWaterfall;
         private CheckBoxTS chkShowTXZeroLineOnWaterfall;
         private CheckBoxTS chkITSync;
+        private ButtonTS buttonAndromeda;
+        private CheckBoxTS chkShowTXFilterOnRXWaterfall;
+        private CheckBoxTS chkZoomShiftModifier;
+        private CheckBoxTS chkReverseShiftZoomModifier;
     }
 }

@@ -182,6 +182,8 @@ namespace Thetis
             comboCAT4databits.Text = "8";
             comboCAT4stopbits.Text = "1";
 
+			if (comboAndromedaCATPort.Items.Count > 0) comboAndromedaCATPort.SelectedIndex = 0;
+
             // comboFRSRegion.Text = "United States";
 
             //fillMetisIPAddrCombo();  /* must happen before GetOptions is called */ 
@@ -243,6 +245,18 @@ namespace Thetis
                 }
             }
 
+            if (comboAndromedaCATPort.SelectedIndex < 0)
+            {
+                if (comboAndromedaCATPort.Items.Count > 0)
+                    comboAndromedaCATPort.SelectedIndex = 0;
+                else
+                {
+                    chkEnableAndromeda.Checked = false;
+                    chkEnableAndromeda.Enabled = false;
+                }
+            }
+
+
             cmboSigGenRXMode.Text = "Radio";
             cmboSigGenTXMode.Text = "Radio";
 
@@ -282,6 +296,11 @@ namespace Thetis
             if (chkCAT4Enable.Checked)
             {
                 chkCAT4Enable_CheckedChanged(this, EventArgs.Empty);
+            }
+
+            if (chkEnableAndromeda.Checked)
+            {
+                ChkEnableAndromeda_CheckedChanged(this, EventArgs.Empty);
             }
 
             if (chkCATPTTEnabled.Checked)
@@ -388,6 +407,7 @@ namespace Thetis
             chkGeneralDisablePTT.Checked = console.DisablePTT;
             chkWheelTunesOutsideSpectral.Checked = console.WheelTunesOutsideSpectral; //MW0LGE
             chkAlsoUseSpecificMouseWheel.Checked = console.AlsoUseSpecificMouseWheel; //MW0LGE
+            chkZoomShiftModifier.Checked = console.ZoomShiftModifier; //MW0LGE
         }
 
         private void InitAudioTab()
@@ -514,6 +534,7 @@ namespace Thetis
             chkShowTXFilterOnWaterfall.Checked = Display.ShowTXFilterOnWaterfall; //MW0LGE
             chkShowRXZeroLineOnWaterfall.Checked = Display.ShowRXZeroLineOnWaterfall; //MW0LGE
             chkShowTXZeroLineOnWaterfall.Checked = Display.ShowTXZeroLineOnWaterfall; //MW0LGE
+            chkShowTXFilterOnRXWaterfall.Checked = Display.ShowTXFilterOnRXWaterfall; //MW0LGE
             clrbtnFilter.Color = Display.DisplayFilterColor;
             clrbtnMeterLeft.Color = console.MeterLeftColor;
             clrbtnMeterRight.Color = console.MeterRightColor;
@@ -567,6 +588,10 @@ namespace Thetis
             comboCATPTTPort.Items.Add("None");
             comboCATPTTPort.Items.Add("CAT");
             comboCATPTTPort.Items.AddRange(com_ports);
+
+            comboAndromedaCATPort.Items.Clear();
+            comboAndromedaCATPort.Items.Add("None");
+            comboAndromedaCATPort.Items.AddRange(com_ports);
         }
 
         private void RefreshSkinList()
@@ -2134,6 +2159,19 @@ namespace Thetis
             set
             {
                 if (chkCAT4Enable != null) chkCAT4Enable.Checked = value;
+            }
+        }
+
+        public bool AndromedaCATEnabled
+        {
+            get
+            {
+                if (chkEnableAndromeda != null) return chkEnableAndromeda.Checked;
+                else return false;
+            }
+            set
+            {
+                if (chkEnableAndromeda != null) chkEnableAndromeda.Checked = value;
             }
         }
 
@@ -5618,6 +5656,15 @@ namespace Thetis
                 tbCFCPEG_Scroll(this, EventArgs.Empty);
                 setCFCProfile(this, EventArgs.Empty);
             }
+        }
+
+
+
+        // added G8NJJ for Andromeda
+        public string AndromedaVersionNumber
+        {
+            get { return lblAndromedaVersion.Text; }
+            set { lblAndromedaVersion.Text = value; }
         }
 
 
@@ -10003,41 +10050,19 @@ namespace Thetis
         private void chkShowTopControls_CheckedChanged(object sender, EventArgs e)
         {
             console.ShowTopControls = chkShowTopControls.Checked;
-            if (chkShowTopControls.Checked == true)
-                chkShowAndromedaTop.Checked = false;
-            console.topControlsToolStripMenuItem.Checked = chkShowTopControls.Checked;
-            console.bandToolStripMenuItem.Visible = !chkShowBandControls.Checked;
-
-            //MW0LGE moved to console.cs
-            //console.topControlsToolStripMenuItem.Checked = chkShowTopControls.Checked; 
-            //console.bandToolStripMenuItem.Visible = !chkShowBandControls.Checked;
-
-            //if (console.CollapsedDisplay)
-            //    console.CollapseDisplay();
+            // G8NJJ: all logic moved to the console properties code
         }
 
         private void chkShowBandControls_CheckedChanged(object sender, EventArgs e)
         {
-            if (chkShowBandControls.Checked == true)
-                chkShowAndromedaBar.Checked = false;
             console.ShowBandControls = chkShowBandControls.Checked;
-            console.bandControlsToolStripMenuItem.Checked = chkShowBandControls.Checked;
-            console.modeToolStripMenuItem.Visible = !chkShowModeControls.Checked;
-
-            //MW0LGE moved to console.cs
-            //console.bandControlsToolStripMenuItem.Checked = chkShowBandControls.Checked;
-            //console.modeToolStripMenuItem.Visible = !chkShowModeControls.Checked;
-
-            //if (console.CollapsedDisplay)
-            //    console.CollapseDisplay();
+            // G8NJJ: all logic moved to the console properties code
         }
 
         private void chkModeControls_CheckedChanged(object sender, EventArgs e)
         {
-            if (chkShowModeControls.Checked == true)
-                chkShowAndromedaBar.Checked = false;
             console.ShowModeControls = chkShowModeControls.Checked;
-            console.modeControlsToolStripMenuItem.Checked = chkShowModeControls.Checked;
+            // G8NJJ: all logic moved to the console properties code
         }
 
         //
@@ -10045,12 +10070,8 @@ namespace Thetis
         //
         private void chkShowAndromedaTop_CheckedChanged(object sender, EventArgs e)
         {
-            if(chkShowAndromedaTop.Checked == true)
-                chkShowTopControls.Checked = false;
             console.ShowAndromedaTopControls = chkShowAndromedaTop.Checked;
-            console.andromedaTopControlsToolStripMenuItem.Checked = chkShowAndromedaTop.Checked;
-            if (console.CollapsedDisplay)                   // force a redraw
-                console.CollapseDisplay();
+            // G8NJJ: all logic moved to the console properties code
         }
 
         //
@@ -10059,18 +10080,7 @@ namespace Thetis
         private void chkShowAndromedaBar_CheckedChanged(object sender, EventArgs e)
         {
             console.ShowAndromedaButtonBar = chkShowAndromedaBar.Checked;
-            console.andromedaButtonBarToolStripMenuItem.Checked = chkShowAndromedaBar.Checked;
-            if (chkShowAndromedaBar.Checked == true)
-            {
-                chkShowBandControls.Checked = false;
-                chkShowModeControls.Checked = false;
-            }
-
-          //MW0LGE moved to console.cs
-            //console.modeControlsToolStripMenuItem.Checked = chkShowModeControls.Checked;
-
-           // if (console.CollapsedDisplay)                   // force a redraw
-              //  console.CollapseDisplay();
+            // G8NJJ: all logic moved to the console properties code
         }
 
 
@@ -10829,6 +10839,12 @@ namespace Thetis
             console.CAT4DataBits = int.Parse((string)comboCAT4databits.SelectedItem);
             console.CAT4StopBits = SDRSerialPort.StringToStopBits((string)comboCAT4stopbits.SelectedItem);
             console.CAT4Enabled = chkCAT4Enable.Checked;
+
+            console.AndromedaCATEnabled = chkEnableAndromeda.Checked;
+            if (comboAndromedaCATPort.Text.StartsWith("COM"))
+                console.AndromedaCATPort = Int32.Parse(comboAndromedaCATPort.Text.Substring(3));
+            console.AndromedaCATEnabled = chkEnableAndromeda.Checked;
+
         }
 
         // called in error cases to set the dialiog vars from 
@@ -10891,6 +10907,16 @@ namespace Thetis
             // port = "COM" + console.CATPTTBitBangPort.ToString();
             // if (comboCATPTTPort.Items.Contains(port))
             //   comboCATPTTPort.Text = port;
+        }
+
+        public void copyAndromedaCATPropsToDialogVars()
+        {
+            chkEnableAndromeda.Checked = console.AndromedaCATEnabled;
+            string port = "COM" + console.AndromedaCATPort.ToString();
+            if (comboAndromedaCATPort.Items.Contains(port))
+                comboAndromedaCATPort.Text = port;
+
+            // wjt fixme -- need to hand baudrate, parity, data, stop -- see initCATandPTTprops
         }
 
         private void chkCATEnable_CheckedChanged(object sender, System.EventArgs e)
@@ -11154,6 +11180,82 @@ namespace Thetis
             }
         }
 
+		private void ChkEnableAndromeda_CheckedChanged(object sender, EventArgs e)
+        {
+            if (initializing) return;
+
+            if (comboAndromedaCATPort.Text == "" || !comboAndromedaCATPort.Text.StartsWith("COM"))
+            {
+                if (chkEnableAndromeda.Focused)
+                {
+                    if (chkEnableAndromeda.Focused && chkEnableAndromeda.Checked)
+                    {
+                        MessageBox.Show("The CAT port \"" + comboAndromedaCATPort.Text + "\" is not a valid port.\n" +
+                            "Please select another port.");
+                        chkEnableAndromeda.Checked = false;
+                    }
+                }
+                return;
+            }
+
+            // make sure we're not using the same comm port as the bit banger
+            if (chkEnableAndromeda.Checked && console.PTTBitBangEnabled &&
+                (comboAndromedaCATPort.Text == comboCATPTTPort.Text))
+            {
+                MessageBox.Show("Andromeda CAT port cannot be the same as Bit Bang Port", "Port Selection Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                chkEnableAndromeda.Checked = false;
+            }
+
+            // if enabled, disable changing of serial port
+            bool enable_sub_fields = !chkEnableAndromeda.Checked;
+            comboAndromedaCATPort.Enabled = enable_sub_fields;
+
+            enableCAT_HardwareFields(enable_sub_fields);
+
+            if (chkEnableAndromeda.Checked)
+            {
+                try
+                {
+                    console.AndromedaCATEnabled = true;
+                }
+                catch (Exception ex)
+                {
+                    console.AndromedaCATEnabled = false;
+                    chkEnableAndromeda.Checked = false;
+                    MessageBox.Show("Could not initialize Andromeda control.  Exception was:\n\n " + ex.Message +
+                        "\n\nAndromeda control has been disabled.", "Error Initializing Andromeda control",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            else
+            {
+                if (comboKeyerConnSecondary.Text == "CAT" && chkCATEnable.Focused)
+                {
+                    MessageBox.Show("The Secondary Keyer option has been changed to None since CAT has been disabled.",
+                        "CAT Disabled",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
+                    comboKeyerConnSecondary.Text = "None";
+                }
+
+                if (comboCATPTTPort.Text == "CAT" && chkCATEnable.Focused)
+                {
+                    MessageBox.Show("The PTT Control Port option has been changed to None since CAT has been disabled.",
+                        "CAT Disabled",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
+
+                    chkCATPTT_RTS.Checked = false;
+                    chkCATPTT_DTR.Checked = false;
+                    comboCATPTTPort.Text = "None";
+                }
+
+                console.AndromedaCATEnabled = false;
+            }
+
+        }
+
         private void enableCAT_HardwareFields(bool enable)
         {
             comboCATbaud.Enabled = enable;
@@ -11363,6 +11465,24 @@ namespace Thetis
 
             if (comboCAT4Port.Text.StartsWith("COM"))
                 console.CAT4Port = Int32.Parse(comboCAT4Port.Text.Substring(3));
+        }
+
+        private void ComboAndromedaCATPort_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (comboAndromedaCATPort.Text == "None")
+            {
+                if (chkEnableAndromeda.Checked)
+                {
+                    if (comboAndromedaCATPort.Focused)
+                        chkEnableAndromeda.Checked = false;
+                }
+
+                chkEnableAndromeda.Enabled = false;
+            }
+            else chkEnableAndromeda.Enabled = true;
+
+            if (comboAndromedaCATPort.Text.StartsWith("COM"))
+                console.AndromedaCATPort = Int32.Parse(comboAndromedaCATPort.Text.Substring(3));
         }
 
         private void comboCATPTTPort_SelectedIndexChanged(object sender, System.EventArgs e)
@@ -17875,6 +17995,14 @@ namespace Thetis
             comboCATPTTPort.Items.Add("CAT");
             comboCATPTTPort.Items.AddRange(com_ports);
         }
+        private void ComboAndromedaCATPort_Click(object sender, EventArgs e)
+        {
+            string[] com_ports = SerialPort.GetPortNames();
+            comboAndromedaCATPort.Items.Clear();
+            comboAndromedaCATPort.Items.Add("None");
+            comboAndromedaCATPort.Items.AddRange(com_ports);
+        }
+
 
         private void chkDSPCESSB_CheckedChanged(object sender, EventArgs e)
         {
@@ -19403,6 +19531,22 @@ namespace Thetis
         private void ChkShowTXZeroLineOnWaterfall_CheckedChanged(object sender, EventArgs e)
         {
             Display.ShowTXZeroLineOnWaterfall = chkShowTXZeroLineOnWaterfall.Checked;
+        }
+
+        private void ChkShowTXFilterOnRXWaterfall_CheckedChanged(object sender, EventArgs e)
+        {
+            Display.ShowTXFilterOnRXWaterfall = chkShowTXFilterOnRXWaterfall.Checked;
+        }
+
+        private void ChkZoomShiftModifier_CheckedChanged(object sender, EventArgs e)
+        {
+            console.ZoomShiftModifier = chkZoomShiftModifier.Checked;
+            chkReverseShiftZoomModifier.Enabled = chkZoomShiftModifier.Checked;
+        }
+
+        private void ChkReverseShiftZoomModifier_CheckedChanged(object sender, EventArgs e)
+        {
+            console.ZoomShiftModifierReverse = chkReverseShiftZoomModifier.Checked;
         }
 
         //--

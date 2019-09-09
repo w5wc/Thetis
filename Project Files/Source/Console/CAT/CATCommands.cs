@@ -3985,6 +3985,81 @@ namespace Thetis
                 return parser.Error1;
         }
 
+        //Andromeda front panel VFO encoder down
+        //write only
+        public string ZZZD(string s)
+        {
+            if (s.Length == parser.nSet)
+            {
+                int Steps = Convert.ToInt32(s);
+                console.HandleFrontPanelVFOEncoderStep(-Steps);
+                return "";
+            }
+            else
+                return parser.Error1;
+        }
+
+        //Andromeda front panel VFO encoder up
+        //write only
+        public string ZZZU(string s)
+        {
+            if (s.Length == parser.nSet)
+            {
+                int Steps = Convert.ToInt32(s);
+                console.HandleFrontPanelVFOEncoderStep(Steps);
+                return "";
+            }
+            else
+                return parser.Error1;
+        }
+
+        //Andromeda front panel h/w version
+        //write only
+        public string ZZZH(string s)
+        {
+            if (s.Length == parser.nSet)
+            {
+                int Version = Convert.ToInt32(s);
+                console.HandleFrontPanelHWVersion(Version);
+                return "";
+            }
+            else
+                return parser.Error1;
+        }
+
+        //Andromeda front panel s/w version
+        //write only
+        public string ZZZS(string s)
+        {
+            if (s.Length == parser.nSet)
+            {
+                int Version = Convert.ToInt32(s);
+                console.HandleFrontPanelSWVersion(Version);
+                return "";
+            }
+            else
+                return parser.Error1;
+        }
+
+        //Andromeda front panel encoder step
+        //write only
+        public string ZZZE(string s)
+        {
+            if (s.Length == parser.nSet)
+            {
+                int Encoder = Convert.ToInt32(s);
+                int Step = Encoder % 10;                // bottom digit
+                Encoder = Encoder / 10;                 // top 2 digits
+                if ((Encoder >= 1) && (Encoder <= 20))
+                console.HandleFrontPanelEncoderStep(Encoder-1, Step);
+                else if ((Encoder >= 51) && (Encoder <= 70))
+                    console.HandleFrontPanelEncoderStep(Encoder - 51, -Step);
+                return "";
+            }
+            else
+                return parser.Error1;
+        }
+
         //Andromeda front panel pushbutton press
         //write only
         public string ZZZP(string s)
@@ -3993,10 +4068,13 @@ namespace Thetis
             {
                 int Button = Convert.ToInt32(s);
                 bool State = false;
-                if ((Button % 10) != 0)
+                bool LongPress = false;
+                if ((Button % 10) == 1)
                     State = true;
+                else if ((Button % 10) == 2)
+                    LongPress = true;
                 Button = Button / 10;           // 1-99
-                console.HandleFrontPanelButtonPress(Button, State);
+                console.HandleFrontPanelButtonPress(Button-1, State, LongPress);
                 return "";
             }
             else
