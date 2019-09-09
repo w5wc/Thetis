@@ -3479,7 +3479,7 @@ namespace Thetis
 
             draw_display_task = Task.Factory.StartNew(() =>
             {
-                while (!cancelTokenSource.IsCancellationRequested)
+                while (cancelTokenSource != null && !cancelTokenSource.IsCancellationRequested)
                 {
 
                     RunDisplay(rx); // get pixels

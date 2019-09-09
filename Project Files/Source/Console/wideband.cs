@@ -43,6 +43,7 @@ namespace Thetis
         {
             wbdisplay.Cancel_Display();
             NetworkIO.SetWBEnable(0, 0);
+            Console.getConsole().wbClosing();
             this.Hide();
             e.Cancel = true;
             SaveWideBand();

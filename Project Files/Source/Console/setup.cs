@@ -16305,11 +16305,39 @@ namespace Thetis
                 console.path_Illustrator.pi_Changed();
         }
 
+        public bool AlexHPFBypass
+        {
+            get
+            {
+                if (chkAlexHPFBypass != null) return chkAlexHPFBypass.Checked;
+                else return false;
+
+            }
+            set
+            {
+                if (chkAlexHPFBypass != null) chkAlexHPFBypass.Checked = value;
+            }
+        }
+
         private void chkAlexHPFBypass_CheckedChanged(object sender, EventArgs e)
         {
             console.AlexHPFBypass = chkAlexHPFBypass.Checked;
             if (console.path_Illustrator != null)
                 console.path_Illustrator.pi_Changed();
+        }
+
+        public bool Alex2HPFBypass
+        {
+            get
+            {
+                if (chkAlex2HPFBypass != null) return chkAlex2HPFBypass.Checked;
+                else return false;
+
+            }
+            set
+            {
+                if (chkAlex2HPFBypass != null) chkAlex2HPFBypass.Checked = value;
+            }
         }
 
         private void chkAlex2HPFBypass_CheckedChanged(object sender, EventArgs e)

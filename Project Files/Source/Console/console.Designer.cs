@@ -868,6 +868,9 @@
             this.RAtoolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.wBToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.BPFToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.BPF1ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.BPF2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.timerNotchZoom = new System.Windows.Forms.Timer(this.components);
             this.picRX2Squelch = new System.Windows.Forms.PictureBox();
             this.panelButtonBar = new System.Windows.Forms.PanelTS();
@@ -3838,7 +3841,8 @@
             this.linearityToolStripMenuItem,
             this.RAtoolStripMenuItem,
             this.wBToolStripMenuItem,
-            this.pIToolStripMenuItem});
+            this.pIToolStripMenuItem,
+            this.BPFToolStripMenuItem});
             resources.ApplyResources(this.menuStrip1, "menuStrip1");
             this.menuStrip1.Name = "menuStrip1";
             // 
@@ -4633,6 +4637,28 @@
             this.pIToolStripMenuItem.Name = "pIToolStripMenuItem";
             resources.ApplyResources(this.pIToolStripMenuItem, "pIToolStripMenuItem");
             this.pIToolStripMenuItem.Click += new System.EventHandler(this.pIToolStripMenuItem_Click);
+            // 
+            // BPFToolStripMenuItem
+            // 
+            this.BPFToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.BPF1ToolStripMenuItem,
+            this.BPF2ToolStripMenuItem});
+            this.BPFToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.BPFToolStripMenuItem.Name = "BPFToolStripMenuItem";
+            resources.ApplyResources(this.BPFToolStripMenuItem, "BPFToolStripMenuItem");
+            // 
+            // BPF1ToolStripMenuItem
+            // 
+            this.BPF1ToolStripMenuItem.Name = "BPF1ToolStripMenuItem";
+            resources.ApplyResources(this.BPF1ToolStripMenuItem, "BPF1ToolStripMenuItem");
+            this.BPF1ToolStripMenuItem.Click += new System.EventHandler(this.BPF1ToolStripMenuItem_Click);
+            // 
+            // BPF2ToolStripMenuItem
+            // 
+            this.BPF2ToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.BPF2ToolStripMenuItem.Name = "BPF2ToolStripMenuItem";
+            resources.ApplyResources(this.BPF2ToolStripMenuItem, "BPF2ToolStripMenuItem");
+            this.BPF2ToolStripMenuItem.Click += new System.EventHandler(this.BPF2ToolStripMenuItem_Click);
             // 
             // timerNotchZoom
             // 
@@ -6996,5 +7022,8 @@
         public ToolStripMenuItem andromedaButtonBarToolStripMenuItem;
         private ButtonTS buttonTS1;
         private GroupBoxTS grpMultimeterMenus;
-   }
+        private ToolStripMenuItem BPFToolStripMenuItem;
+        private ToolStripMenuItem BPF1ToolStripMenuItem;
+        private ToolStripMenuItem BPF2ToolStripMenuItem;
+    }
 }

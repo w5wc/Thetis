@@ -28110,15 +28110,12 @@ namespace Thetis
             set
             {
                 alex_hpf_bypass = value;
-                //  if (chkPower.Checked)
-                //  {
                 double freq = Double.Parse(txtVFOAFreq.Text);
                 SetAlexHPF(freq);
-                //if(XVTRForm != null && SetupForm != null)
-                if (!initializing)
+                 if (!initializing)
                     txtVFOAFreq_LostFocus(this, EventArgs.Empty);
-                // }
-            }
+                BPF1ToolStripMenuItem.Checked = value;
+             }
         }
 
         private bool alex2_hpf_bypass = false;
@@ -28128,13 +28125,11 @@ namespace Thetis
             set
             {
                 alex2_hpf_bypass = value;
-                //  if (chkPower.Checked)
-                //  {
                 double freq = Double.Parse(txtVFOBFreq.Text);
                 SetAlex2HPF(freq);
                 if (!initializing)
                     txtVFOBFreq_LostFocus(this, EventArgs.Empty);
-                // }
+                BPF2ToolStripMenuItem.Checked = value;
             }
         }
 
@@ -53759,6 +53754,18 @@ namespace Thetis
             return true;
         }
 
+        //WD5Y
+        private void BPF1ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (SetupForm != null) SetupForm.AlexHPFBypass = !BPF1ToolStripMenuItem.Checked;
+        }
+
+        private void BPF2ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (SetupForm != null) SetupForm.Alex2HPFBypass = !BPF2ToolStripMenuItem.Checked;
+        }
+        //WD5Y
+
         #region Collapsible Display
 
         // W1CEG:  Start
@@ -56312,6 +56319,13 @@ namespace Thetis
             AndromedaIndicatorCheck(EIndicatorActions.eINNR, false, (chkRX2NR.CheckState != CheckState.Unchecked));
         }
 
+        private bool isHPFBypassed;
+
+        public void wbClosing()
+        {
+            SetupForm.AlexHPFBypass = isHPFBypassed;
+        }
+
         private void wBToolStripMenuItem_Click(object sender, EventArgs e)
         {
             cmaster.Getwb(0).WBdisplay.Init();
@@ -56320,6 +56334,8 @@ namespace Thetis
             else NetworkIO.SetWBPacketsPerFrame(32);
             NetworkIO.SetWBEnable(0, 1);
             cmaster.Getwb(0).WBdisplay.StartDisplay(32);
+            isHPFBypassed = alex_hpf_bypass;
+            if (SetupForm != null) SetupForm.AlexHPFBypass = true;
         }
 
         private void pIToolStripMenuItem_Click(object sender, EventArgs e)
