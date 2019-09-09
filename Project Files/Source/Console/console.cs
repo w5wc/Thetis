@@ -3,7 +3,7 @@
 //=================================================================
 // Thetis is a C# implementation of a Software Defined Radio.
 // Copyright (C) 2004-2009  FlexRadio Systems 
-// Copyright (C) 2010-2018  Doug Wigley
+// Copyright (C) 2010-2019  Doug Wigley
 // Credit is given to Sizenko Alexander of Style-7 (http://www.styleseven.com/) for the Digital-7 font.
 //
 // This program is free software; you can redistribute it and/or
@@ -48291,7 +48291,7 @@ namespace Thetis
                 current_fm_tx_mode = FMTXMode.Simplex;
                 //fm_tx_offset_mhz = 0;		
                 //  chkX2TR.Checked = false;
-                chkFWCATU.Checked = false;
+                //chkFWCATU.Checked = false;
                 lblVFOSplit.BackColor = System.Drawing.Color.Blue;
             }
             else
