@@ -26301,8 +26301,8 @@ namespace Thetis
                 if (SetupForm != null)
                     SetupForm.TunePower = tune_power;
 
-                if (chkTUN.Checked && !tx_tune_power)
-                    PWR = tune_power;
+                //if (chkTUN.Checked && !tx_tune_power)
+                //    PWR = tune_power;
             }
         }
 
@@ -38891,11 +38891,22 @@ namespace Thetis
             if (SetupForm == null)
                 return;
 
-            float val = (float)ptbPWR.Value;
             Band b = tx_band;
 
-            int new_pwr = ptbPWR.Value;
+            int new_pwr = 0;
+            float val = 0.0f;
+            if (!tuning || (tuning && tx_tune_power))
+            {
+                new_pwr = ptbPWR.Value;
+                val = (float)ptbPWR.Value;
+            }
+            else
+            {
+                new_pwr = tune_power;
+                val = (float)tune_power;
+            }
             power_by_band[(int)tx_band] = new_pwr;
+
             if ((!tuning || xvtr_tune_power) && tx_xvtr_index >= 0)
             {
                 int power = ptbPWR.Value;
@@ -40390,8 +40401,8 @@ namespace Thetis
                 if (apollopresent)
                     NetworkIO.EnableApolloAutoTune(0);
 
-                if ((tx_xvtr_index < 0 || xvtr_tune_power) && !tx_tune_power)
-                    TunePower = ptbPWR.Value;
+                //if ((tx_xvtr_index < 0 || xvtr_tune_power) && !tx_tune_power)
+                //    TunePower = ptbPWR.Value;
 
                 if (!tx_tune_power)
                     PWR = PreviousPWR;
