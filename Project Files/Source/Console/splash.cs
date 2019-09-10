@@ -3,7 +3,7 @@
 //=================================================================
 // PowerSDR is a C# implementation of a Software Defined Radio.
 // Copyright (C) 2004-2009  FlexRadio Systems
-//
+// Copyright (C) 2010-2019  Doug Wigley
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
 // as published by the Free Software Foundation; either version 2
@@ -29,9 +29,11 @@
 using System;
 using System.Runtime.InteropServices;
 using System.Collections;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Microsoft.Win32;
 
@@ -384,12 +386,28 @@ namespace Thetis
 				if( this.Opacity > 0 )
 					this.Opacity += m_dblOpacityIncrement;
 				else
-				{
-					StoreIncrements();
-					this.Close();
-				}
-			}
-			if( m_bFirstLaunch == false && m_dblLastCompletionFraction 
+                {
+                    StoreIncrements();
+                    this.Close();
+                    // for -autostart option we run a task here and wait for CPU usage < 75%
+                    TimeSpan ttime;
+                    TimeSpan ttimeDiff;
+                    var t = Task.Run(async delegate
+                    {
+                        Process process = Process.GetCurrentProcess();
+                        do
+                        {
+                            ttime = process.TotalProcessorTime;
+                            await Task.Delay(500);
+                            TimeSpan ttime2 = process.TotalProcessorTime;
+                            ttimeDiff = ttime2.Subtract(ttime);
+                        } while (ttimeDiff.TotalMilliseconds > 400);
+                        Console.setPowerOn();
+                    });
+
+                }
+            }
+            if ( m_bFirstLaunch == false && m_dblLastCompletionFraction 
 				< m_dblCompletionFraction )
 			{
 				m_dblLastCompletionFraction += m_dblPBIncrementPerTimerInterval;

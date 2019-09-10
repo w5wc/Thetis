@@ -918,20 +918,12 @@ namespace Thetis
         private static MemoryStream msgrabbing = new MemoryStream(Properties.Resources.grabbing);
         NumberFormatInfo nfi = NumberFormatInfo.InvariantInfo;  // so we are region independent in terms of ',' and '.' for floats
 
-        // BT 11/05/2007
-        // public Thetis.RemoteProfiles ProfileForm;
         private string machineName = System.Environment.MachineName;
-
-        //EHR 25Mar08
-        // private TDxInput.Device TDxDevice;
-        // private TDxInput.Sensor TDxSensor;
-
         public bool initializing = true;
         public bool booting = false;
-
+        private static bool powerOnOption = false;
         private int h_delta = 0;		//k6jca 1/15/08
         private int v_delta = 0;		//k6jca 1/15/08
-
         private int previous_delta = 0;  //k6jca
 
         private Size console_basis_size = new Size(100, 100);		//k6jca
@@ -1187,6 +1179,13 @@ namespace Thetis
         // ======================================================
         // Constructor and Destructor
         // ======================================================
+
+        // This gets called from the Splash form
+        public static void setPowerOn()
+        {
+            if (powerOnOption)
+                theConsole.chkPower.Checked = true;
+        }
 
         public Console(string[] args)
         {
@@ -1576,7 +1575,10 @@ namespace Thetis
             foreach (string s in CmdLineArgs)
             {
                 if (s == "-autostart")
+                {
                     chkPower.Checked = true;
+                    powerOnOption = true;
+                }
                 else if (s.StartsWith("-datapath:"))
                 {
                     string path = s.Substring(s.IndexOf(":") + 1);
@@ -1835,29 +1837,7 @@ namespace Thetis
         {
 
             psform = new PSForm(this);
-            // PSForm.console = this;
-
-
             booting = true;
-            /*   // EHR add nav support
-               try
-               {
-                   TDxDevice = new TDxInput.DeviceClass();
-                   TDxSensor = TDxDevice.Sensor;
-                   TDxDevice.Connect();
-                   if (TDxDevice.IsConnected)
-                   {
-                       this.timer_navigate.Interval = 100;
-                       this.timer_navigate.Enabled = true;
-                   }
-               }
-               catch (Exception)
-               {
-                   //MessageBox.Show("SpaceNavigator not installed.", "No Navigator",
-                   //MessageBoxButtons.OK, MessageBoxIcon.Information);
-               }
-               // EHR end */
-
             Thread.Sleep(100);
             UpdateBandStackRegisters();
 
@@ -2123,11 +2103,6 @@ namespace Thetis
 
             SetupForm = new Setup(this);		// create Setup form
             SetupForm.StartPosition = FormStartPosition.Manual;
-
-            // SetupForm.AddHPSDRPages();
-            // SetComboPreampForHPSDR();
-
-            //SetupForm.GetTxProfiles();
             UpdateTXProfile(SetupForm.TXProfile);
 
             Common.RestoreForm(EQForm, "EQForm", false);
@@ -2146,12 +2121,6 @@ namespace Thetis
             dxmemList.CheckVersion1(); // ke9ns add
 
             InitMemoryFrontPanel();
-
-            //rx1_filter = Filter.F2600;
-
-            //RX1AGCMode = AGCMode.MED;				// Initialize front panel controls
-            //comboPreamp.Text = "0dB";
-            // chkRX1Preamp.Checked = true;
             vfob_dsp_mode = DSPMode.LSB;
             vfob_filter = Filter.F3;
             comboDisplayMode.Text = "Panafall";
@@ -2213,18 +2182,10 @@ namespace Thetis
             ptbRX2RF_Scroll(this, EventArgs.Empty);
             ptbRX2Squelch_Scroll(this, EventArgs.Empty);
             initializing = false;
-            // double freq = double.Parse(txtVFOAFreq.Text);
-            // Band b = BandByFreq(freq, rx1_xvtr_index, false, current_region);
-            // if (b != rx1_band)
-            // SetRX1Band(b);
             RX1PreampMode = rx1_preamp_by_band[(int)rx1_band];
             RX1AttenuatorData = rx1_step_attenuator_by_band[(int)rx1_band];
             RX2PreampMode = rx2_preamp_by_band[(int)rx2_band];
             RX2AttenuatorData = rx2_step_attenuator_by_band[(int)rx2_band];
-            // initializing = true;
-
-            // RX1PreampMode = rx1_preamp_mode;
-            // RX2PreampMode = rx2_preamp_mode;
             initializing = true;
             ptbDisplayZoom_Scroll(this, EventArgs.Empty);
             ptbRX0Gain_Scroll(this, EventArgs.Empty);
@@ -2233,7 +2194,6 @@ namespace Thetis
             ptbPanSubRX_Scroll(this, EventArgs.Empty);
             ptbRX2Pan_Scroll(this, EventArgs.Empty);
             ptbRX2Gain_Scroll(this, EventArgs.Empty);
-            // chkRX2Preamp_CheckedChanged(this, EventArgs.Empty);
             ptbRF_Scroll(this, EventArgs.Empty);
             ptbVACRXGain_Scroll(this, EventArgs.Empty);
             ptbVACTXGain_Scroll(this, EventArgs.Empty);
@@ -2289,11 +2249,6 @@ namespace Thetis
                             this.Text = this.Text + " *** EerXmit ***";
                             break;
 
-                        //case "--no-send-to-Janus":
-                        //    NoJanusSend = true;
-                        //    this.Text = this.Text + "*** NoJanusSend ***";
-                        //    break;
-
                         case "--allowOOBxmit":
                             Extended = true;
                             this.Text = this.Text + " OOBok";
@@ -2335,17 +2290,6 @@ namespace Thetis
             }
 
             Display.Target = picDisplay;
-            //Display.Target = pandisplay.picPanDisplay;
-            // uncomment for multiple displays
-            //if (cmaster.Getrxa(4) != null)
-            //{
-            //    for (int i = 4; i < 7; i++)
-            //    {
-            //        cmaster.Getrxa(i).pDisplay.cOnsole = this;
-            //        cmaster.Getrxa(i).pDisplay.Init();
-            //    }
-            //}
-
             update_rx2_display = true;
 
             if (startdiversity)
@@ -2441,7 +2385,6 @@ namespace Thetis
             }
 
             SetupForm.UpdateTXDisplayFFT();
-            // RadioDSP.SyncStatic();
 
             for (int i = 0; i < 2; i++)
             {
@@ -2466,19 +2409,9 @@ namespace Thetis
         }
 
         public bool Force16bitIQ = false;
-        // public bool NoJanusSend = false;
+
         public void ExitConsole()
         {
-            /*  try
-              {
-                  if (current_model == Model.FLEX5000 || current_model == Model.FLEX3000)
-                      Pal.Exit();
-              }
-              catch (Exception)
-              {
-
-              }*/
-
             if (n1mm_udp_client != null)
                 n1mm_udp_client.Close();
 
