@@ -227,6 +227,7 @@
             this.chkEnableStaticIP = new System.Windows.Forms.CheckBoxTS();
             this.chkFullDiscovery = new System.Windows.Forms.CheckBoxTS();
             this.grpFRSRegion = new System.Windows.Forms.GroupBoxTS();
+            this.chkExtended = new System.Windows.Forms.CheckBoxTS();
             this.comboFRSRegion = new System.Windows.Forms.ComboBoxTS();
             this.grpGeneralModel = new System.Windows.Forms.GroupBoxTS();
             this.radGenModelANAN7000D = new System.Windows.Forms.RadioButtonTS();
@@ -242,7 +243,7 @@
             this.radGenModelHPSDR = new System.Windows.Forms.RadioButtonTS();
             this.chkGeneralRXOnly = new System.Windows.Forms.CheckBoxTS();
             this.grpMetisAddr = new System.Windows.Forms.GroupBoxTS();
-			this.lblAndromedaVersion = new System.Windows.Forms.LabelTS();
+            this.lblAndromedaVersion = new System.Windows.Forms.LabelTS();
             this.lblMetisBoardID = new System.Windows.Forms.LabelTS();
             this.labelTS88 = new System.Windows.Forms.LabelTS();
             this.lblMetisCodeVersion = new System.Windows.Forms.LabelTS();
@@ -1526,6 +1527,7 @@
             this.tbDisplayFFTSize = new System.Windows.Forms.TrackBarTS();
             this.clrbtnWaterfallHigh = new Thetis.ColorButton();
             this.grpDisplayWaterfall = new System.Windows.Forms.GroupBoxTS();
+            this.chkWaterfallUseRX1SpectrumMinMax = new System.Windows.Forms.CheckBoxTS();
             this.chkRX1WaterfallAGC = new System.Windows.Forms.CheckBoxTS();
             this.lblWaterfallLevels = new System.Windows.Forms.Label();
             this.txtWaterFallBandLevel = new System.Windows.Forms.TextBox();
@@ -1552,6 +1554,7 @@
             this.udRX2DisplayWFAVTime = new System.Windows.Forms.NumericUpDownTS();
             this.labelTS377 = new System.Windows.Forms.LabelTS();
             this.grpRX2DisplayWaterfall = new System.Windows.Forms.GroupBoxTS();
+            this.chkWaterfallUseRX2SpectrumMinMax = new System.Windows.Forms.CheckBoxTS();
             this.chkRX2WaterfallAGC = new System.Windows.Forms.CheckBoxTS();
             this.lblRX2WaterfallLevels = new System.Windows.Forms.Label();
             this.txtRX2WaterFallBandLevel = new System.Windows.Forms.TextBox();
@@ -4163,7 +4166,7 @@
             this.tpCATControl.SuspendLayout();
             this.tcCAT.SuspendLayout();
             this.tpCAT.SuspendLayout();
-			this.grpAndr.SuspendLayout();
+            this.grpAndr.SuspendLayout();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.udUpdatesPerStepMin)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.udUpdatesPerStepMax)).BeginInit();
@@ -7165,13 +7168,27 @@
             // 
             // grpFRSRegion
             // 
+            this.grpFRSRegion.Controls.Add(this.chkExtended);
             this.grpFRSRegion.Controls.Add(this.comboFRSRegion);
             this.grpFRSRegion.Location = new System.Drawing.Point(185, 201);
             this.grpFRSRegion.Name = "grpFRSRegion";
-            this.grpFRSRegion.Size = new System.Drawing.Size(110, 55);
+            this.grpFRSRegion.Size = new System.Drawing.Size(110, 81);
             this.grpFRSRegion.TabIndex = 33;
             this.grpFRSRegion.TabStop = false;
             this.grpFRSRegion.Text = "Region";
+            // 
+            // chkExtended
+            // 
+            this.chkExtended.AutoSize = true;
+            this.chkExtended.Image = null;
+            this.chkExtended.Location = new System.Drawing.Point(12, 52);
+            this.chkExtended.Name = "chkExtended";
+            this.chkExtended.Size = new System.Drawing.Size(71, 17);
+            this.chkExtended.TabIndex = 1;
+            this.chkExtended.Text = "Extended";
+            this.toolTip1.SetToolTip(this.chkExtended, "Enable extended TX (out of band)");
+            this.chkExtended.UseVisualStyleBackColor = true;
+            this.chkExtended.CheckedChanged += new System.EventHandler(this.ChkExtended_CheckedChanged);
             // 
             // comboFRSRegion
             // 
@@ -7197,8 +7214,7 @@
             "Hungary",
             "Netherlands",
             "France",
-            "Russia",
-            "Extended"});
+            "Russia"});
             this.comboFRSRegion.Location = new System.Drawing.Point(3, 20);
             this.comboFRSRegion.Name = "comboFRSRegion";
             this.comboFRSRegion.Size = new System.Drawing.Size(100, 21);
@@ -7367,7 +7383,7 @@
             // 
             // grpMetisAddr
             // 
-			this.grpMetisAddr.Controls.Add(this.lblAndromedaVersion);
+            this.grpMetisAddr.Controls.Add(this.lblAndromedaVersion);
             this.grpMetisAddr.Controls.Add(this.lblMetisBoardID);
             this.grpMetisAddr.Controls.Add(this.labelTS88);
             this.grpMetisAddr.Controls.Add(this.lblMetisCodeVersion);
@@ -25032,6 +25048,7 @@
             // 
             // grpDisplayWaterfall
             // 
+            this.grpDisplayWaterfall.Controls.Add(this.chkWaterfallUseRX1SpectrumMinMax);
             this.grpDisplayWaterfall.Controls.Add(this.chkRX1WaterfallAGC);
             this.grpDisplayWaterfall.Controls.Add(this.lblWaterfallLevels);
             this.grpDisplayWaterfall.Controls.Add(this.txtWaterFallBandLevel);
@@ -25049,10 +25066,23 @@
             this.grpDisplayWaterfall.Controls.Add(this.udDisplayWaterfallHighLevel);
             this.grpDisplayWaterfall.Location = new System.Drawing.Point(296, 6);
             this.grpDisplayWaterfall.Name = "grpDisplayWaterfall";
-            this.grpDisplayWaterfall.Size = new System.Drawing.Size(256, 163);
+            this.grpDisplayWaterfall.Size = new System.Drawing.Size(274, 163);
             this.grpDisplayWaterfall.TabIndex = 40;
             this.grpDisplayWaterfall.TabStop = false;
             this.grpDisplayWaterfall.Text = "Waterfall";
+            // 
+            // chkWaterfallUseRX1SpectrumMinMax
+            // 
+            this.chkWaterfallUseRX1SpectrumMinMax.AutoSize = true;
+            this.chkWaterfallUseRX1SpectrumMinMax.Image = null;
+            this.chkWaterfallUseRX1SpectrumMinMax.Location = new System.Drawing.Point(139, 70);
+            this.chkWaterfallUseRX1SpectrumMinMax.Name = "chkWaterfallUseRX1SpectrumMinMax";
+            this.chkWaterfallUseRX1SpectrumMinMax.Size = new System.Drawing.Size(118, 17);
+            this.chkWaterfallUseRX1SpectrumMinMax.TabIndex = 82;
+            this.chkWaterfallUseRX1SpectrumMinMax.Text = "Use Spec Min/Max";
+            this.toolTip1.SetToolTip(this.chkWaterfallUseRX1SpectrumMinMax, "Spectrum Grid min/max used for low and high level");
+            this.chkWaterfallUseRX1SpectrumMinMax.UseVisualStyleBackColor = true;
+            this.chkWaterfallUseRX1SpectrumMinMax.CheckedChanged += new System.EventHandler(this.ChkWaterfallUseRX1SpectrumMinMax_CheckedChanged);
             // 
             // chkRX1WaterfallAGC
             // 
@@ -25446,6 +25476,7 @@
             // 
             // grpRX2DisplayWaterfall
             // 
+            this.grpRX2DisplayWaterfall.Controls.Add(this.chkWaterfallUseRX2SpectrumMinMax);
             this.grpRX2DisplayWaterfall.Controls.Add(this.chkRX2WaterfallAGC);
             this.grpRX2DisplayWaterfall.Controls.Add(this.lblRX2WaterfallLevels);
             this.grpRX2DisplayWaterfall.Controls.Add(this.txtRX2WaterFallBandLevel);
@@ -25463,10 +25494,23 @@
             this.grpRX2DisplayWaterfall.Controls.Add(this.udRX2DisplayWaterfallHighLevel);
             this.grpRX2DisplayWaterfall.Location = new System.Drawing.Point(296, 6);
             this.grpRX2DisplayWaterfall.Name = "grpRX2DisplayWaterfall";
-            this.grpRX2DisplayWaterfall.Size = new System.Drawing.Size(256, 163);
+            this.grpRX2DisplayWaterfall.Size = new System.Drawing.Size(274, 163);
             this.grpRX2DisplayWaterfall.TabIndex = 50;
             this.grpRX2DisplayWaterfall.TabStop = false;
             this.grpRX2DisplayWaterfall.Text = "Waterfall";
+            // 
+            // chkWaterfallUseRX2SpectrumMinMax
+            // 
+            this.chkWaterfallUseRX2SpectrumMinMax.AutoSize = true;
+            this.chkWaterfallUseRX2SpectrumMinMax.Image = null;
+            this.chkWaterfallUseRX2SpectrumMinMax.Location = new System.Drawing.Point(139, 70);
+            this.chkWaterfallUseRX2SpectrumMinMax.Name = "chkWaterfallUseRX2SpectrumMinMax";
+            this.chkWaterfallUseRX2SpectrumMinMax.Size = new System.Drawing.Size(118, 17);
+            this.chkWaterfallUseRX2SpectrumMinMax.TabIndex = 83;
+            this.chkWaterfallUseRX2SpectrumMinMax.Text = "Use Spec Min/Max";
+            this.toolTip1.SetToolTip(this.chkWaterfallUseRX2SpectrumMinMax, "Spectrum Grid min/max used for low and high level");
+            this.chkWaterfallUseRX2SpectrumMinMax.UseVisualStyleBackColor = true;
+            this.chkWaterfallUseRX2SpectrumMinMax.CheckedChanged += new System.EventHandler(this.ChkWaterfallUseRX2SpectrumMinMax_CheckedChanged);
             // 
             // chkRX2WaterfallAGC
             // 
@@ -50442,7 +50486,7 @@
             // tpCAT
             // 
             this.tpCAT.BackColor = System.Drawing.SystemColors.Control;
-			this.tpCAT.Controls.Add(this.grpAndr);
+            this.tpCAT.Controls.Add(this.grpAndr);
             this.tpCAT.Controls.Add(this.groupBox1);
             this.tpCAT.Controls.Add(this.grpFocusMaster);
             this.tpCAT.Controls.Add(this.labelTS323);
@@ -54111,6 +54155,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.udStaticIP2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.udStaticIP1)).EndInit();
             this.grpFRSRegion.ResumeLayout(false);
+            this.grpFRSRegion.PerformLayout();
             this.grpGeneralModel.ResumeLayout(false);
             this.grpMetisAddr.ResumeLayout(false);
             this.groupBoxHPSDRHW.ResumeLayout(false);
@@ -55053,7 +55098,7 @@
             this.tcCAT.ResumeLayout(false);
             this.tpCAT.ResumeLayout(false);
             this.tpCAT.PerformLayout();
-			this.grpAndr.ResumeLayout(false);
+            this.grpAndr.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.udUpdatesPerStepMin)).EndInit();
@@ -58405,5 +58450,8 @@
         private CheckBoxTS chkShowTXFilterOnRXWaterfall;
         private CheckBoxTS chkZoomShiftModifier;
         private CheckBoxTS chkReverseShiftZoomModifier;
+        private CheckBoxTS chkExtended;
+        private CheckBoxTS chkWaterfallUseRX1SpectrumMinMax;
+        private CheckBoxTS chkWaterfallUseRX2SpectrumMinMax;
     }
 }

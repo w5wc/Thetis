@@ -34,6 +34,7 @@ void mix_main (void *pargs)
 	DWORD taskIndex = 0;
 	HANDLE hTask = AvSetMmThreadCharacteristics(TEXT("Pro Audio"), &taskIndex);
 	if (hTask != 0) AvSetMmThreadPriority(hTask, 2);
+	else SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_HIGHEST);
 
 	AAMIX a = (AAMIX) pargs;
 	

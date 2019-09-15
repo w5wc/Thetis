@@ -408,6 +408,9 @@ namespace Thetis
             chkWheelTunesOutsideSpectral.Checked = console.WheelTunesOutsideSpectral; //MW0LGE
             chkAlsoUseSpecificMouseWheel.Checked = console.AlsoUseSpecificMouseWheel; //MW0LGE
             chkZoomShiftModifier.Checked = console.ZoomShiftModifier; //MW0LGE
+            chkExtended.Checked = console.Extended; //MW0LGE
+            chkWaterfallUseRX1SpectrumMinMax.Checked = console.WaterfallUseRX1SpectrumMinMax; //MW0LGE
+            chkWaterfallUseRX2SpectrumMinMax.Checked = console.WaterfallUseRX2SpectrumMinMax; //MW0LGE
         }
 
         private void InitAudioTab()
@@ -15127,27 +15130,27 @@ namespace Thetis
             {
                 case "Australia":
                     region = FRSRegion.Australia;
-                    console.Extended = false;
+                    //console.Extended = false;
                     break;
                 case "Europe":
                     region = FRSRegion.Europe;
-                    console.Extended = false;
+                    //console.Extended = false;
                     break;
                 case "India":
                     region = FRSRegion.India;
-                    console.Extended = false;
+                    //console.Extended = false;
                     break;
                 case "Italy":
                     region = FRSRegion.Italy_Plus;
-                    console.Extended = false;
+                    //console.Extended = false;
                     break;
                 case "Spain":
                     region = FRSRegion.Spain;
-                    console.Extended = false;
+                    //console.Extended = false;
                     break;
                 case "Japan":
                     region = FRSRegion.Japan;
-                    console.Extended = false;
+                    //console.Extended = false;
                     break;
                 case "United Kingdom":
                     region = FRSRegion.UK;
@@ -15156,59 +15159,60 @@ namespace Thetis
                     break;
                 case "United States":
                     region = FRSRegion.US;
+                    console.Extended = false; // MW0LGE
                     // Display.Init();
                     break;
                 case "Norway":
                     region = FRSRegion.Norway;
-                    console.Extended = false;
+                    //console.Extended = false;
                     break;
                 case "Denmark":
                     region = FRSRegion.Denmark;
-                    console.Extended = false;
+                    //console.Extended = false;
                     break;
                 case "Latvia":
                     region = FRSRegion.Latvia;
-                    console.Extended = false;
+                    //console.Extended = false;
                     break;
                 case "Slovakia":
                     region = FRSRegion.Slovakia;
-                    console.Extended = false;
+                    //console.Extended = false;
                     break;
                 case "Bulgaria":
                     region = FRSRegion.Bulgaria;
-                    console.Extended = false;
+                    //console.Extended = false;
                     break;
                 case "Greece":
                     region = FRSRegion.Greece;
-                    console.Extended = false;
+                    //console.Extended = false;
                     break;
                 case "Hungary":
                     region = FRSRegion.Hungary;
-                    console.Extended = false;
+                    //console.Extended = false;
                     break;
                 case "Netherlands":
                     region = FRSRegion.Netherlands;
-                    console.Extended = false;
+                    //console.Extended = false;
                     break;
                 case "France":
                     region = FRSRegion.France;
-                    console.Extended = false;
+                    //console.Extended = false;
                     break;
                 case "Israel":
                     region = FRSRegion.Israel;
-                    console.Extended = false;
+                    //console.Extended = false;
                     break;
                 case "Russia":
                     region = FRSRegion.Russia;
-                    console.Extended = false;
+                    //console.Extended = false;
                     break;
                 case "Sweden":
                     region = FRSRegion.Sweden;
-                    console.Extended = false;
+                    //console.Extended = false;
                     break;
-                case "Extended":
-                    console.Extended = true;
-                    break;
+                //MW0LGE case "Extended":
+                //    console.Extended = true;
+                //    break;
             }
             if (console.CurrentRegion != region)
                 console.CurrentRegion = region;
@@ -19575,6 +19579,47 @@ namespace Thetis
         private void ChkReverseShiftZoomModifier_CheckedChanged(object sender, EventArgs e)
         {
             console.ZoomShiftModifierReverse = chkReverseShiftZoomModifier.Checked;
+        }
+
+        private void ChkExtended_CheckedChanged(object sender, EventArgs e)
+        {
+            console.Extended = chkExtended.Checked;
+        }
+
+        private void ChkWaterfallUseRX1SpectrumMinMax_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chkWaterfallUseRX1SpectrumMinMax.Checked)
+            {
+                chkRX1WaterfallAGC.Enabled = false;
+                udDisplayWaterfallLowLevel.Enabled = false;
+                udDisplayWaterfallHighLevel.Enabled = false;
+            }
+            else
+            {
+                chkRX1WaterfallAGC.Enabled = true;
+                udDisplayWaterfallLowLevel.Enabled = !chkRX1WaterfallAGC.Checked;
+                udDisplayWaterfallHighLevel.Enabled = true;
+            }
+
+            console.WaterfallUseRX1SpectrumMinMax = chkWaterfallUseRX1SpectrumMinMax.Checked;
+        }
+
+        private void ChkWaterfallUseRX2SpectrumMinMax_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chkWaterfallUseRX2SpectrumMinMax.Checked)
+            {
+                chkRX2WaterfallAGC.Enabled = false;
+                udRX2DisplayWaterfallLowLevel.Enabled = false;
+                udRX2DisplayWaterfallHighLevel.Enabled = false;
+            }
+            else
+            {
+                chkRX2WaterfallAGC.Enabled = true;
+                udRX2DisplayWaterfallLowLevel.Enabled = !chkRX1WaterfallAGC.Checked;
+                udRX2DisplayWaterfallHighLevel.Enabled = true;
+            }
+
+            console.WaterfallUseRX2SpectrumMinMax = chkWaterfallUseRX2SpectrumMinMax.Checked;
         }
 
         //--

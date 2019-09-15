@@ -9883,6 +9883,20 @@ namespace Thetis
             return true;
         }
 
+        //MW0LGE - these props sessentially disable AGC on the waterfall, so that
+        //spectrum/grid based max/mins can be used without getting changed by agc
+        private static bool m_bRX1_spectrum_thresholds = false;
+        public static bool SpectrumBasedThresholdsRX1 {
+            get { return m_bRX1_spectrum_thresholds; }
+            set { m_bRX1_spectrum_thresholds = value; }
+        }
+        private static bool m_bRX2_spectrum_thresholds = false;
+        public static bool SpectrumBasedThresholdsRX2 {
+            get { return m_bRX2_spectrum_thresholds; }
+            set { m_bRX2_spectrum_thresholds = value; }
+        }
+        //--
+
         private static bool rx1_waterfall_agc = false;
         public static bool RX1WaterfallAGC
         {
@@ -9988,7 +10002,7 @@ namespace Thetis
                     grid_min = rx2_spectrum_grid_min;
                     sample_rate = sample_rate_rx2;
                     high_threshold = rx2_waterfall_high_threshold;
-                    if (rx2_waterfall_agc)
+                    if (rx2_waterfall_agc && !m_bRX2_spectrum_thresholds)
                     {
                         waterfall_minimum = rx2_waterfall_minimum;
                         low_threshold = RX2waterfallPreviousMinValue;
@@ -10022,7 +10036,7 @@ namespace Thetis
                     sample_rate = sample_rate_rx1;
                     low_threshold = RX1waterfallPreviousMinValue;
                     high_threshold = waterfall_high_threshold;
-                    if (rx1_waterfall_agc)
+                    if (rx1_waterfall_agc && !m_bRX1_spectrum_thresholds)
                     {
                         waterfall_minimum = rx1_waterfall_minimum;
                         low_threshold = RX1waterfallPreviousMinValue;

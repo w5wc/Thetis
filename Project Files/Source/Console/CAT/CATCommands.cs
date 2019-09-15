@@ -1609,6 +1609,7 @@ namespace Thetis
                 else if (s.Length == parser.nSet)
                 {
                     console.RX2Band = String2Band(s);
+                    console.SetupBand(s); // MW0LGE force the band to be setup, TODO CHECK if this is actually needed
                     return "";
                 }
                 else

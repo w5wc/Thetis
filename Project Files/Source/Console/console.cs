@@ -991,7 +991,7 @@ namespace Thetis
 
         private Point gr_rx2_meter_basis = new Point(100, 100);
         private Point gr_rx2_filter_basis = new Point(100, 100);
-        private Point gr_rx2_mode_basis = new Point(100, 100);
+        //private Point gr_rx2_mode_basis = new Point(100, 100); // MW0LGE same as gr_RX2Mode_basis_location
         private Point gr_rx2_display_basis = new Point(100, 100);
         private Point gr_rx2_dsp_basis = new Point(100, 100);
 
@@ -3159,6 +3159,9 @@ namespace Thetis
             a.Add("isexpanded/" + isexpanded);//w3sz added
             a.Add("diversity/" + diversity2);
 
+            a.Add("rx1_waterfallUseSpectrumMinMax/" + m_bWaterfallUseRX1SpectrumMinMax);
+            a.Add("rx2_waterfallUseSpectrumMinMax/" + m_bWaterfallUseRX2SpectrumMinMax);
+
             for (int i = (int)PreampMode.FIRST + 1; i < (int)PreampMode.LAST; i++)
                 a.Add("rx1_preamp_offset[" + i.ToString() + "]/" + rx1_preamp_offset[i].ToString("f3"));
 
@@ -4082,6 +4085,12 @@ namespace Thetis
                         break; //added by w3sz
                     case "diversity":
                         startdiversity = bool.Parse(val);
+                        break;
+                    case "rx1_waterfallUseSpectrumMinMax": //MW0LGE
+                        this.WaterfallUseRX1SpectrumMinMax = bool.Parse(val);
+                        break;
+                    case "rx2_waterfallUseSpectrumMinMax": //MW0LGE
+                        this.WaterfallUseRX2SpectrumMinMax = bool.Parse(val);
                         break;
                     case "quick_save_mode":
                         quick_save_mode = (DSPMode)(Int32.Parse(val));
@@ -6980,126 +6989,170 @@ namespace Thetis
                                 return Band.GEN;
                         }
                         */
-
             if (extended)
             {
+                //MW0LGE if (vfoa) added to all these in extended
                 // ke9ns add
                 if (freq >= 0.20 && freq < 1.80)
                 {
-                    panelBandHF.Visible = false;
-                    panelBandGEN.Visible = true;
+                    if (vfoa)
+                    {
+                        panelBandHF.Visible = false;
+                        panelBandGEN.Visible = true;
+                    }
                     return Band.BLMF;
                     //  return Band.B160M;
                 }
                 else if (freq == 2.5 || freq == 5.0 || freq == 10.0 || freq == 15.0 ||
                        freq == 20.0 || freq == 25.0 || freq == 3.33 || freq == 7.85 || freq == 14.67)
                 {
-                    panelBandHF.Visible = true;
-                    panelBandGEN.Visible = false;
+                    if (vfoa)
+                    {
+                        panelBandHF.Visible = true;
+                        panelBandGEN.Visible = false;
+                    }
                     return Band.WWV;
                 }
 
 
                 else if (freq >= 2.30 && freq < 3.0)
                 {
-                    panelBandHF.Visible = false;
-                    panelBandGEN.Visible = true;
+                    if (vfoa)
+                    {
+                        panelBandHF.Visible = false;
+                        panelBandGEN.Visible = true;
+                    }
                     return Band.B120M;
                     //  return Band.B160M;
                 }
 
                 else if (freq >= 3.0 && freq < 3.50)
                 {
-                    panelBandHF.Visible = false;
-                    panelBandGEN.Visible = true;
+                    if (vfoa)
+                    {
+                        panelBandHF.Visible = false;
+                        panelBandGEN.Visible = true;
+                    }
                     return Band.B90M;
                     // return Band.B80M;
                 }
 
                 else if (freq >= 4.00 && freq < 5.1)
                 {
-                    panelBandHF.Visible = false;
-                    panelBandGEN.Visible = true;
+                    if (vfoa)
+                    {
+                        panelBandHF.Visible = false;
+                        panelBandGEN.Visible = true;
+                    }
                     return Band.B61M;
                     //  return Band.B80M;
                 }
 
                 else if (freq >= 5.5 && freq < 7.00)
                 {
-                    panelBandHF.Visible = false;
-                    panelBandGEN.Visible = true;
+                    if (vfoa)
+                    {
+                        panelBandHF.Visible = false;
+                        panelBandGEN.Visible = true;
+                    }
                     return Band.B49M;
                     //  return Band.B60M;
                 }
 
                 else if (freq >= 7.30 && freq < 9.0)
                 {
-                    panelBandHF.Visible = false;
-                    panelBandGEN.Visible = true;
+                    if (vfoa)
+                    {
+                        panelBandHF.Visible = false;
+                        panelBandGEN.Visible = true;
+                    }
                     return Band.B41M;
                     //  return Band.B40M;
                 }
 
                 else if (freq >= 9.0 && freq < 10.1)
                 {
-                    panelBandHF.Visible = false;
-                    panelBandGEN.Visible = true;
+                    if (vfoa)
+                    {
+                        panelBandHF.Visible = false;
+                        panelBandGEN.Visible = true;
+                    }
                     return Band.B31M;
                     // return Band.B30M;
                 }
 
                 else if (freq >= 10.16 && freq < 13.57)
                 {
-                    panelBandHF.Visible = false;
-                    panelBandGEN.Visible = true;
+                    if (vfoa)
+                    {
+                        panelBandHF.Visible = false;
+                        panelBandGEN.Visible = true;
+                    }
                     return Band.B25M;
                     //  return Band.B20M;
                 }
 
                 else if (freq >= 13.57 && freq < 14.0)
                 {
-                    panelBandHF.Visible = false;
-                    panelBandGEN.Visible = true;
+                    if (vfoa)
+                    {
+                        panelBandHF.Visible = false;
+                        panelBandGEN.Visible = true;
+                    }
                     return Band.B22M;
                     //  return Band.B20M;
                 }
 
                 else if (freq >= 15.1 && freq < 17.0)
                 {
-                    panelBandHF.Visible = false;
-                    panelBandGEN.Visible = true;
+                    if (vfoa)
+                    {
+                        panelBandHF.Visible = false;
+                        panelBandGEN.Visible = true;
+                    }
                     return Band.B19M;
                     // return Band.B17M;
                 }
 
                 else if (freq >= 17.0 && freq < 18.068)
                 {
-
-                    panelBandHF.Visible = false;
-                    panelBandGEN.Visible = true;
+                    if (vfoa)
+                    {
+                        panelBandHF.Visible = false;
+                        panelBandGEN.Visible = true;
+                    }
                     return Band.B16M;
                     //return Band.B17M;
                 }
 
                 else if (freq >= 18.168 && freq < 21.0)
                 {
-                    panelBandHF.Visible = false;
-                    panelBandGEN.Visible = true;
+                    if (vfoa)
+                    {
+                        panelBandHF.Visible = false;
+                        panelBandGEN.Visible = true;
+                    }
                     return Band.B14M;
                     //  return Band.B15M;
                 }
                 else if (freq >= 21.450 && freq < 24.89)
                 {
-                    panelBandHF.Visible = false;
-                    panelBandGEN.Visible = true;
+                    if (vfoa)
+                    {
+                        panelBandHF.Visible = false;
+                        panelBandGEN.Visible = true;
+                    }
                     return Band.B13M;
                     //  return Band.B12M;
                 }
 
                 else if (freq >= 24.99 && freq < 28.0)
                 {
-                    panelBandHF.Visible = false;
-                    panelBandGEN.Visible = true;
+                    if (vfoa)
+                    {
+                        panelBandHF.Visible = false;
+                        panelBandGEN.Visible = true;
+                    }
                     return Band.B11M;
                     // return Band.B10M;
                 }
@@ -7107,74 +7160,110 @@ namespace Thetis
                 // original code below 
                 else if (freq >= 0.0 && freq <= 2.75)
                 {
-                    panelBandHF.Visible = true;
-                    panelBandGEN.Visible = false;
+                    if (vfoa)
+                    {
+                        panelBandHF.Visible = true;
+                        panelBandGEN.Visible = false;
+                    }
                     return Band.B160M;
                 }
                 else if (freq > 2.75 && freq < 5.3305)
                 {
-                    panelBandHF.Visible = true;
-                    panelBandGEN.Visible = false;
+                    if (vfoa)
+                    {
+                        panelBandHF.Visible = true;
+                        panelBandGEN.Visible = false;
+                    }
                     return Band.B80M;
                 }
                 else if (freq >= 5.3305 && freq < 7.0)
                 {
-                    panelBandHF.Visible = true;
-                    panelBandGEN.Visible = false;
+                    if (vfoa)
+                    {
+                        panelBandHF.Visible = true;
+                        panelBandGEN.Visible = false;
+                    }
                     return Band.B60M;
                 }
                 else if (freq >= 7.0 && freq <= 8.7)
                 {
-                    panelBandHF.Visible = true;
-                    panelBandGEN.Visible = false;
+                    if (vfoa)
+                    {
+                        panelBandHF.Visible = true;
+                        panelBandGEN.Visible = false;
+                    }
                     return Band.B40M;
                 }
                 else if (freq >= 8.7 && freq <= 12.075)
                 {
-                    panelBandHF.Visible = true;
-                    panelBandGEN.Visible = false;
+                    if (vfoa)
+                    {
+                        panelBandHF.Visible = true;
+                        panelBandGEN.Visible = false;
+                    }
                     return Band.B30M;
                 }
                 else if (freq >= 12.075 && freq <= 16.209)
                 {
-                    panelBandHF.Visible = true;
-                    panelBandGEN.Visible = false;
+                    if (vfoa)
+                    {
+                        panelBandHF.Visible = true;
+                        panelBandGEN.Visible = false;
+                    }
                     return Band.B20M;
                 }
                 else if (freq >= 16.209 && freq <= 19.584)
                 {
-                    panelBandHF.Visible = true;
-                    panelBandGEN.Visible = false;
+                    if (vfoa)
+                    {
+                        panelBandHF.Visible = true;
+                        panelBandGEN.Visible = false;
+                    }
                     return Band.B17M;
                 }
                 else if (freq >= 19.584 && freq <= 23.17)
                 {
-                    panelBandHF.Visible = true;
-                    panelBandGEN.Visible = false;
+                    if (vfoa)
+                    {
+                        panelBandHF.Visible = true;
+                        panelBandGEN.Visible = false;
+                    }
                     return Band.B15M;
                 }
                 else if (freq >= 23.17 && freq <= 26.495)
                 {
-                    panelBandHF.Visible = true;
-                    panelBandGEN.Visible = false;
+                    if (vfoa)
+                    {
+                        panelBandHF.Visible = true;
+                        panelBandGEN.Visible = false;
+                    }
                     return Band.B12M;
                 }
                 else if (freq >= 26.495 && freq <= 29.7)
                 {
-                    panelBandHF.Visible = true;
-                    panelBandGEN.Visible = false;
+                    if (vfoa)
+                    {
+                        panelBandHF.Visible = true;
+                        panelBandGEN.Visible = false;
+                    }
                     return Band.B10M;
                 }
                 else if (freq >= 50.0 && freq <= 54.0)
                 {
-                    panelBandHF.Visible = true;
-                    panelBandGEN.Visible = false;
+                    if (vfoa)
+                    {
+                        panelBandHF.Visible = true;
+                        panelBandGEN.Visible = false;
+                    }
                     return Band.B6M;
                 }
                 else if (freq >= 144.0 && freq <= 148.0) // ke9ns test was 144.0 and 148.0
                 {
-                    panelBandHF.Visible = true;
-                    panelBandGEN.Visible = false;
+                    if (vfoa)
+                    {
+                        panelBandHF.Visible = true;
+                        panelBandGEN.Visible = false;
+                    }
                     return Band.B2M;
                 }
                 else
@@ -13155,7 +13244,7 @@ namespace Thetis
             }
             else
             {
-                panelBandGEN.Visible = true;
+                //MW0LGE panelBandGEN.Visible = true;
                 //panelBandHF.Visible = true;
                 panelBandVHF.Visible = false;
             }
@@ -16677,6 +16766,13 @@ namespace Thetis
                         break;
                 }
 
+                //MW0LGE override it... XVTR? TODO
+                if (m_bWaterfallUseRX1SpectrumMinMax)
+                {
+                    Display.WaterfallLowThreshold = SetupForm.DisplayGridMin;
+                    Display.WaterfallHighThreshold = SetupForm.DisplayGridMax;
+                }
+
                 switch (RX2Band)
                 {
                     case Band.B160M:
@@ -16764,6 +16860,14 @@ namespace Thetis
                         Display.RX2WaterfallHighThreshold = RX2WaterfallHighThresholdXVTR;
                         break;
                 }
+
+                //MW0LGE override it... XVTR? TODO
+                if (m_bWaterfallUseRX2SpectrumMinMax)
+                {
+                    Display.RX2WaterfallLowThreshold = SetupForm.RX2DisplayGridMin;
+                    Display.RX2WaterfallHighThreshold = SetupForm.RX2DisplayGridMax;
+                }
+
                 SetupForm.UpdateWaterfallBandInfo();
             }
         }
@@ -19900,7 +20004,7 @@ namespace Thetis
             {
                 enable_led_font = value;
                 if (value)
-                {
+                {                    
                     txtVFOAFreq.Font = LEDLFont;
                     txtVFOBFreq.Font = LEDLFont;
                     txtVFOAMSD.Font = LEDLFont;
@@ -19909,7 +20013,6 @@ namespace Thetis
                     txtVFOBLSD.Font = LEDSFont;
                     txtMultiText.Font = LEDMFont;
                     txtRX2Meter.Font = LEDMFont;
-
                 }
                 else
                 {
@@ -24877,6 +24980,45 @@ namespace Thetis
             set { extended = value; }
         }
 
+        //MW0LGE
+        private bool m_bWaterfallUseRX1SpectrumMinMax = false;
+        public bool WaterfallUseRX1SpectrumMinMax {
+            get { return m_bWaterfallUseRX1SpectrumMinMax; }
+            set {
+                m_bWaterfallUseRX1SpectrumMinMax = value;
+
+                //MW0LGE override, and dont update any setupform/band settings
+                Display.SpectrumBasedThresholdsRX1 = m_bWaterfallUseRX1SpectrumMinMax;
+
+                if (SetupForm == null) return;
+
+                if (m_bWaterfallUseRX1SpectrumMinMax)
+                {
+                    Display.WaterfallLowThreshold = SetupForm.DisplayGridMin;
+                    Display.WaterfallHighThreshold = SetupForm.DisplayGridMax;
+                }
+            }
+        }
+        private bool m_bWaterfallUseRX2SpectrumMinMax = false;
+        public bool WaterfallUseRX2SpectrumMinMax {
+            get { return m_bWaterfallUseRX2SpectrumMinMax; }
+            set {
+                m_bWaterfallUseRX2SpectrumMinMax = value;
+
+                if (SetupForm == null) return;
+
+                //MW0LGE override, and dont update any setupform/band settings
+                Display.SpectrumBasedThresholdsRX2 = m_bWaterfallUseRX2SpectrumMinMax;
+
+                if (m_bWaterfallUseRX2SpectrumMinMax)
+                {
+                    Display.RX2WaterfallLowThreshold = SetupForm.RX2DisplayGridMin;
+                    Display.RX2WaterfallHighThreshold = SetupForm.RX2DisplayGridMax;
+                }
+            }
+        }
+        //-
+
         private int latch_delay = 0;
         public int LatchDelay
         {
@@ -26575,15 +26717,26 @@ namespace Thetis
                 Band old_band = rx2_band;
                 rx2_band = value;
 
-                //comboRX2Band.SelectedIndex = Math.Min(Math.Max(0, (int)value), comboRX2Band.Items.Count-1);
-                comboRX2Band.Text = BandToString(rx2_band);
-                // G8NJJ attempt to get CAT command to set the band, not just update the combo (the _changed event doesn't trigger)
-                // comboRX2Band.SelectedItem = BandToString(rx2_band);
-                comboRX2Band_SelectedIndexChanged(this, EventArgs.Empty);
+                ////comboRX2Band.SelectedIndex = Math.Min(Math.Max(0, (int)value), comboRX2Band.Items.Count-1);
+                //comboRX2Band.Text = BandToString(rx2_band);
+
+                //// G8NJJ attempt to get CAT command to set the band, not just update the combo (the _changed event doesn't trigger)
+                //// comboRX2Band.SelectedItem = BandToString(rx2_band);
+                //comboRX2Band_SelectedIndexChanged(this, EventArgs.Empty);
+
+                //MW0LGE
+                // not all bands are in the drop down, and consequently solution above caused
+                // all sorts of issues when for example dragging RX2 outside HAM bands
+                string sBand = BandToString(rx2_band);
+                if (comboRX2Band.Items.Contains(sBand))
+                {
+                    comboRX2Band.Text = sBand;
+                }
 
                 Band lo_band = Band.FIRST;
                 if (rx2_xvtr_index >= 0)
-                    lo_band = BandByFreq(XVTRForm.TranslateFreq(VFOBFreq), -1, false, current_region, false);
+                    lo_band = BandByFreq(XVTRForm.TranslateFreq(VFOBFreq), rx2_xvtr_index, false, current_region, false);//-1, false, current_region, false);  //MW0LGE use rx2_xvtr_index
+                                                                                                                                                                //MW0LGE this was changed in RX1Band but not here
 
                 if (!initializing && rx2_preamp_mode > PreampMode.FIRST)
                 {
@@ -30372,7 +30525,7 @@ namespace Thetis
 
         #region Display Routines
 
-        public void UpdateDisplay(bool bInvalidate = true)
+        public void UpdateDisplay()
         {
             switch (current_display_engine)
             {
@@ -30381,7 +30534,7 @@ namespace Thetis
                     specRX.GetSpecRX(1).Pixels = picDisplay.Width;
                     specRX.GetSpecRX(cmaster.inid(1, 0)).Pixels = picDisplay.Width;
 
-                    if(bInvalidate) picDisplay.Invalidate();
+                    picDisplay.Invalidate();
                     break;
                 /*case DisplayEngine.DIRECT_X:
                     Display.RenderDirectX();
@@ -31345,7 +31498,7 @@ namespace Thetis
             // pass in 1 or 2 as RXnumber
             // graphics object, and height/width of pic control that takes the output
             // returns the current meter data
-            double dBmMeterReading  = 0;
+            double num  = 0;
             int pixel_x = 0;
             bool bAbove = false;
             bool bReady = false;
@@ -31361,7 +31514,7 @@ namespace Thetis
                         current_meter_data = new_meter_data;
                         meter_data_ready = false;
                     }
-                    dBmMeterReading = current_meter_data;
+                    num = current_meter_data;
                     metRXMode = current_meter_rx_mode;
                     metTXMode = current_meter_tx_mode;
                     bAbove = rx1_above30;
@@ -31372,7 +31525,7 @@ namespace Thetis
                         rx2_meter_current_data = rx2_meter_new_data;
                         rx2_meter_data_ready = false;
                     }
-                    dBmMeterReading = rx2_meter_current_data;
+                    num = rx2_meter_current_data;
                     metRXMode = rx2_meter_mode;
                     bAbove = rx2_above30;
                     break;
@@ -31392,23 +31545,23 @@ namespace Thetis
                                 {
                                     if (collapsedDisplay)
                                     {
-                                        s = (dBmMeterReading + 147) / 6;
+                                        s = (num + 147) / 6;
                                         if (s <= 9.0F)
                                             pixel_x = (int)((s * 15) + 2);
                                         else
                                         {
-                                            double over_s9 = dBmMeterReading + 93;
+                                            double over_s9 = num + 93;
                                             pixel_x = 138 + (int)(over_s9 * 2.10);
                                         }
                                     }
                                     else
                                     {
-                                        s = (dBmMeterReading + 147) / 6;
+                                        s = (num + 147) / 6;
                                         if (s <= 9.0F)
                                             pixel_x = (int)((s * 7.5) + 2);
                                         else
                                         {
-                                            double over_s9 = dBmMeterReading + 93;
+                                            double over_s9 = num + 93;
                                             pixel_x = 69 + (int)(over_s9 * 1.05);
                                         }
                                     }
@@ -31417,47 +31570,47 @@ namespace Thetis
                                 {
                                     if (collapsedDisplay)
                                     {
-                                        s = (dBmMeterReading + 127) / 6;
+                                        s = (num + 127) / 6;
                                         if (s <= 9.0F)
                                             pixel_x = (int)((s * 15) + 2);
                                         else
                                         {
-                                            double over_s9 = dBmMeterReading + 73;
+                                            double over_s9 = num + 73;
                                             pixel_x = 138 + (int)(over_s9 * 2.10);
                                         }
                                     }
                                     else
                                     {
-                                        s = (dBmMeterReading + 127) / 6;
+                                        s = (num + 127) / 6;
                                         if (s <= 9.0F)
                                             pixel_x = (int)((s * 7.5) + 2);
                                         else
                                         {
-                                            double over_s9 = dBmMeterReading + 73;
+                                            double over_s9 = num + 73;
                                             pixel_x = 69 + (int)(over_s9 * 1.05);
                                         }
                                     }
                                 }
                                 break;
                             case 120:
-                                if (dBmMeterReading <= -97.0f)
-                                    pixel_x = (int)(0 + (dBmMeterReading + 100.0) / 3.0 * 10);
-                                else if (dBmMeterReading <= -91.0f)
-                                    pixel_x = (int)(10 + (dBmMeterReading + 97.0) / 6.0 * 17);
-                                else if (dBmMeterReading <= -85.0f)
-                                    pixel_x = (int)(27 + (dBmMeterReading + 91.0) / 6.0 * 16);
-                                else if (dBmMeterReading <= -79.0f)
-                                    pixel_x = (int)(43 + (dBmMeterReading + 85.0) / 6.0 * 17);
-                                else if (dBmMeterReading <= -73.0f)
-                                    pixel_x = (int)(60 + (dBmMeterReading + 79.0) / 6.0 * 16);
-                                else if (dBmMeterReading <= -53.0f)
-                                    pixel_x = (int)(76 + (dBmMeterReading + 73.0) / 20.0 * 24);
-                                else if (dBmMeterReading <= -33.0f)
-                                    pixel_x = (int)(100 + (dBmMeterReading + 53.0) / 20.0 * 24);
-                                else if (dBmMeterReading <= -13.0f)
-                                    pixel_x = (int)(124 + (dBmMeterReading + 33.0) / 20.0 * 24);
+                                if (num <= -97.0f)
+                                    pixel_x = (int)(0 + (num + 100.0) / 3.0 * 10);
+                                else if (num <= -91.0f)
+                                    pixel_x = (int)(10 + (num + 97.0) / 6.0 * 17);
+                                else if (num <= -85.0f)
+                                    pixel_x = (int)(27 + (num + 91.0) / 6.0 * 16);
+                                else if (num <= -79.0f)
+                                    pixel_x = (int)(43 + (num + 85.0) / 6.0 * 17);
+                                else if (num <= -73.0f)
+                                    pixel_x = (int)(60 + (num + 79.0) / 6.0 * 16);
+                                else if (num <= -53.0f)
+                                    pixel_x = (int)(76 + (num + 73.0) / 20.0 * 24);
+                                else if (num <= -33.0f)
+                                    pixel_x = (int)(100 + (num + 53.0) / 20.0 * 24);
+                                else if (num <= -13.0f)
+                                    pixel_x = (int)(124 + (num + 33.0) / 20.0 * 24);
                                 else
-                                    pixel_x = (int)(148 + (dBmMeterReading + 13.0) / 20.0 * 19);
+                                    pixel_x = (int)(148 + (num + 13.0) / 20.0 * 19);
                                 break;
                         }
                         break;
@@ -31467,24 +31620,24 @@ namespace Thetis
                         {
                             case 96:
                                 if (collapsedDisplay)
-                                    pixel_x = (int)(((dBmMeterReading + 100) * 2.4) + 24);
-                                else pixel_x = (int)(((dBmMeterReading + 100) * 1.2) + 12);
+                                    pixel_x = (int)(((num + 100) * 2.4) + 24);
+                                else pixel_x = (int)(((num + 100) * 1.2) + 12);
                                 break;
                             case 120:
-                                if (dBmMeterReading <= -100.0f)
-                                    pixel_x = (int)(0 + (dBmMeterReading + 110.0) / 10.0 * 14);
-                                else if (dBmMeterReading <= -80.0f)
-                                    pixel_x = (int)(14 + (dBmMeterReading + 100.0) / 20.0 * 27);
-                                else if (dBmMeterReading <= -60.0f)
-                                    pixel_x = (int)(41 + (dBmMeterReading + 80.0) / 20.0 * 28);
-                                else if (dBmMeterReading <= -40.0f)
-                                    pixel_x = (int)(69 + (dBmMeterReading + 60.0) / 20.0 * 28);
-                                else if (dBmMeterReading <= -20.0f)
-                                    pixel_x = (int)(97 + (dBmMeterReading + 40.0) / 20.0 * 27);
-                                else if (dBmMeterReading <= 0.0f)
-                                    pixel_x = (int)(124 + (dBmMeterReading + 20.0) / 20.0 * 24);
+                                if (num <= -100.0f)
+                                    pixel_x = (int)(0 + (num + 110.0) / 10.0 * 14);
+                                else if (num <= -80.0f)
+                                    pixel_x = (int)(14 + (num + 100.0) / 20.0 * 27);
+                                else if (num <= -60.0f)
+                                    pixel_x = (int)(41 + (num + 80.0) / 20.0 * 28);
+                                else if (num <= -40.0f)
+                                    pixel_x = (int)(69 + (num + 60.0) / 20.0 * 28);
+                                else if (num <= -20.0f)
+                                    pixel_x = (int)(97 + (num + 40.0) / 20.0 * 27);
+                                else if (num <= 0.0f)
+                                    pixel_x = (int)(124 + (num + 20.0) / 20.0 * 24);
                                 else
-                                    pixel_x = (int)(148 + (dBmMeterReading - 0.0) / 10.0 * 19);
+                                    pixel_x = (int)(148 + (num - 0.0) / 10.0 * 19);
                                 break;
                         }
                         break;
@@ -31510,60 +31663,60 @@ namespace Thetis
                             case 96:
                                 if (collapsedDisplay)
                                 {
-                                    if (dBmMeterReading <= -20.0f)
-                                        pixel_x = (int)(0 + (dBmMeterReading + 25.0) / 5.0 * 18);
-                                    else if (dBmMeterReading <= -10.0f)
-                                        pixel_x = (int)(18 + (dBmMeterReading + 20.0) / 10.0 * 54);
-                                    else if (dBmMeterReading <= -5.0f)
-                                        pixel_x = (int)(72 + (dBmMeterReading + 10.0) / 5.0 * 54);
-                                    else if (dBmMeterReading <= 0.0f)
-                                        pixel_x = (int)(126 + (dBmMeterReading + 5.0) / 5.0 * 48);
-                                    else if (dBmMeterReading <= 4.0f)
-                                        pixel_x = (int)(174 + (dBmMeterReading - 0.0) / 4.0 * 30);
-                                    else if (dBmMeterReading <= 8.0f)
-                                        pixel_x = (int)(204 + (dBmMeterReading - 4.0) / 4.0 * 30);
-                                    else if (dBmMeterReading <= 12.0f)
-                                        pixel_x = (int)(234 + (dBmMeterReading - 8.0) / 4.0 * 30);
+                                    if (num <= -20.0f)
+                                        pixel_x = (int)(0 + (num + 25.0) / 5.0 * 18);
+                                    else if (num <= -10.0f)
+                                        pixel_x = (int)(18 + (num + 20.0) / 10.0 * 54);
+                                    else if (num <= -5.0f)
+                                        pixel_x = (int)(72 + (num + 10.0) / 5.0 * 54);
+                                    else if (num <= 0.0f)
+                                        pixel_x = (int)(126 + (num + 5.0) / 5.0 * 48);
+                                    else if (num <= 4.0f)
+                                        pixel_x = (int)(174 + (num - 0.0) / 4.0 * 30);
+                                    else if (num <= 8.0f)
+                                        pixel_x = (int)(204 + (num - 4.0) / 4.0 * 30);
+                                    else if (num <= 12.0f)
+                                        pixel_x = (int)(234 + (num - 8.0) / 4.0 * 30);
                                     else
-                                        pixel_x = (int)(264 + (dBmMeterReading - 12.0) / 0.5 * 16);
+                                        pixel_x = (int)(264 + (num - 12.0) / 0.5 * 16);
                                 }
                                 else
                                 {
-                                    if (dBmMeterReading <= -20.0f)
-                                        pixel_x = (int)(0 + (dBmMeterReading + 25.0) / 5.0 * 9);
-                                    else if (dBmMeterReading <= -10.0f)
-                                        pixel_x = (int)(9 + (dBmMeterReading + 20.0) / 10.0 * 27);
-                                    else if (dBmMeterReading <= -5.0f)
-                                        pixel_x = (int)(36 + (dBmMeterReading + 10.0) / 5.0 * 27);
-                                    else if (dBmMeterReading <= 0.0f)
-                                        pixel_x = (int)(63 + (dBmMeterReading + 5.0) / 5.0 * 24);
-                                    else if (dBmMeterReading <= 4.0f)
-                                        pixel_x = (int)(87 + (dBmMeterReading - 0.0) / 4.0 * 15);
-                                    else if (dBmMeterReading <= 8.0f)
-                                        pixel_x = (int)(102 + (dBmMeterReading - 4.0) / 4.0 * 15);
-                                    else if (dBmMeterReading <= 12.0f)
-                                        pixel_x = (int)(117 + (dBmMeterReading - 8.0) / 4.0 * 15);
+                                    if (num <= -20.0f)
+                                        pixel_x = (int)(0 + (num + 25.0) / 5.0 * 9);
+                                    else if (num <= -10.0f)
+                                        pixel_x = (int)(9 + (num + 20.0) / 10.0 * 27);
+                                    else if (num <= -5.0f)
+                                        pixel_x = (int)(36 + (num + 10.0) / 5.0 * 27);
+                                    else if (num <= 0.0f)
+                                        pixel_x = (int)(63 + (num + 5.0) / 5.0 * 24);
+                                    else if (num <= 4.0f)
+                                        pixel_x = (int)(87 + (num - 0.0) / 4.0 * 15);
+                                    else if (num <= 8.0f)
+                                        pixel_x = (int)(102 + (num - 4.0) / 4.0 * 15);
+                                    else if (num <= 12.0f)
+                                        pixel_x = (int)(117 + (num - 8.0) / 4.0 * 15);
                                     else
-                                        pixel_x = (int)(132 + (dBmMeterReading - 12.0) / 0.5 * 8);
+                                        pixel_x = (int)(132 + (num - 12.0) / 0.5 * 8);
                                 }
                                 break;
                             case 120:
-                                if (dBmMeterReading <= -20.0f)
-                                    pixel_x = (int)(0 + (dBmMeterReading + 25.0) / 5.0 * 10);
-                                else if (dBmMeterReading <= -10.0f)
-                                    pixel_x = (int)(10 + (dBmMeterReading + 20.0) / 10.0 * 30);
-                                else if (dBmMeterReading <= -5.0f)
-                                    pixel_x = (int)(40 + (dBmMeterReading + 10.0) / 5.0 * 30);
-                                else if (dBmMeterReading <= 0.0f)
-                                    pixel_x = (int)(70 + (dBmMeterReading + 5.0) / 5.0 * 27);
-                                else if (dBmMeterReading <= 4.0f)
-                                    pixel_x = (int)(97 + (dBmMeterReading - 0.0) / 4.0 * 17);
-                                else if (dBmMeterReading <= 8.0f)
-                                    pixel_x = (int)(114 + (dBmMeterReading - 4.0) / 4.0 * 17);
-                                else if (dBmMeterReading <= 12.0f)
-                                    pixel_x = (int)(131 + (dBmMeterReading - 8.0) / 4.0 * 17);
+                                if (num <= -20.0f)
+                                    pixel_x = (int)(0 + (num + 25.0) / 5.0 * 10);
+                                else if (num <= -10.0f)
+                                    pixel_x = (int)(10 + (num + 20.0) / 10.0 * 30);
+                                else if (num <= -5.0f)
+                                    pixel_x = (int)(40 + (num + 10.0) / 5.0 * 30);
+                                else if (num <= 0.0f)
+                                    pixel_x = (int)(70 + (num + 5.0) / 5.0 * 27);
+                                else if (num <= 4.0f)
+                                    pixel_x = (int)(97 + (num - 0.0) / 4.0 * 17);
+                                else if (num <= 8.0f)
+                                    pixel_x = (int)(114 + (num - 4.0) / 4.0 * 17);
+                                else if (num <= 12.0f)
+                                    pixel_x = (int)(131 + (num - 8.0) / 4.0 * 17);
                                 else
-                                    pixel_x = (int)(148 + (dBmMeterReading - 12.0) / 0.5 * 23);
+                                    pixel_x = (int)(148 + (num - 12.0) / 0.5 * 23);
                                 break;
                         }
                         break;
@@ -31579,199 +31732,199 @@ namespace Thetis
                                 {
                                     if (anan10present || anan10Epresent)
                                     {
-                                        if (dBmMeterReading <= 1.0f)
-                                            pixel_x = (int)(0 + dBmMeterReading * 16);
-                                        else if (dBmMeterReading <= 5.0f)
-                                            pixel_x = (int)(16 + (dBmMeterReading - 1) / 4 * 48);
-                                        else if (dBmMeterReading <= 10.0f)
-                                            pixel_x = (int)(64 + (dBmMeterReading - 5) / 5 * 48);
-                                        else if (dBmMeterReading <= 15.0f)
-                                            pixel_x = (int)(112 + (dBmMeterReading - 10) / 5 * 48);
-                                        else if (dBmMeterReading <= 20.0f)
-                                            pixel_x = (int)(160 + (dBmMeterReading - 15) / 5 * 48);
-                                        else if (dBmMeterReading <= 25.0f)
-                                            pixel_x = (int)(208 + (dBmMeterReading - 20) / 5 * 48);
+                                        if (num <= 1.0f)
+                                            pixel_x = (int)(0 + num * 16);
+                                        else if (num <= 5.0f)
+                                            pixel_x = (int)(16 + (num - 1) / 4 * 48);
+                                        else if (num <= 10.0f)
+                                            pixel_x = (int)(64 + (num - 5) / 5 * 48);
+                                        else if (num <= 15.0f)
+                                            pixel_x = (int)(112 + (num - 10) / 5 * 48);
+                                        else if (num <= 20.0f)
+                                            pixel_x = (int)(160 + (num - 15) / 5 * 48);
+                                        else if (num <= 25.0f)
+                                            pixel_x = (int)(208 + (num - 20) / 5 * 48);
                                         else
-                                            pixel_x = (int)(256 + (dBmMeterReading - 25) / 5 * 32);
+                                            pixel_x = (int)(256 + (num - 25) / 5 * 32);
                                     }
                                     else if (apollopresent)
                                     {
-                                        if (dBmMeterReading <= 1.0f)
-                                            pixel_x = (int)(0 + dBmMeterReading * 16);
-                                        else if (dBmMeterReading <= 5.0f)
-                                            pixel_x = (int)(16 + (dBmMeterReading - 1) / 4 * 48);
-                                        else if (dBmMeterReading <= 10.0f)
-                                            pixel_x = (int)(64 + (dBmMeterReading - 5) / 5 * 48);
-                                        else if (dBmMeterReading <= 15.0f)
-                                            pixel_x = (int)(112 + (dBmMeterReading - 10) / 5 * 48);
-                                        else if (dBmMeterReading <= 30.0f)
-                                            pixel_x = (int)(160 + (dBmMeterReading - 15) / 15 * 48);
-                                        else if (dBmMeterReading <= 50.0f)
-                                            pixel_x = (int)(208 + (dBmMeterReading - 30) / 20 * 48);
+                                        if (num <= 1.0f)
+                                            pixel_x = (int)(0 + num * 16);
+                                        else if (num <= 5.0f)
+                                            pixel_x = (int)(16 + (num - 1) / 4 * 48);
+                                        else if (num <= 10.0f)
+                                            pixel_x = (int)(64 + (num - 5) / 5 * 48);
+                                        else if (num <= 15.0f)
+                                            pixel_x = (int)(112 + (num - 10) / 5 * 48);
+                                        else if (num <= 30.0f)
+                                            pixel_x = (int)(160 + (num - 15) / 15 * 48);
+                                        else if (num <= 50.0f)
+                                            pixel_x = (int)(208 + (num - 30) / 20 * 48);
                                         else
-                                            pixel_x = (int)(256 + (dBmMeterReading - 50) / 50 * 32);
+                                            pixel_x = (int)(256 + (num - 50) / 50 * 32);
                                     }
                                     else if (anan8000dpresent && tx_xvtr_index < 0)
                                     {
-                                        if (dBmMeterReading <= 1.0f)
-                                            pixel_x = (int)(0 + dBmMeterReading * 16);
-                                        else if (dBmMeterReading <= 5.0f)
-                                            pixel_x = (int)(16 + (dBmMeterReading - 1) / 4 * 48);
-                                        else if (dBmMeterReading <= 10.0f)
-                                            pixel_x = (int)(64 + (dBmMeterReading - 5) / 5 * 48);
-                                        else if (dBmMeterReading <= 50.0f)
-                                            pixel_x = (int)(112 + (dBmMeterReading - 10) / 40 * 48);
-                                        else if (dBmMeterReading <= 100.0f)
-                                            pixel_x = (int)(160 + (dBmMeterReading - 50) / 50 * 48);
-                                        else if (dBmMeterReading <= 200.0f)
-                                            pixel_x = (int)(200 + (dBmMeterReading - 100) / 20 * 48);
+                                        if (num <= 1.0f)
+                                            pixel_x = (int)(0 + num * 16);
+                                        else if (num <= 5.0f)
+                                            pixel_x = (int)(16 + (num - 1) / 4 * 48);
+                                        else if (num <= 10.0f)
+                                            pixel_x = (int)(64 + (num - 5) / 5 * 48);
+                                        else if (num <= 50.0f)
+                                            pixel_x = (int)(112 + (num - 10) / 40 * 48);
+                                        else if (num <= 100.0f)
+                                            pixel_x = (int)(160 + (num - 50) / 50 * 48);
+                                        else if (num <= 200.0f)
+                                            pixel_x = (int)(200 + (num - 100) / 20 * 48);
                                         else
-                                            pixel_x = (int)(256 + (dBmMeterReading - 120) / 20 * 32);
+                                            pixel_x = (int)(256 + (num - 120) / 20 * 32);
                                     }
                                     else if (alexpresent && !anan8000dpresent)
                                     {
-                                        if (dBmMeterReading <= 1.0f)
-                                            pixel_x = (int)(0 + dBmMeterReading * 16);
-                                        else if (dBmMeterReading <= 5.0f)
-                                            pixel_x = (int)(16 + (dBmMeterReading - 1) / 4 * 48);
-                                        else if (dBmMeterReading <= 10.0f)
-                                            pixel_x = (int)(64 + (dBmMeterReading - 5) / 5 * 48);
-                                        else if (dBmMeterReading <= 50.0f)
-                                            pixel_x = (int)(112 + (dBmMeterReading - 10) / 40 * 48);
-                                        else if (dBmMeterReading <= 100.0f)
-                                            pixel_x = (int)(160 + (dBmMeterReading - 50) / 50 * 48);
-                                        else if (dBmMeterReading <= 208.0f)
-                                            pixel_x = (int)(208 + (dBmMeterReading - 100) / 20 * 48);
+                                        if (num <= 1.0f)
+                                            pixel_x = (int)(0 + num * 16);
+                                        else if (num <= 5.0f)
+                                            pixel_x = (int)(16 + (num - 1) / 4 * 48);
+                                        else if (num <= 10.0f)
+                                            pixel_x = (int)(64 + (num - 5) / 5 * 48);
+                                        else if (num <= 50.0f)
+                                            pixel_x = (int)(112 + (num - 10) / 40 * 48);
+                                        else if (num <= 100.0f)
+                                            pixel_x = (int)(160 + (num - 50) / 50 * 48);
+                                        else if (num <= 208.0f)
+                                            pixel_x = (int)(208 + (num - 100) / 20 * 48);
                                         else
-                                            pixel_x = (int)(256 + (dBmMeterReading - 120) / 20 * 32);
+                                            pixel_x = (int)(256 + (num - 120) / 20 * 32);
                                     }
                                     else
                                     {
-                                        if (dBmMeterReading <= 25.0f)
-                                            pixel_x = (int)(0 + (dBmMeterReading - 0.0) / 25.0 * 16);
-                                        else if (dBmMeterReading <= 50.0f)
-                                            pixel_x = (int)(16 + (dBmMeterReading - 25.0) / 25.0 * 31);
-                                        else if (dBmMeterReading <= 100.0f)
-                                            pixel_x = (int)(31 + (dBmMeterReading - 50.0) / 50.0 * 31);
-                                        else if (dBmMeterReading <= 200.0f)
-                                            pixel_x = (int)(62 + (dBmMeterReading - 100.0) / 100.0 * 64);
-                                        else if (dBmMeterReading <= 500.0f)
-                                            pixel_x = (int)(126 + (dBmMeterReading - 200.0) / 300.0 * 48);
-                                        else if (dBmMeterReading <= 600.0f)
-                                            pixel_x = (int)(174 + (dBmMeterReading - 500.0) / 100.0 * 30);
-                                        else if (dBmMeterReading <= 700.0f)
-                                            pixel_x = (int)(204 + (dBmMeterReading - 600.0) / 100.0 * 30);
-                                        else if (dBmMeterReading <= 800.0f)
-                                            pixel_x = (int)(234 + (dBmMeterReading - 700.0) / 100.0 * 30);
+                                        if (num <= 25.0f)
+                                            pixel_x = (int)(0 + (num - 0.0) / 25.0 * 16);
+                                        else if (num <= 50.0f)
+                                            pixel_x = (int)(16 + (num - 25.0) / 25.0 * 31);
+                                        else if (num <= 100.0f)
+                                            pixel_x = (int)(31 + (num - 50.0) / 50.0 * 31);
+                                        else if (num <= 200.0f)
+                                            pixel_x = (int)(62 + (num - 100.0) / 100.0 * 64);
+                                        else if (num <= 500.0f)
+                                            pixel_x = (int)(126 + (num - 200.0) / 300.0 * 48);
+                                        else if (num <= 600.0f)
+                                            pixel_x = (int)(174 + (num - 500.0) / 100.0 * 30);
+                                        else if (num <= 700.0f)
+                                            pixel_x = (int)(204 + (num - 600.0) / 100.0 * 30);
+                                        else if (num <= 800.0f)
+                                            pixel_x = (int)(234 + (num - 700.0) / 100.0 * 30);
                                         else
-                                            pixel_x = (int)(264 + (dBmMeterReading - 800.0) / 100.0 * 16);
+                                            pixel_x = (int)(264 + (num - 800.0) / 100.0 * 16);
                                     }
                                 }
                                 else
                                 {
                                     if (anan10present || anan10Epresent)
                                     {
-                                        if (dBmMeterReading <= 1.0f)
-                                            pixel_x = (int)(0 + dBmMeterReading * 2);
-                                        else if (dBmMeterReading <= 5.0f)
-                                            pixel_x = (int)(2 + (dBmMeterReading - 1) / 4 * 24);
-                                        else if (dBmMeterReading <= 10.0f)
-                                            pixel_x = (int)(26 + (dBmMeterReading - 5) / 5 * 24);
-                                        else if (dBmMeterReading <= 15.0f)
-                                            pixel_x = (int)(50 + (dBmMeterReading - 10) / 5 * 24);
-                                        else if (dBmMeterReading <= 20.0f)
-                                            pixel_x = (int)(74 + (dBmMeterReading - 15) / 5 * 24);
-                                        else if (dBmMeterReading <= 25.0f)
-                                            pixel_x = (int)(98 + (dBmMeterReading - 20) / 5 * 24);
+                                        if (num <= 1.0f)
+                                            pixel_x = (int)(0 + num * 2);
+                                        else if (num <= 5.0f)
+                                            pixel_x = (int)(2 + (num - 1) / 4 * 24);
+                                        else if (num <= 10.0f)
+                                            pixel_x = (int)(26 + (num - 5) / 5 * 24);
+                                        else if (num <= 15.0f)
+                                            pixel_x = (int)(50 + (num - 10) / 5 * 24);
+                                        else if (num <= 20.0f)
+                                            pixel_x = (int)(74 + (num - 15) / 5 * 24);
+                                        else if (num <= 25.0f)
+                                            pixel_x = (int)(98 + (num - 20) / 5 * 24);
                                         else
-                                            pixel_x = (int)(122 + (dBmMeterReading - 25) / 5 * 16);
+                                            pixel_x = (int)(122 + (num - 25) / 5 * 16);
                                     }
                                     else if (apollopresent)
                                     {
-                                        if (dBmMeterReading <= 1.0f)
-                                            pixel_x = (int)(0 + dBmMeterReading * 2);
-                                        else if (dBmMeterReading <= 5.0f)
-                                            pixel_x = (int)(2 + (dBmMeterReading - 1) / 4 * 24);
-                                        else if (dBmMeterReading <= 10.0f)
-                                            pixel_x = (int)(26 + (dBmMeterReading - 5) / 5 * 24);
-                                        else if (dBmMeterReading <= 15.0f)
-                                            pixel_x = (int)(50 + (dBmMeterReading - 10) / 5 * 24);
-                                        else if (dBmMeterReading <= 30.0f)
-                                            pixel_x = (int)(74 + (dBmMeterReading - 15) / 15 * 24);
-                                        else if (dBmMeterReading <= 50.0f)
-                                            pixel_x = (int)(98 + (dBmMeterReading - 30) / 20 * 24);
+                                        if (num <= 1.0f)
+                                            pixel_x = (int)(0 + num * 2);
+                                        else if (num <= 5.0f)
+                                            pixel_x = (int)(2 + (num - 1) / 4 * 24);
+                                        else if (num <= 10.0f)
+                                            pixel_x = (int)(26 + (num - 5) / 5 * 24);
+                                        else if (num <= 15.0f)
+                                            pixel_x = (int)(50 + (num - 10) / 5 * 24);
+                                        else if (num <= 30.0f)
+                                            pixel_x = (int)(74 + (num - 15) / 15 * 24);
+                                        else if (num <= 50.0f)
+                                            pixel_x = (int)(98 + (num - 30) / 20 * 24);
                                         else
-                                            pixel_x = (int)(122 + (dBmMeterReading - 50) / 50 * 16);
+                                            pixel_x = (int)(122 + (num - 50) / 50 * 16);
                                     }
                                     else if (anan8000dpresent && tx_xvtr_index < 0)
                                     {
-                                        if (dBmMeterReading <= 5.0f)
-                                            pixel_x = (int)(0 + dBmMeterReading * 2);
-                                        else if (dBmMeterReading <= 10.0f)
-                                            pixel_x = (int)(2 + (dBmMeterReading - 1) / 4 * 24);
-                                        else if (dBmMeterReading <= 20.0f)
-                                            pixel_x = (int)(26 + (dBmMeterReading - 10) / 5 * 24);
-                                        else if (dBmMeterReading <= 100.0f)
-                                            pixel_x = (int)(50 + (dBmMeterReading - 20) / 40 * 24);
-                                        else if (dBmMeterReading <= 200.0f)
-                                            pixel_x = (int)(74 + (dBmMeterReading - 100) / 50 * 24);
-                                        else if (dBmMeterReading <= 250.0f)
-                                            pixel_x = (int)(98 + (dBmMeterReading - 200) / 20 * 24);
+                                        if (num <= 5.0f)
+                                            pixel_x = (int)(0 + num * 2);
+                                        else if (num <= 10.0f)
+                                            pixel_x = (int)(2 + (num - 1) / 4 * 24);
+                                        else if (num <= 20.0f)
+                                            pixel_x = (int)(26 + (num - 10) / 5 * 24);
+                                        else if (num <= 100.0f)
+                                            pixel_x = (int)(50 + (num - 20) / 40 * 24);
+                                        else if (num <= 200.0f)
+                                            pixel_x = (int)(74 + (num - 100) / 50 * 24);
+                                        else if (num <= 250.0f)
+                                            pixel_x = (int)(98 + (num - 200) / 20 * 24);
                                         else
-                                            pixel_x = (int)(122 + (dBmMeterReading - 250) / 20 * 16);
+                                            pixel_x = (int)(122 + (num - 250) / 20 * 16);
                                     }
                                     else if (alexpresent && !anan8000dpresent)
                                     {
-                                        if (dBmMeterReading <= 1.0f)
-                                            pixel_x = (int)(0 + dBmMeterReading * 2);
-                                        else if (dBmMeterReading <= 5.0f)
-                                            pixel_x = (int)(2 + (dBmMeterReading - 1) / 4 * 24);
-                                        else if (dBmMeterReading <= 10.0f)
-                                            pixel_x = (int)(26 + (dBmMeterReading - 5) / 5 * 24);
-                                        else if (dBmMeterReading <= 50.0f)
-                                            pixel_x = (int)(50 + (dBmMeterReading - 10) / 40 * 24);
-                                        else if (dBmMeterReading <= 100.0f)
-                                            pixel_x = (int)(74 + (dBmMeterReading - 50) / 50 * 24);
-                                        else if (dBmMeterReading <= 120.0f)
-                                            pixel_x = (int)(98 + (dBmMeterReading - 100) / 20 * 24);
+                                        if (num <= 1.0f)
+                                            pixel_x = (int)(0 + num * 2);
+                                        else if (num <= 5.0f)
+                                            pixel_x = (int)(2 + (num - 1) / 4 * 24);
+                                        else if (num <= 10.0f)
+                                            pixel_x = (int)(26 + (num - 5) / 5 * 24);
+                                        else if (num <= 50.0f)
+                                            pixel_x = (int)(50 + (num - 10) / 40 * 24);
+                                        else if (num <= 100.0f)
+                                            pixel_x = (int)(74 + (num - 50) / 50 * 24);
+                                        else if (num <= 120.0f)
+                                            pixel_x = (int)(98 + (num - 100) / 20 * 24);
                                         else
-                                            pixel_x = (int)(122 + (dBmMeterReading - 120) / 20 * 16);
+                                            pixel_x = (int)(122 + (num - 120) / 20 * 16);
                                     }
                                     else
                                     {
-                                        if (dBmMeterReading <= 100.0f)
-                                            pixel_x = (int)(0 + (dBmMeterReading - 0.0) / 100.0 * 31);
-                                        else if (dBmMeterReading <= 200.0f)
-                                            pixel_x = (int)(31 + (dBmMeterReading - 100.0) / 100.0 * 32);
-                                        else if (dBmMeterReading <= 500.0f)
-                                            pixel_x = (int)(63 + (dBmMeterReading - 200.0) / 300.0 * 24);
-                                        else if (dBmMeterReading <= 600.0f)
-                                            pixel_x = (int)(87 + (dBmMeterReading - 500.0) / 100.0 * 15);
-                                        else if (dBmMeterReading <= 700.0f)
-                                            pixel_x = (int)(102 + (dBmMeterReading - 600.0) / 100.0 * 15);
-                                        else if (dBmMeterReading <= 800.0f)
-                                            pixel_x = (int)(117 + (dBmMeterReading - 700.0) / 100.0 * 15);
+                                        if (num <= 100.0f)
+                                            pixel_x = (int)(0 + (num - 0.0) / 100.0 * 31);
+                                        else if (num <= 200.0f)
+                                            pixel_x = (int)(31 + (num - 100.0) / 100.0 * 32);
+                                        else if (num <= 500.0f)
+                                            pixel_x = (int)(63 + (num - 200.0) / 300.0 * 24);
+                                        else if (num <= 600.0f)
+                                            pixel_x = (int)(87 + (num - 500.0) / 100.0 * 15);
+                                        else if (num <= 700.0f)
+                                            pixel_x = (int)(102 + (num - 600.0) / 100.0 * 15);
+                                        else if (num <= 800.0f)
+                                            pixel_x = (int)(117 + (num - 700.0) / 100.0 * 15);
                                         else
-                                            pixel_x = (int)(132 + (dBmMeterReading - 800.0) / 100.0 * 8);
+                                            pixel_x = (int)(132 + (num - 800.0) / 100.0 * 8);
                                     }
                                 }
                                 break;
 
                             case 120:
-                                if (dBmMeterReading <= 1.0f)
-                                    pixel_x = (int)(0 + dBmMeterReading * 3);
-                                else if (dBmMeterReading <= 5.0f)
-                                    pixel_x = (int)(3 + (dBmMeterReading - 1) / 4 * 26);
-                                else if (dBmMeterReading <= 10.0f)
-                                    pixel_x = (int)(29 + (dBmMeterReading - 5) / 5 * 26);
-                                else if (dBmMeterReading <= 50.0f)
-                                    pixel_x = (int)(55 + (dBmMeterReading - 10) / 40 * 27);
-                                else if (dBmMeterReading <= 100.0f)
-                                    pixel_x = (int)(82 + (dBmMeterReading - 50) / 50 * 28);
-                                else if (dBmMeterReading <= 120.0f)
-                                    pixel_x = (int)(110 + (dBmMeterReading - 100) / 20 * 27);
+                                if (num <= 1.0f)
+                                    pixel_x = (int)(0 + num * 3);
+                                else if (num <= 5.0f)
+                                    pixel_x = (int)(3 + (num - 1) / 4 * 26);
+                                else if (num <= 10.0f)
+                                    pixel_x = (int)(29 + (num - 5) / 5 * 26);
+                                else if (num <= 50.0f)
+                                    pixel_x = (int)(55 + (num - 10) / 40 * 27);
+                                else if (num <= 100.0f)
+                                    pixel_x = (int)(82 + (num - 50) / 50 * 28);
+                                else if (num <= 120.0f)
+                                    pixel_x = (int)(110 + (num - 100) / 20 * 27);
                                 else
-                                    pixel_x = (int)(137 + (dBmMeterReading - 120) / 20 * 30);
+                                    pixel_x = (int)(137 + (num - 120) / 20 * 30);
                                 break;
                         }
                         break;
@@ -31781,60 +31934,60 @@ namespace Thetis
                             case 96:
                                 if (collapsedDisplay)
                                 {
-                                    if (double.IsInfinity(dBmMeterReading))
+                                    if (double.IsInfinity(num))
                                         pixel_x = 200;
-                                    else if (dBmMeterReading <= 1.0f)
-                                        pixel_x = (int)(0 + dBmMeterReading * 6);
-                                    else if (dBmMeterReading <= 1.5f)
-                                        pixel_x = (int)(6 + (dBmMeterReading - 1.0) / 0.5 * 54);
-                                    else if (dBmMeterReading <= 2.0f)
-                                        pixel_x = (int)(60 + (dBmMeterReading - 1.5) / 0.5 * 40);
-                                    else if (dBmMeterReading <= 3.0f)
-                                        pixel_x = (int)(100 + (dBmMeterReading - 2.0) / 1.0 * 42);
-                                    else if (dBmMeterReading <= 5.0f)
-                                        pixel_x = (int)(142 + (dBmMeterReading - 3.0) / 2.0 * 42);
-                                    else if (dBmMeterReading <= 10.0f)
-                                        pixel_x = (int)(184 + (dBmMeterReading - 5.0) / 5.0 * 42);
+                                    else if (num <= 1.0f)
+                                        pixel_x = (int)(0 + num * 6);
+                                    else if (num <= 1.5f)
+                                        pixel_x = (int)(6 + (num - 1.0) / 0.5 * 54);
+                                    else if (num <= 2.0f)
+                                        pixel_x = (int)(60 + (num - 1.5) / 0.5 * 40);
+                                    else if (num <= 3.0f)
+                                        pixel_x = (int)(100 + (num - 2.0) / 1.0 * 42);
+                                    else if (num <= 5.0f)
+                                        pixel_x = (int)(142 + (num - 3.0) / 2.0 * 42);
+                                    else if (num <= 10.0f)
+                                        pixel_x = (int)(184 + (num - 5.0) / 5.0 * 42);
                                     else
-                                        pixel_x = (int)(226 + (dBmMeterReading - 10.0) / 15.0 * 52);
+                                        pixel_x = (int)(226 + (num - 10.0) / 15.0 * 52);
                                 }
                                 else
                                 {
-                                    if (double.IsInfinity(dBmMeterReading))
+                                    if (double.IsInfinity(num))
                                         pixel_x = 200;
-                                    else if (dBmMeterReading <= 1.0f)
-                                        pixel_x = (int)(0 + dBmMeterReading * 3);
-                                    else if (dBmMeterReading <= 1.5f)
-                                        pixel_x = (int)(3 + (dBmMeterReading - 1.0) / 0.5 * 27);
-                                    else if (dBmMeterReading <= 2.0f)
-                                        pixel_x = (int)(30 + (dBmMeterReading - 1.5) / 0.5 * 20);
-                                    else if (dBmMeterReading <= 3.0f)
-                                        pixel_x = (int)(50 + (dBmMeterReading - 2.0) / 1.0 * 21);
-                                    else if (dBmMeterReading <= 5.0f)
-                                        pixel_x = (int)(71 + (dBmMeterReading - 3.0) / 2.0 * 21);
-                                    else if (dBmMeterReading <= 10.0f)
-                                        pixel_x = (int)(92 + (dBmMeterReading - 5.0) / 5.0 * 21);
+                                    else if (num <= 1.0f)
+                                        pixel_x = (int)(0 + num * 3);
+                                    else if (num <= 1.5f)
+                                        pixel_x = (int)(3 + (num - 1.0) / 0.5 * 27);
+                                    else if (num <= 2.0f)
+                                        pixel_x = (int)(30 + (num - 1.5) / 0.5 * 20);
+                                    else if (num <= 3.0f)
+                                        pixel_x = (int)(50 + (num - 2.0) / 1.0 * 21);
+                                    else if (num <= 5.0f)
+                                        pixel_x = (int)(71 + (num - 3.0) / 2.0 * 21);
+                                    else if (num <= 10.0f)
+                                        pixel_x = (int)(92 + (num - 5.0) / 5.0 * 21);
                                     else
-                                        pixel_x = (int)(113 + (dBmMeterReading - 10.0) / 15.0 * 26);
+                                        pixel_x = (int)(113 + (num - 10.0) / 15.0 * 26);
                                 }
                                 break;
                             case 120:
-                                if (double.IsInfinity(dBmMeterReading))
+                                if (double.IsInfinity(num))
                                     pixel_x = 200;
-                                else if (dBmMeterReading <= 1.0f)
-                                    pixel_x = (int)(0 + dBmMeterReading * 3);
-                                else if (dBmMeterReading <= 1.5f)
-                                    pixel_x = (int)(3 + (dBmMeterReading - 1.0) / 0.5 * 31);
-                                else if (dBmMeterReading <= 2.0f)
-                                    pixel_x = (int)(34 + (dBmMeterReading - 1.5) / 0.5 * 22);
-                                else if (dBmMeterReading <= 3.0f)
-                                    pixel_x = (int)(56 + (dBmMeterReading - 2.0) / 1.0 * 22);
-                                else if (dBmMeterReading <= 5.0f)
-                                    pixel_x = (int)(78 + (dBmMeterReading - 3.0) / 2.0 * 23);
-                                else if (dBmMeterReading <= 10.0f)
-                                    pixel_x = (int)(101 + (dBmMeterReading - 5.0) / 5.0 * 23);
+                                else if (num <= 1.0f)
+                                    pixel_x = (int)(0 + num * 3);
+                                else if (num <= 1.5f)
+                                    pixel_x = (int)(3 + (num - 1.0) / 0.5 * 31);
+                                else if (num <= 2.0f)
+                                    pixel_x = (int)(34 + (num - 1.5) / 0.5 * 22);
+                                else if (num <= 3.0f)
+                                    pixel_x = (int)(56 + (num - 2.0) / 1.0 * 22);
+                                else if (num <= 5.0f)
+                                    pixel_x = (int)(78 + (num - 3.0) / 2.0 * 23);
+                                else if (num <= 10.0f)
+                                    pixel_x = (int)(101 + (num - 5.0) / 5.0 * 23);
                                 else
-                                    pixel_x = (int)(124 + (dBmMeterReading - 10.0) / 15.0 * 43);
+                                    pixel_x = (int)(124 + (num - 10.0) / 15.0 * 43);
                                 break;
                         }
                         break;
@@ -31848,48 +32001,48 @@ namespace Thetis
                             case 96:
                                 if (collapsedDisplay)
                                 {
-                                    if (dBmMeterReading <= 0.0f)
+                                    if (num <= 0.0f)
                                         pixel_x = 6;
-                                    else if (dBmMeterReading <= 5.0f)
-                                        pixel_x = (int)(6 + (dBmMeterReading - 0.0) / 5.0 * 56);
-                                    else if (dBmMeterReading <= 10.0f)
-                                        pixel_x = (int)(62 + (dBmMeterReading - 5.0) / 5.0 * 58);
-                                    else if (dBmMeterReading <= 15.0f)
-                                        pixel_x = (int)(120 + (dBmMeterReading - 10.0) / 5.0 * 60);
-                                    else if (dBmMeterReading <= 20.0f)
-                                        pixel_x = (int)(180 + (dBmMeterReading - 15.0) / 5.0 * 62);
+                                    else if (num <= 5.0f)
+                                        pixel_x = (int)(6 + (num - 0.0) / 5.0 * 56);
+                                    else if (num <= 10.0f)
+                                        pixel_x = (int)(62 + (num - 5.0) / 5.0 * 58);
+                                    else if (num <= 15.0f)
+                                        pixel_x = (int)(120 + (num - 10.0) / 5.0 * 60);
+                                    else if (num <= 20.0f)
+                                        pixel_x = (int)(180 + (num - 15.0) / 5.0 * 62);
                                     else
-                                        pixel_x = (int)(242 + (dBmMeterReading - 20.0) / 5.0 * 58);
+                                        pixel_x = (int)(242 + (num - 20.0) / 5.0 * 58);
                                 }
                                 else
                                 {
-                                    if (dBmMeterReading <= 0.0f)
+                                    if (num <= 0.0f)
                                         pixel_x = 3;
-                                    else if (dBmMeterReading <= 5.0f)
-                                        pixel_x = (int)(3 + (dBmMeterReading - 0.0) / 5.0 * 28);
-                                    else if (dBmMeterReading <= 10.0f)
-                                        pixel_x = (int)(31 + (dBmMeterReading - 5.0) / 5.0 * 29);
-                                    else if (dBmMeterReading <= 15.0f)
-                                        pixel_x = (int)(60 + (dBmMeterReading - 10.0) / 5.0 * 30);
-                                    else if (dBmMeterReading <= 20.0f)
-                                        pixel_x = (int)(90 + (dBmMeterReading - 15.0) / 5.0 * 31);
+                                    else if (num <= 5.0f)
+                                        pixel_x = (int)(3 + (num - 0.0) / 5.0 * 28);
+                                    else if (num <= 10.0f)
+                                        pixel_x = (int)(31 + (num - 5.0) / 5.0 * 29);
+                                    else if (num <= 15.0f)
+                                        pixel_x = (int)(60 + (num - 10.0) / 5.0 * 30);
+                                    else if (num <= 20.0f)
+                                        pixel_x = (int)(90 + (num - 15.0) / 5.0 * 31);
                                     else
-                                        pixel_x = (int)(121 + (dBmMeterReading - 20.0) / 5.0 * 29);
+                                        pixel_x = (int)(121 + (num - 20.0) / 5.0 * 29);
                                 }
                                 break;
                             case 120:
-                                if (dBmMeterReading <= 0.0f)
+                                if (num <= 0.0f)
                                     pixel_x = 3;
-                                else if (dBmMeterReading <= 5.0f)
-                                    pixel_x = (int)(3 + (dBmMeterReading - 0.0) / 5.0 * 31);
-                                else if (dBmMeterReading <= 10.0f)
-                                    pixel_x = (int)(34 + (dBmMeterReading - 5.0) / 5.0 * 33);
-                                else if (dBmMeterReading <= 15.0f)
-                                    pixel_x = (int)(77 + (dBmMeterReading - 10.0) / 5.0 * 33);
-                                else if (dBmMeterReading <= 20.0f)
-                                    pixel_x = (int)(110 + (dBmMeterReading - 15.0) / 5.0 * 35);
+                                else if (num <= 5.0f)
+                                    pixel_x = (int)(3 + (num - 0.0) / 5.0 * 31);
+                                else if (num <= 10.0f)
+                                    pixel_x = (int)(34 + (num - 5.0) / 5.0 * 33);
+                                else if (num <= 15.0f)
+                                    pixel_x = (int)(77 + (num - 10.0) / 5.0 * 33);
+                                else if (num <= 20.0f)
+                                    pixel_x = (int)(110 + (num - 15.0) / 5.0 * 35);
                                 else
-                                    pixel_x = (int)(145 + (dBmMeterReading - 20.0) / 5.0 * 32);
+                                    pixel_x = (int)(145 + (num - 20.0) / 5.0 * 32);
                                 break;
                         }
                         break;
@@ -31977,7 +32130,7 @@ namespace Thetis
                 }
             }
 
-            return dBmMeterReading;
+            return num;
         }
 
         private Font font7 = new Font("Arial", 7.0f, FontStyle.Bold);
@@ -31987,7 +32140,7 @@ namespace Thetis
             int H = picMultiMeterDigital.ClientSize.Height;
             int W = picMultiMeterDigital.ClientSize.Width;
             Graphics g = e.Graphics;
-            double dBmMeterReading;
+            double num;
             int pixel_x = 0;
             int pixel_x_swr = 0;
             string output = "";
@@ -31998,7 +32151,7 @@ namespace Thetis
                     #region Original                    
 
                     //MW0LGE
-                    dBmMeterReading = handleOriginalMeter(1, g, H, W);
+                    num = handleOriginalMeter(1, g, H, W);
                     drawOriginalMeterTextScale(g, H, W);
                     //
 
@@ -32019,52 +32172,52 @@ namespace Thetis
                                     {
                                         if (rx1_above30)
                                         {
-                                            if (dBmMeterReading <= -124.0f) output = "    S 0";
-                                            else if (dBmMeterReading > -144.0f & dBmMeterReading <= -138.0f) output = "    S 1";
-                                            else if (dBmMeterReading > -138.0f & dBmMeterReading <= -132.0f) output = "    S 2";
-                                            else if (dBmMeterReading > -132.0f & dBmMeterReading <= -126.0f) output = "    S 3";
-                                            else if (dBmMeterReading > -126.0f & dBmMeterReading <= -120.0f) output = "    S 4";
-                                            else if (dBmMeterReading > -120.0f & dBmMeterReading <= -114.0f) output = "    S 5";
-                                            else if (dBmMeterReading > -114.0f & dBmMeterReading <= -108.0f) output = "    S 6";
-                                            else if (dBmMeterReading > -108.0f & dBmMeterReading <= -102.0f) output = "    S 7";
-                                            else if (dBmMeterReading > -102.0f & dBmMeterReading <= -96.0f) output = "    S 8";
-                                            else if (dBmMeterReading > -96.0f & dBmMeterReading <= -90.0f) output = "    S 9";
-                                            else if (dBmMeterReading > -90.0f & dBmMeterReading <= -86.0f) output = "    S 9 + 5";
-                                            else if (dBmMeterReading > -86.0f & dBmMeterReading <= -80.0f) output = "    S 9 + 10";
-                                            else if (dBmMeterReading > -80.0f & dBmMeterReading <= -76.0f) output = "    S 9 + 15";
-                                            else if (dBmMeterReading > -76.0f & dBmMeterReading <= -66.0f) output = "    S 9 + 20";
-                                            else if (dBmMeterReading > -66.0f & dBmMeterReading <= -56.0f) output = "    S 9 + 30";
-                                            else if (dBmMeterReading > -56.0f & dBmMeterReading <= -46.0f) output = "    S 9 + 40";
-                                            else if (dBmMeterReading > -46.0f & dBmMeterReading <= -36.0f) output = "    S 9 + 50";
-                                            else if (dBmMeterReading > -36.0f) output = "    S 9 + 60";
+                                            if (num <= -124.0f) output = "    S 0";
+                                            else if (num > -144.0f & num <= -138.0f) output = "    S 1";
+                                            else if (num > -138.0f & num <= -132.0f) output = "    S 2";
+                                            else if (num > -132.0f & num <= -126.0f) output = "    S 3";
+                                            else if (num > -126.0f & num <= -120.0f) output = "    S 4";
+                                            else if (num > -120.0f & num <= -114.0f) output = "    S 5";
+                                            else if (num > -114.0f & num <= -108.0f) output = "    S 6";
+                                            else if (num > -108.0f & num <= -102.0f) output = "    S 7";
+                                            else if (num > -102.0f & num <= -96.0f) output = "    S 8";
+                                            else if (num > -96.0f & num <= -90.0f) output = "    S 9";
+                                            else if (num > -90.0f & num <= -86.0f) output = "    S 9 + 5";
+                                            else if (num > -86.0f & num <= -80.0f) output = "    S 9 + 10";
+                                            else if (num > -80.0f & num <= -76.0f) output = "    S 9 + 15";
+                                            else if (num > -76.0f & num <= -66.0f) output = "    S 9 + 20";
+                                            else if (num > -66.0f & num <= -56.0f) output = "    S 9 + 30";
+                                            else if (num > -56.0f & num <= -46.0f) output = "    S 9 + 40";
+                                            else if (num > -46.0f & num <= -36.0f) output = "    S 9 + 50";
+                                            else if (num > -36.0f) output = "    S 9 + 60";
                                         }
                                         else
                                         {
-                                            if (dBmMeterReading <= -124.0f) output = "    S 0";
-                                            else if (dBmMeterReading > -124.0f & dBmMeterReading <= -118.0f) output = "    S 1";
-                                            else if (dBmMeterReading > -118.0f & dBmMeterReading <= -112.0f) output = "    S 2";
-                                            else if (dBmMeterReading > -112.0f & dBmMeterReading <= -106.0f) output = "    S 3";
-                                            else if (dBmMeterReading > -106.0f & dBmMeterReading <= -100.0f) output = "    S 4";
-                                            else if (dBmMeterReading > -100.0f & dBmMeterReading <= -94.0f) output = "    S 5";
-                                            else if (dBmMeterReading > -94.0f & dBmMeterReading <= -88.0f) output = "    S 6";
-                                            else if (dBmMeterReading > -88.0f & dBmMeterReading <= -82.0f) output = "    S 7";
-                                            else if (dBmMeterReading > -82.0f & dBmMeterReading <= -76.0f) output = "    S 8";
-                                            else if (dBmMeterReading > -76.0f & dBmMeterReading <= -70.0f) output = "    S 9";
-                                            else if (dBmMeterReading > -70.0f & dBmMeterReading <= -66.0f) output = "    S 9 + 5";
-                                            else if (dBmMeterReading > -66.0f & dBmMeterReading <= -60.0f) output = "    S 9 + 10";
-                                            else if (dBmMeterReading > -60.0f & dBmMeterReading <= -56.0f) output = "    S 9 + 15";
-                                            else if (dBmMeterReading > -56.0f & dBmMeterReading <= -46.0f) output = "    S 9 + 20";
-                                            else if (dBmMeterReading > -46.0f & dBmMeterReading <= -36.0f) output = "    S 9 + 30";
-                                            else if (dBmMeterReading > -36.0f & dBmMeterReading <= -26.0f) output = "    S 9 + 40";
-                                            else if (dBmMeterReading > -26.0f & dBmMeterReading <= -16.0f) output = "    S 9 + 50";
-                                            else if (dBmMeterReading > -16.0f) output = "    S 9 + 60";
+                                            if (num <= -124.0f) output = "    S 0";
+                                            else if (num > -124.0f & num <= -118.0f) output = "    S 1";
+                                            else if (num > -118.0f & num <= -112.0f) output = "    S 2";
+                                            else if (num > -112.0f & num <= -106.0f) output = "    S 3";
+                                            else if (num > -106.0f & num <= -100.0f) output = "    S 4";
+                                            else if (num > -100.0f & num <= -94.0f) output = "    S 5";
+                                            else if (num > -94.0f & num <= -88.0f) output = "    S 6";
+                                            else if (num > -88.0f & num <= -82.0f) output = "    S 7";
+                                            else if (num > -82.0f & num <= -76.0f) output = "    S 8";
+                                            else if (num > -76.0f & num <= -70.0f) output = "    S 9";
+                                            else if (num > -70.0f & num <= -66.0f) output = "    S 9 + 5";
+                                            else if (num > -66.0f & num <= -60.0f) output = "    S 9 + 10";
+                                            else if (num > -60.0f & num <= -56.0f) output = "    S 9 + 15";
+                                            else if (num > -56.0f & num <= -46.0f) output = "    S 9 + 20";
+                                            else if (num > -46.0f & num <= -36.0f) output = "    S 9 + 30";
+                                            else if (num > -36.0f & num <= -26.0f) output = "    S 9 + 40";
+                                            else if (num > -26.0f & num <= -16.0f) output = "    S 9 + 50";
+                                            else if (num > -16.0f) output = "    S 9 + 60";
                                         }
                                     }
-                                    else output = dBmMeterReading.ToString(format) + " dBm";
+                                    else output = num.ToString(format) + " dBm";
                                     break;
                                 case MeterRXMode.ADC_L:
                                 case MeterRXMode.ADC_R:
-                                    output = dBmMeterReading.ToString("f1") + " dBFS";
+                                    output = num.ToString("f1") + " dBFS";
                                     break;
                                 case MeterRXMode.OFF:
                                     output = "";
@@ -32086,17 +32239,17 @@ namespace Thetis
                                 case MeterTXMode.COMP:
                                 case MeterTXMode.ALC:
                                 case MeterTXMode.ALC_G:
-                                    output = dBmMeterReading.ToString(format) + " dB";
+                                    output = num.ToString(format) + " dB";
                                     break;
                                 case MeterTXMode.FORWARD_POWER:
                                 case MeterTXMode.REVERSE_POWER:
                                     if (alexpresent || pa_present || apollopresent)
-                                        output = dBmMeterReading.ToString(format) + " W";
+                                        output = num.ToString(format) + " W";
                                     else
-                                        output = dBmMeterReading.ToString(format) + " mW";
+                                        output = num.ToString(format) + " mW";
                                     break;
                                 case MeterTXMode.SWR:
-                                    output = dBmMeterReading.ToString("f1") + " : 1";
+                                    output = num.ToString("f1") + " : 1";
                                     break;
                                 case MeterTXMode.OFF:
                                     output = "";
@@ -32125,14 +32278,14 @@ namespace Thetis
 
                     if (avg_num == Display.CLEAR_FLAG) // reset average -- just use new value
                     {
-                        dBmMeterReading = avg_num = current_meter_data;
+                        num = avg_num = current_meter_data;
                     }
                     else
                     {
                         if (current_meter_data > avg_num)
-                            dBmMeterReading = avg_num = current_meter_data * 0.8 + avg_num * 0.2; // fast rise
+                            num = avg_num = current_meter_data * 0.8 + avg_num * 0.2; // fast rise
                         else
-                            dBmMeterReading = avg_num = current_meter_data * 0.2 + avg_num * 0.8; // slow decay
+                            num = avg_num = current_meter_data * 0.2 + avg_num * 0.8; // slow decay
                     }
 
                     g.DrawRectangle(edge_meter_background_pen, 0, 0, W, H);
@@ -32181,24 +32334,24 @@ namespace Thetis
 
                                 if (rx1_above30)
                                 {
-                                    if (dBmMeterReading > -93.0) // high area
+                                    if (num > -93.0) // high area
                                     {
-                                        pixel_x = (int)(W * 0.5 + (93.0 + dBmMeterReading) / 63.0 * (W * 0.5 - 3));
+                                        pixel_x = (int)(W * 0.5 + (93.0 + num) / 63.0 * (W * 0.5 - 3));
                                     }
                                     else
                                     {
-                                        pixel_x = (int)((dBmMeterReading + 153.0) / 60.0 * (W * 0.5));
+                                        pixel_x = (int)((num + 153.0) / 60.0 * (W * 0.5));
                                     }
                                 }
                                 else
                                 {
-                                    if (dBmMeterReading > -73.0) // high area
+                                    if (num > -73.0) // high area
                                     {
-                                        pixel_x = (int)(W * 0.5 + (73.0 + dBmMeterReading) / 63.0 * (W * 0.5 - 3));
+                                        pixel_x = (int)(W * 0.5 + (73.0 + num) / 63.0 * (W * 0.5 - 3));
                                     }
                                     else
                                     {
-                                        pixel_x = (int)((dBmMeterReading + 133.0) / 60.0 * (W * 0.5));
+                                        pixel_x = (int)((num + 133.0) / 60.0 * (W * 0.5));
                                     }
                                 }
 
@@ -32227,7 +32380,7 @@ namespace Thetis
                                     g.DrawString(s, font7, b, (int)(i * spacing - (int)string_width * (s.Length)), (int)(H - 4 - 8 - string_height));
                                 }
 
-                                pixel_x = (int)((dBmMeterReading + 120.0) / 120.0 * (W - 5.0));
+                                pixel_x = (int)((num + 120.0) / 120.0 * (W - 5.0));
                                 break;
                             case MeterRXMode.OFF:
                                 break;
@@ -32279,18 +32432,18 @@ namespace Thetis
                                     g.DrawString(s, font7, high_brush, (int)(W * 0.665 + i * spacing - (int)string_width * s.Length), (int)(H - 4 - 8 - string_height));
                                 }
 
-                                if (dBmMeterReading > 0.0) // high area
+                                if (num > 0.0) // high area
                                 {
-                                    pixel_x = (int)(W * 0.665 + dBmMeterReading / 12.0 * (W * 0.335 - 4));
+                                    pixel_x = (int)(W * 0.665 + num / 12.0 * (W * 0.335 - 4));
                                 }
                                 else
                                 {
-                                    pixel_x = (int)((dBmMeterReading + 30.0) / 30.0 * (W * 0.665 - 1.0));
+                                    pixel_x = (int)((num + 30.0) / 30.0 * (W * 0.665 - 1.0));
                                 }
                                 break;
                             case MeterTXMode.FORWARD_POWER:
                             case MeterTXMode.REVERSE_POWER:
-                                if (alexpresent || apollopresent) dBmMeterReading = Math.Round(dBmMeterReading);
+                                if (alexpresent || apollopresent) num = Math.Round(num);
 
                                 if (alexpresent && ((orionmkiipresent || anan8000dpresent) && tx_xvtr_index < 0))
                                 {
@@ -32325,25 +32478,25 @@ namespace Thetis
                                         g.DrawString("240+", font7, high_brush, (int)(W * 0.75 + i * spacing - (int)3.5 * string_width), (int)(H - 4 - 8 - string_height));
                                     }
 
-                                    if (dBmMeterReading <= 200.0) // low area
+                                    if (num <= 200.0) // low area
                                     {
                                         spacing = (W * 0.75 - 2.0) / 4.0;
-                                        if (dBmMeterReading <= 10.0)
-                                            pixel_x = (int)(dBmMeterReading / 10.0 * (int)spacing);
-                                        else if (dBmMeterReading <= 20.0)
-                                            pixel_x = (int)(spacing + (dBmMeterReading - 10.0) / 10.0 * spacing);
-                                        else if (dBmMeterReading <= 100.0)
-                                            pixel_x = (int)(2 * spacing + (dBmMeterReading - 20.0) / 80.0 * spacing);
+                                        if (num <= 10.0)
+                                            pixel_x = (int)(num / 10.0 * (int)spacing);
+                                        else if (num <= 20.0)
+                                            pixel_x = (int)(spacing + (num - 10.0) / 10.0 * spacing);
+                                        else if (num <= 100.0)
+                                            pixel_x = (int)(2 * spacing + (num - 20.0) / 80.0 * spacing);
                                         else // <= 100
-                                            pixel_x = (int)(3 * spacing + (dBmMeterReading - 100.0) / 100.0 * spacing);
+                                            pixel_x = (int)(3 * spacing + (num - 100.0) / 100.0 * spacing);
                                     }
                                     else
                                     {
                                         spacing = (W * 0.25 - 2.0 - 10.0) / 1.0;
-                                        if (dBmMeterReading <= 240.0)
-                                            pixel_x = (int)(W * 0.75 + (dBmMeterReading - 200.0) / 40.0 * spacing);
+                                        if (num <= 240.0)
+                                            pixel_x = (int)(W * 0.75 + (num - 200.0) / 40.0 * spacing);
                                         else
-                                            pixel_x = (int)(W * 0.75 + spacing + (dBmMeterReading - 240.0) / 120.0 * spacing);
+                                            pixel_x = (int)(W * 0.75 + spacing + (num - 240.0) / 120.0 * spacing);
                                     }
                                 }
 
@@ -32384,25 +32537,25 @@ namespace Thetis
                                         g.DrawString("120+", font7, high_brush, (int)(W * 0.75 + i * spacing - (int)3.5 * string_width), (int)(H - 4 - 8 - string_height));
                                     }
 
-                                    if (dBmMeterReading <= 100.0) // low area
+                                    if (num <= 100.0) // low area
                                     {
                                         spacing = (W * 0.75 - 2.0) / 4.0;
-                                        if (dBmMeterReading <= 5.0)
-                                            pixel_x = (int)(dBmMeterReading / 5.0 * (int)spacing);
-                                        else if (dBmMeterReading <= 10.0)
-                                            pixel_x = (int)(spacing + (dBmMeterReading - 5.0) / 5.0 * spacing);
-                                        else if (dBmMeterReading <= 50.0)
-                                            pixel_x = (int)(2 * spacing + (dBmMeterReading - 10.0) / 40.0 * spacing);
+                                        if (num <= 5.0)
+                                            pixel_x = (int)(num / 5.0 * (int)spacing);
+                                        else if (num <= 10.0)
+                                            pixel_x = (int)(spacing + (num - 5.0) / 5.0 * spacing);
+                                        else if (num <= 50.0)
+                                            pixel_x = (int)(2 * spacing + (num - 10.0) / 40.0 * spacing);
                                         else // <= 100
-                                            pixel_x = (int)(3 * spacing + (dBmMeterReading - 50.0) / 50.0 * spacing);
+                                            pixel_x = (int)(3 * spacing + (num - 50.0) / 50.0 * spacing);
                                     }
                                     else
                                     {
                                         spacing = (W * 0.25 - 2.0 - 10.0) / 1.0;
-                                        if (dBmMeterReading <= 120.0)
-                                            pixel_x = (int)(W * 0.75 + (dBmMeterReading - 100.0) / 20.0 * spacing);
+                                        if (num <= 120.0)
+                                            pixel_x = (int)(W * 0.75 + (num - 100.0) / 20.0 * spacing);
                                         else
-                                            pixel_x = (int)(W * 0.75 + spacing + (dBmMeterReading - 120.0) / 60.0 * spacing);
+                                            pixel_x = (int)(W * 0.75 + spacing + (num - 120.0) / 60.0 * spacing);
                                     }
                                 }
                                 else if (anan10present || anan10Epresent)// || apollopresent)
@@ -32442,25 +32595,25 @@ namespace Thetis
                                         g.DrawString("25+", font7, high_brush, (int)(W * 0.75 + i * spacing - (int)3.5 * string_width), (int)(H - 4 - 8 - string_height));
                                     }
 
-                                    if (dBmMeterReading <= 15.0) // low area
+                                    if (num <= 15.0) // low area
                                     {
                                         spacing = (W * 0.75 - 2.0) / 4.0;
-                                        if (dBmMeterReading <= 1.0)
-                                            pixel_x = (int)(dBmMeterReading / 1.0 * (int)spacing);
-                                        else if (dBmMeterReading <= 5.0)
-                                            pixel_x = (int)(spacing + (dBmMeterReading - 1.0) / 4.0 * spacing);
-                                        else if (dBmMeterReading <= 10.0)
-                                            pixel_x = (int)(2 * spacing + (dBmMeterReading - 5.0) / 5.0 * spacing);
+                                        if (num <= 1.0)
+                                            pixel_x = (int)(num / 1.0 * (int)spacing);
+                                        else if (num <= 5.0)
+                                            pixel_x = (int)(spacing + (num - 1.0) / 4.0 * spacing);
+                                        else if (num <= 10.0)
+                                            pixel_x = (int)(2 * spacing + (num - 5.0) / 5.0 * spacing);
                                         else
-                                            pixel_x = (int)(3 * spacing + (dBmMeterReading - 10.0) / 5.0 * spacing);
+                                            pixel_x = (int)(3 * spacing + (num - 10.0) / 5.0 * spacing);
                                     }
                                     else
                                     {
                                         spacing = (W * 0.25 - 2.0 - 10.0) / 1.0;
-                                        if (dBmMeterReading <= 25.0)
-                                            pixel_x = (int)(W * 0.75 + (dBmMeterReading - 15.0) / 10.0 * spacing);
+                                        if (num <= 25.0)
+                                            pixel_x = (int)(W * 0.75 + (num - 15.0) / 10.0 * spacing);
                                         else
-                                            pixel_x = (int)(W * 0.75 + spacing + (dBmMeterReading - 25.0) / 5.0 * spacing);
+                                            pixel_x = (int)(W * 0.75 + spacing + (num - 25.0) / 5.0 * spacing);
                                     }
                                 }
                                 else if (apollopresent) //(anan10present || apollopresent) // 30W
@@ -32500,25 +32653,25 @@ namespace Thetis
                                         g.DrawString("50+", font7, high_brush, (int)(W * 0.75 + i * spacing - (int)3.5 * string_width), (int)(H - 4 - 8 - string_height));
                                     }
 
-                                    if (dBmMeterReading <= 30.0) // low area
+                                    if (num <= 30.0) // low area
                                     {
                                         spacing = (W * 0.75 - 2.0) / 4.0;
-                                        if (dBmMeterReading <= 5.0)
-                                            pixel_x = (int)(dBmMeterReading / 5.0 * (int)spacing);
-                                        else if (dBmMeterReading <= 10.0)
-                                            pixel_x = (int)(spacing + (dBmMeterReading - 5.0) / 5.0 * spacing);
-                                        else if (dBmMeterReading <= 20.0)
-                                            pixel_x = (int)(2 * spacing + (dBmMeterReading - 10.0) / 10.0 * spacing);
+                                        if (num <= 5.0)
+                                            pixel_x = (int)(num / 5.0 * (int)spacing);
+                                        else if (num <= 10.0)
+                                            pixel_x = (int)(spacing + (num - 5.0) / 5.0 * spacing);
+                                        else if (num <= 20.0)
+                                            pixel_x = (int)(2 * spacing + (num - 10.0) / 10.0 * spacing);
                                         else // <= 30
-                                            pixel_x = (int)(3 * spacing + (dBmMeterReading - 20.0) / 10.0 * spacing);
+                                            pixel_x = (int)(3 * spacing + (num - 20.0) / 10.0 * spacing);
                                     }
                                     else
                                     {
                                         spacing = (W * 0.25 - 2.0 - 10.0) / 1.0;
-                                        if (dBmMeterReading <= 50.0)
-                                            pixel_x = (int)(W * 0.75 + (dBmMeterReading - 30.0) / 20.0 * spacing);
+                                        if (num <= 50.0)
+                                            pixel_x = (int)(W * 0.75 + (num - 30.0) / 20.0 * spacing);
                                         else
-                                            pixel_x = (int)(W * 0.75 + spacing + (dBmMeterReading - 50.0) / 25.0 * spacing);
+                                            pixel_x = (int)(W * 0.75 + spacing + (num - 50.0) / 25.0 * spacing);
                                     }
 
                                 }
@@ -32560,22 +32713,22 @@ namespace Thetis
                                     }
 
                                     // num *= 1000;
-                                    if (dBmMeterReading < 801.0) // low area
+                                    if (num < 801.0) // low area
                                     {
                                         spacing = (W * 0.75 - 2.0) / 4.0;
-                                        if (dBmMeterReading <= 100.0)
-                                            pixel_x = (int)(dBmMeterReading / 100.0 * spacing);
-                                        else if (dBmMeterReading <= 250.0)
-                                            pixel_x = (int)(spacing + (dBmMeterReading - 100.0) / 150.0 * spacing);
-                                        else if (dBmMeterReading <= 500.0)
-                                            pixel_x = (int)(2 * spacing + (dBmMeterReading - 250.0) / 250.0 * spacing);
+                                        if (num <= 100.0)
+                                            pixel_x = (int)(num / 100.0 * spacing);
+                                        else if (num <= 250.0)
+                                            pixel_x = (int)(spacing + (num - 100.0) / 150.0 * spacing);
+                                        else if (num <= 500.0)
+                                            pixel_x = (int)(2 * spacing + (num - 250.0) / 250.0 * spacing);
                                         else // <801.0
-                                            pixel_x = (int)(3 * spacing + (dBmMeterReading - 500.0) / 300.0 * spacing);
+                                            pixel_x = (int)(3 * spacing + (num - 500.0) / 300.0 * spacing);
                                     }
                                     else // >801
                                     {
                                         spacing = (W * 0.25 - 2.0 - 9.0) / 1.0;
-                                        pixel_x = (int)(W * 0.75 + (dBmMeterReading - 800.0) / 200.0 * spacing);
+                                        pixel_x = (int)(W * 0.75 + (num - 800.0) / 200.0 * spacing);
                                     }
                                 }
                                 break;
@@ -32701,25 +32854,25 @@ namespace Thetis
                                         g.DrawString("120+", font7, high_brush, (int)(W * 0.75 + i * spacing - (int)3.5 * string_width), (int)(H - 1 - string_height));
                                     }
 
-                                    if (dBmMeterReading <= 100.0) // low area
+                                    if (num <= 100.0) // low area
                                     {
                                         spacing = (W * 0.75 - 2.0) / 4.0;
-                                        if (dBmMeterReading <= 5.0)
-                                            pixel_x = (int)(dBmMeterReading / 5.0 * (int)spacing);
-                                        else if (dBmMeterReading <= 10.0)
-                                            pixel_x = (int)(spacing + (dBmMeterReading - 5.0) / 5.0 * spacing);
-                                        else if (dBmMeterReading <= 50.0)
-                                            pixel_x = (int)(2 * spacing + (dBmMeterReading - 10.0) / 40.0 * spacing);
+                                        if (num <= 5.0)
+                                            pixel_x = (int)(num / 5.0 * (int)spacing);
+                                        else if (num <= 10.0)
+                                            pixel_x = (int)(spacing + (num - 5.0) / 5.0 * spacing);
+                                        else if (num <= 50.0)
+                                            pixel_x = (int)(2 * spacing + (num - 10.0) / 40.0 * spacing);
                                         else
-                                            pixel_x = (int)(3 * spacing + (dBmMeterReading - 50.0) / 50.0 * spacing);
+                                            pixel_x = (int)(3 * spacing + (num - 50.0) / 50.0 * spacing);
                                     }
                                     else
                                     {
                                         spacing = (W * 0.25 - 2.0 - 10.0) / 1.0;
-                                        if (dBmMeterReading <= 120.0)
-                                            pixel_x = (int)(W * 0.75 + (dBmMeterReading - 100.0) / 20.0 * spacing);
+                                        if (num <= 120.0)
+                                            pixel_x = (int)(W * 0.75 + (num - 100.0) / 20.0 * spacing);
                                         else
-                                            pixel_x = (int)(W * 0.75 + spacing + (dBmMeterReading - 120.0) / 60.0 * spacing);
+                                            pixel_x = (int)(W * 0.75 + spacing + (num - 120.0) / 60.0 * spacing);
                                     }
                                 }
 
@@ -32844,25 +32997,25 @@ namespace Thetis
                                         g.DrawString("25+", font7, high_brush, (int)(W * 0.75 + i * spacing - (int)3.5 * string_width), (int)(H - 1 - string_height));
                                     }
 
-                                    if (dBmMeterReading <= 15.0) // low area
+                                    if (num <= 15.0) // low area
                                     {
                                         spacing = (W * 0.75 - 2.0) / 4.0;
-                                        if (dBmMeterReading <= 1.0)
-                                            pixel_x = (int)(dBmMeterReading / 1.0 * (int)spacing);
-                                        else if (dBmMeterReading <= 5.0)
-                                            pixel_x = (int)(spacing + (dBmMeterReading - 1.0) / 4.0 * spacing);
-                                        else if (dBmMeterReading <= 10.0)
-                                            pixel_x = (int)(2 * spacing + (dBmMeterReading - 5.0) / 5.0 * spacing);
+                                        if (num <= 1.0)
+                                            pixel_x = (int)(num / 1.0 * (int)spacing);
+                                        else if (num <= 5.0)
+                                            pixel_x = (int)(spacing + (num - 1.0) / 4.0 * spacing);
+                                        else if (num <= 10.0)
+                                            pixel_x = (int)(2 * spacing + (num - 5.0) / 5.0 * spacing);
                                         else
-                                            pixel_x = (int)(3 * spacing + (dBmMeterReading - 10.0) / 5.0 * spacing);
+                                            pixel_x = (int)(3 * spacing + (num - 10.0) / 5.0 * spacing);
                                     }
                                     else
                                     {
                                         spacing = (W * 0.25 - 2.0 - 10.0) / 1.0;
-                                        if (dBmMeterReading <= 25.0)
-                                            pixel_x = (int)(W * 0.75 + (dBmMeterReading - 15.0) / 10.0 * spacing);
+                                        if (num <= 25.0)
+                                            pixel_x = (int)(W * 0.75 + (num - 15.0) / 10.0 * spacing);
                                         else
-                                            pixel_x = (int)(W * 0.75 + spacing + (dBmMeterReading - 25.0) / 5.0 * spacing);
+                                            pixel_x = (int)(W * 0.75 + spacing + (num - 25.0) / 5.0 * spacing);
                                     }
                                 }
 
@@ -32986,25 +33139,25 @@ namespace Thetis
                                         g.DrawString("50+", font7, high_brush, (int)(W * 0.75 + i * spacing - (int)3.5 * string_width), (int)(H - 1 - string_height));
                                     }
 
-                                    if (dBmMeterReading <= 30.0) // low area
+                                    if (num <= 30.0) // low area
                                     {
                                         spacing = (W * 0.75 - 2.0) / 4.0;
-                                        if (dBmMeterReading <= 5.0)
-                                            pixel_x = (int)(dBmMeterReading / 5.0 * (int)spacing);
-                                        else if (dBmMeterReading <= 10.0)
-                                            pixel_x = (int)(spacing + (dBmMeterReading - 5.0) / 5.0 * spacing);
-                                        else if (dBmMeterReading <= 20.0)
-                                            pixel_x = (int)(2 * spacing + (dBmMeterReading - 10.0) / 10.0 * spacing);
+                                        if (num <= 5.0)
+                                            pixel_x = (int)(num / 5.0 * (int)spacing);
+                                        else if (num <= 10.0)
+                                            pixel_x = (int)(spacing + (num - 5.0) / 5.0 * spacing);
+                                        else if (num <= 20.0)
+                                            pixel_x = (int)(2 * spacing + (num - 10.0) / 10.0 * spacing);
                                         else // <= 30
-                                            pixel_x = (int)(3 * spacing + (dBmMeterReading - 20.0) / 10.0 * spacing);
+                                            pixel_x = (int)(3 * spacing + (num - 20.0) / 10.0 * spacing);
                                     }
                                     else
                                     {
                                         spacing = (W * 0.25 - 2.0 - 10.0) / 1.0;
-                                        if (dBmMeterReading <= 50.0)
-                                            pixel_x = (int)(W * 0.75 + (dBmMeterReading - 30.0) / 20.0 * spacing);
+                                        if (num <= 50.0)
+                                            pixel_x = (int)(W * 0.75 + (num - 30.0) / 20.0 * spacing);
                                         else
-                                            pixel_x = (int)(W * 0.75 + spacing + (dBmMeterReading - 50.0) / 25.0 * spacing);
+                                            pixel_x = (int)(W * 0.75 + spacing + (num - 50.0) / 25.0 * spacing);
                                     }
                                 }
                                 break;
@@ -33083,30 +33236,30 @@ namespace Thetis
                                     //  g.DrawString("5+", font7, high_brush, (int)(W * 0.75 + i * spacing - (int)2.5 * string_width), (int)(H - 4 - 8 - string_height));
                                   } */
 
-                                if (dBmMeterReading <= 3.0) // low area
+                                if (num <= 3.0) // low area
                                 {
                                     spacing = (W * 0.75) / 3.0;
 
-                                    if (dBmMeterReading <= 1.5)
-                                        pixel_x = (int)((dBmMeterReading - 1.0) / 0.5 * spacing);
-                                    else if (dBmMeterReading <= 2.0)
-                                        pixel_x = (int)(spacing + (dBmMeterReading - 1.5) / 0.5 * spacing);
+                                    if (num <= 1.5)
+                                        pixel_x = (int)((num - 1.0) / 0.5 * spacing);
+                                    else if (num <= 2.0)
+                                        pixel_x = (int)(spacing + (num - 1.5) / 0.5 * spacing);
                                     else //if (num <= 3.0)
-                                        pixel_x = (int)(2 * spacing + (dBmMeterReading - 2.0) / 1.0 * spacing);
+                                        pixel_x = (int)(2 * spacing + (num - 2.0) / 1.0 * spacing);
                                     // else //  num <= 4.0
                                     //  pixel_x = (int)(3 * spacing + (num - 3.0) / 1.0 * spacing);
                                 }
                                 else
                                 {
                                     spacing = (W * 0.25 - 6.0) / 2.0;
-                                    if (dBmMeterReading <= 4.0)
-                                        pixel_x = (int)(W * 0.75 + (dBmMeterReading - 3.0) / 1.0 * spacing);
-                                    else if (dBmMeterReading <= 5.0)
-                                        pixel_x = (int)(W * 0.75 + spacing + (dBmMeterReading - 4.0) / 1.0 * spacing);
+                                    if (num <= 4.0)
+                                        pixel_x = (int)(W * 0.75 + (num - 3.0) / 1.0 * spacing);
+                                    else if (num <= 5.0)
+                                        pixel_x = (int)(W * 0.75 + spacing + (num - 4.0) / 1.0 * spacing);
                                     else
-                                        pixel_x = (int)(W * 0.75 + 2 * spacing + (dBmMeterReading - 5.0) / 4.0 * spacing);
+                                        pixel_x = (int)(W * 0.75 + 2 * spacing + (num - 5.0) / 4.0 * spacing);
                                 }
-                                if (double.IsInfinity(dBmMeterReading)) pixel_x = W - 2;
+                                if (double.IsInfinity(num)) pixel_x = W - 2;
                                 break;
                             // spacing = (W * 0.25 - 2.0 - 10.0) / 1.0;
                             // if (num <= 25.0)
@@ -33211,7 +33364,7 @@ namespace Thetis
 
 
                                 spacing = (W * 0.75 - 2.0) / 4.0;
-                                pixel_x = (int)(dBmMeterReading / 5.0 * spacing);
+                                pixel_x = (int)(num / 5.0 * spacing);
                                 break;
                             case MeterTXMode.OFF:
                                 break;
@@ -33294,54 +33447,54 @@ namespace Thetis
                                     {
                                         if (rx1_above30)
                                         {
-                                            if (dBmMeterReading <= -124.0f) output = "    S 0";
-                                            else if (dBmMeterReading > -144.0f & dBmMeterReading <= -138.0f) output = "    S 1";
-                                            else if (dBmMeterReading > -138.0f & dBmMeterReading <= -132.0f) output = "    S 2";
-                                            else if (dBmMeterReading > -132.0f & dBmMeterReading <= -126.0f) output = "    S 3";
-                                            else if (dBmMeterReading > -126.0f & dBmMeterReading <= -120.0f) output = "    S 4";
-                                            else if (dBmMeterReading > -120.0f & dBmMeterReading <= -114.0f) output = "    S 5";
-                                            else if (dBmMeterReading > -114.0f & dBmMeterReading <= -108.0f) output = "    S 6";
-                                            else if (dBmMeterReading > -108.0f & dBmMeterReading <= -102.0f) output = "    S 7";
-                                            else if (dBmMeterReading > -102.0f & dBmMeterReading <= -96.0f) output = "    S 8";
-                                            else if (dBmMeterReading > -96.0f & dBmMeterReading <= -90.0f) output = "    S 9";
-                                            else if (dBmMeterReading > -90.0f & dBmMeterReading <= -86.0f) output = "    S 9 + 5";
-                                            else if (dBmMeterReading > -86.0f & dBmMeterReading <= -80.0f) output = "    S 9 + 10";
-                                            else if (dBmMeterReading > -80.0f & dBmMeterReading <= -76.0f) output = "    S 9 + 15";
-                                            else if (dBmMeterReading > -76.0f & dBmMeterReading <= -66.0f) output = "    S 9 + 20";
-                                            else if (dBmMeterReading > -66.0f & dBmMeterReading <= -56.0f) output = "    S 9 + 30";
-                                            else if (dBmMeterReading > -56.0f & dBmMeterReading <= -46.0f) output = "    S 9 + 40";
-                                            else if (dBmMeterReading > -46.0f & dBmMeterReading <= -36.0f) output = "    S 9 + 50";
-                                            else if (dBmMeterReading > -36.0f) output = "    S 9 + 60";
+                                            if (num <= -124.0f) output = "    S 0";
+                                            else if (num > -144.0f & num <= -138.0f) output = "    S 1";
+                                            else if (num > -138.0f & num <= -132.0f) output = "    S 2";
+                                            else if (num > -132.0f & num <= -126.0f) output = "    S 3";
+                                            else if (num > -126.0f & num <= -120.0f) output = "    S 4";
+                                            else if (num > -120.0f & num <= -114.0f) output = "    S 5";
+                                            else if (num > -114.0f & num <= -108.0f) output = "    S 6";
+                                            else if (num > -108.0f & num <= -102.0f) output = "    S 7";
+                                            else if (num > -102.0f & num <= -96.0f) output = "    S 8";
+                                            else if (num > -96.0f & num <= -90.0f) output = "    S 9";
+                                            else if (num > -90.0f & num <= -86.0f) output = "    S 9 + 5";
+                                            else if (num > -86.0f & num <= -80.0f) output = "    S 9 + 10";
+                                            else if (num > -80.0f & num <= -76.0f) output = "    S 9 + 15";
+                                            else if (num > -76.0f & num <= -66.0f) output = "    S 9 + 20";
+                                            else if (num > -66.0f & num <= -56.0f) output = "    S 9 + 30";
+                                            else if (num > -56.0f & num <= -46.0f) output = "    S 9 + 40";
+                                            else if (num > -46.0f & num <= -36.0f) output = "    S 9 + 50";
+                                            else if (num > -36.0f) output = "    S 9 + 60";
                                         }
                                         else
                                         {
-                                            if (dBmMeterReading <= -124.0f) output = "    S 0";
-                                            else if (dBmMeterReading > -124.0f & dBmMeterReading <= -118.0f) output = "    S 1";
-                                            else if (dBmMeterReading > -118.0f & dBmMeterReading <= -112.0f) output = "    S 2";
-                                            else if (dBmMeterReading > -112.0f & dBmMeterReading <= -106.0f) output = "    S 3";
-                                            else if (dBmMeterReading > -106.0f & dBmMeterReading <= -100.0f) output = "    S 4";
-                                            else if (dBmMeterReading > -100.0f & dBmMeterReading <= -94.0f) output = "    S 5";
-                                            else if (dBmMeterReading > -94.0f & dBmMeterReading <= -88.0f) output = "    S 6";
-                                            else if (dBmMeterReading > -88.0f & dBmMeterReading <= -82.0f) output = "    S 7";
-                                            else if (dBmMeterReading > -82.0f & dBmMeterReading <= -76.0f) output = "    S 8";
-                                            else if (dBmMeterReading > -76.0f & dBmMeterReading <= -70.0f) output = "    S 9";
-                                            else if (dBmMeterReading > -70.0f & dBmMeterReading <= -66.0f) output = "    S 9 + 5";
-                                            else if (dBmMeterReading > -66.0f & dBmMeterReading <= -60.0f) output = "    S 9 + 10";
-                                            else if (dBmMeterReading > -60.0f & dBmMeterReading <= -56.0f) output = "    S 9 + 15";
-                                            else if (dBmMeterReading > -56.0f & dBmMeterReading <= -46.0f) output = "    S 9 + 20";
-                                            else if (dBmMeterReading > -46.0f & dBmMeterReading <= -36.0f) output = "    S 9 + 30";
-                                            else if (dBmMeterReading > -36.0f & dBmMeterReading <= -26.0f) output = "    S 9 + 40";
-                                            else if (dBmMeterReading > -26.0f & dBmMeterReading <= -16.0f) output = "    S 9 + 50";
-                                            else if (dBmMeterReading > -16.0f) output = "    S 9 + 60";
+                                            if (num <= -124.0f) output = "    S 0";
+                                            else if (num > -124.0f & num <= -118.0f) output = "    S 1";
+                                            else if (num > -118.0f & num <= -112.0f) output = "    S 2";
+                                            else if (num > -112.0f & num <= -106.0f) output = "    S 3";
+                                            else if (num > -106.0f & num <= -100.0f) output = "    S 4";
+                                            else if (num > -100.0f & num <= -94.0f) output = "    S 5";
+                                            else if (num > -94.0f & num <= -88.0f) output = "    S 6";
+                                            else if (num > -88.0f & num <= -82.0f) output = "    S 7";
+                                            else if (num > -82.0f & num <= -76.0f) output = "    S 8";
+                                            else if (num > -76.0f & num <= -70.0f) output = "    S 9";
+                                            else if (num > -70.0f & num <= -66.0f) output = "    S 9 + 5";
+                                            else if (num > -66.0f & num <= -60.0f) output = "    S 9 + 10";
+                                            else if (num > -60.0f & num <= -56.0f) output = "    S 9 + 15";
+                                            else if (num > -56.0f & num <= -46.0f) output = "    S 9 + 20";
+                                            else if (num > -46.0f & num <= -36.0f) output = "    S 9 + 30";
+                                            else if (num > -36.0f & num <= -26.0f) output = "    S 9 + 40";
+                                            else if (num > -26.0f & num <= -16.0f) output = "    S 9 + 50";
+                                            else if (num > -16.0f) output = "    S 9 + 60";
                                         }
                                     }
-                                    else output = dBmMeterReading.ToString(format) + " dBm";
+                                    else output = num.ToString(format) + " dBm";
                                     break;
                                 case MeterRXMode.ADC_L:
                                 case MeterRXMode.ADC_R:
                                 case MeterRXMode.ADC2_L:
                                 case MeterRXMode.ADC2_R:
-                                    output = dBmMeterReading.ToString("f1") + " dBFS";
+                                    output = num.ToString("f1") + " dBFS";
                                     break;
                                 case MeterRXMode.OFF:
                                     output = "";
@@ -33363,17 +33516,17 @@ namespace Thetis
                                 case MeterTXMode.COMP:
                                 case MeterTXMode.ALC:
                                 case MeterTXMode.ALC_G:
-                                    output = dBmMeterReading.ToString(format) + " dB";
+                                    output = num.ToString(format) + " dB";
                                     break;
                                 case MeterTXMode.FORWARD_POWER:
                                 case MeterTXMode.REVERSE_POWER:
                                 case MeterTXMode.SWR_POWER:
-                                    if (anan10present || anan10Epresent || apollopresent) output = dBmMeterReading.ToString(format) + " W";
-                                    else if (alexpresent || pa_present) output = dBmMeterReading.ToString(format) + " W";
-                                    else output = dBmMeterReading.ToString(format) + " mW";
+                                    if (anan10present || anan10Epresent || apollopresent) output = num.ToString(format) + " W";
+                                    else if (alexpresent || pa_present) output = num.ToString(format) + " W";
+                                    else output = num.ToString(format) + " mW";
                                     break;
                                 case MeterTXMode.SWR:
-                                    output = dBmMeterReading.ToString("f1") + " : 1";
+                                    output = num.ToString("f1") + " : 1";
                                     break;
                                 case MeterTXMode.OFF:
                                     output = "";
@@ -33405,7 +33558,7 @@ namespace Thetis
             int H = picRX2Meter.ClientSize.Height;
             int W = picRX2Meter.ClientSize.Width;
             Graphics g = e.Graphics;
-            double dBmMeterReading;
+            double num;
             int pixel_x = 0;
             string output = "";
 
@@ -33415,7 +33568,7 @@ namespace Thetis
                     #region Original
 
                     //MW0LGE
-                    dBmMeterReading = handleOriginalMeter(2, g, H, W);
+                    num = handleOriginalMeter(2, g, H, W);
                     drawOriginalMeterTextScale(g, H, W);
                     //
 
@@ -33434,53 +33587,53 @@ namespace Thetis
                                 {
                                     if (rx1_above30)
                                     {
-                                        if (dBmMeterReading <= -124.0f) output = "    S 0";
-                                        else if (dBmMeterReading > -144.0f & dBmMeterReading <= -138.0f) output = "    S 1";
-                                        else if (dBmMeterReading > -138.0f & dBmMeterReading <= -132.0f) output = "    S 2";
-                                        else if (dBmMeterReading > -132.0f & dBmMeterReading <= -126.0f) output = "    S 3";
-                                        else if (dBmMeterReading > -126.0f & dBmMeterReading <= -120.0f) output = "    S 4";
-                                        else if (dBmMeterReading > -120.0f & dBmMeterReading <= -114.0f) output = "    S 5";
-                                        else if (dBmMeterReading > -114.0f & dBmMeterReading <= -108.0f) output = "    S 6";
-                                        else if (dBmMeterReading > -108.0f & dBmMeterReading <= -102.0f) output = "    S 7";
-                                        else if (dBmMeterReading > -102.0f & dBmMeterReading <= -96.0f) output = "    S 8";
-                                        else if (dBmMeterReading > -96.0f & dBmMeterReading <= -90.0f) output = "    S 9";
-                                        else if (dBmMeterReading > -90.0f & dBmMeterReading <= -86.0f) output = "    S 9 + 5";
-                                        else if (dBmMeterReading > -86.0f & dBmMeterReading <= -80.0f) output = "    S 9 + 10";
-                                        else if (dBmMeterReading > -80.0f & dBmMeterReading <= -76.0f) output = "    S 9 + 15";
-                                        else if (dBmMeterReading > -76.0f & dBmMeterReading <= -66.0f) output = "    S 9 + 20";
-                                        else if (dBmMeterReading > -66.0f & dBmMeterReading <= -56.0f) output = "    S 9 + 30";
-                                        else if (dBmMeterReading > -56.0f & dBmMeterReading <= -46.0f) output = "    S 9 + 40";
-                                        else if (dBmMeterReading > -46.0f & dBmMeterReading <= -36.0f) output = "    S 9 + 50";
-                                        else if (dBmMeterReading > -36.0f) output = "    S 9 + 60";
+                                        if (num <= -124.0f) output = "    S 0";
+                                        else if (num > -144.0f & num <= -138.0f) output = "    S 1";
+                                        else if (num > -138.0f & num <= -132.0f) output = "    S 2";
+                                        else if (num > -132.0f & num <= -126.0f) output = "    S 3";
+                                        else if (num > -126.0f & num <= -120.0f) output = "    S 4";
+                                        else if (num > -120.0f & num <= -114.0f) output = "    S 5";
+                                        else if (num > -114.0f & num <= -108.0f) output = "    S 6";
+                                        else if (num > -108.0f & num <= -102.0f) output = "    S 7";
+                                        else if (num > -102.0f & num <= -96.0f) output = "    S 8";
+                                        else if (num > -96.0f & num <= -90.0f) output = "    S 9";
+                                        else if (num > -90.0f & num <= -86.0f) output = "    S 9 + 5";
+                                        else if (num > -86.0f & num <= -80.0f) output = "    S 9 + 10";
+                                        else if (num > -80.0f & num <= -76.0f) output = "    S 9 + 15";
+                                        else if (num > -76.0f & num <= -66.0f) output = "    S 9 + 20";
+                                        else if (num > -66.0f & num <= -56.0f) output = "    S 9 + 30";
+                                        else if (num > -56.0f & num <= -46.0f) output = "    S 9 + 40";
+                                        else if (num > -46.0f & num <= -36.0f) output = "    S 9 + 50";
+                                        else if (num > -36.0f) output = "    S 9 + 60";
                                     }
                                     else
                                     {
-                                        if (dBmMeterReading <= -124.0f) output = "    S 0";
-                                        else if (dBmMeterReading > -124.0f & dBmMeterReading <= -118.0f) output = "    S 1";
-                                        else if (dBmMeterReading > -118.0f & dBmMeterReading <= -112.0f) output = "    S 2";
-                                        else if (dBmMeterReading > -112.0f & dBmMeterReading <= -106.0f) output = "    S 3";
-                                        else if (dBmMeterReading > -106.0f & dBmMeterReading <= -100.0f) output = "    S 4";
-                                        else if (dBmMeterReading > -100.0f & dBmMeterReading <= -94.0f) output = "    S 5";
-                                        else if (dBmMeterReading > -94.0f & dBmMeterReading <= -88.0f) output = "    S 6";
-                                        else if (dBmMeterReading > -88.0f & dBmMeterReading <= -82.0f) output = "    S 7";
-                                        else if (dBmMeterReading > -82.0f & dBmMeterReading <= -76.0f) output = "    S 8";
-                                        else if (dBmMeterReading > -76.0f & dBmMeterReading <= -70.0f) output = "    S 9";
-                                        else if (dBmMeterReading > -70.0f & dBmMeterReading <= -66.0f) output = "    S 9 + 5";
-                                        else if (dBmMeterReading > -66.0f & dBmMeterReading <= -60.0f) output = "    S 9 + 10";
-                                        else if (dBmMeterReading > -60.0f & dBmMeterReading <= -56.0f) output = "    S 9 + 15";
-                                        else if (dBmMeterReading > -56.0f & dBmMeterReading <= -46.0f) output = "    S 9 + 20";
-                                        else if (dBmMeterReading > -46.0f & dBmMeterReading <= -36.0f) output = "    S 9 + 30";
-                                        else if (dBmMeterReading > -36.0f & dBmMeterReading <= -26.0f) output = "    S 9 + 40";
-                                        else if (dBmMeterReading > -26.0f & dBmMeterReading <= -16.0f) output = "    S 9 + 50";
-                                        else if (dBmMeterReading > -16.0f) output = "    S 9 + 60";
+                                        if (num <= -124.0f) output = "    S 0";
+                                        else if (num > -124.0f & num <= -118.0f) output = "    S 1";
+                                        else if (num > -118.0f & num <= -112.0f) output = "    S 2";
+                                        else if (num > -112.0f & num <= -106.0f) output = "    S 3";
+                                        else if (num > -106.0f & num <= -100.0f) output = "    S 4";
+                                        else if (num > -100.0f & num <= -94.0f) output = "    S 5";
+                                        else if (num > -94.0f & num <= -88.0f) output = "    S 6";
+                                        else if (num > -88.0f & num <= -82.0f) output = "    S 7";
+                                        else if (num > -82.0f & num <= -76.0f) output = "    S 8";
+                                        else if (num > -76.0f & num <= -70.0f) output = "    S 9";
+                                        else if (num > -70.0f & num <= -66.0f) output = "    S 9 + 5";
+                                        else if (num > -66.0f & num <= -60.0f) output = "    S 9 + 10";
+                                        else if (num > -60.0f & num <= -56.0f) output = "    S 9 + 15";
+                                        else if (num > -56.0f & num <= -46.0f) output = "    S 9 + 20";
+                                        else if (num > -46.0f & num <= -36.0f) output = "    S 9 + 30";
+                                        else if (num > -36.0f & num <= -26.0f) output = "    S 9 + 40";
+                                        else if (num > -26.0f & num <= -16.0f) output = "    S 9 + 50";
+                                        else if (num > -16.0f) output = "    S 9 + 60";
                                     }
                                 }
                                 else
-                                    output = dBmMeterReading.ToString(format) + " dBm";
+                                    output = num.ToString(format) + " dBm";
                                 break;
                             case MeterRXMode.ADC_L:
                             case MeterRXMode.ADC_R:
-                                output = dBmMeterReading.ToString("f1") + " dBFS";
+                                output = num.ToString("f1") + " dBFS";
                                 break;
                             case MeterRXMode.OFF:
                                 output = "";
@@ -33506,14 +33659,14 @@ namespace Thetis
 
                     if (rx2_avg_num == Display.CLEAR_FLAG) // reset average -- just use new value
                     {
-                        dBmMeterReading = rx2_avg_num = rx2_meter_current_data;
+                        num = rx2_avg_num = rx2_meter_current_data;
                     }
                     else
                     {
                         if (rx2_meter_current_data > rx2_avg_num)
-                            dBmMeterReading = rx2_avg_num = rx2_meter_current_data * 0.8 + rx2_avg_num * 0.2; // fast rise
+                            num = rx2_avg_num = rx2_meter_current_data * 0.8 + rx2_avg_num * 0.2; // fast rise
                         else
-                            dBmMeterReading = rx2_avg_num = rx2_meter_current_data * 0.2 + rx2_avg_num * 0.8; // slow decay
+                            num = rx2_avg_num = rx2_meter_current_data * 0.2 + rx2_avg_num * 0.8; // slow decay
                     }
                     //using (Pen p = new Pen(edge_meter_background_color))
                     g.DrawRectangle(edge_meter_background_pen, 0, 0, W, H);
@@ -33561,25 +33714,25 @@ namespace Thetis
 
                             if (rx2_above30)
                             {
-                                if (dBmMeterReading > -93.0) // high area
+                                if (num > -93.0) // high area
                                 {
-                                    pixel_x = (int)(W * 0.5 + (93.0 + dBmMeterReading) / 63.0 * (W * 0.5 - 3));
+                                    pixel_x = (int)(W * 0.5 + (93.0 + num) / 63.0 * (W * 0.5 - 3));
                                 }
                                 else
                                 {
-                                    pixel_x = (int)((dBmMeterReading + 153.0) / 60.0 * (W * 0.5));
+                                    pixel_x = (int)((num + 153.0) / 60.0 * (W * 0.5));
                                 }
                             }
                             else
                             {
 
-                                if (dBmMeterReading > -73.0) // high area
+                                if (num > -73.0) // high area
                                 {
-                                    pixel_x = (int)(W * 0.5 + (73.0 + dBmMeterReading) / 63.0 * (W * 0.5 - 3));
+                                    pixel_x = (int)(W * 0.5 + (73.0 + num) / 63.0 * (W * 0.5 - 3));
                                 }
                                 else
                                 {
-                                    pixel_x = (int)((dBmMeterReading + 133.0) / 60.0 * (W * 0.5));
+                                    pixel_x = (int)((num + 133.0) / 60.0 * (W * 0.5));
                                 }
                             }
                             break;
@@ -33607,7 +33760,7 @@ namespace Thetis
                                 g.DrawString(s, font7, b, (int)(i * spacing - (int)string_width * (s.Length)), (int)(H - 4 - 8 - string_height));
                             }
 
-                            pixel_x = (int)((dBmMeterReading + 120.0) / 120.0 * (W - 5.0));
+                            pixel_x = (int)((num + 120.0) / 120.0 * (W - 5.0));
                             break;
                         case MeterRXMode.OFF:
                             break;
@@ -33649,55 +33802,55 @@ namespace Thetis
                                 {
                                     if (rx2_above30)
                                     {
-                                        if (dBmMeterReading <= -124.0f) output = "    S 0";
-                                        else if (dBmMeterReading > -144.0f & dBmMeterReading <= -138.0f) output = "    S 1";
-                                        else if (dBmMeterReading > -138.0f & dBmMeterReading <= -132.0f) output = "    S 2";
-                                        else if (dBmMeterReading > -132.0f & dBmMeterReading <= -126.0f) output = "    S 3";
-                                        else if (dBmMeterReading > -126.0f & dBmMeterReading <= -120.0f) output = "    S 4";
-                                        else if (dBmMeterReading > -120.0f & dBmMeterReading <= -114.0f) output = "    S 5";
-                                        else if (dBmMeterReading > -114.0f & dBmMeterReading <= -108.0f) output = "    S 6";
-                                        else if (dBmMeterReading > -108.0f & dBmMeterReading <= -102.0f) output = "    S 7";
-                                        else if (dBmMeterReading > -102.0f & dBmMeterReading <= -96.0f) output = "    S 8";
-                                        else if (dBmMeterReading > -96.0f & dBmMeterReading <= -90.0f) output = "    S 9";
-                                        else if (dBmMeterReading > -90.0f & dBmMeterReading <= -86.0f) output = "    S 9 + 5";
-                                        else if (dBmMeterReading > -86.0f & dBmMeterReading <= -80.0f) output = "    S 9 + 10";
-                                        else if (dBmMeterReading > -80.0f & dBmMeterReading <= -76.0f) output = "    S 9 + 15";
-                                        else if (dBmMeterReading > -76.0f & dBmMeterReading <= -66.0f) output = "    S 9 + 20";
-                                        else if (dBmMeterReading > -66.0f & dBmMeterReading <= -56.0f) output = "    S 9 + 30";
-                                        else if (dBmMeterReading > -56.0f & dBmMeterReading <= -46.0f) output = "    S 9 + 40";
-                                        else if (dBmMeterReading > -46.0f & dBmMeterReading <= -36.0f) output = "    S 9 + 50";
-                                        else if (dBmMeterReading > -36.0f) output = "    S 9 + 60";
+                                        if (num <= -124.0f) output = "    S 0";
+                                        else if (num > -144.0f & num <= -138.0f) output = "    S 1";
+                                        else if (num > -138.0f & num <= -132.0f) output = "    S 2";
+                                        else if (num > -132.0f & num <= -126.0f) output = "    S 3";
+                                        else if (num > -126.0f & num <= -120.0f) output = "    S 4";
+                                        else if (num > -120.0f & num <= -114.0f) output = "    S 5";
+                                        else if (num > -114.0f & num <= -108.0f) output = "    S 6";
+                                        else if (num > -108.0f & num <= -102.0f) output = "    S 7";
+                                        else if (num > -102.0f & num <= -96.0f) output = "    S 8";
+                                        else if (num > -96.0f & num <= -90.0f) output = "    S 9";
+                                        else if (num > -90.0f & num <= -86.0f) output = "    S 9 + 5";
+                                        else if (num > -86.0f & num <= -80.0f) output = "    S 9 + 10";
+                                        else if (num > -80.0f & num <= -76.0f) output = "    S 9 + 15";
+                                        else if (num > -76.0f & num <= -66.0f) output = "    S 9 + 20";
+                                        else if (num > -66.0f & num <= -56.0f) output = "    S 9 + 30";
+                                        else if (num > -56.0f & num <= -46.0f) output = "    S 9 + 40";
+                                        else if (num > -46.0f & num <= -36.0f) output = "    S 9 + 50";
+                                        else if (num > -36.0f) output = "    S 9 + 60";
                                     }
                                     else
                                     {
-                                        if (dBmMeterReading <= -124.0f) output = "    S 0";
-                                        else if (dBmMeterReading > -124.0f & dBmMeterReading <= -118.0f) output = "    S 1";
-                                        else if (dBmMeterReading > -118.0f & dBmMeterReading <= -112.0f) output = "    S 2";
-                                        else if (dBmMeterReading > -112.0f & dBmMeterReading <= -106.0f) output = "    S 3";
-                                        else if (dBmMeterReading > -106.0f & dBmMeterReading <= -100.0f) output = "    S 4";
-                                        else if (dBmMeterReading > -100.0f & dBmMeterReading <= -94.0f) output = "    S 5";
-                                        else if (dBmMeterReading > -94.0f & dBmMeterReading <= -88.0f) output = "    S 6";
-                                        else if (dBmMeterReading > -88.0f & dBmMeterReading <= -82.0f) output = "    S 7";
-                                        else if (dBmMeterReading > -82.0f & dBmMeterReading <= -76.0f) output = "    S 8";
-                                        else if (dBmMeterReading > -76.0f & dBmMeterReading <= -70.0f) output = "    S 9";
-                                        else if (dBmMeterReading > -70.0f & dBmMeterReading <= -66.0f) output = "    S 9 + 5";
-                                        else if (dBmMeterReading > -66.0f & dBmMeterReading <= -60.0f) output = "    S 9 + 10";
-                                        else if (dBmMeterReading > -60.0f & dBmMeterReading <= -56.0f) output = "    S 9 + 15";
-                                        else if (dBmMeterReading > -56.0f & dBmMeterReading <= -46.0f) output = "    S 9 + 20";
-                                        else if (dBmMeterReading > -46.0f & dBmMeterReading <= -36.0f) output = "    S 9 + 30";
-                                        else if (dBmMeterReading > -36.0f & dBmMeterReading <= -26.0f) output = "    S 9 + 40";
-                                        else if (dBmMeterReading > -26.0f & dBmMeterReading <= -16.0f) output = "    S 9 + 50";
-                                        else if (dBmMeterReading > -16.0f) output = "    S 9 + 60";
+                                        if (num <= -124.0f) output = "    S 0";
+                                        else if (num > -124.0f & num <= -118.0f) output = "    S 1";
+                                        else if (num > -118.0f & num <= -112.0f) output = "    S 2";
+                                        else if (num > -112.0f & num <= -106.0f) output = "    S 3";
+                                        else if (num > -106.0f & num <= -100.0f) output = "    S 4";
+                                        else if (num > -100.0f & num <= -94.0f) output = "    S 5";
+                                        else if (num > -94.0f & num <= -88.0f) output = "    S 6";
+                                        else if (num > -88.0f & num <= -82.0f) output = "    S 7";
+                                        else if (num > -82.0f & num <= -76.0f) output = "    S 8";
+                                        else if (num > -76.0f & num <= -70.0f) output = "    S 9";
+                                        else if (num > -70.0f & num <= -66.0f) output = "    S 9 + 5";
+                                        else if (num > -66.0f & num <= -60.0f) output = "    S 9 + 10";
+                                        else if (num > -60.0f & num <= -56.0f) output = "    S 9 + 15";
+                                        else if (num > -56.0f & num <= -46.0f) output = "    S 9 + 20";
+                                        else if (num > -46.0f & num <= -36.0f) output = "    S 9 + 30";
+                                        else if (num > -36.0f & num <= -26.0f) output = "    S 9 + 40";
+                                        else if (num > -26.0f & num <= -16.0f) output = "    S 9 + 50";
+                                        else if (num > -16.0f) output = "    S 9 + 60";
                                     }
                                 }
                                 else
-                                    output = dBmMeterReading.ToString(format) + " dBm";
+                                    output = num.ToString(format) + " dBm";
                                 break;
                             case MeterRXMode.ADC_L:
                             case MeterRXMode.ADC_R:
                             case MeterRXMode.ADC2_L:
                             case MeterRXMode.ADC2_R:
-                                output = dBmMeterReading.ToString("f1") + " dBFS";
+                                output = num.ToString("f1") + " dBFS";
                                 break;
                             case MeterRXMode.OFF:
                                 output = "";
@@ -38616,13 +38769,20 @@ namespace Thetis
 
         private void Console_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            this.Hide(); 
+            //this.Hide(); 
             Audio.callback_return = 2;
             CATEnabled = false;
 			AndromedaCATEnabled = false;
 
             if (chkPower.Checked == true)  // If we're quitting without first clicking off the "Power" button            
                 chkPower.Checked = false;
+
+            // MW0LGE
+            // show a shutdown window
+            ShutdownForm sdf = new ShutdownForm();
+            sdf.Location = new Point(this.Location.X + this.Size.Width / 2 - sdf.Size.Width / 2, this.Location.Y + this.Size.Height / 2 - sdf.Size.Height / 2);
+            sdf.Show();
+            Application.DoEvents();
 
             MemoryList.Save();
             SetupForm.SaveNotchesToDatabase();
@@ -38639,7 +38799,11 @@ namespace Thetis
             if (diversityForm != null) diversityForm.Hide();
             //  if (preSelForm != null) preSelForm.Hide();
             if (psform != null) psform.Hide();
-            if (cmaster.Getwb(0).WBdisplay != null) cmaster.Hidewb(0);
+
+            //MW0LGE getwb performs a show, so the window will flash.
+            //as Hidewb handles null ref ok, then just call cmaster.Hidewb(0);
+            //if (cmaster.Getwb(0).WBdisplay != null) cmaster.Hidewb(0);
+            cmaster.Hidewb(0);
 
             if (CWXForm != null) CWXForm.Close();
 
@@ -38661,9 +38825,17 @@ namespace Thetis
             if (diversityForm != null) diversityForm.Close();
             //  if (preSelForm != null) preSelForm.Close();
             if (psform != null) psform.Close();
-            if (cmaster.Getwb(0).WBdisplay != null) cmaster.Closewb(0);
+
+            //MW0LGE getwb performs a show, so the window will flash.
+            //as Closewb handles null ref ok, then just call cmaster.Closewb(0);
+            //if (cmaster.Getwb(0).WBdisplay != null) cmaster.Closewb(0);
+            cmaster.Closewb(0);
+
             //cmaster.close_rxa();
-        }
+
+            this.Hide();
+            sdf.Close();
+       }
 
         private void comboPreamp_SelectedIndexChanged(object sender, System.EventArgs e)
         {
@@ -40355,201 +40527,202 @@ namespace Thetis
 
         }
 
-        private void chkTUN_CheckedChanged_old(object sender, System.EventArgs e)
-        {
-            if (chkTUN.Checked)
-            {
-                if (!PowerOn)
-                {
-                    MessageBox.Show("Power must be on to turn on the Tune function.",
-                        "Power is off",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Hand);
-                    chkTUN.Checked = false;
-                    return;
-                }
+        // MW0LGE this looks like it was renamed _old but not commented out
+        //private void chkTUN_CheckedChanged_old(object sender, System.EventArgs e)
+        //{
+        //    if (chkTUN.Checked)
+        //    {
+        //        if (!PowerOn)
+        //        {
+        //            MessageBox.Show("Power must be on to turn on the Tune function.",
+        //                "Power is off",
+        //                MessageBoxButtons.OK,
+        //                MessageBoxIcon.Hand);
+        //            chkTUN.Checked = false;
+        //            return;
+        //        }
 
-                if (chkNoiseGate.Checked)
-                    //radio.GetDSPTX(0).TXSquelchOn = false;
-                    cmaster.SetDEXPRun(0, chkNoiseGate.Checked);
-                tuning = true;
-                chkTUN.BackColor = button_selected_color;
+        //        if (chkNoiseGate.Checked)
+        //            //radio.GetDSPTX(0).TXSquelchOn = false;
+        //            cmaster.SetDEXPRun(0, chkNoiseGate.Checked);
+        //        tuning = true;
+        //        chkTUN.BackColor = button_selected_color;
 
-                if (current_meter_tx_mode != tune_meter_tx_mode)
-                {
-                    old_tune_meter_tx_mode = current_meter_tx_mode;
-                    CurrentMeterTXMode = tune_meter_tx_mode;
-                    comboMeterTXMode_SelectedIndexChanged(this, EventArgs.Empty);
-                }
+        //        if (current_meter_tx_mode != tune_meter_tx_mode)
+        //        {
+        //            old_tune_meter_tx_mode = current_meter_tx_mode;
+        //            CurrentMeterTXMode = tune_meter_tx_mode;
+        //            comboMeterTXMode_SelectedIndexChanged(this, EventArgs.Empty);
+        //        }
 
-                switch (Audio.TXDSPMode)
-                {
-                    case DSPMode.USB:
-                    case DSPMode.CWU:
-                    case DSPMode.DIGU:
-                        // Audio.SineFreq1 = cw_pitch;
-                        //DttSP.SetTXFilter(1, cw_pitch - 100, cw_pitch + 100);
-                        WDSP.SetTXABandpassFreqs(WDSP.id(1, 0), cw_pitch - 100, cw_pitch + 100);
-                        Audio.TXInputSignal = Audio.SignalSource.SINE;
-                        Audio.SourceScale = 1.0;
-                        break;
-                    case DSPMode.LSB:
-                    case DSPMode.CWL:
-                    case DSPMode.DIGL:
-                        // Audio.SineFreq1 = cw_pitch;
-                        //DttSP.SetTXFilter(1, -cw_pitch - 100, -cw_pitch + 100);
-                        WDSP.SetTXABandpassFreqs(WDSP.id(1, 0), -cw_pitch - 100, -cw_pitch + 100);
-                        Audio.TXInputSignal = Audio.SignalSource.SINE;
-                        Audio.SourceScale = 1.0;
-                        break;
-                    case DSPMode.DSB:
-                        // Audio.SineFreq1 = cw_pitch;
-                        //DttSP.SetTXFilter(1, cw_pitch - 100, cw_pitch + 100);
-                        WDSP.SetTXABandpassFreqs(WDSP.id(1, 0), cw_pitch - 100, cw_pitch + 100);
-                        Audio.TXInputSignal = Audio.SignalSource.SINE;
-                        Audio.SourceScale = 1.0;
-                        break;
-                    case DSPMode.AM:
-                    case DSPMode.SAM:
-                    case DSPMode.FM:
-                        //  Audio.SineFreq1 = cw_pitch;
-                        //DttSP.SetTXFilter(1, cw_pitch - 100, cw_pitch + 100);
-                        WDSP.SetTXABandpassFreqs(WDSP.id(1, 0), cw_pitch - 100, cw_pitch + 100);
-                        Audio.TXInputSignal = Audio.SignalSource.SINE;
-                        Audio.SourceScale = 1.0;
-                        break;
-                }
+        //        switch (Audio.TXDSPMode)
+        //        {
+        //            case DSPMode.USB:
+        //            case DSPMode.CWU:
+        //            case DSPMode.DIGU:
+        //                // Audio.SineFreq1 = cw_pitch;
+        //                //DttSP.SetTXFilter(1, cw_pitch - 100, cw_pitch + 100);
+        //                WDSP.SetTXABandpassFreqs(WDSP.id(1, 0), cw_pitch - 100, cw_pitch + 100);
+        //                Audio.TXInputSignal = Audio.SignalSource.SINE;
+        //                Audio.SourceScale = 1.0;
+        //                break;
+        //            case DSPMode.LSB:
+        //            case DSPMode.CWL:
+        //            case DSPMode.DIGL:
+        //                // Audio.SineFreq1 = cw_pitch;
+        //                //DttSP.SetTXFilter(1, -cw_pitch - 100, -cw_pitch + 100);
+        //                WDSP.SetTXABandpassFreqs(WDSP.id(1, 0), -cw_pitch - 100, -cw_pitch + 100);
+        //                Audio.TXInputSignal = Audio.SignalSource.SINE;
+        //                Audio.SourceScale = 1.0;
+        //                break;
+        //            case DSPMode.DSB:
+        //                // Audio.SineFreq1 = cw_pitch;
+        //                //DttSP.SetTXFilter(1, cw_pitch - 100, cw_pitch + 100);
+        //                WDSP.SetTXABandpassFreqs(WDSP.id(1, 0), cw_pitch - 100, cw_pitch + 100);
+        //                Audio.TXInputSignal = Audio.SignalSource.SINE;
+        //                Audio.SourceScale = 1.0;
+        //                break;
+        //            case DSPMode.AM:
+        //            case DSPMode.SAM:
+        //            case DSPMode.FM:
+        //                //  Audio.SineFreq1 = cw_pitch;
+        //                //DttSP.SetTXFilter(1, cw_pitch - 100, cw_pitch + 100);
+        //                WDSP.SetTXABandpassFreqs(WDSP.id(1, 0), cw_pitch - 100, cw_pitch + 100);
+        //                Audio.TXInputSignal = Audio.SignalSource.SINE;
+        //                Audio.SourceScale = 1.0;
+        //                break;
+        //        }
 
-                //DttSP.SetMode(1, 0, DSPMode.DIGU);
-                WDSP.SetTXAMode(WDSP.id(1, 0), DSPMode.DIGU);
-                if (!tx_tune_power)
-                    PreviousPWR = ptbPWR.Value; // save current value
-                if ((!xvtr_tune_power || tx_xvtr_index < 0) && !tx_tune_power) // switch to TUN value
-                    PWR = tune_power;
+        //        //DttSP.SetMode(1, 0, DSPMode.DIGU);
+        //        WDSP.SetTXAMode(WDSP.id(1, 0), DSPMode.DIGU);
+        //        if (!tx_tune_power)
+        //            PreviousPWR = ptbPWR.Value; // save current value
+        //        if ((!xvtr_tune_power || tx_xvtr_index < 0) && !tx_tune_power) // switch to TUN value
+        //            PWR = tune_power;
 
-                if (!chkVFOSplit.Checked && !chkVFOBTX.Checked)
-                {
-                    txtVFOAFreq_LostFocus(this, EventArgs.Empty);
-                }
-                else
-                {
-                    if (chkVFOBTX.Checked)
-                        txtVFOBFreq_LostFocus(this, EventArgs.Empty);
-                    else // split is on
-                    {
-                        if (!chkRX2.Checked)
-                            txtVFOBFreq_LostFocus(this, EventArgs.Empty);
-                        else
-                            txtVFOABand_LostFocus(this, EventArgs.Empty);
-                    }
-                }
+        //        if (!chkVFOSplit.Checked && !chkVFOBTX.Checked)
+        //        {
+        //            txtVFOAFreq_LostFocus(this, EventArgs.Empty);
+        //        }
+        //        else
+        //        {
+        //            if (chkVFOBTX.Checked)
+        //                txtVFOBFreq_LostFocus(this, EventArgs.Empty);
+        //            else // split is on
+        //            {
+        //                if (!chkRX2.Checked)
+        //                    txtVFOBFreq_LostFocus(this, EventArgs.Empty);
+        //                else
+        //                    txtVFOABand_LostFocus(this, EventArgs.Empty);
+        //            }
+        //        }
 
-                chkMOX.Checked = true;
-                if (!mox)
-                {
-                    chkTUN.Checked = false;
-                    return;
-                }
+        //        chkMOX.Checked = true;
+        //        if (!mox)
+        //        {
+        //            chkTUN.Checked = false;
+        //            return;
+        //        }
 
-                current_ptt_mode = PTTMode.MANUAL;
+        //        current_ptt_mode = PTTMode.MANUAL;
 
-                switch (Audio.TXDSPMode)
-                {
-                    case DSPMode.CWL:
-                    case DSPMode.CWU:
-                        Audio.CurrentAudioState1 = Audio.AudioState.DTTSP;
-                        Audio.TXDSPMode = DSPMode.DIGU;
-                        break;
-                }
+        //        switch (Audio.TXDSPMode)
+        //        {
+        //            case DSPMode.CWL:
+        //            case DSPMode.CWU:
+        //                Audio.CurrentAudioState1 = Audio.AudioState.DTTSP;
+        //                Audio.TXDSPMode = DSPMode.DIGU;
+        //                break;
+        //        }
 
-                //  if (HPSDRisMetis)
-                // {
-                NetworkIO.SetUserOut0(1);
-                NetworkIO.SetUserOut2(1);
-                // }
+        //        //  if (HPSDRisMetis)
+        //        // {
+        //        NetworkIO.SetUserOut0(1);
+        //        NetworkIO.SetUserOut2(1);
+        //        // }
 
-                if (apollopresent && apollo_tuner_enabled)
-                    NetworkIO.EnableApolloAutoTune(1);
+        //        if (apollopresent && apollo_tuner_enabled)
+        //            NetworkIO.EnableApolloAutoTune(1);
 
-                is_tune = true;
+        //        is_tune = true;
 
-                /*if(atu_present && tx_band != Band.B2M &&
-                    (ATUTuneMode)comboTuneMode.SelectedIndex != ATUTuneMode.BYPASS)
-                {
-                    chkTUN.Enabled = false;
-                    comboTuneMode.Enabled = false;
+        //        /*if(atu_present && tx_band != Band.B2M &&
+        //            (ATUTuneMode)comboTuneMode.SelectedIndex != ATUTuneMode.BYPASS)
+        //        {
+        //            chkTUN.Enabled = false;
+        //            comboTuneMode.Enabled = false;
 
-                    Thread t = new Thread(new ThreadStart(Tune));
-                    t.IsBackground = true;
-                    t.Priority = ThreadPriority.Normal;
-                    t.Name = "TUN Thread";
-                    t.Start();
-                }*/
-                return;
-            }
-            else
-            {
-                Audio.TXInputSignal = Audio.SignalSource.RADIO;
-                Thread.Sleep(200);
+        //            Thread t = new Thread(new ThreadStart(Tune));
+        //            t.IsBackground = true;
+        //            t.Priority = ThreadPriority.Normal;
+        //            t.Name = "TUN Thread";
+        //            t.Start();
+        //        }*/
+        //        return;
+        //    }
+        //    else
+        //    {
+        //        Audio.TXInputSignal = Audio.SignalSource.RADIO;
+        //        Thread.Sleep(200);
 
-                chkMOX.Checked = false;
-                chkTUN.BackColor = SystemColors.Control;
-                tuning = false;
+        //        chkMOX.Checked = false;
+        //        chkTUN.BackColor = SystemColors.Control;
+        //        tuning = false;
 
-                if (!chkVFOSplit.Checked && !chkVFOBTX.Checked)
-                {
-                    txtVFOAFreq_LostFocus(this, EventArgs.Empty);
-                }
-                else
-                {
-                    if (chkVFOBTX.Checked)
-                        txtVFOBFreq_LostFocus(this, EventArgs.Empty);
-                    else // split is on
-                    {
-                        if (!chkRX2.Checked)
-                            txtVFOBFreq_LostFocus(this, EventArgs.Empty);
-                        else
-                            txtVFOABand_LostFocus(this, EventArgs.Empty);
-                    }
-                }
+        //        if (!chkVFOSplit.Checked && !chkVFOBTX.Checked)
+        //        {
+        //            txtVFOAFreq_LostFocus(this, EventArgs.Empty);
+        //        }
+        //        else
+        //        {
+        //            if (chkVFOBTX.Checked)
+        //                txtVFOBFreq_LostFocus(this, EventArgs.Empty);
+        //            else // split is on
+        //            {
+        //                if (!chkRX2.Checked)
+        //                    txtVFOBFreq_LostFocus(this, EventArgs.Empty);
+        //                else
+        //                    txtVFOABand_LostFocus(this, EventArgs.Empty);
+        //            }
+        //        }
 
-                if (apollopresent)
-                    NetworkIO.EnableApolloAutoTune(0);
+        //        if (apollopresent)
+        //            NetworkIO.EnableApolloAutoTune(0);
 
-                if ((tx_xvtr_index < 0 || xvtr_tune_power) && !tx_tune_power)
-                    TunePower = ptbPWR.Value;
+        //        if ((tx_xvtr_index < 0 || xvtr_tune_power) && !tx_tune_power)
+        //            TunePower = ptbPWR.Value;
 
-                if (!tx_tune_power)
-                    PWR = PreviousPWR;
-                DSPMode mode = radio.GetDSPTX(0).CurrentDSPMode;
-                //DttSP.SetMode(1, 0, mode);
-                WDSP.SetTXAMode(WDSP.id(1, 0), mode);
-                //if (chkVFOBTX.Checked) mode = rx2_dsp_mode;
-                switch (mode)
-                {
-                    case DSPMode.AM:
-                    case DSPMode.SAM:
-                    case DSPMode.FM:
-                        // Audio.SineFreq1 = cw_pitch;
-                        break;
-                    case DSPMode.CWL:
-                    case DSPMode.CWU:
-                        Audio.TXDSPMode = mode;
-                        break;
-                }
-                //DttSP.SetTXFilter(1, radio.GetDSPTX(0).TXFilterLow, radio.GetDSPTX(0).TXFilterHigh);
-                WDSP.SetTXABandpassFreqs(WDSP.id(1, 0), radio.GetDSPTX(0).TXFilterLow, radio.GetDSPTX(0).TXFilterHigh);
-                if (tune_meter_tx_mode != old_tune_meter_tx_mode)
-                    CurrentMeterTXMode = old_tune_meter_tx_mode;
+        //        if (!tx_tune_power)
+        //            PWR = PreviousPWR;
+        //        DSPMode mode = radio.GetDSPTX(0).CurrentDSPMode;
+        //        //DttSP.SetMode(1, 0, mode);
+        //        WDSP.SetTXAMode(WDSP.id(1, 0), mode);
+        //        //if (chkVFOBTX.Checked) mode = rx2_dsp_mode;
+        //        switch (mode)
+        //        {
+        //            case DSPMode.AM:
+        //            case DSPMode.SAM:
+        //            case DSPMode.FM:
+        //                // Audio.SineFreq1 = cw_pitch;
+        //                break;
+        //            case DSPMode.CWL:
+        //            case DSPMode.CWU:
+        //                Audio.TXDSPMode = mode;
+        //                break;
+        //        }
+        //        //DttSP.SetTXFilter(1, radio.GetDSPTX(0).TXFilterLow, radio.GetDSPTX(0).TXFilterHigh);
+        //        WDSP.SetTXABandpassFreqs(WDSP.id(1, 0), radio.GetDSPTX(0).TXFilterLow, radio.GetDSPTX(0).TXFilterHigh);
+        //        if (tune_meter_tx_mode != old_tune_meter_tx_mode)
+        //            CurrentMeterTXMode = old_tune_meter_tx_mode;
 
-                if (chkNoiseGate.Checked)
-                    //radio.GetDSPTX(0).TXSquelchOn = true;
-                    cmaster.SetDEXPRun(0, chkNoiseGate.Checked);
-                NetworkIO.SetUserOut0(0);
-                NetworkIO.SetUserOut2(0);
+        //        if (chkNoiseGate.Checked)
+        //            //radio.GetDSPTX(0).TXSquelchOn = true;
+        //            cmaster.SetDEXPRun(0, chkNoiseGate.Checked);
+        //        NetworkIO.SetUserOut0(0);
+        //        NetworkIO.SetUserOut2(0);
 
-            }
-        }
+        //    }
+        //}
 
         private void comboTuneMode_SelectedIndexChanged(object sender, System.EventArgs e)
         {
@@ -41475,7 +41648,7 @@ namespace Thetis
                 (Display.CurrentDisplayMode == DisplayMode.WATERFALL && !mox)))
             {
                 double rx1_osc = Math.Round(-(VFOAFreq - center_frequency) * 1.0e6);
-                double zoom_factor = 1.0 / ((ptbDisplayZoom.Maximum + ptbDisplayZoom.Minimum - ptbDisplayZoom.Value) * 0.01);
+                // MW0LGE double zoom_factor = 1.0 / ((ptbDisplayZoom.Maximum + ptbDisplayZoom.Minimum - ptbDisplayZoom.Value) * 0.01);
 
                 // MW0LGE
                 double Lmargin = Convert.ToDouble(-Display.RX1FilterLow);
@@ -41964,8 +42137,8 @@ namespace Thetis
                 txtVFOBFreq_LostFocus(this, EventArgs.Empty);
                 if (!initializing && RX2Enabled)
                 {
-                    RX2DSPMode = RX1DSPMode;
-                    RX2Filter = RX1Filter;
+                    if(RX2DSPMode != RX1DSPMode) RX2DSPMode = RX1DSPMode; // MW0LGE only set if different
+                    if(RX2Filter != RX1Filter) RX2Filter = RX1Filter; // MW0LGE only set if different
                 }
             }
 
@@ -42781,7 +42954,7 @@ namespace Thetis
             if (!rx1_sub_drag)
             {
                 tx_dds_freq_mhz = tx_freq;
-                // tx_dds_freq_updated = true;
+                tx_dds_freq_updated = true; // MW0LGE check this
                 UpdateTXDDSFreq();
 
                 //if (rx2_enabled) 
@@ -43396,10 +43569,30 @@ namespace Thetis
                             float min_val = grid_minmax_min_y;
                             min_val += (float)delta_db;
 
+                            if (min_val < -200)
+                            {
+                                min_val = -200;
+                                if (val - min_val < 24) val = min_val + 24;
+                            }
+
+                            if (val > 200)
+                            {
+                                val = 200;
+                                if (val - min_val < 24) min_val = val - 24;
+                            }
+
                             if (!tx1_grid_adjust)
                             {
                                 SetupForm.DisplayGridMax = val;
                                 SetupForm.DisplayGridMin = min_val;
+
+                                //MW0LGE
+                                if (m_bWaterfallUseRX1SpectrumMinMax)
+                                {
+                                    // use display directly so we dont change any band based thresholds in setupform
+                                    Display.WaterfallHighThreshold = val;
+                                    Display.WaterfallLowThreshold = min_val;
+                                }
                             }
                             else
                             {
@@ -43417,14 +43610,24 @@ namespace Thetis
 
                             if (!tx1_grid_adjust)
                             {
+                                if (val - SetupForm.DisplayGridMin < 24) val = SetupForm.DisplayGridMin + 24;
+
                                 SetupForm.DisplayGridMax = val;
+
+                                //MW0LGE
+                                if (m_bWaterfallUseRX1SpectrumMinMax)
+                                {
+                                    // use display directly so we dont change any band based thresholds in setupform
+                                    Display.WaterfallHighThreshold = val;
+                                }
                             }
                             else
                             {
+                                if (val - SetupForm.TXGridMin < 24) val = SetupForm.TXGridMin + 24;
+
                                 SetupForm.TXGridMax = val;
                             }
                         }
-
                     }
                     else if(rx2_grid_adjust) // hard to adjust 2 grids at a time, so use else //MW0LGE
                     {
@@ -43437,10 +43640,30 @@ namespace Thetis
                             float min_val = grid_minmax_min_y;
                             min_val += (float)delta_db;
 
+                            if (min_val < -200)
+                            {
+                                min_val = -200;
+                                if (val - min_val < 24) val = min_val + 24;
+                            }
+
+                            if (val > 200)
+                            {
+                                val = 200;
+                                if (val - min_val < 24) min_val = val - 24;
+                            }
+
                             if (!tx2_grid_adjust)
                             {
                                 SetupForm.RX2DisplayGridMax = val;
                                 SetupForm.RX2DisplayGridMin = min_val;
+
+                                //MW0LGE
+                                if (m_bWaterfallUseRX2SpectrumMinMax)
+                                {
+                                    // use display directly so we dont change any band based thresholds in setupform
+                                    Display.RX2WaterfallHighThreshold = val;
+                                    Display.RX2WaterfallLowThreshold = min_val;
+                                }
                             }
                             else
                             {
@@ -43457,10 +43680,21 @@ namespace Thetis
 
                             if (!tx2_grid_adjust)
                             {
+                                if (val - SetupForm.RX2DisplayGridMin < 24) val = SetupForm.RX2DisplayGridMin + 24;
+
                                 SetupForm.RX2DisplayGridMax = val;
+
+                                //MW0LGE
+                                if (m_bWaterfallUseRX2SpectrumMinMax)
+                                {
+                                    // use display directly so we dont change any band based thresholds in setupform
+                                    Display.RX2WaterfallHighThreshold = val;
+                                }
                             }
                             else
                             {
+                                if (val - SetupForm.TXGridMin < 24) val = SetupForm.TXGridMin + 24;
+
                                 SetupForm.TXGridMax = val;
                             }
                         }
@@ -45369,15 +45603,17 @@ namespace Thetis
             {
                 case (DisplayEngine.GDI_PLUS):
                     {
-                        Thread.Sleep(100);
+                        Thread.Sleep(1); // MW0LGE was 100
                         Display.Init();
 
                         comboDisplayMode_SelectedIndexChanged(this, EventArgs.Empty); // MW0LGE - this needs work TODO CHECK
 
-                        if (!booting)
-                        {
-                            UpdateDisplay(false);
-                        }
+                        //MW0LGE pointless, done by Display.Target = ... above
+                        //if (!booting)
+                        //{
+                        //    UpdateDisplay();// false);
+                        //}
+
                         picDisplay.Invalidate();
                     }
                     break;
@@ -49489,7 +49725,7 @@ namespace Thetis
                 panelBandGEN.Location = new Point(gr_BandGEN_basis_location.X + h_delta, gr_BandGEN_basis_location.Y + (v_delta / 4));
                 panelBandVHF.Location = new Point(gr_BandVHF_basis_location.X + h_delta, gr_BandVHF_basis_location.Y + (v_delta / 4));
                 panelMode.Location = new Point(gr_Mode_basis_location.X + h_delta, gr_Mode_basis_location.Y + (v_delta / 2));
-                panelRX2Mode.Location = new Point(gr_RX2Mode_basis_location.X + h_delta, gr_RX2Mode_basis_location.Y + (v_delta / 2));
+                // MW0LGE down below as well !!??? panelRX2Mode.Location = new Point(gr_RX2Mode_basis_location.X + h_delta, gr_RX2Mode_basis_location.Y + (v_delta / 2));
                 //grpVFOB.Location = new Point(gr_VFOB_basis_location.X+h_delta-(h_delta/4),gr_VFOB_basis_location.Y);
                 //grpVFOA.Location = new Point(gr_VFOA_basis_location.X+(h_delta/4),gr_VFOA_basis_location.Y);
                 panelModeSpecificPhone.Location = new Point(gr_ModePhone_basis_location.X + h_delta - (h_delta / 4), gr_ModePhone_basis_location.Y + v_delta);
@@ -49573,7 +49809,7 @@ namespace Thetis
                 grpDisplaySplit.Location = new Point(gr_display_split_basis.X + (h_delta / 2), gr_display_split_basis.Y + v_delta);
                 grpRX2Meter.Location = new Point(gr_rx2_meter_basis.X + h_delta, gr_rx2_meter_basis.Y + v_delta);
                 panelRX2Filter.Location = new Point(gr_rx2_filter_basis.X + (int)(h_delta * 0.66), gr_rx2_filter_basis.Y + v_delta);
-                panelRX2Mode.Location = new Point(gr_rx2_mode_basis.X + (int)(h_delta * 0.492), gr_rx2_mode_basis.Y + v_delta);
+                panelRX2Mode.Location = new Point(gr_RX2Mode_basis_location.X + (int)(h_delta * 0.492), gr_RX2Mode_basis_location.Y + v_delta); // MW0LGE changed to gr_RX2Mode_basis_location
                 panelRX2Display.Location = new Point(gr_rx2_display_basis.X + (int)(h_delta * 0.383), gr_rx2_display_basis.Y + v_delta);
                 panelRX2DSP.Location = new Point(gr_rx2_dsp_basis.X + (int)(h_delta * 0.258), gr_rx2_dsp_basis.Y + v_delta);
 
@@ -49699,7 +49935,8 @@ namespace Thetis
             gr_display_split_basis = this.grpDisplaySplit.Location;
             gr_rx2_meter_basis = this.grpRX2Meter.Location;
             gr_rx2_filter_basis = this.panelRX2Filter.Location;
-            gr_rx2_mode_basis = this.panelRX2Mode.Location;
+            //MW0LGE same as gr_RX2Mode_basis_location
+            //gr_rx2_mode_basis = this.panelRX2Mode.Location;
             gr_rx2_display_basis = this.panelRX2Display.Location;
             gr_rx2_dsp_basis = this.panelRX2DSP.Location;
 
@@ -50050,8 +50287,16 @@ namespace Thetis
                         this.Height += (panelRX2Filter.Height + 8);
 
                     console_basis_size.Height += (panelRX2Filter.Height + 8);
-                    if (!(this.WindowState == FormWindowState.Maximized))
-                        this.Height += (panelRX2Filter.Height + 8);
+                    // MW0LGE
+                    // removed so that window doesnt grow, why would we want it to grow?
+                    // surely it makes more sense to fill existing area if possible, and only grow
+                    // if too small. Expansion is handled in the if( above, and the next line console_basis...
+                    // ensures that exising controls will be aranged in the available space by altering the delta_v
+                    // in resize function. If there is a reason for this code to be there then some other solution will
+                    // need to be worked out for adding rx2 without increasing window size unless necessary
+                    //--
+                    //if (!(this.WindowState == FormWindowState.Maximized))
+                    //    this.Height += (panelRX2Filter.Height + 8);
 
                     resizeWaterfallBitmaps(Display.CurrentDisplayModeBottom == DisplayMode.PANAFALL); //MW0LGE
                 }
@@ -50061,8 +50306,9 @@ namespace Thetis
                         this.Height -= (panelRX2Filter.Height + 8);
 
                     console_basis_size.Height -= (panelRX2Filter.Height + 8);
-                    if (!(this.WindowState == FormWindowState.Maximized))
-                        this.Height -= (panelRX2Filter.Height + 8);
+                    // MW0LGE removed - see above
+                    //if (!(this.WindowState == FormWindowState.Maximized))
+                    //    this.Height -= (panelRX2Filter.Height + 8);
 
                     resizeWaterfallBitmaps(Display.CurrentDisplayMode == DisplayMode.PANAFALL); //MW0LGE
                 }
@@ -52137,74 +52383,79 @@ namespace Thetis
         }
 
 
+        public void SetupBand(string sBand)
+        {
+            string filter = "", mode = "";
+            double freq = 0.0;
+            bool CTUN;
+            int ZoomFactor;
+            double CenterFreq;
+            bool b = false;
+            switch (sBand)
+            {
+                case "160m":
+                    b = DB.GetBandStack("160M", 0, out mode, out filter, out freq, out CTUN, out ZoomFactor, out CenterFreq);
+                    break;
+                case "80m":
+                    b = DB.GetBandStack("80M", 0, out mode, out filter, out freq, out CTUN, out ZoomFactor, out CenterFreq);
+                    break;
+                case "60m":
+                    b = DB.GetBandStack("60M", 0, out mode, out filter, out freq, out CTUN, out ZoomFactor, out CenterFreq);
+                    break;
+                case "40m":
+                    b = DB.GetBandStack("40M", 0, out mode, out filter, out freq, out CTUN, out ZoomFactor, out CenterFreq);
+                    break;
+                case "30m":
+                    b = DB.GetBandStack("30M", 0, out mode, out filter, out freq, out CTUN, out ZoomFactor, out CenterFreq);
+                    break;
+                case "20m":
+                    b = DB.GetBandStack("20M", 0, out mode, out filter, out freq, out CTUN, out ZoomFactor, out CenterFreq);
+                    break;
+                case "17m":
+                    b = DB.GetBandStack("17M", 0, out mode, out filter, out freq, out CTUN, out ZoomFactor, out CenterFreq);
+                    break;
+                case "15m":
+                    b = DB.GetBandStack("15M", 0, out mode, out filter, out freq, out CTUN, out ZoomFactor, out CenterFreq);
+                    break;
+                case "12m":
+                    b = DB.GetBandStack("12M", 0, out mode, out filter, out freq, out CTUN, out ZoomFactor, out CenterFreq);
+                    break;
+                case "10m":
+                    b = DB.GetBandStack("10M", 0, out mode, out filter, out freq, out CTUN, out ZoomFactor, out CenterFreq);
+                    break;
+                case "6m":
+                    b = DB.GetBandStack("6M", 0, out mode, out filter, out freq, out CTUN, out ZoomFactor, out CenterFreq);
+                    break;
+                case "GEN":
+                    b = DB.GetBandStack("GEN", 0, out mode, out filter, out freq, out CTUN, out ZoomFactor, out CenterFreq);
+                    break;
+                case "WWV":
+                    b = DB.GetBandStack("WWV", 0, out mode, out filter, out freq, out CTUN, out ZoomFactor, out CenterFreq);
+                    break;
+            }
 
+            if (b)
+            {
+                if (filter.Contains("@"))
+                {
+                    filter = filter.Substring(0, (filter.Length) - 1); // ke9ns add for bandstack lockout
+                }
+                VFOBFreq = freq;
+                RX2DSPMode = (DSPMode)Enum.Parse(typeof(DSPMode), mode);
+                VFOBFreq = freq;
+                RX2Filter = (Filter)Enum.Parse(typeof(Filter), filter);
+            }
+        }
 
         private void comboRX2Band_SelectedIndexChanged(object sender, System.EventArgs e)
         {
             // G8NJJ to get settings to update from CAT command as well as mouse click
-            if (true)
-//            if (comboRX2Band.Focused)
-            {
-                string filter = "", mode = "";
-                double freq = 0.0;
-                bool CTUN;
-                int ZoomFactor;
-                double CenterFreq;
-                bool b = false;
-                switch (comboRX2Band.Text)
-                {
-                    case "160m":
-                        b = DB.GetBandStack("160M", 0, out mode, out filter, out freq, out CTUN, out ZoomFactor, out CenterFreq);
-                        break;
-                    case "80m":
-                        b = DB.GetBandStack("80M", 0, out mode, out filter, out freq, out CTUN, out ZoomFactor, out CenterFreq);
-                        break;
-                    case "60m":
-                        b = DB.GetBandStack("60M", 0, out mode, out filter, out freq, out CTUN, out ZoomFactor, out CenterFreq);
-                        break;
-                    case "40m":
-                        b = DB.GetBandStack("40M", 0, out mode, out filter, out freq, out CTUN, out ZoomFactor, out CenterFreq);
-                        break;
-                    case "30m":
-                        b = DB.GetBandStack("30M", 0, out mode, out filter, out freq, out CTUN, out ZoomFactor, out CenterFreq);
-                        break;
-                    case "20m":
-                        b = DB.GetBandStack("20M", 0, out mode, out filter, out freq, out CTUN, out ZoomFactor, out CenterFreq);
-                        break;
-                    case "17m":
-                        b = DB.GetBandStack("17M", 0, out mode, out filter, out freq, out CTUN, out ZoomFactor, out CenterFreq);
-                        break;
-                    case "15m":
-                        b = DB.GetBandStack("15M", 0, out mode, out filter, out freq, out CTUN, out ZoomFactor, out CenterFreq);
-                        break;
-                    case "12m":
-                        b = DB.GetBandStack("12M", 0, out mode, out filter, out freq, out CTUN, out ZoomFactor, out CenterFreq);
-                        break;
-                    case "10m":
-                        b = DB.GetBandStack("10M", 0, out mode, out filter, out freq, out CTUN, out ZoomFactor, out CenterFreq);
-                        break;
-                    case "6m":
-                        b = DB.GetBandStack("6M", 0, out mode, out filter, out freq, out CTUN, out ZoomFactor, out CenterFreq);
-                        break;
-                    case "GEN":
-                        b = DB.GetBandStack("GEN", 0, out mode, out filter, out freq, out CTUN, out ZoomFactor, out CenterFreq);
-                        break;
-                    case "WWV":
-                        b = DB.GetBandStack("WWV", 0, out mode, out filter, out freq, out CTUN, out ZoomFactor, out CenterFreq);
-                        break;
-                }
+            //            if (true)
 
-                if (b)
-                {
-                    if (filter.Contains("@"))
-                    {
-                        filter = filter.Substring(0, (filter.Length) - 1); // ke9ns add for bandstack lockout
-                    }
-                    VFOBFreq = freq;
-                    RX2DSPMode = (DSPMode)Enum.Parse(typeof(DSPMode), mode);
-                    VFOBFreq = freq;
-                    RX2Filter = (Filter)Enum.Parse(typeof(Filter), filter);
-                }
+            // MW0LGE reinstated and moved block to another function to be called from here, and via CAT
+            if (comboRX2Band.Focused)
+            {
+                SetupBand(comboRX2Band.Text);
 
                 btnHidden.Focus();
             }
@@ -54242,8 +54493,10 @@ namespace Thetis
 
             panelMode.Location = new Point(gr_Mode_basis_location.X + h_delta, gr_Mode_basis_location.Y + (v_delta / 2));
             panelMode.Size = gr_Mode_basis_size;
-            panelRX2Mode.Location = new Point(gr_RX2Mode_basis_location.X + h_delta, gr_RX2Mode_basis_location.Y + (v_delta / 2));
+            //MW0LGE panelRX2Mode.Location = new Point(gr_RX2Mode_basis_location.X + h_delta, gr_RX2Mode_basis_location.Y + (v_delta / 2));
+            panelRX2Mode.Location = new Point(gr_RX2Mode_basis_location.X + (int)(h_delta * 0.492), gr_RX2Mode_basis_location.Y + v_delta);
             panelRX2Mode.Size = gr_RX2Mode_basis_size;
+
             radModeLSB.Location = rad_mode_lsb_basis;
             radModeUSB.Location = rad_mode_usb_basis;
             radModeDSB.Location = rad_mode_dsb_basis;
@@ -56396,13 +56649,27 @@ namespace Thetis
             LEDMFont = GetCustomFont(Properties.Resources.digital7, 22, FontStyle.Regular);
         }
 
+        [DllImport("gdi32.dll", ExactSpelling = true)]
+        private static extern IntPtr AddFontMemResourceEx(byte[] pbFont, int cbFont, IntPtr pdv, out uint pcFonts);
+
         static public Font GetCustomFont(byte[] fontData, float size, FontStyle style)
         {
             if (_fontCollections == null) _fontCollections = new List<PrivateFontCollection>();
             PrivateFontCollection fontCol = new PrivateFontCollection();
             IntPtr fontPtr = Marshal.AllocCoTaskMem(fontData.Length);
+
+            // MW0LGE
+            // register the font to the system
+            // ideally we should use 'RemoveFontMemResourceEx.' to clear up on app shutdown
+            // but it will be tidied automatically. We are not doing anything crazy over and over with this
+            // so will ignore the ideal world for now
+            uint cFonts;
+            AddFontMemResourceEx(fontData, fontData.Length, IntPtr.Zero, out cFonts);
+            //
+
             Marshal.Copy(fontData, 0, fontPtr, fontData.Length);
             fontCol.AddMemoryFont(fontPtr, fontData.Length);
+            
             Marshal.FreeCoTaskMem(fontPtr);     //<-- It works!
             _fontCollections.Add(fontCol);
             return new Font(fontCol.Families[0], size, style);
@@ -59834,6 +60101,7 @@ namespace Thetis
             }
         }
 
+        //MW0LGE
         private Image m_objBackgroundImage = null;
         private bool m_bDisableBackgroundImage = false;
         public bool DisableBackgroundImage
@@ -59842,26 +60110,27 @@ namespace Thetis
             set
             {
                 m_bDisableBackgroundImage = value;
-                if (m_bDisableBackgroundImage)
-                {
-                    if (picDisplay.BackgroundImage != null)
-                    {
-                        m_objBackgroundImage = picDisplay.BackgroundImage;
-                        picDisplay.BackgroundImageLayout = ImageLayout.None;
-                        picDisplay.BackgroundImage = null;
-                    }
-                }
-                else
-                {
-                    if (m_objBackgroundImage != null)
-                    {
-                        picDisplay.BackgroundImageLayout = ImageLayout.Stretch;
-                        picDisplay.BackgroundImage = m_objBackgroundImage;
-                        m_objBackgroundImage = null;
-                    }
-                }
+
+                SetDisplayBackgroundImage(picDisplay.BackgroundImage);
             }
         }
+        public void SetDisplayBackgroundImage(Image objImg)
+        {
+            if (objImg != null) m_objBackgroundImage = objImg;
+
+            if (!m_bDisableBackgroundImage)
+            {
+                // show the image
+                picDisplay.BackgroundImageLayout = ImageLayout.Stretch;
+                picDisplay.BackgroundImage = m_objBackgroundImage;
+            }
+            else
+            {
+                picDisplay.BackgroundImageLayout = ImageLayout.None;
+                picDisplay.BackgroundImage = null;
+            }
+        }
+        //-
 
         private bool m_bZoomShiftModifier = false;
         public bool ZoomShiftModifier {
