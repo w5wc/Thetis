@@ -1405,9 +1405,9 @@ namespace Thetis
                     int block_size = block_size_vac2;
 
                     double in_latency = vac2_latency_manual ? latency3/1000.0 : PA19.PA_GetDeviceInfo(input_dev3).defaultLowInputLatency;
-                    double out_latency = vac2_latency_manual ? latency3/1000.0 : PA19.PA_GetDeviceInfo(output_dev3).defaultLowOutputLatency;
+                    double out_latency = vac2_latency_out_manual ? vac2_latency_out/1000.0 : PA19.PA_GetDeviceInfo(output_dev3).defaultLowOutputLatency;
                     double pa_in_latency = vac2_latency_pa_in_manual ? vac2_latency_pa_in / 1000.0 : PA19.PA_GetDeviceInfo(input_dev3).defaultLowInputLatency;
-                    double pa_out_latency = vac2_latency_pa_in_manual ? vac2_latency_pa_in / 1000.0 : PA19.PA_GetDeviceInfo(output_dev3).defaultLowOutputLatency;
+                    double pa_out_latency = vac2_latency_pa_out_manual ? vac2_latency_pa_out / 1000.0 : PA19.PA_GetDeviceInfo(output_dev3).defaultLowOutputLatency;
 
                     if (vac2_output_iq)
                     {

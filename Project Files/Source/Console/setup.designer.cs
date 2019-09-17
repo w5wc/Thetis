@@ -23534,33 +23534,30 @@
             // 
             this.labelTS369.AutoSize = true;
             this.labelTS369.Image = null;
-            this.labelTS369.Location = new System.Drawing.Point(78, 106);
+            this.labelTS369.Location = new System.Drawing.Point(78, 105);
             this.labelTS369.Name = "labelTS369";
             this.labelTS369.Size = new System.Drawing.Size(27, 13);
             this.labelTS369.TabIndex = 55;
             this.labelTS369.Text = "Out:";
-            this.labelTS369.Visible = false;
             // 
             // labelTS370
             // 
             this.labelTS370.AutoSize = true;
             this.labelTS370.Image = null;
-            this.labelTS370.Location = new System.Drawing.Point(5, 106);
+            this.labelTS370.Location = new System.Drawing.Point(5, 105);
             this.labelTS370.Name = "labelTS370";
             this.labelTS370.Size = new System.Drawing.Size(19, 13);
             this.labelTS370.TabIndex = 54;
             this.labelTS370.Text = "In:";
-            this.labelTS370.Visible = false;
             // 
             // chkVAC2LatencyPAOutManual
             // 
             this.chkVAC2LatencyPAOutManual.Image = null;
-            this.chkVAC2LatencyPAOutManual.Location = new System.Drawing.Point(86, 125);
+            this.chkVAC2LatencyPAOutManual.Location = new System.Drawing.Point(84, 124);
             this.chkVAC2LatencyPAOutManual.Name = "chkVAC2LatencyPAOutManual";
             this.chkVAC2LatencyPAOutManual.Size = new System.Drawing.Size(64, 16);
             this.chkVAC2LatencyPAOutManual.TabIndex = 53;
             this.chkVAC2LatencyPAOutManual.Text = "Manual";
-            this.chkVAC2LatencyPAOutManual.Visible = false;
             this.chkVAC2LatencyPAOutManual.CheckedChanged += new System.EventHandler(this.chkVAC2LatencyPAOutManual_CheckedChanged);
             // 
             // udVAC2LatencyPAOut
@@ -23571,7 +23568,7 @@
             0,
             0,
             0});
-            this.udVAC2LatencyPAOut.Location = new System.Drawing.Point(108, 104);
+            this.udVAC2LatencyPAOut.Location = new System.Drawing.Point(108, 103);
             this.udVAC2LatencyPAOut.Maximum = new decimal(new int[] {
             240,
             0,
@@ -23590,13 +23587,12 @@
             0,
             0,
             0});
-            this.udVAC2LatencyPAOut.Visible = false;
             this.udVAC2LatencyPAOut.ValueChanged += new System.EventHandler(this.udVAC2LatencyPAOut_ValueChanged);
             // 
             // chkVAC2LatencyPAInManual
             // 
             this.chkVAC2LatencyPAInManual.Image = null;
-            this.chkVAC2LatencyPAInManual.Location = new System.Drawing.Point(13, 125);
+            this.chkVAC2LatencyPAInManual.Location = new System.Drawing.Point(11, 124);
             this.chkVAC2LatencyPAInManual.Name = "chkVAC2LatencyPAInManual";
             this.chkVAC2LatencyPAInManual.Size = new System.Drawing.Size(64, 16);
             this.chkVAC2LatencyPAInManual.TabIndex = 50;
@@ -23611,7 +23607,7 @@
             0,
             0,
             0});
-            this.udVAC2LatencyPAIn.Location = new System.Drawing.Point(25, 104);
+            this.udVAC2LatencyPAIn.Location = new System.Drawing.Point(25, 103);
             this.udVAC2LatencyPAIn.Maximum = new decimal(new int[] {
             240,
             0,
@@ -23636,7 +23632,7 @@
             // 
             this.labelTS371.AutoSize = true;
             this.labelTS371.Image = null;
-            this.labelTS371.Location = new System.Drawing.Point(45, 88);
+            this.labelTS371.Location = new System.Drawing.Point(45, 87);
             this.labelTS371.Name = "labelTS371";
             this.labelTS371.Size = new System.Drawing.Size(53, 13);
             this.labelTS371.TabIndex = 49;
@@ -23645,12 +23641,11 @@
             // chkVAC2LatencyOutManual
             // 
             this.chkVAC2LatencyOutManual.Image = null;
-            this.chkVAC2LatencyOutManual.Location = new System.Drawing.Point(86, 56);
+            this.chkVAC2LatencyOutManual.Location = new System.Drawing.Point(84, 56);
             this.chkVAC2LatencyOutManual.Name = "chkVAC2LatencyOutManual";
             this.chkVAC2LatencyOutManual.Size = new System.Drawing.Size(64, 16);
             this.chkVAC2LatencyOutManual.TabIndex = 46;
             this.chkVAC2LatencyOutManual.Text = "Manual";
-            this.chkVAC2LatencyOutManual.Visible = false;
             this.chkVAC2LatencyOutManual.CheckedChanged += new System.EventHandler(this.chkVAC2LatencyOutManual_CheckedChanged);
             // 
             // udVAC2LatencyOut
@@ -23680,7 +23675,6 @@
             0,
             0,
             0});
-            this.udVAC2LatencyOut.Visible = false;
             this.udVAC2LatencyOut.ValueChanged += new System.EventHandler(this.udVAC2LatencyOut_ValueChanged);
             // 
             // labelTS368
@@ -23692,7 +23686,6 @@
             this.labelTS368.Size = new System.Drawing.Size(27, 13);
             this.labelTS368.TabIndex = 44;
             this.labelTS368.Text = "Out:";
-            this.labelTS368.Visible = false;
             // 
             // labelTS367
             // 
@@ -23703,13 +23696,12 @@
             this.labelTS367.Size = new System.Drawing.Size(19, 13);
             this.labelTS367.TabIndex = 43;
             this.labelTS367.Text = "In:";
-            this.labelTS367.Visible = false;
             // 
             // labelTS366
             // 
             this.labelTS366.AutoSize = true;
             this.labelTS366.Image = null;
-            this.labelTS366.Location = new System.Drawing.Point(45, 15);
+            this.labelTS366.Location = new System.Drawing.Point(45, 16);
             this.labelTS366.Name = "labelTS366";
             this.labelTS366.Size = new System.Drawing.Size(57, 13);
             this.labelTS366.TabIndex = 42;
@@ -23718,7 +23710,7 @@
             // chkVAC2LatencyManual
             // 
             this.chkVAC2LatencyManual.Image = null;
-            this.chkVAC2LatencyManual.Location = new System.Drawing.Point(13, 56);
+            this.chkVAC2LatencyManual.Location = new System.Drawing.Point(11, 56);
             this.chkVAC2LatencyManual.Name = "chkVAC2LatencyManual";
             this.chkVAC2LatencyManual.Size = new System.Drawing.Size(64, 16);
             this.chkVAC2LatencyManual.TabIndex = 5;
@@ -23745,7 +23737,7 @@
             0,
             0});
             this.udVAC2Latency.Name = "udVAC2Latency";
-            this.udVAC2Latency.Size = new System.Drawing.Size(48, 20);
+            this.udVAC2Latency.Size = new System.Drawing.Size(40, 20);
             this.udVAC2Latency.TabIndex = 36;
             this.udVAC2Latency.Value = new decimal(new int[] {
             120,
