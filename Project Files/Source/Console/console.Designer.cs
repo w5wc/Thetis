@@ -6354,8 +6354,8 @@
             // picMultiMeterDigital
             // 
             this.picMultiMeterDigital.BackColor = System.Drawing.Color.Black;
-            this.picMultiMeterDigital.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             resources.ApplyResources(this.picMultiMeterDigital, "picMultiMeterDigital");
+            this.picMultiMeterDigital.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.picMultiMeterDigital.Name = "picMultiMeterDigital";
             this.picMultiMeterDigital.TabStop = false;
             this.picMultiMeterDigital.Paint += new System.Windows.Forms.PaintEventHandler(this.picMultiMeterDigital_Paint);
