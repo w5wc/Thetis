@@ -1672,7 +1672,7 @@ namespace Thetis
             dr["VAC1_IQ_Correct"] = (bool)chkAudioCorrectIQ.Checked;
             dr["VAC1_PTT_OverRide"] = (bool)chkVACAllowBypass.Checked;
             dr["VAC1_Combine_Input_Channels"] = (bool)chkVACCombine.Checked;
-            dr["VAC1_Latency_On"] = (bool)chkAudioLatencyManual2.Checked; // MW0LGE true;
+            dr["VAC1_Latency_On"] = true;
             dr["VAC1_Latency_Duration"] = (int)udAudioLatency2.Value;
 
             dr["VAC2_On"] = (bool)chkVAC2Enable.Checked;
@@ -1685,7 +1685,7 @@ namespace Thetis
             dr["VAC2_IQ_Output"] = (bool)chkVAC2DirectIQ.Checked;
             dr["VAC2_IQ_Correct"] = (bool)chkVAC2DirectIQCal.Checked;
             dr["VAC2_Combine_Input_Channels"] = (bool)chkVAC2Combine.Checked;
-            dr["VAC2_Latency_On"] = (bool)chkVAC2LatencyManual.Checked; // MW0LGE true;
+            dr["VAC2_Latency_On"] = true;
             dr["VAC2_Latency_Duration"] = (int)udVAC2Latency.Value;
 
             dr["Phone_RX_DSP_Buffer"] = (string)comboDSPPhoneRXBuf.Text;
@@ -7236,7 +7236,7 @@ namespace Thetis
         private void comboGeneralProcessPriority_SelectedIndexChanged(object sender, System.EventArgs e)
         {
             Process p = Process.GetCurrentProcess();
-            
+
             if (comboGeneralProcessPriority.Text == "Real Time" &&
                 comboGeneralProcessPriority.Focused)
             {

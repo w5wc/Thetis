@@ -20346,9 +20346,8 @@ namespace Thetis
                         NetworkIO.SetAlexAtten(alex_atten); // normal up alex attenuator setting
                 }
 
-                ////MW0LGE why ??  if (CollapsedDisplay)
-                //    CollapseDisplay();
-
+                if (CollapsedDisplay)
+                    CollapseDisplay();
                 if (!mox)
                 {
                     //update_preamp_mode = false;
@@ -20439,9 +20438,8 @@ namespace Thetis
                         //  JanusAudio.EnableADC2StepAtten(1);
                     }
 
-                    //MW0LGE why ??  if (CollapsedDisplay)
-                    //    CollapseDisplay();
-
+                    if (CollapsedDisplay)
+                        CollapseDisplay();
                     if (!mox)
                     {
                         //update_preamp_mode = false;
@@ -21662,7 +21660,7 @@ namespace Thetis
                 }
                 current_meter_display_mode = value;
 
-                ////MW0LGE why ??  if (collapsedDisplay) CollapseDisplay();
+                if (collapsedDisplay) CollapseDisplay();
                 picMultiMeterDigital.Invalidate();
             }
         }
@@ -34201,13 +34199,6 @@ namespace Thetis
 
         private void RunDisplay()
         {
-            // MW0LGE use diagnostics timer for now as
-            // System.Windows.Threading.DispatcherTimer
-            // and System.Timers.Timer not that accurate
-            // the aim of this is to delay accurately, so that if possible
-            // we acheive desired fps rate
-            System.Diagnostics.Stopwatch objStopWatch = System.Diagnostics.Stopwatch.StartNew();
-
             //uint thread = 0;
             //			display_running = true;
             while (true) //(chkPower.Checked)
@@ -34215,8 +34206,6 @@ namespace Thetis
                 uint top_thread = 0;
                 uint bottom_thread = 2;
                 int flag;
-
-                objStopWatch.Restart();
 
                 if (mox)
                 {
@@ -34451,18 +34440,13 @@ namespace Thetis
                     }
                 }
 
-                // MW0LGE - note, if both displays are off, then the refresh to hide the final one
-                // will not happen. This is now forced in combo display mode to force a refresh
                 if ((Display.CurrentDisplayMode != DisplayMode.OFF) ||
                     (RX2Enabled && Display.CurrentDisplayModeBottom != DisplayMode.OFF))
                     picDisplay.Refresh();
 
-                //MW0LGE delay changed to take into consideration how long all the above took
-                objStopWatch.Stop();
 
-                int dly = display_delay - (int)objStopWatch.ElapsedMilliseconds;
-                if (dly < 1) dly = 1;
-                Thread.Sleep(dly);
+                Thread.Sleep(display_delay);
+
             }
         }
 
@@ -38392,15 +38376,14 @@ namespace Thetis
                     break;
             }
 
-            //MW0LGE could not find a time when this would actually be used
-            //if (old_mode == DisplayMode.OFF && (draw_display_thread == null || !draw_display_thread.IsAlive))
-            //{
-            //    draw_display_thread = new Thread(new ThreadStart(RunDisplay));
-            //    draw_display_thread.Name = "Draw Display Thread";
-            //    draw_display_thread.Priority = ThreadPriority.BelowNormal;
-            //    draw_display_thread.IsBackground = true;
-            //    draw_display_thread.Start();
-            //}
+            if (old_mode == DisplayMode.OFF && (draw_display_thread == null || !draw_display_thread.IsAlive))
+            {
+                draw_display_thread = new Thread(new ThreadStart(RunDisplay));
+                draw_display_thread.Name = "Draw Display Thread";
+                draw_display_thread.Priority = ThreadPriority.BelowNormal;
+                draw_display_thread.IsBackground = true;
+                draw_display_thread.Start();
+            }
 
             switch (old_mode)
             {
@@ -38587,9 +38570,6 @@ namespace Thetis
             if (comboDisplayMode.Focused)
                 btnHidden.Focus();
             pause_DisplayThread = false;
-
-            //MW0LGE force a refresh
-            picDisplay.Refresh();
         }
 
         private void chkBIN_CheckedChanged(object sender, System.EventArgs e)
@@ -38799,9 +38779,9 @@ namespace Thetis
 
             // MW0LGE
             // show a shutdown window
-            ShutdownForm frmShutDownForm = new ShutdownForm();
-            frmShutDownForm.Location = new Point(this.Location.X + this.Size.Width / 2 - frmShutDownForm.Size.Width / 2, this.Location.Y + this.Size.Height / 2 - frmShutDownForm.Size.Height / 2);
-            frmShutDownForm.Show();
+            ShutdownForm sdf = new ShutdownForm();
+            sdf.Location = new Point(this.Location.X + this.Size.Width / 2 - sdf.Size.Width / 2, this.Location.Y + this.Size.Height / 2 - sdf.Size.Height / 2);
+            sdf.Show();
             Application.DoEvents();
 
             MemoryList.Save();
@@ -38854,7 +38834,7 @@ namespace Thetis
             //cmaster.close_rxa();
 
             this.Hide();
-            frmShutDownForm.Close(); // last thing to get rid of
+            sdf.Close();
        }
 
         private void comboPreamp_SelectedIndexChanged(object sender, System.EventArgs e)
@@ -40424,7 +40404,6 @@ namespace Thetis
                         radio.GetDSPTX(0).TXPostGenToneFreq = +cw_pitch;
                         break;
                 }
-
                 radio.GetDSPTX(0).TXPostGenToneMag = 0.99999;
                 radio.GetDSPTX(0).TXPostGenMode = 0;
                 radio.GetDSPTX(0).TXPostGenRun = 1;
@@ -40819,10 +40798,10 @@ namespace Thetis
             whatisHF = false;
             whatisGEN = false;
 
-            ////MW0LGE why ??  {
-            //    if (collapsedDisplay)
-            //        CollapseDisplay();
-            //}
+            {
+                if (collapsedDisplay)
+                    CollapseDisplay();
+            }
 
             if (!rx1_click_tune_drag)
             {
@@ -40848,10 +40827,10 @@ namespace Thetis
             whatisHF = true;
             whatisGEN = false;
 
-            ////MW0LGE why ??  {
-            //    if (collapsedDisplay)
-            //        CollapseDisplay();
-            //}
+            {
+                if (collapsedDisplay)
+                    CollapseDisplay();
+            }
 
             if (!rx1_click_tune_drag)
             {
@@ -40879,10 +40858,10 @@ namespace Thetis
             whatisHF = false;
             whatisGEN = true;
 
-            ////MW0LGE why ??  {
-            //    if (collapsedDisplay)
-            //        CollapseDisplay();
-            //}
+            {
+                if (collapsedDisplay)
+                    CollapseDisplay();
+            }
 
             if (!rx1_click_tune_drag)
             {
@@ -41647,7 +41626,7 @@ namespace Thetis
 
             double passbandWidth = (Convert.ToDouble(Display.RX1FilterHigh) - Convert.ToDouble(Display.RX1FilterLow));
             double dispWidth = Convert.ToDouble(Display.RXDisplayHigh) - Convert.ToDouble(Display.RXDisplayLow);
-            double dispMargin = 0.05; // Margin from display edge to start scrolling - in fraction of total display width   
+            double dispMargin = 0.025; // Margin from display edge to start scrolling - in fraction of total display width   
 
             // Lock the display //-W2PA Don't freeze display if we are zoomed in too far to fit the passband
             //if (!initializing && click_tune_display && (passbandWidth < (dispWidth * (1.0 - 2.0 * dispMargin))) &&
@@ -41659,15 +41638,14 @@ namespace Thetis
             //{
             if (!initializing && click_tune_display && (passbandWidth < (dispWidth * (1.0 - 2.0 * dispMargin))) &&
                 ((Display.CurrentDisplayMode == DisplayMode.PANADAPTER && mox && VFOBTX) ||
-                (Display.CurrentDisplayMode == DisplayMode.WATERFALL && mox && VFOBTX) ||
-                (Display.CurrentDisplayMode == DisplayMode.PANAFALL && mox && VFOBTX) ||
-                (Display.CurrentDisplayMode == DisplayMode.PANADAPTER && !mox) ||
-                (Display.CurrentDisplayMode == DisplayMode.WATERFALL && !mox) ||
-                (Display.CurrentDisplayMode == DisplayMode.PANAFALL && !mox) ||
                 (Display.CurrentDisplayMode == DisplayMode.PANADAPTER && display_duplex) ||
+                (Display.CurrentDisplayMode == DisplayMode.PANADAPTER && !mox) ||
+                (Display.CurrentDisplayMode == DisplayMode.PANAFALL && mox && VFOBTX) ||
+                (Display.CurrentDisplayMode == DisplayMode.PANAFALL && display_duplex) ||
+                (Display.CurrentDisplayMode == DisplayMode.PANAFALL && !mox) ||
+                (Display.CurrentDisplayMode == DisplayMode.WATERFALL && mox && VFOBTX) ||
                 (Display.CurrentDisplayMode == DisplayMode.WATERFALL && display_duplex) ||
-                (Display.CurrentDisplayMode == DisplayMode.PANAFALL && display_duplex)
-                ))
+                (Display.CurrentDisplayMode == DisplayMode.WATERFALL && !mox)))
             {
                 double rx1_osc = Math.Round(-(VFOAFreq - center_frequency) * 1.0e6);
                 // MW0LGE double zoom_factor = 1.0 / ((ptbDisplayZoom.Maximum + ptbDisplayZoom.Minimum - ptbDisplayZoom.Value) * 0.01);
@@ -41771,7 +41749,7 @@ namespace Thetis
                 else Display.VFOA = (long)(freq * 1e6);
             }
 
-            if (chkTUN.Checked && chkVFOATX.Checked && !chkVFOSplit.Checked && !display_duplex) // MW0LGE only if not display duplex
+            if (chkTUN.Checked && chkVFOATX.Checked && !chkVFOSplit.Checked)
             {
                 switch (radio.GetDSPTX(0).CurrentDSPMode)
                 {
@@ -42497,7 +42475,7 @@ namespace Thetis
             double dispMargin = 0.05; // Margin from display edge to start scrolling - in fraction of total display width   
 
             // Lock the display //-W2PA Don't freeze display if we are zoomed in too far to fit the passband
-            if (!initializing && click_tune_rx2_display && (passbandWidth < (dispWidth * (1.0 - 2.0 * dispMargin))) &&
+            if (!initializing && (click_tune_rx2_display) && (passbandWidth < dispWidth) &&
                             ((Display.CurrentDisplayModeBottom == DisplayMode.PANADAPTER && mox && !VFOBTX) ||
                             (Display.CurrentDisplayModeBottom == DisplayMode.WATERFALL && mox && !VFOBTX) ||
                             (Display.CurrentDisplayModeBottom == DisplayMode.PANAFALL && mox && !VFOBTX) ||
@@ -42614,7 +42592,7 @@ namespace Thetis
                 if (!stereo_diversity)
                 {
                     //-W2PA Freeze display unless we are zoomed in too far to fit the passband
-                    if ((click_tune_rx2_display) && (passbandWidth < (dispWidth * (1.0 - 2.0 * dispMargin))) &&
+                    if ((click_tune_rx2_display) && (passbandWidth < dispWidth) &&
                                      ((Display.CurrentDisplayModeBottom == DisplayMode.PANADAPTER && mox && !VFOBTX) ||
                                      (Display.CurrentDisplayModeBottom == DisplayMode.WATERFALL && mox && !VFOBTX) ||
                         (Display.CurrentDisplayModeBottom == DisplayMode.PANAFALL && mox && !VFOBTX) ||
@@ -42631,7 +42609,7 @@ namespace Thetis
                     else
                         Display.VFOB = (long)(freq * 1e6);
 
-                    if (chkTUN.Checked && chkVFOBTX.Checked && !display_duplex) // MW0LGE only if not duplex
+                    if (chkTUN.Checked && chkVFOBTX.Checked)
                     {
                         switch (radio.GetDSPTX(0).CurrentDSPMode)
                         {
@@ -43351,7 +43329,6 @@ namespace Thetis
                     case DisplayMode.SPECTRUM:
                     case DisplayMode.HISTOGRAM:
                     case DisplayMode.PANAFALL:
-                    case DisplayMode.WATERFALL:
                         // check if we are anywhere over area that filters etc can be adjusted
                         if ((x >= 0 && x < picDisplay.Width) &&
                          (y < nMaxHeightRX1 && y > nMinHeightRX1 + 10))
@@ -43370,7 +43347,6 @@ namespace Thetis
                     case DisplayMode.SPECTRUM:
                     case DisplayMode.HISTOGRAM:
                     case DisplayMode.PANAFALL:
-                    case DisplayMode.WATERFALL:
                         // check if we are anywhere over area that filters etc can be adjusted
                         if ((x >= 0 && x < picDisplay.Width) &&
                          (y < nMaxHeightRX2 && y > nMinHeightRX2 + 10))
@@ -51743,9 +51719,6 @@ namespace Thetis
 
             if (comboRX2DisplayMode.Focused)
                 btnHidden.Focus();
-
-            //MW0LGE force a refresh
-            picDisplay.Refresh();
         }
 
         private void chkRX2DisplayAVG_CheckedChanged(object sender, System.EventArgs e)
@@ -54615,16 +54588,16 @@ namespace Thetis
             else
             {
                 if (this.m_bShowBandControls)
-                {
-                    minWidth = Math.Max(minWidth, radBand160.Width * 14 + this.Width - this.ClientSize.Width);
-                    minHeight += 5 + radBand160.Height;
-                }
+            {
+                minWidth = Math.Max(minWidth, radBand160.Width * 14 + this.Width - this.ClientSize.Width);
+                minHeight += 5 + radBand160.Height;
+            }
 
-                if (this.m_bShowModeControls)
-                {
-                    minWidth = Math.Max(minWidth, radModeLSB.Width * 12 + this.Width - this.ClientSize.Width);
-                    minHeight += 5 + radModeLSB.Height;
-                }
+            if (this.m_bShowModeControls)
+            {
+                minWidth = Math.Max(minWidth, radModeLSB.Width * 12 + this.Width - this.ClientSize.Width);
+                minHeight += 5 + radModeLSB.Height;
+            }
             }
 
             this.MinimumSize = new Size(minWidth, minHeight);
@@ -54710,8 +54683,8 @@ namespace Thetis
                 comboRX2AGC.Hide();
                 comboRX2Preamp.Hide();
                 udRX2StepAttData.Hide();
-                //comboPreamp.Hide();
-                //udRX1StepAttData.Hide();
+                comboPreamp.Hide();
+                udRX1StepAttData.Hide();
                 comboMeterRXMode.Hide();
                 comboRX2MeterMode.Hide();
                 comboMeterTXMode.Hide();
@@ -55119,7 +55092,6 @@ namespace Thetis
                 lblPWR2.Hide();
                 //radRX1Show.Hide();
                 // radRX2Show.Hide();
-                comboPreamp.Hide();//MW0LGE
             }
 
             //
@@ -55351,66 +55323,67 @@ namespace Thetis
                     btnRITReset.Location = new Point(chkRIT.Location.X + chkRIT.Width, chkRIT.Location.Y);
 
                 }
-                else if (show_rx2)
-                {
-                    top = grpVFOB.Height + 10;
-                    //top = grpMultimeter.Location.Y + grpMultimeter.Height + 5;
-                    //grpVFOA.Location = new Point(gr_VFOA_basis_location.X + (h_delta / 4), gr_VFOA_basis_location.Y);
-                    grpVFOB.Location = new Point((this.ClientSize.Width - grpVFOB.Width) / 2, gr_VFOB_basis_location.Y);
-                    //grpVFOB.Location = new Point(gr_VFOB_basis_location.X + h_delta - (h_delta / 4), gr_VFOB_basis_location.Y);
-                    txtRX2Meter.Location = new Point(((this.ClientSize.Width - (grpVFOB.Location.X + grpVFOB.Width)) -
-                        (txtRX2Meter.Width / 12)) * 2, grpVFOB.Location.Y + 5);
-                    // picMultiMeterDigital.Location = txtMultiText.Location;
-                    // picMultiMeterDigital.Location = new Point(txtMultiText.Location.X, txtMultiText.Location.Y + txtMultiText.Height + 8);
-                    picRX2Meter.Size = new Size(pic_rx2meter_size_basis.Width * 2, pic_rx2meter_size_basis.Height);
-                    picRX2Meter.Location = new Point(((this.ClientSize.Width - (grpVFOB.Location.X + grpVFOB.Width)) -
-                        (picRX2Meter.Width / 6)) * 2, txtRX2Meter.Location.Y + txtRX2Meter.Height + 9);
-                    // picMultiMeterDigital.Size = new Size(pic_multi_meter_size_basis.Width * 2, pic_multi_meter_size_basis.Height);
-                    //grpMultimeter.Size = new Size(grpMultimeter.Width, grpVFOB.Height);
-                    if (current_meter_display_mode == MultiMeterDisplayMode.Original)
+                else
+                    if (show_rx2)
                     {
-                        picRX2Meter.Size = new Size(pic_rx2meter_size_basis.Width * 2, pic_rx2meter_size_basis.Height);//MW0LGE  - lblRX2Meter.Height);
-                        //MW0LGE lblRX2Meter.Size = new Size(lbl_rx2meter_size_basis.Width * 2, lbl_rx2meter_size_basis.Height);
-                        //MW0LGE lblRX2Meter.Location = new Point(picRX2Meter.Location.X, picRX2Meter.Location.Y + picRX2Meter.Height);
-                        //MW0LGE lblRX2Meter.Show();
-                        //MW0LGE lblRX2Meter.BringToFront();
-                    }
-                    //MW0LGE else lblRX2Meter.Hide();
+                        top = grpVFOB.Height + 10;
+                        //top = grpMultimeter.Location.Y + grpMultimeter.Height + 5;
+                        //grpVFOA.Location = new Point(gr_VFOA_basis_location.X + (h_delta / 4), gr_VFOA_basis_location.Y);
+                        grpVFOB.Location = new Point((this.ClientSize.Width - grpVFOB.Width) / 2, gr_VFOB_basis_location.Y);
+                        //grpVFOB.Location = new Point(gr_VFOB_basis_location.X + h_delta - (h_delta / 4), gr_VFOB_basis_location.Y);
+                        txtRX2Meter.Location = new Point(((this.ClientSize.Width - (grpVFOB.Location.X + grpVFOB.Width)) -
+                            (txtRX2Meter.Width / 12)) * 2, grpVFOB.Location.Y + 5);
+                        // picMultiMeterDigital.Location = txtMultiText.Location;
+                        // picMultiMeterDigital.Location = new Point(txtMultiText.Location.X, txtMultiText.Location.Y + txtMultiText.Height + 8);
+                        picRX2Meter.Size = new Size(pic_rx2meter_size_basis.Width * 2, pic_rx2meter_size_basis.Height);
+                        picRX2Meter.Location = new Point(((this.ClientSize.Width - (grpVFOB.Location.X + grpVFOB.Width)) -
+                            (picRX2Meter.Width / 6)) * 2, txtRX2Meter.Location.Y + txtRX2Meter.Height + 9);
+                        // picMultiMeterDigital.Size = new Size(pic_multi_meter_size_basis.Width * 2, pic_multi_meter_size_basis.Height);
+                        //grpMultimeter.Size = new Size(grpMultimeter.Width, grpVFOB.Height);
+                        if (current_meter_display_mode == MultiMeterDisplayMode.Original)
+                        {
+                            picRX2Meter.Size = new Size(pic_rx2meter_size_basis.Width * 2, pic_rx2meter_size_basis.Height);//MW0LGE  - lblRX2Meter.Height);
+                            //MW0LGE lblRX2Meter.Size = new Size(lbl_rx2meter_size_basis.Width * 2, lbl_rx2meter_size_basis.Height);
+                            //MW0LGE lblRX2Meter.Location = new Point(picRX2Meter.Location.X, picRX2Meter.Location.Y + picRX2Meter.Height);
+                            //MW0LGE lblRX2Meter.Show();
+                            //MW0LGE lblRX2Meter.BringToFront();
+                        }
+                        //MW0LGE else lblRX2Meter.Hide();
 
-                    comboRX2MeterMode.Location = new Point(txtRX2Meter.Location.X - comboRX2MeterMode.Width - 5,
-                        txtRX2Meter.Location.Y + 2);
-                    // comboMeterTXMode.Location = new Point(comboMeterRXMode.Location.X, 
-                    //     comboMeterRXMode.Location.Y + comboMeterRXMode.Height + 1);
-                    comboMeterTXMode.Location = new Point(txtRX2Meter.Location.X + txtRX2Meter.Width + 5,
-                        txtRX2Meter.Location.Y + 2);
-                    chkPower.Location = new Point(30, grpVFOB.Location.Y + 2);
-                    chkRX2.Location = new Point(chkPower.Location.X + chkRX2.Width + 5, chkPower.Location.Y);
-                    radRX1Show.Location = new Point(chkRX2.Location.X + radRX1Show.Width + 15, chkRX2.Location.Y + 4);
-                    radRX2Show.Location = new Point(radRX1Show.Location.X + radRX1Show.Width + 5, radRX1Show.Location.Y);
-                    //chkMON.Location = new Point(10, chkPower.Location.Y + chkPower.Height + 5);
-                    chkMON.Location = new Point(grpVFOB.Location.X - chkMON.Width - 10, grpVFOB.Location.Y + 8);
-                    //chkMUT.Location = new Point(chkMON.Location.X + chkMON.Width, chkPower.Location.Y + chkPower.Height + 5);
-                    chkRX2Mute.Location = new Point(grpVFOB.Location.X + grpVFOB.Width + 4, chkMON.Location.Y);  //MW0LGE -- move mute to right side of vfo box
+                        comboRX2MeterMode.Location = new Point(txtRX2Meter.Location.X - comboRX2MeterMode.Width - 5,
+                            txtRX2Meter.Location.Y + 2);
+                        // comboMeterTXMode.Location = new Point(comboMeterRXMode.Location.X, 
+                        //     comboMeterRXMode.Location.Y + comboMeterRXMode.Height + 1);
+                        comboMeterTXMode.Location = new Point(txtRX2Meter.Location.X + txtRX2Meter.Width + 5,
+                            txtRX2Meter.Location.Y + 2);
+                        chkPower.Location = new Point(30, grpVFOB.Location.Y + 2);
+                        chkRX2.Location = new Point(chkPower.Location.X + chkRX2.Width + 5, chkPower.Location.Y);
+                        radRX1Show.Location = new Point(chkRX2.Location.X + radRX1Show.Width + 15, chkRX2.Location.Y + 4);
+                        radRX2Show.Location = new Point(radRX1Show.Location.X + radRX1Show.Width + 5, radRX1Show.Location.Y);
+                        //chkMON.Location = new Point(10, chkPower.Location.Y + chkPower.Height + 5);
+                        chkMON.Location = new Point(grpVFOB.Location.X - chkMON.Width - 10, grpVFOB.Location.Y + 8);
+                        //chkMUT.Location = new Point(chkMON.Location.X + chkMON.Width, chkPower.Location.Y + chkPower.Height + 5);
+                        chkRX2Mute.Location = new Point(grpVFOB.Location.X + grpVFOB.Width + 4, chkMON.Location.Y);  //MW0LGE -- move mute to right side of vfo box
 
-                    chkTUN.Location = new Point(chkMON.Location.X, chkMON.Location.Y + chkMON.Height + 4);
-                    chkMOX.Location = new Point(chkTUN.Location.X, chkTUN.Location.Y + chkTUN.Height + 4);
+                        chkTUN.Location = new Point(chkMON.Location.X, chkMON.Location.Y + chkMON.Height + 4);
+                        chkMOX.Location = new Point(chkTUN.Location.X, chkTUN.Location.Y + chkTUN.Height + 4);
                     //                        chkVOX.Location = new Point(chkMON.Location.X - chkVOX.Width - 10, chkMON.Location.Y);
                     chkFWCATUBypass.Location = new Point(chkMON.Location.X - chkVOX.Width - 10, chkMON.Location.Y);
 
-                    chkRX2SR.Location = new Point(chkTUN.Location.X - chkRX2SR.Width - 10, chkTUN.Location.Y); //DUP
-                    //  chkFWCATU.Location = new Point(chkMOX.Location.X - chkFWCATU.Width - 10, chkMOX.Location.Y); //CTUN
-                    chkX2TR.Location = new Point(chkMOX.Location.X - chkX2TR.Width - 10, chkMOX.Location.Y); //RX2 CTUN
-                    lblAF2.Location = new Point(5, chkPower.Location.Y + chkPower.Height + 5);
-                    //ptbAF.Location = new Point(lblAF2.Location.X + lblAF2.Width, lblAF2.Location.Y); 
-                    ptbRX2AF.Location = new Point(lblAF2.Location.X + lblAF2.Width, lblAF2.Location.Y);
-                    //ptbAF.Location = new Point(10, chkPower.Location.Y + chkPower.Height + 2);
-                    lblPWR2.Location = new Point(ptbRX2AF.Location.X + ptbRX2AF.Width + 2, ptbRX2AF.Location.Y);
-                    ptbPWR.Location = new Point(lblPWR2.Location.X + lblPWR2.Width, lblPWR2.Location.Y);
-                    lblRF2.Location = new Point(5, lblAF2.Location.Y + lblAF2.Height + 2);
-                    ptbRX2RF.Location = new Point(lblRF2.Location.X + lblRF2.Width, ptbRX2AF.Location.Y + ptbRX2AF.Height + 2);
-                    comboRX2AGC.Location = new Point(ptbRX2RF.Location.X + ptbRX2RF.Width + 2, ptbRX2RF.Location.Y + 3);
-                    //chkMUT.Location = new Point(ptbAF.Location.X + ptbAF.Width + 2, ptbAF.Location.Y);
-                    //comboPreamp.Location = new Point(comboRX2AGC.Location.X + comboPreamp.Width + 2, comboRX2AGC.Location.Y);
+                        chkRX2SR.Location = new Point(chkTUN.Location.X - chkRX2SR.Width - 10, chkTUN.Location.Y); //DUP
+                        //  chkFWCATU.Location = new Point(chkMOX.Location.X - chkFWCATU.Width - 10, chkMOX.Location.Y); //CTUN
+                        chkX2TR.Location = new Point(chkMOX.Location.X - chkX2TR.Width - 10, chkMOX.Location.Y); //RX2 CTUN
+                        lblAF2.Location = new Point(5, chkPower.Location.Y + chkPower.Height + 5);
+                        //ptbAF.Location = new Point(lblAF2.Location.X + lblAF2.Width, lblAF2.Location.Y); 
+                        ptbRX2AF.Location = new Point(lblAF2.Location.X + lblAF2.Width, lblAF2.Location.Y);
+                        //ptbAF.Location = new Point(10, chkPower.Location.Y + chkPower.Height + 2);
+                        lblPWR2.Location = new Point(ptbRX2AF.Location.X + ptbRX2AF.Width + 2, ptbRX2AF.Location.Y);
+                        ptbPWR.Location = new Point(lblPWR2.Location.X + lblPWR2.Width, lblPWR2.Location.Y);
+                        lblRF2.Location = new Point(5, lblAF2.Location.Y + lblAF2.Height + 2);
+                        ptbRX2RF.Location = new Point(lblRF2.Location.X + lblRF2.Width, ptbRX2AF.Location.Y + ptbRX2AF.Height + 2);
+                        comboRX2AGC.Location = new Point(ptbRX2RF.Location.X + ptbRX2RF.Width + 2, ptbRX2RF.Location.Y + 3);
+                        //chkMUT.Location = new Point(ptbAF.Location.X + ptbAF.Width + 2, ptbAF.Location.Y);
+                        //comboPreamp.Location = new Point(comboRX2AGC.Location.X + comboPreamp.Width + 2, comboRX2AGC.Location.Y);
                     udXIT.Location = new Point(grpVFOB.Location.X + grpVFOB.Width + 6, comboRX2AGC.Location.Y);     // XIT bottom, to right of VFO
                     chkXIT.Location = new Point(udXIT.Location.X, udXIT.Location.Y - chkXIT.Height);             // chkXIT above it
                     btnXITReset.Location = new Point(chkXIT.Location.X + chkXIT.Width, chkXIT.Location.Y);      // btnXIT to its right
@@ -55418,50 +55391,50 @@ namespace Thetis
                     chkRIT.Location = new Point(udRIT.Location.X, udRIT.Location.Y - chkRIT.Height);
                     btnRITReset.Location = new Point(chkRIT.Location.X + chkRIT.Width, chkRIT.Location.Y);
 
-                    comboPreamp.Location = new Point(comboRX2AGC.Location.X + comboPreamp.Width + 2, comboRX2AGC.Location.Y);
-                    udRX1StepAttData.Location = new Point(comboRX2AGC.Location.X + udRX1StepAttData.Width + 2, comboRX2AGC.Location.Y);
-                    comboRX2Preamp.Location = new Point(comboRX2AGC.Location.X + comboRX2Preamp.Width + 2, comboRX2AGC.Location.Y);
-                    udRX2StepAttData.Location = new Point(comboRX2AGC.Location.X + udRX2StepAttData.Width + 2, comboRX2AGC.Location.Y);
+                        comboPreamp.Location = new Point(comboRX2AGC.Location.X + comboPreamp.Width + 2, comboRX2AGC.Location.Y);
+                        udRX1StepAttData.Location = new Point(comboRX2AGC.Location.X + udRX1StepAttData.Width + 2, comboRX2AGC.Location.Y);
+                        comboRX2Preamp.Location = new Point(comboRX2AGC.Location.X + comboRX2Preamp.Width + 2, comboRX2AGC.Location.Y);
+                        udRX2StepAttData.Location = new Point(comboRX2AGC.Location.X + udRX2StepAttData.Width + 2, comboRX2AGC.Location.Y);
 
-                    if (rx2_preamp_present)
-                    {
-                        if (rx2_step_att_present)
+                        if (rx2_preamp_present)
                         {
-                            comboPreamp.Hide();
-                            udRX1StepAttData.Hide();
-                            comboRX2Preamp.Hide();
-                            udRX2StepAttData.Show();
-                            // udRX2StepAttData.Location = new Point(comboRX2AGC.Location.X + udRX2StepAttData.Width + 2, comboRX2AGC.Location.Y);
+                            if (rx2_step_att_present)
+                            {
+                                comboPreamp.Hide();
+                                udRX1StepAttData.Hide();
+                                comboRX2Preamp.Hide();
+                                udRX2StepAttData.Show();
+                                // udRX2StepAttData.Location = new Point(comboRX2AGC.Location.X + udRX2StepAttData.Width + 2, comboRX2AGC.Location.Y);
+                            }
+                            else
+                            {
+                                comboPreamp.Hide();
+                                udRX1StepAttData.Hide();
+                                udRX2StepAttData.Hide();
+                                comboRX2Preamp.Show();
+                                // comboRX2Preamp.Location = new Point(comboRX2AGC.Location.X + comboRX2Preamp.Width + 2, comboRX2AGC.Location.Y);
+                            }
                         }
                         else
                         {
-                            comboPreamp.Hide();
-                            udRX1StepAttData.Hide();
-                            udRX2StepAttData.Hide();
-                            comboRX2Preamp.Show();
-                            // comboRX2Preamp.Location = new Point(comboRX2AGC.Location.X + comboRX2Preamp.Width + 2, comboRX2AGC.Location.Y);
+                            if (rx1_step_att_present)
+                            {
+                                comboPreamp.Hide();
+                                comboRX2Preamp.Hide();
+                                udRX2StepAttData.Hide();
+                                udRX1StepAttData.Show();
+                                //udRX1StepAttData.Location = new Point(comboRX2AGC.Location.X + udRX1StepAttData.Width + 2, comboRX2AGC.Location.Y);
+                            }
+                            else
+                            {
+                                udRX1StepAttData.Hide();
+                                comboRX2Preamp.Hide();
+                                udRX2StepAttData.Hide();
+                                comboPreamp.Show();
+                                // comboPreamp.Location = new Point(comboRX2AGC.Location.X + comboPreamp.Width + 2, comboRX2AGC.Location.Y);
+                            }
                         }
                     }
-                    else
-                    {
-                        if (rx1_step_att_present)
-                        {
-                            comboPreamp.Hide();
-                            comboRX2Preamp.Hide();
-                            udRX2StepAttData.Hide();
-                            udRX1StepAttData.Show();
-                            //udRX1StepAttData.Location = new Point(comboRX2AGC.Location.X + udRX1StepAttData.Width + 2, comboRX2AGC.Location.Y);
-                        }
-                        else
-                        {
-                            udRX1StepAttData.Hide();
-                            comboRX2Preamp.Hide();
-                            udRX2StepAttData.Hide();
-                            comboPreamp.Show();
-                            // comboPreamp.Location = new Point(comboRX2AGC.Location.X + comboPreamp.Width + 2, comboRX2AGC.Location.Y);
-                        }
-                    }
-                }
                 // G8NJJ
             }
 
@@ -55469,18 +55442,18 @@ namespace Thetis
 
             int height = this.ClientSize.Height - (top + 25);
 
-            if (showAndromedaButtonBar)
-            {
-                height -= panelButtonBar.Height;
-            }
-            else
-            {
-                if (this.m_bShowBandControls)
-                    height -= radBand160.Height;
+                if (showAndromedaButtonBar)
+                {
+                    height -= panelButtonBar.Height;
+                }
+                else
+                {
+                    if (this.m_bShowBandControls)
+                height -= radBand160.Height;
 
-                if (this.m_bShowModeControls)
-                    height -= radModeLSB.Height;
-            }
+            if (this.m_bShowModeControls)
+                height -= radModeLSB.Height;
+                }
 
             panelDisplay.Size = new Size(this.ClientSize.Width, height);
 
@@ -55519,8 +55492,8 @@ namespace Thetis
 
             comboDisplayMode.Parent = panelDisplay;
             comboDisplayMode.Location = new Point(btnDisplayPanCenter.Location.X + btnDisplayPanCenter.Width + 5, top);
-            comboRX2DisplayMode.Parent = panelDisplay;
-            comboRX2DisplayMode.Location = new Point(btnDisplayPanCenter.Location.X + btnDisplayPanCenter.Width + 5, top);
+                comboRX2DisplayMode.Parent = panelDisplay;
+                comboRX2DisplayMode.Location = new Point(btnDisplayPanCenter.Location.X + btnDisplayPanCenter.Width + 5, top);
 
             lblDisplayZoom.Location = new Point(comboDisplayMode.Location.X + comboDisplayMode.Width + 5, top);
             ptbDisplayZoom.Location = new Point(lblDisplayZoom.Location.X + lblDisplayZoom.Width, top);
@@ -55536,23 +55509,23 @@ namespace Thetis
             radDisplayZoom4x.Location = new Point(radDisplayZoom2x.Location.X + radDisplayZoom2x.Width, top);
 
             top = panelDisplay.Location.Y + panelDisplay.Height;
-            // G8NJJ to add new Andromeda button bar in place of band, mode controls
-            if (this.showAndromedaButtonBar)
-            {
-                panelButtonBar.Location = new Point(5, top);
-                top = top + panelButtonBar.Height;
-
-            }
-            else
-            {
-                if (this.m_bShowBandControls)
+                // G8NJJ to add new Andromeda button bar in place of band, mode controls
+                if (this.showAndromedaButtonBar)
                 {
-                    lblRX2Band.Location = new Point(5, top);
-                    comboRX2Band.Location = new Point(lblRX2Band.Location.X + lblRX2Band.Width + 5, top);
+                    panelButtonBar.Location = new Point(5, top);
+                    top = top + panelButtonBar.Height;
+
+                }
+                else
+            {
+                    if (this.m_bShowBandControls)
+                    {
+                        lblRX2Band.Location = new Point(5, top);
+                        comboRX2Band.Location = new Point(lblRX2Band.Location.X + lblRX2Band.Width + 5, top);
 
                 if (panelBandVHF.Visible)  //w3sz added
                 {
-                    panelBandVHF.Location = new Point(this.ClientSize.Width / 2 - radBandVHF0.Width * 7 + 100, top); //w3sz added "V"
+                            panelBandVHF.Location = new Point(this.ClientSize.Width / 2 - radBandVHF0.Width * 7 + 100, top); //w3sz added "V"
                     panelBandVHF.Size = new Size(radBandVHF0.Width * 15, radBandVHF0.Height); //w3sz added "V" 
                     radBandVHF0.Location = new Point(0, 0);//w3sz added
                     radBandVHF1.Location = new Point(radBandVHF0.Location.X + radBandVHF0.Width, 0);//w3sz added
@@ -55573,7 +55546,7 @@ namespace Thetis
                 }
                 else if (panelBandHF.Visible)
                 {
-                    panelBandHF.Location = new Point(this.ClientSize.Width / 2 - radBand160.Width * 7 + 100, top);
+                            panelBandHF.Location = new Point(this.ClientSize.Width / 2 - radBand160.Width * 7 + 100, top);
                     panelBandHF.Size = new Size(radBand160.Width * 15, radBand160.Height);
                     radBand160.Location = new Point(0, 0);
                     radBand80.Location = new Point(radBand160.Location.X + radBand160.Width, 0);
@@ -55593,7 +55566,7 @@ namespace Thetis
                 }
                 else
                 {
-                    panelBandGEN.Location = new Point(this.ClientSize.Width / 2 - radBandGEN0.Width * 7 + 100, top);
+                            panelBandGEN.Location = new Point(this.ClientSize.Width / 2 - radBandGEN0.Width * 7 + 100, top);
                     panelBandGEN.Size = new Size(radBandGEN0.Width * 15, radBandGEN0.Height);
                     radBandGEN0.Location = new Point(0, 0);
                     radBandGEN1.Location = new Point(radBandGEN0.Location.X + radBandGEN0.Width, 0);
@@ -55615,44 +55588,44 @@ namespace Thetis
 
             }
 
-                if (this.m_bShowModeControls)
-                {
-                    panelMode.Location = new Point(this.ClientSize.Width / 2 - radModeLSB.Width * 6 + 100, top);
-                    panelMode.Size = new Size(radModeLSB.Width * 12, radModeLSB.Height);
-                    panelRX2Mode.Location = new Point(this.ClientSize.Width / 2 - radModeLSB.Width * 6 + 100, top);
-                    panelRX2Mode.Size = new Size(radModeLSB.Width * 12, radModeLSB.Height);
+            if (this.m_bShowModeControls)
+            {
+                        panelMode.Location = new Point(this.ClientSize.Width / 2 - radModeLSB.Width * 6 + 100, top);
+                panelMode.Size = new Size(radModeLSB.Width * 12, radModeLSB.Height);
+                        panelRX2Mode.Location = new Point(this.ClientSize.Width / 2 - radModeLSB.Width * 6 + 100, top);
+                        panelRX2Mode.Size = new Size(radModeLSB.Width * 12, radModeLSB.Height);
 
-                    radModeLSB.Location = new Point(0, 0);
-                    radModeUSB.Location = new Point(radModeLSB.Location.X + radModeLSB.Width, 0);
-                    radModeDSB.Location = new Point(radModeUSB.Location.X + radModeUSB.Width, 0);
-                    radModeCWL.Location = new Point(radModeDSB.Location.X + radModeDSB.Width, 0);
-                    radModeCWU.Location = new Point(radModeCWL.Location.X + radModeCWL.Width, 0);
-                    radModeFMN.Location = new Point(radModeCWU.Location.X + radModeCWU.Width, 0);
-                    radModeAM.Location = new Point(radModeFMN.Location.X + radModeFMN.Width, 0);
-                    radModeSAM.Location = new Point(radModeAM.Location.X + radModeAM.Width, 0);
-                    radModeSPEC.Location = new Point(radModeSAM.Location.X + radModeSAM.Width, 0);
-                    radModeDIGL.Location = new Point(radModeSPEC.Location.X + radModeSPEC.Width, 0);
-                    radModeDIGU.Location = new Point(radModeDIGL.Location.X + radModeDIGL.Width, 0);
-                    radModeDRM.Location = new Point(radModeDIGU.Location.X + radModeDIGU.Width, 0);
-                    radRX2ModeLSB.Location = new Point(0, 0);
-                    radRX2ModeUSB.Location = new Point(radRX2ModeLSB.Location.X + radRX2ModeLSB.Width, 0);
-                    radRX2ModeDSB.Location = new Point(radRX2ModeUSB.Location.X + radRX2ModeUSB.Width, 0);
-                    radRX2ModeCWL.Location = new Point(radRX2ModeDSB.Location.X + radRX2ModeDSB.Width, 0);
-                    radRX2ModeCWU.Location = new Point(radRX2ModeCWL.Location.X + radRX2ModeCWL.Width, 0);
-                    radRX2ModeFMN.Location = new Point(radRX2ModeCWU.Location.X + radRX2ModeCWU.Width, 0);
-                    radRX2ModeAM.Location = new Point(radRX2ModeFMN.Location.X + radRX2ModeFMN.Width, 0);
-                    radRX2ModeSAM.Location = new Point(radRX2ModeAM.Location.X + radRX2ModeAM.Width, 0);
-                    radRX2ModeSPEC.Location = new Point(radRX2ModeSAM.Location.X + radRX2ModeSAM.Width, 0);
-                    radRX2ModeDIGL.Location = new Point(radRX2ModeSPEC.Location.X + radRX2ModeSPEC.Width, 0);
-                    radRX2ModeDIGU.Location = new Point(radRX2ModeDIGL.Location.X + radRX2ModeDIGL.Width, 0);
-                    radRX2ModeDRM.Location = new Point(radRX2ModeDIGU.Location.X + radRX2ModeDIGU.Width, 0);
+                radModeLSB.Location = new Point(0, 0);
+                radModeUSB.Location = new Point(radModeLSB.Location.X + radModeLSB.Width, 0);
+                radModeDSB.Location = new Point(radModeUSB.Location.X + radModeUSB.Width, 0);
+                radModeCWL.Location = new Point(radModeDSB.Location.X + radModeDSB.Width, 0);
+                radModeCWU.Location = new Point(radModeCWL.Location.X + radModeCWL.Width, 0);
+                radModeFMN.Location = new Point(radModeCWU.Location.X + radModeCWU.Width, 0);
+                radModeAM.Location = new Point(radModeFMN.Location.X + radModeFMN.Width, 0);
+                radModeSAM.Location = new Point(radModeAM.Location.X + radModeAM.Width, 0);
+                radModeSPEC.Location = new Point(radModeSAM.Location.X + radModeSAM.Width, 0);
+                radModeDIGL.Location = new Point(radModeSPEC.Location.X + radModeSPEC.Width, 0);
+                radModeDIGU.Location = new Point(radModeDIGL.Location.X + radModeDIGL.Width, 0);
+                radModeDRM.Location = new Point(radModeDIGU.Location.X + radModeDIGU.Width, 0);
+                        radRX2ModeLSB.Location = new Point(0, 0);
+                        radRX2ModeUSB.Location = new Point(radRX2ModeLSB.Location.X + radRX2ModeLSB.Width, 0);
+                        radRX2ModeDSB.Location = new Point(radRX2ModeUSB.Location.X + radRX2ModeUSB.Width, 0);
+                        radRX2ModeCWL.Location = new Point(radRX2ModeDSB.Location.X + radRX2ModeDSB.Width, 0);
+                        radRX2ModeCWU.Location = new Point(radRX2ModeCWL.Location.X + radRX2ModeCWL.Width, 0);
+                        radRX2ModeFMN.Location = new Point(radRX2ModeCWU.Location.X + radRX2ModeCWU.Width, 0);
+                        radRX2ModeAM.Location = new Point(radRX2ModeFMN.Location.X + radRX2ModeFMN.Width, 0);
+                        radRX2ModeSAM.Location = new Point(radRX2ModeAM.Location.X + radRX2ModeAM.Width, 0);
+                        radRX2ModeSPEC.Location = new Point(radRX2ModeSAM.Location.X + radRX2ModeSAM.Width, 0);
+                        radRX2ModeDIGL.Location = new Point(radRX2ModeSPEC.Location.X + radRX2ModeSPEC.Width, 0);
+                        radRX2ModeDIGU.Location = new Point(radRX2ModeDIGL.Location.X + radRX2ModeDIGL.Width, 0);
+                        radRX2ModeDRM.Location = new Point(radRX2ModeDIGU.Location.X + radRX2ModeDIGU.Width, 0);
 
-                    top = panelMode.Location.Y + panelMode.Height;
-                }
-
+                top = panelMode.Location.Y + panelMode.Height;
             }
 
-            if ((!this.m_bShowTopControls) && (!this.showAndromedaTopControls))
+                }
+
+                if ((!this.m_bShowTopControls) && (!this.showAndromedaTopControls))
             {
                 grpVFOA.Location = new Point(grpVFOA.Location.X, -200);
                 grpVFOB.Location = new Point(grpVFOB.Location.X, -200);
@@ -58334,8 +58307,6 @@ namespace Thetis
         //
         void AndromedaIndicatorCheck(EIndicatorActions IndicatorType, bool IsRX1, bool State)
         {
-            if (!AndromedaCATEnabled) return; // MW0LGE
-
             int Cntr;
             int Override;                                                   // indicator table setting
             bool Selected = true;                                           // true if RX1/2 test matches

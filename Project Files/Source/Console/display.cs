@@ -8545,8 +8545,8 @@ namespace Thetis
                 //  p = Pens.Blue;
                 // else p = Pens.Green;
 
-                //if (ClickTuneFilter)
-                //{
+                if (ClickTuneFilter)
+                {
                     bool bShow = false;
 
                     Pen p;
@@ -8617,16 +8617,14 @@ namespace Thetis
                         int x1 = (int)((freq_low - Low) / width * W);
                         int x2 = (int)((freq_high - Low) / width * W);
 
-                        if (ClickTuneFilter) { // only show filter if option set MW0LGE
-                            if (((rx1_dsp_mode == DSPMode.CWL || rx1_dsp_mode == DSPMode.CWU) && rx == 1) || ((rx2_dsp_mode == DSPMode.CWL || rx2_dsp_mode == DSPMode.CWU) && rx == 2))
-                            {
-                                g.FillRectangle(display_filter_brush, display_cursor_x -
-                                    ((x2 - x1) / 2), y1, x2 - x1, y2 - top);
-                            }
-                            else
-                            {
-                                g.FillRectangle(display_filter_brush, x1, y1, x2 - x1, y2 - top);
-                            }
+                        if (((rx1_dsp_mode == DSPMode.CWL || rx1_dsp_mode == DSPMode.CWU) && rx==1) || ((rx2_dsp_mode == DSPMode.CWL || rx2_dsp_mode == DSPMode.CWU) && rx == 2)) 
+                        {
+                            g.FillRectangle(display_filter_brush, display_cursor_x -
+                                ((x2 - x1) / 2), y1, x2 - x1, y2 - top);
+                        }
+                        else
+                        {
+                            g.FillRectangle(display_filter_brush, x1, y1, x2 - x1, y2 - top);
                         }
 
                         g.DrawLine(p, display_cursor_x, y1-top, display_cursor_x, (y1 - top) + y2);
@@ -8634,7 +8632,7 @@ namespace Thetis
                         // draw horiz cursor line
                         if (ShowCTHLine) g.DrawLine(p, 0, display_cursor_y, W, display_cursor_y);
                     }
-                //}                
+                }                
             }
 
             // MW0LGE all the code for F/G/H overlay line/grab boxes
