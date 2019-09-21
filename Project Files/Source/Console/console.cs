@@ -1183,15 +1183,28 @@ namespace Thetis
         // This gets called from the Splash form
         public static void setPowerOn()
         {
-            if (powerOnOption)
-                theConsole.chkPower.Checked = true;
+            // MW0LGE
+            //if (powerOnOption)
+            //    theConsole.chkPower.Checked = true;
         }
 
         public Console(string[] args)
         {
             Display.specready = false;
 
+            //MW0LGE
+            // Problems with CultureInfo.
+            // MemoryPanel and Spot system changes CultureInfo on their own threads, problem with this is that the culture change is now not limited just in that thread, if they
+            // access stuff outside their thread, then the stuff they access has the same culture as the calling thread. VFOA frequency etc gets read incorrectly.
+            // I have no idea how this actually managed to work before, unless it has been a recent change/fix to .NET 4.8.
+            // I went through the stages of standardising the xml/db saving so to use CultureInfo.InvariantCulture, however the issues caused by Spot and Memory forms
+            // just meant it was 100x easier just to force whole application to un-US.
+            CultureInfo ci = new CultureInfo("en-US");
 
+            CultureInfo.DefaultThreadCurrentCulture = ci;
+            CultureInfo.DefaultThreadCurrentUICulture = ci;
+            Thread.CurrentThread.CurrentCulture = ci;
+            Thread.CurrentThread.CurrentUICulture = ci;
 
             foreach (string s in args)
             {
@@ -1572,22 +1585,18 @@ namespace Thetis
                 }
             }
 
+            SyncDSP();
+
             foreach (string s in CmdLineArgs)
             {
-                if (s == "-autostart")
-                {
-                    chkPower.Checked = true;
-                    powerOnOption = true;
-                }
-                else if (s.StartsWith("-datapath:"))
+                if (s.StartsWith("-datapath:"))
                 {
                     string path = s.Substring(s.IndexOf(":") + 1);
                     if (Directory.Exists(path))
                         AppDataPath = path;
+                    break;
                 }
             }
-
-            SyncDSP();
 
             initializing = false;
             txtVFOAFreq_LostFocus(this, EventArgs.Empty);
@@ -1610,6 +1619,19 @@ namespace Thetis
 
             rx1_meter_cal_offset = rx_meter_cal_offset_by_radio[(int)current_hpsdr_model];
             RX1DisplayCalOffset = rx_display_cal_offset_by_radio[(int)current_hpsdr_model];
+
+            foreach (string s in CmdLineArgs)
+            {
+                if (s == "-autostart")
+                {
+                    //chkPower.Checked = true;
+                    //powerOnOption = true;
+                    tmrAutoStart.Interval = 2000;
+                    tmrAutoStart.Enabled = true; // MW0LGE hack to get this auto start kicked off
+                    break;
+                }
+            }
+
             if (resetForAutoMerge)
             {
                 MessageBox.Show("Please RE-START now.", "Note", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -16101,10 +16123,10 @@ namespace Thetis
             {
                 picDisplay.Invalidate();
             }
-            else
-            {
-                Display.RefreshPanadapterGrid = true;
-            }
+            //else
+            //{
+            //    Display.RefreshPanadapterGrid = true;
+            //}
         }
 
         public void CalcRX2DisplayFreq()
@@ -16120,10 +16142,10 @@ namespace Thetis
             {
                 picDisplay.Invalidate();
             }
-            else
-            {
-                Display.RefreshPanadapterGrid = true;
-            }
+            //else
+            //{
+            //    Display.RefreshPanadapterGrid = true;
+            //}
         }
 
         public void CalcTXDisplayFreq()
@@ -16134,10 +16156,10 @@ namespace Thetis
             {
                 picDisplay.Invalidate();
             }
-            else
-            {
-                Display.RefreshPanadapterGrid = true;
-            }
+            //else
+            //{
+            //    Display.RefreshPanadapterGrid = true;
+            //}
         }
 
         public void UpdateRXSpectrumDisplayVars()
@@ -30796,6 +30818,79 @@ namespace Thetis
             }
         }
 
+        private int HzInNPixels(int nPixelCount, int rx)
+        {
+            int low, high;
+            if (!mox)
+            {
+                if (rx == 1)
+                {
+                    if (Display.CurrentDisplayMode == DisplayMode.SPECTRUM ||
+                        Display.CurrentDisplayMode == DisplayMode.HISTOGRAM)
+                    // Display.CurrentDisplayMode != DisplayMode.SPECTRASCOPE)
+                    {
+                        low = Display.RXSpectrumDisplayLow;
+                        high = Display.RXSpectrumDisplayHigh;
+                    }
+                    else
+                    {
+                        low = Display.RXDisplayLow;
+                        high = Display.RXDisplayHigh;
+                    }
+                }
+                else
+                {
+                    if (Display.CurrentDisplayMode == DisplayMode.SPECTRUM ||
+                    Display.CurrentDisplayMode == DisplayMode.HISTOGRAM)
+                    // Display.CurrentDisplayMode != DisplayMode.SPECTRASCOPE)
+                    {
+                        low = Display.RX2SpectrumDisplayLow;
+                        high = Display.RX2SpectrumDisplayHigh;
+                    }
+                    else
+                    {
+
+                        low = Display.RX2DisplayLow;
+                        high = Display.RX2DisplayHigh;
+                    }
+                }
+            }
+            else
+            {
+                if (Display.CurrentDisplayMode == DisplayMode.SPECTRUM ||
+                    Display.CurrentDisplayMode == DisplayMode.HISTOGRAM)
+                // Display.CurrentDisplayMode != DisplayMode.SPECTRASCOPE)
+                {
+                    if (display_duplex)
+                    {
+                        low = Display.RXSpectrumDisplayLow;
+                        high = Display.RXSpectrumDisplayHigh;
+                    }
+                    else
+                    {
+                        low = Display.TXSpectrumDisplayLow;
+                        high = Display.TXSpectrumDisplayHigh;
+                    }
+                }
+                else
+                {
+                    if (display_duplex)
+                    {
+                        low = Display.RXDisplayLow;
+                        high = Display.RXDisplayHigh;
+                    }
+                    else
+                    {
+                        low = Display.TXDisplayLow;
+                        high = Display.TXDisplayHigh;
+                    }
+                }
+            }
+
+            int width = high - low;
+            return (int)((double)nPixelCount / (double)picDisplay.Width * (double)width);
+        }
+
         private float PixelToHz(float x)
         {
             int low, high;
@@ -34246,51 +34341,33 @@ namespace Thetis
                                 {
                                     if (chkVFOATX.Checked || !chkRX2.Checked)
                                     {
-                                        if (!Display.DataReady)
-                                        {
-                                            fixed (float* ptr = &Display.new_display_data[0])
-                                                SpecHPSDRDLL.GetPixels(cmaster.inid(1, 0), 0, ptr, ref flag);
-                                            Display.DataReady = true;
-                                        }
-                                        if (!Display.WaterfallDataReady)
-                                        {
-                                            fixed (float* ptr = &Display.new_waterfall_data[0])
-                                                SpecHPSDRDLL.GetPixels(cmaster.inid(1, 0), 1, ptr, ref flag);
-                                            Display.WaterfallDataReady = true;
-                                        }
+                                        fixed (float* ptr = &Display.new_display_data[0])
+                                            SpecHPSDRDLL.GetPixels(cmaster.inid(1, 0), 0, ptr, ref flag);
+                                        Display.DataReady = (flag==1);
+                                        fixed (float* ptr = &Display.new_waterfall_data[0])
+                                            SpecHPSDRDLL.GetPixels(cmaster.inid(1, 0), 1, ptr, ref flag);
+                                        Display.WaterfallDataReady = true; //(flag == 1);
                                     }
                                     else
                                     {
-                                        if (!Display.DataReady)
-                                        {
-                                            fixed (float* ptr = &Display.new_display_data[0])
-                                                // SpecHPSDRDLL.GetPixels(cmaster.inid(1, 0), 0, ptr, ref flag);
-                                                SpecHPSDRDLL.GetPixels(0, 0, ptr, ref flag);
-                                            Display.DataReady = true;
-                                        }
-                                        if (!Display.WaterfallDataReady)
-                                        {
-                                            fixed (float* ptr = &Display.new_waterfall_data[0])
-                                                //SpecHPSDRDLL.GetPixels(cmaster.inid(1, 0), 1, ptr, ref flag); 
-                                                SpecHPSDRDLL.GetPixels(0, 1, ptr, ref flag);
-                                            Display.WaterfallDataReady = true;
-                                        }
+                                        fixed (float* ptr = &Display.new_display_data[0])
+                                            // SpecHPSDRDLL.GetPixels(cmaster.inid(1, 0), 0, ptr, ref flag);
+                                            SpecHPSDRDLL.GetPixels(0, 0, ptr, ref flag);
+                                        Display.DataReady = true; //(flag == 1);
+                                        fixed (float* ptr = &Display.new_waterfall_data[0])
+                                            //SpecHPSDRDLL.GetPixels(cmaster.inid(1, 0), 1, ptr, ref flag); 
+                                            SpecHPSDRDLL.GetPixels(0, 1, ptr, ref flag);
+                                        Display.WaterfallDataReady = true; //(flag == 1);
                                     }
                                 }
                                 else //rx
                                 {
-                                    if (!Display.DataReady)
-                                    {
-                                        fixed (float* ptr = &Display.new_display_data[0])
-                                            SpecHPSDRDLL.GetPixels(0, 0, ptr, ref flag);
-                                        Display.DataReady = true;
-                                    }
-                                    if (!Display.WaterfallDataReady)
-                                    {
-                                        fixed (float* ptr = &Display.new_waterfall_data[0])
-                                            SpecHPSDRDLL.GetPixels(0, 1, ptr, ref flag);
-                                        Display.WaterfallDataReady = true;
-                                    }
+                                    fixed (float* ptr = &Display.new_display_data[0])
+                                        SpecHPSDRDLL.GetPixels(0, 0, ptr, ref flag);
+                                    Display.DataReady = true; //(flag == 1);
+                                    fixed (float* ptr = &Display.new_waterfall_data[0])
+                                        SpecHPSDRDLL.GetPixels(0, 1, ptr, ref flag);
+                                    Display.WaterfallDataReady = true; //(flag == 1);
                                 }
                                 break;
                             case DisplayMode.SPECTRUM:
@@ -34304,17 +34381,20 @@ namespace Thetis
                                     {
                                         fixed (float* ptr = &Display.new_display_data[0])
                                             SpecHPSDRDLL.GetPixels(cmaster.inid(1, 0), 0, ptr, ref flag);
+                                        Display.DataReady = true; //(flag == 1);
                                     }
                                     else
                                     {
                                         fixed (float* ptr = &Display.new_display_data[0])
                                             SpecHPSDRDLL.GetPixels(0, 0, ptr, ref flag);
+                                        Display.DataReady = true; //(flag == 1);
                                     }
                                 }
                                 else
                                 {
                                     fixed (float* ptr = &Display.new_display_data[0])
                                         SpecHPSDRDLL.GetPixels(0, 0, ptr, ref flag);
+                                    Display.DataReady = true; //(flag == 1);
                                 }
                                 break;
                             case DisplayMode.SCOPE:
@@ -34327,6 +34407,7 @@ namespace Thetis
                                     else
                                         WDSP.TXAGetaSipF(WDSP.id(top_thread, 0), ptr, (int)(scope_time * 48));
                                 }
+                                Display.DataReady = true;
                                 break;
                             case DisplayMode.PHASE:
                                 fixed (float* ptr = &Display.new_display_data[0])
@@ -34337,6 +34418,7 @@ namespace Thetis
                                     else
                                         WDSP.TXAGetaSipF1(WDSP.id(top_thread, 0), ptr, Display.PhaseNumPts);
                                 }
+                                Display.DataReady = true;
                                 break;
                             case DisplayMode.PHASE2:
                                 //Audio.phase_mutex.WaitOne();
@@ -34345,13 +34427,10 @@ namespace Thetis
                                     Display.new_display_data[i * 2] = Audio.phase_buf_l[i];
                                     Display.new_display_data[i * 2 + 1] = Audio.phase_buf_r[i];
                                 }
+                                Display.DataReady = true;
                                 //Audio.phase_mutex.ReleaseMutex();
                                 break;
                         }
-
-                        if (Display.CurrentDisplayMode != DisplayMode.PANAFALL &&
-                            Display.CurrentDisplayMode != DisplayMode.WATERFALL)
-                            Display.DataReady = true;
                     }
 
                     if (!pause_DisplayThread && chkSplitDisplay.Checked &&
@@ -34375,7 +34454,7 @@ namespace Thetis
                                     fixed (float* ptr = &Display.new_waterfall_data_bottom[0])
                                         SpecHPSDRDLL.GetPixels(1, 1, ptr, ref flag);
                                 }
-                                Display.WaterfallDataReadyBottom = true;
+                                Display.WaterfallDataReadyBottom = true; //(flag == 1);
                                 break;
                             case DisplayMode.PANADAPTER:
                                 if (mox && VFOBTX)
@@ -34389,25 +34468,27 @@ namespace Thetis
                                     fixed (float* ptr = &Display.new_display_data_bottom[0])
                                         SpecHPSDRDLL.GetPixels(1, 0, ptr, ref flag);
                                 }
-                                Display.DataReadyBottom = true; //MW0LGE
+                                Display.DataReadyBottom = true; //(flag == 1);
                                 break;
                             case DisplayMode.PANAFALL:  // MW0LGE
                                 if (mox && VFOBTX)
                                 {
                                     fixed (float* ptr = &Display.new_display_data_bottom[0])
                                         SpecHPSDRDLL.GetPixels(cmaster.inid(1, 0), 0, ptr, ref flag);
+                                    Display.DataReadyBottom = true; //(flag == 1);
                                     fixed (float* ptr = &Display.new_waterfall_data_bottom[0])
                                         SpecHPSDRDLL.GetPixels(cmaster.inid(1, 0), 1, ptr, ref flag);
+                                    Display.WaterfallDataReadyBottom = true; //(flag == 1);
                                 }
                                 else
                                 {
                                     fixed (float* ptr = &Display.new_display_data_bottom[0])
                                         SpecHPSDRDLL.GetPixels(1, 0, ptr, ref flag);
+                                    Display.DataReadyBottom = true; //(flag == 1);
                                     fixed (float* ptr = &Display.new_waterfall_data_bottom[0])
                                         SpecHPSDRDLL.GetPixels(1, 1, ptr, ref flag);
+                                    Display.WaterfallDataReadyBottom = true; //(flag == 1);
                                 }
-                                Display.DataReadyBottom = true;
-                                Display.WaterfallDataReadyBottom = true;
                                 break;
                             case DisplayMode.SCOPE:
                             case DisplayMode.SCOPE2:
@@ -34419,6 +34500,7 @@ namespace Thetis
                                     else
                                         WDSP.TXAGetaSipF(WDSP.id(bottom_thread, 0), ptr, (int)(scope_time * 48));
                                 }
+                                Display.DataReadyBottom = true;
                                 break;
                             case DisplayMode.PHASE:
                                 fixed (float* ptr = &Display.new_display_data_bottom[0])
@@ -34429,6 +34511,7 @@ namespace Thetis
                                     else
                                         WDSP.TXAGetaSipF1(WDSP.id(bottom_thread, 0), ptr, Display.PhaseNumPts);
                                 }
+                                Display.DataReadyBottom = true;
                                 break;
                             case DisplayMode.PHASE2:
                                 //Audio.phase_mutex.WaitOne();
@@ -34438,11 +34521,9 @@ namespace Thetis
                                     Display.new_display_data_bottom[i * 2 + 1] = Audio.phase_buf_r[i];
                                 }
                                 //Audio.phase_mutex.ReleaseMutex();
+                                Display.DataReadyBottom = true;
                                 break;
                         }
-                        if (Display.CurrentDisplayModeBottom != DisplayMode.PANAFALL &&
-                            Display.CurrentDisplayModeBottom != DisplayMode.WATERFALL)
-                            Display.DataReady = true; //MW0LGE
                     }
                     if (displaydidit)
                     {
@@ -34461,7 +34542,15 @@ namespace Thetis
                 objStopWatch.Stop();
 
                 int dly = display_delay - (int)objStopWatch.ElapsedMilliseconds;
-                if (dly < 1) dly = 1;
+                if (dly < 1)
+                {
+                    Display.FrameRateIssue = true;
+                    dly = 1;
+                }
+                else
+                {
+                    Display.FrameRateIssue = false;
+                }
                 Thread.Sleep(dly);
             }
         }
@@ -41468,6 +41557,13 @@ namespace Thetis
             else num_steps = (e.Delta > 0 ? 1 : -1);	// 1 per click
             //int numberToMove = e.Delta / 120;	// 1 per click
 
+            // MW0LGE before all, handle the notch size change
+            if (SelectedNotch != null && num_steps != 0)
+            {
+                notchMouseWheel(num_steps);
+                return;
+            }
+
             if (vfo_char_width == 0)
                 GetVFOCharWidth();
 
@@ -41695,42 +41791,45 @@ namespace Thetis
                 }
                 else
                 {
-                    //-W2PA If we tune beyond the display limits, re-center or scroll display, and keep going.  Original code above just stops tuning at edges.
-                    if (((-rx1_osc) - Lmargin) < (Ldisp - freqJumpThresh) || ((-rx1_osc) + Hmargin) > (Hdisp + freqJumpThresh)) // re-center if we've jumped far
+                    if (!rx1_spectrum_tune_drag)
                     {
-                        center_frequency = freq;
-                        update_centerfreq = false;
-                        //MW0LGE VFOAFreq = freq;
-                        rx1_osc = 0.0;
-                    }
-                    else  // not a jump - more like tuning
-                    if (((-rx1_osc) - Lmargin) < Ldisp) // scroll the spectrum display smoothly at the edge and keep going
-                    {
-                        double adjustFreq = Ldisp - ((-rx1_osc) - Lmargin);
-                        //center_frequency -= CurrentTuneStepMHz;
-                        center_frequency -= 1.0e-6 * adjustFreq;
-                        update_centerfreq = false;
-                        //MW0LGE VFOAFreq = freq;
-                        //rx1_osc += CurrentTuneStepHz;
-                        rx1_osc += adjustFreq;
-                    }
-                    else if (((-rx1_osc) + Hmargin) > Hdisp)
-                    {
-                        double adjustFreq = ((-rx1_osc) + Hmargin) - Hdisp;
-                        //center_frequency += CurrentTuneStepMHz;
-                        center_frequency += 1.0e-6 * adjustFreq;
-                        update_centerfreq = false;
-                        //MW0LGE VFOAFreq = freq;
-                        //rx1_osc -= CurrentTuneStepHz;
-                        rx1_osc -= adjustFreq;
+                        //-W2PA If we tune beyond the display limits, re-center or scroll display, and keep going.  Original code above just stops tuning at edges.
+                        if (((-rx1_osc) - Lmargin) < (Ldisp - freqJumpThresh) || ((-rx1_osc) + Hmargin) > (Hdisp + freqJumpThresh)) // re-center if we've jumped far, ignore if dragging with top area
+                        {
+                            center_frequency = freq;
+                            update_centerfreq = false;
+                            //MW0LGE VFOAFreq = freq;
+                            rx1_osc = 0.0;
+                        }
+                        else  // not a jump - more like tuning
+                        if (((-rx1_osc) - Lmargin) < Ldisp) // scroll the spectrum display smoothly at the edge and keep going //MW0LGE ignore if dragging with top area 
+                        {
+                            double adjustFreq = Ldisp - ((-rx1_osc) - Lmargin);
+                            //center_frequency -= CurrentTuneStepMHz;
+                            center_frequency -= 1.0e-6 * adjustFreq;
+                            update_centerfreq = false;
+                            //MW0LGE VFOAFreq = freq;
+                            //rx1_osc += CurrentTuneStepHz;
+                            rx1_osc += adjustFreq;
+                        }
+                        else if (((-rx1_osc) + Hmargin) > Hdisp)  //MW0LGE ignore if dragging with top area
+                        {
+                            double adjustFreq = ((-rx1_osc) + Hmargin) - Hdisp;
+                            //center_frequency += CurrentTuneStepMHz;
+                            center_frequency += 1.0e-6 * adjustFreq;
+                            update_centerfreq = false;
+                            //MW0LGE VFOAFreq = freq;
+                            //rx1_osc -= CurrentTuneStepHz;
+                            rx1_osc -= adjustFreq;
+                        }
                     }
                 }
 
                 if (chkRIT.Checked)
                     rx1_osc -= (int)udRIT.Value;// *0.000001;
 
-                if (rx1_osc > -sample_rate1 / 2 && rx1_osc < sample_rate1 / 2)
-                {
+//                if (rx1_osc > -sample_rate1 / 2 && rx1_osc < sample_rate1 / 2)
+//                {
                     radio.GetDSPRX(0, 0).RXOsc = rx1_osc; // keep tuning
                     Display.FreqDiff = (int)radio.GetDSPRX(0, 0).RXOsc;
                     if (stereo_diversity)
@@ -41738,8 +41837,7 @@ namespace Thetis
                         radio.GetDSPRX(1, 0).RXOsc = rx1_osc; // keep tuning
                         Display.RX2FreqDiff = (int)radio.GetDSPRX(1, 0).RXOsc;
                     }
-                }
-
+//                }
             }
             else
             {
@@ -42533,45 +42631,48 @@ namespace Thetis
                 }
                 else
                 {
-                    //-W2PA If we tune beyond the display limits, re-center or scroll display, and keep going.  Original code above just stops tuning at edges.
-                    if (((-rx2_osc) - Lmargin) < (Ldisp - freqJumpThresh) || ((-rx2_osc) + Hmargin) > (Hdisp + freqJumpThresh)) // re-center if we've jumped far
+                    if (!rx2_spectrum_tune_drag)
                     {
-                        center_rx2_frequency = freq;
-                        update_rx2_centerfreq = false;
-                        //MW0LGE VFOBFreq = freq;
-                        rx2_osc = 0.0;
-                    }
-                    else  // not a jump - more like tuning
-                    if (((-rx2_osc) - Lmargin) < Ldisp) // scroll the spectrum display smoothly at the edge and keep going
-                    {
-                        double adjustFreq = Ldisp - ((-rx2_osc) - Lmargin);
-                        //center_rx2_frequency -= CurrentTuneStepMHz;
-                        center_rx2_frequency -= 1.0e-6 * adjustFreq;
-                        update_rx2_centerfreq = false;
-                        //MW0LGE VFOBFreq = freq;
-                        //rx2_osc += CurrentTuneStepHz;
-                        rx2_osc += adjustFreq;
-                    }
-                    else if (((-rx2_osc) + Hmargin) > Hdisp)
-                    {
-                        double adjustFreq = ((-rx2_osc) + Hmargin) - Hdisp;
-                        //center_rx2_frequency += CurrentTuneStepMHz;
-                        center_rx2_frequency += 1.0e-6 * adjustFreq;
-                        update_rx2_centerfreq = false;
-                        //MW0LGE VFOBFreq = freq;
-                        //rx2_osc -= CurrentTuneStepHz;
-                        rx2_osc -= adjustFreq;
+                        //-W2PA If we tune beyond the display limits, re-center or scroll display, and keep going.  Original code above just stops tuning at edges.
+                        if (((-rx2_osc) - Lmargin) < (Ldisp - freqJumpThresh) || ((-rx2_osc) + Hmargin) > (Hdisp + freqJumpThresh)) // re-center if we've jumped far
+                        {
+                            center_rx2_frequency = freq;
+                            update_rx2_centerfreq = false;
+                            //MW0LGE VFOBFreq = freq;
+                            rx2_osc = 0.0;
+                        }
+                        else  // not a jump - more like tuning
+                        if (((-rx2_osc) - Lmargin) < Ldisp) // scroll the spectrum display smoothly at the edge and keep going    //MW0LGE ignore if dragging with top area
+                        {
+                            double adjustFreq = Ldisp - ((-rx2_osc) - Lmargin);
+                            //center_rx2_frequency -= CurrentTuneStepMHz;
+                            center_rx2_frequency -= 1.0e-6 * adjustFreq;
+                            update_rx2_centerfreq = false;
+                            //MW0LGE VFOBFreq = freq;
+                            //rx2_osc += CurrentTuneStepHz;
+                            rx2_osc += adjustFreq;
+                        }
+                        else if (((-rx2_osc) + Hmargin) > Hdisp) //MW0LGE ignore if dragging with top area
+                        {
+                            double adjustFreq = ((-rx2_osc) + Hmargin) - Hdisp;
+                            //center_rx2_frequency += CurrentTuneStepMHz;
+                            center_rx2_frequency += 1.0e-6 * adjustFreq;
+                            update_rx2_centerfreq = false;
+                            //MW0LGE VFOBFreq = freq;
+                            //rx2_osc -= CurrentTuneStepHz;
+                            rx2_osc -= adjustFreq;
+                        }
                     }
                 }
 
                 if (chkRIT.Checked && VFOSync)
                     rx2_osc -= (int)udRIT.Value;// *0.000001;
 
-                if (rx2_osc > -sample_rate1 / 2 && rx2_osc < sample_rate1 / 2)
-                {
+//                if (rx2_osc > -sample_rate1 / 2 && rx2_osc < sample_rate1 / 2)
+//                {
                     radio.GetDSPRX(1, 0).RXOsc = rx2_osc; // keep tuning
                     Display.RX2FreqDiff = (int)radio.GetDSPRX(1, 0).RXOsc;
-                }
+//                }
 
                 // SetupForm.txtRX1VFO.Text = rx1_osc.ToString();
                 // SetupForm.txtRX2VFO.Text = diff.ToString();
@@ -43310,7 +43411,7 @@ namespace Thetis
         private Cursor grab = new Cursor(msgrab);
         private Cursor grabbing = new Cursor(msgrabbing);
 
-        private bool overRX(int x, int y, int rx, bool bIncludePanafallCheck = true)
+        private bool overRX(int x, int y, int rx, bool bIgnorePanafallWaterfall = true)
         {
             int nMinHeightRX1 = 0;
             int nMaxHeightRX1 = picDisplay.Height;
@@ -43322,14 +43423,14 @@ namespace Thetis
                 // top half only
                 nMaxHeightRX1 = picDisplay.Height / 2;
 
-                if (Display.CurrentDisplayModeBottom == DisplayMode.PANAFALL && bIncludePanafallCheck)
+                if (Display.CurrentDisplayModeBottom == DisplayMode.PANAFALL && bIgnorePanafallWaterfall)
                 {
                     //top half, of bottom half is available only
                     nMaxHeightRX2 = (picDisplay.Height / 4) * 3;
                 }
             }
 
-            if (Display.CurrentDisplayMode == DisplayMode.PANAFALL && bIncludePanafallCheck)
+            if (Display.CurrentDisplayMode == DisplayMode.PANAFALL && bIgnorePanafallWaterfall)
             {
                 if (!rx2_enabled)
                 {
@@ -43354,7 +43455,7 @@ namespace Thetis
                     case DisplayMode.WATERFALL:
                         // check if we are anywhere over area that filters etc can be adjusted
                         if ((x >= 0 && x < picDisplay.Width) &&
-                         (y < nMaxHeightRX1 && y > nMinHeightRX1 + 10))
+                         (y < nMaxHeightRX1 && y >= nMinHeightRX1)) // + 10))
                         {
                             return true;
                         }
@@ -43373,7 +43474,7 @@ namespace Thetis
                     case DisplayMode.WATERFALL:
                         // check if we are anywhere over area that filters etc can be adjusted
                         if ((x >= 0 && x < picDisplay.Width) &&
-                         (y < nMaxHeightRX2 && y > nMinHeightRX2 + 10))
+                         (y < nMaxHeightRX2 && y >= nMinHeightRX2)) // + 10))
                         {
                             return true;
                         }
@@ -43383,6 +43484,42 @@ namespace Thetis
 
             return false;
         }
+
+        //NOTCH MW0LGE
+        private Point drag_notch_start_point;
+        private double drag_notch_start_data = 0;
+        private bool m_bDraggingNotch = false;
+        private bool m_bDraggingNotchBW = false;
+        private bool m_BDragginNotchBWRightSide = false;
+
+        private MNotch m_objSelectedNotch;
+        private MNotch SelectedNotch {
+            get { return m_objSelectedNotch; }
+            set {
+                m_objSelectedNotch = value;
+                Display.HighlightNotch = m_objSelectedNotch;
+            }
+        }
+        private void notchMouseWheel(int wheelDelta)
+        {
+            if (SelectedNotch == null) return;
+
+            double tmp = SelectedNotch.FWidth;
+
+            if (m_bShiftKeyDown) {
+                tmp += wheelDelta;
+            }
+            else {
+                tmp += wheelDelta * 10;
+            }
+
+            if (tmp < 0) tmp = 0;
+            
+            if (tmp > max_filter_width) tmp = max_filter_width;
+
+            changeNotchBW(SelectedNotch, tmp);
+        }
+        //END NOTCH
 
         private void picDisplay_MouseMove(object sender, MouseEventArgs e)
         {
@@ -43487,8 +43624,93 @@ namespace Thetis
                 //    }
                 //}
 
-                bool bOverRX1 = overRX(e.X, e.Y, 1);
-                bool bOverRX2 = overRX(e.X, e.Y, 2);
+                bool bOverRX1 = overRX(e.X, e.Y, 1, true);
+                bool bOverRX2 = overRX(e.X, e.Y, 2, true);
+
+                //NOTCH MW0LGE
+                if (!SetupForm.NotchAdminBusy) // only highlight/select if we are not actively adding/edditing via setup form
+                {
+                    int nRX = 0;
+                    if (bOverRX1 && (Display.CurrentDisplayMode == DisplayMode.PANADAPTER || Display.CurrentDisplayMode == DisplayMode.PANAFALL))
+                    {
+                        nRX = 1;
+                    }
+                    else if (bOverRX2 && (Display.CurrentDisplayModeBottom == DisplayMode.PANADAPTER || Display.CurrentDisplayModeBottom == DisplayMode.PANAFALL))
+                    {
+                        nRX = 2;
+                    }
+
+                    if (!m_bDraggingNotch && !m_bDraggingNotchBW)
+                    {
+                        double dVfo = 0;
+                        double dCentreFreq = 0;
+                        int nL = 0;
+                        int nH = 0;
+
+                        if (nRX == 1)
+                        {
+                            dCentreFreq = center_frequency * 1e6;
+                            dVfo = dCentreFreq + PixelToHz(e.X, 1);
+                            nL = Display.RXDisplayLow;
+                            nH = Display.RXDisplayHigh;
+                            if (rx1_dsp_mode == DSPMode.CWL)
+                                dVfo += (double)cw_pitch;
+                            else if (rx1_dsp_mode == DSPMode.CWU)
+                                dVfo -= (double)cw_pitch;
+                        }
+                        else if (nRX == 2)
+                        {
+                            dCentreFreq = center_rx2_frequency * 1e6;
+                            dVfo = dCentreFreq + PixelToHz(e.X, 2);
+                            nL = Display.RX2DisplayLow;
+                            nH = Display.RX2DisplayHigh;
+                            if (rx2_dsp_mode == DSPMode.CWL)
+                                dVfo += (double)cw_pitch;
+                            else if (rx2_dsp_mode == DSPMode.CWU)
+                                dVfo -= (double)cw_pitch;
+                        }
+
+                        if (nRX != 0)  // we are over a RX with the mouse
+                        {
+
+                            // ok are we over the top of a notch?
+                            // we pad it with 1pixel worth of hz
+                            SelectedNotch = MNotchDB.NotchThatSurroundsFrequencyInBW(dCentreFreq, nL, nH, dVfo, HzInNPixels(1, nRX)) ;
+                        }
+                        else
+                        {
+                            if (SelectedNotch != null) SelectedNotch = null;
+                        }
+                    }
+                    else if (m_bDraggingNotch && nRX != 0)
+                    {
+                        // drag the whole notch
+                        double diff = PixelToHz(e.X, nRX) - PixelToHz(drag_notch_start_point.X, nRX);
+
+                        SelectedNotch.FCenter = drag_notch_start_data + diff;
+                    }
+                    else if (m_bDraggingNotchBW && nRX != 0)
+                    {
+                        // drag the bw edges of the notch
+                        double diff = 0;
+                        if (m_BDragginNotchBWRightSide)
+                        {
+                            diff = PixelToHz(e.X, nRX) - PixelToHz(drag_notch_start_point.X, nRX);
+                        }
+                        else
+                        {
+                            diff = PixelToHz(drag_notch_start_point.X, nRX) - PixelToHz(e.X, nRX);
+                        }
+
+                        double tmp = drag_notch_start_data + (diff * 2); // we want double the diff, as we are doing 'both sides'
+
+                        if (tmp < 0) tmp = 0; 
+                        if (tmp > max_filter_width) tmp = max_filter_width;
+
+                        SelectedNotch.FWidth = tmp;
+                    }
+                }
+                //END NOTCH
 
                 if (bOverRX1)
                 {
@@ -44694,6 +44916,8 @@ namespace Thetis
 
         private void picDisplay_MouseLeave(object sender, System.EventArgs e)
         {
+            SelectedNotch = null; // clear the selected notch (if there was one)
+
             txtDisplayCursorOffset.Text = "";
             txtDisplayCursorPower.Text = "";
             txtDisplayCursorFreq.Text = "";
@@ -44781,6 +45005,99 @@ namespace Thetis
                     //            break;
                     //    }
                     //}
+
+                    bool bOverRX1 = overRX(e.X, e.Y, 1, false);  //MW0LGE
+                    bool bOverRX2 = overRX(e.X, e.Y, 2, false);
+
+                    //NOTCH MW0LGE
+                    if (SelectedNotch != null)
+                    {
+                        // this will be the notch we have mouse over                        
+
+                        // the inital click point, delta is worked in mouse_move
+                        drag_notch_start_point = new Point(e.X, e.Y);
+
+                        int nRX = 0;
+                        if (bOverRX1 && (Display.CurrentDisplayMode == DisplayMode.PANADAPTER || Display.CurrentDisplayMode == DisplayMode.PANAFALL))
+                        {
+                            nRX = 1;
+                        }
+                        else if (bOverRX2 && (Display.CurrentDisplayModeBottom == DisplayMode.PANADAPTER || Display.CurrentDisplayModeBottom == DisplayMode.PANAFALL))
+                        {
+                            nRX = 2;
+                        }
+
+                        double dMouseVFO = 0;
+                        double dCentreFreq = 0;
+                        double dCWoffset = 0;
+
+                        if (nRX == 1)
+                        {
+                            dCentreFreq = center_frequency * 1e6;
+                            dMouseVFO = dCentreFreq + PixelToHz(e.X, 1);
+                            if (rx1_dsp_mode == DSPMode.CWL)
+                                dCWoffset = (double)cw_pitch;
+                            else if (rx1_dsp_mode == DSPMode.CWU)
+                                dCWoffset = -(double)cw_pitch;
+                        }
+                        else if (nRX == 2)
+                        {
+                            dCentreFreq = center_rx2_frequency * 1e6;
+                            dMouseVFO = dCentreFreq + PixelToHz(e.X, 2);
+                            if (rx2_dsp_mode == DSPMode.CWL)
+                                dCWoffset = (double)cw_pitch;
+                            else if (rx2_dsp_mode == DSPMode.CWU)
+                                dCWoffset = -(double)cw_pitch;
+                        }
+                        dMouseVFO += dCWoffset;
+
+                        // upper and lower sides of the notch
+                        double dL = SelectedNotch.FCenter - (SelectedNotch.FWidth / 2);
+                        double dH = SelectedNotch.FCenter + (SelectedNotch.FWidth / 2);
+
+                        // convert the upper and lower sides into pixels from left edge of picDispay
+                        int nLpx = HzToPixel((float)(dL - dCentreFreq - dCWoffset), nRX);
+                        int nHpx = HzToPixel((float)(dH - dCentreFreq - dCWoffset), nRX);
+
+                        bool bNearEdge = false;
+
+                        // default this based on which side of middle the mouse is
+                        // so that we get inuative feeling when using shift modifier to resize
+                        // ie we are not draggin an edge
+                        m_BDragginNotchBWRightSide = (dMouseVFO >= SelectedNotch.FCenter);
+
+                        if (nHpx - nLpx > 8)
+                        {
+                            //Debug.Print("x={0} lpx={1} hpx={2}", e.X, nLpx, nHpx);
+                            // ok, the edges are far enough appart in pixels to actually check to see if we are over low or high side
+                            if (Math.Abs(e.X - nLpx) < 4)
+                            {
+                                m_BDragginNotchBWRightSide = false;
+                                bNearEdge = true;
+                            }
+                            else if (Math.Abs(e.X - nHpx) < 4)
+                            {
+                                m_BDragginNotchBWRightSide = true;
+                                bNearEdge = true;
+                            }
+                        }
+
+                        if (bNearEdge || m_bShiftKeyDown) // can also hold shift drag to resize the notch
+                        {
+                            // near edge of notch, let us drag the width
+                            drag_notch_start_data = SelectedNotch.FWidth;
+                            m_bDraggingNotchBW = true;
+                        }
+                        else
+                        {
+                            // drag whole notch, as we are not near the edge
+                            drag_notch_start_data = SelectedNotch.FCenter;
+                            m_bDraggingNotch = true;
+                        }
+                        return;
+                    }
+                    //END NOTCH
+
 
                     // if (!mox)
                     // {
@@ -44920,9 +45237,6 @@ namespace Thetis
                         }
                     }
 
-                    bool bOverRX1 = overRX(e.X, e.Y, 1, false);  //MW0LGE
-                    bool bOverRX2 = overRX(e.X, e.Y, 2, false);
-
                     if (/*!near_notch &&*/
                         !agc_knee_drag &&
                         !agc_hang_drag &&
@@ -45035,6 +45349,8 @@ namespace Thetis
                                 //  if (click_tune_rx2_display || click_tune_display)
                                 // {
                                 // spectrum_drag_last_x = e.X;
+
+                                // MW0LGE block below handles dragging top frequency bars
                                 if (current_click_tune_mode == ClickTuneMode.Off)
                                 {
                                     if (rx2_enabled && e.Y > picDisplay.Height / 2)
@@ -45447,13 +45763,84 @@ namespace Thetis
                     }
                     break;
                 case MouseButtons.Middle:
-                    if (mouse_tune_step)
+                    if (SelectedNotch != null)
+                    {
+                        // move or toggle notch
+                        if (m_bShiftKeyDown)
+                        {
+                            if (removeNotch(SelectedNotch)) SelectedNotch = null; // remove the notch, and if ok clear selected MW0LGE
+                        }
+                        else
+                        {
+                            toggleNotchActive(SelectedNotch);
+                        }
+                    }
+                    else if(CurrentClickTuneMode != ClickTuneMode.Off)
+                    {
+                        double dFreq;
+                        // add notck from cross hair mode with middle mouse
+                        if (rx2_enabled && e.Y > picDisplay.Height / 2)
+                        {
+                            dFreq = getFrequencyAtPixel(e.X, 2);
+                        }
+                        else
+                        {
+                            dFreq = getFrequencyAtPixel(e.X, 1);
+                        }
+
+                        Debug.Print("Middle Mouse notch add @ {0} Hz", dFreq);
+                        addNotch(dFreq);
+                    }
+                    // carry onto the tune step, but give notch priority
+                    else if (mouse_tune_step)
                     {
                         if (m_bShiftKeyDown) ChangeTuneStepDown(); //MW0LGE
                         else ChangeTuneStepUp();
                     }
                     break;
             }
+        }
+
+        private double getFrequencyAtPixel(int x, int nRX)
+        {
+            //MW0LGE returns the frequecny (Hz) at a given pixel
+            double dFreq = 0;
+
+            if (nRX == 2)
+            {
+                if (click_tune_rx2_display && current_click_tune_mode != ClickTuneMode.Off)
+                {
+                    dFreq = (double)PixelToHz(x, 2) + (center_rx2_frequency * 1e6);
+                }
+                else
+                {
+                    dFreq = (double)PixelToHz(x, 2) + (VFOBFreq * 1e6);
+                }
+
+                switch (rx2_dsp_mode)
+                {
+                    case DSPMode.CWU: dFreq -= cw_pitch; break;
+                    case DSPMode.CWL: dFreq += cw_pitch; break;
+                }
+            }
+            else
+            {
+                if (click_tune_display && current_click_tune_mode != ClickTuneMode.Off)
+                {
+                    dFreq = (double)PixelToHz(x, 1) + (center_frequency * 1e6);
+                }
+                else
+                {
+                    dFreq = (double)PixelToHz(x, 1) + (VFOAFreq * 1e6);
+                }
+                switch (rx1_dsp_mode)
+                {
+                    case DSPMode.CWU: dFreq -= cw_pitch; break;
+                    case DSPMode.CWL: dFreq += cw_pitch; break;
+                }
+            }
+
+            return dFreq;
         }
 
         //=================================================================================================
@@ -45568,6 +45955,21 @@ namespace Thetis
                 }
                 rx2_spectrum_drag = false;
                 //Cursor = Cursors.Default;
+
+                if (m_bDraggingNotch)
+                {
+                    // finished dragging a notch, let use change its frequency MW0LGE
+                    m_bDraggingNotch = false;
+                    double tmp = SelectedNotch.FCenter;
+                    changeNotchCentreFrequency(SelectedNotch, tmp);
+                }
+                else if (m_bDraggingNotchBW) // can only do one or the other
+                {
+                    // finished dragging notch BW, lets us change it
+                    m_bDraggingNotchBW = false;
+                    double tmp = SelectedNotch.FWidth;
+                    changeNotchBW(SelectedNotch, tmp);
+                }
             }
 
             if (e.Button == MouseButtons.Right)
@@ -53002,57 +53404,57 @@ namespace Thetis
             filterRX2Form.Focus();
         }
 
-        private Notch Context_Notch;
+        //private Notch Context_Notch;
         private void toolStripNotchDelete_Click(Object sender, EventArgs e)
         {
-            NotchList.RemoveNotch(Context_Notch);
-            contextMenuStripNotch.Close();
-            UpdateRX1Notches();
-            UpdateRX1SubNotches();
-            UpdateRX2Notches();
+        //    NotchList.RemoveNotch(Context_Notch);
+        //    contextMenuStripNotch.Close();
+        //    UpdateRX1Notches();
+        //    UpdateRX1SubNotches();
+        //    UpdateRX2Notches();
         }
 
         private void toolStripNotchRemember_Click(object sender, EventArgs e)
         {
-            Context_Notch.Permanent = !toolStripNotchRemember.Checked;
-            toolStripNotchRemember.Checked = !toolStripNotchRemember.Checked;
-            contextMenuStripNotch.Close();
+        //    Context_Notch.Permanent = !toolStripNotchRemember.Checked;
+        //    toolStripNotchRemember.Checked = !toolStripNotchRemember.Checked;
+        //    contextMenuStripNotch.Close();
         }
 
         private void toolStripNotchNormal_Click(object sender, EventArgs e)
         {
-            Context_Notch.Depth = 1;
-            toolStripNotchNormal.Checked = true;
-            toolStripNotchDeep.Checked = false;
-            toolStripNotchVeryDeep.Checked = false;
-            contextMenuStripNotch.Close();
-            UpdateRX1Notches();
-            UpdateRX1SubNotches();
-            UpdateRX2Notches();
+        //    Context_Notch.Depth = 1;
+        //    toolStripNotchNormal.Checked = true;
+        //    toolStripNotchDeep.Checked = false;
+        //    toolStripNotchVeryDeep.Checked = false;
+        //    contextMenuStripNotch.Close();
+        //    UpdateRX1Notches();
+        //    UpdateRX1SubNotches();
+        //    UpdateRX2Notches();
         }
 
         private void toolStripNotchDeep_Click(object sender, EventArgs e)
         {
-            Context_Notch.Depth = 2;
-            toolStripNotchNormal.Checked = false;
-            toolStripNotchDeep.Checked = true;
-            toolStripNotchVeryDeep.Checked = false;
-            contextMenuStripNotch.Close();
-            UpdateRX1Notches();
-            UpdateRX1SubNotches();
-            UpdateRX2Notches();
+        //    Context_Notch.Depth = 2;
+        //    toolStripNotchNormal.Checked = false;
+        //    toolStripNotchDeep.Checked = true;
+        //    toolStripNotchVeryDeep.Checked = false;
+        //    contextMenuStripNotch.Close();
+        //    UpdateRX1Notches();
+        //    UpdateRX1SubNotches();
+        //    UpdateRX2Notches();
         }
 
         private void toolStripNotchVeryDeep_Click(object sender, EventArgs e)
         {
-            Context_Notch.Depth = 3;
-            toolStripNotchNormal.Checked = false;
-            toolStripNotchDeep.Checked = false;
-            toolStripNotchVeryDeep.Checked = true;
-            contextMenuStripNotch.Close();
-            UpdateRX1Notches();
-            UpdateRX1SubNotches();
-            UpdateRX2Notches();
+        //    Context_Notch.Depth = 3;
+        //    toolStripNotchNormal.Checked = false;
+        //    toolStripNotchDeep.Checked = false;
+        //    toolStripNotchVeryDeep.Checked = true;
+        //    contextMenuStripNotch.Close();
+        //    UpdateRX1Notches();
+        //    UpdateRX1SubNotches();
+        //    UpdateRX2Notches();
         }
 
         private void toolStripMenuItemRX2FilterReset_Click(object sender, EventArgs e)
@@ -53194,244 +53596,403 @@ namespace Thetis
             // UpdateRX1Notches();
             // UpdateRX1SubNotches();
             // UpdateRX2Notches();
-            // Display.TNFActive = chkTNF.Checked;
+            Display.TNFActive = chkTNF.Checked;
             WDSP.RXANBPSetNotchesRun(WDSP.id(0, 0), chkTNF.Checked);
             WDSP.RXANBPSetNotchesRun(WDSP.id(0, 1), chkTNF.Checked);
             WDSP.RXANBPSetNotchesRun(WDSP.id(2, 0), chkTNF.Checked);
         }
+        
+        private bool changeNotchBW(MNotch notch, double newWidth)
+        {
+            if (SetupForm.NotchAdminBusy) return false; // cant change it if setup is adding/editing
 
-        private int default_notch_width = 100;
-        //MAX_NOTCHES_IN_PASSBAND is delcared in consoole.cs, wdsp.cs, and sdr.c, [sdrexport.h]
-        private const int MAX_NOTCHES_IN_PASSBAND = 9;//18;     //used to be 9
-        private const int MAX_NOTCHES_INITIALLY_IN_PASSBAND = 3;//;   //used to be 3
+            bool bRet = false;
+            int nIndex = MNotchDB.List.IndexOf(notch);
+
+            if (nIndex >= 0)
+            {
+                double fcenter, fwidth;
+                int active;
+                bool bActive;
+                // just use channel 0,0 as all others have been set the same
+                WDSP.RXANBPGetNotch(WDSP.id(0, 0), nIndex, &fcenter, &fwidth, &active);
+
+                bActive = Convert.ToBoolean(active);
+
+                WDSP.RXANBPEditNotch(WDSP.id(0, 0), nIndex, fcenter, newWidth, bActive);
+                WDSP.RXANBPEditNotch(WDSP.id(0, 1), nIndex, fcenter, newWidth, bActive);
+                WDSP.RXANBPEditNotch(WDSP.id(2, 0), nIndex, fcenter, newWidth, bActive);
+
+                bool bSelected = (SelectedNotch != null);
+                SetupForm.SaveNotchesToDatabase();
+                SetupForm.UpdateNotchDisplay();
+
+                // find the previously selected notch, which would have been lost due to savenotchestodb
+                if (bSelected) SelectedNotch = MNotchDB.GetFirstNotchThatMatches(fcenter, newWidth, bActive);
+
+                bRet = true;
+            }
+
+            return bRet;
+        }
+
+        private bool changeNotchCentreFrequency(MNotch notch, double newCentreFrequencyHz)
+        {
+            //constrain
+            if (newCentreFrequencyHz < min_freq || newCentreFrequencyHz > max_freq * 1e6) return false;
+
+            if (SetupForm.NotchAdminBusy) return false; // cant change it if setup is adding/editing
+
+            bool bRet = false;
+            int nIndex = MNotchDB.List.IndexOf(notch);
+
+            if (nIndex >= 0)
+            {
+                double fcenter, fwidth;
+                int active;
+                bool bActive;
+                // just use channel 0,0 as all others have been set the same
+                WDSP.RXANBPGetNotch(WDSP.id(0, 0), nIndex, &fcenter, &fwidth, &active);
+
+                bActive = Convert.ToBoolean(active);
+
+                WDSP.RXANBPEditNotch(WDSP.id(0, 0), nIndex, newCentreFrequencyHz, fwidth, bActive);
+                WDSP.RXANBPEditNotch(WDSP.id(0, 1), nIndex, newCentreFrequencyHz, fwidth, bActive);
+                WDSP.RXANBPEditNotch(WDSP.id(2, 0), nIndex, newCentreFrequencyHz, fwidth, bActive);
+
+                bool bSelected = (SelectedNotch != null);
+                SetupForm.SaveNotchesToDatabase();
+                SetupForm.UpdateNotchDisplay();
+
+                // find the previously selected notch, which would have been lost due to savenotchestodb
+                if (bSelected) SelectedNotch = MNotchDB.GetFirstNotchThatMatches(fcenter, fwidth, bActive);
+
+                bRet = true;
+            }
+
+            return bRet;
+        }
+
+        private bool toggleNotchActive(MNotch notch)
+        {
+            if (SetupForm.NotchAdminBusy) return false; // cant change it if setup is adding/editing
+
+            bool bRet = false;
+            int nIndex = MNotchDB.List.IndexOf(notch);
+
+            if (nIndex >= 0)
+            {
+                double fcenter, fwidth;
+                int active;
+                bool bActive;
+                // just use channel 0,0 as all others have been set the same
+                WDSP.RXANBPGetNotch(WDSP.id(0, 0), nIndex, &fcenter, &fwidth, &active);
+
+                bActive = !Convert.ToBoolean(active); // invert state
+
+                WDSP.RXANBPEditNotch(WDSP.id(0, 0), nIndex, fcenter, fwidth, bActive);
+                WDSP.RXANBPEditNotch(WDSP.id(0, 1), nIndex, fcenter, fwidth, bActive);
+                WDSP.RXANBPEditNotch(WDSP.id(2, 0), nIndex, fcenter, fwidth, bActive);
+
+                bool bSelected = (SelectedNotch != null);
+                SetupForm.SaveNotchesToDatabase();
+                SetupForm.UpdateNotchDisplay();
+
+                // find the previously selected notch, which would have been lost due to savenotchestodb
+                if (bSelected) SelectedNotch = MNotchDB.GetFirstNotchThatMatches(fcenter, fwidth, bActive);
+
+                bRet = true;
+            }
+
+            return bRet;
+        }
+
+        private bool removeNotch(MNotch notch)
+        {
+            if (SetupForm.NotchAdminBusy) return false; // cant remove it if setup is adding/editing
+
+            bool bRet = false;
+            int nIndex = MNotchDB.List.IndexOf(notch);
+
+            if (nIndex >= 0)
+            {
+                WDSP.RXANBPDeleteNotch(WDSP.id(0, 0), nIndex);
+                WDSP.RXANBPDeleteNotch(WDSP.id(0, 1), nIndex);
+                WDSP.RXANBPDeleteNotch(WDSP.id(2, 0), nIndex);
+
+                SetupForm.SaveNotchesToDatabase();
+                SetupForm.UpdateNotchDisplay();
+
+                bRet = true;
+            }
+
+            return bRet;
+        }
+
+        private void addNotch(double fFreq)
+        {
+            //constrain
+            if (fFreq < min_freq || fFreq > max_freq * 1e6) return;
+
+            // if there is a notch within 10hz ignore 
+            if (MNotchDB.NotchNearFreq(fFreq, 10)) return;
+
+            int nNumberofExistingNotches;
+            unsafe
+            {
+                WDSP.RXANBPGetNumNotches(WDSP.id(0, 0), &nNumberofExistingNotches);
+            }
+
+            double fWidth = 200;
+            if (m_bShiftKeyDown) fWidth = 100;
+
+            WDSP.RXANBPAddNotch(WDSP.id(0, 0), nNumberofExistingNotches, fFreq, fWidth, true);
+            WDSP.RXANBPAddNotch(WDSP.id(0, 1), nNumberofExistingNotches, fFreq, fWidth, true);
+            WDSP.RXANBPAddNotch(WDSP.id(2, 0), nNumberofExistingNotches, fFreq, fWidth, true);
+
+            SetupForm.SaveNotchesToDatabase();
+            SetupForm.UpdateNotchDisplay();
+        }
+
+        //private int default_notch_width = 100;
+        ////MAX_NOTCHES_IN_PASSBAND is delcared in consoole.cs, wdsp.cs, and sdr.c, [sdrexport.h]
+        //private const int MAX_NOTCHES_IN_PASSBAND = 9;//18;     //used to be 9
+        //private const int MAX_NOTCHES_INITIALLY_IN_PASSBAND = 3;//;   //used to be 3
         private void btnTNFAdd_Click(object sender, EventArgs e)
         {
-            // calculate the mid-point for the filter
-            int low = radio.GetDSPRX(0, 0).RXFilterLow;
-            int high = radio.GetDSPRX(0, 0).RXFilterHigh;
-            int midpoint = (low + high) / 2;
+            if (SetupForm.NotchAdminBusy) return; // dont add if using add/edit on the setup form
 
-            if (midpoint < -9999 || midpoint > 9999)
-                throw new Exception("TNF: The filter limits [" + low + "," + high + "] do not make sense");
+            double vfoHz = VFOAFreq * 1.0e6;
+            if (RIT) vfoHz += (double)RITValue * 1e-6; // check for RIT
 
-            double vfo = VFOAFreq;
-            if (chkRIT.Checked) vfo += (double)udRIT.Value * 1e-6; // check for RIT
+            addNotch(vfoHz);
 
-            double rf_freq = vfo + midpoint * 1e-6;
+            //    // calculate the mid-point for the filter
+            //    int low = radio.GetDSPRX(0, 0).RXFilterLow;
+            //    int high = radio.GetDSPRX(0, 0).RXFilterHigh;
+            //    int midpoint = (low + high) / 2;
 
-            // if there's already another notch within 100Hz, then quit now
-            if (NotchList.NotchNearFreq(rf_freq, 100))
-                return;
+            //    if (midpoint < -9999 || midpoint > 9999)
+            //        throw new Exception("TNF: The filter limits [" + low + "," + high + "] do not make sense");
 
-            // if there's already 3+ filters within the RF window, quit now
-            if (NotchList.NotchesInBW(VFOAFreq, low, high).Count >= 3)
-                return;
+            //    double vfo = VFOAFreq;
+            //    if (chkRIT.Checked) vfo += (double)udRIT.Value * 1e-6; // check for RIT
 
-            NotchList.List.Add(new Notch(rf_freq, default_notch_width));
+            //    double rf_freq = vfo + midpoint * 1e-6;
 
-            UpdateRX1Notches();
-            UpdateRX1SubNotches();
-            UpdateRX2Notches();
+            //    // if there's already another notch within 100Hz, then quit now
+            //    if (NotchList.NotchNearFreq(rf_freq, 100))
+            //        return;
+
+            //    // if there's already 3+ filters within the RF window, quit now
+            //    if (NotchList.NotchesInBW(VFOAFreq, low, high).Count >= 3)
+            //        return;
+
+            //    NotchList.List.Add(new Notch(rf_freq, default_notch_width));
+
+            //    UpdateRX1Notches();
+            //    UpdateRX1SubNotches();
+            //    UpdateRX2Notches();
         }
 
-        private void addNotch(int thread, int subrx, uint count, double freq, double bw)
-        {
-            if (count < MAX_NOTCHES_IN_PASSBAND)
-            {
-                radio.GetDSPRX(thread, subrx).SetNotchFreq(count, freq);
-                radio.GetDSPRX(thread, subrx).SetNotchBW(count, bw);
-                radio.GetDSPRX(thread, subrx).SetNotchOn(count, true);
-            }
-        }
+        //private void addNotch(int thread, int subrx, uint count, double freq, double bw)
+        //{
+        //    if (count < MAX_NOTCHES_IN_PASSBAND)
+        //    {
+        //        radio.GetDSPRX(thread, subrx).SetNotchFreq(count, freq);
+        //        radio.GetDSPRX(thread, subrx).SetNotchBW(count, bw);
+        //        radio.GetDSPRX(thread, subrx).SetNotchOn(count, true);
+        //    }
+        //}
 
-        private void UpdateRX1Notches()
-        {
-            if (!chkTNF.Checked)
-            {
-                for (uint i = 0; i < MAX_NOTCHES_IN_PASSBAND; i++)
-                    radio.GetDSPRX(0, 0).SetNotchOn(i, false);
-                return;
-            }
+        //private void UpdateRX1Notches()
+        //{
+        //    if (!chkTNF.Checked)
+        //    {
+        //        for (uint i = 0; i < MAX_NOTCHES_IN_PASSBAND; i++)
+        //            radio.GetDSPRX(0, 0).SetNotchOn(i, false);
+        //        return;
+        //    }
 
-            double vfo = VFOAFreq;
-            if (chkRIT.Checked) vfo += (double)udRIT.Value * 1e-6;
+        //    double vfo = VFOAFreq;
+        //    if (chkRIT.Checked) vfo += (double)udRIT.Value * 1e-6;
 
-            switch (rx1_dsp_mode)
-            {
-                case (DSPMode.CWL):
-                    vfo += cw_pitch * 1e-6;
-                    break;
-                case (DSPMode.CWU):
-                    vfo -= cw_pitch * 1e-6;
-                    break;
-            }
+        //    switch (rx1_dsp_mode)
+        //    {
+        //        case (DSPMode.CWL):
+        //            vfo += cw_pitch * 1e-6;
+        //            break;
+        //        case (DSPMode.CWU):
+        //            vfo -= cw_pitch * 1e-6;
+        //            break;
+        //    }
 
-            int low = radio.GetDSPRX(0, 0).RXFilterLow - 200;
-            int high = radio.GetDSPRX(0, 0).RXFilterHigh + 200;
+        //    int low = radio.GetDSPRX(0, 0).RXFilterLow - 200;
+        //    int high = radio.GetDSPRX(0, 0).RXFilterHigh + 200;
 
-            List<Notch> l = NotchList.NotchesInBW(vfo, low, high);
-            if (l.Count == 0)
-            {
-                for (uint i = 0; i < MAX_NOTCHES_IN_PASSBAND; i++)
-                    radio.GetDSPRX(0, 0).SetNotchOn(i, false);
-                return;
-            }
+        //    List<Notch> l = NotchList.NotchesInBW(vfo, low, high);
+        //    if (l.Count == 0)
+        //    {
+        //        for (uint i = 0; i < MAX_NOTCHES_IN_PASSBAND; i++)
+        //            radio.GetDSPRX(0, 0).SetNotchOn(i, false);
+        //        return;
+        //    }
 
-            l.Sort();
-            uint count = 0;
+        //    l.Sort();
+        //    uint count = 0;
 
-            // enable up to MAX_NOTCHES_IN_PASSBAND notches
-            foreach (Notch n in l)
-            {
-                // translate RF to audio frequency
-                double audio_freq = Math.Abs((n.Freq - vfo)) * 1e6; // now in Hz
+        //    // enable up to MAX_NOTCHES_IN_PASSBAND notches
+        //    foreach (Notch n in l)
+        //    {
+        //        // translate RF to audio frequency
+        //        double audio_freq = Math.Abs((n.Freq - vfo)) * 1e6; // now in Hz
 
-                for (int x = 0; x < n.Depth; x++)
-                {
-                    if (audio_freq > 0)
-                        addNotch(0, 0, count++, audio_freq, n.BW);
-                }
+        //        for (int x = 0; x < n.Depth; x++)
+        //        {
+        //            if (audio_freq > 0)
+        //                addNotch(0, 0, count++, audio_freq, n.BW);
+        //        }
 
-                if (count >= MAX_NOTCHES_IN_PASSBAND) // don't enable more than 9 notches!
-                    break;
-            }
+        //        if (count >= MAX_NOTCHES_IN_PASSBAND) // don't enable more than 9 notches!
+        //            break;
+        //    }
 
-            // turn off unused notches
-            if (count < MAX_NOTCHES_IN_PASSBAND)
-            {
-                for (uint i = count; i < MAX_NOTCHES_IN_PASSBAND; i++)
-                    radio.GetDSPRX(0, 0).SetNotchOn(i, false);
-            }
+        //    // turn off unused notches
+        //    if (count < MAX_NOTCHES_IN_PASSBAND)
+        //    {
+        //        for (uint i = count; i < MAX_NOTCHES_IN_PASSBAND; i++)
+        //            radio.GetDSPRX(0, 0).SetNotchOn(i, false);
+        //    }
 
-            //  if (!chkPower.Checked)
-            //    Display.DrawBackground();
-        }
+        //    //  if (!chkPower.Checked)
+        //    //    Display.DrawBackground();
+        //}
 
-        private void UpdateRX1SubNotches()
-        {
-            if (!chkTNF.Checked || !chkEnableMultiRX.Checked)
-            {
-                for (uint i = 0; i < MAX_NOTCHES_IN_PASSBAND; i++)
-                    radio.GetDSPRX(0, 1).SetNotchOn(i, false);
-                return;
-            }
+        //private void UpdateRX1SubNotches()
+        //{
+        //    if (!chkTNF.Checked || !chkEnableMultiRX.Checked)
+        //    {
+        //        for (uint i = 0; i < MAX_NOTCHES_IN_PASSBAND; i++)
+        //            radio.GetDSPRX(0, 1).SetNotchOn(i, false);
+        //        return;
+        //    }
 
-            double vfo = VFOBFreq;
-            if (rx2_enabled) vfo = VFOASubFreq;
-            if (chkRIT.Checked) vfo += (double)udRIT.Value * 1e-6;
+        //    double vfo = VFOBFreq;
+        //    if (rx2_enabled) vfo = VFOASubFreq;
+        //    if (chkRIT.Checked) vfo += (double)udRIT.Value * 1e-6;
 
-            switch (rx1_dsp_mode)
-            {
-                case (DSPMode.CWL):
-                    vfo += cw_pitch * 1e-6;
-                    break;
-                case (DSPMode.CWU):
-                    vfo -= cw_pitch * 1e-6;
-                    break;
-            }
+        //    switch (rx1_dsp_mode)
+        //    {
+        //        case (DSPMode.CWL):
+        //            vfo += cw_pitch * 1e-6;
+        //            break;
+        //        case (DSPMode.CWU):
+        //            vfo -= cw_pitch * 1e-6;
+        //            break;
+        //    }
 
-            int low = radio.GetDSPRX(0, 1).RXFilterLow;
-            int high = radio.GetDSPRX(0, 1).RXFilterHigh;
+        //    int low = radio.GetDSPRX(0, 1).RXFilterLow;
+        //    int high = radio.GetDSPRX(0, 1).RXFilterHigh;
 
-            List<Notch> l = NotchList.NotchesInBW(vfo, low, high);
-            if (l.Count == 0)
-            {
-                for (uint i = 0; i < MAX_NOTCHES_IN_PASSBAND; i++)
-                    radio.GetDSPRX(0, 1).SetNotchOn(i, false);
-                return;
-            }
+        //    List<Notch> l = NotchList.NotchesInBW(vfo, low, high);
+        //    if (l.Count == 0)
+        //    {
+        //        for (uint i = 0; i < MAX_NOTCHES_IN_PASSBAND; i++)
+        //            radio.GetDSPRX(0, 1).SetNotchOn(i, false);
+        //        return;
+        //    }
 
-            l.Sort();
-            uint count = 0;
+        //    l.Sort();
+        //    uint count = 0;
 
-            // enable up to 3 notches
-            foreach (Notch n in l)
-            {
-                // translate RF to audio frequency
-                double audio_freq = (n.Freq - vfo) * 1e6; // now in Hz
+        //    // enable up to 3 notches
+        //    foreach (Notch n in l)
+        //    {
+        //        // translate RF to audio frequency
+        //        double audio_freq = (n.Freq - vfo) * 1e6; // now in Hz
 
-                for (int x = 0; x < n.Depth; x++)
-                {
-                    if (audio_freq > 0)
-                        addNotch(0, 1, count++, audio_freq, n.BW);
-                }
-                if (count >= MAX_NOTCHES_IN_PASSBAND) // don't enable more than 9 notches!
-                    break;
-            }
+        //        for (int x = 0; x < n.Depth; x++)
+        //        {
+        //            if (audio_freq > 0)
+        //                addNotch(0, 1, count++, audio_freq, n.BW);
+        //        }
+        //        if (count >= MAX_NOTCHES_IN_PASSBAND) // don't enable more than 9 notches!
+        //            break;
+        //    }
 
-            // turn off unused notches
-            if (count < MAX_NOTCHES_IN_PASSBAND)
-            {
-                for (uint i = count; i < MAX_NOTCHES_IN_PASSBAND; i++)
-                    radio.GetDSPRX(0, 1).SetNotchOn(i, false);
-            }
+        //    // turn off unused notches
+        //    if (count < MAX_NOTCHES_IN_PASSBAND)
+        //    {
+        //        for (uint i = count; i < MAX_NOTCHES_IN_PASSBAND; i++)
+        //            radio.GetDSPRX(0, 1).SetNotchOn(i, false);
+        //    }
 
-            // if (!chkPower.Checked)
-            //     Display.DrawBackground();
-        }
+        //    // if (!chkPower.Checked)
+        //    //     Display.DrawBackground();
+        //}
 
-        private void UpdateRX2Notches()
-        {
-            if (!chkTNF.Checked || !rx2_enabled)
-            {
-                for (uint i = 0; i < MAX_NOTCHES_IN_PASSBAND; i++)
-                    radio.GetDSPRX(1, 0).SetNotchOn(i, false);
-                return;
-            }
+        //private void UpdateRX2Notches()
+        //{
+        //    if (!chkTNF.Checked || !rx2_enabled)
+        //    {
+        //        for (uint i = 0; i < MAX_NOTCHES_IN_PASSBAND; i++)
+        //            radio.GetDSPRX(1, 0).SetNotchOn(i, false);
+        //        return;
+        //    }
 
-            double vfo = VFOBFreq;
-            //if (chkRIT.Checked) vfo += (double)udRIT.Value * 1e-6;
+        //    double vfo = VFOBFreq;
+        //    //if (chkRIT.Checked) vfo += (double)udRIT.Value * 1e-6;
 
-            switch (rx2_dsp_mode)
-            {
-                case (DSPMode.CWL):
-                    vfo += cw_pitch * 1e-6;
-                    break;
-                case (DSPMode.CWU):
-                    vfo -= cw_pitch * 1e-6;
-                    break;
-            }
+        //    switch (rx2_dsp_mode)
+        //    {
+        //        case (DSPMode.CWL):
+        //            vfo += cw_pitch * 1e-6;
+        //            break;
+        //        case (DSPMode.CWU):
+        //            vfo -= cw_pitch * 1e-6;
+        //            break;
+        //    }
 
-            int low = radio.GetDSPRX(1, 0).RXFilterLow - 200;
-            int high = radio.GetDSPRX(1, 0).RXFilterHigh + 200;
+        //    int low = radio.GetDSPRX(1, 0).RXFilterLow - 200;
+        //    int high = radio.GetDSPRX(1, 0).RXFilterHigh + 200;
 
-            List<Notch> l = NotchList.NotchesInBW(vfo, low, high);
-            if (l.Count == 0)
-            {
-                for (uint i = 0; i < MAX_NOTCHES_IN_PASSBAND; i++)
-                    radio.GetDSPRX(1, 0).SetNotchOn(i, false);
-                return;
-            }
+        //    List<Notch> l = NotchList.NotchesInBW(vfo, low, high);
+        //    if (l.Count == 0)
+        //    {
+        //        for (uint i = 0; i < MAX_NOTCHES_IN_PASSBAND; i++)
+        //            radio.GetDSPRX(1, 0).SetNotchOn(i, false);
+        //        return;
+        //    }
 
-            l.Sort();
-            uint count = 0;
+        //    l.Sort();
+        //    uint count = 0;
 
-            // enable up to 9 notches
-            foreach (Notch n in l)
-            {
-                // translate RF to audio frequency
-                double audio_freq = (n.Freq - vfo) * 1e6; // now in Hz
+        //    // enable up to 9 notches
+        //    foreach (Notch n in l)
+        //    {
+        //        // translate RF to audio frequency
+        //        double audio_freq = (n.Freq - vfo) * 1e6; // now in Hz
 
-                for (int x = 0; x < n.Depth; x++)
-                {
-                    if (audio_freq > 0)
-                        addNotch(1, 0, count++, audio_freq, n.BW);
-                }
-                if (count >= MAX_NOTCHES_IN_PASSBAND) // don't enable more than 9 notches!
-                    break;
+        //        for (int x = 0; x < n.Depth; x++)
+        //        {
+        //            if (audio_freq > 0)
+        //                addNotch(1, 0, count++, audio_freq, n.BW);
+        //        }
+        //        if (count >= MAX_NOTCHES_IN_PASSBAND) // don't enable more than 9 notches!
+        //            break;
 
-            }
+        //    }
 
-            // turn off unused notches
-            if (count < MAX_NOTCHES_IN_PASSBAND)
-            {
-                for (uint i = count; i < MAX_NOTCHES_IN_PASSBAND; i++)
-                    radio.GetDSPRX(1, 0).SetNotchOn(i, false);
-            }
+        //    // turn off unused notches
+        //    if (count < MAX_NOTCHES_IN_PASSBAND)
+        //    {
+        //        for (uint i = count; i < MAX_NOTCHES_IN_PASSBAND; i++)
+        //            radio.GetDSPRX(1, 0).SetNotchOn(i, false);
+        //    }
 
-            //  if (!chkPower.Checked)
-            //     Display.DrawBackground();
-        }
+        //    //  if (!chkPower.Checked)
+        //    //     Display.DrawBackground();
+        //}
 
         private void ptbFMMic_Scroll(object sender, EventArgs e)
         {
@@ -53744,16 +54305,16 @@ namespace Thetis
 
         private void timerNotchZoom_Tick(object sender, EventArgs e)
         {
-            //const int TOL = 10;
+        //    //const int TOL = 10;
 
-            //timerNotchZoom.Enabled = false;
-            //if (notch_drag_max_delta_x < TOL &&
-            //    notch_drag_max_delta_y < TOL)
-            //{
-            //    Display.TNFZoom = true;
-            //    notch_zoom = true;
-            //    Display.NotchZoomStartFreq = notch_drag_start.Freq;
-            //}
+        //    //timerNotchZoom.Enabled = false;
+        //    //if (notch_drag_max_delta_x < TOL &&
+        //    //    notch_drag_max_delta_y < TOL)
+        //    //{
+        //    //    Display.TNFZoom = true;
+        //    //    notch_zoom = true;
+        //    //    Display.NotchZoomStartFreq = notch_drag_start.Freq;
+        //    //}
         }
 
         private void setupToolStripMenuItem_Click(object sender, EventArgs e)
@@ -60320,6 +60881,13 @@ namespace Thetis
             }
         }
         #endregion
+
+        private void TmrAutoStart_Tick(object sender, EventArgs e)
+        {
+            //MW0LGE just a quick hack to get auto start 'working'
+            tmrAutoStart.Enabled = false;
+            chkPower.Checked = true;
+        }
     }
 
     public class DigiMode

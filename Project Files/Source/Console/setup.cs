@@ -379,7 +379,6 @@ namespace Thetis
                 AllowFreqBroadcast = true;
             else
                 AllowFreqBroadcast = false;
-
         }
 #if false
         protected override void Dispose(bool disposing)
@@ -1165,7 +1164,9 @@ namespace Thetis
             radOrionBiasOn_CheckedChanged(this, e);
             chkNetworkWDT_CheckedChanged(this, e);
             //NAVigation-general
-            ChkAlsoUseSpecificMouseWheel_CheckedChanged(this, e); //MW0LGE
+            ChkAlsoUseSpecificMouseWheel_CheckedChanged(this, e);
+            chkClickTuneFilter_CheckedChanged(this, e);
+            chkShowCTHLine_CheckedChanged(this, e);
 
             // Audio Tab
             comboAudioBuffer2_SelectedIndexChanged(this, e);
@@ -18414,6 +18415,14 @@ namespace Thetis
             }
         }
 
+        public bool NotchAdminBusy
+        {
+            // returns true if in middle of edit or add MW0LGE
+            get{
+                return AddActive | EditActive;
+            }
+        }
+
         // store the values from an Add or Edit operation
         private void btnMNFEnter_Click(object sender, EventArgs e)
         {
@@ -18448,6 +18457,8 @@ namespace Thetis
             chkMNFActive.Enabled = false;
             btnMNFAdd.Enabled = true;
             btnMNFEdit.Enabled = true;
+
+            SaveNotchesToDatabase(); // aligns notch db with what has actually happened MW0LGE
         }
 
         // cancel the Add or Edit operation
@@ -18548,12 +18559,15 @@ namespace Thetis
                 udMNFWidth.Value = 0;
                 chkMNFActive.Checked = true;
                 btnMNFDelete.Enabled = false;
+                btnMNFEdit.Enabled = false; //MW0LGE
             }
             // set the Maximum for the 'Notch' control
             if (numnotches > 0)
                 udMNFNotch.Maximum = numnotches - 1;
             else
                 udMNFNotch.Maximum = 0;
+
+            SaveNotchesToDatabase(); // aligns notch db with what has actually happened MW0LGE
         }
 
         private void udMNFNotch_ValueChanged(object sender, EventArgs e)
@@ -18613,23 +18627,9 @@ namespace Thetis
             }
         }
 
-        unsafe public void RestoreNotchesFromDatabase()
+        unsafe public void UpdateNotchDisplay()
         {
-            // HERE:  Read the number of notches, 'numnotches' from the database
-            for (int i = 0; i < MNotchDB.List.Count; i++)
-            {
-                double fcenter = 0.0, fwidth = 0.0;
-                bool active = false;
-
-                // HERE:  READ VALUES OF fcenter, fwidth, and active FOR NOTCH[i] FROM THE DATABASE
-                fcenter = MNotchDB.List[i].FCenter;
-                fwidth = MNotchDB.List[i].FWidth;
-                active = MNotchDB.List[i].Active;
-
-                WDSP.RXANBPAddNotch(WDSP.id(0, 0), i, fcenter, fwidth, active);
-                WDSP.RXANBPAddNotch(WDSP.id(0, 1), i, fcenter, fwidth, active);
-                WDSP.RXANBPAddNotch(WDSP.id(2, 0), i, fcenter, fwidth, active);
-            }
+            // sets max limits, and selects first notch if one exists
             numnotches = MNotchDB.List.Count;
             udMNFNotch.Value = 0;
             udMNFNotch.Maximum = 0;
@@ -18647,7 +18647,38 @@ namespace Thetis
                     chkMNFActive.Checked = false;
 
                 btnMNFDelete.Enabled = true;
+                btnMNFEdit.Enabled = true; //MW0LGE
             }
+            else
+            {
+                // MW0LGE added because udMNFFreq could be set to some value even though no MNotchDB entries
+                // this caused by generic form save, saving out the control value
+                udMNFFreq.Value = 0;
+                udMNFWidth.Value = 0;
+                btnMNFDelete.Enabled = false;
+                btnMNFEdit.Enabled = false;
+            }
+        }
+
+        unsafe public void RestoreNotchesFromDatabase()
+        {
+            // HERE:  Read the number of notches, 'numnotches' from the database
+            for (int i = 0; i < MNotchDB.List.Count; i++)
+            {
+                double fcenter = 0.0, fwidth = 0.0;
+                bool active = false;
+
+                // HERE:  READ VALUES OF fcenter, fwidth, and active FOR NOTCH[i] FROM THE DATABASE
+                fcenter = MNotchDB.List[i].FCenter;
+                fwidth = MNotchDB.List[i].FWidth;
+                active = MNotchDB.List[i].Active;
+
+                WDSP.RXANBPAddNotch(WDSP.id(0, 0), i, fcenter, fwidth, active);
+                WDSP.RXANBPAddNotch(WDSP.id(0, 1), i, fcenter, fwidth, active);
+                WDSP.RXANBPAddNotch(WDSP.id(2, 0), i, fcenter, fwidth, active);
+            }
+
+            UpdateNotchDisplay(); // sets max limits, and selects first notch if one exists MW0LGE
         }
 
         #endregion
