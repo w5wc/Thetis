@@ -66,8 +66,8 @@ namespace Thetis
         public static float[] new_display_data_bottom;
         public static float[] current_display_data_bottom;
 
-        public static float[] new_scope_data;
-        public static float[] current_scope_data;
+      //  public static float[] new_scope_data;
+      //  public static float[] current_scope_data;
 
         public static float[] rx1_average_buffer;					// Averaged display data buffer
         public static float[] rx2_average_buffer;
