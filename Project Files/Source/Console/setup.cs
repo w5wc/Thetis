@@ -65,6 +65,7 @@ namespace Thetis
             FlexProfilerInstalled = false;
             InitializeComponent();
             console = c;
+            Skin.SetConsole(c); //MW0LGE
             openFileDialog1.InitialDirectory = console.AppDataPath;
 
 #if(!DEBUG)
@@ -85,7 +86,6 @@ namespace Thetis
 
             RefreshCOMPortLists();
 
-            RefreshSkinList();
             InitAudioTab();
             CurrentModel = Model.HERMES;
             comboGeneralProcessPriority.Text = "Normal";
@@ -182,13 +182,17 @@ namespace Thetis
             comboCAT4databits.Text = "8";
             comboCAT4stopbits.Text = "1";
 
-			if (comboAndromedaCATPort.Items.Count > 0) comboAndromedaCATPort.SelectedIndex = 0;
+            if (comboAndromedaCATPort.Items.Count > 0) comboAndromedaCATPort.SelectedIndex = 0;
 
             // comboFRSRegion.Text = "United States";
 
             //fillMetisIPAddrCombo();  /* must happen before GetOptions is called */ 
 
+            RefreshSkinList(); //moved down the initialisation order, so we at least know if we are gdi or dx, only build the list
+
             GetOptions();
+
+            selectSkin();
 
             if (comboDSPPhoneRXBuf.SelectedIndex < 0 || comboDSPPhoneRXBuf.SelectedIndex >= comboDSPPhoneRXBuf.Items.Count)
                 comboDSPPhoneRXBuf.SelectedIndex = comboDSPPhoneRXBuf.Items.Count - 1;
@@ -273,10 +277,13 @@ namespace Thetis
             initializing = false;
             udDisplayScopeTime_ValueChanged(this, EventArgs.Empty);
 
-            if (comboTXProfileName.SelectedIndex < 0 &&
-                comboTXProfileName.Items.Count > 0)
-                comboTXProfileName.SelectedIndex = 0;
-            current_profile = comboTXProfileName.Text;
+            //MW0LGE now done in GetOptions
+            //if (comboTXProfileName.SelectedIndex < 0 &&
+            //    comboTXProfileName.Items.Count > 0)
+            //    comboTXProfileName.SelectedIndex = 0;
+            ////current_profile = comboTXProfileName.Text;
+            //if (loadTXProfile(comboTXProfileName.Text)) current_profile = comboTXProfileName.Text;
+            //else current_profile = "";
 
             if (chkCATEnable.Checked)
             {
@@ -318,9 +325,9 @@ namespace Thetis
             EventArgs e = EventArgs.Empty;
             //comboGeneralLPTAddr_LostFocus(this, e);
             //udDDSCorrection_ValueChanged(this, e);
-           // udDSPCWPitch_ValueChanged(this, e);
-           // udTXFilterHigh_ValueChanged(this, e);
-           // udTXFilterLow_ValueChanged(this, e);
+            // udDSPCWPitch_ValueChanged(this, e);
+            // udTXFilterHigh_ValueChanged(this, e);
+            // udTXFilterLow_ValueChanged(this, e);
             tbRX1FilterAlpha_Scroll(this, e);
             tbTXFilterAlpha_Scroll(this, e);
             tbBackgroundAlpha_Scroll(this, e);
@@ -598,7 +605,6 @@ namespace Thetis
 
         private void RefreshSkinList()
         {
-            string skin = comboAppSkin.Text;
             comboAppSkin.Items.Clear();
             string path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) +
                     "\\OpenHPSDR\\Skins";
@@ -629,6 +635,10 @@ namespace Thetis
                     MessageBoxIcon.Error);
                 return;
             }
+        }
+        private void selectSkin()
+        {
+            string skin = comboAppSkin.Text;
 
             if (skin == "")
             {
@@ -642,10 +652,10 @@ namespace Thetis
                     comboAppSkin.Text = "OpenHPSDR-Gray"; //"OpenHPSDR-Gray";
             }
             else if (comboAppSkin.Items.Contains(skin))
-                     comboAppSkin.Text = skin;
+                comboAppSkin.Text = skin;
             else comboAppSkin.Text = "IK3VIG Special";
         }
-
+    
         private void GetHosts()
         {
             // comboAudioDriver1.Items.Clear();
@@ -881,6 +891,11 @@ namespace Thetis
                         ComboBoxTS c = (ComboBoxTS)combobox_list[i];
                         if (c.Name.Equals(name))		// name found
                         {
+                            if (name.Equals("comboAppSkin"))
+                            {
+                                int aa = 1;
+                                aa++;
+                            }
                             if (c.Items.Count > 0 && c.Items[0].GetType() == typeof(string))
                             {
                                 c.Text = val;
@@ -995,6 +1010,16 @@ namespace Thetis
 
             foreach (ColorButton c in colorbutton_list)
                 c.Automatic = "";
+
+            //MW0LGE ok, so we have overwritten controls with data that might not match a saved out
+            //profile. Save options just blindly saves every control, including the ones related to TX profile.
+            //Now, we must get the actual profile data. A side effect of just blanket saving everything
+            if (comboTXProfileName.SelectedIndex < 0 &&
+                comboTXProfileName.Items.Count > 0)
+                comboTXProfileName.SelectedIndex = 0;
+
+            if (loadTXProfile(comboTXProfileName.Text)) current_profile = comboTXProfileName.Text;
+            else current_profile = "";
         }
 
         private string KeyToString(Keys k)
@@ -1334,6 +1359,9 @@ namespace Thetis
             udTXAMCarrierLevel_ValueChanged(this, e);
             chkLimitExtAmpOnOverload_CheckedChanged(this, e);
             chkBPF2Gnd_CheckedChanged(this, e);
+            chkSaveTXProfileOnExit_CheckedChanged(this, e); //MW0LGE
+            ForceTXProfileUpdate();//MW0LGE
+
             // Keyboard Tab
             comboKBTuneUp1_SelectedIndexChanged(this, e);
             comboKBTuneUp2_SelectedIndexChanged(this, e);
@@ -1378,7 +1406,7 @@ namespace Thetis
             clrbtnText_Changed(this, e);
             clrbtnDataLine_Changed(this, e);
             clrbtnDataFill_Changed(this, e);//MW0LGE
-            chkDisablePicDisplayBackgroundImage_CheckedChanged(this, e);//MW0LGE
+            //chkDisablePicDisplayBackgroundImage_CheckedChanged(this, e);//MW0LGE
             udDisplayLineWidth_ValueChanged(this, e);
             udTXLineWidth_ValueChanged(this, e);
             clrbtnTXDataLine_Changed(this, e);
@@ -8276,9 +8304,10 @@ namespace Thetis
         private void udDisplayFPS_ValueChanged(object sender, System.EventArgs e)
         {
             console.DisplayFPS = (int)udDisplayFPS.Value;
-            console.specRX.GetSpecRX(0).FrameRate = (int)udDisplayFPS.Value;
-            console.specRX.GetSpecRX(1).FrameRate = (int)udDisplayFPS.Value;
-            console.specRX.GetSpecRX(cmaster.inid(1, 0)).FrameRate = (int)udDisplayFPS.Value;
+            //MW0LGE movedto console
+            //console.specRX.GetSpecRX(0).FrameRate = (int)udDisplayFPS.Value;
+            //console.specRX.GetSpecRX(1).FrameRate = (int)udDisplayFPS.Value;
+            //console.specRX.GetSpecRX(cmaster.inid(1, 0)).FrameRate = (int)udDisplayFPS.Value;
 
             udDisplayAVGTime_ValueChanged(this, EventArgs.Empty);
         }
@@ -9606,39 +9635,10 @@ namespace Thetis
             console.TXTunePower = chkTXTunePower.Checked;
         }
 
-        private string current_profile = "";
-        private void comboTXProfileName_SelectedIndexChanged(object sender, System.EventArgs e)
+        private bool loadTXProfile(String sProfileName)
         {
-            if (comboTXProfileName.SelectedIndex < 0 || initializing)
-                return;
-
-            if (chkAutoSaveTXProfile.Checked)
-            {
-                SaveTXProfileData();
-            }
-            else
-            {
-                if (CheckTXProfileChanged() && comboTXProfileName.Focused)
-                {
-                    DialogResult result = MessageBox.Show("The current profile has changed.  " +
-                        "Would you like to save the current profile?",
-                        "Save Current Profile?",
-                        MessageBoxButtons.YesNoCancel,
-                        MessageBoxIcon.Question);
-
-                    if (result == DialogResult.Yes)
-                    {
-                        btnTXProfileSave_Click(this, EventArgs.Empty);
-                        //return;
-                    }
-                    else if (result == DialogResult.Cancel)
-                        return;
-                }
-            }
-
-            console.TXProfile = comboTXProfileName.Text;
             DataRow[] rows = DB.ds.Tables["TxProfile"].Select(
-                "'" + comboTXProfileName.Text + "' = Name");
+                "'" + sProfileName + "' = Name");
 
             if (rows.Length != 1)
             {
@@ -9646,8 +9646,10 @@ namespace Thetis
                     "Database error",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
-                return;
+                return false;
             }
+
+            console.TXProfile = sProfileName;
 
             DataRow dr = rows[0];
             int[] eq = null;
@@ -9667,6 +9669,9 @@ namespace Thetis
 
             udTXFilterLow.Value = Math.Min(Math.Max((int)dr["FilterLow"], udTXFilterLow.Minimum), udTXFilterLow.Maximum);
             udTXFilterHigh.Value = Math.Min(Math.Max((int)dr["FilterHigh"], udTXFilterHigh.Minimum), udTXFilterHigh.Maximum);
+
+            console.TXFilterLow = (int)udTXFilterLow.Value;
+            console.TXFilterHigh = (int)udTXFilterHigh.Value;
 
             console.DX = (bool)dr["DXOn"];
             console.DXLevel = (int)dr["DXLevel"];
@@ -9798,7 +9803,46 @@ namespace Thetis
 
             CFCCOMPEQ = cfceq;
 
-            current_profile = comboTXProfileName.Text;
+            return true;
+        }
+
+        public void ForceTXProfileUpdate()
+        {
+            comboTXProfileName_SelectedIndexChanged(this, EventArgs.Empty);
+        }
+
+        private string current_profile = "";
+        private void comboTXProfileName_SelectedIndexChanged(object sender, System.EventArgs e)
+        {
+            if (comboTXProfileName.SelectedIndex < 0 || initializing)
+                return;
+
+            if (chkAutoSaveTXProfile.Checked)
+            {
+                SaveTXProfileData();
+            }
+            else
+            {
+                if (CheckTXProfileChanged() && comboTXProfileName.Focused)
+                {
+                    DialogResult result = MessageBox.Show("The current profile has changed.  " +
+                        "Would you like to save the current profile?",
+                        "Save Current Profile?",
+                        MessageBoxButtons.YesNoCancel,
+                        MessageBoxIcon.Question);
+
+                    if (result == DialogResult.Yes)
+                    {
+                        btnTXProfileSave_Click(this, EventArgs.Empty);
+                        //return;
+                    }
+                    else if (result == DialogResult.Cancel)
+                        return;
+                }
+            }
+
+            if (loadTXProfile(comboTXProfileName.Text)) current_profile = comboTXProfileName.Text;
+            else current_profile = "";
         }
 
         private void btnTXProfileSave_Click(object sender, System.EventArgs e)
@@ -13451,8 +13495,6 @@ namespace Thetis
                 Skin.Restore(comboAppSkin.Text, path, console);
             console.CurrentSkin = comboAppSkin.Text;
             console.RadarColorUpdate = true;
-
-            console.DisableBackgroundImage = chkDisablePicDisplayBackgroundImage.Checked;  //MW0LGE
         }
 
         private void btnSkinExport_Click(object sender, EventArgs e)

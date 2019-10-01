@@ -3324,7 +3324,7 @@ namespace Thetis
         }
     }
 
-    class MNotch : IComparable
+    public class MNotch : IComparable
     {
         private double fcenter = 0.0;
         public double FCenter

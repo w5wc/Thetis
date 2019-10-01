@@ -1095,7 +1095,6 @@
             this.lblTXMeter = new System.Windows.Forms.LabelTS();
             this.lblRXMeter = new System.Windows.Forms.LabelTS();
             this.grpMultimeterMenus = new System.Windows.Forms.GroupBoxTS();
-            this.tmrAutoStart = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.ptbFilterShift)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ptbFilterWidth)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.udFilterHigh)).BeginInit();
@@ -6789,11 +6788,6 @@
             this.grpMultimeterMenus.Name = "grpMultimeterMenus";
             this.grpMultimeterMenus.TabStop = false;
             // 
-            // tmrAutoStart
-            // 
-            this.tmrAutoStart.Interval = 1000;
-            this.tmrAutoStart.Tick += new System.EventHandler(this.TmrAutoStart_Tick);
-            // 
             // Console
             // 
             resources.ApplyResources(this, "$this");
@@ -7030,6 +7024,5 @@
         private ToolStripMenuItem BPFToolStripMenuItem;
         private ToolStripMenuItem BPF1ToolStripMenuItem;
         private ToolStripMenuItem BPF2ToolStripMenuItem;
-        private Timer tmrAutoStart;
     }
 }

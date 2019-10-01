@@ -389,21 +389,23 @@ namespace Thetis
                 {
                     StoreIncrements();
                     this.Close();
-                    // for -autostart option we run a task here and wait for CPU usage < 75%
-                    TimeSpan ttime;
-                    TimeSpan ttimeDiff;
-                    var t = Task.Run(async delegate
-                    {
-                        Process process = Process.GetCurrentProcess();
-                        do
-                        {
-                            ttime = process.TotalProcessorTime;
-                            await Task.Delay(500);
-                            TimeSpan ttime2 = process.TotalProcessorTime;
-                            ttimeDiff = ttime2.Subtract(ttime);
-                        } while (ttimeDiff.TotalMilliseconds > 400);
-                        Console.setPowerOn();
-                    });
+
+                    //MW0LGE interesting, but removed
+                    //// for -autostart option we run a task here and wait for CPU usage < 75%
+                    //TimeSpan ttime;
+                    //TimeSpan ttimeDiff;
+                    //var t = Task.Run(async delegate
+                    //{
+                    //    Process process = Process.GetCurrentProcess();
+                    //    do
+                    //    {
+                    //        ttime = process.TotalProcessorTime;
+                    //        await Task.Delay(500);
+                    //        TimeSpan ttime2 = process.TotalProcessorTime;
+                    //        ttimeDiff = ttime2.Subtract(ttime);
+                    //    } while (ttimeDiff.TotalMilliseconds > 400);
+                    //    Console.setPowerOn();
+                    //});
 
                 }
             }

@@ -35,12 +35,14 @@
 using Midi2Cat.Data; //-W2PA Necessary for Behringer MIDI changes
 
 
-namespace Thetis 
+namespace Thetis
 {
+    // using System.Speech.Synthesis;
+    using RawInput_dll;
     using System;
-    using System.Runtime.InteropServices;
     using System.Collections;
     using System.Collections.Generic;
+    using System.Data;
     using System.Diagnostics;
     using System.Drawing;
     using System.Drawing.Drawing2D;
@@ -48,21 +50,16 @@ namespace Thetis
     using System.Globalization;
     using System.IO;
     using System.IO.Ports;
+    using System.Linq;
     using System.Net;
     using System.Net.Sockets;
     using System.Reflection;
-    using System.Threading;
-    using System.Threading.Tasks;
+    using System.Runtime.InteropServices;
     using System.Text;
-    using System.Windows.Forms;
-    using System.Xml;
-    using System.Xml.Linq;
+    using System.Threading;
     using System.Timers;
-    using System.Linq;
-    using System.Data;
-    // using System.Speech.Synthesis;
-    using RawInput_dll;
-    using System.Media;
+    using System.Windows.Forms;
+    using System.Xml.Linq;
     #region Enums
 
     public enum FocusMasterMode
@@ -664,7 +661,8 @@ namespace Thetis
         public HttpServer httpServer = null;           // rn3kk add
 
         public Setup SetupForm;
-        public CWX CWXForm;
+        private CWX m_frmCWXForm;
+        //public CWX CWXForm;
         public XVTRForm XVTRForm;
         public EQForm EQForm;
         public FilterForm filterRX1Form;
@@ -921,7 +919,7 @@ namespace Thetis
         private string machineName = System.Environment.MachineName;
         public bool initializing = true;
         public bool booting = false;
-        private static bool powerOnOption = false;
+        //private static bool powerOnOption = false;
         private int h_delta = 0;		//k6jca 1/15/08
         private int v_delta = 0;		//k6jca 1/15/08
         private int previous_delta = 0;  //k6jca
@@ -1160,6 +1158,20 @@ namespace Thetis
 
 
         // MW0LGE
+        private frmNotchPopup m_frmNotchPopup;
+
+        public CWX CWXForm
+        {
+            get {
+                if (m_frmCWXForm == null || m_frmCWXForm.IsDisposed)
+                {
+                    m_frmCWXForm = new CWX(this);
+                }
+                return m_frmCWXForm;
+            }
+            set { }
+        }
+
         // used to delay repaint of all controls, until after they have been moved
         private const int WM_SETREDRAW = 11;
         [DllImport("user32.dll")]
@@ -1171,6 +1183,7 @@ namespace Thetis
         private RawInput m_objRawinput;
         // ----
         private bool m_bShiftKeyDown = false;
+        private static System.Timers.Timer autoStartTimer;
         // ----
 
         #endregion
@@ -1180,13 +1193,12 @@ namespace Thetis
         // Constructor and Destructor
         // ======================================================
 
-        // This gets called from the Splash form
-        public static void setPowerOn()
-        {
-            // MW0LGE
-            //if (powerOnOption)
-            //    theConsole.chkPower.Checked = true;
-        }
+        //// This gets called from the Splash form
+        //public static void setPowerOn()
+        //{
+        //    if (powerOnOption)
+        //        theConsole.chkPower.Checked = true;
+        //}
 
         public Console(string[] args)
         {
@@ -1620,23 +1632,26 @@ namespace Thetis
             rx1_meter_cal_offset = rx_meter_cal_offset_by_radio[(int)current_hpsdr_model];
             RX1DisplayCalOffset = rx_display_cal_offset_by_radio[(int)current_hpsdr_model];
 
-            foreach (string s in CmdLineArgs)
-            {
-                if (s == "-autostart")
-                {
-                    //chkPower.Checked = true;
-                    //powerOnOption = true;
-                    tmrAutoStart.Interval = 2000;
-                    tmrAutoStart.Enabled = true; // MW0LGE hack to get this auto start kicked off
-                    break;
-                }
-            }
-
             if (resetForAutoMerge)
             {
                 MessageBox.Show("Please RE-START now.", "Note", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-
+            else
+            {
+                foreach (string s in CmdLineArgs)
+                {
+                    if (s == "-autostart")
+                    {
+                        //chkPower.Checked = true;
+                        //powerOnOption = true;
+                        autoStartTimer = new System.Timers.Timer(2000);
+                        autoStartTimer.Elapsed += OnAutoStartTimerEvent;
+                        autoStartTimer.AutoReset = false;
+                        autoStartTimer.Enabled = true;
+                        break;
+                    }
+                }
+            }
         }
 
         //MW0LGE
@@ -1655,6 +1670,11 @@ namespace Thetis
             parent.Refresh();
         }
         //--
+        private void OnAutoStartTimerEvent(Object source, ElapsedEventArgs e)
+        {
+            // used by autostart command line flags, this event will fire 2 seconds 
+            chkPower.Checked = true;
+        }
 
         void gmh_MouseUp()
         {
@@ -1855,8 +1875,33 @@ namespace Thetis
             set { mic_ptt = value; }
         }
 
+        private void onNotchDelete()
+        {
+            if (SelectedNotch != null)
+            {
+                removeNotch(SelectedNotch);
+            }
+        }
+        private void onBWChanged(double width)
+        {
+            if (SelectedNotch != null)
+            {
+                if(width != SelectedNotch.FWidth) changeNotchBW(SelectedNotch, width);
+            }
+        }
+        private void onActiveChanged(bool active)
+        {
+            if (SelectedNotch != null)
+            {
+                if (active != SelectedNotch.Active) changeNotchActive(SelectedNotch, active);
+            }
+        }
         private void InitConsole()
         {
+            m_frmNotchPopup = new frmNotchPopup();
+            m_frmNotchPopup.NotchDeleteEvent += onNotchDelete;
+            m_frmNotchPopup.NotchBWChangedEvent += onBWChanged;
+            m_frmNotchPopup.NotchActiveChangedEvent += onActiveChanged;
 
             psform = new PSForm(this);
             booting = true;
@@ -2154,12 +2199,17 @@ namespace Thetis
             quick_save_mode = DSPMode.LSB;
             ptbPWR.Value = 100;
             btnDisplayPanCenter_Click(this, EventArgs.Empty);
+
             comboTXProfile.Text = SetupForm.TXProfile;
             comboDigTXProfile.Text = SetupForm.TXProfile;
             comboFMTXProfile.Text = SetupForm.TXProfile;
             comboFMCTCSS.Text = "100.0";
 
             GetState();							// recall saved state
+
+            initializing = false;
+            SetupForm.ForceTXProfileUpdate();
+            initializing = true;
 
             chkFullDuplex.Checked = false;
             if (rx1_dsp_mode == DSPMode.FIRST || rx1_dsp_mode == DSPMode.LAST)
@@ -2444,8 +2494,8 @@ namespace Thetis
 
             if (SetupForm != null)		// make sure Setup form is deallocated
                 SetupForm.Dispose();
-            if (CWXForm != null)			// make sure CWX form is deallocated
-                CWXForm.Dispose();
+            if (m_frmCWXForm != null)			// make sure CWX form is deallocated
+                m_frmCWXForm.Dispose();
             chkPower.Checked = false;	// make sure power is off		
             ckQuickRec.Checked = false; // make sure recording is stopped
 
@@ -4803,7 +4853,7 @@ namespace Thetis
                 else if (s.StartsWith("ud"))
                 {
                     for (int i = 0; i < numericupdown_list.Count; i++)
-                    {	// look through each control to find the matching name
+                    {   // look through each control to find the matching name
                         NumericUpDownTS c = (NumericUpDownTS)numericupdown_list[i];
                         if (c.Name.Equals(name))		// name found
                         {
@@ -20856,13 +20906,19 @@ namespace Thetis
             }
             set
             {
+                //MW0LGE changed
                 if (value)
                 {
-                    cWXToolStripMenuItem.PerformClick();
+                    //cWXToolStripMenuItem.PerformClick();
+                    cWXToolStripMenuItem_Click(this, EventArgs.Empty);
                 }
                 else
-                    if (CWXForm != null)
-                        this.Invoke(new MethodInvoker(CWXForm.Close));
+                {
+                    //if (CWXForm != null)
+                    //    this.Invoke(new MethodInvoker(CWXForm.Close));
+
+                    if (m_frmCWXForm != null) m_frmCWXForm.Close();
+                }
             }
         }
 
@@ -22769,6 +22825,7 @@ namespace Thetis
             set
             {
                 bool power = chkPower.Checked;
+                
                 current_display_engine = value;
 
                 if (PowerOn)
@@ -22778,35 +22835,28 @@ namespace Thetis
                     Thread.Sleep(100);
                 }
 
+                Display.CurrentDisplayEngine = value; // moved so that display engine knows what to do in Init() //MW0LGE
+
                 switch (value)
                 {
                     case DisplayEngine.GDI_PLUS:
                         {
-                            //Display.DirectXRelease();
+                            Display.ShutdownDX2D();
+
                             Thread.Sleep(100);
+                            Display.Init();
+
+                            SetPicDisplayBackgroundImage();//MW0LGE restore pciture box background that would have been turned off when in DX mode
+                        }
+                        break;
+                    case DisplayEngine.DIRECT_X:
+                        {
+                            Display.InitDX2D();
                             Display.Init();
                         }
                         break;
-                    //case DisplayEngine.DIRECT_X:
-                    //    {
-                    //        if (!booting)
-                    //        {
-                    //            pause_DisplayThread = true;
-                    //            Display.Target = picDisplay;
-                    //            Display.WaterfallTarget = picWaterfall;
-                    //            //Display.DirectXInit();
-                    //            //Display.RenderDirectX();
-                    //            // current_display_engine = value;
-                    //            // Display.PrepareDisplayVars(Display.CurrentDisplayMode);
-                    //            // Display.DrawBackground();
-                    //            pause_DisplayThread = false;
-                    //        }
-                    // Display.CurrentDisplayEngine = value;
-                    // chkPower.Checked = power;                          
-                    // }
-                    // break;
                 }
-                Display.CurrentDisplayEngine = value;
+
                 pause_DisplayThread = false;
 
                 if (power) PowerOn = true;
@@ -29724,7 +29774,13 @@ namespace Thetis
             set
             {
                 display_fps = value;
+                if (display_fps > 60) display_fps = 60; //MW0LGE
+                if (display_fps < 1) display_fps = 1; //MW0LGE
                 display_delay = 1000 / display_fps;
+
+                specRX.GetSpecRX(0).FrameRate = display_fps;
+                specRX.GetSpecRX(1).FrameRate = display_fps;
+                specRX.GetSpecRX(cmaster.inid(1, 0)).FrameRate = display_fps;
             }
         }
 
@@ -34303,6 +34359,9 @@ namespace Thetis
             // we acheive desired fps rate
             System.Diagnostics.Stopwatch objStopWatch = System.Diagnostics.Stopwatch.StartNew();
 
+            //System.Diagnostics.Stopwatch objStopWatch2 = System.Diagnostics.Stopwatch.StartNew();
+            //int frames = 0;
+
             //uint thread = 0;
             //			display_running = true;
             while (true) //(chkPower.Checked)
@@ -34312,6 +34371,7 @@ namespace Thetis
                 int flag;
 
                 objStopWatch.Restart();
+                //objStopWatch2.Start();
 
                 if (mox)
                 {
@@ -34343,7 +34403,7 @@ namespace Thetis
                                     {
                                         fixed (float* ptr = &Display.new_display_data[0])
                                             SpecHPSDRDLL.GetPixels(cmaster.inid(1, 0), 0, ptr, ref flag);
-                                        Display.DataReady = (flag==1);
+                                        Display.DataReady = true; //(flag==1);
                                         fixed (float* ptr = &Display.new_waterfall_data[0])
                                             SpecHPSDRDLL.GetPixels(cmaster.inid(1, 0), 1, ptr, ref flag);
                                         Display.WaterfallDataReady = true; //(flag == 1);
@@ -34534,9 +34594,28 @@ namespace Thetis
 
                 // MW0LGE - note, if both displays are off, then the refresh to hide the final one
                 // will not happen. This is now forced in combo display mode to force a refresh
-                if ((Display.CurrentDisplayMode != DisplayMode.OFF) ||
-                    (RX2Enabled && Display.CurrentDisplayModeBottom != DisplayMode.OFF))
-                    picDisplay.Refresh();
+                if (!pause_DisplayThread && ((Display.CurrentDisplayMode != DisplayMode.OFF) ||
+                    (RX2Enabled && Display.CurrentDisplayModeBottom != DisplayMode.OFF)))
+                {
+                    switch (current_display_engine)
+                    {
+                        case DisplayEngine.GDI_PLUS:
+                            picDisplay.Refresh();
+                            break;
+                        case DisplayEngine.DIRECT_X:
+                            Display.RenderDX2D();
+                            break;
+                    }
+                }
+
+                //objStopWatch2.Stop();
+                //frames++;
+                //if (frames == 1000)
+                //{
+                //    Debug.Print(objStopWatch2.ElapsedMilliseconds.ToString());
+                //    objStopWatch2.Reset();
+                //    frames = 0;
+                //}
 
                 //MW0LGE delay changed to take into consideration how long all the above took
                 objStopWatch.Stop();
@@ -34551,6 +34630,7 @@ namespace Thetis
                 {
                     Display.FrameRateIssue = false;
                 }
+
                 Thread.Sleep(dly);
             }
         }
@@ -36933,18 +37013,18 @@ namespace Thetis
                     case Keys.F9: // CWX memory 9
                     case Keys.F10: // CWX memory stop
                         // Make sure we have an instance of the form
-                        if (CWXForm == null || CWXForm.IsDisposed)
-                        {
-                            try
-                            {
-                                CWXForm = new CWX(this);
-                            }
-                            catch
-                            {
-                                e.Handled = true;
-                                return;
-                            }
-                        }
+                        //MOOMOOif (CWXForm == null || CWXForm.IsDisposed)
+                        //{
+                        //    try
+                        //    {
+                        //        CWXForm = new CWX(this);
+                        //    }
+                        //    catch
+                        //    {
+                        //        e.Handled = true;
+                        //        return;
+                        //    }
+                        //}
 
                         int t_memory_num = 0;
                         if (e.KeyCode == Keys.F1) t_memory_num = 1;
@@ -38541,20 +38621,20 @@ namespace Thetis
                     //  btnZeroBeat.Enabled = true;
                     radio.GetDSPRX(0, 0).SpectrumPreFilter = true;
                     radio.GetDSPRX(1, 0).SpectrumPreFilter = true;
-                    if (current_display_engine == DisplayEngine.GDI_PLUS)
-                    {
+                    //if (current_display_engine == DisplayEngine.GDI_PLUS)
+                    //{
                         //  picWaterfall.SendToBack();
                         //  picWaterfall.Hide();
                         picDisplay.BringToFront();
                         //  picDisplay.Show();
-                    }
-                    else
-                    {
-                        //  picDisplay.SendToBack();
-                        //  picDisplay.Hide();
-                        picWaterfall.BringToFront();
-                        //  picWaterfall.Show();
-                    }
+                    //}
+                    //else
+                    //{
+                    //    //  picDisplay.SendToBack();
+                    //    //  picDisplay.Hide();
+                    //    picWaterfall.BringToFront();
+                    //    //  picWaterfall.Show();
+                    //}
 
                     break;
                 case DisplayMode.PANADAPTER:
@@ -38678,7 +38758,7 @@ namespace Thetis
             pause_DisplayThread = false;
 
             //MW0LGE force a refresh
-            picDisplay.Refresh();
+            picDisplay.Invalidate();
         }
 
         private void chkBIN_CheckedChanged(object sender, System.EventArgs e)
@@ -38901,20 +38981,21 @@ namespace Thetis
             SaveState();
 
             if (SetupForm != null) SetupForm.Hide();
-            if (CWXForm != null) CWXForm.Hide();
+            if (m_frmCWXForm != null) m_frmCWXForm.Hide();
             if (EQForm != null) EQForm.Hide();
             if (XVTRForm != null) XVTRForm.Hide();
             if (memoryForm != null) memoryForm.Hide();
             if (diversityForm != null) diversityForm.Hide();
             //  if (preSelForm != null) preSelForm.Hide();
             if (psform != null) psform.Hide();
+            if (m_frmNotchPopup != null) m_frmNotchPopup.Hide();
 
             //MW0LGE getwb performs a show, so the window will flash.
             //as Hidewb handles null ref ok, then just call cmaster.Hidewb(0);
             //if (cmaster.Getwb(0).WBdisplay != null) cmaster.Hidewb(0);
-            cmaster.Hidewb(0);
+            cmaster.Hidewb(0);            
 
-            if (CWXForm != null) CWXForm.Close();
+            Display.ShutdownDX2D(); // MW0LGE
 
             //MW0LGE
             //Change to check if existing save is happening. Without this
@@ -41046,6 +41127,7 @@ namespace Thetis
         private void comboTXProfile_SelectedIndexChanged(object sender, System.EventArgs e)
         {
             if (SetupForm == null || initializing) return;
+
             SetupForm.TXProfile = comboTXProfile.Text;
 
             if (comboDigTXProfile.Text != comboTXProfile.Text)
@@ -43628,7 +43710,7 @@ namespace Thetis
                 bool bOverRX2 = overRX(e.X, e.Y, 2, true);
 
                 //NOTCH MW0LGE
-                if (!SetupForm.NotchAdminBusy) // only highlight/select if we are not actively adding/edditing via setup form
+                if (!SetupForm.NotchAdminBusy && !m_frmNotchPopup.Visible) // only highlight/select if we are not actively adding/edditing via setup form, or the popup is hidden
                 {
                     int nRX = 0;
                     if (bOverRX1 && (Display.CurrentDisplayMode == DisplayMode.PANADAPTER || Display.CurrentDisplayMode == DisplayMode.PANAFALL))
@@ -44916,7 +44998,7 @@ namespace Thetis
 
         private void picDisplay_MouseLeave(object sender, System.EventArgs e)
         {
-            SelectedNotch = null; // clear the selected notch (if there was one)
+            if(!m_frmNotchPopup.Visible) SelectedNotch = null; // clear the selected notch (if there was one)
 
             txtDisplayCursorOffset.Text = "";
             txtDisplayCursorPower.Text = "";
@@ -44928,6 +45010,8 @@ namespace Thetis
 
         private void picDisplay_MouseDown(object sender, MouseEventArgs e)
         {
+            if (m_frmNotchPopup.Visible) return;
+
             switch (e.Button)
             {
                 case MouseButtons.Left:
@@ -45642,6 +45726,9 @@ namespace Thetis
                     }
                     break;
                 case MouseButtons.Right:
+                    // if we have a notch highlighted, then all other right click is ignored
+                    if (SelectedNotch != null) return;
+
                     double cfreq;
 
                     if (rx2_enabled && e.Y > picDisplay.Height / 2)
@@ -45988,8 +46075,15 @@ namespace Thetis
                         tx2_grid_adjust = false;
                         break;
                 }
-            }
 
+                if (SelectedNotch != null)
+                {
+                    Point p = new Point(e.X, e.Y);
+                    m_frmNotchPopup.Left = picDisplay.PointToScreen(p).X - 16;
+                    m_frmNotchPopup.Top = picDisplay.PointToScreen(p).Y - 16;
+                    if (!m_frmNotchPopup.Visible) m_frmNotchPopup.Show(SelectedNotch, 0, 1000 /*max_filter_width*/);
+                }
+            }
         }
 
         private void picDisplay_DoubleClick(object sender, EventArgs e)
@@ -46025,11 +46119,12 @@ namespace Thetis
                 pause_DisplayThread = true;
 
             Display.Target = picDisplay;
+
             switch (current_display_engine)
             {
                 case (DisplayEngine.GDI_PLUS):
                     {
-                        Thread.Sleep(1); // MW0LGE was 100
+                        Thread.Sleep(100);
                         Display.Init();
 
                         comboDisplayMode_SelectedIndexChanged(this, EventArgs.Empty); // MW0LGE - this needs work TODO CHECK
@@ -46043,6 +46138,16 @@ namespace Thetis
                         picDisplay.Invalidate();
                     }
                     break;
+                case DisplayEngine.DIRECT_X:
+                    {
+                        Thread.Sleep(100);
+                        Display.Init();
+
+                        comboDisplayMode_SelectedIndexChanged(this, EventArgs.Empty); // MW0LGE - this needs work TODO CHECK
+
+                        Display.ResizeDX2D();
+                        break;
+                    }
                 //case (DisplayEngine.DIRECT_X):
                 //    if (!booting)
                 //    {
@@ -49654,33 +49759,33 @@ namespace Thetis
             XVTRForm.Focus();
         }
 
-        private void mnuCWX_Click(object sender, System.EventArgs e)
-        {
-            if (rx1_dsp_mode == DSPMode.LSB)
-                RX1DSPMode = DSPMode.CWL;
-            else if (rx1_dsp_mode == DSPMode.USB)
-                RX1DSPMode = DSPMode.CWU;
+        //private void mnuCWX_Click(object sender, System.EventArgs e)
+        //{
+        //    if (rx1_dsp_mode == DSPMode.LSB)
+        //        RX1DSPMode = DSPMode.CWL;
+        //    else if (rx1_dsp_mode == DSPMode.USB)
+        //        RX1DSPMode = DSPMode.CWU;
 
-            if (rx1_dsp_mode != DSPMode.CWL &&
-                rx1_dsp_mode != DSPMode.CWU)
-            {
-                MessageBox.Show("The radio must be in CWL or CWU mode in order to open the " +
-                    "CWX Control Form.",
-                    "CWX Error: Wrong Mode",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-                return;
-            }
+        //    if (rx1_dsp_mode != DSPMode.CWL &&
+        //        rx1_dsp_mode != DSPMode.CWU)
+        //    {
+        //        MessageBox.Show("The radio must be in CWL or CWU mode in order to open the " +
+        //            "CWX Control Form.",
+        //            "CWX Error: Wrong Mode",
+        //            MessageBoxButtons.OK,
+        //            MessageBoxIcon.Error);
+        //        return;
+        //    }
 
-            //	cw_key_mode = true;
-            if (CWXForm == null || CWXForm.IsDisposed)
-            {
-                CWXForm = new CWX(this);
-            }
+        //    //	cw_key_mode = true;
+        //    if (CWXForm == null || CWXForm.IsDisposed)
+        //    {
+        //        CWXForm = new CWX(this);
+        //    }
 
-            CWXForm.Show();
-            CWXForm.Focus();
-        }
+        //    CWXForm.Show();
+        //    CWXForm.Focus();
+        //}
 
         /*	private void mnuMemRecall_Click(object sender, System.EventArgs e)
             {
@@ -52147,7 +52252,7 @@ namespace Thetis
                 btnHidden.Focus();
 
             //MW0LGE force a refresh
-            picDisplay.Refresh();
+            picDisplay.Invalidate();
         }
 
         private void chkRX2DisplayAVG_CheckedChanged(object sender, System.EventArgs e)
@@ -53673,6 +53778,37 @@ namespace Thetis
             return bRet;
         }
 
+        private bool changeNotchActive(MNotch notch, bool bActive)
+        {
+            if (SetupForm.NotchAdminBusy) return false; // cant change it if setup is adding/editing
+
+            bool bRet = false;
+            int nIndex = MNotchDB.List.IndexOf(notch);
+
+            if (nIndex >= 0)
+            {
+                double fcenter, fwidth;
+                int active;
+                // just use channel 0,0 as all others have been set the same
+                WDSP.RXANBPGetNotch(WDSP.id(0, 0), nIndex, &fcenter, &fwidth, &active);
+
+                WDSP.RXANBPEditNotch(WDSP.id(0, 0), nIndex, fcenter, fwidth, bActive);
+                WDSP.RXANBPEditNotch(WDSP.id(0, 1), nIndex, fcenter, fwidth, bActive);
+                WDSP.RXANBPEditNotch(WDSP.id(2, 0), nIndex, fcenter, fwidth, bActive);
+
+                bool bSelected = (SelectedNotch != null);
+                SetupForm.SaveNotchesToDatabase();
+                SetupForm.UpdateNotchDisplay();
+
+                // find the previously selected notch, which would have been lost due to savenotchestodb
+                if (bSelected) SelectedNotch = MNotchDB.GetFirstNotchThatMatches(fcenter, fwidth, bActive);
+
+                bRet = true;
+            }
+
+            return bRet;
+        }
+
         private bool toggleNotchActive(MNotch notch)
         {
             if (SetupForm.NotchAdminBusy) return false; // cant change it if setup is adding/editing
@@ -54395,10 +54531,11 @@ namespace Thetis
             }
 
             //	cw_key_mode = true;
-            if (CWXForm == null || CWXForm.IsDisposed)
-            {
-                CWXForm = new CWX(this);
-            }
+
+            //MOOMOOif (CWXForm == null || CWXForm.IsDisposed)
+            //{
+            //    CWXForm = new CWX(this);
+            //}
 
             CWXForm.Show();
             CWXForm.Focus();
@@ -57998,13 +58135,14 @@ namespace Thetis
         // ke9ns add to allow TX filter on main console SSB panel
         private void udTXFilterHigh_ValueChanged(object sender, EventArgs e)
         {
+            if (initializing) return; // MW0LGE
             if (SetupForm != null) SetupForm.TXFilterHigh = (int)udTXFilterHigh.Value;
-
         }
 
         // ke9ns add
         private void udTXFilterLow_ValueChanged(object sender, EventArgs e)
         {
+            if (initializing) return; // MW0LGE
             if (SetupForm != null) SetupForm.TXFilterLow = (int)udTXFilterLow.Value;
         }
 
@@ -60692,7 +60830,7 @@ namespace Thetis
         }
 
         //MW0LGE
-        private Image m_objBackgroundImage = null;
+        private Image m_imgBackgroundCopy = null;
         private bool m_bDisableBackgroundImage = false;
         public bool DisableBackgroundImage
         {
@@ -60700,24 +60838,60 @@ namespace Thetis
             set
             {
                 m_bDisableBackgroundImage = value;
-
-                SetDisplayBackgroundImage(picDisplay.BackgroundImage);
+                SetPicDisplayBackgroundImage();
             }
         }
-        public void SetDisplayBackgroundImage(Image objImg)
+        public void SetPicDisplayBackgroundImage(Image objImg = null)
         {
-            if (objImg != null) m_objBackgroundImage = objImg;
+            if (objImg != null) m_imgBackgroundCopy = objImg;
 
-            if (!m_bDisableBackgroundImage)
+            if (m_bDisableBackgroundImage)
             {
-                // show the image
-                picDisplay.BackgroundImageLayout = ImageLayout.Stretch;
-                picDisplay.BackgroundImage = m_objBackgroundImage;
+                picDisplay.BackgroundImage = null;
+                Display.SetDX2BackgoundImage((Image)null);
+                return;
+            }
+
+            if (current_display_engine == DisplayEngine.DIRECT_X)
+            {
+                if (objImg != null)
+                {
+                    Image c = objImg.Clone() as Image;
+                    Display.SetDX2BackgoundImage(c);
+                    c.Dispose();
+                }
+                else
+                {
+                    if (m_imgBackgroundCopy != null)
+                    {
+                        Image c = m_imgBackgroundCopy.Clone() as Image;
+                        Display.SetDX2BackgoundImage(c);
+                        c.Dispose();
+                    }
+                    else
+                    {
+                        Display.SetDX2BackgoundImage((Image)null);
+                    }
+                }
             }
             else
             {
-                picDisplay.BackgroundImageLayout = ImageLayout.None;
-                picDisplay.BackgroundImage = null;
+                if (objImg != null)
+                {
+                    picDisplay.BackgroundImage = objImg;
+                }
+                else
+                {
+                    if (m_imgBackgroundCopy != null)
+                    {
+                        picDisplay.BackgroundImage = m_imgBackgroundCopy;
+                    }
+                    else
+                    {
+                        picDisplay.BackgroundImage = null;
+                    }
+                }
+                
             }
         }
         //-
@@ -60882,12 +61056,6 @@ namespace Thetis
         }
         #endregion
 
-        private void TmrAutoStart_Tick(object sender, EventArgs e)
-        {
-            //MW0LGE just a quick hack to get auto start 'working'
-            tmrAutoStart.Enabled = false;
-            chkPower.Checked = true;
-        }
     }
 
     public class DigiMode

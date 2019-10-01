@@ -1459,10 +1459,10 @@
             this.tpDisplayGeneral = new System.Windows.Forms.TabPage();
             this.grpDisplay8000DLE = new System.Windows.Forms.GroupBoxTS();
             this.chkANAN8000DLEDisplayVoltsAmps = new System.Windows.Forms.CheckBoxTS();
-            this.grpDisplayMultimeter = new System.Windows.Forms.GroupBoxTS();
-            this.chkSMeter = new System.Windows.Forms.CheckBoxTS();
             this.grpDisplayDriverEngine = new System.Windows.Forms.GroupBoxTS();
             this.comboDisplayDriver = new System.Windows.Forms.ComboBoxTS();
+            this.grpDisplayMultimeter = new System.Windows.Forms.GroupBoxTS();
+            this.chkSMeter = new System.Windows.Forms.CheckBoxTS();
             this.chkDisplayMeterShowDecimal = new System.Windows.Forms.CheckBoxTS();
             this.udMeterDigitalDelay = new System.Windows.Forms.NumericUpDownTS();
             this.lblMultimeterDigitalDelay = new System.Windows.Forms.LabelTS();
@@ -3527,8 +3527,8 @@
             this.tcDisplay.SuspendLayout();
             this.tpDisplayGeneral.SuspendLayout();
             this.grpDisplay8000DLE.SuspendLayout();
-            this.grpDisplayMultimeter.SuspendLayout();
             this.grpDisplayDriverEngine.SuspendLayout();
+            this.grpDisplayMultimeter.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.udMeterDigitalDelay)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.udDisplayMeterAvg)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.udDisplayMultiTextHoldTime)).BeginInit();
@@ -23921,6 +23921,7 @@
             // 
             this.tpDisplayGeneral.BackColor = System.Drawing.SystemColors.Control;
             this.tpDisplayGeneral.Controls.Add(this.grpDisplay8000DLE);
+            this.tpDisplayGeneral.Controls.Add(this.grpDisplayDriverEngine);
             this.tpDisplayGeneral.Controls.Add(this.grpDisplayMultimeter);
             this.tpDisplayGeneral.Controls.Add(this.grpDisplayScopeMode);
             this.tpDisplayGeneral.Controls.Add(this.grpDisplayPhase);
@@ -23956,10 +23957,33 @@
             this.toolTip1.SetToolTip(this.chkANAN8000DLEDisplayVoltsAmps, "Check to show detailed meter info");
             this.chkANAN8000DLEDisplayVoltsAmps.CheckedChanged += new System.EventHandler(this.chkANAN8000DLEDisplayVoltsAmps_CheckedChanged);
             // 
+            // grpDisplayDriverEngine
+            // 
+            this.grpDisplayDriverEngine.Controls.Add(this.comboDisplayDriver);
+            this.grpDisplayDriverEngine.Location = new System.Drawing.Point(343, 217);
+            this.grpDisplayDriverEngine.Name = "grpDisplayDriverEngine";
+            this.grpDisplayDriverEngine.Size = new System.Drawing.Size(96, 56);
+            this.grpDisplayDriverEngine.TabIndex = 46;
+            this.grpDisplayDriverEngine.TabStop = false;
+            this.grpDisplayDriverEngine.Text = "Driver Engine";
+            // 
+            // comboDisplayDriver
+            // 
+            this.comboDisplayDriver.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboDisplayDriver.DropDownWidth = 48;
+            this.comboDisplayDriver.Items.AddRange(new object[] {
+            "GDI+",
+            "DirectX"});
+            this.comboDisplayDriver.Location = new System.Drawing.Point(8, 24);
+            this.comboDisplayDriver.Name = "comboDisplayDriver";
+            this.comboDisplayDriver.Size = new System.Drawing.Size(80, 21);
+            this.comboDisplayDriver.TabIndex = 45;
+            this.toolTip1.SetToolTip(this.comboDisplayDriver, "Sets the driver to be used for the display.");
+            this.comboDisplayDriver.SelectedIndexChanged += new System.EventHandler(this.comboDisplayDriver_SelectedIndexChanged);
+            // 
             // grpDisplayMultimeter
             // 
             this.grpDisplayMultimeter.Controls.Add(this.chkSMeter);
-            this.grpDisplayMultimeter.Controls.Add(this.grpDisplayDriverEngine);
             this.grpDisplayMultimeter.Controls.Add(this.chkDisplayMeterShowDecimal);
             this.grpDisplayMultimeter.Controls.Add(this.udMeterDigitalDelay);
             this.grpDisplayMultimeter.Controls.Add(this.lblMultimeterDigitalDelay);
@@ -23988,31 +24012,6 @@
             this.chkSMeter.Text = "S-Reading";
             this.toolTip1.SetToolTip(this.chkSMeter, "Check to show signal meter info");
             this.chkSMeter.CheckedChanged += new System.EventHandler(this.chkSMeter_CheckedChanged);
-            // 
-            // grpDisplayDriverEngine
-            // 
-            this.grpDisplayDriverEngine.Controls.Add(this.comboDisplayDriver);
-            this.grpDisplayDriverEngine.Location = new System.Drawing.Point(198, 72);
-            this.grpDisplayDriverEngine.Name = "grpDisplayDriverEngine";
-            this.grpDisplayDriverEngine.Size = new System.Drawing.Size(96, 56);
-            this.grpDisplayDriverEngine.TabIndex = 46;
-            this.grpDisplayDriverEngine.TabStop = false;
-            this.grpDisplayDriverEngine.Text = "Driver Engine";
-            this.grpDisplayDriverEngine.Visible = false;
-            // 
-            // comboDisplayDriver
-            // 
-            this.comboDisplayDriver.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboDisplayDriver.DropDownWidth = 48;
-            this.comboDisplayDriver.Items.AddRange(new object[] {
-            "GDI+",
-            "DirectX"});
-            this.comboDisplayDriver.Location = new System.Drawing.Point(8, 24);
-            this.comboDisplayDriver.Name = "comboDisplayDriver";
-            this.comboDisplayDriver.Size = new System.Drawing.Size(80, 21);
-            this.comboDisplayDriver.TabIndex = 45;
-            this.toolTip1.SetToolTip(this.comboDisplayDriver, "Sets the driver to be used for the display.");
-            this.comboDisplayDriver.SelectedIndexChanged += new System.EventHandler(this.comboDisplayDriver_SelectedIndexChanged);
             // 
             // chkDisplayMeterShowDecimal
             // 
@@ -54391,8 +54390,8 @@
             this.tpDisplayGeneral.ResumeLayout(false);
             this.grpDisplay8000DLE.ResumeLayout(false);
             this.grpDisplay8000DLE.PerformLayout();
-            this.grpDisplayMultimeter.ResumeLayout(false);
             this.grpDisplayDriverEngine.ResumeLayout(false);
+            this.grpDisplayMultimeter.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.udMeterDigitalDelay)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.udDisplayMeterAvg)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.udDisplayMultiTextHoldTime)).EndInit();
