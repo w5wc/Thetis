@@ -513,17 +513,17 @@ namespace Thetis
 		public string KY(string s)
 		{
 			// Make sure we have an instance of the form
-			if(console.CWXForm == null || console.CWXForm.IsDisposed)
-			{
-				try
-				{
-					console.CWXForm = new CWX(console);
-				}
-				catch
-				{
-					return parser.Error1;
-				}
-			}
+			//MOOMOOif(console.CWXForm == null || console.CWXForm.IsDisposed)
+			//{
+			//	try
+			//	{
+			//		console.CWXForm = new CWX(console);
+			//	}
+			//	catch
+			//	{
+			//		return parser.Error1;
+			//	}
+			//}
 
 			// Make sure we are in a cw mode.
 			switch(console.RX1DSPMode)
@@ -3450,17 +3450,17 @@ namespace Thetis
             {
                 qn = Convert.ToInt32(s);
                 // Make sure we have an instance of the form
-                if (console.CWXForm == null || console.CWXForm.IsDisposed)
-                {
-                    try
-                    {
-                        console.CWXForm = new CWX(console);
-                    }
-                    catch
-                    {
-                        return parser.Error1;
-                    }
-                }
+                //MOOMOOif (console.CWXForm == null || console.CWXForm.IsDisposed)
+                //{
+                //    try
+                //    {
+                //        console.CWXForm = new CWX(console);
+                //    }
+                //    catch
+                //    {
+                //        return parser.Error1;
+                //    }
+                //}
                 if (qn > 0 || qn < 10)
                 {
                     console.CWXForm.StartQueue = qn;
@@ -3478,17 +3478,17 @@ namespace Thetis
 		{
 			int cws = 0;
 			// Make sure we have an instance of the form
-			if(console.CWXForm == null || console.CWXForm.IsDisposed)
-			{
-				try
-				{
-					console.CWXForm = new CWX(console);
-				}
-				catch
-				{
-					return parser.Error1;
-				}
-			}
+			//MOOMOOif(console.CWXForm == null || console.CWXForm.IsDisposed)
+			//{
+			//	try
+			//	{
+			//		console.CWXForm = new CWX(console);
+			//	}
+			//	catch
+			//	{
+			//		return parser.Error1;
+			//	}
+			//}
 
 			if(s.Length == parser.nSet)
 			{
@@ -3511,17 +3511,17 @@ namespace Thetis
 		public string ZZKY(string s)
 		{
 			// Make sure we have an instance of the form
-			if(console.CWXForm == null || console.CWXForm.IsDisposed)
-			{
-				try
-				{
-					console.CWXForm = new CWX(console);
-				}
-				catch
-				{
-					return parser.Error1;
-				}
-			}
+			//MOOMOOif(console.CWXForm == null || console.CWXForm.IsDisposed)
+			//{
+			//	try
+			//	{
+			//		console.CWXForm = new CWX(console);
+			//	}
+			//	catch
+			//	{
+			//		return parser.Error1;
+			//	}
+			//}
 
 
 			if(s.Length == parser.nSet)
