@@ -512,19 +512,6 @@ namespace Thetis
 		//Sends text data to CWX for conversion to Morse
 		public string KY(string s)
 		{
-			// Make sure we have an instance of the form
-			//MOOMOOif(console.CWXForm == null || console.CWXForm.IsDisposed)
-			//{
-			//	try
-			//	{
-			//		console.CWXForm = new CWX(console);
-			//	}
-			//	catch
-			//	{
-			//		return parser.Error1;
-			//	}
-			//}
-
 			// Make sure we are in a cw mode.
 			switch(console.RX1DSPMode)
 			{
@@ -2646,7 +2633,7 @@ namespace Thetis
 				else
 					s = s.Insert(5, separator);
 
-                if (!isMidi)
+                if (!isMidi && console.CATChangesCenterFreq) // MW0LGE changed to take into consideration the flag
                 console.UpdateCenterFreq = true;
 				console.VFOAFreq = double.Parse(s);
 				return "";
@@ -2690,8 +2677,8 @@ namespace Thetis
 				else
 					s = s.Insert(5, separator);
 
-                if (!isMidi2)
-                console.UpdateRX2CenterFreq = true;
+                if (!isMidi2 && console.CATChangesCenterFreq) // MW0LGE changed to take into consideration the flag
+                    console.UpdateRX2CenterFreq = true;
 				console.VFOBFreq = double.Parse(s);
 				return "";
 			}
@@ -3449,18 +3436,7 @@ namespace Thetis
             if (s != "0" && s.Length > 0)
             {
                 qn = Convert.ToInt32(s);
-                // Make sure we have an instance of the form
-                //MOOMOOif (console.CWXForm == null || console.CWXForm.IsDisposed)
-                //{
-                //    try
-                //    {
-                //        console.CWXForm = new CWX(console);
-                //    }
-                //    catch
-                //    {
-                //        return parser.Error1;
-                //    }
-                //}
+
                 if (qn > 0 || qn < 10)
                 {
                     console.CWXForm.StartQueue = qn;
@@ -3477,18 +3453,6 @@ namespace Thetis
 		public string ZZKS(string s)
 		{
 			int cws = 0;
-			// Make sure we have an instance of the form
-			//MOOMOOif(console.CWXForm == null || console.CWXForm.IsDisposed)
-			//{
-			//	try
-			//	{
-			//		console.CWXForm = new CWX(console);
-			//	}
-			//	catch
-			//	{
-			//		return parser.Error1;
-			//	}
-			//}
 
 			if(s.Length == parser.nSet)
 			{
@@ -3510,20 +3474,6 @@ namespace Thetis
 		//Sends text to CWX for conversion to Morse
 		public string ZZKY(string s)
 		{
-			// Make sure we have an instance of the form
-			//MOOMOOif(console.CWXForm == null || console.CWXForm.IsDisposed)
-			//{
-			//	try
-			//	{
-			//		console.CWXForm = new CWX(console);
-			//	}
-			//	catch
-			//	{
-			//		return parser.Error1;
-			//	}
-			//}
-
-
 			if(s.Length == parser.nSet)
 			{
 

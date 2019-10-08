@@ -1530,7 +1530,7 @@ namespace Thetis
             Image objImg = File.Exists(path + "\\" + c.TopLevelControl.Name + "\\" + c.Name + pic_file_ext) ? Image.FromFile(path + "\\" + c.TopLevelControl.Name + "\\" + c.Name + pic_file_ext) : null;
             if (c.Name.Equals("picDisplay")) // special case
             {
-                m_objConsole.SetPicDisplayBackgroundImage(objImg);
+                m_objConsole.PicDisplayBackgroundImage = objImg;
             }
             else
             {

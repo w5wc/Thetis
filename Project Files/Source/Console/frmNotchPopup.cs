@@ -32,9 +32,19 @@ namespace Thetis
             if (notch == null) return;  // Todo initialise empty?
 
             trkWidth.Minimum = minWidth;
-            trkWidth.Maximum = maxWidth;
+            if ((int)notch.FWidth > maxWidth)
+            {   // this copes with filters that have been dragged out really wide
+                trkWidth.Maximum = (int)notch.FWidth;
+            }
+            else
+            {
+                // use passed in maxWidth
+                trkWidth.Maximum = maxWidth;
+            }
+
             trkWidth.TickFrequency = 10;
             trkWidth.TickStyle = TickStyle.None;
+
 
             trkWidth.Value = (int)notch.FWidth;
 

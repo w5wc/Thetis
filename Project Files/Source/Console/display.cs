@@ -456,6 +456,17 @@ namespace Thetis
             set { cw_pitch = value; }
         }
 
+        private static int m_nPhasePointSize = 1;
+        public static int PhasePointSize {
+            get { return m_nPhasePointSize; }
+            set { m_nPhasePointSize = value; }
+        }
+        private static bool m_bShowFPS = false;
+        public static bool ShowFPS {
+            get { return m_bShowFPS; }
+            set { m_bShowFPS = value; }
+        }
+
         //=======================================================
 
         //private static PixelFormat WtrColor = PixelFormat.Format24bppRgb;  //          
@@ -2127,14 +2138,20 @@ namespace Thetis
                     // MW0LGE - rx2}
                 }
 
+                // HIGH swr display warning
+                if (high_swr) e.Graphics.DrawString("High SWR", font14, Brushes.Red, 245, 20);
+
                 //MW0LGE framrate issue, this will be true if less than desired frame rate achevied, set in RunDisplay thread of console.cs
                 if (m_bFramRateIssue)
                 {
-                    e.Graphics.FillRectangle(m_brFrameRateIssue_brush, 0, 0, 8, 8);
+                    e.Graphics.FillRectangle(new SolidBrush(Color.Red), 0, 0, 8, 8);
                 }
 
-                calcFps();
-                e.Graphics.DrawString(m_fps.ToString(), m_fntCallOutFont, m_bTextCallOutActive, 10, 0);
+                if (m_bShowFPS)
+                {
+                    calcFps();
+                    e.Graphics.DrawString(m_fps.ToString(), m_fntCallOutFont, m_bTextCallOutActive, 10, 0);
+                }
             }
             catch (Exception ex)
             {
@@ -2176,18 +2193,12 @@ namespace Thetis
                 if (bottom) g.DrawEllipse(grid_pen, (int)(W / 2 - H * i / 2), H + (int)(H / 2 - H * i / 2), (int)(H * i), (int)(H * i));
                 else g.DrawEllipse(grid_pen, (int)(W / 2 - H * i / 2), (int)(H / 2 - H * i / 2), (int)(H * i), (int)(H * i));
             }
-            if (high_swr && !bottom)
-                g.DrawString("High SWR", font14, Brushes.Red, 245, 20);
         }
 
         private static void DrawScopeGrid(ref Graphics g, int W, int H, bool bottom)
         {
             // draw background
             g.FillRectangle(display_background_brush, 0, bottom ? H : 0, W, H);
-
-            using (SolidBrush brush = new SolidBrush(Color.Red))
-                if (high_swr && !bottom)
-                    g.DrawString("High SWR", font14, brush, 245, 20);
         }
 
         private static void DrawSpectrumGrid(ref Graphics g, int W, int H, bool bottom)
@@ -2568,9 +2579,6 @@ namespace Thetis
                         g.DrawLine(grid_zero_pen, mid_w - 1, 0, mid_w - 1, H);
                     }
             }
-
-            if (high_swr && !bottom)
-                g.DrawString("High SWR", font14, Brushes.Red, 245, 20);
         }
 
         //=========================================================
@@ -2685,8 +2693,6 @@ namespace Thetis
             return Color.FromArgb(A, c.R, c.G, c.B);
         }
 
-        private static Brush m_brFrameRateIssue_brush = new SolidBrush(Color.Red);
-
         unsafe private static void drawPanadapterAndWaterfallGrid(ref Graphics g, int W, int H, int rx, bool bottom, bool bIsWaterfall = false)
         {
             // MW0LGE
@@ -2714,6 +2720,8 @@ namespace Thetis
 
             //MW0LGE
             int nVerticalShift = getVerticalShift(rx, bottom, W, H);
+            int cwSideToneShift = getCWSideToneShift(rx, bottom);
+            int cwSideToneShiftInverted = cwSideToneShift * -1; // invert the sign as cw zero lines/tx lines etc are a shift in opposite direction to the grid
 
             if (rx == 1)
             {
@@ -2745,7 +2753,7 @@ namespace Thetis
                     High = rx_display_high;
                     grid_max = spectrum_grid_max;
                     grid_min = spectrum_grid_min;
-                    grid_step = rx2_spectrum_grid_step;
+                    grid_step = spectrum_grid_step;
                     sample_rate = sample_rate_rx1;
                 }
                 f_diff = freq_diff;
@@ -2998,7 +3006,10 @@ namespace Thetis
             //MW0LGE
             // calculate vertical step size
             int h_steps = (grid_max - grid_min) / grid_step;
-            int top = (int)((double)grid_step * H / y_range); // MW0LGE
+            int top;
+
+            if (bIsWaterfall) top = 20; //change top so that the filter gap doesnt change, inore grid spacing
+            else top = (int)((double)grid_step * H / y_range); // top is based on grid spacing
 
             if (!local_mox && sub_rx1_enabled && rx == 1) //multi-rx
             {
@@ -3092,37 +3103,37 @@ namespace Thetis
                 }
             }
             
-            if (!local_mox /* && !tx_on_vfob */ && draw_tx_cw_freq &&
-                (rx1_dsp_mode == DSPMode.CWL || rx1_dsp_mode == DSPMode.CWU))
-            {
-                int pitch = cw_pitch;
-                if (rx1_dsp_mode == DSPMode.CWL)
-                    pitch = -cw_pitch;
+            //if (!local_mox /* && !tx_on_vfob */ && draw_tx_cw_freq &&
+            //    (rx1_dsp_mode == DSPMode.CWL || rx1_dsp_mode == DSPMode.CWU))
+            //{
+            //    int pitch = cw_pitch;
+            //    if (rx1_dsp_mode == DSPMode.CWL)
+            //        pitch = -cw_pitch;
 
-                int cw_line_x;
-                if (!split_enabled)
-                    cw_line_x = (int)((float)(pitch - Low - f_diff + xit_hz - rit_hz) / width * W);
-                else
-                    cw_line_x = (int)((float)(pitch - Low + xit_hz - rit_hz + (vfoa_sub_hz - vfoa_hz)) / width * W);
+            //    int cw_line_x;
+            //    if (!split_enabled)
+            //        cw_line_x = (int)((float)(pitch - Low - f_diff + xit_hz - rit_hz) / width * W);
+            //    else
+            //        cw_line_x = (int)((float)(pitch - Low + xit_hz - rit_hz + (vfoa_sub_hz - vfoa_hz)) / width * W);
 
-                g.DrawLine(tx_filter_pen, cw_line_x, nVerticalShift + top, cw_line_x, nVerticalShift + H); //MW0LGE
-            }
+            //    g.DrawLine(tx_filter_pen, cw_line_x, nVerticalShift + top, cw_line_x, nVerticalShift + H); //MW0LGE
+            //}
 
-            if (!local_mox && tx_on_vfob && draw_tx_cw_freq &&
-                (rx2_dsp_mode == DSPMode.CWL || rx2_dsp_mode == DSPMode.CWU))
-            {
-                int pitch = cw_pitch;
-                if (rx2_dsp_mode == DSPMode.CWL)
-                    pitch = -cw_pitch;
+            //if (!local_mox && tx_on_vfob && draw_tx_cw_freq &&
+            //    (rx2_dsp_mode == DSPMode.CWL || rx2_dsp_mode == DSPMode.CWU))
+            //{
+            //    int pitch = cw_pitch;
+            //    if (rx2_dsp_mode == DSPMode.CWL)
+            //        pitch = -cw_pitch;
 
-                int cw_line_x;
-                if (!split_enabled)
-                    cw_line_x = (int)((float)(pitch - Low + xit_hz - rit_hz) / width * W);
-                else
-                    cw_line_x = (int)((float)(pitch - Low + xit_hz - rit_hz + (vfoa_sub_hz - vfoa_hz)) / width * W);
+            //    int cw_line_x;
+            //    if (!split_enabled)
+            //        cw_line_x = (int)((float)(pitch - Low + xit_hz - rit_hz) / width * W);
+            //    else
+            //        cw_line_x = (int)((float)(pitch - Low + xit_hz - rit_hz + (vfoa_sub_hz - vfoa_hz)) / width * W);
 
-                g.DrawLine(tx_filter_pen, cw_line_x, nVerticalShift + top, cw_line_x, nVerticalShift + H); //MW0LGE
-            }
+            //    g.DrawLine(tx_filter_pen, cw_line_x, nVerticalShift + top, cw_line_x, nVerticalShift + H); //MW0LGE
+            //}
 
             // draw 60m channels if in view - not on the waterfall //MW0LGE
             if (!bIsWaterfall && (console.CurrentRegion == FRSRegion.US || console.CurrentRegion == FRSRegion.UK))
@@ -3161,30 +3172,31 @@ namespace Thetis
                         }
 
                         // offset for CW Pitch to align display
-                        if (bottom || (current_display_mode_bottom == DisplayMode.PANAFALL && rx == 2))
-                        {
-                            switch (rx2_dsp_mode)
-                            {
-                                case (DSPMode.CWL):
-                                    rf_freq += cw_pitch;
-                                    break;
-                                case (DSPMode.CWU):
-                                    rf_freq -= cw_pitch;
-                                    break;
-                            }
-                        }
-                        else
-                        {
-                            switch (rx1_dsp_mode)
-                            {
-                                case (DSPMode.CWL):
-                                    rf_freq += cw_pitch;
-                                    break;
-                                case (DSPMode.CWU):
-                                    rf_freq -= cw_pitch;
-                                    break;
-                            }
-                        }
+                        rf_freq += cwSideToneShift;
+                        //if (bottom || (current_display_mode_bottom == DisplayMode.PANAFALL && rx == 2))
+                        //{
+                        //    switch (rx2_dsp_mode)
+                        //    {
+                        //        case (DSPMode.CWL):
+                        //            rf_freq += cw_pitch;
+                        //            break;
+                        //        case (DSPMode.CWU):
+                        //            rf_freq -= cw_pitch;
+                        //            break;
+                        //    }
+                        //}
+                        //else
+                        //{
+                        //    switch (rx1_dsp_mode)
+                        //    {
+                        //        case (DSPMode.CWL):
+                        //            rf_freq += cw_pitch;
+                        //            break;
+                        //        case (DSPMode.CWU):
+                        //            rf_freq -= cw_pitch;
+                        //            break;
+                        //    }
+                        //}
 
                         int chan_left_x = (int)((float)(c.Freq * 1e6 - rf_freq - c.BW / 2 - Low - rit) / width * W);
                         int chan_right_x = (int)((float)(c.Freq * 1e6 - rf_freq + c.BW / 2 - Low - rit) / width * W);
@@ -3211,33 +3223,39 @@ namespace Thetis
             if (!local_mox && !bIsWaterfall)
             {
                 long rf_freq = vfoa_hz;
-                int rit = rit_hz;
+                int rit = rit_hz;                
 
-                if (bottom || (current_display_mode_bottom == DisplayMode.PANAFALL && rx == 2))
+                if (bottom || (current_display_mode_bottom == DisplayMode.PANAFALL && rx == 2)) // MW0LGE
                 {
                     rf_freq = vfob_hz;
-                    switch (rx2_dsp_mode)
-                    {
-                        case (DSPMode.CWL):
-                            rf_freq += cw_pitch;
-                            break;
-                        case (DSPMode.CWU):
-                            rf_freq -= cw_pitch;
-                            break;
-                    }
                 }
-                else
-                {
-                    switch (rx1_dsp_mode)
-                    {
-                        case (DSPMode.CWL):
-                            rf_freq += cw_pitch;
-                            break;
-                        case (DSPMode.CWU):
-                            rf_freq -= cw_pitch;
-                            break;
-                    }
-                }
+
+                rf_freq += cwSideToneShift;
+                //if (bottom || (current_display_mode_bottom == DisplayMode.PANAFALL && rx == 2))
+                //{
+                //    rf_freq = vfob_hz;
+                //    switch (rx2_dsp_mode)
+                //    {
+                //        case (DSPMode.CWL):
+                //            rf_freq += cw_pitch;
+                //            break;
+                //        case (DSPMode.CWU):
+                //            rf_freq -= cw_pitch;
+                //            break;
+                //    }
+                //}
+                //else
+                //{
+                //    switch (rx1_dsp_mode)
+                //    {
+                //        case (DSPMode.CWL):
+                //            rf_freq += cw_pitch;
+                //            break;
+                //        case (DSPMode.CWU):
+                //            rf_freq -= cw_pitch;
+                //            break;
+                //    }
+                //}
 
                 Pen p;
                 Brush b;
@@ -3304,38 +3322,111 @@ namespace Thetis
                 }
             }
 
-            // Draw a Zero Beat line on CW filter
-            if (!local_mox && show_cwzero_line &&
-                (rx1_dsp_mode == DSPMode.CWL || rx1_dsp_mode == DSPMode.CWU))
+            // Draw a CW Zero Beat + TX line on CW filter
+            if (!bIsWaterfall)
             {
-                int pitch = cw_pitch;
-                if (rx1_dsp_mode == DSPMode.CWL)
-                    pitch = -cw_pitch;
+                if (show_cwzero_line)
+                {
+                    if (rx == 1 && !local_mox &&
+                        (rx1_dsp_mode == DSPMode.CWL || rx1_dsp_mode == DSPMode.CWU))
+                    {
+                        //int pitch = cw_pitch;
+                        //if (rx1_dsp_mode == DSPMode.CWL)
+                        //    pitch = -cw_pitch;
 
-                int cw_line_x1;
-                if (!split_enabled)
-                    cw_line_x1 = (int)((float)(pitch - Low - f_diff) / width * W);
-                else
-                    cw_line_x1 = (int)((float)(pitch - Low + (vfoa_sub_hz - vfoa_hz)) / width * W);
+                        int cw_line_x1;
+                        //if (!split_enabled)
+                        cw_line_x1 = (int)((float)(cwSideToneShiftInverted - Low - f_diff) / width * W);
+                        //else
+                        //    cw_line_x1 = (int)((float)(cwSideToneShiftInverted - Low + (vfoa_sub_hz - vfoa_hz)) / width * W);
 
-                g.DrawLine(cw_zero_pen, cw_line_x1, top, cw_line_x1, H);
+                        g.DrawLine(cw_zero_pen, cw_line_x1, nVerticalShift + top, cw_line_x1, nVerticalShift + H);
+                    }
+
+                    if (rx == 2 && !local_mox &&
+                        (rx2_dsp_mode == DSPMode.CWL || rx2_dsp_mode == DSPMode.CWU))
+                    {
+                        //int pitch = cw_pitch;
+                        //if (rx2_dsp_mode == DSPMode.CWL)
+                        //    pitch = -cw_pitch;
+
+                        int cw_line_x1;
+                        //if (!split_enabled)
+                        cw_line_x1 = (int)((float)(cwSideToneShiftInverted - Low - f_diff) / width * W);
+                        //else
+                        //    cw_line_x1 = (int)((float)(cwSideToneShiftInverted - Low + (vfoa_sub_hz - vfoa_hz)) / width * W);
+
+                        g.DrawLine(cw_zero_pen, cw_line_x1, nVerticalShift + top, cw_line_x1, nVerticalShift + H);
+                    }
+                }
+                if (draw_tx_cw_freq)
+                {
+                    if (rx == 1 && !local_mox &&
+                        (rx1_dsp_mode == DSPMode.CWL || rx1_dsp_mode == DSPMode.CWU))
+                    {
+                        //int pitch = cw_pitch;
+                        //if (rx1_dsp_mode == DSPMode.CWL)
+                        //    pitch = -cw_pitch;
+
+                        int cw_line_x1;
+                        if (!split_enabled)
+                            cw_line_x1 = (int)((float)(cwSideToneShiftInverted - Low - f_diff + xit_hz - rit_hz) / width * W);
+                        else
+                            cw_line_x1 = (int)((float)(cwSideToneShiftInverted - Low + xit_hz - rit_hz + (vfoa_sub_hz - vfoa_hz)) / width * W);
+
+                        g.DrawLine(tx_filter_pen, cw_line_x1, nVerticalShift + top, cw_line_x1, nVerticalShift + H);
+                    }
+
+                    if (rx == 2 && !local_mox &&
+                        (rx2_dsp_mode == DSPMode.CWL || rx2_dsp_mode == DSPMode.CWU))
+                    {
+                        //int pitch = cw_pitch;
+                        //if (rx2_dsp_mode == DSPMode.CWL)
+                        //    pitch = -cw_pitch;
+
+                        int cw_line_x1;
+                        if (!split_enabled)
+                            cw_line_x1 = (int)((float)(cwSideToneShiftInverted - Low - f_diff + xit_hz - rit_hz) / width * W);
+                        else
+                            cw_line_x1 = (int)((float)(cwSideToneShiftInverted - Low + xit_hz - rit_hz + (vfoa_sub_hz - vfoa_hz)) / width * W);
+
+                        g.DrawLine(tx_filter_pen, cw_line_x1, nVerticalShift + top, cw_line_x1, nVerticalShift + H);
+                    }
+                }
             }
 
-            if (!local_mox && show_cwzero_line &&
-                (rx2_dsp_mode == DSPMode.CWL || rx2_dsp_mode == DSPMode.CWU))
-            {
-                int pitch = cw_pitch;
-                if (rx2_dsp_mode == DSPMode.CWL)
-                    pitch = -cw_pitch;
+            //// Draw a Zero Beat line on CW filter
+            //if (!local_mox && show_cwzero_line &&
+            //    (rx1_dsp_mode == DSPMode.CWL || rx1_dsp_mode == DSPMode.CWU))
+            //{
+            //    int pitch = cw_pitch;
+            //    if (rx1_dsp_mode == DSPMode.CWL)
+            //        pitch = -cw_pitch;
 
-                int cw_line_x1;
-                if (!split_enabled)
-                    cw_line_x1 = (int)((float)(pitch - Low - f_diff) / width * W);
-                else
-                    cw_line_x1 = (int)((float)(pitch - Low + (vfoa_sub_hz - vfoa_hz)) / width * W);
+            //    int cw_line_x1;
+            //    if (!split_enabled)
+            //        cw_line_x1 = (int)((float)(pitch - Low - f_diff) / width * W);
+            //    else
+            //        cw_line_x1 = (int)((float)(pitch - Low + (vfoa_sub_hz - vfoa_hz)) / width * W);
 
-                g.DrawLine(tx_filter_pen, cw_line_x1, H + top, cw_line_x1, H + H);
-            }
+            //    g.DrawLine(cw_zero_pen, cw_line_x1, top, cw_line_x1, H);
+            //}
+
+            //if (!local_mox && show_cwzero_line &&
+            //    (rx2_dsp_mode == DSPMode.CWL || rx2_dsp_mode == DSPMode.CWU))
+            //{
+            //    int pitch = cw_pitch;
+            //    if (rx2_dsp_mode == DSPMode.CWL)
+            //        pitch = -cw_pitch;
+
+            //    int cw_line_x1;
+            //    if (!split_enabled)
+            //        cw_line_x1 = (int)((float)(pitch - Low - f_diff) / width * W);
+            //    else
+            //        cw_line_x1 = (int)((float)(pitch - Low + (vfoa_sub_hz - vfoa_hz)) / width * W);
+
+            //    g.DrawLine(tx_filter_pen, cw_line_x1, H + top, cw_line_x1, H + H);
+            //}
 
             //      MW0LGE
             if (local_mox)
@@ -3391,34 +3482,35 @@ namespace Thetis
             }
 
             //MW0LGE - TODO CHECK
-            if (rx == 1)
-            {
-                switch (rx1_dsp_mode)
-                {
-                    case DSPMode.CWL:
-                        vfo += cw_pitch;
-                        break;
-                    case DSPMode.CWU:
-                        vfo -= cw_pitch;
-                        break;
-                    default:
-                        break;
-                }
-            }
-            else // if(rx==2)
-            {
-                switch (rx2_dsp_mode)
-                {
-                    case DSPMode.CWL:
-                        vfo += cw_pitch;
-                        break;
-                    case DSPMode.CWU:
-                        vfo -= cw_pitch;
-                        break;
-                    default:
-                        break;
-                }
-            }
+            vfo += cwSideToneShift;
+            //if (rx == 1)
+            //{
+            //    switch (rx1_dsp_mode)
+            //    {
+            //        case DSPMode.CWL:
+            //            vfo += cw_pitch;
+            //            break;
+            //        case DSPMode.CWU:
+            //            vfo -= cw_pitch;
+            //            break;
+            //        default:
+            //            break;
+            //    }
+            //}
+            //else // if(rx==2)
+            //{
+            //    switch (rx2_dsp_mode)
+            //    {
+            //        case DSPMode.CWL:
+            //            vfo += cw_pitch;
+            //            break;
+            //        case DSPMode.CWU:
+            //            vfo -= cw_pitch;
+            //            break;
+            //        default:
+            //            break;
+            //    }
+            //}
             //--
 
             //MW0LGE
@@ -4032,10 +4124,6 @@ namespace Thetis
                 }
             }
 
-            if (high_swr && rx == 1)
-                g.DrawString("High SWR", font14, Brushes.Red, 245, 20);
-
-
             // ke9ns add draw DX SPOTS on pandapter
             //=====================================================================
             //=====================================================================
@@ -4052,6 +4140,9 @@ namespace Thetis
                 int H1a = H / 2;            // length of vertical line (based on rx1 and rx2 display window configuration)
                 int H1b = 20;               // starting point of vertical line
 
+                int rxDisplayLow = RXDisplayLow;
+                int rxDisplayHigh = RXDisplayHigh;
+
                 // RX1/RX2 PanF/Pan = 5,2 (K9,K10)(short)  PanF/PanF = 5,5, (short) Pan/Pan 2,2 (long)
                 if (bottom)                 // if your drawing to the bottom 
                 {
@@ -4061,16 +4152,18 @@ namespace Thetis
                     H1b = H + 20;
 
                     vfo_hz = (int)vfob_hz;
-                    Console.DXK2 = 0;        // RX2 index to allow call signs to draw after all the vert lines on the screen
+                    rxDisplayLow = RX2DisplayLow;
+                    rxDisplayHigh = RX2DisplayHigh;
 
+                    Console.DXK2 = 0;        // RX2 index to allow call signs to draw after all the vert lines on the screen
                 }
                 else
                 {
                     Console.DXK = 0;        // RX1 index to allow call signs to draw after all the vert lines on the screen
                 }
 
-                VFOLow = vfo_hz + RXDisplayLow;    // low freq (left side) in hz
-                VFOHigh = vfo_hz + RXDisplayHigh; // high freq (right side) in hz
+                VFOLow = vfo_hz + rxDisplayLow;    // low freq (left side) in hz
+                VFOHigh = vfo_hz + rxDisplayHigh; // high freq (right side) in hz
                 VFODiff = VFOHigh - VFOLow;       // diff in hz
 
                 if ((vfo_hz < 5000000) || ((vfo_hz > 6000000) && (vfo_hz < 8000000))) low = true; // LSB
@@ -4087,14 +4180,14 @@ namespace Thetis
 
                     if ((SpotControl.DX_Freq[ii] >= VFOLow) && (SpotControl.DX_Freq[ii] <= VFOHigh))
                     {
-                        int VFO_DXPos = (int)((((float)W / (float)VFODiff) * (float)(SpotControl.DX_Freq[ii] - VFOLow))); // determine DX spot line pos on current panadapter screen
+                        int VFO_DXPos = (int)((((float)W / (float)VFODiff) * (float)(SpotControl.DX_Freq[ii] + cwSideToneShiftInverted - VFOLow))); // determine DX spot line pos on current panadapter screen
 
                         holder[kk] = ii;                    // ii is the actual DX_INdex pos the the KK holds
                         holder1[kk] = VFO_DXPos;
 
                         kk++;
 
-                        g.DrawLine(p1, VFO_DXPos, H1b, VFO_DXPos, H1a);   // draw vertical line
+                        g.DrawLine(p1, VFO_DXPos, H1b + nVerticalShift, VFO_DXPos, H1a + nVerticalShift);   // draw vertical line
 
                     }
 
@@ -4122,7 +4215,7 @@ namespace Thetis
                     if (low) // 1=LSB so draw on left side of line
                     {
 
-                        if (Console.DXR == 0) // display Spotted on Pan
+                        if (Console.DisplaySpot) // display Spotted on Pan
                         {
                             length = g.MeasureString(SpotControl.DX_Station[holder[ii]], font1); //  temp used to determine the size of the string when in LSB and you need to reserve a certain space//  (cl.Width);
 
@@ -4146,7 +4239,7 @@ namespace Thetis
                                 } // for loop to check if DX text will draw over top of Memory text
                             }
 
-                            g.DrawString(SpotControl.DX_Station[holder[ii]], font1, grid_text_brush, holder1[ii] - (int)length.Width, H1b + iii);
+                            g.DrawString(SpotControl.DX_Station[holder[ii]], font1, grid_text_brush, holder1[ii] - (int)length.Width, H1b + iii + nVerticalShift);
                         }
                         else // display SPOTTER on Pan (not the Spotted)
                         {
@@ -4172,7 +4265,7 @@ namespace Thetis
                                 } // for loop to check if DX text will draw over top of Memory text
                             }
 
-                            g.DrawString(SpotControl.DX_Spotter[holder[ii]], font1, grid_text_brush, holder1[ii] - (int)length.Width, H1b + iii);
+                            g.DrawString(SpotControl.DX_Spotter[holder[ii]], font1, grid_text_brush, holder1[ii] - (int)length.Width, H1b + iii + nVerticalShift);
 
                         }
 
@@ -4195,7 +4288,7 @@ namespace Thetis
 
                     else   // 0=usb so draw on righ side of line (normal)
                     {
-                        if (Console.DXR == 0) // spot
+                        if (Console.DisplaySpot) // spot
                         {
                             length = g.MeasureString(SpotControl.DX_Station[holder[ii]], font1); //  not needed here but used for qrz hyperlinking
 
@@ -4219,7 +4312,7 @@ namespace Thetis
                                 } // for loop to check if DX text will draw over top of Memory text
                             }
 
-                            g.DrawString(SpotControl.DX_Station[holder[ii]], font1, grid_text_brush, holder1[ii], H1b + iii); // DX station name
+                            g.DrawString(SpotControl.DX_Station[holder[ii]], font1, grid_text_brush, holder1[ii], H1b + iii + nVerticalShift); // DX station name
                         }
                         else // spotter
                         {
@@ -4245,7 +4338,7 @@ namespace Thetis
                                 } // for loop to check if DX text will draw over top of Memory text
                             }
 
-                            g.DrawString(SpotControl.DX_Spotter[holder[ii]], font1, grid_text_brush, holder1[ii], H1b + iii); // DX station name
+                            g.DrawString(SpotControl.DX_Spotter[holder[ii]], font1, grid_text_brush, holder1[ii], H1b + iii + nVerticalShift); // DX station name
 
                         }
 
@@ -4264,7 +4357,7 @@ namespace Thetis
                         if (vfo_hz >= 50000000) // 50000000 or 50mhz
                         {
                             iii = iii + 11;
-                            g.DrawString(SpotControl.DX_Grid[holder[ii]], font1, grid_text_brush, holder1[ii], H1b + iii); // DX grid name
+                            g.DrawString(SpotControl.DX_Grid[holder[ii]], font1, grid_text_brush, holder1[ii], H1b + iii + nVerticalShift); // DX grid name
                         }
 
                     } // USB side
@@ -4307,9 +4400,6 @@ namespace Thetis
         {
             // draw background
             g.FillRectangle(display_background_brush, 0, bottom ? H : 0, W, H);
-
-            if (high_swr && !bottom)
-                g.DrawString("High SWR", font14, Brushes.Red, 245, 20);
         }
 
         private static float[] scope_min = new float[displayTargetWidth];
@@ -4548,9 +4638,11 @@ namespace Thetis
                 if (bottom) points[i].Y += H;
             }
 
+            int nShift = m_nPhasePointSize / 2;
+
             // draw each point
             for (int i = 0; i < num_points; i++)
-                g.DrawRectangle(data_line_pen, points[i].X, points[i].Y, 1, 1);
+                g.DrawRectangle(data_line_pen, points[i].X - nShift, points[i].Y - nShift, m_nPhasePointSize, m_nPhasePointSize);
 
             // draw long cursor
             if (current_click_tune_mode != ClickTuneMode.Off)
@@ -4607,9 +4699,11 @@ namespace Thetis
                 if (bottom) points[i].Y += H;
             }
 
+            int nShift = m_nPhasePointSize / 2;
+
             // draw each point
             for (int i = 0; i < num_points; i++)
-                g.DrawRectangle(data_line_pen, points[i].X, points[i].Y, 1, 1);
+                g.DrawRectangle(data_line_pen, points[i].X - nShift, points[i].Y - nShift, m_nPhasePointSize, m_nPhasePointSize);
 
             // draw long cursor
             if (current_click_tune_mode == ClickTuneMode.Off) return;
@@ -5016,8 +5110,8 @@ namespace Thetis
             float low_threshold = 0.0f;
             float high_threshold = 0.0f;
             float waterfall_minimum = 0.0f;
-            float rx1_waterfall_minimum = 0.0f;
-            float rx2_waterfall_minimum = 0.0f;
+            //float rx1_waterfall_minimum = 0.0f;
+            //float rx2_waterfall_minimum = 0.0f;
             ColorSheme cSheme = ColorSheme.enhanced;
             Color low_color = Color.Black;
             Color mid_color = Color.Red;
@@ -5047,7 +5141,7 @@ namespace Thetis
                     sample_rate = sample_rate_tx;
                     low_threshold = (float)TXWFAmpMin;
                     high_threshold = (float)TXWFAmpMax;
-                    waterfall_minimum = rx2_waterfall_minimum; // check
+                    //waterfall_minimum = rx2_waterfall_minimum; // check
                 }
                 else
                 {
@@ -5057,7 +5151,7 @@ namespace Thetis
                     high_threshold = rx2_waterfall_high_threshold;
                     if (rx2_waterfall_agc && !m_bRX2_spectrum_thresholds)
                     {
-                        waterfall_minimum = rx2_waterfall_minimum;
+                        //waterfall_minimum = rx2_waterfall_minimum;
                         low_threshold = RX2waterfallPreviousMinValue;
                     }
                     else low_threshold = rx2_waterfall_low_threshold;
@@ -5076,7 +5170,7 @@ namespace Thetis
                     sample_rate = sample_rate_tx;
                     low_threshold = (float)TXWFAmpMin;
                     high_threshold = (float)TXWFAmpMax;
-                    waterfall_minimum = rx1_waterfall_minimum; // check
+                    //waterfall_minimum = rx1_waterfall_minimum; // check
                 }
                 else
                 {
@@ -5087,7 +5181,7 @@ namespace Thetis
                     high_threshold = waterfall_high_threshold;
                     if (rx1_waterfall_agc && !m_bRX1_spectrum_thresholds)
                     {
-                        waterfall_minimum = rx1_waterfall_minimum;
+                        //waterfall_minimum = rx1_waterfall_minimum;
                         low_threshold = RX1waterfallPreviousMinValue;
                     }
                     else low_threshold = waterfall_low_threshold;
@@ -6361,10 +6455,10 @@ namespace Thetis
         private static Object m_objDX2Lock = new Object();
         public static void ShutdownDX2D()
         {
-            if (!m_bDX2Setup) return;
-
             lock (m_objDX2Lock)
             {
+                if (!m_bDX2Setup) return;
+
                 waterfall_bmp_dx2d.Dispose();
                 waterfall_bmp2_dx2d.Dispose();
 
@@ -6379,64 +6473,67 @@ namespace Thetis
         }
         public static void InitDX2D()
         {
-            if (m_bDX2Setup) return;
-
-            try
+            lock (m_objDX2Lock)
             {
-                SwapChainDescription desc = new SwapChainDescription()
+                if (m_bDX2Setup) return;
+
+                try
                 {
-                    BufferCount = 1,
-                    ModeDescription =
-                                       new ModeDescription(displayTargetWidth, displayTargetHeight,
-                                                           new Rational(60, 1), Format.B8G8R8A8_UNorm),
-                    IsWindowed = true,
-                    OutputHandle = displayTarget.Handle,
-                    SampleDescription = new SampleDescription(1, 0), // no multi sampling, no antialiasing
-                    SwapEffect = SwapEffect.Discard,
-                    Usage = Usage.RenderTargetOutput                  
-                };
+                    SwapChainDescription desc = new SwapChainDescription()
+                    {
+                        BufferCount = 1,
+                        ModeDescription =
+                                           new ModeDescription(displayTargetWidth, displayTargetHeight,
+                                                               new Rational(60, 1), Format.B8G8R8A8_UNorm),
+                        IsWindowed = true,
+                        OutputHandle = displayTarget.Handle,
+                        SampleDescription = new SampleDescription(1, 0), // no multi sampling, no antialiasing
+                        SwapEffect = SwapEffect.Discard,
+                        Usage = Usage.RenderTargetOutput
+                    };
 
-                Device.CreateWithSwapChain(DriverType.Hardware, DeviceCreationFlags.BgraSupport | DeviceCreationFlags.SingleThreaded, new SharpDX.Direct3D.FeatureLevel[] { SharpDX.Direct3D.FeatureLevel.Level_10_0 }, desc, out device, out swapChain);
-                d2dFactory = new SharpDX.Direct2D1.Factory();
-                
-                backBuffer = Texture2D.FromSwapChain<Texture2D>(swapChain, 0);
-                renderView = new RenderTargetView(device, backBuffer);
-                surface = backBuffer.QueryInterface<Surface>();
-                d2dRenderTarget = new RenderTarget(d2dFactory, surface,
-                                                                new RenderTargetProperties(new SDXPixelFormat(Format.B8G8R8A8_UNorm, AlphaMode.Premultiplied)));
+                    Device.CreateWithSwapChain(DriverType.Hardware, DeviceCreationFlags.BgraSupport | DeviceCreationFlags.SingleThreaded, new SharpDX.Direct3D.FeatureLevel[] { SharpDX.Direct3D.FeatureLevel.Level_10_0 }, desc, out device, out swapChain);
+                    d2dFactory = new SharpDX.Direct2D1.Factory();
 
-                waterfall_bmp_dx2d = new SharpDX.Direct2D1.Bitmap(d2dRenderTarget, new Size2(displayTargetWidth, displayTargetHeight - 20), new BitmapProperties(new SDXPixelFormat(Format.B8G8R8A8_UNorm, AlphaMode.Premultiplied)));
-                waterfall_bmp2_dx2d = new SharpDX.Direct2D1.Bitmap(d2dRenderTarget, new Size2(displayTargetWidth, displayTargetHeight - 20), new BitmapProperties(new SDXPixelFormat(Format.B8G8R8A8_UNorm, AlphaMode.Premultiplied)));
+                    backBuffer = Texture2D.FromSwapChain<Texture2D>(swapChain, 0);
+                    renderView = new RenderTargetView(device, backBuffer);
+                    surface = backBuffer.QueryInterface<Surface>();
+                    d2dRenderTarget = new RenderTarget(d2dFactory, surface,
+                                                                    new RenderTargetProperties(new SDXPixelFormat(Format.B8G8R8A8_UNorm, AlphaMode.Premultiplied)));
 
-                d2dRenderTarget.AntialiasMode = AntialiasMode.Aliased;
-                d2dRenderTarget.TextAntialiasMode = TextAntialiasMode.Default;
+                    waterfall_bmp_dx2d = new SharpDX.Direct2D1.Bitmap(d2dRenderTarget, new Size2(displayTargetWidth, displayTargetHeight - 20), new BitmapProperties(new SDXPixelFormat(Format.B8G8R8A8_UNorm, AlphaMode.Premultiplied)));
+                    waterfall_bmp2_dx2d = new SharpDX.Direct2D1.Bitmap(d2dRenderTarget, new Size2(displayTargetWidth, displayTargetHeight - 20), new BitmapProperties(new SDXPixelFormat(Format.B8G8R8A8_UNorm, AlphaMode.Premultiplied)));
 
-                //// midldle pixel align shift
-                //Matrix3x2 t = d2dRenderTarget.Transform;
-                //t.TranslationVector += new Vector2(0.5f, 0.5f);
-                //d2dRenderTarget.Transform = t;
+                    d2dRenderTarget.AntialiasMode = AntialiasMode.Aliased;
+                    d2dRenderTarget.TextAntialiasMode = TextAntialiasMode.Default;
 
-                m_bDX2Setup = true;
+                    //// midldle pixel align shift
+                    //Matrix3x2 t = d2dRenderTarget.Transform;
+                    //t.TranslationVector += new Vector2(0.5f, 0.5f);
+                    //d2dRenderTarget.Transform = t;
 
-                buildDX2Resources();
-                buildFontsDX2D();
-                SetDX2BackgoundImage(console.picDisplay.BackgroundImage);
-            }
-            catch(Exception e)
-            {
-                // issue setting up dx
-                // msg box and switch engine back to GDI+ ?
-                ShutdownDX2D();
-                MessageBox.Show("Problem initialising DirectX" + System.Environment.NewLine + "Switching to GDI+" + System.Environment.NewLine + System.Environment.NewLine + e.ToString(), "DirectX", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                console.CurrentDisplayEngine = DisplayEngine.GDI_PLUS;  //TODO the setupform wont show correct state
+                    m_bDX2Setup = true;
+
+                    buildDX2Resources();
+                    buildFontsDX2D();
+                    SetDX2BackgoundImage(console.PicDisplayBackgroundImage);
+                }
+                catch (Exception e)
+                {
+                    // issue setting up dx
+                    // msg box and switch engine back to GDI+ ?
+                    ShutdownDX2D();
+                    MessageBox.Show("Problem initialising DirectX" + System.Environment.NewLine + "Switching to GDI+" + System.Environment.NewLine + System.Environment.NewLine + e.ToString(), "DirectX", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    console.CurrentDisplayEngine = DisplayEngine.GDI_PLUS;  //TODO the setupform wont show correct state
+                }
             }
         }
         public static void ResizeDX2D()
         {
-            if (!m_bDX2Setup) return;
-
             lock (m_objDX2Lock)
             {
+                if (!m_bDX2Setup) return;
+
                 d2dRenderTarget.Dispose();
                 surface.Dispose();
                 renderView.Dispose();
@@ -6453,10 +6550,10 @@ namespace Thetis
 
         public static void RenderDX2D()
         {
-            if (!m_bDX2Setup) return;
-
             lock (m_objDX2Lock)
             {
+                if (!m_bDX2Setup) return; // moved inside the lock so that a change in state by shutdown becomes thread safe
+
                 d2dRenderTarget.BeginDraw();
 
                 d2dRenderTarget.Clear(SharpDX.Color.Black);
@@ -6606,19 +6703,24 @@ namespace Thetis
                     }
                 }
 
+                // HIGH swr display warning
+                if (high_swr) drawStringDX2D("High SWR", fontDX2d_font14, m_bDX2_Red, 245, 20);
+
                 if (m_bFramRateIssue)
                 {
-                    d2dRenderTarget.FillRectangle(new RectangleF(0, 0, 8, 8), convertBrush((SolidBrush)m_brFrameRateIssue_brush));
+                    d2dRenderTarget.FillRectangle(new RectangleF(0, 0, 8, 8), m_bDX2_Red);
                 }
 
-                calcFps();
-                d2dRenderTarget.DrawText(m_fps.ToString(), fontDX2d_callout, new RectangleF(10, 0, 100, 100), m_bDX2_m_bTextCallOutActive, DrawTextOptions.None);
+                if (m_bShowFPS)
+                {
+                    calcFps();
+                    d2dRenderTarget.DrawText(m_fps.ToString(), fontDX2d_callout, new RectangleF(10, 0, 100, 100), m_bDX2_m_bTextCallOutActive, DrawTextOptions.None);
+                }
 
                 d2dRenderTarget.EndDraw();
 
                 // render
                 swapChain.Present(0, PresentFlags.None);
-
             }
             //m_nLastTickCount = System.Environment.TickCount;
         }
@@ -6916,8 +7018,8 @@ namespace Thetis
             float low_threshold = 0.0f;
             float high_threshold = 0.0f;
             float waterfall_minimum = 0.0f;
-            float rx1_waterfall_minimum = 0.0f;
-            float rx2_waterfall_minimum = 0.0f;
+            //float rx1_waterfall_minimum = 0.0f;
+            //float rx2_waterfall_minimum = 0.0f;
             ColorSheme cSheme = ColorSheme.enhanced;
             Color low_color = Color.Black;
             Color mid_color = Color.Red;
@@ -6947,7 +7049,7 @@ namespace Thetis
                     sample_rate = sample_rate_tx;
                     low_threshold = (float)TXWFAmpMin;
                     high_threshold = (float)TXWFAmpMax;
-                    waterfall_minimum = rx2_waterfall_minimum; // check
+                    //waterfall_minimum = rx2_waterfall_minimum; // check
                 }
                 else
                 {
@@ -6957,7 +7059,7 @@ namespace Thetis
                     high_threshold = rx2_waterfall_high_threshold;
                     if (rx2_waterfall_agc && !m_bRX2_spectrum_thresholds)
                     {
-                        waterfall_minimum = rx2_waterfall_minimum;
+                        //waterfall_minimum = rx2_waterfall_minimum;
                         low_threshold = RX2waterfallPreviousMinValue;
                     }
                     else low_threshold = rx2_waterfall_low_threshold;
@@ -6976,7 +7078,7 @@ namespace Thetis
                     sample_rate = sample_rate_tx;
                     low_threshold = (float)TXWFAmpMin;
                     high_threshold = (float)TXWFAmpMax;
-                    waterfall_minimum = rx1_waterfall_minimum; // check
+                    //waterfall_minimum = rx1_waterfall_minimum; // check
                 }
                 else
                 {
@@ -6987,7 +7089,7 @@ namespace Thetis
                     high_threshold = waterfall_high_threshold;
                     if (rx1_waterfall_agc && !m_bRX1_spectrum_thresholds)
                     {
-                        waterfall_minimum = rx1_waterfall_minimum;
+                        //waterfall_minimum = rx1_waterfall_minimum;
                         low_threshold = RX1waterfallPreviousMinValue;
                     }
                     else low_threshold = waterfall_low_threshold;
@@ -8094,10 +8196,10 @@ namespace Thetis
         }
         public static void SetDX2BackgoundImage(System.Drawing.Bitmap bitmap)
         {
-            if (!m_bDX2Setup) return;
-
             lock (m_objDX2Lock)
             {
+                if (!m_bDX2Setup) return;
+
                 if (m_bitmapBackground != null) m_bitmapBackground.Dispose();
 
                 m_bitmapBackground = null;
@@ -8199,10 +8301,10 @@ namespace Thetis
         //--------------------------
         private static void buildDX2Resources()
         {
-            if (!m_bDX2Setup) return;
-
             lock (m_objDX2Lock)
             {
+                if (!m_bDX2Setup) return;
+
                 if (m_bDX2_data_fill_fpen_brush != null) m_bDX2_data_fill_fpen_brush.Dispose();
                 if (m_bDX2_data_line_pen_brush != null) m_bDX2_data_line_pen_brush.Dispose();
                 if (m_bDX2_tx_data_line_fpen_brush != null) m_bDX2_tx_data_line_fpen_brush.Dispose();
@@ -8328,10 +8430,10 @@ namespace Thetis
         //--------------------------
         private static void buildFontsDX2D()
         {
-            if (!m_bDX2Setup) return;
-
             lock (m_objDX2Lock)
             {
+                if (!m_bDX2Setup) return;
+
                 if (fontFactory != null) fontFactory.Dispose();
                 if (fontDX2d_callout != null) fontDX2d_callout.Dispose();
                 if (fontDX2d_font9 != null) fontDX2d_font9.Dispose();
@@ -8441,7 +8543,7 @@ namespace Thetis
         }
         private static System.Drawing.SizeF measureStringDX2D(String s, SharpDX.DirectWrite.TextFormat tf)
         {
-            SharpDX.DirectWrite.TextLayout layout = new SharpDX.DirectWrite.TextLayout(fontFactory, s, tf, tf.FontSize, tf.FontSize);
+            SharpDX.DirectWrite.TextLayout layout = new SharpDX.DirectWrite.TextLayout(fontFactory, s, tf, float.MaxValue, float.MaxValue);
             float w = layout.Metrics.Width;
             float h = layout.Metrics.Height;
             layout.Dispose();
@@ -8449,6 +8551,37 @@ namespace Thetis
             return new System.Drawing.SizeF(w, h);
         }
         //--------------------------
+
+        private static int getCWSideToneShift(int rx, bool bottom)
+        {
+            int nRet = 0;
+            if (bottom || (current_display_mode_bottom == DisplayMode.PANAFALL && rx == 2))
+            {
+                switch (rx2_dsp_mode)
+                {
+                    case (DSPMode.CWL):
+                        nRet = cw_pitch;
+                        break;
+                    case (DSPMode.CWU):
+                        nRet = -cw_pitch;
+                        break;
+                }
+            }
+            else
+            {
+                switch (rx1_dsp_mode)
+                {
+                    case (DSPMode.CWL):
+                        nRet = cw_pitch;
+                        break;
+                    case (DSPMode.CWU):
+                        nRet = -cw_pitch;
+                        break;
+                }
+            }
+
+            return nRet;
+        }
         unsafe private static void drawPanadapterAndWaterfallGridDX2D(int W, int H, int rx, bool bottom, bool bIsWaterfall = false)
         {
             // MW0LGE
@@ -8476,6 +8609,8 @@ namespace Thetis
 
             //MW0LGE
             int nVerticalShift = getVerticalShift(rx, bottom, W, H);
+            int cwSideToneShift = getCWSideToneShift(rx, bottom);
+            int cwSideToneShiftInverted = cwSideToneShift * -1; // invert the sign as cw zero lines/tx lines etc are a shift in opposite direction to the grid
 
             if (rx == 1)
             {
@@ -8507,7 +8642,7 @@ namespace Thetis
                     High = rx_display_high;
                     grid_max = spectrum_grid_max;
                     grid_min = spectrum_grid_min;
-                    grid_step = rx2_spectrum_grid_step;
+                    grid_step = spectrum_grid_step;
                     sample_rate = sample_rate_rx1;
                 }
                 f_diff = freq_diff;
@@ -8645,7 +8780,10 @@ namespace Thetis
             //MW0LGE
             // calculate vertical step size
             int h_steps = (grid_max - grid_min) / grid_step;
-            int top = (int)((double)grid_step * H / y_range); // MW0LGE
+            int top;
+            
+            if (bIsWaterfall) top = 20; //change top so that the filter gap doesnt change, inore grid spacing
+            else top = (int)((double)grid_step * H / y_range); // top is based on grid spacing
 
             if (!local_mox && sub_rx1_enabled && rx == 1) //multi-rx
             {
@@ -8739,37 +8877,37 @@ namespace Thetis
                 }
             }
 
-            if (!local_mox /* && !tx_on_vfob */ && draw_tx_cw_freq &&
-                (rx1_dsp_mode == DSPMode.CWL || rx1_dsp_mode == DSPMode.CWU))
-            {
-                int pitch = cw_pitch;
-                if (rx1_dsp_mode == DSPMode.CWL)
-                    pitch = -cw_pitch;
+            //if (rx == 1 && !local_mox /* && !tx_on_vfob */ && draw_tx_cw_freq &&
+            //    (rx1_dsp_mode == DSPMode.CWL || rx1_dsp_mode == DSPMode.CWU))
+            //{
+            //    //int pitch = cw_pitch;
+            //    //if (rx1_dsp_mode == DSPMode.CWL)
+            //    //    pitch = -cw_pitch;
 
-                int cw_line_x;
-                if (!split_enabled)
-                    cw_line_x = (int)((float)(pitch - Low - f_diff + xit_hz - rit_hz) / width * W);
-                else
-                    cw_line_x = (int)((float)(pitch - Low + xit_hz - rit_hz + (vfoa_sub_hz - vfoa_hz)) / width * W);
+            //    int cw_line_x;
+            //    if (!split_enabled)
+            //        cw_line_x = (int)((float)(cwSideToneShiftInverted - Low - f_diff + xit_hz - rit_hz) / width * W);
+            //    else
+            //        cw_line_x = (int)((float)(cwSideToneShiftInverted - Low + xit_hz - rit_hz + (vfoa_sub_hz - vfoa_hz)) / width * W);
 
-                drawLineDX2D(m_bDX2_tx_filter_pen, cw_line_x, nVerticalShift + top, cw_line_x, nVerticalShift + H, tx_filter_pen.Width); //MW0LGE
-            }
+            //    drawLineDX2D(m_bDX2_tx_filter_pen, cw_line_x, nVerticalShift + top, cw_line_x, nVerticalShift + H, tx_filter_pen.Width); //MW0LGE
+            //}
 
-            if (!local_mox && tx_on_vfob && draw_tx_cw_freq &&
-                (rx2_dsp_mode == DSPMode.CWL || rx2_dsp_mode == DSPMode.CWU))
-            {
-                int pitch = cw_pitch;
-                if (rx2_dsp_mode == DSPMode.CWL)
-                    pitch = -cw_pitch;
+            //if (rx==2 && !local_mox && tx_on_vfob && draw_tx_cw_freq &&
+            //    (rx2_dsp_mode == DSPMode.CWL || rx2_dsp_mode == DSPMode.CWU))
+            //{
+            //    //int pitch = cw_pitch;
+            //    //if (rx2_dsp_mode == DSPMode.CWL)
+            //    //    pitch = -cw_pitch;
 
-                int cw_line_x;
-                if (!split_enabled)
-                    cw_line_x = (int)((float)(pitch - Low + xit_hz - rit_hz) / width * W);
-                else
-                    cw_line_x = (int)((float)(pitch - Low + xit_hz - rit_hz + (vfoa_sub_hz - vfoa_hz)) / width * W);
+            //    int cw_line_x;
+            //    if (!split_enabled)
+            //        cw_line_x = (int)((float)(cwSideToneShiftInverted - Low + xit_hz - rit_hz) / width * W);
+            //    else
+            //        cw_line_x = (int)((float)(cwSideToneShiftInverted - Low + xit_hz - rit_hz + (vfoa_sub_hz - vfoa_hz)) / width * W);
 
-                drawLineDX2D(m_bDX2_tx_filter_pen, cw_line_x, nVerticalShift + top, cw_line_x, nVerticalShift + H, tx_filter_pen.Width); //MW0LGE
-            }
+            //    drawLineDX2D(m_bDX2_tx_filter_pen, cw_line_x, nVerticalShift + top, cw_line_x, nVerticalShift + H, tx_filter_pen.Width); //MW0LGE
+            //}
 
             // draw 60m channels if in view - not on the waterfall //MW0LGE
             if (!bIsWaterfall && (console.CurrentRegion == FRSRegion.US || console.CurrentRegion == FRSRegion.UK))
@@ -8808,30 +8946,31 @@ namespace Thetis
                         }
 
                         // offset for CW Pitch to align display
-                        if (bottom || (current_display_mode_bottom == DisplayMode.PANAFALL && rx == 2))
-                        {
-                            switch (rx2_dsp_mode)
-                            {
-                                case (DSPMode.CWL):
-                                    rf_freq += cw_pitch;
-                                    break;
-                                case (DSPMode.CWU):
-                                    rf_freq -= cw_pitch;
-                                    break;
-                            }
-                        }
-                        else
-                        {
-                            switch (rx1_dsp_mode)
-                            {
-                                case (DSPMode.CWL):
-                                    rf_freq += cw_pitch;
-                                    break;
-                                case (DSPMode.CWU):
-                                    rf_freq -= cw_pitch;
-                                    break;
-                            }
-                        }
+                        rf_freq += cwSideToneShift;
+                        //if (bottom || (current_display_mode_bottom == DisplayMode.PANAFALL && rx == 2))
+                        //{
+                        //    switch (rx2_dsp_mode)
+                        //    {
+                        //        case (DSPMode.CWL):
+                        //            rf_freq += cw_pitch;
+                        //            break;
+                        //        case (DSPMode.CWU):
+                        //            rf_freq -= cw_pitch;
+                        //            break;
+                        //    }
+                        //}
+                        //else
+                        //{
+                        //    switch (rx1_dsp_mode)
+                        //    {
+                        //        case (DSPMode.CWL):
+                        //            rf_freq += cw_pitch;
+                        //            break;
+                        //        case (DSPMode.CWU):
+                        //            rf_freq -= cw_pitch;
+                        //            break;
+                        //    }
+                        //}
 
                         int chan_left_x = (int)((float)(c.Freq * 1e6 - rf_freq - c.BW / 2 - Low - rit) / width * W);
                         int chan_right_x = (int)((float)(c.Freq * 1e6 - rf_freq + c.BW / 2 - Low - rit) / width * W);
@@ -8858,33 +8997,39 @@ namespace Thetis
             if (!local_mox && !bIsWaterfall)
             {
                 long rf_freq = vfoa_hz;
-                int rit = rit_hz;
+                int rit = rit_hz;                
 
-                if (bottom || (current_display_mode_bottom == DisplayMode.PANAFALL && rx == 2))
+                if (bottom || (current_display_mode_bottom == DisplayMode.PANAFALL && rx == 2)) // MW0LGE
                 {
                     rf_freq = vfob_hz;
-                    switch (rx2_dsp_mode)
-                    {
-                        case (DSPMode.CWL):
-                            rf_freq += cw_pitch;
-                            break;
-                        case (DSPMode.CWU):
-                            rf_freq -= cw_pitch;
-                            break;
-                    }
                 }
-                else
-                {
-                    switch (rx1_dsp_mode)
-                    {
-                        case (DSPMode.CWL):
-                            rf_freq += cw_pitch;
-                            break;
-                        case (DSPMode.CWU):
-                            rf_freq -= cw_pitch;
-                            break;
-                    }
-                }
+
+                rf_freq += cwSideToneShift;
+                //if (bottom || (current_display_mode_bottom == DisplayMode.PANAFALL && rx == 2))
+                //{
+                //    rf_freq = vfob_hz;
+                //    switch (rx2_dsp_mode)
+                //    {
+                //        case (DSPMode.CWL):
+                //            rf_freq += cw_pitch;
+                //            break;
+                //        case (DSPMode.CWU):
+                //            rf_freq -= cw_pitch;
+                //            break;
+                //    }
+                //}
+                //else
+                //{
+                //    switch (rx1_dsp_mode)
+                //    {
+                //        case (DSPMode.CWL):
+                //            rf_freq += cw_pitch;
+                //            break;
+                //        case (DSPMode.CWU):
+                //            rf_freq -= cw_pitch;
+                //            break;
+                //    }
+                //}
 
                 SharpDX.Direct2D1.Brush p;
                 SharpDX.Direct2D1.Brush b;
@@ -8951,37 +9096,77 @@ namespace Thetis
                 }
             }
 
-            // Draw a Zero Beat line on CW filter
-            if (!local_mox && show_cwzero_line &&
-                (rx1_dsp_mode == DSPMode.CWL || rx1_dsp_mode == DSPMode.CWU))
+            // Draw a CW Zero Beat + TX line on CW filter
+            if (!bIsWaterfall)
             {
-                int pitch = cw_pitch;
-                if (rx1_dsp_mode == DSPMode.CWL)
-                    pitch = -cw_pitch;
+                if (show_cwzero_line)
+                {
+                    if (rx == 1 && !local_mox &&
+                        (rx1_dsp_mode == DSPMode.CWL || rx1_dsp_mode == DSPMode.CWU))
+                    {
+                        //int pitch = cw_pitch;
+                        //if (rx1_dsp_mode == DSPMode.CWL)
+                        //    pitch = -cw_pitch;
 
-                int cw_line_x1;
-                if (!split_enabled)
-                    cw_line_x1 = (int)((float)(pitch - Low - f_diff) / width * W);
-                else
-                    cw_line_x1 = (int)((float)(pitch - Low + (vfoa_sub_hz - vfoa_hz)) / width * W);
+                        int cw_line_x1;
+                        //if (!split_enabled)
+                        cw_line_x1 = (int)((float)(cwSideToneShiftInverted - Low - f_diff) / width * W);
+                        //else
+                        //    cw_line_x1 = (int)((float)(cwSideToneShiftInverted - Low + (vfoa_sub_hz - vfoa_hz)) / width * W);
 
-                drawLineDX2D(m_bDX2_cw_zero_pen, cw_line_x1, top, cw_line_x1, H, cw_zero_pen.Width);
-            }
+                        drawLineDX2D(m_bDX2_cw_zero_pen, cw_line_x1, nVerticalShift + top, cw_line_x1, nVerticalShift + H, cw_zero_pen.Width);
+                    }
 
-            if (!local_mox && show_cwzero_line &&
-                (rx2_dsp_mode == DSPMode.CWL || rx2_dsp_mode == DSPMode.CWU))
-            {
-                int pitch = cw_pitch;
-                if (rx2_dsp_mode == DSPMode.CWL)
-                    pitch = -cw_pitch;
+                    if (rx == 2 && !local_mox &&
+                        (rx2_dsp_mode == DSPMode.CWL || rx2_dsp_mode == DSPMode.CWU))
+                    {
+                        //int pitch = cw_pitch;
+                        //if (rx2_dsp_mode == DSPMode.CWL)
+                        //    pitch = -cw_pitch;
 
-                int cw_line_x1;
-                if (!split_enabled)
-                    cw_line_x1 = (int)((float)(pitch - Low - f_diff) / width * W);
-                else
-                    cw_line_x1 = (int)((float)(pitch - Low + (vfoa_sub_hz - vfoa_hz)) / width * W);
+                        int cw_line_x1;
+                        //if (!split_enabled)
+                        cw_line_x1 = (int)((float)(cwSideToneShiftInverted - Low - f_diff) / width * W);
+                        //else
+                        //    cw_line_x1 = (int)((float)(cwSideToneShiftInverted - Low + (vfoa_sub_hz - vfoa_hz)) / width * W);
 
-                drawLineDX2D(m_bDX2_tx_filter_pen, cw_line_x1, H + top, cw_line_x1, H + H, tx_filter_pen.Width);
+                        drawLineDX2D(m_bDX2_cw_zero_pen, cw_line_x1, nVerticalShift + top, cw_line_x1, nVerticalShift + H, cw_zero_pen.Width);
+                    }
+                }
+                if (draw_tx_cw_freq)
+                {
+                    if (rx == 1 && !local_mox &&
+                        (rx1_dsp_mode == DSPMode.CWL || rx1_dsp_mode == DSPMode.CWU))
+                    {
+                        //int pitch = cw_pitch;
+                        //if (rx1_dsp_mode == DSPMode.CWL)
+                        //    pitch = -cw_pitch;
+
+                        int cw_line_x1;
+                        if (!split_enabled)
+                            cw_line_x1 = (int)((float)(cwSideToneShiftInverted - Low - f_diff + xit_hz - rit_hz) / width * W);
+                        else
+                            cw_line_x1 = (int)((float)(cwSideToneShiftInverted - Low + xit_hz - rit_hz + (vfoa_sub_hz - vfoa_hz)) / width * W);
+
+                        drawLineDX2D(m_bDX2_tx_filter_pen, cw_line_x1, nVerticalShift + top, cw_line_x1, nVerticalShift + H, tx_filter_pen.Width);
+                    }
+
+                    if (rx == 2 && !local_mox &&
+                        (rx2_dsp_mode == DSPMode.CWL || rx2_dsp_mode == DSPMode.CWU))
+                    {
+                        //int pitch = cw_pitch;
+                        //if (rx2_dsp_mode == DSPMode.CWL)
+                        //    pitch = -cw_pitch;
+
+                        int cw_line_x1;
+                        if (!split_enabled)
+                            cw_line_x1 = (int)((float)(cwSideToneShiftInverted - Low - f_diff + xit_hz - rit_hz) / width * W);
+                        else
+                            cw_line_x1 = (int)((float)(cwSideToneShiftInverted - Low + xit_hz - rit_hz + (vfoa_sub_hz - vfoa_hz)) / width * W);
+
+                        drawLineDX2D(m_bDX2_tx_filter_pen, cw_line_x1, nVerticalShift + top, cw_line_x1, nVerticalShift + H, tx_filter_pen.Width);
+                    }
+                }
             }
 
             //      MW0LGE
@@ -9039,34 +9224,35 @@ namespace Thetis
             }
 
             //MW0LGE - TODO CHECK
-            if (rx == 1)
-            {
-                switch (rx1_dsp_mode)
-                {
-                    case DSPMode.CWL:
-                        vfo += cw_pitch;
-                        break;
-                    case DSPMode.CWU:
-                        vfo -= cw_pitch;
-                        break;
-                    default:
-                        break;
-                }
-            }
-            else // if(rx==2)
-            {
-                switch (rx2_dsp_mode)
-                {
-                    case DSPMode.CWL:
-                        vfo += cw_pitch;
-                        break;
-                    case DSPMode.CWU:
-                        vfo -= cw_pitch;
-                        break;
-                    default:
-                        break;
-                }
-            }
+            vfo += cwSideToneShift;
+            //if (rx == 1)
+            //{
+            //    switch (rx1_dsp_mode)
+            //    {
+            //        case DSPMode.CWL:
+            //            vfo += cw_pitch;
+            //            break;
+            //        case DSPMode.CWU:
+            //            vfo -= cw_pitch;
+            //            break;
+            //        default:
+            //            break;
+            //    }
+            //}
+            //else // if(rx==2)
+            //{
+            //    switch (rx2_dsp_mode)
+            //    {
+            //        case DSPMode.CWL:
+            //            vfo += cw_pitch;
+            //            break;
+            //        case DSPMode.CWU:
+            //            vfo -= cw_pitch;
+            //            break;
+            //        default:
+            //            break;
+            //    }
+            //}
             //--
 
             //MW0LGE
@@ -9125,6 +9311,10 @@ namespace Thetis
 
 
             // Draw vertical lines - band edge markers and freq text
+            SharpDX.Direct2D1.Brush pnMajorLine;
+            SharpDX.Direct2D1.Brush pnInbetweenLine;
+            SharpDX.Direct2D1.Brush brTextBrush;
+
             for (int i = 0; i < f_steps + 1; i++)
             {
                 string label;
@@ -9151,10 +9341,6 @@ namespace Thetis
                             break;
                         }
                     }
-
-                    SharpDX.Direct2D1.Brush pnMajorLine;
-                    SharpDX.Direct2D1.Brush pnInbetweenLine;
-                    SharpDX.Direct2D1.Brush brTextBrush;
 
                     if (bBandEdge)
                     {
@@ -9260,7 +9446,6 @@ namespace Thetis
 
                 //--------------
                 //MW0LGE
-                SharpDX.Direct2D1.Brush pnMajorLine;
 
                 if (local_mox)
                 {
@@ -9311,7 +9496,7 @@ namespace Thetis
                         num = grid_max - i * grid_step;
                         string label = num.ToString();
                         if (label.Length == 3)
-                            xOffset = (int)measureStringDX2D("-", fontDX2d_font9).Width - 2;
+                            xOffset = (int)measureStringDX2D("0", fontDX2d_font9).Width;// use 0 here instead of a - sign
                         SizeF size = measureStringDX2D(label, fontDX2d_font9);
 
                         int x = 0;
@@ -9669,10 +9854,6 @@ namespace Thetis
                 }
             }
 
-            if (high_swr && rx == 1)
-                drawStringDX2D("High SWR", fontDX2d_font14, m_bDX2_Red, 245, 20);
-
-
             // ke9ns add draw DX SPOTS on pandapter
             //=====================================================================
             //=====================================================================
@@ -9689,25 +9870,30 @@ namespace Thetis
                 int H1a = H / 2;            // length of vertical line (based on rx1 and rx2 display window configuration)
                 int H1b = 20;               // starting point of vertical line
 
-                // RX1/RX2 PanF/Pan = 5,2 (K9,K10)(short)  PanF/PanF = 5,5, (short) Pan/Pan 2,2 (long)
-                if (bottom)                 // if your drawing to the bottom 
-                {
-                    if ((K9 == 2) && (K10 == 2)) H1a = H + (H / 2); // long
-                    else H1a = H + (H / 4); // short
+                int rxDisplayLow = RXDisplayLow;
+                int rxDisplayHigh = RXDisplayHigh;
 
-                    H1b = H + 20;
+                // RX1/RX2 PanF/Pan = 5,2 (K9,K10)(short)  PanF/PanF = 5,5, (short) Pan/Pan 2,2 (long)
+                if (bottom || (current_display_mode_bottom == DisplayMode.PANAFALL && rx == 2))                 // if your drawing to the bottom 
+                {
+                    //if ((K9 == 2) && (K10 == 2)) H1a = H + (H / 2); // long
+                    //else H1a = H + (H / 4); // short
+
+                    //H1b = H + 20;
 
                     vfo_hz = (int)vfob_hz;
-                    Console.DXK2 = 0;        // RX2 index to allow call signs to draw after all the vert lines on the screen
+                    rxDisplayLow = RX2DisplayLow;
+                    rxDisplayHigh = RX2DisplayHigh;
 
+                    Console.DXK2 = 0;        // RX2 index to allow call signs to draw after all the vert lines on the screen
                 }
                 else
                 {
                     Console.DXK = 0;        // RX1 index to allow call signs to draw after all the vert lines on the screen
                 }
 
-                VFOLow = vfo_hz + RXDisplayLow;    // low freq (left side) in hz
-                VFOHigh = vfo_hz + RXDisplayHigh; // high freq (right side) in hz
+                VFOLow = vfo_hz + rxDisplayLow;    // low freq (left side) in hz
+                VFOHigh = vfo_hz + rxDisplayHigh; // high freq (right side) in hz
                 VFODiff = VFOHigh - VFOLow;       // diff in hz
 
                 if ((vfo_hz < 5000000) || ((vfo_hz > 6000000) && (vfo_hz < 8000000))) low = true; // LSB
@@ -9724,14 +9910,14 @@ namespace Thetis
 
                     if ((SpotControl.DX_Freq[ii] >= VFOLow) && (SpotControl.DX_Freq[ii] <= VFOHigh))
                     {
-                        int VFO_DXPos = (int)((((float)W / (float)VFODiff) * (float)(SpotControl.DX_Freq[ii] - VFOLow))); // determine DX spot line pos on current panadapter screen
+                        int VFO_DXPos = (int)((((float)W / (float)VFODiff) * (float)(SpotControl.DX_Freq[ii] + cwSideToneShiftInverted - VFOLow))); // determine DX spot line pos on current panadapter screen
 
                         holder[kk] = ii;                    // ii is the actual DX_INdex pos the the KK holds
                         holder1[kk] = VFO_DXPos;
 
                         kk++;
 
-                        drawLineDX2D(m_bDX2_p1, VFO_DXPos, H1b, VFO_DXPos, H1a);   // draw vertical line
+                        drawLineDX2D(m_bDX2_p1, VFO_DXPos, H1b + nVerticalShift, VFO_DXPos, H1a + nVerticalShift);   // draw vertical line
 
                     }
 
@@ -9739,7 +9925,7 @@ namespace Thetis
 
 
                 int bb = 0;
-                if (bottom)
+                if (bottom || (current_display_mode_bottom == DisplayMode.PANAFALL && rx == 2))
                 {
                     Console.DXK2 = kk; // keep a count for the bottom QRZ hyperlink
                     bb = Console.MMK4;
@@ -9759,7 +9945,7 @@ namespace Thetis
                     if (low) // 1=LSB so draw on left side of line
                     {
 
-                        if (Console.DXR == 0) // display Spotted on Pan
+                        if (Console.DisplaySpot) // display Spotted on Pan
                         {
                             length = measureStringDX2D(SpotControl.DX_Station[holder[ii]], fontDX2d_font1); //  temp used to determine the size of the string when in LSB and you need to reserve a certain space//  (cl.Width);
 
@@ -9783,7 +9969,7 @@ namespace Thetis
                                 } // for loop to check if DX text will draw over top of Memory text
                             }
 
-                            drawStringDX2D(SpotControl.DX_Station[holder[ii]], fontDX2d_font1, m_bDX2_grid_text_brush, holder1[ii] - (int)length.Width, H1b + iii);
+                            drawStringDX2D(SpotControl.DX_Station[holder[ii]], fontDX2d_font1, m_bDX2_grid_text_brush, holder1[ii] - (int)length.Width, H1b + iii + nVerticalShift);
                         }
                         else // display SPOTTER on Pan (not the Spotted)
                         {
@@ -9809,11 +9995,11 @@ namespace Thetis
                                 } // for loop to check if DX text will draw over top of Memory text
                             }
 
-                            drawStringDX2D(SpotControl.DX_Spotter[holder[ii]], fontDX2d_font1, m_bDX2_grid_text_brush, holder1[ii] - (int)length.Width, H1b + iii);
+                            drawStringDX2D(SpotControl.DX_Spotter[holder[ii]], fontDX2d_font1, m_bDX2_grid_text_brush, holder1[ii] - (int)length.Width, H1b + iii + nVerticalShift);
 
                         }
 
-                        if (bottom) rx2 = 50; // allow only 50 qrz spots per Receiver
+                        if (bottom || (current_display_mode_bottom == DisplayMode.PANAFALL && rx == 2)) rx2 = 50; // allow only 50 qrz spots per Receiver
                         else rx2 = 0;
 
                         if (!mox) // only do when not transmitting
@@ -9832,7 +10018,7 @@ namespace Thetis
 
                     else   // 0=usb so draw on righ side of line (normal)
                     {
-                        if (Console.DXR == 0) // spot
+                        if (Console.DisplaySpot) // spot
                         {
                             length = measureStringDX2D(SpotControl.DX_Station[holder[ii]], fontDX2d_font1); //  not needed here but used for qrz hyperlinking
 
@@ -9856,7 +10042,7 @@ namespace Thetis
                                 } // for loop to check if DX text will draw over top of Memory text
                             }
 
-                            drawStringDX2D(SpotControl.DX_Station[holder[ii]], fontDX2d_font1, m_bDX2_grid_text_brush, holder1[ii], H1b + iii); // DX station name
+                            drawStringDX2D(SpotControl.DX_Station[holder[ii]], fontDX2d_font1, m_bDX2_grid_text_brush, holder1[ii], H1b + iii + nVerticalShift); // DX station name
                         }
                         else // spotter
                         {
@@ -9882,11 +10068,11 @@ namespace Thetis
                                 } // for loop to check if DX text will draw over top of Memory text
                             }
 
-                            drawStringDX2D(SpotControl.DX_Spotter[holder[ii]], fontDX2d_font1, m_bDX2_grid_text_brush, holder1[ii], H1b + iii); // DX station name
+                            drawStringDX2D(SpotControl.DX_Spotter[holder[ii]], fontDX2d_font1, m_bDX2_grid_text_brush, holder1[ii], H1b + iii + nVerticalShift); // DX station name
 
                         }
 
-                        if (bottom) rx2 = 50;
+                        if (bottom || (current_display_mode_bottom == DisplayMode.PANAFALL && rx == 2)) rx2 = 50;
                         else rx2 = 0;
 
                         if (!mox) // only do when not transmitting
@@ -9901,7 +10087,7 @@ namespace Thetis
                         if (vfo_hz >= 50000000) // 50000000 or 50mhz
                         {
                             iii = iii + 11;
-                            drawStringDX2D(SpotControl.DX_Grid[holder[ii]], fontDX2d_font1, m_bDX2_grid_text_brush, holder1[ii], H1b + iii); // DX grid name
+                            drawStringDX2D(SpotControl.DX_Grid[holder[ii]], fontDX2d_font1, m_bDX2_grid_text_brush, holder1[ii], H1b + iii + nVerticalShift); // DX grid name
                         }
 
                     } // USB side
@@ -10452,9 +10638,6 @@ namespace Thetis
                         drawLineDX2D(m_bDX2_grid_zero_pen, mid_w - 1, 0, mid_w - 1, H);
                     }
             }
-
-            if (high_swr && !bottom)
-                drawStringDX2D("High SWR", fontDX2d_font14, m_bDX2_Red, 245, 20);
         }
 
         unsafe private static bool DrawScopeDX2D(int W, int H, bool bottom)
@@ -10540,9 +10723,6 @@ namespace Thetis
         {
             // draw background
             drawFillRectangleDX2D(m_bDX2_display_background_brush, 0, bottom ? H : 0, W, H);
-
-            if (high_swr && !bottom)
-                drawStringDX2D("High SWR", fontDX2d_font14, m_bDX2_Red, 245, 20);
         }
 
         unsafe private static bool DrawScope2DX2D(int W, int H, bool bottom)
@@ -10643,6 +10823,8 @@ namespace Thetis
                 data_ready_bottom = false;
             }
 
+            int nShift = m_nPhasePointSize / 2;
+
             SharpDX.Vector2 point = new SharpDX.Vector2();
 
             for (int i = 0, j = 0; i < num_points; i++, j += 8)	// fill point array
@@ -10663,7 +10845,7 @@ namespace Thetis
                 point.Y = H / 2 + y;
                 if (bottom) point.Y += H;
 
-                drawFillRectangleDX2D(m_bDX2_data_line_pen_brush, point.X, point.Y, 1, 1);
+                drawFillRectangleDX2D(m_bDX2_data_line_pen_brush, point.X - nShift, point.Y - nShift, m_nPhasePointSize, m_nPhasePointSize);
             }
             
             // draw long cursor
@@ -10688,9 +10870,6 @@ namespace Thetis
                 if (bottom) drawElipseDX2D(m_bDX2_grid_pen, (int)(W / 2), H + (int)(H / 2), (int)(H * i), (int)(H * i));
                 else drawElipseDX2D(m_bDX2_grid_pen, (int)(W / 2), (int)(H / 2), (int)(H * i), (int)(H * i));
             }
-
-            if (high_swr && !bottom)
-                drawStringDX2D("High SWR", fontDX2d_font14, m_bDX2_Red, 245, 20);
         }
 
         unsafe private static void DrawPhase2DX2D(int W, int H, bool bottom)
@@ -10715,6 +10894,8 @@ namespace Thetis
                 data_ready_bottom = false;
             }
 
+            int nShift = m_nPhasePointSize / 2;
+
             SharpDX.Vector2 point = new SharpDX.Vector2();
 
             for (int i = 0; i < num_points; i++)	// fill point array
@@ -10735,7 +10916,7 @@ namespace Thetis
                 point.Y = (int)(H * 0.5 + y);
                 if (bottom) point.Y += H;
 
-                drawFillRectangleDX2D(m_bDX2_data_line_pen_brush, point.X, point.Y, 1, 1);
+                drawFillRectangleDX2D(m_bDX2_data_line_pen_brush, point.X - nShift, point.Y - nShift, m_nPhasePointSize, m_nPhasePointSize);
             }
 
             // draw long cursor

@@ -809,6 +809,7 @@ ReadThreadMainLoop() {
 						//          Bit [1] - User I/O (IO5) 1 = active, 0 = inactive
 						//          Bit [2] - User I/O (IO6) 1 = active, 0 = inactive
 						//          Bit [3] - User I/O (IO8) 1 = active, 0 = inactive
+						//          Bit [4] - User I/O (IO2) 1 = active, 0 = inactive
 						prn->user_io = prn->ReadBufp[55];
 
 						prn->hardware_LEDs = prn->ReadBufp[26] << 8 | prn->ReadBufp[27];
@@ -1043,8 +1044,8 @@ void CmdHighPriority() { // port 1027
 	// TX0 drive level
 	packetbuf[345] = prn->tx[0].drive_level;
 
-	// Enable transverter T/R relay 8---DLE
-    packetbuf[1400] = xvtr_enable & 0x01;
+	// Enable transverter T/R relay 8   Mute Audio Amp bit 1 from J16 pin 9 IO4---DLE
+    packetbuf[1400] = xvtr_enable | ((!(prn->user_io & 0x01)) << 1);
 
 	// Open Collector Ouputs
 	packetbuf[1401] = (prn->oc_output << 1) & 0xfe;

@@ -424,7 +424,7 @@ namespace Thetis
                     //MW0LGE pnlStatus.Invalidate(m_rProgress);
                     // this call supresses background draw, which was causing the flicker
                     // annoying that c# invalidate does not have this option.
-                    if(pnlStatus!=null)InvalidateRect(pnlStatus.Handle, IntPtr.Zero, false);
+                    if(pnlStatus!=null && !pnlStatus.IsDisposed)InvalidateRect(pnlStatus.Handle, IntPtr.Zero, false);
 
 					int iSecondsLeft = 1 + (int)(TIMER_INTERVAL * 
 						((1.0 - m_dblLastCompletionFraction)/

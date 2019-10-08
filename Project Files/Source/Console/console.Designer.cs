@@ -738,6 +738,7 @@
             this.chkRxAnt = new System.Windows.Forms.CheckBoxTS();
             this.chkVFOBLock = new System.Windows.Forms.CheckBoxTS();
             this.chkQSK = new System.Windows.Forms.CheckBoxTS();
+            this.comboAMTXProfile = new System.Windows.Forms.ComboBoxTS();
             this.picSquelch = new System.Windows.Forms.PictureBox();
             this.timer_clock = new System.Windows.Forms.Timer(this.components);
             this.contextMenuStripFilterRX1 = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -3710,6 +3711,17 @@
             this.toolTip1.SetToolTip(this.chkQSK, resources.GetString("chkQSK.ToolTip"));
             this.chkQSK.CheckedChanged += new System.EventHandler(this.chkQSK_CheckedChanged);
             // 
+            // comboAMTXProfile
+            // 
+            this.comboAMTXProfile.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(46)))), ((int)(((byte)(46)))));
+            this.comboAMTXProfile.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboAMTXProfile.DropDownWidth = 96;
+            this.comboAMTXProfile.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            resources.ApplyResources(this.comboAMTXProfile, "comboAMTXProfile");
+            this.comboAMTXProfile.Name = "comboAMTXProfile";
+            this.toolTip1.SetToolTip(this.comboAMTXProfile, resources.GetString("comboAMTXProfile.ToolTip"));
+            this.comboAMTXProfile.SelectedIndexChanged += new System.EventHandler(this.comboAMTXProfile_SelectedIndexChanged);
+            // 
             // picSquelch
             // 
             this.picSquelch.BackColor = System.Drawing.SystemColors.ControlText;
@@ -5546,6 +5558,7 @@
             this.txtCPUMeter.ForeColor = System.Drawing.Color.White;
             this.txtCPUMeter.Name = "txtCPUMeter";
             this.txtCPUMeter.ReadOnly = true;
+            this.txtCPUMeter.MouseDown += new System.Windows.Forms.MouseEventHandler(this.DateTime_MouseDown);
             // 
             // panelDateTime
             // 
@@ -5555,6 +5568,7 @@
             this.panelDateTime.Controls.Add(this.txtDate);
             this.panelDateTime.Controls.Add(this.txtCPUMeter);
             this.panelDateTime.Name = "panelDateTime";
+            this.panelDateTime.MouseDown += new System.Windows.Forms.MouseEventHandler(this.DateTime_MouseDown);
             // 
             // txtTime
             // 
@@ -5672,6 +5686,7 @@
             this.panelModeSpecificPhone.Controls.Add(this.chkVOX);
             this.panelModeSpecificPhone.Controls.Add(this.chkNoiseGate);
             this.panelModeSpecificPhone.Controls.Add(this.lblCPUMeter);
+            this.panelModeSpecificPhone.Controls.Add(this.comboAMTXProfile);
             this.panelModeSpecificPhone.Name = "panelModeSpecificPhone";
             // 
             // labelTS4
@@ -6817,6 +6832,7 @@
             this.Controls.Add(this.grpRX2Meter);
             this.Controls.Add(this.grpDisplaySplit);
             this.Controls.Add(this.grpVFOBetween);
+            this.Controls.Add(this.panelModeSpecificCW);
             this.Controls.Add(this.grpVFOA);
             this.Controls.Add(this.picSquelch);
             this.Controls.Add(this.grpVFOB);
@@ -6830,7 +6846,6 @@
             this.Controls.Add(this.panelBandHF);
             this.Controls.Add(this.panelBandVHF);
             this.Controls.Add(this.panelBandGEN);
-            this.Controls.Add(this.panelModeSpecificCW);
             this.Controls.Add(this.panelModeSpecificPhone);
             this.Controls.Add(this.panelModeSpecificFM);
             this.Controls.Add(this.panelModeSpecificDigital);
@@ -7024,5 +7039,6 @@
         private ToolStripMenuItem BPFToolStripMenuItem;
         private ToolStripMenuItem BPF1ToolStripMenuItem;
         private ToolStripMenuItem BPF2ToolStripMenuItem;
+        private ComboBoxTS comboAMTXProfile;
     }
 }

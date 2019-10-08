@@ -601,10 +601,24 @@ namespace Thetis
                     MessageBox.Show(t);
                 }
 
-                //why is this an issue? MW0LGE , moved to load event
-                //cbMorse.SelectedIndex = 0;
+                ////MW0LGE
+                //if (!this.InvokeRequired)
+                //{
+                //    cbMorse.SelectedIndex = 0;
+                //}
+                //else
+                //{
+                //    CBMorseUpdateDelegate objDelegate = new CBMorseUpdateDelegate(CBMorseUpdate);
+                //    Invoke(objDelegate, new object[] { 0 });
+                //}
             }
         }
+
+        //private delegate void CBMorseUpdateDelegate(int value);
+        //private void CBMorseUpdate(int value)
+        //{
+        //    cbMorse.SelectedIndex = value;
+        //}
 
         #endregion
 
@@ -1575,9 +1589,8 @@ namespace Thetis
 #if (CWX_DEBUG)
 			Debug.WriteLine("load cwx, queue is " + elfifo.Length);
 #endif
-
-            // moved from constructor to fix freeze issue when using CAT ... why? MW0LGE
-            if (cbMorse.Items.Count > 0) cbMorse.SelectedIndex = 0;
+            //MW0LGE moved here  from loadalpha
+            cbMorse.SelectedIndex = 0;
         }
         private void CWX_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
@@ -2296,7 +2309,7 @@ namespace Thetis
 
         private void CbMorse_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Debug.Print("CBMorse : " + cbMorse.SelectedIndex.ToString());
+            //Debug.Print("CBMorse : " + cbMorse.SelectedIndex.ToString());
         }
 
         private void insert_key(char key)

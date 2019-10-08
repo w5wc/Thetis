@@ -4663,7 +4663,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;chkSquelch.ZOrder" xml:space="preserve">
-    <value>31</value>
+    <value>32</value>
   </data>
   <data name="btnMemoryQuickRestore.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
     <value>Flat</value>
@@ -5107,7 +5107,7 @@
     <value>13</value>
   </data>
   <data name="comboRX2MeterMode.Location" type="System.Drawing.Point, System.Drawing">
-    <value>80, 7</value>
+    <value>88, 11</value>
   </data>
   <data name="comboRX2MeterMode.Size" type="System.Drawing.Size, System.Drawing">
     <value>72, 21</value>
@@ -8544,6 +8544,33 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
   <data name="&gt;&gt;chkQSK.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
+  <data name="comboAMTXProfile.ItemHeight" type="System.Int32, mscorlib">
+    <value>13</value>
+  </data>
+  <data name="comboAMTXProfile.Location" type="System.Drawing.Point, System.Drawing">
+    <value>217, 26</value>
+  </data>
+  <data name="comboAMTXProfile.Size" type="System.Drawing.Size, System.Drawing">
+    <value>96, 21</value>
+  </data>
+  <data name="comboAMTXProfile.TabIndex" type="System.Int32, mscorlib">
+    <value>125</value>
+  </data>
+  <data name="comboAMTXProfile.ToolTip" xml:space="preserve">
+    <value>Sets the transmit profile (PWR, EQ, MIC, CPDR, etc.)</value>
+  </data>
+  <data name="&gt;&gt;comboAMTXProfile.Name" xml:space="preserve">
+    <value>comboAMTXProfile</value>
+  </data>
+  <data name="&gt;&gt;comboAMTXProfile.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ComboBoxTS, Thetis, Version=2.6.8.0, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;comboAMTXProfile.Parent" xml:space="preserve">
+    <value>panelModeSpecificPhone</value>
+  </data>
+  <data name="&gt;&gt;comboAMTXProfile.ZOrder" xml:space="preserve">
+    <value>27</value>
+  </data>
   <data name="picSquelch.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>Off</value>
   </data>
@@ -8566,7 +8593,7 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
     <value>$this</value>
   </data>
   <data name="&gt;&gt;picSquelch.ZOrder" xml:space="preserve">
-    <value>28</value>
+    <value>29</value>
   </data>
   <metadata name="timer_clock.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 54</value>
@@ -11526,7 +11553,7 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
     <value>$this</value>
   </data>
   <data name="&gt;&gt;panelRX2Power.ZOrder" xml:space="preserve">
-    <value>35</value>
+    <value>36</value>
   </data>
   <data name="chkRX2.Appearance" type="System.Windows.Forms.Appearance, System.Windows.Forms">
     <value>Button</value>
@@ -11667,7 +11694,7 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
     <value>$this</value>
   </data>
   <data name="&gt;&gt;lblRF2.ZOrder" xml:space="preserve">
-    <value>36</value>
+    <value>37</value>
   </data>
   <data name="panelPower.AutoScrollMargin" type="System.Drawing.Size, System.Drawing">
     <value>0, 0</value>
@@ -11694,7 +11721,7 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
     <value>$this</value>
   </data>
   <data name="&gt;&gt;panelPower.ZOrder" xml:space="preserve">
-    <value>32</value>
+    <value>33</value>
   </data>
   <data name="panelModeSpecificCW.AutoScrollMargin" type="System.Drawing.Size, System.Drawing">
     <value>0, 0</value>
@@ -11949,7 +11976,7 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
     <value>$this</value>
   </data>
   <data name="&gt;&gt;panelModeSpecificCW.ZOrder" xml:space="preserve">
-    <value>40</value>
+    <value>27</value>
   </data>
   <data name="panelRX2Filter.AutoScrollMargin" type="System.Drawing.Size, System.Drawing">
     <value>0, 0</value>
@@ -14397,7 +14424,7 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
     <value>$this</value>
   </data>
   <data name="&gt;&gt;panelDisplay.ZOrder" xml:space="preserve">
-    <value>30</value>
+    <value>31</value>
   </data>
   <data name="panelMode.AutoScrollMargin" type="System.Drawing.Size, System.Drawing">
     <value>0, 0</value>
@@ -14460,7 +14487,7 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
     <value>$this</value>
   </data>
   <data name="&gt;&gt;panelMode.ZOrder" xml:space="preserve">
-    <value>33</value>
+    <value>34</value>
   </data>
   <data name="panelBandHF.AutoScrollMargin" type="System.Drawing.Size, System.Drawing">
     <value>0, 0</value>
@@ -14490,7 +14517,7 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
     <value>$this</value>
   </data>
   <data name="&gt;&gt;panelBandHF.ZOrder" xml:space="preserve">
-    <value>37</value>
+    <value>38</value>
   </data>
   <data name="txtVFOAFreq.Font" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft Sans Serif, 20.25pt</value>
@@ -14907,7 +14934,7 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
     <value>$this</value>
   </data>
   <data name="&gt;&gt;grpVFOA.ZOrder" xml:space="preserve">
-    <value>27</value>
+    <value>28</value>
   </data>
   <data name="lblRX2ModeBigLabel.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -15312,7 +15339,7 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
     <value>$this</value>
   </data>
   <data name="&gt;&gt;grpVFOB.ZOrder" xml:space="preserve">
-    <value>29</value>
+    <value>30</value>
   </data>
   <data name="btnBandHF.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
     <value>Flat</value>
@@ -15609,10 +15636,10 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
     <value>Off</value>
   </data>
   <data name="picRX2Meter.Location" type="System.Drawing.Point, System.Drawing">
-    <value>8, 65</value>
+    <value>8, 69</value>
   </data>
   <data name="picRX2Meter.Size" type="System.Drawing.Size, System.Drawing">
-    <value>144, 40</value>
+    <value>157, 30</value>
   </data>
   <data name="picRX2Meter.TabIndex" type="System.Int32, mscorlib">
     <value>61</value>
@@ -15633,10 +15660,10 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
     <value>Microsoft Sans Serif, 18pt</value>
   </data>
   <data name="txtRX2Meter.Location" type="System.Drawing.Point, System.Drawing">
-    <value>8, 29</value>
+    <value>8, 33</value>
   </data>
   <data name="txtRX2Meter.Size" type="System.Drawing.Size, System.Drawing">
-    <value>144, 35</value>
+    <value>157, 35</value>
   </data>
   <data name="txtRX2Meter.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -15657,10 +15684,10 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
     <value>2</value>
   </data>
   <data name="grpRX2Meter.Location" type="System.Drawing.Point, System.Drawing">
-    <value>848, 588</value>
+    <value>841, 588</value>
   </data>
   <data name="grpRX2Meter.Size" type="System.Drawing.Size, System.Drawing">
-    <value>160, 110</value>
+    <value>172, 108</value>
   </data>
   <data name="grpRX2Meter.TabIndex" type="System.Int32, mscorlib">
     <value>90</value>
@@ -16335,7 +16362,7 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
     <value>$this</value>
   </data>
   <data name="&gt;&gt;panelBandVHF.ZOrder" xml:space="preserve">
-    <value>38</value>
+    <value>39</value>
   </data>
   <data name="ptbSquelch.BackgroundImageLayout" type="System.Windows.Forms.ImageLayout, System.Windows.Forms">
     <value>Stretch</value>
@@ -16368,7 +16395,7 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
     <value>$this</value>
   </data>
   <data name="&gt;&gt;ptbSquelch.ZOrder" xml:space="preserve">
-    <value>34</value>
+    <value>35</value>
   </data>
   <data name="panelModeSpecificFM.AutoScrollMargin" type="System.Drawing.Size, System.Drawing">
     <value>0, 0</value>
@@ -16692,7 +16719,7 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
     <value>$this</value>
   </data>
   <data name="&gt;&gt;panelBandGEN.ZOrder" xml:space="preserve">
-    <value>39</value>
+    <value>40</value>
   </data>
   <data name="panelMeterLabels.AutoScrollMargin" type="System.Drawing.Size, System.Drawing">
     <value>0, 0</value>
@@ -16910,6 +16937,9 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
   </data>
   <data name="$this.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>Off</value>
+  </data>
+  <data name="$this.StartPosition" type="System.Windows.Forms.FormStartPosition, System.Windows.Forms">
+    <value>Manual</value>
   </data>
   <data name="$this.Text" xml:space="preserve">
     <value>openHPSDR v3.0.0 (1/30/13) </value>

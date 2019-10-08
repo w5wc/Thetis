@@ -1457,9 +1457,12 @@
             this.tpDisplay = new System.Windows.Forms.TabPage();
             this.tcDisplay = new System.Windows.Forms.TabControl();
             this.tpDisplayGeneral = new System.Windows.Forms.TabPage();
+            this.groupBoxTS11 = new System.Windows.Forms.GroupBoxTS();
+            this.chkSmallModeFilteronVFOs = new System.Windows.Forms.CheckBoxTS();
             this.grpDisplay8000DLE = new System.Windows.Forms.GroupBoxTS();
             this.chkANAN8000DLEDisplayVoltsAmps = new System.Windows.Forms.CheckBoxTS();
             this.grpDisplayDriverEngine = new System.Windows.Forms.GroupBoxTS();
+            this.chkShowFPS = new System.Windows.Forms.CheckBoxTS();
             this.comboDisplayDriver = new System.Windows.Forms.ComboBoxTS();
             this.grpDisplayMultimeter = new System.Windows.Forms.GroupBoxTS();
             this.chkSMeter = new System.Windows.Forms.CheckBoxTS();
@@ -1478,6 +1481,8 @@
             this.udDisplayScopeTime = new System.Windows.Forms.NumericUpDownTS();
             this.lblDisplayScopeTime = new System.Windows.Forms.LabelTS();
             this.grpDisplayPhase = new System.Windows.Forms.GroupBoxTS();
+            this.labelTS517 = new System.Windows.Forms.LabelTS();
+            this.udDisplayPhasePtSize = new System.Windows.Forms.NumericUpDownTS();
             this.lblDisplayPhasePts = new System.Windows.Forms.LabelTS();
             this.udDisplayPhasePts = new System.Windows.Forms.NumericUpDownTS();
             this.grpDisplayRefreshRates = new System.Windows.Forms.GroupBoxTS();
@@ -3030,6 +3035,7 @@
             this.tpCATControl = new System.Windows.Forms.TabPage();
             this.tcCAT = new System.Windows.Forms.TabControl();
             this.tpCAT = new System.Windows.Forms.TabPage();
+            this.chkRecenterOnZZFx = new System.Windows.Forms.CheckBoxTS();
             this.grpAndr = new System.Windows.Forms.GroupBoxTS();
             this.buttonAndromeda = new System.Windows.Forms.ButtonTS();
             this.comboAndromedaCATPort = new System.Windows.Forms.ComboBoxTS();
@@ -3526,6 +3532,7 @@
             this.tpDisplay.SuspendLayout();
             this.tcDisplay.SuspendLayout();
             this.tpDisplayGeneral.SuspendLayout();
+            this.groupBoxTS11.SuspendLayout();
             this.grpDisplay8000DLE.SuspendLayout();
             this.grpDisplayDriverEngine.SuspendLayout();
             this.grpDisplayMultimeter.SuspendLayout();
@@ -3537,6 +3544,7 @@
             this.grpDisplayScopeMode.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.udDisplayScopeTime)).BeginInit();
             this.grpDisplayPhase.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.udDisplayPhasePtSize)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.udDisplayPhasePts)).BeginInit();
             this.grpDisplayRefreshRates.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.udDisplayCPUMeter)).BeginInit();
@@ -23920,6 +23928,7 @@
             // tpDisplayGeneral
             // 
             this.tpDisplayGeneral.BackColor = System.Drawing.SystemColors.Control;
+            this.tpDisplayGeneral.Controls.Add(this.groupBoxTS11);
             this.tpDisplayGeneral.Controls.Add(this.grpDisplay8000DLE);
             this.tpDisplayGeneral.Controls.Add(this.grpDisplayDriverEngine);
             this.tpDisplayGeneral.Controls.Add(this.grpDisplayMultimeter);
@@ -23933,12 +23942,35 @@
             this.tpDisplayGeneral.TabIndex = 0;
             this.tpDisplayGeneral.Text = "General";
             // 
+            // groupBoxTS11
+            // 
+            this.groupBoxTS11.Controls.Add(this.chkSmallModeFilteronVFOs);
+            this.groupBoxTS11.Location = new System.Drawing.Point(343, 84);
+            this.groupBoxTS11.Name = "groupBoxTS11";
+            this.groupBoxTS11.Size = new System.Drawing.Size(200, 94);
+            this.groupBoxTS11.TabIndex = 47;
+            this.groupBoxTS11.TabStop = false;
+            this.groupBoxTS11.Text = "Other";
+            // 
+            // chkSmallModeFilteronVFOs
+            // 
+            this.chkSmallModeFilteronVFOs.AutoSize = true;
+            this.chkSmallModeFilteronVFOs.Image = null;
+            this.chkSmallModeFilteronVFOs.Location = new System.Drawing.Point(10, 19);
+            this.chkSmallModeFilteronVFOs.Name = "chkSmallModeFilteronVFOs";
+            this.chkSmallModeFilteronVFOs.Size = new System.Drawing.Size(148, 17);
+            this.chkSmallModeFilteronVFOs.TabIndex = 1;
+            this.chkSmallModeFilteronVFOs.Text = "Small mode/filter on VFOs";
+            this.toolTip1.SetToolTip(this.chkSmallModeFilteronVFOs, "Show small labels in the VFO boxes when in expanded display");
+            this.chkSmallModeFilteronVFOs.UseVisualStyleBackColor = true;
+            this.chkSmallModeFilteronVFOs.CheckedChanged += new System.EventHandler(this.chkSmallModeFilteronVFOs_CheckedChanged);
+            // 
             // grpDisplay8000DLE
             // 
             this.grpDisplay8000DLE.Controls.Add(this.chkANAN8000DLEDisplayVoltsAmps);
-            this.grpDisplay8000DLE.Location = new System.Drawing.Point(343, 22);
+            this.grpDisplay8000DLE.Location = new System.Drawing.Point(343, 6);
             this.grpDisplay8000DLE.Name = "grpDisplay8000DLE";
-            this.grpDisplay8000DLE.Size = new System.Drawing.Size(200, 100);
+            this.grpDisplay8000DLE.Size = new System.Drawing.Size(200, 72);
             this.grpDisplay8000DLE.TabIndex = 44;
             this.grpDisplay8000DLE.TabStop = false;
             this.grpDisplay8000DLE.Text = "7000DLE/8000DLE";
@@ -23949,7 +23981,7 @@
             this.chkANAN8000DLEDisplayVoltsAmps.Checked = true;
             this.chkANAN8000DLEDisplayVoltsAmps.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkANAN8000DLEDisplayVoltsAmps.Image = null;
-            this.chkANAN8000DLEDisplayVoltsAmps.Location = new System.Drawing.Point(6, 19);
+            this.chkANAN8000DLEDisplayVoltsAmps.Location = new System.Drawing.Point(10, 19);
             this.chkANAN8000DLEDisplayVoltsAmps.Name = "chkANAN8000DLEDisplayVoltsAmps";
             this.chkANAN8000DLEDisplayVoltsAmps.Size = new System.Drawing.Size(110, 17);
             this.chkANAN8000DLEDisplayVoltsAmps.TabIndex = 41;
@@ -23959,13 +23991,27 @@
             // 
             // grpDisplayDriverEngine
             // 
+            this.grpDisplayDriverEngine.Controls.Add(this.chkShowFPS);
             this.grpDisplayDriverEngine.Controls.Add(this.comboDisplayDriver);
-            this.grpDisplayDriverEngine.Location = new System.Drawing.Point(343, 217);
+            this.grpDisplayDriverEngine.Location = new System.Drawing.Point(427, 184);
             this.grpDisplayDriverEngine.Name = "grpDisplayDriverEngine";
-            this.grpDisplayDriverEngine.Size = new System.Drawing.Size(96, 56);
+            this.grpDisplayDriverEngine.Size = new System.Drawing.Size(116, 97);
             this.grpDisplayDriverEngine.TabIndex = 46;
             this.grpDisplayDriverEngine.TabStop = false;
             this.grpDisplayDriverEngine.Text = "Driver Engine";
+            // 
+            // chkShowFPS
+            // 
+            this.chkShowFPS.AutoSize = true;
+            this.chkShowFPS.Image = null;
+            this.chkShowFPS.Location = new System.Drawing.Point(12, 62);
+            this.chkShowFPS.Name = "chkShowFPS";
+            this.chkShowFPS.Size = new System.Drawing.Size(76, 17);
+            this.chkShowFPS.TabIndex = 46;
+            this.chkShowFPS.Text = "Show FPS";
+            this.toolTip1.SetToolTip(this.chkShowFPS, "Show FPS reading in top left of spectrum area");
+            this.chkShowFPS.UseVisualStyleBackColor = true;
+            this.chkShowFPS.CheckedChanged += new System.EventHandler(this.chkShowFPS_CheckedChanged);
             // 
             // comboDisplayDriver
             // 
@@ -23976,7 +24022,7 @@
             "DirectX"});
             this.comboDisplayDriver.Location = new System.Drawing.Point(8, 24);
             this.comboDisplayDriver.Name = "comboDisplayDriver";
-            this.comboDisplayDriver.Size = new System.Drawing.Size(80, 21);
+            this.comboDisplayDriver.Size = new System.Drawing.Size(102, 21);
             this.comboDisplayDriver.TabIndex = 45;
             this.toolTip1.SetToolTip(this.comboDisplayDriver, "Sets the driver to be used for the display.");
             this.comboDisplayDriver.SelectedIndexChanged += new System.EventHandler(this.comboDisplayDriver_SelectedIndexChanged);
@@ -23997,7 +24043,7 @@
             this.grpDisplayMultimeter.Controls.Add(this.lblDisplayMeterDelay);
             this.grpDisplayMultimeter.Location = new System.Drawing.Point(6, 137);
             this.grpDisplayMultimeter.Name = "grpDisplayMultimeter";
-            this.grpDisplayMultimeter.Size = new System.Drawing.Size(301, 136);
+            this.grpDisplayMultimeter.Size = new System.Drawing.Size(318, 144);
             this.grpDisplayMultimeter.TabIndex = 41;
             this.grpDisplayMultimeter.TabStop = false;
             this.grpDisplayMultimeter.Text = "Multimeter";
@@ -24224,7 +24270,7 @@
             // 
             this.grpDisplayScopeMode.Controls.Add(this.udDisplayScopeTime);
             this.grpDisplayScopeMode.Controls.Add(this.lblDisplayScopeTime);
-            this.grpDisplayScopeMode.Location = new System.Drawing.Point(188, 59);
+            this.grpDisplayScopeMode.Location = new System.Drawing.Point(188, 84);
             this.grpDisplayScopeMode.Name = "grpDisplayScopeMode";
             this.grpDisplayScopeMode.Size = new System.Drawing.Size(136, 47);
             this.grpDisplayScopeMode.TabIndex = 43;
@@ -24272,14 +24318,54 @@
             // 
             // grpDisplayPhase
             // 
+            this.grpDisplayPhase.Controls.Add(this.labelTS517);
+            this.grpDisplayPhase.Controls.Add(this.udDisplayPhasePtSize);
             this.grpDisplayPhase.Controls.Add(this.lblDisplayPhasePts);
             this.grpDisplayPhase.Controls.Add(this.udDisplayPhasePts);
             this.grpDisplayPhase.Location = new System.Drawing.Point(188, 6);
             this.grpDisplayPhase.Name = "grpDisplayPhase";
-            this.grpDisplayPhase.Size = new System.Drawing.Size(120, 47);
+            this.grpDisplayPhase.Size = new System.Drawing.Size(136, 72);
             this.grpDisplayPhase.TabIndex = 37;
             this.grpDisplayPhase.TabStop = false;
             this.grpDisplayPhase.Text = "Phase Mode";
+            // 
+            // labelTS517
+            // 
+            this.labelTS517.Image = null;
+            this.labelTS517.Location = new System.Drawing.Point(8, 43);
+            this.labelTS517.Name = "labelTS517";
+            this.labelTS517.Size = new System.Drawing.Size(56, 23);
+            this.labelTS517.TabIndex = 3;
+            this.labelTS517.Text = "Pt Size:";
+            // 
+            // udDisplayPhasePtSize
+            // 
+            this.udDisplayPhasePtSize.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.udDisplayPhasePtSize.Location = new System.Drawing.Point(64, 43);
+            this.udDisplayPhasePtSize.Maximum = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.udDisplayPhasePtSize.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.udDisplayPhasePtSize.Name = "udDisplayPhasePtSize";
+            this.udDisplayPhasePtSize.Size = new System.Drawing.Size(48, 20);
+            this.udDisplayPhasePtSize.TabIndex = 2;
+            this.toolTip1.SetToolTip(this.udDisplayPhasePtSize, "Size of points to display in Phase Mode.");
+            this.udDisplayPhasePtSize.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.udDisplayPhasePtSize.ValueChanged += new System.EventHandler(this.udDisplayPhasePtSize_ValueChanged);
             // 
             // lblDisplayPhasePts
             // 
@@ -50477,6 +50563,7 @@
             // tpCAT
             // 
             this.tpCAT.BackColor = System.Drawing.SystemColors.Control;
+            this.tpCAT.Controls.Add(this.chkRecenterOnZZFx);
             this.tpCAT.Controls.Add(this.grpAndr);
             this.tpCAT.Controls.Add(this.groupBox1);
             this.tpCAT.Controls.Add(this.grpFocusMaster);
@@ -50497,6 +50584,18 @@
             this.tpCAT.Size = new System.Drawing.Size(579, 338);
             this.tpCAT.TabIndex = 0;
             this.tpCAT.Text = "CAT";
+            // 
+            // chkRecenterOnZZFx
+            // 
+            this.chkRecenterOnZZFx.AutoSize = true;
+            this.chkRecenterOnZZFx.Image = null;
+            this.chkRecenterOnZZFx.Location = new System.Drawing.Point(182, 166);
+            this.chkRecenterOnZZFx.Name = "chkRecenterOnZZFx";
+            this.chkRecenterOnZZFx.Size = new System.Drawing.Size(130, 17);
+            this.chkRecenterOnZZFx.TabIndex = 107;
+            this.chkRecenterOnZZFx.Text = "Always recenter VFOs";
+            this.chkRecenterOnZZFx.UseVisualStyleBackColor = true;
+            this.chkRecenterOnZZFx.CheckedChanged += new System.EventHandler(this.chkRecenterOnZZFx_CheckedChanged);
             // 
             // grpAndr
             // 
@@ -51078,7 +51177,7 @@
             this.grpPTTBitBang.Controls.Add(this.chkCATPTTEnabled);
             this.grpPTTBitBang.Location = new System.Drawing.Point(182, 17);
             this.grpPTTBitBang.Name = "grpPTTBitBang";
-            this.grpPTTBitBang.Size = new System.Drawing.Size(128, 152);
+            this.grpPTTBitBang.Size = new System.Drawing.Size(128, 131);
             this.grpPTTBitBang.TabIndex = 91;
             this.grpPTTBitBang.TabStop = false;
             this.grpPTTBitBang.Text = "PTT Control";
@@ -51087,7 +51186,7 @@
             // 
             this.comboCATPTTPort.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboCATPTTPort.DropDownWidth = 56;
-            this.comboCATPTTPort.Location = new System.Drawing.Point(40, 56);
+            this.comboCATPTTPort.Location = new System.Drawing.Point(40, 42);
             this.comboCATPTTPort.Name = "comboCATPTTPort";
             this.comboCATPTTPort.Size = new System.Drawing.Size(80, 21);
             this.comboCATPTTPort.TabIndex = 96;
@@ -51098,7 +51197,7 @@
             // lblCATPTTPort
             // 
             this.lblCATPTTPort.Image = null;
-            this.lblCATPTTPort.Location = new System.Drawing.Point(8, 56);
+            this.lblCATPTTPort.Location = new System.Drawing.Point(8, 42);
             this.lblCATPTTPort.Name = "lblCATPTTPort";
             this.lblCATPTTPort.Size = new System.Drawing.Size(40, 23);
             this.lblCATPTTPort.TabIndex = 6;
@@ -51107,7 +51206,7 @@
             // chkCATPTT_RTS
             // 
             this.chkCATPTT_RTS.Image = null;
-            this.chkCATPTT_RTS.Location = new System.Drawing.Point(40, 88);
+            this.chkCATPTT_RTS.Location = new System.Drawing.Point(40, 74);
             this.chkCATPTT_RTS.Name = "chkCATPTT_RTS";
             this.chkCATPTT_RTS.Size = new System.Drawing.Size(48, 24);
             this.chkCATPTT_RTS.TabIndex = 0;
@@ -51117,7 +51216,7 @@
             // chkCATPTT_DTR
             // 
             this.chkCATPTT_DTR.Image = null;
-            this.chkCATPTT_DTR.Location = new System.Drawing.Point(40, 120);
+            this.chkCATPTT_DTR.Location = new System.Drawing.Point(40, 106);
             this.chkCATPTT_DTR.Name = "chkCATPTT_DTR";
             this.chkCATPTT_DTR.Size = new System.Drawing.Size(48, 16);
             this.chkCATPTT_DTR.TabIndex = 1;
@@ -54388,9 +54487,12 @@
             this.tpDisplay.ResumeLayout(false);
             this.tcDisplay.ResumeLayout(false);
             this.tpDisplayGeneral.ResumeLayout(false);
+            this.groupBoxTS11.ResumeLayout(false);
+            this.groupBoxTS11.PerformLayout();
             this.grpDisplay8000DLE.ResumeLayout(false);
             this.grpDisplay8000DLE.PerformLayout();
             this.grpDisplayDriverEngine.ResumeLayout(false);
+            this.grpDisplayDriverEngine.PerformLayout();
             this.grpDisplayMultimeter.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.udMeterDigitalDelay)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.udDisplayMeterAvg)).EndInit();
@@ -54400,6 +54502,7 @@
             this.grpDisplayScopeMode.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.udDisplayScopeTime)).EndInit();
             this.grpDisplayPhase.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.udDisplayPhasePtSize)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.udDisplayPhasePts)).EndInit();
             this.grpDisplayRefreshRates.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.udDisplayCPUMeter)).EndInit();
@@ -58444,5 +58547,11 @@
         private CheckBoxTS chkExtended;
         private CheckBoxTS chkWaterfallUseRX1SpectrumMinMax;
         private CheckBoxTS chkWaterfallUseRX2SpectrumMinMax;
+        private CheckBoxTS chkRecenterOnZZFx;
+        private CheckBoxTS chkShowFPS;
+        private LabelTS labelTS517;
+        private NumericUpDownTS udDisplayPhasePtSize;
+        private GroupBoxTS groupBoxTS11;
+        private CheckBoxTS chkSmallModeFilteronVFOs;
     }
 }

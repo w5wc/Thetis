@@ -415,8 +415,6 @@ namespace Thetis
             chkAlsoUseSpecificMouseWheel.Checked = console.AlsoUseSpecificMouseWheel; //MW0LGE
             chkZoomShiftModifier.Checked = console.ZoomShiftModifier; //MW0LGE
             chkExtended.Checked = console.Extended; //MW0LGE
-            chkWaterfallUseRX1SpectrumMinMax.Checked = console.WaterfallUseRX1SpectrumMinMax; //MW0LGE
-            chkWaterfallUseRX2SpectrumMinMax.Checked = console.WaterfallUseRX2SpectrumMinMax; //MW0LGE
         }
 
         private void InitAudioTab()
@@ -474,6 +472,8 @@ namespace Thetis
             udTXGridStep.Value = Display.TXSpectrumGridStep;
             udTXWFAmpMax.Value = Display.TXWFAmpMax;
             udTXWFAmpMin.Value = Display.TXWFAmpMin;
+            chkWaterfallUseRX1SpectrumMinMax.Checked = console.WaterfallUseRX1SpectrumMinMax; //MW0LGE
+            chkWaterfallUseRX2SpectrumMinMax.Checked = console.WaterfallUseRX2SpectrumMinMax; //MW0LGE
         }
 
         private void InitDSPTab()
@@ -562,6 +562,30 @@ namespace Thetis
         // ======================================================
         // Misc Routines
         // ======================================================
+
+        public void PerformDelayedInitalistion()
+        {
+            EventArgs e = EventArgs.Empty;
+
+            chkDisable6mLNAonTX_CheckedChanged(this, e);
+            chkDisable6mLNAonRX_CheckedChanged(this, e);
+            chkDisableHPFonTX_CheckedChanged(this, e);
+
+            chkLPFBypass_CheckedChanged(this, e);
+
+            chkAlex1_5BPHPF_CheckedChanged(this, e);
+            chkAlex6_5BPHPF_CheckedChanged(this, e);
+            chkAlex9_5BPHPF_CheckedChanged(this, e);
+            chkAlex13BPHPF_CheckedChanged(this, e);
+            chkAlex20BPHPF_CheckedChanged(this, e);
+            chkAlex6BPHPF_CheckedChanged(this, e);
+            chkAlex21_5BPHPF_CheckedChanged(this, e);
+            chkAlex26_5BPHPF_CheckedChanged(this, e);
+            chkAlex29_5BPHPF_CheckedChanged(this, e);
+            chkAlex213BPHPF_CheckedChanged(this, e);
+            chkAlex220BPHPF_CheckedChanged(this, e);
+            chkAlex26BPHPF_CheckedChanged(this, e);
+        }
 
         private void RefreshCOMPortLists()
         {
@@ -1263,6 +1287,8 @@ namespace Thetis
             udDisplayWaterfallAvgTime_ValueChanged(this, e);
             udRX2DisplayWaterfallAvgTime_ValueChanged(this, e);
             comboTXLabelAlign_SelectedIndexChanged(this, e);
+            ChkWaterfallUseRX1SpectrumMinMax_CheckedChanged(this, e); //MW0LGE
+            ChkWaterfallUseRX2SpectrumMinMax_CheckedChanged(this, e); //MW0LGE
             // DSP Tab
             udLMSANF_ValueChanged(this, e);
             udLMSNR_ValueChanged(this, e);
@@ -1406,7 +1432,6 @@ namespace Thetis
             clrbtnText_Changed(this, e);
             clrbtnDataLine_Changed(this, e);
             clrbtnDataFill_Changed(this, e);//MW0LGE
-            //chkDisablePicDisplayBackgroundImage_CheckedChanged(this, e);//MW0LGE
             udDisplayLineWidth_ValueChanged(this, e);
             udTXLineWidth_ValueChanged(this, e);
             clrbtnTXDataLine_Changed(this, e);
@@ -1445,6 +1470,10 @@ namespace Thetis
             udDSPNBLead_ValueChanged(this, e);
             udDSPNBLag_ValueChanged(this, e);
             comboMeterType_SelectedIndexChanged(this, e);
+
+            comboAppSkin_SelectedIndexChanged(this, e); // MW0LGE
+            chkDisablePicDisplayBackgroundImage_CheckedChanged(this, e);//MW0LGE
+
             // RX2 tab
             chkRX2AutoMuteTX_CheckedChanged(this, e);
             udMoxDelay_ValueChanged(this, e);
@@ -1481,6 +1510,8 @@ namespace Thetis
             udDSPRX2DollyF1_ValueChanged(this, e);
             // CAT
             comboFocusMasterMode_SelectedIndexChanged(this, e);
+            chkRecenterOnZZFx_CheckedChanged(this, e); //MW0LGE
+
             // SNB
             udDSPSNBThresh1_ValueChanged(this, e);
             udDSPSNBThresh2_ValueChanged(this, e);
@@ -1841,6 +1872,22 @@ namespace Thetis
                     case Band.B10M: txtDisplayGridBandLevel.Text = "10 meters"; break;
                     case Band.B6M: txtDisplayGridBandLevel.Text = "6 meters"; break;
                     case Band.WWV: txtDisplayGridBandLevel.Text = "WWV"; break;
+                    // MW0LGE all this block added
+                    case Band.BLMF: txtDisplayGridBandLevel.Text = "LW/MW bands"; break; // ke9ns add
+                    case Band.B120M: txtDisplayGridBandLevel.Text = "120 meters"; break;
+                    case Band.B90M: txtDisplayGridBandLevel.Text = "90 meters"; break;
+                    case Band.B61M: txtDisplayGridBandLevel.Text = "60 meters"; break;
+                    case Band.B49M: txtDisplayGridBandLevel.Text = "49 meters"; break;
+                    case Band.B41M: txtDisplayGridBandLevel.Text = "41 meters"; break;
+                    case Band.B31M: txtDisplayGridBandLevel.Text = "31 meters"; break;
+                    case Band.B25M: txtDisplayGridBandLevel.Text = "25 meters"; break;
+                    case Band.B22M: txtDisplayGridBandLevel.Text = "22 meters"; break;
+                    case Band.B19M: txtDisplayGridBandLevel.Text = "19 meters"; break;
+                    case Band.B16M: txtDisplayGridBandLevel.Text = "16 meters"; break;
+                    case Band.B14M: txtDisplayGridBandLevel.Text = "14 meters"; break;
+                    case Band.B13M: txtDisplayGridBandLevel.Text = "13 meters"; break;
+                    case Band.B11M: txtDisplayGridBandLevel.Text = "11 meters"; break;
+                    // - end lge
                     case Band.GEN: txtDisplayGridBandLevel.Text = "General"; break;
                     default: txtDisplayGridBandLevel.Text = "2M & VHF+"; break;
                 }
@@ -7633,7 +7680,7 @@ namespace Thetis
         {
             if (comboAudioSampleRate1.SelectedIndex < 0) return;
 
-            int old_rate = console.SampleRate1;
+            int old_rate = console.SampleRateRX1;
             int new_rate = Int32.Parse(comboAudioSampleRate1.Text);
             bool was_enabled = true;
             if (new_rate != old_rate || initializing)
@@ -7662,7 +7709,7 @@ namespace Thetis
                 // in the property SampleRate1:
                 //    (1) the new samplerate will be sent to the DDC
                 //    (2) SetXcmInrate() is called by Audio.SampleRate1 which is called by console.SampleRate1
-                console.SampleRate1 = new_rate;
+                console.SampleRateRX1 = new_rate;
 
                 // set the corresponding new buffer size
                 int new_size = cmaster.GetBuffSize(new_rate);
@@ -12953,7 +13000,7 @@ namespace Thetis
 
         private void udDisplayWaterfallAvgTime_ValueChanged(object sender, System.EventArgs e)
         {
-            double buffer_time = (double)console.BlockSize1 / (double)console.SampleRate1;
+            double buffer_time = (double)console.BlockSize1 / (double)console.SampleRateRX1;
             int buffersToAvg = (int)((float)udDisplayWaterfallAvgTime.Value * 0.001 / buffer_time);
             buffersToAvg = Math.Max(2, buffersToAvg);
             Display.WaterfallAvgBlocks = buffersToAvg;
@@ -13488,6 +13535,8 @@ namespace Thetis
 
         private void comboAppSkin_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (initializing) return;  // prevents call on getoptions, need to force call after options loaded MW0LGE 
+
             string path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) +
                     "\\OpenHPSDR\\Skins\\";
 
@@ -16337,16 +16386,19 @@ namespace Thetis
 
         private void chkDisable6mLNAonTX_CheckedChanged(object sender, EventArgs e)
         {
+            if (initializing) return;
             console.Disable6mLNAonTX = chkDisable6mLNAonTX.Checked;
         }
 
         private void chkDisable6mLNAonRX_CheckedChanged(object sender, EventArgs e)
         {
+            if (initializing) return;
             console.Disable6mLNAonRX = chkDisable6mLNAonRX.Checked;
         }
 
         private void chkDisableHPFonTX_CheckedChanged(object sender, EventArgs e)
         {
+            if (initializing) return;
             console.DisableHPFonTX = chkDisableHPFonTX.Checked;
             if (console.path_Illustrator != null)
                 console.path_Illustrator.pi_Changed();
@@ -16481,61 +16533,73 @@ namespace Thetis
 
         private void chkAlex1_5BPHPF_CheckedChanged(object sender, EventArgs e)
         {
+            if (initializing) return;
             console.Alex1_5BPHPFBypass = chkAlex1_5BPHPF.Checked;
         }
 
         private void chkAlex6_5BPHPF_CheckedChanged(object sender, EventArgs e)
         {
+            if (initializing) return;
             console.Alex6_5BPHPFBypass = chkAlex6_5BPHPF.Checked;
         }
 
         private void chkAlex9_5BPHPF_CheckedChanged(object sender, EventArgs e)
         {
+            if (initializing) return;
             console.Alex9_5BPHPFBypass = chkAlex9_5BPHPF.Checked;
         }
 
         private void chkAlex13BPHPF_CheckedChanged(object sender, EventArgs e)
         {
+            if (initializing) return;
             console.Alex13BPHPFBypass = chkAlex13BPHPF.Checked;
         }
 
         private void chkAlex20BPHPF_CheckedChanged(object sender, EventArgs e)
         {
+            if (initializing) return;
             console.Alex20BPHPFBypass = chkAlex20BPHPF.Checked;
         }
 
         private void chkAlex6BPHPF_CheckedChanged(object sender, EventArgs e)
         {
+            if (initializing) return;
             console.Alex6BPHPFBypass = chkAlex6BPHPF.Checked;
         }
 
         private void chkAlex21_5BPHPF_CheckedChanged(object sender, EventArgs e)
         {
+            if (initializing) return;
             console.Alex21_5BPHPFBypass = chkAlex21_5BPHPF.Checked;
         }
 
         private void chkAlex26_5BPHPF_CheckedChanged(object sender, EventArgs e)
         {
+            if (initializing) return;
             console.Alex26_5BPHPFBypass = chkAlex26_5BPHPF.Checked;
         }
 
         private void chkAlex29_5BPHPF_CheckedChanged(object sender, EventArgs e)
         {
+            if (initializing) return;
             console.Alex29_5BPHPFBypass = chkAlex29_5BPHPF.Checked;
         }
 
         private void chkAlex213BPHPF_CheckedChanged(object sender, EventArgs e)
         {
+            if (initializing) return;
             console.Alex213BPHPFBypass = chkAlex213BPHPF.Checked;
         }
 
         private void chkAlex220BPHPF_CheckedChanged(object sender, EventArgs e)
         {
+            if (initializing) return;
             console.Alex220BPHPFBypass = chkAlex220BPHPF.Checked;
         }
 
         private void chkAlex26BPHPF_CheckedChanged(object sender, EventArgs e)
         {
+            if (initializing) return;
             console.Alex26BPHPFBypass = chkAlex26BPHPF.Checked;
         }
 
@@ -19282,6 +19346,7 @@ namespace Thetis
 
         private void chkLPFBypass_CheckedChanged(object sender, EventArgs e)
         {
+            if (initializing) return;
             console.LPFBypass = chkLPFBypass.Checked;
         }
 
@@ -19477,7 +19542,7 @@ namespace Thetis
         ///
         private void chkDisablePicDisplayBackgroundImage_CheckedChanged(object sender, EventArgs e)
         {
-            
+            if (initializing) return; // ignore until we force call this after init MW0LGE
             console.DisableBackgroundImage = chkDisablePicDisplayBackgroundImage.Checked;
         }
 
@@ -19688,11 +19753,31 @@ namespace Thetis
             else
             {
                 chkRX2WaterfallAGC.Enabled = true;
-                udRX2DisplayWaterfallLowLevel.Enabled = !chkRX1WaterfallAGC.Checked;
+                udRX2DisplayWaterfallLowLevel.Enabled = !chkRX2WaterfallAGC.Checked;
                 udRX2DisplayWaterfallHighLevel.Enabled = true;
             }
 
             console.WaterfallUseRX2SpectrumMinMax = chkWaterfallUseRX2SpectrumMinMax.Checked;
+        }
+
+        private void chkRecenterOnZZFx_CheckedChanged(object sender, EventArgs e)
+        {
+            console.CATChangesCenterFreq = chkRecenterOnZZFx.Checked;
+        }
+
+        private void udDisplayPhasePtSize_ValueChanged(object sender, EventArgs e)
+        {
+            Display.PhasePointSize = (int)udDisplayPhasePtSize.Value;
+        }
+
+        private void chkShowFPS_CheckedChanged(object sender, EventArgs e)
+        {
+            Display.ShowFPS = chkShowFPS.Checked;
+        }
+
+        private void chkSmallModeFilteronVFOs_CheckedChanged(object sender, EventArgs e)
+        {
+            console.ShowSmallModeFilterOnVFOs = chkSmallModeFilteronVFOs.Checked;
         }
 
         //--

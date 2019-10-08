@@ -125,7 +125,7 @@ typedef struct CACHE_ALIGN _radionet
 			    break_in          : 1; // bit 07
 			};
 		};
-#pragma pack(pop, 1)
+#pragma pack(pop)
 	}cw;
 
 	struct _mic
@@ -146,7 +146,7 @@ typedef struct CACHE_ALIGN _radionet
 				unsigned char           : 1; // bit 07
 			};
 		};
-#pragma pack(pop, 1)
+#pragma pack(pop)
 		int spp;							// I-samples per network packet
 	} mic;
 
@@ -261,7 +261,7 @@ typedef struct _rbpfilter // radio band pass filter
 		};
 	};
 }rbpfilter, *RBPFILTER;
-#pragma pack(pop, 1)
+#pragma pack(pop)
 RBPFILTER prbpfilter;
 
 #pragma pack(push, 1)
@@ -292,7 +292,7 @@ typedef struct _rbpfilter2 // radio band pass filter
 		};
 	};
 }rbpfilter2, *RBPFILTER2;
-#pragma pack(pop, 1)
+#pragma pack(pop)
 RBPFILTER2 prbpfilter2;
 
 extern __declspec(dllexport) void create_rnet();
@@ -310,11 +310,11 @@ void PrintTimeHack();
 void PeakFwdPower(float fwd);
 void PeakRevPower(float rev);
 
-void InitWinsock();
-void CreateRIOSocket();
-void Bind(SOCKET s, const unsigned short port);
-void PostRIORecvs(const DWORD recvBufferSize, const DWORD pendingRecvs);
-void InitializeRIO(SOCKET s);
+//void InitWinsock();
+//void CreateRIOSocket();
+//void Bind(SOCKET s, const unsigned short port);
+//void PostRIORecvs(const DWORD recvBufferSize, const DWORD pendingRecvs);
+//void InitializeRIO(SOCKET s);
 
 // IOThread rountines
 int IOThreadStop(void);
@@ -457,3 +457,5 @@ enum HPSDRHW
 	Orion = 4,    // ANAN-200D
 	OrionMKII = 5 // ANAN-7000DLE/8000DLE
 };
+
+
