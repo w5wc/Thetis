@@ -155,8 +155,14 @@ int getOOO() { // OOO == Out Of Order packet
 		result += 8;
 	if (prn->rx[3].rx_in_seq_err > 0) // DDC3 I/Q data
 		result += 16;
-	if (prn->tx[0].mic_in_seq_err > 0) // mic_in data
+	if (prn->rx[4].rx_in_seq_err > 0) // DDC4 I/Q data
 		result += 32;
+	if (prn->rx[5].rx_in_seq_err > 0) // DDC5 I/Q data
+		result += 64;
+	if (prn->rx[6].rx_in_seq_err > 0) // DDC6 I/Q data
+		result += 128;
+	if (prn->tx[0].mic_in_seq_err > 0) // mic_in data
+		result += 256;
 
 
 	if (result > 0)
@@ -169,10 +175,32 @@ int getOOO() { // OOO == Out Of Order packet
 		prn->rx[1].rx_in_seq_err = 0;
 		prn->rx[2].rx_in_seq_err = 0;
 		prn->rx[3].rx_in_seq_err = 0;
+		prn->rx[4].rx_in_seq_err = 0;
+		prn->rx[5].rx_in_seq_err = 0;
+		prn->rx[6].rx_in_seq_err = 0;
 		prn->tx[0].mic_in_seq_err = 0;
 	}
 
 	return result;
+}
+
+PORT
+int getSeqInDeltaStart(int rx) {
+	prn->rx[rx].snapshot = prn->rx[rx].snapshots_head;
+	return prn->rx[rx].snapshot != NULL;
+}
+
+PORT
+int getSeqInDelta(int rx, int deltas[]) {
+	if (prn->rx[rx].snapshot != NULL)
+	{
+		memcpy(deltas, prn->rx[rx].snapshot->rx_in_seq_snapshot, sizeof(int) * MAX_IN_SEQ_LOG);
+
+		prn->rx[rx].snapshot = prn->rx[rx].snapshot->next;
+
+		return 1;
+	}
+	return 0;
 }
 
 PORT
@@ -1288,6 +1316,15 @@ void create_rnet() {
 			prn->rx[i].time_stamp = 0;
 			prn->rx[i].bits_per_sample = 0;
 			prn->rx[i].spp = 238;				// IQ-samples per packet
+
+			//MW0LGE
+			prn->rx[i].rx_in_seq_delta_index = 0;
+			for (int ii = 0; ii < MAX_IN_SEQ_LOG; ii++) {
+				prn->rx[i].rx_in_seq_delta[ii] = 0;
+			}
+			prn->rx[i].snapshots_head = NULL;
+			prn->rx[i].snapshots_tail = NULL;
+			prn->rx[i].snapshot_length = 0;
 		}
 
 		for (i = 0; i < MAX_TX_STREAMS; i++) {
@@ -1352,6 +1389,22 @@ void create_rnet() {
 }
 
 PORT
+void clearSnapshots()
+{
+	int i;
+	for (i = 0; i < MAX_RX_STREAMS; i++) {
+		while (prn->rx[i].snapshots_head != NULL)
+		{
+			_seqLogSnapshot_t* tmp = prn->rx[i].snapshots_head;
+			prn->rx[i].snapshots_head = tmp->next;
+			free(tmp);
+		}
+		prn->rx[i].snapshot_length = 0;
+		prn->rx[i].snapshots_tail = NULL;
+	}
+}
+
+PORT
 void destroy_rnet() {
 	int i;
 	for (i = 0; i < MAX_ADC; i++)
@@ -1367,6 +1420,9 @@ void destroy_rnet() {
 	free(prn->TxReadBufp);
 	free(prn->RxReadBufp);
 	free(prn->ReadBufp);
+	//MW0LGE
+	clearSnapshots();
+	//
 	free(prn);
 	_aligned_free(prbpfilter);
 	_aligned_free(prbpfilter2);

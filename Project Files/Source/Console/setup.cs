@@ -74,6 +74,8 @@ namespace Thetis
 #endif
             initializing = true;
 
+            labelSavingLoading.Visible = false;// MW0LGE gets shown/hidden by save/cancel/apply
+
             // GetMixerDevices();
             GetHosts();
             InitAlexAntTables();
@@ -472,8 +474,27 @@ namespace Thetis
             udTXGridStep.Value = Display.TXSpectrumGridStep;
             udTXWFAmpMax.Value = Display.TXWFAmpMax;
             udTXWFAmpMin.Value = Display.TXWFAmpMin;
-            chkWaterfallUseRX1SpectrumMinMax.Checked = console.WaterfallUseRX1SpectrumMinMax; //MW0LGE
-            chkWaterfallUseRX2SpectrumMinMax.Checked = console.WaterfallUseRX2SpectrumMinMax; //MW0LGE
+
+            // MW0LGE in the case where we dont have a setting in the db, this fuction (initdisplaytab) is called, use console instead
+            SetMultiMeterMode(console.MMMeasureMode);
+
+            comboDisplayThreadPriority.SelectedIndex = (int)console.DisplayThreadPriority; // MW0LGE
+        }
+
+        public void SetMultiMeterMode(MultiMeterMeasureMode mode)
+        {
+            switch (mode)
+            {
+                case MultiMeterMeasureMode.SMeter:
+                    radSReading.Checked = true;
+                    break;
+                case MultiMeterMeasureMode.DBM:
+                    radDBM.Checked = true;
+                    break;
+                case MultiMeterMeasureMode.UV:
+                    radUV.Checked = true;
+                    break;
+            }
         }
 
         private void InitDSPTab()
@@ -732,6 +753,23 @@ namespace Thetis
                 comboAudioOutput3.Items.Add(p);
         }
 
+        private void controlList2(Control c, ref Dictionary<string, Control> a)
+        {
+            if (c.Controls.Count > 0)
+            {
+                foreach (Control c2 in c.Controls)
+                    controlList2(c2, ref a);
+            }
+
+            if (c.GetType() == typeof(CheckBoxTS) || c.GetType() == typeof(CheckBox) ||
+                c.GetType() == typeof(ComboBoxTS) || c.GetType() == typeof(ComboBox) ||
+                c.GetType() == typeof(NumericUpDownTS) || c.GetType() == typeof(NumericUpDown) ||
+                c.GetType() == typeof(RadioButtonTS) || c.GetType() == typeof(RadioButton) ||
+                c.GetType() == typeof(TextBoxTS) || c.GetType() == typeof(TextBox) ||
+                c.GetType() == typeof(TrackBarTS) || c.GetType() == typeof(TrackBar) ||
+                c.GetType() == typeof(ColorButton))
+                a.Add(c.Name, c);
+        }
         private void ControlList(Control c, ref ArrayList a)
         {
             if (c.Controls.Count > 0)
@@ -752,28 +790,29 @@ namespace Thetis
 
         private static bool saving = false;
 
-        //MW0LGE
-        public bool CompleteAnyExistingSave()
-        {
-            if (!saving) return true;
-            // we must be in middle of save already
-            // perhaps started by a thread
-            // we should hang here until it is done
-            // should we time out? wait for 15 secs;
+        ////MW0LGE
+        //public bool CompleteAnyExistingSave()
+        //{
+        //    if (!saving) return true;
+        //    // we must be in middle of save already
+        //    // perhaps started by a thread
+        //    // we should hang here until it is done
+        //    // should we time out? wait for 15 secs;
 
-            int n=0;
-            while(saving && n<14)
-            {
-                Debug.Print("SETUP: WAITING FOR EXISTING SAVE TO COMPLETE");
-                Thread.Sleep(1000);
-                n++;
-            }
+        //    int n=0;
+        //    while(saving && n<14)
+        //    {
+        //        Debug.Print("SETUP: WAITING FOR EXISTING SAVE TO COMPLETE");
+        //        Thread.Sleep(1000);
+        //        n++;
+        //    }
 
-            return !saving;
-        }
+        //    return !saving;
+        //}
 
         public void SaveOptions()
         {
+            //Debug.Print("START - SaveOptions");
             // Automatically saves all control settings to the database in the tab
             // pages on this form of the following types: CheckBoxTS, ComboBoxTS,
             // NumericUpDownTS, RadioButtonTS, TextBox, and TrackBar (slider)
@@ -818,19 +857,137 @@ namespace Thetis
                     Debug.WriteLine(c.Name + " needs to be converted to a Thread Safe control.");
 #endif
             }
-
             DB.SaveVars("Options", ref a);		// save the values to the DB
             saving = false;
+
+            //Debug.Print("END - SaveOptions");
+        }
+
+        private void getOptions2()
+        {
+            //MW0LGE moved to dictionary, as control names are unique, and does away with old loop through every control to find the one we want
+            Dictionary<string, Control> controls = new Dictionary<string, Control>();
+
+            controlList2(this, ref controls);
+
+            ArrayList a = DB.GetVars("Options");
+            a.Sort();
+
+            if (a.Count < controls.Count)		// some control values are not in the database
+            {								// so set all of them to the defaults
+                InitGeneralTab();
+                InitAudioTab();
+                InitDSPTab();
+                InitDisplayTab();
+                InitKeyboardTab();
+                InitAppearanceTab();
+            }
+
+            foreach(string s in a)
+            {
+                string[] vals = s.Split('/');
+                if (vals.Length > 2)
+                {
+                    for (int i = 2; i < vals.Length; i++)
+                        vals[1] += "/" + vals[i];
+                }
+
+                string name = vals[0];
+                string val = vals[1];
+                
+                if (controls.ContainsKey(name))
+                {
+                    Control cc = controls[name];
+
+                    if (cc.GetType() == typeof(CheckBoxTS))          // the control is a CheckBoxTS
+                    {
+                        CheckBoxTS c = (CheckBoxTS)cc;
+                        c.Checked = bool.Parse(val);
+                    }
+                    else if (cc.GetType() == typeof(ComboBoxTS))     // the control is a ComboBoxTS
+                    {
+                        ComboBoxTS c = (ComboBoxTS)cc;
+                        if (c.Items.Count > 0 && c.Items[0].GetType() == typeof(string))
+                        {
+                            c.Text = val;
+                        }
+                        else
+                        {
+                            foreach (object o in c.Items)
+                            {
+                                if (o.ToString() == val)
+                                    c.Text = val;   // restore value
+                            }
+                        }
+                    }
+                    else if (cc.GetType() == typeof(NumericUpDownTS))    // the control is a NumericUpDownTS
+                    {
+                        NumericUpDownTS c = (NumericUpDownTS)cc;
+                        decimal num = decimal.Parse(val);
+
+                        if (num > c.Maximum) num = c.Maximum;       // check endpoints
+                        else if (num < c.Minimum) num = c.Minimum;
+                        c.Value = num;			// restore value
+                    }
+                    else if (cc.GetType() == typeof(RadioButtonTS))  // the control is a RadioButtonTS
+                    {
+                        RadioButtonTS c = (RadioButtonTS)cc;
+                        c.Checked = bool.Parse(val);	// restore value
+                    }
+                    else if (cc.GetType() == typeof(TextBoxTS))      // the control is a TextBox
+                    {
+                        TextBoxTS c = (TextBoxTS)cc;
+                        c.Text = val;	// restore value
+                    }
+                    else if (cc.GetType() == typeof(TrackBarTS))     // the control is a TrackBar (slider)
+                    {
+                        TrackBarTS c = (TrackBarTS)cc;
+                        c.Value = Int32.Parse(val);
+                    }
+                    else if (cc.GetType() == typeof(ColorButton))
+                    {
+                        string[] colors = val.Split('.');
+                        if (colors.Length == 4)
+                        {
+                            int R, G, B, A;
+                            R = Int32.Parse(colors[0]);
+                            G = Int32.Parse(colors[1]);
+                            B = Int32.Parse(colors[2]);
+                            A = Int32.Parse(colors[3]);
+
+                            ColorButton c = (ColorButton)cc;
+                            c.Color = Color.FromArgb(A, R, G, B);
+                            c.Automatic = "";
+                        }
+                    }
+                }
+                else
+                {
+                    Debug.WriteLine("Control not found: " + name);
+                }
+            }
+
+            //MW0LGE We have overwritten controls with data that might not match the current profile
+            //load in current profile
+            if (comboTXProfileName.SelectedIndex < 0 &&
+                comboTXProfileName.Items.Count > 0)
+                comboTXProfileName.SelectedIndex = 0;
+
+            if (loadTXProfile(comboTXProfileName.Text)) current_profile = comboTXProfileName.Text;
+            else current_profile = "";
         }
 
         public void GetOptions()
         {
+            getOptions2(); //MW0LGE
+            return;
+
+            /*
             // Automatically restores all controls from the database in the
             // tab pages on this form of the following types: CheckBoxTS, ComboBoxTS,
             // NumericUpDownTS, RadioButtonTS, TextBox, and TrackBar (slider)
 
             // get list of live controls
-            //ArrayList temp = new ArrayList();
             ArrayList temp = new ArrayList();		// list of all first level controls
             ControlList(this, ref temp);
 
@@ -845,7 +1002,6 @@ namespace Thetis
             //ArrayList controls = new ArrayList();	// list of controls to restore
             foreach (Control c in temp)
             {
-
                 if (c.GetType() == typeof(CheckBoxTS))			// the control is a CheckBoxTS
                     checkbox_list.Add(c);
                 else if (c.GetType() == typeof(ComboBoxTS))		// the control is a ComboBoxTS
@@ -915,11 +1071,6 @@ namespace Thetis
                         ComboBoxTS c = (ComboBoxTS)combobox_list[i];
                         if (c.Name.Equals(name))		// name found
                         {
-                            if (name.Equals("comboAppSkin"))
-                            {
-                                int aa = 1;
-                                aa++;
-                            }
                             if (c.Items.Count > 0 && c.Items[0].GetType() == typeof(string))
                             {
                                 c.Text = val;
@@ -1035,15 +1186,15 @@ namespace Thetis
             foreach (ColorButton c in colorbutton_list)
                 c.Automatic = "";
 
-            //MW0LGE ok, so we have overwritten controls with data that might not match a saved out
-            //profile. Save options just blindly saves every control, including the ones related to TX profile.
-            //Now, we must get the actual profile data. A side effect of just blanket saving everything
+            //MW0LGE We have overwritten controls with data that might not match the current profile
+            //load in current profile
             if (comboTXProfileName.SelectedIndex < 0 &&
                 comboTXProfileName.Items.Count > 0)
                 comboTXProfileName.SelectedIndex = 0;
 
             if (loadTXProfile(comboTXProfileName.Text)) current_profile = comboTXProfileName.Text;
             else current_profile = "";
+            */
         }
 
         private string KeyToString(Keys k)
@@ -1478,6 +1629,8 @@ namespace Thetis
             chkRX2AutoMuteTX_CheckedChanged(this, e);
             udMoxDelay_ValueChanged(this, e);
             udCWKeyUpDelay_ValueChanged(this, e);
+
+            // PS 
             console.psform.ForcePS();
 
             // APF
@@ -8429,6 +8582,7 @@ namespace Thetis
             // if (udDisplayGridMin.Value >= udDisplayGridMax.Value)
             //   udDisplayGridMin.Value = udDisplayGridMax.Value - 10;
             // Display.SpectrumGridMin = (int)udDisplayGridMin.Value;
+
             UpdateDisplayGridBandInfo();
             switch (console.RX1Band)
             {
@@ -8489,7 +8643,7 @@ namespace Thetis
                     Display.SpectrumGridMin = (int)console.DisplayGridMinXVTR;
                     break;
             }
-
+            console.UpdateDisplayGridLevelMinValues(); //MW0LGE
         }
 
         private void udDisplayGridStep_ValueChanged(object sender, System.EventArgs e)
@@ -8502,6 +8656,7 @@ namespace Thetis
             // if (udRX2DisplayGridMax.Value <= udRX2DisplayGridMin.Value)
             //    udRX2DisplayGridMax.Value = udRX2DisplayGridMin.Value + 10;
             // Display.RX2SpectrumGridMax = (int)udRX2DisplayGridMax.Value;
+
             UpdateDisplayGridBandInfo();
             switch (console.RX2Band)
             {
@@ -8562,6 +8717,8 @@ namespace Thetis
                     Display.RX2SpectrumGridMax = (int)console.RX2DisplayGridMaxXVTR;
                     break;
             }
+
+            console.UpdateDisplayGridLevelMaxValues(); //MW0LGE
         }
 
         private void udRX2DisplayGridMin_ValueChanged(object sender, System.EventArgs e)
@@ -9744,7 +9901,8 @@ namespace Thetis
             udDSPALCHangTime.Value = (int)dr["ALC_Hang"];
             tbDSPALCHangThreshold.Value = (int)dr["ALC_HangThreshold"];
 
-            console.PWR = (int)dr["Power"];
+            //console.PWR = (int)dr["Power"];  // MW0LGE power is stored per band, leaving this in will prevent the power per band from being recalled
+                                                // leaving in save incase we want to use this at some point
 
             chkVOXEnable.Checked = (bool)dr["VOX_On"];
             chkDEXPEnable.Checked = (bool)dr["Dexp_On"];
@@ -9761,8 +9919,8 @@ namespace Thetis
             chkDEXPLookAheadEnable.Checked = (bool)dr["Dexp_LookAhead_On"];
             udDEXPLookAhead.Value = (int)dr["Dexp_LookAhead"];
 
-            udTXTunePower.Value = (int)dr["Tune_Power"];
-            comboTXTUNMeter.Text = (string)dr["Tune_Meter_Type"];
+            //udTXTunePower.Value = (int)dr["Tune_Power"];  //MW0LGE not applied here anymore, leave in save incase we want to use it
+            //comboTXTUNMeter.Text = (string)dr["Tune_Meter_Type"];  //MW0LGE
 
             // chkTXLimitSlew.Checked = (bool)dr["TX_Limit_Slew"];
 
@@ -12066,50 +12224,136 @@ namespace Thetis
         // Display Tab Event Handlers
         // ======================================================
 
-        private void btnOK_Click(object sender, System.EventArgs e)
+        private void setButtonState(bool bSaving, bool bLoading)
         {
-            console.SetFocusMaster(true);
-            if (saving)
+            if (m_bIgnoreButtonState) return; // not used after this is true, which is set in console_closing
+
+            // prevent users from cancel when saving etc
+            // give some feedback that save or load is occuring
+            
+            bool bEnabled = !(bSaving || bLoading);
+
+            // disable/enable anything that can save/load settings
+            btnOK.Enabled = bEnabled;
+            btnApply.Enabled = bEnabled;
+            btnCancel.Enabled = bEnabled;
+            btnResetDB.Enabled = bEnabled;
+            btnImportDB.Enabled = bEnabled;
+            comboFRSRegion.Enabled = bEnabled;
+            comboTXProfileName.Enabled = bEnabled;
+            btnTXProfileSave.Enabled = bEnabled;
+            btnTXProfileDelete.Enabled = bEnabled;
+            btnTXProfileDefImport.Enabled = bEnabled;
+
+            if (bLoading)
             {
-                this.Hide();
+                labelSavingLoading.Text = "LOADING";
+                labelSavingLoading.Visible = true;
+            }
+            else if (bSaving)
+            {
+                labelSavingLoading.Text = "SAVING";
+                labelSavingLoading.Visible = true;
             }
             else
             {
-                Thread t = new Thread(new ThreadStart(SaveOptions));
-                t.Name = "Save Options Thread";
-                t.IsBackground = true;
-                t.Priority = ThreadPriority.Lowest;
-                t.Start();
-                this.Hide();
+                labelSavingLoading.Text = "";
+                labelSavingLoading.Visible = false;
             }
+            labelSavingLoading.Refresh();
+        }
+
+        private Thread m_objSaveLoadThread = null;
+        public Thread SaveLoadThread {
+            get { return m_objSaveLoadThread; }
+            set {                 
+            }
+        }
+        private bool m_bIgnoreButtonState = false;
+        public bool IgnoreButtonState {
+            get { return m_bIgnoreButtonState; }
+            set { m_bIgnoreButtonState = value;  }
+        }
+        public void WaitForSaveLoad()
+        {
+            if (m_objSaveLoadThread != null && m_objSaveLoadThread.IsAlive) m_objSaveLoadThread.Join();
+        }
+
+        private void btnOK_Click(object sender, System.EventArgs e)
+        {
+            setButtonState(true, false);
+
+            console.SetFocusMaster(true);
+            //if (saving)
+            //{
+            //    this.Hide();
+            //}
+            //else
+            //{
+            WaitForSaveLoad();
+            m_objSaveLoadThread = null;
+
+            m_objSaveLoadThread = new Thread(new ThreadStart(PreSaveOptions));
+            m_objSaveLoadThread.Name = "Save Options Thread";
+            m_objSaveLoadThread.IsBackground = true;
+            m_objSaveLoadThread.Priority = ThreadPriority.Lowest;
+            m_objSaveLoadThread.Start();
+            this.Hide();
+            //}
 
         }
 
         private void btnCancel_Click(object sender, System.EventArgs e)
         {
+            setButtonState(false, true);
+
             console.SetFocusMaster(true);
-            Thread t = new Thread(new ThreadStart(GetOptions));
-            t.Name = "Save Options Thread";
-            t.IsBackground = true;
-            t.Priority = ThreadPriority.Lowest;
-            t.Start();
+
+            WaitForSaveLoad();
+            m_objSaveLoadThread = null;
+
+            m_objSaveLoadThread = new Thread(new ThreadStart(PreGetOptions));
+            m_objSaveLoadThread.Name = "Get Options Thread";
+            m_objSaveLoadThread.IsBackground = true;
+            m_objSaveLoadThread.Priority = ThreadPriority.Lowest;
+            m_objSaveLoadThread.Start();
             this.Hide();
         }
 
         private void btnApply_Click(object sender, System.EventArgs e)
         {
-            Thread t = new Thread(new ThreadStart(ApplyOptions));
-            t.Name = "Save Options Thread";
-            t.IsBackground = true;
-            t.Priority = ThreadPriority.Normal;
-            t.Start();
+            setButtonState(true, false);
+
+            WaitForSaveLoad();
+            m_objSaveLoadThread = null;
+
+            m_objSaveLoadThread = new Thread(new ThreadStart(ApplyOptions));
+            m_objSaveLoadThread.Name = "Apply Options Thread";
+            m_objSaveLoadThread.IsBackground = true;
+            m_objSaveLoadThread.Priority = ThreadPriority.Normal;
+            m_objSaveLoadThread.Start();
         }
 
+        private void PreGetOptions()
+        {            
+            GetOptions();
+
+            setButtonState(false, false);
+        }
+        private void PreSaveOptions()
+        {
+            //if (saving) return;
+            SaveOptions();
+
+            setButtonState(false, false);
+        }
         private void ApplyOptions()
         {
-            if (saving) return;
+            //if (saving) return;
             SaveOptions();
             DB.Update();
+            
+            setButtonState(false, false);
         }
 
         private void udGeneralLPTDelay_ValueChanged(object sender, System.EventArgs e)
@@ -15251,7 +15495,7 @@ namespace Thetis
                     break;
                 case "United States":
                     region = FRSRegion.US;
-                    console.Extended = false; // MW0LGE
+                    //console.Extended = false;
                     // Display.Init();
                     break;
                 case "Norway":
@@ -15302,22 +15546,40 @@ namespace Thetis
                     region = FRSRegion.Sweden;
                     //console.Extended = false;
                     break;
-                //MW0LGE case "Extended":
-                //    console.Extended = true;
-                //    break;
+                case "Region1":
+                    region = FRSRegion.Region1;
+                    break;
+                case "Region2":
+                    region = FRSRegion.Region2;
+                    break;
+                case "Region3":
+                    region = FRSRegion.Region3;
+                    break;
+                case "Germany":
+                    region = FRSRegion.Germany;
+                    break;
             }
             if (console.CurrentRegion != region)
                 console.CurrentRegion = region;
 
-            if (!console.initializing) DB.UpdateRegion(console.CurrentRegion);
-            if (console.CurrentRegion == FRSRegion.UK)
+            if (!console.initializing)
             {
-                console.band_60m_register = 11;
-                console.Init60mChannels();
+                setButtonState(true, false);  // MW0LGE this causes an update of the whole DB, so disable buttons while happening
+                DB.UpdateRegion(console.CurrentRegion);
+                setButtonState(false, false);
             }
-            if (console.CurrentRegion == FRSRegion.US)
+            //if (console.CurrentRegion == FRSRegion.UK)
+            //{
+            //    console.band_60m_register = 11;
+            //    console.Init60mChannels();
+            //}
+            //if (console.CurrentRegion == FRSRegion.US)
+            //{
+            //    console.band_60m_register = 5;
+            //    console.Init60mChannels();
+            //}
+            if (console.CurrentRegion == FRSRegion.UK || console.CurrentRegion == FRSRegion.US)
             {
-                console.band_60m_register = 5;
                 console.Init60mChannels();
             }
         }
@@ -15420,11 +15682,6 @@ namespace Thetis
             {
                 Audio.SourceScale = Math.Pow(10.0, (double)udTwoToneLevel.Value / 20.0);
             }
-        }
-
-        private void chkSMeter_CheckedChanged(object sender, EventArgs e)
-        {
-            console.SMeter = chkSMeter.Checked;
         }
 
         private void clrbtnGridFine_Changed(object sender, EventArgs e)
@@ -16526,6 +16783,10 @@ namespace Thetis
             console.SWRProtection = chkSWRProtection.Checked;
         }
 
+        public bool ATTOnTXChecked {
+            get { return chkATTOnTX.Checked; }
+            set { }
+        }
         private void chkATTOnTX_CheckedChanged(object sender, EventArgs e)
         {
             console.ATTOnTX = chkATTOnTX.Checked;
@@ -19778,6 +20039,49 @@ namespace Thetis
         private void chkSmallModeFilteronVFOs_CheckedChanged(object sender, EventArgs e)
         {
             console.ShowSmallModeFilterOnVFOs = chkSmallModeFilteronVFOs.Checked;
+        }
+
+        private void comboDisplayThreadPriority_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            //Below Normal
+            //Normal
+            //Above Normal
+            //High
+
+            //ThreadPriority.Lowest         0
+            //ThreadPriority.BelowNormal    1
+            //ThreadPriority.Normal         2
+            //ThreadPriority.AboveNormal    3
+            //ThreadPriority.Highest        4
+
+            if (comboDisplayThreadPriority.SelectedIndex < 0) return; // ignore 0 or not selected
+
+            console.DisplayThreadPriority = (ThreadPriority)comboDisplayThreadPriority.SelectedIndex;
+        }
+
+        private void btnShowSeqLog_Click(object sender, EventArgs e)
+        {
+            console.ShowSEQLog();
+        }
+
+        private void radSReading_CheckedChanged(object sender, EventArgs e)
+        {
+            console.MMMeasureMode = MultiMeterMeasureMode.SMeter;
+        }
+
+        private void radDBM_CheckedChanged(object sender, EventArgs e)
+        {
+            console.MMMeasureMode = MultiMeterMeasureMode.DBM;
+        }
+
+        private void radUV_CheckedChanged(object sender, EventArgs e)
+        {
+            console.MMMeasureMode = MultiMeterMeasureMode.UV;
+        }
+
+        private void chkAntiAlias_CheckedChanged(object sender, EventArgs e)
+        {
+            console.AntiAlias = chkAntiAlias.Checked;
         }
 
         //--

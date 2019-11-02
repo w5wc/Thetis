@@ -471,6 +471,56 @@ void StopReadThread(void) {
 //	}
 //}
 
+void addSnapShot(int rx)
+{
+	// add newest to head
+
+	_seqLogSnapshot_t* snapshot = malloc(sizeof(_seqLogSnapshot_t));
+	if (snapshot == NULL) return; //eek
+
+	memcpy(snapshot->rx_in_seq_snapshot, prn->rx[rx].rx_in_seq_delta, sizeof(int) * MAX_IN_SEQ_LOG);
+
+	if (prn->rx[rx].snapshot_length == MAX_IN_SEQ_SNAPSHOTS) {
+		// too many in the list, dump tail
+		prn->rx[rx].snapshot_length--;
+
+		_seqLogSnapshot_t* tmp = prn->rx[rx].snapshots_tail;
+		
+		tmp->previous->next = NULL;  // previous will always exist so no need to check for null
+
+		prn->rx[rx].snapshots_tail = tmp->previous;
+
+		free(tmp);
+	}
+
+	if (prn->rx[rx].snapshots_head == NULL) {
+		// new
+		snapshot->previous = NULL;
+		snapshot->next = NULL;
+		prn->rx[rx].snapshots_head = snapshot;
+		prn->rx[rx].snapshots_tail = snapshot;
+	}
+	else
+	{
+		// add to head
+		prn->rx[rx].snapshots_head->previous = snapshot;
+		snapshot->next = prn->rx[rx].snapshots_head;
+		prn->rx[rx].snapshots_head = snapshot;
+	}
+
+	prn->rx[rx].snapshot_length++;
+}
+
+void storeRXSeqDelta(int rx, int delta) {
+	unsigned int i = prn->rx[rx].rx_in_seq_delta_index;
+
+	prn->rx[rx].rx_in_seq_delta[i] = delta;
+
+	i++;
+	if (i == MAX_IN_SEQ_LOG) i = 0;
+	prn->rx[rx].rx_in_seq_delta_index = i;
+}
+
 int ReadUDPFrame(unsigned char *bufp) {
 	unsigned char readbuf[1444];
 	struct sockaddr_in fromaddr;
@@ -627,12 +677,16 @@ int ReadUDPFrame(unsigned char *bufp) {
 	case 1035: // 1444 bytes - 24-bit DDC0 I/Q data
 		if (nrecv != 1444) break; // check for malformed packet
 
+		if (seqnum != 0) storeRXSeqDelta(0, (int)seqnum - (1 + prn->rx[0].rx_in_seq_no));
+
 		//rx_samples_buf++;
 		if (seqnum != (1 + prn->rx[0].rx_in_seq_no) && seqnum != 0)  {
 			prn->rx[0].rx_in_seq_err += 1;
 			//PrintTimeHack();
 			printf("- Rx0 I/Q: seq error this: %d last: %d\n", seqnum, prn->rx[0].rx_in_seq_no);
 			fflush(stdout);
+
+			addSnapShot(0);
 		}
 
 		prn->rx[0].rx_in_seq_no = seqnum;
@@ -641,11 +695,15 @@ int ReadUDPFrame(unsigned char *bufp) {
 	case 1036: // 1444 bytes - 24-bit DDC1 I/Q data
 		if (nrecv != 1444) break; // check for malformed packet
 
+		if(seqnum != 0) storeRXSeqDelta(1, (int)seqnum - (1 + prn->rx[1].rx_in_seq_no));
+
 		if (seqnum != (1 + prn->rx[1].rx_in_seq_no) && seqnum != 0)  {
 			prn->rx[1].rx_in_seq_err += 1;
 			//PrintTimeHack();
 			printf("- Rx1 I/Q: seq error this: %d last: %d\n", seqnum, prn->rx[1].rx_in_seq_no);
 			fflush(stdout);
+
+			addSnapShot(1);
 		}
 
 		prn->rx[1].rx_in_seq_no = seqnum;
@@ -654,12 +712,16 @@ int ReadUDPFrame(unsigned char *bufp) {
 	case 1037: // 1444 bytes - 24-bit DDC2 I/Q data
 		if (nrecv != 1444) break; // check for malformed packet
 
+		if (seqnum != 0) storeRXSeqDelta(2, (int)seqnum - (1 + prn->rx[2].rx_in_seq_no));
+
 		//rx_samples_buf++;
 		if (seqnum != (1 + prn->rx[2].rx_in_seq_no) && seqnum != 0)  {
 			prn->rx[2].rx_in_seq_err += 1;
 			//PrintTimeHack();
 			printf("- Rx2 I/Q: seq error this: %d last: %d\n", seqnum, prn->rx[2].rx_in_seq_no);
 			fflush(stdout);
+
+			addSnapShot(2);
 		}
 
 		prn->rx[2].rx_in_seq_no = seqnum;
@@ -668,11 +730,15 @@ int ReadUDPFrame(unsigned char *bufp) {
 	case 1038: // 1444 bytes - 24-bit DDC3 I/Q data
 		if (nrecv != 1444) break; // check for malformed packet
 
+		if (seqnum != 0) storeRXSeqDelta(3, (int)seqnum - (1 + prn->rx[3].rx_in_seq_no));
+
 		if (seqnum != (1 + prn->rx[3].rx_in_seq_no) && seqnum != 0)  {
 			prn->rx[3].rx_in_seq_err += 1;
 			//PrintTimeHack();
 			printf("- Rx3 I/Q: seq error this: %d last: %d\n", seqnum, prn->rx[3].rx_in_seq_no);
 			fflush(stdout);
+
+			addSnapShot(3);
 		}
 
 		prn->rx[3].rx_in_seq_no = seqnum;
@@ -681,11 +747,15 @@ int ReadUDPFrame(unsigned char *bufp) {
 	case 1039: // 1444 bytes - 24-bit DDC4 I/Q data
 		if (nrecv != 1444) break; // check for malformed packet
 
+		if (seqnum != 0) storeRXSeqDelta(4, (int)seqnum - (1 + prn->rx[4].rx_in_seq_no));
+
 		if (seqnum != (1 + prn->rx[4].rx_in_seq_no) && seqnum != 0)  {
 			prn->rx[4].rx_in_seq_err += 1;
 			//PrintTimeHack();
 			printf("- Rx4 I/Q: seq error this: %d last: %d\n", seqnum, prn->rx[4].rx_in_seq_no);
 			fflush(stdout);
+
+			addSnapShot(4);
 		}
 
 		prn->rx[4].rx_in_seq_no = seqnum;
@@ -694,11 +764,15 @@ int ReadUDPFrame(unsigned char *bufp) {
 	case 1040: // 1444 bytes - 24-bit DDC5 I/Q data
 		if (nrecv != 1444) break; // check for malformed packet
 
+		if (seqnum != 0) storeRXSeqDelta(5, (int)seqnum - (1 + prn->rx[5].rx_in_seq_no));
+
 		if (seqnum != (1 + prn->rx[5].rx_in_seq_no) && seqnum != 0)  {
 			prn->rx[5].rx_in_seq_err += 1;
 			//PrintTimeHack();
 			printf("- Rx5 I/Q: seq error this: %d last: %d\n", seqnum, prn->rx[5].rx_in_seq_no);
 			fflush(stdout);
+
+			addSnapShot(5);
 		}
 
 		prn->rx[5].rx_in_seq_no = seqnum;
@@ -707,11 +781,15 @@ int ReadUDPFrame(unsigned char *bufp) {
 	case 1041: // 1444 bytes - 24-bit DDC6 I/Q data
 		if (nrecv != 1444) break; // check for malformed packet
 
+		if (seqnum != 0) storeRXSeqDelta(6, (int)seqnum - (1 + prn->rx[6].rx_in_seq_no));
+
 		if (seqnum != (1 + prn->rx[6].rx_in_seq_no) && seqnum != 0)  {
 			prn->rx[6].rx_in_seq_err += 1;
 			//PrintTimeHack();
 			printf("- Rx6 I/Q: seq error this: %d last: %d\n", seqnum, prn->rx[6].rx_in_seq_no);
 			fflush(stdout);
+
+			addSnapShot(6);
 		}
 
 		prn->rx[6].rx_in_seq_no = seqnum;
@@ -739,7 +817,7 @@ ReadThreadMainLoop() {
 		DWORD retVal = WSAWaitForMultipleEvents(1, &prn->hDataEvent, FALSE, prn->wdt ? 3000 : WSA_INFINITE, FALSE);
 			if ((retVal == WSA_WAIT_FAILED) || (retVal == WSA_WAIT_TIMEOUT))
 			{
-				HaveSync = 0; //send console LOS
+				HaveSync = 0; //send console LOS			
 				SendStopToMetis();
 				memset(prn->RxReadBufp, 0, prn->rx[0].spp);
 				memset(prn->TxReadBufp, 0, prn->mic.spp);

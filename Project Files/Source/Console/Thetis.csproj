@@ -269,6 +269,12 @@
     <Compile Include="frmNotchPopup.designer.cs">
       <DependentUpon>frmNotchPopup.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmSeqLog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmSeqLog.designer.cs">
+      <DependentUpon>frmSeqLog.cs</DependentUpon>
+    </Compile>
     <Compile Include="ShutdownForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -541,6 +547,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="frmNotchPopup.resx">
       <DependentUpon>frmNotchPopup.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmSeqLog.resx">
+      <DependentUpon>frmSeqLog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="KE9N\scan.resx">
       <SubType>Designer</SubType>

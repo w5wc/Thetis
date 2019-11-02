@@ -52,7 +52,7 @@ namespace Thetis
     using SharpDX.Direct3D;
     using SharpDX.Direct3D11;
     using SharpDX.DXGI;
-    using SharpDX.Windows;
+    //using SharpDX.Windows;
     //using SharpDX.Mathematics;
 
     //
@@ -68,11 +68,12 @@ namespace Thetis
     // SharpDX clashes
     using AlphaMode = SharpDX.Direct2D1.AlphaMode;
     using Device = SharpDX.Direct3D11.Device;
-    using Factory = SharpDX.DXGI.Factory;
-    using SDXColor = SharpDX.Color;
+    //using Factory = SharpDX.DXGI.Factory;
+    //using SDXColor = SharpDX.Color;
     using RectangleF = SharpDX.RectangleF;
     using SDXPixelFormat = SharpDX.Direct2D1.PixelFormat;
     //
+
 
     class Display
     {
@@ -511,6 +512,7 @@ namespace Thetis
                 displayTarget = value;
                 displayTargetHeight = displayTarget.Height;
                 displayTargetWidth = displayTarget.Width;
+                displayTargetWidth = Math.Min(displayTargetWidth, BUFFER_SIZE); //MW0LGE prevent larger width than BUFFERSIZE
                 Audio.ScopeDisplayWidth = displayTargetWidth;
                 if (specready)
                 {
@@ -1740,11 +1742,12 @@ namespace Thetis
 
             histogram_data = m_objIntPool.Rent(displayTargetWidth);
             histogram_history = m_objIntPool.Rent(displayTargetWidth);
-            for (int i = 0; i < displayTargetWidth; i++)
+
+            Parallel.For(0, displayTargetWidth, (i) => //for (int i = 0; i < displayTargetWidth; i++)
             {
                 histogram_data[i] = Int32.MaxValue;
                 histogram_history[i] = 0;
-            }
+            });
 
             if (current_display_engine == DisplayEngine.GDI_PLUS)
             {
@@ -1769,16 +1772,17 @@ namespace Thetis
             if (rx1_peak_buffer != null) m_objFloatPool.Return(rx1_peak_buffer);
             if (rx2_peak_buffer != null) m_objFloatPool.Return(rx2_peak_buffer);
 
-            rx1_average_buffer = m_objFloatPool.Rent(BUFFER_SIZE);	// initialize averaging buffer array
+            //displayTargetWidth  or BUFFER_SIZE?
+            rx1_average_buffer = m_objFloatPool.Rent(displayTargetWidth);	// initialize averaging buffer array
             rx1_average_buffer[0] = CLEAR_FLAG;	// set the clear flag
 
-            rx2_average_buffer = m_objFloatPool.Rent(BUFFER_SIZE);  // initialize averaging buffer array
+            rx2_average_buffer = m_objFloatPool.Rent(displayTargetWidth);  // initialize averaging buffer array
             rx2_average_buffer[0] = CLEAR_FLAG;		// set the clear flag
 
-            rx1_peak_buffer = m_objFloatPool.Rent(BUFFER_SIZE);
+            rx1_peak_buffer = m_objFloatPool.Rent(displayTargetWidth);
             rx1_peak_buffer[0] = CLEAR_FLAG;
 
-            rx2_peak_buffer = m_objFloatPool.Rent(BUFFER_SIZE);
+            rx2_peak_buffer = m_objFloatPool.Rent(displayTargetWidth);
             rx2_peak_buffer[0] = CLEAR_FLAG;
 
             if (new_display_data != null) m_objFloatPool.Return(new_display_data);
@@ -1795,22 +1799,22 @@ namespace Thetis
             //if (peakHold_time != null) m_objFloatPool.Return(peakHold_time);
             //if (peakHold_time_bottom != null) m_objFloatPool.Return(peakHold_time_bottom);
 
-            new_display_data = m_objFloatPool.Rent(BUFFER_SIZE);
-            current_display_data = m_objFloatPool.Rent(BUFFER_SIZE);
-            new_display_data_bottom = m_objFloatPool.Rent(BUFFER_SIZE);
-            current_display_data_bottom = m_objFloatPool.Rent(BUFFER_SIZE);
+            new_display_data = m_objFloatPool.Rent(displayTargetWidth);
+            current_display_data = m_objFloatPool.Rent(displayTargetWidth);
+            new_display_data_bottom = m_objFloatPool.Rent(displayTargetWidth);
+            current_display_data_bottom = m_objFloatPool.Rent(displayTargetWidth);
 
-            new_waterfall_data = m_objFloatPool.Rent(BUFFER_SIZE);
-            current_waterfall_data = m_objFloatPool.Rent(BUFFER_SIZE);
-            new_waterfall_data_bottom = m_objFloatPool.Rent(BUFFER_SIZE);
-            current_waterfall_data_bottom = m_objFloatPool.Rent(BUFFER_SIZE);
+            new_waterfall_data = m_objFloatPool.Rent(displayTargetWidth);
+            current_waterfall_data = m_objFloatPool.Rent(displayTargetWidth);
+            new_waterfall_data_bottom = m_objFloatPool.Rent(displayTargetWidth);
+            current_waterfall_data_bottom = m_objFloatPool.Rent(displayTargetWidth);
 
             //peakHold_data = m_objFloatPool.Rent(BUFFER_SIZE);
             //peakHold_data_bottom = m_objFloatPool.Rent(BUFFER_SIZE);
             //peakHold_time = m_objFloatPool.Rent(BUFFER_SIZE);
             //peakHold_time_bottom = m_objFloatPool.Rent(BUFFER_SIZE);
 
-            for (int i = 0; i < BUFFER_SIZE; i++)
+            Parallel.For(0, displayTargetWidth, (i) => //for (int i = 0; i < displayTargetWidth; i++)
             {
                 new_display_data[i] = -200.0f;
                 current_display_data[i] = -200.0f;
@@ -1825,7 +1829,7 @@ namespace Thetis
                 //peakHold_data_bottom[i] = float.MaxValue;
                 //peakHold_time[i] = 1; //s
                 //peakHold_time_bottom[i] = 1; //s
-            }
+            });
         }
 
         public static void DrawBackground()
@@ -1876,6 +1880,15 @@ namespace Thetis
 
         unsafe public static void RenderGDIPlus(ref PaintEventArgs e)
         {
+            if (m_bAntiAlias)
+            {
+                e.Graphics.SmoothingMode = SmoothingMode.HighQuality;
+            }
+            else
+            {
+                e.Graphics.SmoothingMode = SmoothingMode.HighSpeed;
+            }
+
             // MW0LGE to do, sort out K variables, and stuff for Map overlay, some has been commented for now
             // just to get dual panafalls up and running
             try
@@ -2147,9 +2160,9 @@ namespace Thetis
                     e.Graphics.FillRectangle(new SolidBrush(Color.Red), 0, 0, 8, 8);
                 }
 
+                calcFps();
                 if (m_bShowFPS)
-                {
-                    calcFps();
+                {                    
                     e.Graphics.DrawString(m_fps.ToString(), m_fntCallOutFont, m_bTextCallOutActive, 10, 0);
                 }
             }
@@ -2163,12 +2176,12 @@ namespace Thetis
         {
             if (buffer[0] == CLEAR_FLAG)
             {
-                for (int i = 0; i < BUFFER_SIZE; i++)
+                for (int i = 0; i < displayTargetWidth/*BUFFER_SIZE*/; i++)
                     buffer[i] = new_data[i];
             }
             else
             {
-                for (int i = 0; i < BUFFER_SIZE; i++)
+                for (int i = 0; i < displayTargetWidth/*BUFFER_SIZE*/; i++)
                 {
                     if (new_data[i] > buffer[i])
                         buffer[i] = new_data[i];
@@ -2720,7 +2733,7 @@ namespace Thetis
 
             //MW0LGE
             int nVerticalShift = getVerticalShift(rx, bottom, W, H);
-            int cwSideToneShift = getCWSideToneShift(rx, bottom);
+            int cwSideToneShift = getCWSideToneShift(rx);
             int cwSideToneShiftInverted = cwSideToneShift * -1; // invert the sign as cw zero lines/tx lines etc are a shift in opposite direction to the grid
 
             if (rx == 1)
@@ -3151,8 +3164,8 @@ namespace Thetis
 
                     if (c.InBW((rf_freq + Low) * 1e-6, (rf_freq + High) * 1e-6)) // is channel visible?
                     {
-                        bool on_channel = console.RX1IsOn60mChannel(c); // only true if you are on channel and are in an acceptable mode
-                        if (bottom || (current_display_mode_bottom == DisplayMode.PANAFALL && rx == 2)) on_channel = console.RX2IsOn60mChannel(c);
+                        bool on_channel = console.RX1IsIn60mChannel(c); // only true if you are on channel and are in an acceptable mode
+                        if (bottom || (current_display_mode_bottom == DisplayMode.PANAFALL && rx == 2)) on_channel = console.RX2IsIn60mChannel(c);
 
                         DSPMode mode = rx1_dsp_mode;
                         if (bottom || (current_display_mode_bottom == DisplayMode.PANAFALL && rx == 2)) mode = rx2_dsp_mode;
@@ -3453,6 +3466,74 @@ namespace Thetis
                 g.DrawString("0", font9, brBrush, center_line_x - 5, nVerticalShift + (float)Math.Floor(H * .01));
             }
 
+            //MW0LGE
+            int[] band_edge_list;
+            switch (console.CurrentRegion)
+            {
+                case FRSRegion.US:
+                    band_edge_list = new int[]{ 135700, 137800, 472000, 479000, 1800000, 2000000, 3500000, 4000000,
+            5330500, 5406400, 7000000, 7300000, 10100000, 10150000, 14000000, 14350000,  18068000, 18168000, 21000000, 21450000,
+            24890000, 24990000, 28000000, 29700000, 50000000, 54000000, 144000000, 148000000 };
+                    break;
+                case FRSRegion.Germany:
+                    band_edge_list = new int[]{ 135700, 137800, 472000, 479000, 1810000, 2000000, 3500000, 3800000,
+            5351500, 5366500, 7000000, 7200000, 10100000, 10150000, 14000000, 14350000,  18068000, 18168000, 21000000, 21450000,
+            24890000, 24990000, 28000000, 29700000, 50000000, 51000000, 144000000, 146000000 };
+                    break;
+                case FRSRegion.Region1:
+                    band_edge_list = new int[]{ 135700, 137800, 472000, 479000, 1810000, 2000000, 3500000, 3800000,
+            5351500, 5366500, 7000000, 7200000, 10100000, 10150000, 14000000, 14350000,  18068000, 18168000, 21000000, 21450000,
+            24890000, 24990000, 28000000, 29700000, 50000000, 54000000, 144000000, 146000000 };
+                    break;
+                case FRSRegion.Region2:
+                    band_edge_list = new int[]{ 135700, 137800, 472000, 479000, 1800000, 2000000, 3500000, 4000000,
+            5351500, 5366500, 7000000, 7300000, 10100000, 10150000, 14000000, 14350000,  18068000, 18168000, 21000000, 21450000,
+            24890000, 24990000, 28000000, 29700000, 50000000, 54000000, 144000000, 148000000 };
+                    break;
+                case FRSRegion.Region3:
+                    band_edge_list = new int[]{ 135700, 137800, 472000, 479000, 1800000, 2000000, 3500000, 3900000,
+            7000000, 7300000, 10100000, 10150000, 14000000, 14350000,  18068000, 18168000, 21000000, 21450000,
+            24890000, 24990000, 28000000, 29700000, 50000000, 54000000, 144000000, 148000000 };
+                    break;
+                case FRSRegion.Spain:
+                    band_edge_list = new int[] { 135700, 137800, 472000, 479000, 1810000, 1850000, 3500000, 3800000,
+            7000000, 7200000, 10100000, 10150000, 14000000, 14350000, 18068000, 18168000,
+            21000000, 21450000, 24890000, 24990000, 28000000, 29700000, 50000000, 52000000, 144000000, 148000000 };
+                    break;
+                case FRSRegion.Australia:
+                    band_edge_list = new int[]{ 135700, 137800, 472000, 479000, 1800000, 1875000,
+             3500000, 3800000, 7000000, 7300000, 10100000, 10150000, 14000000, 14350000, 18068000,
+             18168000, 21000000, 21450000, 24890000, 24990000, 28000000, 29700000, 50000000, 54000000, 144000000, 148000000 };
+                    break;
+                case FRSRegion.UK:
+                    band_edge_list = new int[] { 135700, 137800, 472000, 479000, 1810000, 2000000, 3500000, 3800000,
+            5258500, 5406500, 7000000, 7200000, 10100000, 10150000, 14000000, 14350000, 18068000, 18168000,
+            21000000, 21450000, 24890000, 24990000, 28000000, 29700000, 50000000, 52000000, 144000000, 148000000 };
+                    break;
+                case FRSRegion.India:
+                    band_edge_list = new int[]{ 1810000, 1860000, 3500000, 3900000, 7000000, 7200000,
+            10100000, 10150000, 14000000, 14350000, 18068000, 18168000, 21000000, 21450000,
+            24890000, 24990000, 28000000, 29700000, 50000000, 54000000, 144000000, 148000000 };
+                    break;
+                case FRSRegion.Norway:
+                    band_edge_list = new int[]{ 1800000, 2000000, 3500000, 4000000, 5260000, 5410000,
+            7000000, 7300000, 10100000, 10150000, 14000000, 14350000, 18068000, 18168000, 21000000, 21450000,
+            24890000, 24990000, 28000000, 29700000, 50000000, 54000000, 144000000, 148000000 };
+                    break;
+                case FRSRegion.Japan:
+                    band_edge_list = new int[]{ 135700, 137800, 472000, 479000, 1810000, 1825000, 1907500, 1912500,
+                        3500000, 3575000, 3599000, 3612000, 3680000, 3687000, 3702000, 3716000, 3745000, 3770000, 3791000, 3805000,
+            7000000, 7200000, 10100000, 10150000, 14000000, 14350000, 18068000, 18168000, 21000000, 21450000,
+            24890000, 24990000, 28000000, 29700000, 50000000, 54000000, 144000000, 146000000 };
+                    break;
+                default: // same as region3 but with extended 80m out to 4mhz
+                    band_edge_list = new int[]{ 135700, 137800, 472000, 479000, 1800000, 2000000, 3500000, 4000000,
+            7000000, 7300000, 10100000, 10150000, 14000000, 14350000,  18068000, 18168000, 21000000, 21450000,
+            24890000, 24990000, 28000000, 29700000, 50000000, 54000000, 144000000, 148000000 };
+                    break;
+            }
+            //--
+
             double vfo;
 
             if (rx == 1)
@@ -3513,55 +3594,6 @@ namespace Thetis
             //}
             //--
 
-            //MW0LGE
-            int[] band_edge_list;
-            switch (console.CurrentRegion)
-            {
-                case FRSRegion.Spain:
-                    band_edge_list = new int[] { 135700, 137800, 472000, 479000, 1810000, 1850000, 3500000, 3800000,
-            7000000, 7200000, 10100000, 10150000, 14000000, 14350000, 18068000, 18168000,
-            21000000, 21450000, 24890000, 24990000, 28000000, 29700000, 50000000, 52000000, 144000000, 148000000 };
-                    break;
-                case FRSRegion.Australia:
-                    band_edge_list = new int[]{ 135700, 137800, 472000, 479000, 1800000, 1875000,
-             3500000, 3800000, 7000000, 7300000, 10100000, 10150000, 14000000, 14350000, 18068000,
-             18168000, 21000000, 21450000, 28000000, 29700000, 50000000, 54000000, 144000000, 148000000 };
-                    break;
-                case FRSRegion.UK:
-                    band_edge_list = new int[] { 135700, 137800, 472000, 479000, 1810000, 2000000, 3500000, 3800000,
-            5258500, 5406500, 7000000, 7200000, 10100000, 10150000, 14000000, 14350000, 18068000, 18168000,
-            21000000, 21450000, 24890000, 24990000, 28000000, 29700000, 50000000, 52000000, 144000000, 148000000 };
-                    break;
-                case FRSRegion.India:
-                    band_edge_list = new int[]{ 1810000, 1860000, 3500000, 3900000, 7000000, 7200000,
-            10100000, 10150000, 14000000, 14350000, 18068000, 18168000, 21000000, 21450000,
-            24890000, 24990000, 28000000, 29700000, 50000000, 54000000, 144000000, 148000000 };
-                    break;
-                case FRSRegion.Norway:
-                    band_edge_list = new int[]{ 1800000, 2000000, 3500000, 4000000, 5260000, 5410000,
-            7000000, 7300000, 10100000, 10150000, 14000000, 14350000, 18068000, 18168000, 21000000, 21450000,
-            24890000, 24990000, 28000000, 29700000, 50000000, 54000000, 144000000, 148000000 };
-                    break;
-                case FRSRegion.US:
-                    band_edge_list = new int[]{ 135700, 137800, 472000, 479000, 1800000, 2000000, 3500000, 4000000,
-            7000000, 7300000, 10100000, 10150000, 14000000, 14350000,  18068000, 18168000, 21000000, 21450000,
-            24890000, 24990000, 28000000, 29700000, 50000000, 54000000, 144000000, 148000000 };
-                    break;
-                case FRSRegion.Japan:
-                    band_edge_list = new int[]{ 135700, 137800, 472000, 479000, 1810000, 1810000, 1907500, 1912500,
-                        3500000, 3575000, 3599000, 3612000, 3687000, 3702000, 3716000, 3745000, 3770000, 3791000, 3805000,
-            7000000, 7200000, 10100000, 10150000, 14000000, 14350000, 18068000, 18168000, 21000000, 21450000,
-            24890000, 24990000, 28000000, 29700000, 50000000, 54000000, 144000000, 148000000 };
-                    break;
-                default:
-                    band_edge_list = new int[]{ 135700, 137800, 472000, 479000, 1800000, 2000000, 3500000, 4000000,
-            7000000, 7300000, 10100000, 10150000, 14000000, 14350000,  18068000, 18168000, 21000000, 21450000,
-            24890000, 24990000, 28000000, 29700000, 50000000, 54000000, 144000000, 148000000 };
-                    break;
-            }
-            //--
-
-
             long vfo_round = ((long)(vfo / freq_step_size)) * freq_step_size;
             long vfo_delta = (long)(vfo - vfo_round);
 
@@ -3569,7 +3601,7 @@ namespace Thetis
 
 
             // Draw vertical lines - band edge markers and freq text
-            for (int i = 0; i < f_steps + 1; i++)
+            for (int i = -1; i < f_steps + 1; i++)  // MW0LGE was from i=0, fixes inbetweenies not drawn if major is < 0
             {
                 string label;
                 int offsetL;
@@ -3582,11 +3614,9 @@ namespace Thetis
                 bool bBandEdge = false;
 
                 if (!show_freq_offset)
-                {
-                    
+                {                    
                     //--------------
                     //MW0LGE
-
                     for (int ii = 0; ii < band_edge_list.Length; ii++)
                     {
                         if(actual_fgrid == (double)band_edge_list[ii] / 1000000)
@@ -4389,12 +4419,12 @@ namespace Thetis
             return (float)(spectrum_grid_max - y * (double)(spectrum_grid_max - spectrum_grid_min) / displayTargetHeight);
         }
 
-        private static void DrawWaterfallGrid(ref Graphics g, int W, int H, int rx, bool bottom)
-        {
-            drawPanadapterAndWaterfallGrid(ref g, W, H, rx, bottom, true); // true  =  drawing waterfall grid
+        //private static void DrawWaterfallGrid(ref Graphics g, int W, int H, int rx, bool bottom)
+        //{
+        //    drawPanadapterAndWaterfallGrid(ref g, W, H, rx, bottom, true); // true  =  drawing waterfall grid
 
-            // all this semi duplicated code ditched,  now use common function passing true/false if you want waterfall or pana grid
-        }
+        //    // all this semi duplicated code ditched,  now use common function passing true/false if you want waterfall or pana grid
+        //}
 
         private static void DrawOffBackground(Graphics g, int W, int H, bool bottom)
         {
@@ -4605,7 +4635,7 @@ namespace Thetis
                 // get new data
                 fixed (void* rptr = &new_display_data[0])
                 fixed (void* wptr = &current_display_data[0])
-                    Win32.memcpy(wptr, rptr, BUFFER_SIZE * sizeof(float));
+                    Win32.memcpy(wptr, rptr, W/*BUFFER_SIZE*/ * sizeof(float));
                 data_ready = false;
             }
             else if (bottom && data_ready_bottom)
@@ -4613,7 +4643,7 @@ namespace Thetis
                 // get new data
                 fixed (void* rptr = &new_display_data_bottom[0])
                 fixed (void* wptr = &current_display_data_bottom[0])
-                    Win32.memcpy(wptr, rptr, BUFFER_SIZE * sizeof(float));
+                    Win32.memcpy(wptr, rptr, W/*BUFFER_SIZE*/ * sizeof(float));
                 data_ready_bottom = false;
             }
 
@@ -4666,7 +4696,7 @@ namespace Thetis
                 // get new data
                 fixed (void* rptr = &new_display_data[0])
                 fixed (void* wptr = &current_display_data[0])
-                    Win32.memcpy(wptr, rptr, BUFFER_SIZE * sizeof(float));
+                    Win32.memcpy(wptr, rptr, W/*BUFFER_SIZE*/ * sizeof(float));
                 data_ready = false;
             }
             else if (bottom && data_ready_bottom)
@@ -4674,7 +4704,7 @@ namespace Thetis
                 // get new data
                 fixed (void* rptr = &new_display_data_bottom[0])
                 fixed (void* wptr = &current_display_data_bottom[0])
-                    Win32.memcpy(wptr, rptr, BUFFER_SIZE * sizeof(float));
+                    Win32.memcpy(wptr, rptr, W/*BUFFER_SIZE*/ * sizeof(float));
                 data_ready_bottom = false;
             }
 
@@ -4760,7 +4790,7 @@ namespace Thetis
                 {
                     fixed (void* rptr = &new_display_data[0])
                     fixed (void* wptr = &current_display_data[0])
-                        Win32.memcpy(wptr, rptr, BUFFER_SIZE * sizeof(float));
+                        Win32.memcpy(wptr, rptr, W/*BUFFER_SIZE*/ * sizeof(float));
                 }
                 data_ready = false;
             }
@@ -4769,7 +4799,7 @@ namespace Thetis
                 {
                     fixed (void* rptr = &new_display_data_bottom[0])
                     fixed (void* wptr = &current_display_data_bottom[0])
-                        Win32.memcpy(wptr, rptr, BUFFER_SIZE * sizeof(float));
+                        Win32.memcpy(wptr, rptr, W/*BUFFER_SIZE*/ * sizeof(float));
                 }
                 data_ready_bottom = false;
             }
@@ -4892,7 +4922,7 @@ namespace Thetis
                     {
                         fixed (void* rptr = &new_display_data[0])
                         fixed (void* wptr = &current_display_data[0])
-                            Win32.memcpy(wptr, rptr, BUFFER_SIZE * sizeof(float));
+                            Win32.memcpy(wptr, rptr, W/*BUFFER_SIZE*/ * sizeof(float));
                     }
                     data_ready = false;
                 }
@@ -4928,7 +4958,7 @@ namespace Thetis
                     {
                         fixed (void* rptr = &new_display_data_bottom[0])
                         fixed (void* wptr = &current_display_data_bottom[0])
-                            Win32.memcpy(wptr, rptr, BUFFER_SIZE * sizeof(float));
+                            Win32.memcpy(wptr, rptr, W/*BUFFER_SIZE*/ * sizeof(float));
                     }
 
                     data_ready_bottom = false;
@@ -5205,7 +5235,7 @@ namespace Thetis
                     {
                         fixed (void* rptr = &new_waterfall_data[0])
                         fixed (void* wptr = &current_waterfall_data[0])
-                            Win32.memcpy(wptr, rptr, BUFFER_SIZE * sizeof(float));
+                            Win32.memcpy(wptr, rptr, W/*BUFFER_SIZE*/ * sizeof(float));
 
                     }
                     waterfall_data_ready = false;
@@ -5221,7 +5251,7 @@ namespace Thetis
                     {
                         fixed (void* rptr = &new_waterfall_data_bottom[0])
                         fixed (void* wptr = &current_waterfall_data_bottom[0])
-                            Win32.memcpy(wptr, rptr, BUFFER_SIZE * sizeof(float));
+                            Win32.memcpy(wptr, rptr, W/*BUFFER_SIZE*/ * sizeof(float));
                     }
 
                     waterfall_data_ready_bottom = false;
@@ -6286,7 +6316,7 @@ namespace Thetis
                 // get new data
                 fixed (void* rptr = &new_display_data[0])
                 fixed (void* wptr = &current_display_data[0])
-                    Win32.memcpy(wptr, rptr, BUFFER_SIZE * sizeof(float));
+                    Win32.memcpy(wptr, rptr, W/*BUFFER_SIZE*/ * sizeof(float));
 
                 data_ready = false;
             }
@@ -6444,6 +6474,22 @@ namespace Thetis
 
 
         // directx mw0lge
+
+        private static bool m_bHighlightNumberScaleRX1 = false;
+        private static bool m_bHighlightNumberScaleRX2 = false;
+        public static bool HighlightNumberScaleRX1
+        {
+            get { return m_bHighlightNumberScaleRX1; }
+            set {
+                m_bHighlightNumberScaleRX1 = value;
+            }
+        }
+        public static bool HighlightNumberScaleRX2 {
+            get { return m_bHighlightNumberScaleRX2; }
+            set {
+                m_bHighlightNumberScaleRX2 = value;
+            }
+        }
         private static bool m_bDX2Setup = false;
         private static Surface surface;
         private static Device device;
@@ -6478,7 +6524,7 @@ namespace Thetis
                 if (m_bDX2Setup) return;
 
                 try
-                {
+                {                   
                     SwapChainDescription desc = new SwapChainDescription()
                     {
                         BufferCount = 1,
@@ -6487,25 +6533,28 @@ namespace Thetis
                                                                new Rational(60, 1), Format.B8G8R8A8_UNorm),
                         IsWindowed = true,
                         OutputHandle = displayTarget.Handle,
-                        SampleDescription = new SampleDescription(1, 0), // no multi sampling, no antialiasing
+                        SampleDescription = new SampleDescription(1, 0), // no multi sampling (1 sample), no antialiasing
                         SwapEffect = SwapEffect.Discard,
                         Usage = Usage.RenderTargetOutput
                     };
 
                     Device.CreateWithSwapChain(DriverType.Hardware, DeviceCreationFlags.BgraSupport | DeviceCreationFlags.SingleThreaded, new SharpDX.Direct3D.FeatureLevel[] { SharpDX.Direct3D.FeatureLevel.Level_10_0 }, desc, out device, out swapChain);
-                    d2dFactory = new SharpDX.Direct2D1.Factory();
 
+                    //int maxQuality = device.CheckMultisampleQualityLevels(Format.B8G8R8A8_UNorm, 2); // 2 = MSAA_2, 2 times multisampling
+
+                    d2dFactory = new SharpDX.Direct2D1.Factory();
                     backBuffer = Texture2D.FromSwapChain<Texture2D>(swapChain, 0);
                     renderView = new RenderTargetView(device, backBuffer);
                     surface = backBuffer.QueryInterface<Surface>();
                     d2dRenderTarget = new RenderTarget(d2dFactory, surface,
                                                                     new RenderTargetProperties(new SDXPixelFormat(Format.B8G8R8A8_UNorm, AlphaMode.Premultiplied)));
+                    
+                    //d2dRenderTarget.AntialiasMode = AntialiasMode.Aliased;
+                    //d2dRenderTarget.TextAntialiasMode = TextAntialiasMode.Default;
 
                     waterfall_bmp_dx2d = new SharpDX.Direct2D1.Bitmap(d2dRenderTarget, new Size2(displayTargetWidth, displayTargetHeight - 20), new BitmapProperties(new SDXPixelFormat(Format.B8G8R8A8_UNorm, AlphaMode.Premultiplied)));
                     waterfall_bmp2_dx2d = new SharpDX.Direct2D1.Bitmap(d2dRenderTarget, new Size2(displayTargetWidth, displayTargetHeight - 20), new BitmapProperties(new SDXPixelFormat(Format.B8G8R8A8_UNorm, AlphaMode.Premultiplied)));
 
-                    d2dRenderTarget.AntialiasMode = AntialiasMode.Aliased;
-                    d2dRenderTarget.TextAntialiasMode = TextAntialiasMode.Default;
 
                     //// midldle pixel align shift
                     //Matrix3x2 t = d2dRenderTarget.Transform;
@@ -6548,6 +6597,12 @@ namespace Thetis
             }
         }
 
+        private static bool m_bAntiAlias = false;
+        public static bool AntiAlias
+        {
+            get { return m_bAntiAlias;  }
+            set { m_bAntiAlias = value; }
+        }
         public static void RenderDX2D()
         {
             lock (m_objDX2Lock)
@@ -6555,6 +6610,17 @@ namespace Thetis
                 if (!m_bDX2Setup) return; // moved inside the lock so that a change in state by shutdown becomes thread safe
 
                 d2dRenderTarget.BeginDraw();
+
+                if (m_bAntiAlias)
+                {
+                    d2dRenderTarget.AntialiasMode = AntialiasMode.PerPrimitive; // this will antialias even if multisampling is off
+                }
+                else
+                {
+                    d2dRenderTarget.AntialiasMode = AntialiasMode.Aliased; // this will result in non antialiased lines only if multisampling = 1
+                }
+
+                d2dRenderTarget.TextAntialiasMode = TextAntialiasMode.Default;
 
                 d2dRenderTarget.Clear(SharpDX.Color.Black);
 
@@ -6711,21 +6777,20 @@ namespace Thetis
                     d2dRenderTarget.FillRectangle(new RectangleF(0, 0, 8, 8), m_bDX2_Red);
                 }
 
+                calcFps();
                 if (m_bShowFPS)
                 {
-                    calcFps();
                     d2dRenderTarget.DrawText(m_fps.ToString(), fontDX2d_callout, new RectangleF(10, 0, 100, 100), m_bDX2_m_bTextCallOutActive, DrawTextOptions.None);
                 }
 
                 d2dRenderTarget.EndDraw();
 
                 // render
-                swapChain.Present(0, PresentFlags.None);
+                swapChain.Present(0, PresentFlags.DoNotWait);                
             }
             //m_nLastTickCount = System.Environment.TickCount;
         }
-
-        //------- DX2D
+        
         private static int m_fps = 0;
         private static int m_count = 0;
         private static int m_startTime = System.Environment.TickCount;
@@ -6749,21 +6814,23 @@ namespace Thetis
             drawPanadapterAndWaterfallGridDX2D(W, H, rx, bottom, false);
 
             float local_max_y = float.MinValue;
+            float local_max_x = float.MinValue;
+
             bool local_mox = false;
             bool displayduplex = false;
 
             int grid_max = 0;
             int grid_min = 0;
 
-            if (rx == 1 && !tx_on_vfob && mox) local_mox = true;
-            if (rx == 2 && tx_on_vfob && mox) local_mox = true;
-            if (rx == 1 && tx_on_vfob && mox && !console.RX2Enabled) local_mox = true;
+            if (mox) {
+                if (rx == 1 && !tx_on_vfob) local_mox = true;
+                if (rx == 2 && tx_on_vfob) local_mox = true;
+                if (rx == 1 && tx_on_vfob && !console.RX2Enabled) local_mox = true;
+            }
 
             //MW0LGE
             int yRange;
             float[] data;
-            //float[] peakHolddata;
-            //float[] peakHoldtime;
 
             if (rx == 1)
             {
@@ -6793,13 +6860,11 @@ namespace Thetis
                     {
                         fixed (void* rptr = &new_display_data[0])
                         fixed (void* wptr = &current_display_data[0])
-                            Win32.memcpy(wptr, rptr, BUFFER_SIZE * sizeof(float));
+                            Win32.memcpy(wptr, rptr, /*BUFFER_SIZE*/W * sizeof(float));
                     }
                     data_ready = false;
                 }
                 data = current_display_data;
-                //peakHolddata = peakHold_data;
-                //peakHoldtime = peakHold_time;
             }
             else// if(rx == 2)
             {
@@ -6831,56 +6896,55 @@ namespace Thetis
                     {
                         fixed (void* rptr = &new_display_data_bottom[0])
                         fixed (void* wptr = &current_display_data_bottom[0])
-                            Win32.memcpy(wptr, rptr, BUFFER_SIZE * sizeof(float));
+                            Win32.memcpy(wptr, rptr, /*BUFFER_SIZE*/W * sizeof(float));
                     }
 
                     data_ready_bottom = false;
                 }
                 data = current_display_data_bottom;
-                //peakHolddata = peakHold_data_bottom;
-                //peakHoldtime = peakHold_time_bottom;
             }
 
             try
             {
                 float max;
-                //MW0LGE block of code pulled from loop, += in there for now - TODO
-                float fOffset = 0;
-                int nOffset2 = 0;
+                float fOffset;// = 0;
 
                 if (rx == 1)
                 {
-                    if (local_mox) fOffset += tx_display_cal_offset;
+                    if (local_mox) fOffset = tx_display_cal_offset;
                     else if (mox && tx_on_vfob && !displayduplex)
                     {
-                        if (console.RX2Enabled) fOffset += rx1_display_cal_offset;
-                        else fOffset += tx_display_cal_offset;
+                        if (console.RX2Enabled) fOffset = rx1_display_cal_offset;
+                        else fOffset = tx_display_cal_offset;
                     }
-                    else fOffset += rx1_display_cal_offset;
+                    else fOffset = rx1_display_cal_offset;
                 }
-                else if (rx == 2)
+                else //if (rx == 2)
                 {
-                    if (local_mox) fOffset += tx_display_cal_offset;
-                    else fOffset += rx2_display_cal_offset;
+                    if (local_mox) fOffset = tx_display_cal_offset;
+                    else fOffset = rx2_display_cal_offset;
                 }
 
                 if (!local_mox || (local_mox && displayduplex))
                 {
                     if (rx == 1) fOffset += rx1_preamp_offset;
-                    else if (rx == 2) fOffset += rx2_preamp_offset;
+                    else /*if (rx == 2)*/ fOffset += rx2_preamp_offset;
                 }
 
-                if (bottom) nOffset2 = H;
-                else if (current_display_mode_bottom == DisplayMode.PANAFALL && rx == 2) nOffset2 = 2 * H;  //MW0LGE
 
-                int lowerH = H; // the bottom edge
-                    
+                //if (bottom) nOffset2 = H;
+                //else if (current_display_mode_bottom == DisplayMode.PANAFALL && rx == 2) nOffset2 = 2 * H;  //MW0LGE
+
+                int nOffset2 = 0;
+                int lowerH = H; // the bottom edge                  
                 if (bottom)
                 {
+                    nOffset2 = H;
                     lowerH += H;
                 }
                 else if (current_display_mode_bottom == DisplayMode.PANAFALL && rx == 2)                     //MW0LGE - RX2
                 {
+                    nOffset2 = 2 * H;
                     lowerH += 2 * H;
                 }
 
@@ -6898,9 +6962,7 @@ namespace Thetis
 
                 SharpDX.Vector2 point = new SharpDX.Vector2();
                 SharpDX.Vector2 previousPoint = new SharpDX.Vector2();
-                SharpDX.Vector2 bottomPoint = new SharpDX.Vector2(0, lowerH);
-                //SharpDX.Vector2 peakPoint = new SharpDX.Vector2();
-                //SharpDX.Vector2 previousPeakPoint = new SharpDX.Vector2();
+                SharpDX.Vector2 bottomPoint = new SharpDX.Vector2(0, lowerH + 0.5f);
 
                 SharpDX.Direct2D1.Brush lineBrush;
                 SharpDX.Direct2D1.Brush fillBrush;
@@ -6915,23 +6977,15 @@ namespace Thetis
                     lineBrush = m_bDX2_data_line_pen_brush;
                     fillBrush = m_bDX2_data_fill_fpen_brush;
                 }
+                float penWidth = data_line_pen.Width;
 
-                int Y;
                 // start pos
+                int Y;
                 max = data[0] + fOffset;
-
                 Y = (int)(Math.Floor((grid_max - max) * H / yRange));
                 Y = Math.Min(Y, H);
-
-                Y += nOffset2;
-
                 previousPoint.X = 0 + 0.5f; // the 0.5f pushes it into the middle of a 'pixel', so that it is not drawn half in one, and half in the other
-                previousPoint.Y = Y + 0.5f;
-
-                //previousPeakPoint.X = 0 + 0.5f; // the 0.5f pushes it into the middle of a 'pixel', so that it is not drawn half in one, and half in the other
-                //previousPeakPoint.Y = peakHolddata[0];
-
-                //float dt = (float)(System.Environment.TickCount - m_nLastTickCount) / 1000f;
+                previousPoint.Y = Y + nOffset2 + 0.5f;
 
                 for (int i = 0; i < W; i++)
                 {
@@ -6939,36 +6993,17 @@ namespace Thetis
 
                     if (max > local_max_y)
                     {
+                        // store peak
                         local_max_y = max;
-                        max_x = i;
+                        local_max_x = i;
                     }
 
-                    Y = (int)(Math.Floor((grid_max - max) * H / yRange));
+                    //Y = (int)(Math.Floor((grid_max - max) * H / yRange));
+                    Y = (int)(((grid_max - max) * H / yRange) - 0.5f); // -0.5 to mimic floor
                     Y = Math.Min(Y, H);
 
-                    Y += nOffset2;
-
                     point.X = i + 0.5f; // the 0.5f pushes it into the middle of a 'pixel', so that it is not drawn half in one, and half in the other
-                    point.Y = Y + 0.5f;
-
-                    //peak hold
-                    //if (point.Y < peakHolddata[i])
-                    //{
-                    //    peakHolddata[i] = point.Y;
-                    //    peakHoldtime[i] = 1f; //s
-                    //}
-                    //peakPoint.X = point.X;
-                    //peakPoint.Y = peakHolddata[i];
-                    //d2dRenderTarget.DrawLine(point/*previousPeakPoint*/, peakPoint, m_bDX2_grid_text_brush, data_line_pen.Width);
-                    //previousPeakPoint.X = peakPoint.X;
-                    //previousPeakPoint.Y = peakPoint.Y;
-                    //peakHoldtime[i] -= dt;
-                    //if (peakHoldtime[i] <= 0)
-                    //{
-                    //    peakHolddata[i] += 2;// 100 * dt;
-                    //    peakHoldtime[i] = 0;
-                    //}
-                    
+                    point.Y = Y + nOffset2 + 0.5f;
 
                     if (pan_fill)
                     {
@@ -6977,10 +7012,9 @@ namespace Thetis
                         d2dRenderTarget.DrawLine(bottomPoint, point, fillBrush, 1f);
                     }
 
-                    d2dRenderTarget.DrawLine(previousPoint, point, lineBrush, data_line_pen.Width);
+                    d2dRenderTarget.DrawLine(previousPoint, point, lineBrush, penWidth);
 
-                    previousPoint.X = point.X;
-                    previousPoint.Y = point.Y;
+                    previousPoint = point;
                 }
             }
             catch (Exception ex)
@@ -6988,12 +7022,16 @@ namespace Thetis
                 Trace.WriteLine(ex);
             }
 
-            if (!bottom) max_y = local_max_y;
+            if (!bottom)
+            {
+                max_y = local_max_y;
+                max_x = local_max_x;
+            }
 
             return true;
         }
 
-    unsafe static private bool DrawWaterfallDX2D(int W, int H, int rx, bool bottom)
+        unsafe static private bool DrawWaterfallDX2D(int W, int H, int rx, bool bottom)
         {
             // grid draw now moved to end, so that everything can get put
             // on top of waterfall
@@ -7003,6 +7041,7 @@ namespace Thetis
             {
                 waterfall_data = new float[W];		// array of points to display
             }
+
             float local_max_y = float.MinValue;
             bool local_mox = false;
             if (rx == 1 && !tx_on_vfob && mox) local_mox = true;
@@ -7113,7 +7152,7 @@ namespace Thetis
                     {
                         fixed (void* rptr = &new_waterfall_data[0])
                         fixed (void* wptr = &current_waterfall_data[0])
-                            Win32.memcpy(wptr, rptr, BUFFER_SIZE * sizeof(float));
+                            Win32.memcpy(wptr, rptr, /*BUFFER_SIZE*/W * sizeof(float));
 
                     }
                     waterfall_data_ready = false;
@@ -7129,7 +7168,7 @@ namespace Thetis
                     {
                         fixed (void* rptr = &new_waterfall_data_bottom[0])
                         fixed (void* wptr = &current_waterfall_data_bottom[0])
-                            Win32.memcpy(wptr, rptr, BUFFER_SIZE * sizeof(float));
+                            Win32.memcpy(wptr, rptr, /*BUFFER_SIZE*/W * sizeof(float));
                     }
 
                     waterfall_data_ready_bottom = false;
@@ -7230,15 +7269,18 @@ namespace Thetis
                     {
                         topPixels = new SharpDX.Direct2D1.Bitmap(d2dRenderTarget, new Size2((int)waterfall_bmp_dx2d.Size.Width, (int)waterfall_bmp_dx2d.Size.Height - 1), 
                             new BitmapProperties(new SDXPixelFormat(Format.B8G8R8A8_UNorm, AlphaMode.Premultiplied)));
-                        topPixels.CopyFromBitmap(waterfall_bmp_dx2d, new SharpDX.Point(0, 0), new SharpDX.Rectangle(0, 0, (int)waterfall_bmp_dx2d.Size.Width, (int)waterfall_bmp_dx2d.Size.Height - 1));                        
+
+                        topPixels.CopyFromBitmap(waterfall_bmp_dx2d, new SharpDX.Point(0, 0), new SharpDX.Rectangle(0, 0, (int)topPixels.Size.Width, (int)topPixels.Size.Height));                        
                     }
                     else //rx2
                     {
                         topPixels = new SharpDX.Direct2D1.Bitmap(d2dRenderTarget, new Size2((int)waterfall_bmp2_dx2d.Size.Width, (int)waterfall_bmp2_dx2d.Size.Height - 1),
                             new BitmapProperties(new SDXPixelFormat(Format.B8G8R8A8_UNorm, AlphaMode.Premultiplied)));
-                        topPixels.CopyFromBitmap(waterfall_bmp2_dx2d, new SharpDX.Point(0, 0), new SharpDX.Rectangle(0, 0, (int)waterfall_bmp2_dx2d.Size.Width, (int)waterfall_bmp2_dx2d.Size.Height - 1));
+
+                        topPixels.CopyFromBitmap(waterfall_bmp2_dx2d, new SharpDX.Point(0, 0), new SharpDX.Rectangle(0, 0, (int)topPixels.Size.Width, (int)topPixels.Size.Height));
                     }
 
+                    #region colours
                     switch (cSheme)
                     {
                         case (ColorSheme.original):
@@ -8113,10 +8155,11 @@ namespace Thetis
                             }
                             break;
                     }
+                    #endregion
 
                     if (rx == 1)
                     {
-                        waterfall_bmp_dx2d.CopyFromMemory(row, W * pixel_size, new SharpDX.Rectangle(0,0,W,1));
+                        waterfall_bmp_dx2d.CopyFromMemory(row, W * pixel_size, new SharpDX.Rectangle(0, 0, W, 1));
                         waterfall_bmp_dx2d.CopyFromBitmap(topPixels, new SharpDX.Point(0, 1));
                     }
                     else
@@ -8298,6 +8341,9 @@ namespace Thetis
         private static SharpDX.Direct2D1.Brush m_bDX2_dhp2;
 
         private static SharpDX.Direct2D1.StrokeStyle m_styleDots;
+
+        private static SharpDX.Direct2D1.Brush m_bDX2_m_bHightlightNumberScale;
+        private static SharpDX.Direct2D1.Brush m_bDX2_m_bHightlightNumbers;
         //--------------------------
         private static void buildDX2Resources()
         {
@@ -8312,6 +8358,9 @@ namespace Thetis
 
                 if (m_bDX2_p1 != null) m_bDX2_p1.Dispose();
                 if (m_bDX2_display_background_brush != null) m_bDX2_display_background_brush.Dispose();
+
+                if (m_bDX2_m_bHightlightNumbers != null) m_bDX2_m_bHightlightNumbers.Dispose();
+                if (m_bDX2_m_bHightlightNumberScale != null) m_bDX2_m_bHightlightNumberScale.Dispose();
 
                 if (m_bDX2_grid_tx_text_brush != null) m_bDX2_grid_tx_text_brush.Dispose();
                 if (m_bDX2_grid_text_brush != null) m_bDX2_grid_text_brush.Dispose();
@@ -8366,6 +8415,9 @@ namespace Thetis
 
                 m_bDX2_p1 = convertBrush((SolidBrush)p1.Brush);
                 m_bDX2_display_background_brush = convertBrush((SolidBrush)display_background_brush);
+
+                m_bDX2_m_bHightlightNumbers = convertBrush(new SolidBrush(Color.FromArgb(255, 255, 255)));
+                m_bDX2_m_bHightlightNumberScale = convertBrush(new SolidBrush(Color.FromArgb(192, 64, 64, 64)));
 
                 m_bDX2_grid_tx_text_brush = convertBrush((SolidBrush)grid_tx_text_brush);
                 m_bDX2_grid_text_brush = convertBrush((SolidBrush)grid_text_brush);
@@ -8552,32 +8604,28 @@ namespace Thetis
         }
         //--------------------------
 
-        private static int getCWSideToneShift(int rx, bool bottom)
+        private static int getCWSideToneShift(int rx)
         {
             int nRet = 0;
-            if (bottom || (current_display_mode_bottom == DisplayMode.PANAFALL && rx == 2))
+            DSPMode mode;
+
+            if(rx == 1)
             {
-                switch (rx2_dsp_mode)
-                {
-                    case (DSPMode.CWL):
-                        nRet = cw_pitch;
-                        break;
-                    case (DSPMode.CWU):
-                        nRet = -cw_pitch;
-                        break;
-                }
+                mode = rx1_dsp_mode;
             }
             else
             {
-                switch (rx1_dsp_mode)
-                {
-                    case (DSPMode.CWL):
-                        nRet = cw_pitch;
-                        break;
-                    case (DSPMode.CWU):
-                        nRet = -cw_pitch;
-                        break;
-                }
+                mode = rx2_dsp_mode;
+            }
+
+            switch (mode)
+            {
+                case (DSPMode.CWL):
+                    nRet = cw_pitch;
+                    break;
+                case (DSPMode.CWU):
+                    nRet = -cw_pitch;
+                    break;
             }
 
             return nRet;
@@ -8607,9 +8655,10 @@ namespace Thetis
             int f_diff = 0;
             int sample_rate;
 
+            #region setup
             //MW0LGE
             int nVerticalShift = getVerticalShift(rx, bottom, W, H);
-            int cwSideToneShift = getCWSideToneShift(rx, bottom);
+            int cwSideToneShift = getCWSideToneShift(rx);
             int cwSideToneShiftInverted = cwSideToneShift * -1; // invert the sign as cw zero lines/tx lines etc are a shift in opposite direction to the grid
 
             if (rx == 1)
@@ -8784,7 +8833,9 @@ namespace Thetis
             
             if (bIsWaterfall) top = 20; //change top so that the filter gap doesnt change, inore grid spacing
             else top = (int)((double)grid_step * H / y_range); // top is based on grid spacing
+            #endregion
 
+            #region RX filter and filter lines
             if (!local_mox && sub_rx1_enabled && rx == 1) //multi-rx
             {
                 if ((bIsWaterfall && m_bShowRXFilterOnWaterfall) || !bIsWaterfall)
@@ -8823,10 +8874,14 @@ namespace Thetis
                     drawFilterOverlayDX2D(m_bDX2_display_filter_brush, filter_left_x, filter_right_x, W, H, rx, top, bottom, nVerticalShift);
                 }
             }
+            #endregion
+
+            #region Tx filter and tx lines
             if ((bIsWaterfall && m_bShowTXFilterOnWaterfall) || !bIsWaterfall)
             {
                 if (local_mox && (rx1_dsp_mode != DSPMode.CWL && rx1_dsp_mode != DSPMode.CWU))
                 {
+                    // draw TX filter
                     int filter_left_x = (int)((float)(filter_low - Low - f_diff + xit_hz) / width * W);
                     int filter_right_x = (int)((float)(filter_high - Low - f_diff + xit_hz) / width * W);
 
@@ -8908,7 +8963,9 @@ namespace Thetis
 
             //    drawLineDX2D(m_bDX2_tx_filter_pen, cw_line_x, nVerticalShift + top, cw_line_x, nVerticalShift + H, tx_filter_pen.Width); //MW0LGE
             //}
+            #endregion
 
+            #region 60m channels
             // draw 60m channels if in view - not on the waterfall //MW0LGE
             if (!bIsWaterfall && (console.CurrentRegion == FRSRegion.US || console.CurrentRegion == FRSRegion.UK))
             {
@@ -8925,11 +8982,14 @@ namespace Thetis
 
                     if (c.InBW((rf_freq + Low) * 1e-6, (rf_freq + High) * 1e-6)) // is channel visible?
                     {
-                        bool on_channel = console.RX1IsOn60mChannel(c); // only true if you are on channel and are in an acceptable mode
-                        if (bottom || (current_display_mode_bottom == DisplayMode.PANAFALL && rx == 2)) on_channel = console.RX2IsOn60mChannel(c);
-
+                        bool on_channel = console.RX1IsIn60mChannel(c); // only true if you are on channel and are in an acceptable mode
                         DSPMode mode = rx1_dsp_mode;
-                        if (bottom || (current_display_mode_bottom == DisplayMode.PANAFALL && rx == 2)) mode = rx2_dsp_mode;
+
+                        if (bottom || (current_display_mode_bottom == DisplayMode.PANAFALL && rx == 2))
+                        {
+                            on_channel = console.RX2IsIn60mChannel(c);
+                            mode = rx2_dsp_mode;
+                        }
 
                         switch (mode)
                         {
@@ -8992,7 +9052,9 @@ namespace Thetis
                     }
                 }
             }
+            #endregion
 
+            #region notches
             // draw notches if in RX
             if (!local_mox && !bIsWaterfall)
             {
@@ -9005,31 +9067,6 @@ namespace Thetis
                 }
 
                 rf_freq += cwSideToneShift;
-                //if (bottom || (current_display_mode_bottom == DisplayMode.PANAFALL && rx == 2))
-                //{
-                //    rf_freq = vfob_hz;
-                //    switch (rx2_dsp_mode)
-                //    {
-                //        case (DSPMode.CWL):
-                //            rf_freq += cw_pitch;
-                //            break;
-                //        case (DSPMode.CWU):
-                //            rf_freq -= cw_pitch;
-                //            break;
-                //    }
-                //}
-                //else
-                //{
-                //    switch (rx1_dsp_mode)
-                //    {
-                //        case (DSPMode.CWL):
-                //            rf_freq += cw_pitch;
-                //            break;
-                //        case (DSPMode.CWU):
-                //            rf_freq -= cw_pitch;
-                //            break;
-                //    }
-                //}
 
                 SharpDX.Direct2D1.Brush p;
                 SharpDX.Direct2D1.Brush b;
@@ -9062,7 +9099,7 @@ namespace Thetis
                         b = m_bDX2_m_bTNFInactive;
                     }
 
-                    //overide highlighed
+                    //overide if highlighed
                     if (n == m_objHightlightedNotch)
                     {
                         if (n.Active)
@@ -9094,8 +9131,10 @@ namespace Thetis
                         drawFillRectangleDX2D(b, notch_left_x, nVerticalShift + top, notch_right_x - notch_left_x, H - top);
                     }
                 }
-            }
+            }// END NOTCH
+            #endregion
 
+            #region CW zero and tx lines
             // Draw a CW Zero Beat + TX line on CW filter
             if (!bIsWaterfall)
             {
@@ -9168,6 +9207,7 @@ namespace Thetis
                     }
                 }
             }
+            #endregion
 
             //      MW0LGE
             if (local_mox)
@@ -9194,6 +9234,75 @@ namespace Thetis
 
                 drawStringDX2D("0", fontDX2d_font9, brBrush, center_line_x - 5, nVerticalShift + (float)Math.Floor(H * .01));
             }
+
+            #region Band edges, H+V lines and labels
+            //MW0LGE
+            int[] band_edge_list;
+            switch (console.CurrentRegion)
+            {
+                case FRSRegion.US:
+                    band_edge_list = new int[]{ 135700, 137800, 472000, 479000, 1800000, 2000000, 3500000, 4000000,
+            5330500, 5406400, 7000000, 7300000, 10100000, 10150000, 14000000, 14350000,  18068000, 18168000, 21000000, 21450000,
+            24890000, 24990000, 28000000, 29700000, 50000000, 54000000, 144000000, 148000000 };
+                    break;
+                case FRSRegion.Germany:
+                    band_edge_list = new int[]{ 135700, 137800, 472000, 479000, 1810000, 2000000, 3500000, 3800000,
+            5351500, 5366500, 7000000, 7200000, 10100000, 10150000, 14000000, 14350000,  18068000, 18168000, 21000000, 21450000,
+            24890000, 24990000, 28000000, 29700000, 50000000, 51000000, 144000000, 146000000 };
+                    break;
+                case FRSRegion.Region1:
+                    band_edge_list = new int[]{ 135700, 137800, 472000, 479000, 1810000, 2000000, 3500000, 3800000,
+            5351500, 5366500, 7000000, 7200000, 10100000, 10150000, 14000000, 14350000,  18068000, 18168000, 21000000, 21450000,
+            24890000, 24990000, 28000000, 29700000, 50000000, 54000000, 144000000, 146000000 };
+                    break;
+                case FRSRegion.Region2:
+                    band_edge_list = new int[]{ 135700, 137800, 472000, 479000, 1800000, 2000000, 3500000, 4000000,
+            5351500, 5366500, 7000000, 7300000, 10100000, 10150000, 14000000, 14350000,  18068000, 18168000, 21000000, 21450000,
+            24890000, 24990000, 28000000, 29700000, 50000000, 54000000, 144000000, 148000000 };
+                    break;
+                case FRSRegion.Region3:
+                    band_edge_list = new int[]{ 135700, 137800, 472000, 479000, 1800000, 2000000, 3500000, 3900000,
+            7000000, 7300000, 10100000, 10150000, 14000000, 14350000,  18068000, 18168000, 21000000, 21450000,
+            24890000, 24990000, 28000000, 29700000, 50000000, 54000000, 144000000, 148000000 };
+                    break;
+                case FRSRegion.Spain:
+                    band_edge_list = new int[] { 135700, 137800, 472000, 479000, 1810000, 1850000, 3500000, 3800000,
+            7000000, 7200000, 10100000, 10150000, 14000000, 14350000, 18068000, 18168000,
+            21000000, 21450000, 24890000, 24990000, 28000000, 29700000, 50000000, 52000000, 144000000, 148000000 };
+                    break;
+                case FRSRegion.Australia:
+                    band_edge_list = new int[]{ 135700, 137800, 472000, 479000, 1800000, 1875000,
+             3500000, 3800000, 7000000, 7300000, 10100000, 10150000, 14000000, 14350000, 18068000,
+             18168000, 21000000, 21450000, 24890000, 24990000, 28000000, 29700000, 50000000, 54000000, 144000000, 148000000 };
+                    break;
+                case FRSRegion.UK:
+                    band_edge_list = new int[] { 135700, 137800, 472000, 479000, 1810000, 2000000, 3500000, 3800000,
+            5258500, 5406500, 7000000, 7200000, 10100000, 10150000, 14000000, 14350000, 18068000, 18168000,
+            21000000, 21450000, 24890000, 24990000, 28000000, 29700000, 50000000, 52000000, 144000000, 148000000 };
+                    break;
+                case FRSRegion.India:
+                    band_edge_list = new int[]{ 1810000, 1860000, 3500000, 3900000, 7000000, 7200000,
+            10100000, 10150000, 14000000, 14350000, 18068000, 18168000, 21000000, 21450000,
+            24890000, 24990000, 28000000, 29700000, 50000000, 54000000, 144000000, 148000000 };
+                    break;
+                case FRSRegion.Norway:
+                    band_edge_list = new int[]{ 1800000, 2000000, 3500000, 4000000, 5260000, 5410000,
+            7000000, 7300000, 10100000, 10150000, 14000000, 14350000, 18068000, 18168000, 21000000, 21450000,
+            24890000, 24990000, 28000000, 29700000, 50000000, 54000000, 144000000, 148000000 };
+                    break;
+                case FRSRegion.Japan:
+                    band_edge_list = new int[]{ 135700, 137800, 472000, 479000, 1810000, 1825000, 1907500, 1912500,
+                        3500000, 3575000, 3599000, 3612000, 3680000, 3687000, 3702000, 3716000, 3745000, 3770000, 3791000, 3805000,
+            7000000, 7200000, 10100000, 10150000, 14000000, 14350000, 18068000, 18168000, 21000000, 21450000,
+            24890000, 24990000, 28000000, 29700000, 50000000, 54000000, 144000000, 146000000 };
+                    break;
+                default: // same as region3 but with extended 80m out to 4mhz
+                    band_edge_list = new int[]{ 135700, 137800, 472000, 479000, 1800000, 2000000, 3500000, 4000000,
+            7000000, 7300000, 10100000, 10150000, 14000000, 14350000,  18068000, 18168000, 21000000, 21450000,
+            24890000, 24990000, 28000000, 29700000, 50000000, 54000000, 144000000, 148000000 };
+                    break;
+            }
+            //--
 
             double vfo;
 
@@ -9255,55 +9364,6 @@ namespace Thetis
             //}
             //--
 
-            //MW0LGE
-            int[] band_edge_list;
-            switch (console.CurrentRegion)
-            {
-                case FRSRegion.Spain:
-                    band_edge_list = new int[] { 135700, 137800, 472000, 479000, 1810000, 1850000, 3500000, 3800000,
-            7000000, 7200000, 10100000, 10150000, 14000000, 14350000, 18068000, 18168000,
-            21000000, 21450000, 24890000, 24990000, 28000000, 29700000, 50000000, 52000000, 144000000, 148000000 };
-                    break;
-                case FRSRegion.Australia:
-                    band_edge_list = new int[]{ 135700, 137800, 472000, 479000, 1800000, 1875000,
-             3500000, 3800000, 7000000, 7300000, 10100000, 10150000, 14000000, 14350000, 18068000,
-             18168000, 21000000, 21450000, 28000000, 29700000, 50000000, 54000000, 144000000, 148000000 };
-                    break;
-                case FRSRegion.UK:
-                    band_edge_list = new int[] { 135700, 137800, 472000, 479000, 1810000, 2000000, 3500000, 3800000,
-            5258500, 5406500, 7000000, 7200000, 10100000, 10150000, 14000000, 14350000, 18068000, 18168000,
-            21000000, 21450000, 24890000, 24990000, 28000000, 29700000, 50000000, 52000000, 144000000, 148000000 };
-                    break;
-                case FRSRegion.India:
-                    band_edge_list = new int[]{ 1810000, 1860000, 3500000, 3900000, 7000000, 7200000,
-            10100000, 10150000, 14000000, 14350000, 18068000, 18168000, 21000000, 21450000,
-            24890000, 24990000, 28000000, 29700000, 50000000, 54000000, 144000000, 148000000 };
-                    break;
-                case FRSRegion.Norway:
-                    band_edge_list = new int[]{ 1800000, 2000000, 3500000, 4000000, 5260000, 5410000,
-            7000000, 7300000, 10100000, 10150000, 14000000, 14350000, 18068000, 18168000, 21000000, 21450000,
-            24890000, 24990000, 28000000, 29700000, 50000000, 54000000, 144000000, 148000000 };
-                    break;
-                case FRSRegion.US:
-                    band_edge_list = new int[]{ 135700, 137800, 472000, 479000, 1800000, 2000000, 3500000, 4000000,
-            7000000, 7300000, 10100000, 10150000, 14000000, 14350000,  18068000, 18168000, 21000000, 21450000,
-            24890000, 24990000, 28000000, 29700000, 50000000, 54000000, 144000000, 148000000 };
-                    break;
-                case FRSRegion.Japan:
-                    band_edge_list = new int[]{ 135700, 137800, 472000, 479000, 1810000, 1810000, 1907500, 1912500,
-                        3500000, 3575000, 3599000, 3612000, 3687000, 3702000, 3716000, 3745000, 3770000, 3791000, 3805000,
-            7000000, 7200000, 10100000, 10150000, 14000000, 14350000, 18068000, 18168000, 21000000, 21450000,
-            24890000, 24990000, 28000000, 29700000, 50000000, 54000000, 144000000, 148000000 };
-                    break;
-                default:
-                    band_edge_list = new int[]{ 135700, 137800, 472000, 479000, 1800000, 2000000, 3500000, 4000000,
-            7000000, 7300000, 10100000, 10150000, 14000000, 14350000,  18068000, 18168000, 21000000, 21450000,
-            24890000, 24990000, 28000000, 29700000, 50000000, 54000000, 144000000, 148000000 };
-                    break;
-            }
-            //--
-
-
             long vfo_round = ((long)(vfo / freq_step_size)) * freq_step_size;
             long vfo_delta = (long)(vfo - vfo_round);
 
@@ -9315,7 +9375,7 @@ namespace Thetis
             SharpDX.Direct2D1.Brush pnInbetweenLine;
             SharpDX.Direct2D1.Brush brTextBrush;
 
-            for (int i = 0; i < f_steps + 1; i++)
+            for (int i = -1; i < f_steps + 1; i++) // MW0LGE was from i=0, fixes inbetweenies not drawn if major is < 0
             {
                 string label;
                 int offsetL;
@@ -9323,7 +9383,7 @@ namespace Thetis
                 int fgrid = i * freq_step_size + (Low / freq_step_size) * freq_step_size;
                 double actual_fgrid = ((double)(vfo_round + fgrid)) / 1000000;
                 int vgrid = (int)((double)(fgrid - vfo_delta - Low) / width * W);
-                string freq_num = actual_fgrid.ToString();
+                //string freq_num = actual_fgrid.ToString();
 
                 bool bBandEdge = false;
 
@@ -9332,7 +9392,6 @@ namespace Thetis
 
                     //--------------
                     //MW0LGE
-
                     for (int ii = 0; ii < band_edge_list.Length; ii++)
                     {
                         if (actual_fgrid == (double)band_edge_list[ii] / 1000000)
@@ -9401,10 +9460,10 @@ namespace Thetis
                     else
                     {
                         //display freqencies
-                        string temp_string;
+                        //string temp_string;
                         int jper;
                         label = actual_fgrid.ToString("f4");
-                        temp_string = label;
+                        //temp_string = label;
                         jper = label.IndexOf('.') + 4;
                         label = label.Insert(jper, " ");
 
@@ -9473,7 +9532,54 @@ namespace Thetis
 
             if (grid_control && !bIsWaterfall)
             {
+                SharpDX.Direct2D1.Brush brTextLabel;
+
+                if ((m_bHighlightNumberScaleRX1 && rx==1) || (m_bHighlightNumberScaleRX2 && rx == 2))
+                {
+                    drawFillRectangleDX2D(m_bDX2_m_bHightlightNumberScale, console.DisplayGridX, nVerticalShift + top, console.DisplayGridW - console.DisplayGridX, H - top);
+                    brTextLabel = m_bDX2_m_bHightlightNumbers;
+                }
+                else
+                {
+                    if (local_mox)
+                    {
+                        brTextLabel = m_bDX2_grid_tx_text_brush;
+                    }
+                    else
+                    {
+                        brTextLabel = m_bDX2_grid_text_brush;
+                    }
+
+                }
                 // Draw horizontal lines
+                int nLeft=0;
+                int nRight=0;
+                int nW = (int)measureStringDX2D("-999", fontDX2d_font9).Width + 12;
+
+                switch (label_align)//MW0LGE display_label_align)
+                {
+                    case DisplayLabelAlignment.LEFT:
+                        nLeft = 0;
+                        nRight = nW;
+                        break;
+                    case DisplayLabelAlignment.CENTER:
+                        nLeft = center_line_x;
+                        nRight = center_line_x + nW;
+                        break;
+                    case DisplayLabelAlignment.RIGHT:
+                        nLeft = W - nW;
+                        nRight = W;
+                        break;
+                    case DisplayLabelAlignment.AUTO:
+                        nLeft = 0;
+                        nRight = nW;
+                        break;
+                    case DisplayLabelAlignment.OFF:
+                        nLeft = W;
+                        nRight = W + nW;
+                        break;
+                }
+
                 for (int i = 1; i < h_steps; i++)
                 {
                     int xOffset = 0;
@@ -9518,25 +9624,21 @@ namespace Thetis
                                 x = W;
                                 break;
                         }
-                        console.DisplayGridX = x;
-                        console.DisplayGridW = (int)(x + size.Width);
+                        //if (x < nTmpMinX) nTmpMinX = x;
+                        //if ((int)(x + size.Width) + 10 > nTmpMaxXWidth) nTmpMaxXWidth = (int)(x + size.Width + 10);
                         y -= 8;
                         if (y + 9 < H)
                         {
-                            // MW0LGE
-                            if (local_mox)
-                            {
-                                drawStringDX2D(label, fontDX2d_font9, m_bDX2_grid_tx_text_brush, x, nVerticalShift + y);
-                            }
-                            else
-                            {
-                                drawStringDX2D(label, fontDX2d_font9, m_bDX2_grid_text_brush, x, nVerticalShift + y);
-                            }
+                            drawStringDX2D(label, fontDX2d_font9, brTextLabel, x, nVerticalShift + y);
                         }
                     }
                 }
+                console.DisplayGridX = nLeft;
+                console.DisplayGridW = nRight;
             }
+            #endregion
 
+            #region long cursor and right click overlay
             // draw long cursor & filter overlay
             if (current_click_tune_mode != ClickTuneMode.Off)
             {
@@ -9610,9 +9712,11 @@ namespace Thetis
                 }
                 //}                
             }
+            #endregion
 
+            #region F/G/H line and grabs
             // MW0LGE all the code for F/G/H overlay line/grab boxes
-            if (!bIsWaterfall)
+            if (!bIsWaterfall && !local_mox)
             {
                 //MW0LGE include bottom check
                 if (console.PowerOn && (((current_display_mode == DisplayMode.PANADAPTER ||
@@ -9687,7 +9791,7 @@ namespace Thetis
                         }
                     }
 
-                    if (rx == 1 && !local_mox)
+                    if (rx == 1/* && !local_mox*/)
                     {
                         float rx1_cal_offset = 0.0f;
                         switch (console.RX1AGCMode)
@@ -9757,7 +9861,7 @@ namespace Thetis
                             drawStringDX2D(rx1_agc, fontDX2d_panafont, m_bDX2_pana_text_brush, AGCKnee.X + AGCKnee.Width, AGCKnee.Y - (AGCKnee.Height / 2));
                         }
                     }
-                    else if (rx == 2 && !local_mox)
+                    else if (rx == 2/* && !local_mox*/)
                     {
                         float rx2_cal_offset = 0.0f;
                         double rx2_thresh = 0.0;
@@ -9853,7 +9957,9 @@ namespace Thetis
                     }
                 }
             }
+            #endregion
 
+            #region Spots
             // ke9ns add draw DX SPOTS on pandapter
             //=====================================================================
             //=====================================================================
@@ -10099,6 +10205,7 @@ namespace Thetis
                 }// for loop through DX_Index
 
             }
+            #endregion
         }
 
         unsafe static private bool DrawSpectrumDX2D(int W, int H, bool bottom)
@@ -10147,7 +10254,7 @@ namespace Thetis
                 {
                     fixed (void* rptr = &new_display_data[0])
                     fixed (void* wptr = &current_display_data[0])
-                        Win32.memcpy(wptr, rptr, BUFFER_SIZE * sizeof(float));
+                        Win32.memcpy(wptr, rptr, /*BUFFER_SIZE*/W * sizeof(float));
                 }
                 data_ready = false;
             }
@@ -10156,7 +10263,7 @@ namespace Thetis
                 {
                     fixed (void* rptr = &new_display_data_bottom[0])
                     fixed (void* wptr = &current_display_data_bottom[0])
-                        Win32.memcpy(wptr, rptr, BUFFER_SIZE * sizeof(float));
+                        Win32.memcpy(wptr, rptr, /*BUFFER_SIZE*/W * sizeof(float));
                 }
                 data_ready_bottom = false;
             }
@@ -10261,7 +10368,7 @@ namespace Thetis
         }
 
         private static void DrawSpectrumGridDX2D(int W, int H, bool bottom)
-        {           
+        {
             // draw background
             drawFillRectangleDX2D(m_bDX2_display_background_brush, 0, bottom ? H : 0, W, H);
 
@@ -10366,8 +10473,8 @@ namespace Thetis
                     {
                         string label = num.ToString();
                         if (label.Length == 3)
-                            xOffset = (int)measureStringDX2D("-", fontDX2d_font9).Width - 2;
-                        int offset = (int)(label.Length * 4.1);
+                            xOffset = (int)measureStringDX2D("0", fontDX2d_font9).Width;// use 0 here instead of a - sign
+                        //int offset = (int)(label.Length * 4.1);
                         SizeF size = measureStringDX2D(label, fontDX2d_font9);
 
                         int x = 0;
@@ -10811,7 +10918,7 @@ namespace Thetis
                 // get new data
                 fixed (void* rptr = &new_display_data[0])
                 fixed (void* wptr = &current_display_data[0])
-                    Win32.memcpy(wptr, rptr, BUFFER_SIZE * sizeof(float));
+                    Win32.memcpy(wptr, rptr, /*BUFFER_SIZE*/W * sizeof(float));
                 data_ready = false;
             }
             else if (bottom && data_ready_bottom)
@@ -10819,7 +10926,7 @@ namespace Thetis
                 // get new data
                 fixed (void* rptr = &new_display_data_bottom[0])
                 fixed (void* wptr = &current_display_data_bottom[0])
-                    Win32.memcpy(wptr, rptr, BUFFER_SIZE * sizeof(float));
+                    Win32.memcpy(wptr, rptr, /*BUFFER_SIZE*/W * sizeof(float));
                 data_ready_bottom = false;
             }
 
@@ -10882,7 +10989,7 @@ namespace Thetis
                 // get new data
                 fixed (void* rptr = &new_display_data[0])
                 fixed (void* wptr = &current_display_data[0])
-                    Win32.memcpy(wptr, rptr, BUFFER_SIZE * sizeof(float));
+                    Win32.memcpy(wptr, rptr, /*BUFFER_SIZE*/W * sizeof(float));
                 data_ready = false;
             }
             else if (bottom && data_ready_bottom)
@@ -10890,7 +10997,7 @@ namespace Thetis
                 // get new data
                 fixed (void* rptr = &new_display_data_bottom[0])
                 fixed (void* wptr = &current_display_data_bottom[0])
-                    Win32.memcpy(wptr, rptr, BUFFER_SIZE * sizeof(float));
+                    Win32.memcpy(wptr, rptr, /*BUFFER_SIZE*/W * sizeof(float));
                 data_ready_bottom = false;
             }
 
@@ -10898,7 +11005,7 @@ namespace Thetis
 
             SharpDX.Vector2 point = new SharpDX.Vector2();
 
-            for (int i = 0; i < num_points; i++)	// fill point array
+            for (int i = 0; i < num_points; i++)
             {
                 int x = 0;
                 int y = 0;
@@ -10968,7 +11075,7 @@ namespace Thetis
                 // get new data
                 fixed (void* rptr = &new_display_data[0])
                 fixed (void* wptr = &current_display_data[0])
-                    Win32.memcpy(wptr, rptr, BUFFER_SIZE * sizeof(float));
+                    Win32.memcpy(wptr, rptr, /*BUFFER_SIZE*/W * sizeof(float));
 
                 data_ready = false;
             }

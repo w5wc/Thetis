@@ -3916,7 +3916,7 @@
     <value>panelMode</value>
   </data>
   <data name="&gt;&gt;radModeAM.ZOrder" xml:space="preserve">
-    <value>1</value>
+    <value>0</value>
   </data>
   <data name="radModeLSB.Appearance" type="System.Windows.Forms.Appearance, System.Windows.Forms">
     <value>Button</value>
@@ -3961,7 +3961,7 @@
     <value>panelMode</value>
   </data>
   <data name="&gt;&gt;radModeLSB.ZOrder" xml:space="preserve">
-    <value>2</value>
+    <value>1</value>
   </data>
   <data name="radModeSAM.Appearance" type="System.Windows.Forms.Appearance, System.Windows.Forms">
     <value>Button</value>
@@ -4006,7 +4006,7 @@
     <value>panelMode</value>
   </data>
   <data name="&gt;&gt;radModeSAM.ZOrder" xml:space="preserve">
-    <value>3</value>
+    <value>2</value>
   </data>
   <data name="radModeCWL.Appearance" type="System.Windows.Forms.Appearance, System.Windows.Forms">
     <value>Button</value>
@@ -4051,7 +4051,7 @@
     <value>panelMode</value>
   </data>
   <data name="&gt;&gt;radModeCWL.ZOrder" xml:space="preserve">
-    <value>4</value>
+    <value>3</value>
   </data>
   <data name="radModeDSB.Appearance" type="System.Windows.Forms.Appearance, System.Windows.Forms">
     <value>Button</value>
@@ -4096,7 +4096,7 @@
     <value>panelMode</value>
   </data>
   <data name="&gt;&gt;radModeDSB.ZOrder" xml:space="preserve">
-    <value>5</value>
+    <value>4</value>
   </data>
   <data name="radModeUSB.Appearance" type="System.Windows.Forms.Appearance, System.Windows.Forms">
     <value>Button</value>
@@ -4141,7 +4141,7 @@
     <value>panelMode</value>
   </data>
   <data name="&gt;&gt;radModeUSB.ZOrder" xml:space="preserve">
-    <value>6</value>
+    <value>5</value>
   </data>
   <data name="radModeCWU.Appearance" type="System.Windows.Forms.Appearance, System.Windows.Forms">
     <value>Button</value>
@@ -4186,7 +4186,7 @@
     <value>panelMode</value>
   </data>
   <data name="&gt;&gt;radModeCWU.ZOrder" xml:space="preserve">
-    <value>7</value>
+    <value>6</value>
   </data>
   <data name="radModeFMN.Appearance" type="System.Windows.Forms.Appearance, System.Windows.Forms">
     <value>Button</value>
@@ -4231,7 +4231,7 @@
     <value>panelMode</value>
   </data>
   <data name="&gt;&gt;radModeFMN.ZOrder" xml:space="preserve">
-    <value>8</value>
+    <value>7</value>
   </data>
   <data name="radModeDIGU.Appearance" type="System.Windows.Forms.Appearance, System.Windows.Forms">
     <value>Button</value>
@@ -4276,7 +4276,7 @@
     <value>panelMode</value>
   </data>
   <data name="&gt;&gt;radModeDIGU.ZOrder" xml:space="preserve">
-    <value>9</value>
+    <value>8</value>
   </data>
   <data name="radModeDRM.Appearance" type="System.Windows.Forms.Appearance, System.Windows.Forms">
     <value>Button</value>
@@ -4321,7 +4321,7 @@
     <value>panelMode</value>
   </data>
   <data name="&gt;&gt;radModeDRM.ZOrder" xml:space="preserve">
-    <value>10</value>
+    <value>9</value>
   </data>
   <data name="radModeDIGL.Appearance" type="System.Windows.Forms.Appearance, System.Windows.Forms">
     <value>Button</value>
@@ -4366,7 +4366,7 @@
     <value>panelMode</value>
   </data>
   <data name="&gt;&gt;radModeDIGL.ZOrder" xml:space="preserve">
-    <value>11</value>
+    <value>10</value>
   </data>
   <data name="radModeSPEC.Appearance" type="System.Windows.Forms.Appearance, System.Windows.Forms">
     <value>Button</value>
@@ -4411,7 +4411,7 @@
     <value>panelMode</value>
   </data>
   <data name="&gt;&gt;radModeSPEC.ZOrder" xml:space="preserve">
-    <value>12</value>
+    <value>11</value>
   </data>
   <data name="btnBandVHF.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
     <value>Flat</value>
@@ -14237,30 +14237,6 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
   <data name="&gt;&gt;picDisplay.ZOrder" xml:space="preserve">
     <value>13</value>
   </data>
-  <data name="picWaterfall.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>Off</value>
-  </data>
-  <data name="picWaterfall.Location" type="System.Drawing.Point, System.Drawing">
-    <value>8, 5</value>
-  </data>
-  <data name="picWaterfall.Size" type="System.Drawing.Size, System.Drawing">
-    <value>704, 245</value>
-  </data>
-  <data name="picWaterfall.TabIndex" type="System.Int32, mscorlib">
-    <value>68</value>
-  </data>
-  <data name="&gt;&gt;picWaterfall.Name" xml:space="preserve">
-    <value>picWaterfall</value>
-  </data>
-  <data name="&gt;&gt;picWaterfall.Type" xml:space="preserve">
-    <value>System.Windows.Forms.PictureBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;picWaterfall.Parent" xml:space="preserve">
-    <value>panelDisplay</value>
-  </data>
-  <data name="&gt;&gt;picWaterfall.ZOrder" xml:space="preserve">
-    <value>14</value>
-  </data>
   <data name="txtDisplayCursorPower.Font" type="System.Drawing.Font, System.Drawing">
     <value>Arial, 9.75pt</value>
   </data>
@@ -14286,7 +14262,7 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
     <value>panelDisplay</value>
   </data>
   <data name="&gt;&gt;txtDisplayCursorPower.ZOrder" xml:space="preserve">
-    <value>15</value>
+    <value>14</value>
   </data>
   <data name="txtDisplayCursorFreq.Font" type="System.Drawing.Font, System.Drawing">
     <value>Arial, 9.75pt</value>
@@ -14313,7 +14289,7 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
     <value>panelDisplay</value>
   </data>
   <data name="&gt;&gt;txtDisplayCursorFreq.ZOrder" xml:space="preserve">
-    <value>16</value>
+    <value>15</value>
   </data>
   <data name="txtDisplayOrionMKIIPAAmps.Location" type="System.Drawing.Point, System.Drawing">
     <value>97, 252</value>
@@ -14334,7 +14310,7 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
     <value>panelDisplay</value>
   </data>
   <data name="&gt;&gt;txtDisplayOrionMKIIPAAmps.ZOrder" xml:space="preserve">
-    <value>17</value>
+    <value>16</value>
   </data>
   <data name="txtDisplayOrionMKIIBlank.Location" type="System.Drawing.Point, System.Drawing">
     <value>185, 252</value>
@@ -14355,7 +14331,7 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
     <value>panelDisplay</value>
   </data>
   <data name="&gt;&gt;txtDisplayOrionMKIIBlank.ZOrder" xml:space="preserve">
-    <value>18</value>
+    <value>17</value>
   </data>
   <data name="txtDisplayCursorOffset.Font" type="System.Drawing.Font, System.Drawing">
     <value>Arial, 9.75pt</value>
@@ -14382,7 +14358,7 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
     <value>panelDisplay</value>
   </data>
   <data name="&gt;&gt;txtDisplayCursorOffset.ZOrder" xml:space="preserve">
-    <value>19</value>
+    <value>18</value>
   </data>
   <data name="txtDisplayOrionMKIIPAVolts.Location" type="System.Drawing.Point, System.Drawing">
     <value>9, 252</value>
@@ -14403,7 +14379,7 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
     <value>panelDisplay</value>
   </data>
   <data name="&gt;&gt;txtDisplayOrionMKIIPAVolts.ZOrder" xml:space="preserve">
-    <value>20</value>
+    <value>19</value>
   </data>
   <data name="panelDisplay.Location" type="System.Drawing.Point, System.Drawing">
     <value>120, 113</value>
@@ -14431,36 +14407,6 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
   </data>
   <data name="panelMode.AutoScrollMinSize" type="System.Drawing.Size, System.Drawing">
     <value>0, 0</value>
-  </data>
-  <data name="buttonTS1.Image" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="buttonTS1.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>Off</value>
-  </data>
-  <data name="buttonTS1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>512, 225</value>
-  </data>
-  <data name="buttonTS1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>10, 8</value>
-  </data>
-  <data name="buttonTS1.TabIndex" type="System.Int32, mscorlib">
-    <value>60</value>
-  </data>
-  <data name="buttonTS1.Text" xml:space="preserve">
-    <value>buttonTS1</value>
-  </data>
-  <data name="&gt;&gt;buttonTS1.Name" xml:space="preserve">
-    <value>buttonTS1</value>
-  </data>
-  <data name="&gt;&gt;buttonTS1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ButtonTS, Thetis, Version=2.6.8.0, Culture=neutral, PublicKeyToken=null</value>
-  </data>
-  <data name="&gt;&gt;buttonTS1.Parent" xml:space="preserve">
-    <value>panelMode</value>
-  </data>
-  <data name="&gt;&gt;buttonTS1.ZOrder" xml:space="preserve">
-    <value>0</value>
   </data>
   <data name="panelMode.Font" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft Sans Serif, 8.25pt, style=Bold</value>
@@ -15629,6 +15575,9 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
   <data name="&gt;&gt;grpDisplaySplit.ZOrder" xml:space="preserve">
     <value>25</value>
   </data>
+  <data name="picRX2Meter.BackgroundImageLayout" type="System.Windows.Forms.ImageLayout, System.Windows.Forms">
+    <value>Stretch</value>
+  </data>
   <data name="picRX2Meter.Enabled" type="System.Boolean, mscorlib">
     <value>False</value>
   </data>
@@ -15640,6 +15589,9 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
   </data>
   <data name="picRX2Meter.Size" type="System.Drawing.Size, System.Drawing">
     <value>157, 30</value>
+  </data>
+  <data name="picRX2Meter.SizeMode" type="System.Windows.Forms.PictureBoxSizeMode, System.Windows.Forms">
+    <value>StretchImage</value>
   </data>
   <data name="picRX2Meter.TabIndex" type="System.Int32, mscorlib">
     <value>61</value>

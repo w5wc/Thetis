@@ -151,11 +151,11 @@ namespace Thetis
             // lblStatus
             // 
             this.lblStatus.BackColor = System.Drawing.Color.Transparent;
-            this.lblStatus.ForeColor = System.Drawing.Color.White;
+            this.lblStatus.ForeColor = System.Drawing.Color.Black;
             this.lblStatus.Image = null;
-            this.lblStatus.Location = new System.Drawing.Point(-6, 149);
+            this.lblStatus.Location = new System.Drawing.Point(-1, 9);
             this.lblStatus.Name = "lblStatus";
-            this.lblStatus.Size = new System.Drawing.Size(400, 16);
+            this.lblStatus.Size = new System.Drawing.Size(397, 16);
             this.lblStatus.TabIndex = 0;
             this.lblStatus.Text = "Status";
             this.lblStatus.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;

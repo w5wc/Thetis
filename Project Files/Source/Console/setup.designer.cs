@@ -1462,10 +1462,14 @@
             this.grpDisplay8000DLE = new System.Windows.Forms.GroupBoxTS();
             this.chkANAN8000DLEDisplayVoltsAmps = new System.Windows.Forms.CheckBoxTS();
             this.grpDisplayDriverEngine = new System.Windows.Forms.GroupBoxTS();
+            this.chkAntiAlias = new System.Windows.Forms.CheckBoxTS();
+            this.comboDisplayThreadPriority = new System.Windows.Forms.ComboBoxTS();
             this.chkShowFPS = new System.Windows.Forms.CheckBoxTS();
             this.comboDisplayDriver = new System.Windows.Forms.ComboBoxTS();
             this.grpDisplayMultimeter = new System.Windows.Forms.GroupBoxTS();
-            this.chkSMeter = new System.Windows.Forms.CheckBoxTS();
+            this.radUV = new System.Windows.Forms.RadioButtonTS();
+            this.radDBM = new System.Windows.Forms.RadioButtonTS();
+            this.radSReading = new System.Windows.Forms.RadioButtonTS();
             this.chkDisplayMeterShowDecimal = new System.Windows.Forms.CheckBoxTS();
             this.udMeterDigitalDelay = new System.Windows.Forms.NumericUpDownTS();
             this.lblMultimeterDigitalDelay = new System.Windows.Forms.LabelTS();
@@ -3151,6 +3155,7 @@
             this.udHttpPort = new System.Windows.Forms.NumericUpDownTS();
             this.chkBoxHTTP = new System.Windows.Forms.CheckBoxTS();
             this.tpTests = new System.Windows.Forms.TabPage();
+            this.btnShowSeqLog = new System.Windows.Forms.ButtonTS();
             this.grpBoxTS1 = new System.Windows.Forms.GroupBoxTS();
             this.grpSigGenTransmit = new System.Windows.Forms.GroupBoxTS();
             this.grpPulse = new System.Windows.Forms.GroupBoxTS();
@@ -3266,6 +3271,7 @@
             this.radioButtonTS5 = new System.Windows.Forms.RadioButtonTS();
             this.radioButtonTS6 = new System.Windows.Forms.RadioButtonTS();
             this.timer_RawInputMouseWheel = new System.Windows.Forms.Timer(this.components);
+            this.labelSavingLoading = new System.Windows.Forms.LabelTS();
             tpAlexAntCtrl = new System.Windows.Forms.TabPage();
             numericUpDownTS3 = new System.Windows.Forms.NumericUpDownTS();
             numericUpDownTS4 = new System.Windows.Forms.NumericUpDownTS();
@@ -7180,7 +7186,7 @@
             this.grpFRSRegion.Controls.Add(this.comboFRSRegion);
             this.grpFRSRegion.Location = new System.Drawing.Point(185, 201);
             this.grpFRSRegion.Name = "grpFRSRegion";
-            this.grpFRSRegion.Size = new System.Drawing.Size(110, 81);
+            this.grpFRSRegion.Size = new System.Drawing.Size(111, 81);
             this.grpFRSRegion.TabIndex = 33;
             this.grpFRSRegion.TabStop = false;
             this.grpFRSRegion.Text = "Region";
@@ -7222,8 +7228,12 @@
             "Hungary",
             "Netherlands",
             "France",
-            "Russia"});
-            this.comboFRSRegion.Location = new System.Drawing.Point(3, 20);
+            "Russia",
+            "Region1",
+            "Region2",
+            "Region3",
+            "Germany"});
+            this.comboFRSRegion.Location = new System.Drawing.Point(6, 19);
             this.comboFRSRegion.Name = "comboFRSRegion";
             this.comboFRSRegion.Size = new System.Drawing.Size(100, 21);
             this.comboFRSRegion.TabIndex = 0;
@@ -23991,20 +24001,53 @@
             // 
             // grpDisplayDriverEngine
             // 
+            this.grpDisplayDriverEngine.Controls.Add(this.chkAntiAlias);
+            this.grpDisplayDriverEngine.Controls.Add(this.comboDisplayThreadPriority);
             this.grpDisplayDriverEngine.Controls.Add(this.chkShowFPS);
             this.grpDisplayDriverEngine.Controls.Add(this.comboDisplayDriver);
             this.grpDisplayDriverEngine.Location = new System.Drawing.Point(427, 184);
             this.grpDisplayDriverEngine.Name = "grpDisplayDriverEngine";
-            this.grpDisplayDriverEngine.Size = new System.Drawing.Size(116, 97);
+            this.grpDisplayDriverEngine.Size = new System.Drawing.Size(116, 128);
             this.grpDisplayDriverEngine.TabIndex = 46;
             this.grpDisplayDriverEngine.TabStop = false;
             this.grpDisplayDriverEngine.Text = "Driver Engine";
+            // 
+            // chkAntiAlias
+            // 
+            this.chkAntiAlias.AutoSize = true;
+            this.chkAntiAlias.Image = null;
+            this.chkAntiAlias.Location = new System.Drawing.Point(9, 107);
+            this.chkAntiAlias.Name = "chkAntiAlias";
+            this.chkAntiAlias.Size = new System.Drawing.Size(80, 17);
+            this.chkAntiAlias.TabIndex = 48;
+            this.chkAntiAlias.Text = "Anti-aliased";
+            this.toolTip1.SetToolTip(this.chkAntiAlias, "Enable anti-aliasing. Will allow sub pixel lines in DirectX and remove all the ja" +
+        "ggies in both DirectX and GDI+");
+            this.chkAntiAlias.UseVisualStyleBackColor = true;
+            this.chkAntiAlias.CheckedChanged += new System.EventHandler(this.chkAntiAlias_CheckedChanged);
+            // 
+            // comboDisplayThreadPriority
+            // 
+            this.comboDisplayThreadPriority.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboDisplayThreadPriority.DropDownWidth = 112;
+            this.comboDisplayThreadPriority.Items.AddRange(new object[] {
+            "Lowest",
+            "Below Normal",
+            "Normal",
+            "Above Normal",
+            "High"});
+            this.comboDisplayThreadPriority.Location = new System.Drawing.Point(8, 76);
+            this.comboDisplayThreadPriority.Name = "comboDisplayThreadPriority";
+            this.comboDisplayThreadPriority.Size = new System.Drawing.Size(102, 21);
+            this.comboDisplayThreadPriority.TabIndex = 47;
+            this.toolTip1.SetToolTip(this.comboDisplayThreadPriority, "Set the priority of the display thread");
+            this.comboDisplayThreadPriority.SelectedIndexChanged += new System.EventHandler(this.comboDisplayThreadPriority_SelectedIndexChanged);
             // 
             // chkShowFPS
             // 
             this.chkShowFPS.AutoSize = true;
             this.chkShowFPS.Image = null;
-            this.chkShowFPS.Location = new System.Drawing.Point(12, 62);
+            this.chkShowFPS.Location = new System.Drawing.Point(8, 51);
             this.chkShowFPS.Name = "chkShowFPS";
             this.chkShowFPS.Size = new System.Drawing.Size(76, 17);
             this.chkShowFPS.TabIndex = 46;
@@ -24029,7 +24072,9 @@
             // 
             // grpDisplayMultimeter
             // 
-            this.grpDisplayMultimeter.Controls.Add(this.chkSMeter);
+            this.grpDisplayMultimeter.Controls.Add(this.radUV);
+            this.grpDisplayMultimeter.Controls.Add(this.radDBM);
+            this.grpDisplayMultimeter.Controls.Add(this.radSReading);
             this.grpDisplayMultimeter.Controls.Add(this.chkDisplayMeterShowDecimal);
             this.grpDisplayMultimeter.Controls.Add(this.udMeterDigitalDelay);
             this.grpDisplayMultimeter.Controls.Add(this.lblMultimeterDigitalDelay);
@@ -24048,16 +24093,44 @@
             this.grpDisplayMultimeter.TabStop = false;
             this.grpDisplayMultimeter.Text = "Multimeter";
             // 
-            // chkSMeter
+            // radUV
             // 
-            this.chkSMeter.Image = null;
-            this.chkSMeter.Location = new System.Drawing.Point(200, 44);
-            this.chkSMeter.Name = "chkSMeter";
-            this.chkSMeter.Size = new System.Drawing.Size(96, 16);
-            this.chkSMeter.TabIndex = 41;
-            this.chkSMeter.Text = "S-Reading";
-            this.toolTip1.SetToolTip(this.chkSMeter, "Check to show signal meter info");
-            this.chkSMeter.CheckedChanged += new System.EventHandler(this.chkSMeter_CheckedChanged);
+            this.radUV.AutoSize = true;
+            this.radUV.Image = null;
+            this.radUV.Location = new System.Drawing.Point(200, 92);
+            this.radUV.Name = "radUV";
+            this.radUV.Size = new System.Drawing.Size(63, 17);
+            this.radUV.TabIndex = 44;
+            this.radUV.TabStop = true;
+            this.radUV.Text = "uV (rms)";
+            this.radUV.UseVisualStyleBackColor = true;
+            this.radUV.CheckedChanged += new System.EventHandler(this.radUV_CheckedChanged);
+            // 
+            // radDBM
+            // 
+            this.radDBM.AutoSize = true;
+            this.radDBM.Image = null;
+            this.radDBM.Location = new System.Drawing.Point(200, 68);
+            this.radDBM.Name = "radDBM";
+            this.radDBM.Size = new System.Drawing.Size(46, 17);
+            this.radDBM.TabIndex = 43;
+            this.radDBM.TabStop = true;
+            this.radDBM.Text = "dBm";
+            this.radDBM.UseVisualStyleBackColor = true;
+            this.radDBM.CheckedChanged += new System.EventHandler(this.radDBM_CheckedChanged);
+            // 
+            // radSReading
+            // 
+            this.radSReading.AutoSize = true;
+            this.radSReading.Image = null;
+            this.radSReading.Location = new System.Drawing.Point(200, 47);
+            this.radSReading.Name = "radSReading";
+            this.radSReading.Size = new System.Drawing.Size(75, 17);
+            this.radSReading.TabIndex = 42;
+            this.radSReading.TabStop = true;
+            this.radSReading.Text = "S Reading";
+            this.radSReading.UseVisualStyleBackColor = true;
+            this.radSReading.CheckedChanged += new System.EventHandler(this.radSReading_CheckedChanged);
             // 
             // chkDisplayMeterShowDecimal
             // 
@@ -52072,6 +52145,7 @@
             // 
             // tpTests
             // 
+            this.tpTests.Controls.Add(this.btnShowSeqLog);
             this.tpTests.Controls.Add(this.grpBoxTS1);
             this.tpTests.Controls.Add(this.grpTestTXIMD);
             this.tpTests.Controls.Add(this.grpImpulseTest);
@@ -52081,6 +52155,17 @@
             this.tpTests.Size = new System.Drawing.Size(584, 364);
             this.tpTests.TabIndex = 7;
             this.tpTests.Text = "Tests";
+            // 
+            // btnShowSeqLog
+            // 
+            this.btnShowSeqLog.Image = null;
+            this.btnShowSeqLog.Location = new System.Drawing.Point(37, 327);
+            this.btnShowSeqLog.Name = "btnShowSeqLog";
+            this.btnShowSeqLog.Size = new System.Drawing.Size(97, 23);
+            this.btnShowSeqLog.TabIndex = 92;
+            this.btnShowSeqLog.Text = "Show SEQ log";
+            this.btnShowSeqLog.UseVisualStyleBackColor = true;
+            this.btnShowSeqLog.Click += new System.EventHandler(this.btnShowSeqLog_Click);
             // 
             // grpBoxTS1
             // 
@@ -54164,11 +54249,24 @@
             this.timer_RawInputMouseWheel.Interval = 500;
             this.timer_RawInputMouseWheel.Tick += new System.EventHandler(this.Timer_RawInputMouseWheel_Tick);
             // 
+            // labelSavingLoading
+            // 
+            this.labelSavingLoading.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelSavingLoading.ForeColor = System.Drawing.Color.Red;
+            this.labelSavingLoading.Image = null;
+            this.labelSavingLoading.Location = new System.Drawing.Point(499, 426);
+            this.labelSavingLoading.Name = "labelSavingLoading";
+            this.labelSavingLoading.Size = new System.Drawing.Size(100, 10);
+            this.labelSavingLoading.TabIndex = 23;
+            this.labelSavingLoading.Text = "SAVING";
+            this.labelSavingLoading.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
             // Setup
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(604, 439);
+            this.Controls.Add(this.labelSavingLoading);
             this.Controls.Add(this.btnExportDB);
             this.Controls.Add(this.btnImportDB);
             this.Controls.Add(this.btnResetDB);
@@ -54494,6 +54592,7 @@
             this.grpDisplayDriverEngine.ResumeLayout(false);
             this.grpDisplayDriverEngine.PerformLayout();
             this.grpDisplayMultimeter.ResumeLayout(false);
+            this.grpDisplayMultimeter.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.udMeterDigitalDelay)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.udDisplayMeterAvg)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.udDisplayMultiTextHoldTime)).EndInit();
@@ -56113,7 +56212,6 @@
         private TextBox txtMeterOffset;
         private LabelTS labelTS54;
         private LabelTS labelTS53;
-        private CheckBoxTS chkSMeter;
         private GroupBoxTS grpAppGrid;
         private ColorButton clrbtnGridFine;
         private LabelTS lblGridFine;
@@ -58553,5 +58651,12 @@
         private NumericUpDownTS udDisplayPhasePtSize;
         private GroupBoxTS groupBoxTS11;
         private CheckBoxTS chkSmallModeFilteronVFOs;
+        private ComboBoxTS comboDisplayThreadPriority;
+        private LabelTS labelSavingLoading;
+        private ButtonTS btnShowSeqLog;
+        private RadioButtonTS radUV;
+        private RadioButtonTS radDBM;
+        private RadioButtonTS radSReading;
+        private CheckBoxTS chkAntiAlias;
     }
 }

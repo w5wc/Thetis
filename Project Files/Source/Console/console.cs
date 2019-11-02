@@ -140,6 +140,14 @@ namespace Thetis
         Edge,
         Analog,
     }
+    public enum MultiMeterMeasureMode
+    {
+        FIRST = -1,
+        SMeter,
+        DBM,
+        UV,
+        LAST
+    }
 
     public enum FilterWidthMode
     {
@@ -288,6 +296,7 @@ namespace Thetis
         COMP,
         ALC,
         ALC_G,
+        ALC_GROUP,
         SWR,
         OFF,
         LAST,
@@ -332,6 +341,10 @@ namespace Thetis
         Extended = 18,
         India = 19,
         Sweden = 20,
+        Region1 = 21,
+        Region2 = 22,
+        Region3 = 23,
+        Germany = 24,
         LAST,
     }
 
@@ -1013,7 +1026,6 @@ namespace Thetis
 
         //MW0LGE
         private Size txt_multi_text_size_basis = new Size(100, 100); // original size of miltimeter text
-        private Point gr_multi_meter_basis = new Point(100, 100);  // original pos of multimeter group
         private Point gr_multi_meter_menus_basis = new Point(100, 100);  // original pos of multimeter menu group
         private Size gr_multi_meter_menus_size_basis = new Size(100, 100); // original size of multimeter menu
 
@@ -1159,7 +1171,7 @@ namespace Thetis
 
         // MW0LGE
         private frmNotchPopup m_frmNotchPopup;
-        
+        private frmSeqLog m_frmSeqLog;
         public CWX CWXForm
         {
             // implemented so that the creation of the form happens in a single place
@@ -1218,6 +1230,7 @@ namespace Thetis
             CultureInfo.DefaultThreadCurrentUICulture = ci;
             Thread.CurrentThread.CurrentCulture = ci;
             Thread.CurrentThread.CurrentUICulture = ci;
+            //
 
             foreach (string s in args)
             {
@@ -1621,16 +1634,16 @@ namespace Thetis
             chkRX2Squelch_CheckedChanged(this, EventArgs.Empty);
 
             UpdateWaterfallLevelValues();
-            UpdateDisplayGridLevelValues();
+            updateDisplayGridLevelValues();
             UpdateDiversityValues();
 
             if (draw_display_thread == null || !draw_display_thread.IsAlive)
             {
                 draw_display_thread = new Thread(new ThreadStart(RunDisplay));
                 draw_display_thread.Name = "Draw Display Thread";
-                draw_display_thread.Priority = ThreadPriority.BelowNormal;
+                draw_display_thread.Priority = m_tpDisplayThreadPriority;//MW0LGE now defaulted with m_tpDisplayThreadPriority, and updated by setupform
                 draw_display_thread.IsBackground = true;
-                draw_display_thread.Start();
+                draw_display_thread.Start();                
             }
 
             rx1_meter_cal_offset = rx_meter_cal_offset_by_radio[(int)current_hpsdr_model];
@@ -1678,6 +1691,24 @@ namespace Thetis
         {
             // used by autostart command line flags, this event will fire 2 seconds 
             chkPower.Checked = true;
+        }
+
+        private ThreadPriority m_tpDisplayThreadPriority = ThreadPriority.BelowNormal;
+        public ThreadPriority DisplayThreadPriority
+        {
+            get
+            { 
+                return m_tpDisplayThreadPriority;
+            }
+            set
+            {
+                m_tpDisplayThreadPriority = value;
+                if (draw_display_thread != null)
+                {
+                    draw_display_thread.Priority = m_tpDisplayThreadPriority;
+                }
+
+            }
         }
 
         void gmh_MouseUp()
@@ -1770,8 +1801,8 @@ namespace Thetis
 #endif
             }
 
-            try
-            {
+            //try
+            //{
                 {
                     // Need to create the directory in %appdata% before we go run wisdom
                     if (!Directory.Exists(app_data_path))
@@ -1798,15 +1829,14 @@ namespace Thetis
                     Application.Exit();
                 }
                 else Application.Run(theConsole);
-            }
-            catch (Exception ex)
-            {
-                string msg = ex.Message + "\n\n" + ex.StackTrace.ToString();
-                if (ex.InnerException != null) msg += "\n\n" + ex.InnerException.Message;
-                MessageBox.Show(msg, "Fatal Error",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-
+            //}
+            //catch (Exception ex)
+            //{
+            //    string msg = ex.Message + "\n\n" + ex.StackTrace.ToString();
+            //    if (ex.InnerException != null) msg += "\n\n" + ex.InnerException.Message;
+            //    MessageBox.Show(msg, "Fatal Error",
+            //        MessageBoxButtons.OK, MessageBoxIcon.Error);
+            //}
         }
 
         #endregion
@@ -1900,12 +1930,20 @@ namespace Thetis
                 if (active != SelectedNotch.Active) changeNotchActive(SelectedNotch, active);
             }
         }
+        private void onClearButton()
+        {
+            NetworkIO.clearSnapshots();
+        }
+
         private void InitConsole()
         {
             m_frmNotchPopup = new frmNotchPopup();
             m_frmNotchPopup.NotchDeleteEvent += onNotchDelete;
             m_frmNotchPopup.NotchBWChangedEvent += onBWChanged;
             m_frmNotchPopup.NotchActiveChangedEvent += onActiveChanged;
+
+            m_frmSeqLog = new frmSeqLog();
+            m_frmSeqLog.ClearButtonEvent += onClearButton;
 
             psform = new PSForm(this);
             booting = true;
@@ -2191,10 +2229,6 @@ namespace Thetis
             dxmemList = DXMemList.Restore1(); // ke9ns add for dx spotter
             dxmemList.CheckVersion1(); // ke9ns add
 
-            // MW0LGE certain things in setup need objects created in this class, so we will
-            // delay them during init of setup, and now do them here
-            SetupForm.PerformDelayedInitalistion();
-
             InitMemoryFrontPanel();
             vfob_dsp_mode = DSPMode.LSB;
             vfob_filter = Filter.F3;
@@ -2214,11 +2248,15 @@ namespace Thetis
             comboAMTXProfile.Text = SetupForm.TXProfile;
             comboFMCTCSS.Text = "100.0";
 
-            GetState();							// recall saved state
+            GetState();                         // recall saved state
 
             initializing = false;
-            SetupForm.ForceTXProfileUpdate();
+            SetupForm.ForceTXProfileUpdate();   // loads previously saved profile
             initializing = true;
+
+            // MW0LGE certain things in setup need objects created in this instance, so we will
+            // delay them during init of setup, and now do them here
+            SetupForm.PerformDelayedInitalistion();
 
             chkFullDuplex.Checked = false;
             if (rx1_dsp_mode == DSPMode.FIRST || rx1_dsp_mode == DSPMode.LAST)
@@ -2235,7 +2273,7 @@ namespace Thetis
             chkVFOATX_CheckedChanged(this, EventArgs.Empty);
             chkVFOBTX_CheckedChanged(this, EventArgs.Empty);
 
-            txtVFOAFreq_LostFocus(this, EventArgs.Empty);
+            //MW0LGE moved down to end txtVFOAFreq_LostFocus(this, EventArgs.Empty);
 
             PAPresent = pa_present;
             SampleRateTX = sample_rate_tx;
@@ -2244,8 +2282,8 @@ namespace Thetis
                 RX1AGCMode = AGCMode.MED;
             if (comboRX2AGC.SelectedIndex < 0)
                 comboRX2AGC.Text = "Med";
-            txtVFOBFreq_LostFocus(this, EventArgs.Empty);
-            txtVFOAFreq_LostFocus(this, EventArgs.Empty);
+            //MW0LGE moved down to end txtVFOBFreq_LostFocus(this, EventArgs.Empty);
+            //MW0LGE moved down to end ... also DUPED from above??? txtVFOAFreq_LostFocus(this, EventArgs.Empty);
             ptbPWR_Scroll(this, EventArgs.Empty);
             ptbAF_Scroll(this, EventArgs.Empty);
             ptbSquelch_Scroll(this, EventArgs.Empty);
@@ -2262,12 +2300,14 @@ namespace Thetis
             ptbPanSubRX_Scroll(this, EventArgs.Empty);
             ptbRX2RF_Scroll(this, EventArgs.Empty);
             ptbRX2Squelch_Scroll(this, EventArgs.Empty);
+
             initializing = false;
             RX1PreampMode = rx1_preamp_by_band[(int)rx1_band];
             RX1AttenuatorData = rx1_step_attenuator_by_band[(int)rx1_band];
             RX2PreampMode = rx2_preamp_by_band[(int)rx2_band];
             RX2AttenuatorData = rx2_step_attenuator_by_band[(int)rx2_band];
             initializing = true;
+
             ptbDisplayZoom_Scroll(this, EventArgs.Empty);
             ptbRX0Gain_Scroll(this, EventArgs.Empty);
             ptbRX1Gain_Scroll(this, EventArgs.Empty);
@@ -2370,8 +2410,15 @@ namespace Thetis
                 rX2ToolStripMenuItem.Visible = false;
             }
 
-            Display.Target = picDisplay;
+            //MW0LGE duped from above Display.Target = picDisplay;
             update_rx2_display = true;
+
+            // MW0LGE moved way down here, so that display/zoom etc is setup which is needed
+            // also, just to note btnDisplayPanCenter_Click side effect to sets up initAnalyser
+            initializing = false;
+            txtVFOBFreq_LostFocus(this, EventArgs.Empty);
+            txtVFOAFreq_LostFocus(this, EventArgs.Empty);
+            initializing = true;
 
             if (startdiversity)
                 eSCToolStripMenuItem_Click(this, EventArgs.Empty);
@@ -2388,7 +2435,7 @@ namespace Thetis
             chkQSK.Checked = false;
             non_qsk_agc = RX1AGCMode;
             non_qsk_agc_hang_thresh = SetupForm.AGCHangThreshold;
-            non_qsk_ATTOnTX = attontx;
+            non_qsk_ATTOnTX = m_bAttontx;
             non_qsk_ATTOnTXVal = SetupForm.ATTOnTX;
             non_qsk_breakin = BreakInEnabled;
             non_qsk_breakin_delay = break_in_delay;
@@ -2410,7 +2457,7 @@ namespace Thetis
             channels_60m = new List<Channel>();
             switch (CurrentRegion)
             {
-                case FRSRegion.UK:
+                case FRSRegion.UK:                    
                     channels_60m.Add(new Channel(5.26125, 5500));
                     channels_60m.Add(new Channel(5.2800, 8000));
                     channels_60m.Add(new Channel(5.29025, 3500));
@@ -2423,7 +2470,6 @@ namespace Thetis
                     channels_60m.Add(new Channel(5.39825, 6500));
                     channels_60m.Add(new Channel(5.4050, 3000));
                     break;
-
                 case FRSRegion.US:
                     channels_60m.Add(new Channel(5.3320, 2800));
                     channels_60m.Add(new Channel(5.3480, 2800));
@@ -2431,7 +2477,6 @@ namespace Thetis
                     channels_60m.Add(new Channel(5.3730, 2800));
                     channels_60m.Add(new Channel(5.4050, 2800));
                     break;
-
                 default:
                     channels_60m.Add(new Channel(5.3320, 2800));
                     channels_60m.Add(new Channel(5.3480, 2800));
@@ -2440,6 +2485,7 @@ namespace Thetis
                     channels_60m.Add(new Channel(5.4050, 2800));
                     break;
             }
+            band_60m_register = channels_60m.Count;
         }
 
         private void SyncDSP()
@@ -3239,10 +3285,7 @@ namespace Thetis
             a.Add("iscollapsed/" + iscollapsed);//w3sz added
             a.Add("isexpanded/" + isexpanded);//w3sz added
             a.Add("diversity/" + diversity2);
-
-            a.Add("rx1_waterfallUseSpectrumMinMax/" + m_bWaterfallUseRX1SpectrumMinMax);
-            a.Add("rx2_waterfallUseSpectrumMinMax/" + m_bWaterfallUseRX2SpectrumMinMax);
-
+            
             for (int i = (int)PreampMode.FIRST + 1; i < (int)PreampMode.LAST; i++)
                 a.Add("rx1_preamp_offset[" + i.ToString() + "]/" + rx1_preamp_offset[i].ToString("f3"));
 
@@ -3832,8 +3875,10 @@ namespace Thetis
                 else if (name.StartsWith("power_by_band"))
                 {
                     string[] list = val.Split('|');
-                    for (int i = 0; i < (int)Band.LAST; i++)
+                    for (int i = 0; i < (int)Band.LAST; i++) {
                         power_by_band[i] = int.Parse(list[i]);
+                        Debug.Print(((Band)i).ToString() + " = " + power_by_band[i].ToString());                   
+                    }
                 }
                 else if (name.StartsWith("fm_tx_offset_by_band_mhz"))
                 {
@@ -4167,12 +4212,6 @@ namespace Thetis
                     case "diversity":
                         startdiversity = bool.Parse(val);
                         break;
-                    case "rx1_waterfallUseSpectrumMinMax": //MW0LGE
-                        this.WaterfallUseRX1SpectrumMinMax = bool.Parse(val);
-                        break;
-                    case "rx2_waterfallUseSpectrumMinMax": //MW0LGE
-                        this.WaterfallUseRX2SpectrumMinMax = bool.Parse(val);
-                        break;
                     case "quick_save_mode":
                         quick_save_mode = (DSPMode)(Int32.Parse(val));
                         break;
@@ -4358,6 +4397,14 @@ namespace Thetis
                     case "center_frequency":
                         center_frequency = double.Parse(val);
                         break;
+                    // MW0LGE missed out
+                    case "click_tune_rx2_display":
+                        click_tune_rx2_display = bool.Parse(val);
+                        break;
+                    case "VFOBFreq":
+                        VFOBFreq = double.Parse(val);
+                        break;
+                    //
                     case "center_rx2_frequency":
                         center_rx2_frequency = double.Parse(val);
                         break;
@@ -5469,6 +5516,7 @@ namespace Thetis
             comboMeterTXMode.Items.Add("COMP");
             comboMeterTXMode.Items.Add("ALC");
             comboMeterTXMode.Items.Add("ALC Comp");
+            comboMeterTXMode.Items.Add("ALC Group"); //MW0LGE
             comboMeterTXMode.Items.Add("Off");
         }
 
@@ -6012,13 +6060,15 @@ namespace Thetis
 
             ClickTuneDisplay = false;                               // Set CTUN off to restore center frequency - G3OQD
             chkFWCATU.Checked = ClickTuneDisplay;
+
             ptbDisplayZoom.Value = ZoomFactor;
             ptbDisplayZoom_Scroll(this, EventArgs.Empty);
+
             if (CTUN)
             {
                 center_frequency = CenterFreq;                      // Restore centre frequency if CTUN enabled - G3OQD
                 VFOAFreq = center_frequency;
-                txtVFOAFreq_LostFocus(this, EventArgs.Empty);
+                //MW0LGE txtVFOAFreq_LostFocus(this, EventArgs.Empty);
             }
 
             if (rx1_dsp_mode != DSPMode.DRM &&
@@ -13301,6 +13351,271 @@ namespace Thetis
                     else
                         return Band.GEN;
 
+                case FRSRegion.Germany:
+                    if ((freq >= 0.472 && freq <= 0.479) ||
+                        (freq >= 1.8 && freq <= 2.0))
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
+                        return Band.B160M;
+                    }
+                    else if (freq >= 3.5 && freq <= 3.8)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
+                        return Band.B80M;
+                    }
+                    else if (freq >= 5.3515 && freq <= 5.3665)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
+                        return Band.B60M;
+                    }
+                    else if (freq >= 7.0 && freq <= 7.2)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
+                        return Band.B40M;
+                    }
+                    else if (freq >= 10.1 && freq <= 10.15)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
+                        return Band.B30M;
+                    }
+                    else if (freq >= 14.0 && freq <= 14.35)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
+                        return Band.B20M;
+                    }
+                    else if (freq >= 18.068 && freq <= 18.168)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
+                        return Band.B17M;
+                    }
+                    else if (freq >= 21.0 && freq <= 21.450)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
+                        return Band.B15M;
+                    }
+                    else if (freq >= 24.89 && freq <= 24.99)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
+                        return Band.B12M;
+                    }
+                    else if (freq >= 28.0 && freq <= 29.7)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
+                        return Band.B10M;
+                    }
+                    else if (freq >= 50.0 && freq <= 51.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
+                        return Band.B6M;
+                    }
+                    else if (freq >= 144.0 && freq <= 146.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
+                        return Band.B2M;
+                    }
+                    else if (freq == 2.5 || freq == 5.0 || freq == 10.0 || freq == 15.0 ||
+                            freq == 20.0 || freq == 25.0 || freq == 3.33 || freq == 7.85 || freq == 14.67)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = true;
+                            panelBandGEN.Visible = false;
+                        }
+                        return Band.WWV;
+                    }
+
+                    // ke9ns add
+                    else if (freq >= 0.20 && freq < 1.80)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.BLMF;
+                    }
+
+                    else if (freq >= 2.3 && freq < 3.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B120M;
+                    }
+
+                    else if (freq >= 3.0 && freq < 3.5)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B90M;
+                    }
+
+                    else if (freq >= 4.10 && freq < 5.06)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B61M;
+                    }
+
+                    else if (freq >= 5.06 && freq < 7.20)
+                    {
+                        //   Debug.WriteLine("bandbyfreq 49");
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B49M;
+                    }
+
+                    else if (freq >= 7.20 && freq < 9.0)
+                    {
+                        //  Debug.WriteLine("bandbyfreq 41");
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B41M;
+                    }
+
+                    else if (freq >= 9.0 && freq < 9.99)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B31M;
+                    }
+
+                    else if (freq >= 11.6 && freq < 13.57)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B25M;
+                    }
+
+                    else if (freq >= 13.57 && freq < 13.87)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B22M;
+                    }
+
+                    else if (freq >= 15.1 && freq < 17.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B19M;
+                    }
+
+                    else if (freq >= 17.0 && freq < 18.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B16M;
+                    }
+
+                    else if (freq >= 18.0 && freq < 21.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B14M;
+                    }
+                    else if (freq >= 21.00 && freq < 25.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B13M;
+                    }
+
+                    else if (freq >= 25.0 && freq < 28.0)
+                    {
+                        if (vfoa)
+                        {
+                            panelBandHF.Visible = false;
+                            panelBandGEN.Visible = true;
+                        }
+                        return Band.B11M;
+                    }
+
+                    else
+                        return Band.GEN;
             }
 
 
@@ -13330,7 +13645,7 @@ namespace Thetis
             {
                 UpdateBandButtonColors();
                 UpdateWaterfallLevelValues();
-                UpdateDisplayGridLevelValues();
+                updateDisplayGridLevelValues();
                 UpdateDiversityValues();
             }
 
@@ -13359,7 +13674,7 @@ namespace Thetis
             {
                 UpdateBandButtonColors();
                 UpdateWaterfallLevelValues();
-                UpdateDisplayGridLevelValues();
+                updateDisplayGridLevelValues();
             }
             //  UpdateWaterfallLevelValues();
             //  UpdateDisplayGridLevelValues();
@@ -14846,6 +15161,22 @@ namespace Thetis
                     else if (f >= 50.0 && f <= 50.2) ret_val = true;
                     else ret_val = false;
                     break;
+                case FRSRegion.Germany:
+                    if (f >= .1357 && f <= .1378) ret_val = true;
+                    else if (f >= 0.472 && f <= 0.479) ret_val = true;
+                    else if (f >= 1.81 && f <= 2.0) ret_val = true;
+                    else if (f >= 3.5 && f <= 3.8) ret_val = true;
+                    else if (f >= 5.3515 && f <= 5.3665) ret_val = true;
+                    else if (f >= 7.0 && f <= 7.2) ret_val = true;
+                    else if (f >= 10.1 && f <= 10.15) ret_val = true;
+                    else if (f >= 14.0 && f <= 14.35) ret_val = true;
+                    else if (f >= 18.068 && f <= 18.168) ret_val = true;
+                    else if (f >= 21.0 && f <= 21.45) ret_val = true;
+                    else if (f >= 24.89 && f <= 24.99) ret_val = true;
+                    else if (f >= 28.0 && f <= 29.7) ret_val = true;
+                    else if (f >= 50.0 && f <= 51.0) ret_val = true;
+                    else ret_val = false;
+                    break;
                 case FRSRegion.UK:
                     if (f >= 0.472 && f <= 0.479) ret_val = true;
                     else if (f >= 1.81 && f <= 2.0) ret_val = true;
@@ -15839,6 +16170,52 @@ namespace Thetis
             band_vhf12_register = band_stacks[40];
             band_vhf13_register = band_stacks[41];
 
+            //MW0LGE
+            // index 0 based, register n in stack
+            if (band_160m_index + 1 > band_160m_register) band_160m_index = band_160m_register - 1;
+            if (band_80m_index + 1 > band_80m_register) band_80m_index = band_80m_register - 1;
+            if (band_60m_index + 1 > band_60m_register) band_60m_index = band_60m_register - 1;
+            if (band_40m_index + 1 > band_40m_register) band_40m_index = band_40m_register - 1;
+            if (band_30m_index + 1 > band_30m_register) band_30m_index = band_30m_register - 1;
+            if (band_20m_index + 1 > band_20m_register) band_20m_index = band_20m_register - 1;
+            if (band_17m_index + 1 > band_17m_register) band_17m_index = band_17m_register - 1;
+            if (band_15m_index + 1 > band_15m_register) band_15m_index = band_15m_register - 1;
+            if (band_12m_index + 1 > band_12m_register) band_12m_index = band_12m_register - 1;
+            if (band_10m_index + 1 > band_10m_register) band_10m_index = band_10m_register - 1;
+            if (band_6m_index + 1 > band_6m_register) band_6m_index = band_6m_register - 1;
+            if (band_2m_index + 1 > band_2m_register) band_2m_index = band_2m_register - 1;
+            if (band_wwv_index + 1 > band_wwv_register) band_wwv_index = band_wwv_register - 1;
+            if (band_gen_index + 1 > band_gen_register) band_gen_index = band_gen_register - 1;
+
+            if (band_LMF_index + 1 > band_LMF_register) band_LMF_index = band_LMF_register - 1;
+            if (band_120m_index + 1 > band_120m_register) band_120m_index = band_120m_register - 1;
+            if (band_90m_index + 1 > band_90m_register) band_90m_index = band_90m_register - 1;
+            if (band_61m_index + 1 > band_61m_register) band_61m_index = band_61m_register - 1;
+            if (band_49m_index + 1 > band_49m_register) band_49m_index = band_49m_register - 1;
+            if (band_41m_index + 1 > band_41m_register) band_41m_index = band_41m_register - 1;
+            if (band_31m_index + 1 > band_31m_register) band_31m_index = band_31m_register - 1;
+            if (band_25m_index + 1 > band_25m_register) band_25m_index = band_25m_register - 1;
+            if (band_22m_index + 1 > band_22m_register) band_22m_index = band_22m_register - 1;
+            if (band_19m_index + 1 > band_19m_register) band_19m_index = band_19m_register - 1;
+            if (band_16m_index + 1 > band_16m_register) band_16m_index = band_16m_register - 1;
+            if (band_14m_index + 1 > band_14m_register) band_14m_index = band_14m_register - 1;
+            if (band_13m_index + 1 > band_13m_register) band_13m_index = band_13m_register - 1;
+            if (band_11m_index + 1 > band_11m_register) band_11m_index = band_11m_register - 1;
+
+            if (band_vhf0_index + 1 > band_vhf0_register) band_vhf0_index = band_vhf0_register - 1;
+            if (band_vhf1_index + 1 > band_vhf1_register) band_vhf1_index = band_vhf1_register - 1;
+            if (band_vhf2_index + 1 > band_vhf2_register) band_vhf2_index = band_vhf2_register - 1;
+            if (band_vhf3_index + 1 > band_vhf3_register) band_vhf3_index = band_vhf3_register - 1;
+            if (band_vhf4_index + 1 > band_vhf4_register) band_vhf4_index = band_vhf4_register - 1;
+            if (band_vhf5_index + 1 > band_vhf5_register) band_vhf5_index = band_vhf5_register - 1;
+            if (band_vhf6_index + 1 > band_vhf6_register) band_vhf6_index = band_vhf6_register - 1;
+            if (band_vhf7_index + 1 > band_vhf7_register) band_vhf7_index = band_vhf7_register - 1;
+            if (band_vhf8_index + 1 > band_vhf8_register) band_vhf8_index = band_vhf8_register - 1;
+            if (band_vhf9_index + 1 > band_vhf9_register) band_vhf9_index = band_vhf9_register - 1;
+            if (band_vhf10_index + 1 > band_vhf10_register) band_vhf10_index = band_vhf10_register - 1;
+            if (band_vhf11_index + 1 > band_vhf11_register) band_vhf11_index = band_vhf11_register - 1;
+            if (band_vhf12_index + 1 > band_vhf12_register) band_vhf12_index = band_vhf12_register - 1;
+            if (band_vhf13_index + 1 > band_vhf13_register) band_vhf13_index = band_vhf13_register - 1;
         }
 
         public void UpdateRX1Filters(int low, int high)
@@ -16151,6 +16528,7 @@ namespace Thetis
 
         public void UpdateVFOAFreq(string freq)
         {	// only do this routine if there are six digits after the decimal point.
+            m_dVFOAFreq = freqFromString(freq); //MW0LGE
             txtVFOAFreq.Text = freq;
             txtVFOAMSD.Text = freq;
 
@@ -16175,6 +16553,7 @@ namespace Thetis
 
         public void UpdateVFOBFreq(string freq)
         {	// only do this routine if there are six digits after the decimal point.
+            m_dVFOBFreq = freqFromString(freq);
             txtVFOBFreq.Text = freq;
             txtVFOBMSD.Text = freq;
 
@@ -17039,7 +17418,7 @@ namespace Thetis
             }
         }
 
-        private void UpdateDisplayGridLevelValues()
+        public void UpdateDisplayGridLevelMinValues(bool bDoBandInfoAndWaterFallSync = true)
         {
             if (!initializing)
             {
@@ -17048,87 +17427,59 @@ namespace Thetis
                 {
                     case Band.B160M:
                         SetupForm.DisplayGridMin = DisplayGridMin160m;
-                        SetupForm.DisplayGridMax = DisplayGridMax160m;
                         Display.SpectrumGridMin = (int)DisplayGridMin160m;
-                        Display.SpectrumGridMax = (int)DisplayGridMax160m;
                         break;
                     case Band.B80M:
                         SetupForm.DisplayGridMin = DisplayGridMin80m;
-                        SetupForm.DisplayGridMax = DisplayGridMax80m;
                         Display.SpectrumGridMin = (int)DisplayGridMin80m;
-                        Display.SpectrumGridMax = (int)DisplayGridMax80m;
                         break;
                     case Band.B60M:
                         SetupForm.DisplayGridMin = DisplayGridMin60m;
-                        SetupForm.DisplayGridMax = DisplayGridMax60m;
                         Display.SpectrumGridMin = (int)DisplayGridMin60m;
-                        Display.SpectrumGridMax = (int)DisplayGridMax60m;
                         break;
                     case Band.B40M:
                         SetupForm.DisplayGridMin = DisplayGridMin40m;
-                        SetupForm.DisplayGridMax = DisplayGridMax40m;
                         Display.SpectrumGridMin = (int)DisplayGridMin40m;
-                        Display.SpectrumGridMax = (int)DisplayGridMax40m;
                         break;
                     case Band.B30M:
                         SetupForm.DisplayGridMin = DisplayGridMin30m;
-                        SetupForm.DisplayGridMax = DisplayGridMax30m;
                         Display.SpectrumGridMin = (int)DisplayGridMin30m;
-                        Display.SpectrumGridMax = (int)DisplayGridMax30m;
                         break;
                     case Band.B20M:
                         SetupForm.DisplayGridMin = DisplayGridMin20m;
-                        SetupForm.DisplayGridMax = DisplayGridMax20m;
                         Display.SpectrumGridMin = (int)DisplayGridMin20m;
-                        Display.SpectrumGridMax = (int)DisplayGridMax20m;
                         break;
                     case Band.B17M:
                         SetupForm.DisplayGridMin = DisplayGridMin17m;
-                        SetupForm.DisplayGridMax = DisplayGridMax17m;
                         Display.SpectrumGridMin = (int)DisplayGridMin17m;
-                        Display.SpectrumGridMax = (int)DisplayGridMax17m;
                         break;
                     case Band.B15M:
                         SetupForm.DisplayGridMin = DisplayGridMin15m;
-                        SetupForm.DisplayGridMax = DisplayGridMax15m;
                         Display.SpectrumGridMin = (int)DisplayGridMin15m;
-                        Display.SpectrumGridMax = (int)DisplayGridMax15m;
                         break;
                     case Band.B12M:
                         SetupForm.DisplayGridMin = DisplayGridMin12m;
-                        SetupForm.DisplayGridMax = DisplayGridMax12m;
                         Display.SpectrumGridMin = (int)DisplayGridMin12m;
-                        Display.SpectrumGridMax = (int)DisplayGridMax12m;
                         break;
                     case Band.B10M:
                         SetupForm.DisplayGridMin = DisplayGridMin10m;
-                        SetupForm.DisplayGridMax = DisplayGridMax10m;
                         Display.SpectrumGridMin = (int)DisplayGridMin10m;
-                        Display.SpectrumGridMax = (int)DisplayGridMax10m;
                         break;
                     case Band.B6M:
                         SetupForm.DisplayGridMin = DisplayGridMin6m;
-                        SetupForm.DisplayGridMax = DisplayGridMax6m;
                         Display.SpectrumGridMin = (int)DisplayGridMin6m;
-                        Display.SpectrumGridMax = (int)DisplayGridMax6m;
                         break;
                     case Band.WWV:
                         SetupForm.DisplayGridMin = DisplayGridMinWWV;
-                        SetupForm.DisplayGridMax = DisplayGridMaxWWV;
                         Display.SpectrumGridMin = (int)DisplayGridMinWWV;
-                        Display.SpectrumGridMax = (int)DisplayGridMaxWWV;
                         break;
                     case Band.GEN:
                         SetupForm.DisplayGridMin = DisplayGridMinGEN;
-                        SetupForm.DisplayGridMax = DisplayGridMaxGEN;
                         Display.SpectrumGridMin = (int)DisplayGridMinGEN;
-                        Display.SpectrumGridMax = (int)DisplayGridMaxGEN;
                         break;
                     default:
                         SetupForm.DisplayGridMin = DisplayGridMinXVTR;
-                        SetupForm.DisplayGridMax = DisplayGridMaxXVTR;
                         Display.SpectrumGridMin = (int)DisplayGridMinXVTR;
-                        Display.SpectrumGridMax = (int)DisplayGridMaxXVTR;
                         break;
                 }
 
@@ -17136,95 +17487,394 @@ namespace Thetis
                 {
                     case Band.B160M:
                         SetupForm.RX2DisplayGridMin = RX2DisplayGridMin160m;
-                        SetupForm.RX2DisplayGridMax = RX2DisplayGridMax160m;
                         Display.RX2SpectrumGridMin = (int)RX2DisplayGridMin160m;
-                        Display.RX2SpectrumGridMax = (int)RX2DisplayGridMax160m;
                         break;
                     case Band.B80M:
                         SetupForm.RX2DisplayGridMin = RX2DisplayGridMin80m;
-                        SetupForm.RX2DisplayGridMax = RX2DisplayGridMax80m;
                         Display.RX2SpectrumGridMin = (int)RX2DisplayGridMin80m;
-                        Display.RX2SpectrumGridMax = (int)RX2DisplayGridMax80m;
                         break;
                     case Band.B60M:
                         SetupForm.RX2DisplayGridMin = RX2DisplayGridMin60m;
-                        SetupForm.RX2DisplayGridMax = RX2DisplayGridMax60m;
                         Display.RX2SpectrumGridMin = (int)RX2DisplayGridMin60m;
-                        Display.RX2SpectrumGridMax = (int)RX2DisplayGridMax60m;
                         break;
                     case Band.B40M:
                         SetupForm.RX2DisplayGridMin = RX2DisplayGridMin40m;
-                        SetupForm.RX2DisplayGridMax = RX2DisplayGridMax40m;
                         Display.RX2SpectrumGridMin = (int)RX2DisplayGridMin40m;
-                        Display.RX2SpectrumGridMax = (int)RX2DisplayGridMax40m;
                         break;
                     case Band.B30M:
                         SetupForm.RX2DisplayGridMin = RX2DisplayGridMin30m;
-                        SetupForm.RX2DisplayGridMax = RX2DisplayGridMax30m;
                         Display.RX2SpectrumGridMin = (int)RX2DisplayGridMin30m;
-                        Display.RX2SpectrumGridMax = (int)RX2DisplayGridMax30m;
                         break;
                     case Band.B20M:
                         SetupForm.RX2DisplayGridMin = RX2DisplayGridMin20m;
-                        SetupForm.RX2DisplayGridMax = RX2DisplayGridMax20m;
                         Display.RX2SpectrumGridMin = (int)RX2DisplayGridMin20m;
-                        Display.RX2SpectrumGridMax = (int)RX2DisplayGridMax20m;
                         break;
                     case Band.B17M:
                         SetupForm.RX2DisplayGridMin = RX2DisplayGridMin17m;
-                        SetupForm.RX2DisplayGridMax = RX2DisplayGridMax17m;
                         Display.RX2SpectrumGridMin = (int)RX2DisplayGridMin17m;
-                        Display.RX2SpectrumGridMax = (int)RX2DisplayGridMax17m;
                         break;
                     case Band.B15M:
                         SetupForm.RX2DisplayGridMin = RX2DisplayGridMin15m;
-                        SetupForm.RX2DisplayGridMax = RX2DisplayGridMax15m;
                         Display.RX2SpectrumGridMin = (int)RX2DisplayGridMin15m;
-                        Display.RX2SpectrumGridMax = (int)RX2DisplayGridMax15m;
                         break;
                     case Band.B12M:
                         SetupForm.RX2DisplayGridMin = RX2DisplayGridMin12m;
-                        SetupForm.RX2DisplayGridMax = RX2DisplayGridMax12m;
                         Display.RX2SpectrumGridMin = (int)RX2DisplayGridMin12m;
-                        Display.RX2SpectrumGridMax = (int)RX2DisplayGridMax12m;
                         break;
                     case Band.B10M:
                         SetupForm.RX2DisplayGridMin = RX2DisplayGridMin10m;
-                        SetupForm.RX2DisplayGridMax = RX2DisplayGridMax10m;
                         Display.RX2SpectrumGridMin = (int)RX2DisplayGridMin10m;
-                        Display.RX2SpectrumGridMax = (int)RX2DisplayGridMax10m;
                         break;
                     case Band.B6M:
                         SetupForm.RX2DisplayGridMin = RX2DisplayGridMin6m;
-                        SetupForm.RX2DisplayGridMax = RX2DisplayGridMax6m;
                         Display.RX2SpectrumGridMin = (int)RX2DisplayGridMin6m;
-                        Display.RX2SpectrumGridMax = (int)RX2DisplayGridMax6m;
                         break;
                     case Band.WWV:
                         SetupForm.RX2DisplayGridMin = RX2DisplayGridMinWWV;
-                        SetupForm.RX2DisplayGridMax = RX2DisplayGridMaxWWV;
                         Display.RX2SpectrumGridMin = (int)RX2DisplayGridMinWWV;
-                        Display.RX2SpectrumGridMax = (int)RX2DisplayGridMaxWWV;
                         break;
                     case Band.GEN:
                         SetupForm.RX2DisplayGridMin = RX2DisplayGridMinGEN;
-                        SetupForm.RX2DisplayGridMax = RX2DisplayGridMaxGEN;
                         Display.RX2SpectrumGridMin = (int)RX2DisplayGridMinGEN;
-                        Display.RX2SpectrumGridMax = (int)RX2DisplayGridMaxGEN;
                         break;
                     default:
                         SetupForm.RX2DisplayGridMin = RX2DisplayGridMinXVTR;
-                        SetupForm.RX2DisplayGridMax = RX2DisplayGridMaxXVTR;
                         Display.RX2SpectrumGridMin = (int)RX2DisplayGridMinXVTR;
+                        break;
+                }
+
+                if (bDoBandInfoAndWaterFallSync)
+                {
+                    SetupForm.UpdateDisplayGridBandInfo();
+
+                    //MW0LGE override... XVTR? TODO
+                    setWaterfallGainsIfLinkedToSpectrum();
+                }
+            }
+        }
+        public void UpdateDisplayGridLevelMaxValues(bool bDoBandInfoAndWaterFallSync = true)
+        {
+            if (!initializing)
+            {
+                //
+                switch (RX1Band)
+                {
+                    case Band.B160M:
+                        SetupForm.DisplayGridMax = DisplayGridMax160m;
+                        Display.SpectrumGridMax = (int)DisplayGridMax160m;
+                        break;
+                    case Band.B80M:
+                        SetupForm.DisplayGridMax = DisplayGridMax80m;
+                        Display.SpectrumGridMax = (int)DisplayGridMax80m;
+                        break;
+                    case Band.B60M:
+                        SetupForm.DisplayGridMax = DisplayGridMax60m;
+                        Display.SpectrumGridMax = (int)DisplayGridMax60m;
+                        break;
+                    case Band.B40M:
+                        SetupForm.DisplayGridMax = DisplayGridMax40m;
+                        Display.SpectrumGridMax = (int)DisplayGridMax40m;
+                        break;
+                    case Band.B30M:
+                        SetupForm.DisplayGridMax = DisplayGridMax30m;
+                        Display.SpectrumGridMax = (int)DisplayGridMax30m;
+                        break;
+                    case Band.B20M:
+                        SetupForm.DisplayGridMax = DisplayGridMax20m;
+                        Display.SpectrumGridMax = (int)DisplayGridMax20m;
+                        break;
+                    case Band.B17M:
+                        SetupForm.DisplayGridMax = DisplayGridMax17m;
+                        Display.SpectrumGridMax = (int)DisplayGridMax17m;
+                        break;
+                    case Band.B15M:
+                        SetupForm.DisplayGridMax = DisplayGridMax15m;
+                        Display.SpectrumGridMax = (int)DisplayGridMax15m;
+                        break;
+                    case Band.B12M:
+                        SetupForm.DisplayGridMax = DisplayGridMax12m;
+                        Display.SpectrumGridMax = (int)DisplayGridMax12m;
+                        break;
+                    case Band.B10M:
+                        SetupForm.DisplayGridMax = DisplayGridMax10m;
+                        Display.SpectrumGridMax = (int)DisplayGridMax10m;
+                        break;
+                    case Band.B6M:
+                        SetupForm.DisplayGridMax = DisplayGridMax6m;
+                        Display.SpectrumGridMax = (int)DisplayGridMax6m;
+                        break;
+                    case Band.WWV:
+                        SetupForm.DisplayGridMax = DisplayGridMaxWWV;
+                        Display.SpectrumGridMax = (int)DisplayGridMaxWWV;
+                        break;
+                    case Band.GEN:
+                        SetupForm.DisplayGridMax = DisplayGridMaxGEN;
+                        Display.SpectrumGridMax = (int)DisplayGridMaxGEN;
+                        break;
+                    default:
+                        SetupForm.DisplayGridMax = DisplayGridMaxXVTR;
+                        Display.SpectrumGridMax = (int)DisplayGridMaxXVTR;
+                        break;
+                }
+
+                switch (RX2Band)
+                {
+                    case Band.B160M:
+                        SetupForm.RX2DisplayGridMax = RX2DisplayGridMax160m;
+                        Display.RX2SpectrumGridMax = (int)RX2DisplayGridMax160m;
+                        break;
+                    case Band.B80M:
+                        SetupForm.RX2DisplayGridMax = RX2DisplayGridMax80m;
+                        Display.RX2SpectrumGridMax = (int)RX2DisplayGridMax80m;
+                        break;
+                    case Band.B60M:
+                        SetupForm.RX2DisplayGridMax = RX2DisplayGridMax60m;
+                        Display.RX2SpectrumGridMax = (int)RX2DisplayGridMax60m;
+                        break;
+                    case Band.B40M:
+                        SetupForm.RX2DisplayGridMax = RX2DisplayGridMax40m;
+                        Display.RX2SpectrumGridMax = (int)RX2DisplayGridMax40m;
+                        break;
+                    case Band.B30M:
+                        SetupForm.RX2DisplayGridMax = RX2DisplayGridMax30m;
+                        Display.RX2SpectrumGridMax = (int)RX2DisplayGridMax30m;
+                        break;
+                    case Band.B20M:
+                        SetupForm.RX2DisplayGridMax = RX2DisplayGridMax20m;
+                        Display.RX2SpectrumGridMax = (int)RX2DisplayGridMax20m;
+                        break;
+                    case Band.B17M:
+                        SetupForm.RX2DisplayGridMax = RX2DisplayGridMax17m;
+                        Display.RX2SpectrumGridMax = (int)RX2DisplayGridMax17m;
+                        break;
+                    case Band.B15M:
+                        SetupForm.RX2DisplayGridMax = RX2DisplayGridMax15m;
+                        Display.RX2SpectrumGridMax = (int)RX2DisplayGridMax15m;
+                        break;
+                    case Band.B12M:
+                        SetupForm.RX2DisplayGridMax = RX2DisplayGridMax12m;
+                        Display.RX2SpectrumGridMax = (int)RX2DisplayGridMax12m;
+                        break;
+                    case Band.B10M:
+                        SetupForm.RX2DisplayGridMax = RX2DisplayGridMax10m;
+                        Display.RX2SpectrumGridMax = (int)RX2DisplayGridMax10m;
+                        break;
+                    case Band.B6M:
+                        SetupForm.RX2DisplayGridMax = RX2DisplayGridMax6m;
+                        Display.RX2SpectrumGridMax = (int)RX2DisplayGridMax6m;
+                        break;
+                    case Band.WWV:
+                        SetupForm.RX2DisplayGridMax = RX2DisplayGridMaxWWV;
+                        Display.RX2SpectrumGridMax = (int)RX2DisplayGridMaxWWV;
+                        break;
+                    case Band.GEN:
+                        SetupForm.RX2DisplayGridMax = RX2DisplayGridMaxGEN;
+                        Display.RX2SpectrumGridMax = (int)RX2DisplayGridMaxGEN;
+                        break;
+                    default:
+                        SetupForm.RX2DisplayGridMax = RX2DisplayGridMaxXVTR;
                         Display.RX2SpectrumGridMax = (int)RX2DisplayGridMaxXVTR;
                         break;
                 }
 
-                SetupForm.UpdateDisplayGridBandInfo();
+                if (bDoBandInfoAndWaterFallSync)
+                {
+                    SetupForm.UpdateDisplayGridBandInfo();
 
-                //MW0LGE override... XVTR? TODO
-                setWaterfallGainsIfLinkedToSpectrum();
+                    //MW0LGE override... XVTR? TODO
+                    setWaterfallGainsIfLinkedToSpectrum();
+                }
             }
+        }
+        private void updateDisplayGridLevelValues()
+        {
+            UpdateDisplayGridLevelMinValues(false); // false because we do the updates after setting max below
+            UpdateDisplayGridLevelMaxValues(true);
+
+            //if (!initializing)
+            //{
+            //    //
+            //    switch (RX1Band)
+            //    {
+            //        case Band.B160M:
+            //            SetupForm.DisplayGridMin = DisplayGridMin160m;
+            //            SetupForm.DisplayGridMax = DisplayGridMax160m;
+            //            Display.SpectrumGridMin = (int)DisplayGridMin160m;
+            //            Display.SpectrumGridMax = (int)DisplayGridMax160m;
+            //            break;
+            //        case Band.B80M:
+            //            SetupForm.DisplayGridMin = DisplayGridMin80m;
+            //            SetupForm.DisplayGridMax = DisplayGridMax80m;
+            //            Display.SpectrumGridMin = (int)DisplayGridMin80m;
+            //            Display.SpectrumGridMax = (int)DisplayGridMax80m;
+            //            break;
+            //        case Band.B60M:
+            //            SetupForm.DisplayGridMin = DisplayGridMin60m;
+            //            SetupForm.DisplayGridMax = DisplayGridMax60m;
+            //            Display.SpectrumGridMin = (int)DisplayGridMin60m;
+            //            Display.SpectrumGridMax = (int)DisplayGridMax60m;
+            //            break;
+            //        case Band.B40M:
+            //            SetupForm.DisplayGridMin = DisplayGridMin40m;
+            //            SetupForm.DisplayGridMax = DisplayGridMax40m;
+            //            Display.SpectrumGridMin = (int)DisplayGridMin40m;
+            //            Display.SpectrumGridMax = (int)DisplayGridMax40m;
+            //            break;
+            //        case Band.B30M:
+            //            SetupForm.DisplayGridMin = DisplayGridMin30m;
+            //            SetupForm.DisplayGridMax = DisplayGridMax30m;
+            //            Display.SpectrumGridMin = (int)DisplayGridMin30m;
+            //            Display.SpectrumGridMax = (int)DisplayGridMax30m;
+            //            break;
+            //        case Band.B20M:
+            //            SetupForm.DisplayGridMin = DisplayGridMin20m;
+            //            SetupForm.DisplayGridMax = DisplayGridMax20m;
+            //            Display.SpectrumGridMin = (int)DisplayGridMin20m;
+            //            Display.SpectrumGridMax = (int)DisplayGridMax20m;
+            //            break;
+            //        case Band.B17M:
+            //            SetupForm.DisplayGridMin = DisplayGridMin17m;
+            //            SetupForm.DisplayGridMax = DisplayGridMax17m;
+            //            Display.SpectrumGridMin = (int)DisplayGridMin17m;
+            //            Display.SpectrumGridMax = (int)DisplayGridMax17m;
+            //            break;
+            //        case Band.B15M:
+            //            SetupForm.DisplayGridMin = DisplayGridMin15m;
+            //            SetupForm.DisplayGridMax = DisplayGridMax15m;
+            //            Display.SpectrumGridMin = (int)DisplayGridMin15m;
+            //            Display.SpectrumGridMax = (int)DisplayGridMax15m;
+            //            break;
+            //        case Band.B12M:
+            //            SetupForm.DisplayGridMin = DisplayGridMin12m;
+            //            SetupForm.DisplayGridMax = DisplayGridMax12m;
+            //            Display.SpectrumGridMin = (int)DisplayGridMin12m;
+            //            Display.SpectrumGridMax = (int)DisplayGridMax12m;
+            //            break;
+            //        case Band.B10M:
+            //            SetupForm.DisplayGridMin = DisplayGridMin10m;
+            //            SetupForm.DisplayGridMax = DisplayGridMax10m;
+            //            Display.SpectrumGridMin = (int)DisplayGridMin10m;
+            //            Display.SpectrumGridMax = (int)DisplayGridMax10m;
+            //            break;
+            //        case Band.B6M:
+            //            SetupForm.DisplayGridMin = DisplayGridMin6m;
+            //            SetupForm.DisplayGridMax = DisplayGridMax6m;
+            //            Display.SpectrumGridMin = (int)DisplayGridMin6m;
+            //            Display.SpectrumGridMax = (int)DisplayGridMax6m;
+            //            break;
+            //        case Band.WWV:
+            //            SetupForm.DisplayGridMin = DisplayGridMinWWV;
+            //            SetupForm.DisplayGridMax = DisplayGridMaxWWV;
+            //            Display.SpectrumGridMin = (int)DisplayGridMinWWV;
+            //            Display.SpectrumGridMax = (int)DisplayGridMaxWWV;
+            //            break;
+            //        case Band.GEN:
+            //            SetupForm.DisplayGridMin = DisplayGridMinGEN;
+            //            SetupForm.DisplayGridMax = DisplayGridMaxGEN;
+            //            Display.SpectrumGridMin = (int)DisplayGridMinGEN;
+            //            Display.SpectrumGridMax = (int)DisplayGridMaxGEN;
+            //            break;
+            //        default:
+            //            SetupForm.DisplayGridMin = DisplayGridMinXVTR;
+            //            SetupForm.DisplayGridMax = DisplayGridMaxXVTR;
+            //            Display.SpectrumGridMin = (int)DisplayGridMinXVTR;
+            //            Display.SpectrumGridMax = (int)DisplayGridMaxXVTR;
+            //            break;
+            //    }
+
+            //    switch (RX2Band)
+            //    {
+            //        case Band.B160M:
+            //            SetupForm.RX2DisplayGridMin = RX2DisplayGridMin160m;
+            //            SetupForm.RX2DisplayGridMax = RX2DisplayGridMax160m;
+            //            Display.RX2SpectrumGridMin = (int)RX2DisplayGridMin160m;
+            //            Display.RX2SpectrumGridMax = (int)RX2DisplayGridMax160m;
+            //            break;
+            //        case Band.B80M:
+            //            SetupForm.RX2DisplayGridMin = RX2DisplayGridMin80m;
+            //            SetupForm.RX2DisplayGridMax = RX2DisplayGridMax80m;
+            //            Display.RX2SpectrumGridMin = (int)RX2DisplayGridMin80m;
+            //            Display.RX2SpectrumGridMax = (int)RX2DisplayGridMax80m;
+            //            break;
+            //        case Band.B60M:
+            //            SetupForm.RX2DisplayGridMin = RX2DisplayGridMin60m;
+            //            SetupForm.RX2DisplayGridMax = RX2DisplayGridMax60m;
+            //            Display.RX2SpectrumGridMin = (int)RX2DisplayGridMin60m;
+            //            Display.RX2SpectrumGridMax = (int)RX2DisplayGridMax60m;
+            //            break;
+            //        case Band.B40M:
+            //            SetupForm.RX2DisplayGridMin = RX2DisplayGridMin40m;
+            //            SetupForm.RX2DisplayGridMax = RX2DisplayGridMax40m;
+            //            Display.RX2SpectrumGridMin = (int)RX2DisplayGridMin40m;
+            //            Display.RX2SpectrumGridMax = (int)RX2DisplayGridMax40m;
+            //            break;
+            //        case Band.B30M:
+            //            SetupForm.RX2DisplayGridMin = RX2DisplayGridMin30m;
+            //            SetupForm.RX2DisplayGridMax = RX2DisplayGridMax30m;
+            //            Display.RX2SpectrumGridMin = (int)RX2DisplayGridMin30m;
+            //            Display.RX2SpectrumGridMax = (int)RX2DisplayGridMax30m;
+            //            break;
+            //        case Band.B20M:
+            //            SetupForm.RX2DisplayGridMin = RX2DisplayGridMin20m;
+            //            SetupForm.RX2DisplayGridMax = RX2DisplayGridMax20m;
+            //            Display.RX2SpectrumGridMin = (int)RX2DisplayGridMin20m;
+            //            Display.RX2SpectrumGridMax = (int)RX2DisplayGridMax20m;
+            //            break;
+            //        case Band.B17M:
+            //            SetupForm.RX2DisplayGridMin = RX2DisplayGridMin17m;
+            //            SetupForm.RX2DisplayGridMax = RX2DisplayGridMax17m;
+            //            Display.RX2SpectrumGridMin = (int)RX2DisplayGridMin17m;
+            //            Display.RX2SpectrumGridMax = (int)RX2DisplayGridMax17m;
+            //            break;
+            //        case Band.B15M:
+            //            SetupForm.RX2DisplayGridMin = RX2DisplayGridMin15m;
+            //            SetupForm.RX2DisplayGridMax = RX2DisplayGridMax15m;
+            //            Display.RX2SpectrumGridMin = (int)RX2DisplayGridMin15m;
+            //            Display.RX2SpectrumGridMax = (int)RX2DisplayGridMax15m;
+            //            break;
+            //        case Band.B12M:
+            //            SetupForm.RX2DisplayGridMin = RX2DisplayGridMin12m;
+            //            SetupForm.RX2DisplayGridMax = RX2DisplayGridMax12m;
+            //            Display.RX2SpectrumGridMin = (int)RX2DisplayGridMin12m;
+            //            Display.RX2SpectrumGridMax = (int)RX2DisplayGridMax12m;
+            //            break;
+            //        case Band.B10M:
+            //            SetupForm.RX2DisplayGridMin = RX2DisplayGridMin10m;
+            //            SetupForm.RX2DisplayGridMax = RX2DisplayGridMax10m;
+            //            Display.RX2SpectrumGridMin = (int)RX2DisplayGridMin10m;
+            //            Display.RX2SpectrumGridMax = (int)RX2DisplayGridMax10m;
+            //            break;
+            //        case Band.B6M:
+            //            SetupForm.RX2DisplayGridMin = RX2DisplayGridMin6m;
+            //            SetupForm.RX2DisplayGridMax = RX2DisplayGridMax6m;
+            //            Display.RX2SpectrumGridMin = (int)RX2DisplayGridMin6m;
+            //            Display.RX2SpectrumGridMax = (int)RX2DisplayGridMax6m;
+            //            break;
+            //        case Band.WWV:
+            //            SetupForm.RX2DisplayGridMin = RX2DisplayGridMinWWV;
+            //            SetupForm.RX2DisplayGridMax = RX2DisplayGridMaxWWV;
+            //            Display.RX2SpectrumGridMin = (int)RX2DisplayGridMinWWV;
+            //            Display.RX2SpectrumGridMax = (int)RX2DisplayGridMaxWWV;
+            //            break;
+            //        case Band.GEN:
+            //            SetupForm.RX2DisplayGridMin = RX2DisplayGridMinGEN;
+            //            SetupForm.RX2DisplayGridMax = RX2DisplayGridMaxGEN;
+            //            Display.RX2SpectrumGridMin = (int)RX2DisplayGridMinGEN;
+            //            Display.RX2SpectrumGridMax = (int)RX2DisplayGridMaxGEN;
+            //            break;
+            //        default:
+            //            SetupForm.RX2DisplayGridMin = RX2DisplayGridMinXVTR;
+            //            SetupForm.RX2DisplayGridMax = RX2DisplayGridMaxXVTR;
+            //            Display.RX2SpectrumGridMin = (int)RX2DisplayGridMinXVTR;
+            //            Display.RX2SpectrumGridMax = (int)RX2DisplayGridMaxXVTR;
+            //            break;
+            //    }
+
+            //    SetupForm.UpdateDisplayGridBandInfo();
+
+            //    //MW0LGE override... XVTR? TODO
+            //    setWaterfallGainsIfLinkedToSpectrum();
+            //}
         }
 
         public bool RX1IsIn60m()
@@ -17236,20 +17886,32 @@ namespace Thetis
         public bool RX1IsOn60mChannel(Channel c)
         {
             double freq = VFOAFreq - ModeFreqOffset(rx1_dsp_mode);
-            freq = Math.Round(freq, 6);
+            freq = Math.Round(freq, 6); // in mhz
 
             return (c.Freq == freq);
         }
-
-        public bool RX1IsOn60mChannel()
+        public bool RX1IsIn60mChannel(Channel c)
         {
-            double freq = VFOAFreq - ModeFreqOffset(rx1_dsp_mode);
-            freq = Math.Round(freq, 6);
+            double freq = VFOAFreq;
+            freq = Math.Round(freq, 6); // in mhz
 
+            return (freq >= c.Low) && (freq <= c.High);
+        }
+
+        public bool RX1IsIn60mChannel()
+        {
             foreach (Channel c in Channels60m)
             {
-                if (c.Freq == freq)
-                    return true;
+                if (RX1IsIn60mChannel(c)) return true;
+            }
+
+            return false; // nothing matched, return false
+        }
+        public bool RX1IsOn60mChannel()
+        {
+            foreach (Channel c in Channels60m)
+            {
+                if (RX1IsOn60mChannel(c)) return true;
             }
 
             return false; // nothing matched, return false
@@ -17264,20 +17926,31 @@ namespace Thetis
         public bool RX2IsOn60mChannel(Channel c)
         {
             double freq = VFOBFreq - ModeFreqOffset(rx2_dsp_mode);
-            freq = Math.Round(freq, 6);
+            freq = Math.Round(freq, 6); // in mhz
 
             return (c.Freq == freq);
         }
-
-        public bool RX2IsOn60mChannel()
+        public bool RX2IsIn60mChannel(Channel c)
         {
-            double freq = VFOBFreq - ModeFreqOffset(rx2_dsp_mode);
+            double freq = VFOBFreq;
             freq = Math.Round(freq, 6);
 
+            return (freq >= c.Low) && (freq <= c.High);
+        }
+        public bool RX2IsOn60mChannel()
+        {
             foreach (Channel c in Channels60m)
             {
-                if (c.Freq == freq)
-                    return true;
+                if (RX2IsOn60mChannel(c)) return true;
+            }
+
+            return false; // nothing matched, return false
+        }
+        public bool RX2IsIn60mChannel()
+        {
+            foreach (Channel c in Channels60m)
+            {
+                if (RX2IsIn60mChannel(c)) return true;
             }
 
             return false; // nothing matched, return false
@@ -17845,7 +18518,7 @@ namespace Thetis
                 SetBand(mode, filter, freq, CTUN, ZoomFactor, CenterFreq);
             }
             UpdateWaterfallLevelValues();
-            UpdateDisplayGridLevelValues();
+            updateDisplayGridLevelValues();
             UpdateDiversityValues();
             NetworkIO.SendHighPriority(1);
 
@@ -17882,7 +18555,7 @@ namespace Thetis
                 SetBand(mode, filter, freq, CTUN, ZoomFactor, CenterFreq);
             }
             UpdateWaterfallLevelValues();
-            UpdateDisplayGridLevelValues();
+            updateDisplayGridLevelValues();
             UpdateDiversityValues();
             NetworkIO.SendHighPriority(1);
         } // 120m
@@ -17913,7 +18586,7 @@ namespace Thetis
                 SetBand(mode, filter, freq, CTUN, ZoomFactor, CenterFreq);
             }
             UpdateWaterfallLevelValues();
-            UpdateDisplayGridLevelValues();
+            updateDisplayGridLevelValues();
             UpdateDiversityValues();
             NetworkIO.SendHighPriority(1);
         } // 90m
@@ -17944,7 +18617,7 @@ namespace Thetis
                 SetBand(mode, filter, freq, CTUN, ZoomFactor, CenterFreq);
             }
             UpdateWaterfallLevelValues();
-            UpdateDisplayGridLevelValues();
+            updateDisplayGridLevelValues();
             UpdateDiversityValues();
             NetworkIO.SendHighPriority(1);
         } // 60m
@@ -17975,7 +18648,7 @@ namespace Thetis
                 SetBand(mode, filter, freq, CTUN, ZoomFactor, CenterFreq);
             }
             UpdateWaterfallLevelValues();
-            UpdateDisplayGridLevelValues();
+            updateDisplayGridLevelValues();
             UpdateDiversityValues();
             NetworkIO.SendHighPriority(1);
         } // 49m
@@ -18006,7 +18679,7 @@ namespace Thetis
                 SetBand(mode, filter, freq, CTUN, ZoomFactor, CenterFreq);
             }
             UpdateWaterfallLevelValues();
-            UpdateDisplayGridLevelValues();
+            updateDisplayGridLevelValues();
             UpdateDiversityValues();
             NetworkIO.SendHighPriority(1);
         } // 41m
@@ -18037,7 +18710,7 @@ namespace Thetis
                 SetBand(mode, filter, freq, CTUN, ZoomFactor, CenterFreq);
             }
             UpdateWaterfallLevelValues();
-            UpdateDisplayGridLevelValues();
+            updateDisplayGridLevelValues();
             UpdateDiversityValues();
             NetworkIO.SendHighPriority(1);
         } //31m
@@ -18068,7 +18741,7 @@ namespace Thetis
                 SetBand(mode, filter, freq, CTUN, ZoomFactor, CenterFreq);
             }
             UpdateWaterfallLevelValues();
-            UpdateDisplayGridLevelValues();
+            updateDisplayGridLevelValues();
             UpdateDiversityValues();
             NetworkIO.SendHighPriority(1);
         } // 25m
@@ -18099,7 +18772,7 @@ namespace Thetis
                 SetBand(mode, filter, freq, CTUN, ZoomFactor, CenterFreq);
             }
             UpdateWaterfallLevelValues();
-            UpdateDisplayGridLevelValues();
+            updateDisplayGridLevelValues();
             UpdateDiversityValues();
             NetworkIO.SendHighPriority(1);
         } // 22m
@@ -18130,7 +18803,7 @@ namespace Thetis
                 SetBand(mode, filter, freq, CTUN, ZoomFactor, CenterFreq);
             }
             UpdateWaterfallLevelValues();
-            UpdateDisplayGridLevelValues();
+            updateDisplayGridLevelValues();
             UpdateDiversityValues();
             NetworkIO.SendHighPriority(1);
         } // 19m
@@ -18161,7 +18834,7 @@ namespace Thetis
                 SetBand(mode, filter, freq, CTUN, ZoomFactor, CenterFreq);
             }
             UpdateWaterfallLevelValues();
-            UpdateDisplayGridLevelValues();
+            updateDisplayGridLevelValues();
             UpdateDiversityValues();
             NetworkIO.SendHighPriority(1);
         } //16m
@@ -18192,7 +18865,7 @@ namespace Thetis
                 SetBand(mode, filter, freq, CTUN, ZoomFactor, CenterFreq);
             }
             UpdateWaterfallLevelValues();
-            UpdateDisplayGridLevelValues();
+            updateDisplayGridLevelValues();
             UpdateDiversityValues();
             NetworkIO.SendHighPriority(1);
         } // 14m
@@ -18223,7 +18896,7 @@ namespace Thetis
                 SetBand(mode, filter, freq, CTUN, ZoomFactor, CenterFreq);
             }
             UpdateWaterfallLevelValues();
-            UpdateDisplayGridLevelValues();
+            updateDisplayGridLevelValues();
             UpdateDiversityValues();
             NetworkIO.SendHighPriority(1);
         } // 13m 
@@ -18254,7 +18927,7 @@ namespace Thetis
                 SetBand(mode, filter, freq, CTUN, ZoomFactor, CenterFreq);
             }
             UpdateWaterfallLevelValues();
-            UpdateDisplayGridLevelValues();
+            updateDisplayGridLevelValues();
             UpdateDiversityValues();
             NetworkIO.SendHighPriority(1);
 
@@ -18267,7 +18940,7 @@ namespace Thetis
         {
             MouseEventArgs me = (MouseEventArgs)e;
 
-            if ((regBand == 1) && (me.Button == System.Windows.Forms.MouseButtons.Right)) // regband is 1 when control key held down
+            if (m_bControlKeyDown && (me.Button == System.Windows.Forms.MouseButtons.Right)) // regband is 1 when control key held down //MW0GE sigh
             {
                 if (band_160m_register < 10)
                     DB.AddBandStack("160M", rx1_dsp_mode.ToString(), rx1_filter.ToString(), Math.Round(VFOAFreq, 6), ClickTuneDisplay, ptbDisplayZoom.Value, center_frequency); // take current band, DSP mode, filter, and freq
@@ -18284,7 +18957,7 @@ namespace Thetis
         {
             MouseEventArgs me = (MouseEventArgs)e;
 
-            if ((regBand == 1) && (me.Button == System.Windows.Forms.MouseButtons.Right))
+            if (m_bControlKeyDown && (me.Button == System.Windows.Forms.MouseButtons.Right))
             {
                 if (band_80m_register < 10)
                     DB.AddBandStack("80M", rx1_dsp_mode.ToString(), rx1_filter.ToString(), Math.Round(VFOAFreq, 6), ClickTuneDisplay, ptbDisplayZoom.Value, center_frequency); // take current band, DSP mode, filter, and freq
@@ -18296,7 +18969,18 @@ namespace Thetis
 
         private void radBand60_MouseDown(object sender, MouseEventArgs e)
         {
-            // channelized
+            // channelized - perhaps only in the US, certainly not in the UK MW0LGE
+            if (current_region == FRSRegion.US) return;
+
+            MouseEventArgs me = (MouseEventArgs)e;
+
+            if (m_bControlKeyDown && (me.Button == System.Windows.Forms.MouseButtons.Right))
+            {
+                if (band_60m_register < 10)
+                    DB.AddBandStack("60M", rx1_dsp_mode.ToString(), rx1_filter.ToString(), Math.Round(VFOAFreq, 6), ClickTuneDisplay, ptbDisplayZoom.Value, center_frequency); // take current band, DSP mode, filter, and freq
+                UpdateBandStackRegisters();
+                UpdateBandButtonColors();
+            } // right click
 
         }
 
@@ -18304,7 +18988,7 @@ namespace Thetis
         {
             MouseEventArgs me = (MouseEventArgs)e;
 
-            if ((regBand == 1) && (me.Button == System.Windows.Forms.MouseButtons.Right))
+            if (m_bControlKeyDown && (me.Button == System.Windows.Forms.MouseButtons.Right))
             {
 
                 if (band_40m_register < 10)
@@ -18321,7 +19005,7 @@ namespace Thetis
         {
             MouseEventArgs me = (MouseEventArgs)e;
 
-            if ((regBand == 1) && (me.Button == System.Windows.Forms.MouseButtons.Right))
+            if (m_bControlKeyDown && (me.Button == System.Windows.Forms.MouseButtons.Right))
             {
                 if (band_30m_register < 10)
                     DB.AddBandStack("30M", rx1_dsp_mode.ToString(), rx1_filter.ToString(), Math.Round(VFOAFreq, 6), ClickTuneDisplay, ptbDisplayZoom.Value, center_frequency); // take current band, DSP mode, filter, and freq
@@ -18335,7 +19019,7 @@ namespace Thetis
         {
             MouseEventArgs me = (MouseEventArgs)e;
 
-            if ((regBand == 1) && (me.Button == System.Windows.Forms.MouseButtons.Right))
+            if (m_bControlKeyDown && (me.Button == System.Windows.Forms.MouseButtons.Right))
             {
 
                 if (band_20m_register < 10)
@@ -18350,7 +19034,7 @@ namespace Thetis
         {
             MouseEventArgs me = (MouseEventArgs)e;
 
-            if ((regBand == 1) && (me.Button == System.Windows.Forms.MouseButtons.Right))
+            if (m_bControlKeyDown && (me.Button == System.Windows.Forms.MouseButtons.Right))
             {
 
                 if (band_17m_register < 10)
@@ -18364,7 +19048,7 @@ namespace Thetis
         {
             MouseEventArgs me = (MouseEventArgs)e;
 
-            if ((regBand == 1) && (me.Button == System.Windows.Forms.MouseButtons.Right))
+            if (m_bControlKeyDown && (me.Button == System.Windows.Forms.MouseButtons.Right))
             {
 
                 if (band_15m_register < 10)
@@ -18379,7 +19063,7 @@ namespace Thetis
         {
             MouseEventArgs me = (MouseEventArgs)e;
 
-            if ((regBand == 1) && (me.Button == System.Windows.Forms.MouseButtons.Right))
+            if (m_bControlKeyDown && (me.Button == System.Windows.Forms.MouseButtons.Right))
             {
 
                 if (band_12m_register < 10)
@@ -18394,7 +19078,7 @@ namespace Thetis
         {
             MouseEventArgs me = (MouseEventArgs)e;
 
-            if ((regBand == 1) && (me.Button == System.Windows.Forms.MouseButtons.Right))
+            if (m_bControlKeyDown && (me.Button == System.Windows.Forms.MouseButtons.Right))
             {
 
                 if (band_10m_register < 10)
@@ -18409,7 +19093,7 @@ namespace Thetis
         {
             MouseEventArgs me = (MouseEventArgs)e;
 
-            if ((regBand == 1) && (me.Button == System.Windows.Forms.MouseButtons.Right))
+            if (m_bControlKeyDown && (me.Button == System.Windows.Forms.MouseButtons.Right))
             {
 
                 if (band_6m_register < 10)
@@ -18424,7 +19108,7 @@ namespace Thetis
         {
             MouseEventArgs me = (MouseEventArgs)e;
 
-            if ((regBand == 1) && (me.Button == System.Windows.Forms.MouseButtons.Right))
+            if (m_bControlKeyDown && (me.Button == System.Windows.Forms.MouseButtons.Right))
             {
 
                 if (band_LMF_register < 10)
@@ -18439,7 +19123,7 @@ namespace Thetis
         {
             MouseEventArgs me = (MouseEventArgs)e;
 
-            if ((regBand == 1) && (me.Button == System.Windows.Forms.MouseButtons.Right))
+            if (m_bControlKeyDown && (me.Button == System.Windows.Forms.MouseButtons.Right))
             {
 
                 if (band_120m_register < 10)
@@ -18454,7 +19138,7 @@ namespace Thetis
         {
             MouseEventArgs me = (MouseEventArgs)e;
 
-            if ((regBand == 1) && (me.Button == System.Windows.Forms.MouseButtons.Right))
+            if (m_bControlKeyDown && (me.Button == System.Windows.Forms.MouseButtons.Right))
             {
 
                 if (band_90m_register < 10)
@@ -18469,7 +19153,7 @@ namespace Thetis
         {
             MouseEventArgs me = (MouseEventArgs)e;
 
-            if ((regBand == 1) && (me.Button == System.Windows.Forms.MouseButtons.Right))
+            if (m_bControlKeyDown && (me.Button == System.Windows.Forms.MouseButtons.Right))
             {
                 if (band_61m_register < 10)
                     DB.AddBandStack("61M", rx1_dsp_mode.ToString(), rx1_filter.ToString(), Math.Round(VFOAFreq, 6), ClickTuneDisplay, ptbDisplayZoom.Value, center_frequency); // take current band, DSP mode, filter, and freq
@@ -18483,7 +19167,7 @@ namespace Thetis
         {
             MouseEventArgs me = (MouseEventArgs)e;
 
-            if ((regBand == 1) && (me.Button == System.Windows.Forms.MouseButtons.Right))
+            if (m_bControlKeyDown && (me.Button == System.Windows.Forms.MouseButtons.Right))
             {
 
                 if (band_49m_register < 10)
@@ -18499,7 +19183,7 @@ namespace Thetis
         {
             MouseEventArgs me = (MouseEventArgs)e;
 
-            if ((regBand == 1) && (me.Button == System.Windows.Forms.MouseButtons.Right))
+            if (m_bControlKeyDown && (me.Button == System.Windows.Forms.MouseButtons.Right))
             {
 
                 if (band_41m_register < 10)
@@ -18514,7 +19198,7 @@ namespace Thetis
         {
             MouseEventArgs me = (MouseEventArgs)e;
 
-            if ((regBand == 1) && (me.Button == System.Windows.Forms.MouseButtons.Right))
+            if (m_bControlKeyDown && (me.Button == System.Windows.Forms.MouseButtons.Right))
             {
 
                 if (band_31m_register < 10)
@@ -18529,7 +19213,7 @@ namespace Thetis
         {
             MouseEventArgs me = (MouseEventArgs)e;
 
-            if ((regBand == 1) && (me.Button == System.Windows.Forms.MouseButtons.Right))
+            if (m_bControlKeyDown && (me.Button == System.Windows.Forms.MouseButtons.Right))
             {
 
                 if (band_25m_register < 10)
@@ -18544,7 +19228,7 @@ namespace Thetis
         {
             MouseEventArgs me = (MouseEventArgs)e;
 
-            if ((regBand == 1) && (me.Button == System.Windows.Forms.MouseButtons.Right))
+            if (m_bControlKeyDown && (me.Button == System.Windows.Forms.MouseButtons.Right))
             {
 
                 if (band_22m_register < 10)
@@ -18559,7 +19243,7 @@ namespace Thetis
         {
             MouseEventArgs me = (MouseEventArgs)e;
 
-            if ((regBand == 1) && (me.Button == System.Windows.Forms.MouseButtons.Right))
+            if (m_bControlKeyDown && (me.Button == System.Windows.Forms.MouseButtons.Right))
             {
 
                 if (band_19m_register < 10)
@@ -18574,7 +19258,7 @@ namespace Thetis
         {
             MouseEventArgs me = (MouseEventArgs)e;
 
-            if ((regBand == 1) && (me.Button == System.Windows.Forms.MouseButtons.Right))
+            if (m_bControlKeyDown && (me.Button == System.Windows.Forms.MouseButtons.Right))
             {
 
                 if (band_16m_register < 10)
@@ -18589,7 +19273,7 @@ namespace Thetis
         {
             MouseEventArgs me = (MouseEventArgs)e;
 
-            if ((regBand == 1) && (me.Button == System.Windows.Forms.MouseButtons.Right))
+            if (m_bControlKeyDown && (me.Button == System.Windows.Forms.MouseButtons.Right))
             {
 
                 if (band_14m_register < 10)
@@ -18604,7 +19288,7 @@ namespace Thetis
         {
             MouseEventArgs me = (MouseEventArgs)e;
 
-            if ((regBand == 1) && (me.Button == System.Windows.Forms.MouseButtons.Right))
+            if (m_bControlKeyDown && (me.Button == System.Windows.Forms.MouseButtons.Right))
             {
 
                 if (band_13m_register < 10)
@@ -18619,7 +19303,7 @@ namespace Thetis
         {
             MouseEventArgs me = (MouseEventArgs)e;
 
-            if ((regBand == 1) && (me.Button == System.Windows.Forms.MouseButtons.Right))
+            if (m_bControlKeyDown && (me.Button == System.Windows.Forms.MouseButtons.Right))
             {
 
                 if (band_11m_register < 10)
@@ -18634,7 +19318,7 @@ namespace Thetis
         {
             MouseEventArgs me = (MouseEventArgs)e;
 
-            if ((regBand == 1) && (me.Button == System.Windows.Forms.MouseButtons.Right))
+            if (m_bControlKeyDown && (me.Button == System.Windows.Forms.MouseButtons.Right))
             {
 
                 if (band_vhf0_register < 10)
@@ -18649,7 +19333,7 @@ namespace Thetis
         {
             MouseEventArgs me = (MouseEventArgs)e;
 
-            if ((regBand == 1) && (me.Button == System.Windows.Forms.MouseButtons.Right))
+            if (m_bControlKeyDown && (me.Button == System.Windows.Forms.MouseButtons.Right))
             {
 
                 if (band_vhf1_register < 10)
@@ -18664,7 +19348,7 @@ namespace Thetis
         {
             MouseEventArgs me = (MouseEventArgs)e;
 
-            if ((regBand == 1) && (me.Button == System.Windows.Forms.MouseButtons.Right))
+            if (m_bControlKeyDown && (me.Button == System.Windows.Forms.MouseButtons.Right))
             {
 
                 if (band_vhf2_register < 10)
@@ -18680,7 +19364,7 @@ namespace Thetis
         {
             MouseEventArgs me = (MouseEventArgs)e;
 
-            if ((regBand == 1) && (me.Button == System.Windows.Forms.MouseButtons.Right))
+            if (m_bControlKeyDown && (me.Button == System.Windows.Forms.MouseButtons.Right))
             {
                 if (band_vhf3_register < 10)
                     DB.AddBandStack("VHF3", rx1_dsp_mode.ToString(), rx1_filter.ToString(), Math.Round(VFOAFreq, 6), ClickTuneDisplay, ptbDisplayZoom.Value, center_frequency); // take current band, DSP mode, filter, and freq
@@ -18695,7 +19379,7 @@ namespace Thetis
         {
             MouseEventArgs me = (MouseEventArgs)e;
 
-            if ((regBand == 1) && (me.Button == System.Windows.Forms.MouseButtons.Right))
+            if (m_bControlKeyDown && (me.Button == System.Windows.Forms.MouseButtons.Right))
             {
                 if (band_vhf4_register < 10)
                     DB.AddBandStack("VHF4", rx1_dsp_mode.ToString(), rx1_filter.ToString(), Math.Round(VFOAFreq, 6), ClickTuneDisplay, ptbDisplayZoom.Value, center_frequency); // take current band, DSP mode, filter, and freq
@@ -18709,7 +19393,7 @@ namespace Thetis
         {
             MouseEventArgs me = (MouseEventArgs)e;
 
-            if ((regBand == 1) && (me.Button == System.Windows.Forms.MouseButtons.Right))
+            if (m_bControlKeyDown && (me.Button == System.Windows.Forms.MouseButtons.Right))
             {
                 if (band_vhf5_register < 10)
                     DB.AddBandStack("VHF5", rx1_dsp_mode.ToString(), rx1_filter.ToString(), Math.Round(VFOAFreq, 6), ClickTuneDisplay, ptbDisplayZoom.Value, center_frequency); // take current band, DSP mode, filter, and freq
@@ -18725,7 +19409,7 @@ namespace Thetis
         {
             MouseEventArgs me = (MouseEventArgs)e;
 
-            if ((regBand == 1) && (me.Button == System.Windows.Forms.MouseButtons.Right))
+            if (m_bControlKeyDown && (me.Button == System.Windows.Forms.MouseButtons.Right))
             {
                 if (band_vhf6_register < 10)
                     DB.AddBandStack("VHF6", rx1_dsp_mode.ToString(), rx1_filter.ToString(), Math.Round(VFOAFreq, 6), ClickTuneDisplay, ptbDisplayZoom.Value, center_frequency); // take current band, DSP mode, filter, and freq
@@ -18740,7 +19424,7 @@ namespace Thetis
         {
             MouseEventArgs me = (MouseEventArgs)e;
 
-            if ((regBand == 1) && (me.Button == System.Windows.Forms.MouseButtons.Right))
+            if (m_bControlKeyDown && (me.Button == System.Windows.Forms.MouseButtons.Right))
             {
                 if (band_vhf7_register < 10)
                     DB.AddBandStack("VHF7", rx1_dsp_mode.ToString(), rx1_filter.ToString(), Math.Round(VFOAFreq, 6), ClickTuneDisplay, ptbDisplayZoom.Value, center_frequency); // take current band, DSP mode, filter, and freq
@@ -18755,7 +19439,7 @@ namespace Thetis
         {
             MouseEventArgs me = (MouseEventArgs)e;
 
-            if ((regBand == 1) && (me.Button == System.Windows.Forms.MouseButtons.Right))
+            if (m_bControlKeyDown && (me.Button == System.Windows.Forms.MouseButtons.Right))
             {
                 if (band_vhf8_register < 10)
                     DB.AddBandStack("VHF8", rx1_dsp_mode.ToString(), rx1_filter.ToString(), Math.Round(VFOAFreq, 6), ClickTuneDisplay, ptbDisplayZoom.Value, center_frequency); // take current band, DSP mode, filter, and freq
@@ -18770,7 +19454,7 @@ namespace Thetis
         {
             MouseEventArgs me = (MouseEventArgs)e;
 
-            if ((regBand == 1) && (me.Button == System.Windows.Forms.MouseButtons.Right))
+            if (m_bControlKeyDown && (me.Button == System.Windows.Forms.MouseButtons.Right))
             {
                 if (band_vhf9_register < 10)
                     DB.AddBandStack("VHF9", rx1_dsp_mode.ToString(), rx1_filter.ToString(), Math.Round(VFOAFreq, 6), ClickTuneDisplay, ptbDisplayZoom.Value, center_frequency); // take current band, DSP mode, filter, and freq
@@ -18785,7 +19469,7 @@ namespace Thetis
         {
             MouseEventArgs me = (MouseEventArgs)e;
 
-            if ((regBand == 1) && (me.Button == System.Windows.Forms.MouseButtons.Right))
+            if (m_bControlKeyDown && (me.Button == System.Windows.Forms.MouseButtons.Right))
             {
                 if (band_vhf10_register < 10)
                     DB.AddBandStack("VHF10", rx1_dsp_mode.ToString(), rx1_filter.ToString(), Math.Round(VFOAFreq, 6), ClickTuneDisplay, ptbDisplayZoom.Value, center_frequency); // take current band, DSP mode, filter, and freq
@@ -18800,7 +19484,7 @@ namespace Thetis
         {
             MouseEventArgs me = (MouseEventArgs)e;
 
-            if ((regBand == 1) && (me.Button == System.Windows.Forms.MouseButtons.Right))
+            if (m_bControlKeyDown && (me.Button == System.Windows.Forms.MouseButtons.Right))
             {
                 if (band_vhf11_register < 10)
                     DB.AddBandStack("VHF11", rx1_dsp_mode.ToString(), rx1_filter.ToString(), Math.Round(VFOAFreq, 6), ClickTuneDisplay, ptbDisplayZoom.Value, center_frequency); // take current band, DSP mode, filter, and freq
@@ -18814,7 +19498,7 @@ namespace Thetis
         {
             MouseEventArgs me = (MouseEventArgs)e;
 
-            if ((regBand == 1) && (me.Button == System.Windows.Forms.MouseButtons.Right))
+            if (m_bControlKeyDown && (me.Button == System.Windows.Forms.MouseButtons.Right))
             {
                 if (band_vhf12_register < 10)
                     DB.AddBandStack("VHF12", rx1_dsp_mode.ToString(), rx1_filter.ToString(), Math.Round(VFOAFreq, 6), ClickTuneDisplay, ptbDisplayZoom.Value, center_frequency); // take current band, DSP mode, filter, and freq
@@ -18829,7 +19513,7 @@ namespace Thetis
         {
             MouseEventArgs me = (MouseEventArgs)e;
 
-            if ((regBand == 1) && (me.Button == System.Windows.Forms.MouseButtons.Right))
+            if (m_bControlKeyDown && (me.Button == System.Windows.Forms.MouseButtons.Right))
             {
                 if (band_vhf13_register < 10)
                     DB.AddBandStack("VHF13", rx1_dsp_mode.ToString(), rx1_filter.ToString(), Math.Round(VFOAFreq, 6), ClickTuneDisplay, ptbDisplayZoom.Value, center_frequency); // take current band, DSP mode, filter, and freq
@@ -20210,10 +20894,10 @@ namespace Thetis
                 if (!initializing)
                 {
                     tx_step_attenuator_by_band[(int)rx1_band] = tx_attenuator_data;
-                    if (attontx) NetworkIO.SetTxAttenData(tx_step_attenuator_by_band[(int)rx1_band]);
+                    if (m_bAttontx) NetworkIO.SetTxAttenData(tx_step_attenuator_by_band[(int)rx1_band]);
                     else NetworkIO.SetTxAttenData(0);
 
-                    if (attontx && mox)
+                    if (m_bAttontx && mox)
                         udRX1StepAttData.Value = value;
                 }
             }
@@ -26999,6 +27683,8 @@ namespace Thetis
             set
             {
                 Band old_band = tx_band;
+                if (initializing) old_band = value; // we cant use tx_band, because it is unset (GEN), unless we save it out it is irrelevant MW0LGE
+
                 tx_band = value;
 
                 Band lo_band = Band.FIRST;
@@ -27011,16 +27697,22 @@ namespace Thetis
                 {
                     // save values for old band
                     int old_pwr = ptbPWR.Value;
+                    if (initializing) old_pwr = power_by_band[(int)old_band]; // we cant use what is set on the trackbar if we are
+                                                                              // initialisting, becase it is irrelevent, old_band will = value at this point MW0LGE
+
                     //if(rx1_dsp_mode == DSPMode.FM) old_pwr = (int)(old_pwr*2.5);
                     power_by_band[(int)old_band] = old_pwr;
 
                     //if(tx_xvtr_index < 0)
                     PWR = power_by_band[(int)value];
 
-                    ptbPWR_Scroll(this, EventArgs.Empty);
+                    //ptbPWR_Scroll(this, EventArgs.Empty);  // MW0LGE commented, setting PWR= above calls _Scroll
 
                     // save FM TX Offset
-                    fm_tx_offset_by_band_mhz[(int)old_band] = fm_tx_offset_mhz;
+                    if (!initializing)
+                    {
+                        fm_tx_offset_by_band_mhz[(int)old_band] = fm_tx_offset_mhz;
+                    }
                     udFMOffset.Value = (decimal)(fm_tx_offset_by_band_mhz[(int)value]);
                 }
 
@@ -27721,6 +28413,9 @@ namespace Thetis
                     case MeterTXMode.ALC_G:
                         text = "ALC Comp";
                         break;
+                    case MeterTXMode.ALC_GROUP: //MW0LGE
+                        text = "ALC Group";
+                        break;
                     case MeterTXMode.SWR:
                         text = "SWR";
                         break;
@@ -27851,27 +28546,38 @@ namespace Thetis
             set { histogram_hang_time = value; }
         }
 
+        static double freqFromString(string s)
+        {
+            try
+            {
+                return Double.Parse(s);
+            }
+            catch
+            {
+                return 0;
+            }
+        }
+
+        private double m_dVFOAFreq = 0;
         public double VFOAFreq
         {
             get
             {
-                try
-                {
-                    return double.Parse(txtVFOAFreq.Text);
-                }
-                catch (Exception)
-                {
-                    return 0;
-                }
+                //try
+                //{
+                    return m_dVFOAFreq;// double.Parse(txtVFOAFreq.Text);
+                //}
+                //catch (Exception)
+                //{
+                //    return 0;
+                //}                
             }
             set
             {
                 if ((vfo_lock != CheckState.Unchecked) || vfoA_lock == true || SetupForm == null) return;
                 if (!this.InvokeRequired)
                 {
-                    // UpdateVFOAFreq(value.ToString("f6"));
-                    txtVFOAFreq.Text = value.ToString("f6");
-                    txtVFOAFreq_LostFocus(this, EventArgs.Empty);
+                    VFOAUpdate(value);
                 }
                 else
                 {
@@ -27885,52 +28591,86 @@ namespace Thetis
         private void VFOAUpdate(double freq)
         {
             //UpdateVFOAFreq(freq.ToString("f6"));
+            m_dVFOAFreq = freq;
             txtVFOAFreq.Text = freq.ToString("f6");
             txtVFOAFreq_LostFocus(this, EventArgs.Empty);
         }
-
+        private void VFOBUpdate(double freq)
+        {
+            m_dVFOBFreq = freq;
+            txtVFOBFreq.Text = freq.ToString("f6");
+            txtVFOBFreq_LostFocus(this, EventArgs.Empty);
+        }
+        private void VFOASubUpdate(double freq)
+        {
+            m_dVFOASubFreq = freq;
+            txtVFOABand.Text = freq.ToString("f6");
+            txtVFOABand_LostFocus(this, EventArgs.Empty);
+        }
+        private double m_dVFOASubFreq = 0;
         public double VFOASubFreq //rx2
         {
             get
             {
                 if (!rx2_enabled || (!chkEnableMultiRX.Checked && !chkVFOSplit.Checked)) return -999.999;
-                try
-                {
-                    return double.Parse(txtVFOABand.Text);
-                }
-                catch (Exception)
-                {
-                    return -999.999;
-                }
+                //try
+                //{
+                    return m_dVFOASubFreq;//double.Parse(txtVFOABand.Text);
+                //}
+                //catch (Exception)
+                //{
+                //    return -999.999;
+                //}
             }
 
             set
             {
                 if ((vfo_lock != CheckState.Unchecked) || vfoA_lock == true || SetupForm == null) return;
-                txtVFOABand.Text = value.ToString("f6");
-                txtVFOABand_LostFocus(this, EventArgs.Empty);
+                //m_dVFOASubFreq = value;
+                //txtVFOABand.Text = value.ToString("f6");
+                //txtVFOABand_LostFocus(this, EventArgs.Empty);
+                if (!this.InvokeRequired)
+                {
+                    VFOASubUpdate(value);
+                }
+                else
+                {
+                    VFOUpdateDel del = new VFOUpdateDel(VFOASubUpdate);
+                    Invoke(del, new object[] { value });
+                }
             }
         }
 
+        private double m_dVFOBFreq = 0;
         public double VFOBFreq
         {
             get
             {
-                try
-                {
-                    return double.Parse(txtVFOBFreq.Text);
-                }
-                catch (Exception)
-                {
-                    return 0;
-                }
+                //try
+                //{
+                    return m_dVFOBFreq;// double.Parse(txtVFOBFreq.Text);
+                //}
+                //catch (Exception)
+                //{
+                //    return 0;
+                //}
             }
             set
             {
                 if ((vfo_lock == CheckState.Indeterminate) || SetupForm == null || vfoB_lock == true) return;
-                value = Math.Max(0, value);
-                txtVFOBFreq.Text = value.ToString("f6");
-                txtVFOBFreq_LostFocus(this, EventArgs.Empty);
+                value = Math.Max(0, value);  //MW0LGE does it go below 0? reason for this?
+                //m_dVFOBFreq = value;
+                //txtVFOBFreq.Text = value.ToString("f6");
+                //txtVFOBFreq_LostFocus(this, EventArgs.Empty);
+                if (!this.InvokeRequired)
+                {
+                    VFOBUpdate(value);
+                }
+                else
+                {
+                    VFOUpdateDel del = new VFOUpdateDel(VFOBUpdate);
+                    Invoke(del, new object[] { value });
+                }
             }
         }
 
@@ -28730,20 +29470,20 @@ namespace Thetis
             }
         }
 
-        private bool attontx = true;
+        private bool m_bAttontx = true;
         public bool ATTOnTX
         {
-            get { return attontx; }
+            get { return m_bAttontx; }
             set
             {
-                attontx = value;
+                m_bAttontx = value;
                 if (PowerOn)
                 {
-                    if (attontx) NetworkIO.SetTxAttenData(tx_step_attenuator_by_band[(int)rx1_band]);
+                    if (m_bAttontx) NetworkIO.SetTxAttenData(tx_step_attenuator_by_band[(int)rx1_band]);
                     else NetworkIO.SetTxAttenData(0);
 
                     if (MercuryPresent)
-                        NetworkIO.SetMercTxAtten(Convert.ToInt32(attontx));
+                        NetworkIO.SetMercTxAtten(Convert.ToInt32(m_bAttontx));
                 }
 
             }
@@ -29312,25 +30052,27 @@ namespace Thetis
                 ptbDisplayPan_Scroll(this, EventArgs.Empty);
             }
         }
-
+        private AGCMode m_RX1agcMode = AGCMode.FIRST;
         public AGCMode RX1AGCMode
         {
-            get { return (AGCMode)comboAGC.SelectedIndex; }
+            get { return m_RX1agcMode; }//(AGCMode)comboAGC.SelectedIndex; }
             set
             {
+                m_RX1agcMode = value;
                 comboAGC.SelectedIndex = (int)value;
                 lblAGCLabel.Text = "AGC: " + comboAGC.Text;
             }
         }
-
+        private AGCMode m_RX2agcMode = AGCMode.FIRST;
         public AGCMode RX2AGCMode
         {
             get
             {
-                return (AGCMode)comboRX2AGC.SelectedIndex;
+                return m_RX2agcMode;// (AGCMode)comboRX2AGC.SelectedIndex;
             }
             set
             {
+                m_RX2agcMode = value;
                 comboRX2AGC.SelectedIndex = (int)value;
                 lblRX2AGCLabel.Text = "AGC: " + comboRX2AGC.Text;
             }
@@ -29920,8 +30662,8 @@ namespace Thetis
             set
             {
                 display_fps = value;
-                if (display_fps > 60) display_fps = 60; //MW0LGE
-                if (display_fps < 1) display_fps = 1; //MW0LGE
+                if (display_fps > 60) display_fps = 60;
+                if (display_fps < 1) display_fps = 1;
                 display_delay = 1000 / display_fps;
 
                 specRX.GetSpecRX(0).FrameRate = display_fps;
@@ -30526,11 +31268,32 @@ namespace Thetis
             get { return rx1_preamp_offset[(int)rx1_preamp_mode]; }
         }
 
-        private bool s_meter = false;
-        public bool SMeter
-        {
-            get { return s_meter; }
-            set { s_meter = value; }
+        //private bool s_meter_uv = false;
+        //public bool SMeterUV {
+        //    get { return s_meter_uv; }
+        //    set { s_meter_uv = value; }
+        //}
+
+        //private bool s_meter = false;
+        //public bool SMeter
+        //{
+        //    get { return s_meter; }
+        //    set { s_meter = value; }
+        //}
+
+        private bool m_bAntiAlias = false;
+        public bool AntiAlias {
+            get { return m_bAntiAlias; }
+            set { 
+                m_bAntiAlias = value;
+                Display.AntiAlias = m_bAntiAlias;
+            }
+        }
+
+        private MultiMeterMeasureMode m_eMeasureMode = MultiMeterMeasureMode.DBM;
+        public MultiMeterMeasureMode MMMeasureMode {
+            get { return m_eMeasureMode; }
+            set { m_eMeasureMode = value; }
         }
 
         private bool spacebar_last_btn = false;
@@ -30768,6 +31531,18 @@ namespace Thetis
                     */
             }
         }
+        //
+        private static bool isBitSet(int n, int pos)
+        {
+            return (n & (1 << pos)) != 0;
+        }
+        //
+        public void ShowSEQLog()
+        {
+            m_frmSeqLog.Show();
+            m_frmSeqLog.BringToFront();
+        }
+
         private bool old_psautocal = false;
         private int HaveSync = 1;
         private int change_overload_color_count = 0;
@@ -30835,6 +31610,8 @@ namespace Thetis
 
                 if (ooo > 0)
                 {
+                    // MW0LGE not used atm
+                    /*
                     string s = "";
                     if (ooo == 1) s = "Seq->CC";
                     if (ooo == 2) s = "Seq->DDC0";
@@ -30856,9 +31633,49 @@ namespace Thetis
                     if (ooo == 16) s = "Seq->DDC3";
                     if (ooo == 32) s = "Seq->Mic";
                     if (ooo >= 64) s = "Seq->WB";
+                    */
 
-                    txtOverload.ForeColor = Color.Red;
-                    txtOverload.Text = "Seq=> " + ooo.ToString(); // s;
+                    //MW0LGE
+                    string s = "";
+                    if (isBitSet(ooo, 0)) s += "CC ";
+                    if (isBitSet(ooo, 1)) s += "DDC0 ";
+                    if (isBitSet(ooo, 2)) s += "DDC1 ";
+                    if (isBitSet(ooo, 3)) s += "DDC2 ";
+                    if (isBitSet(ooo, 4)) s += "DDC3 ";
+                    if (isBitSet(ooo, 5)) s += "DDC4 ";
+                    if (isBitSet(ooo, 6)) s += "DDC5 ";
+                    if (isBitSet(ooo, 7)) s += "DDC6 ";
+                    if (isBitSet(ooo, 8)) s += "Mic ";
+
+                    int[] d = new int[40]; //MAX_IN_SEQ_LOG
+
+                    for (int ll=1; ll < 8; ll++)
+                    {
+                        if (isBitSet(ooo, ll))
+                        {
+                            string ss = "DCC" + (ll-1).ToString() + System.Environment.NewLine;
+                           
+                            if (NetworkIO.getSeqInDeltaStart(ll - 1))
+                            {
+                                int n = 0;
+                                while (NetworkIO.getSeqInDelta(ll - 1, d))
+                                {
+                                    ss += "s" + n.ToString() + "=";
+                                    for (int ff = 0; ff < d.Length; ff++)
+                                    {
+                                        ss += d[ff].ToString() + " ";
+                                    }
+                                    ss += System.Environment.NewLine;
+                                    n++;
+                                }
+                            }
+
+                            m_frmSeqLog.LogString(ss);
+                        }
+                    }
+
+                    //txtOverload.ForeColor = Color.Red;
+                    txtOverload.Text = "Seq=> " + ooo.ToString() + " (" + s.Trim() + ")";
                 }
                 else if (tx_inhibit) txtOverload.Text = "TX Inhibit";
                 else txtOverload.Text = "";
@@ -30893,13 +31710,13 @@ namespace Thetis
             switch (Display.CurrentDisplayMode)
             {
                 case (DisplayMode.PANAFALL):
-                    Display.MaxY = picWaterfall.Height / 2;
+                    Display.MaxY = picDisplay.Height / 2;
                     break;
                 case (DisplayMode.PANADAPTER):
                     Display.MaxY = picDisplay.Height;
                     break;
                 case (DisplayMode.WATERFALL):
-                    Display.MaxY = picWaterfall.Height;
+                    Display.MaxY = picDisplay.Height;
                     break;
                 default:
                     Display.MaxY = picDisplay.Height;
@@ -31348,12 +32165,7 @@ namespace Thetis
                     //e.Graphics.CompositingQuality = CompositingQuality.Default;
                     //e.Graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
                     //e.Graphics.SmoothingMode = SmoothingMode.HighQuality;
-/* TESTING MW0LGE
-                    e.Graphics.CompositingMode = CompositingMode.SourceOver;
-                    e.Graphics.CompositingQuality = CompositingQuality.HighSpeed;
-                    e.Graphics.SmoothingMode = SmoothingMode.HighSpeed;
-                    e.Graphics.PixelOffsetMode = PixelOffsetMode.HighSpeed;
-*/
+
                     Display.RenderGDIPlus(ref e);
                     break;
                 case DisplayEngine.DIRECT_X:
@@ -31366,55 +32178,124 @@ namespace Thetis
             }
         }
 
-        private void drawOriginalMeterTextScale(Graphics g, int H, int W)
-        {   
-            //MW0LGE this is a copy of EDGE meter code just to display text scale along bottom, now used in ORIGINAL meter
-            //with lines and segments removed. TODO is having swr reading on original meter
-            //The old method of string '1  2  3' being padded with some spaces is removed.
-            if (!mox)
+        private void getMeterPixelPosAndDrawScales(int rx, Graphics g, int H, int W, double num, ref int pixel_x, ref int pixel_x_swr, int nStringOffsetY, bool bDrawMarkers)
+        {
+            //MW0LGE 
+            //int nStringOffsetY = -4;
+            MeterRXMode rxMode;
+            bool bAbove30;
+            if (rx == 1)
             {
-                switch (current_meter_rx_mode)
+                rxMode = current_meter_rx_mode;
+                bAbove30 = rx1_above30;
+            }
+            else
+            {
+                rxMode = rx2_meter_mode;
+                bAbove30 = rx2_above30;
+            }
+
+            if (!mox || rx==2) // rx2 can not tx
+            {
+                switch (rxMode)
                 {
                     case MeterRXMode.SIGNAL_STRENGTH:
                     case MeterRXMode.SIGNAL_AVERAGE:
+                        if (bDrawMarkers)
+                        {
+                            g.FillRectangle(low_brush, 0, H - 4, (int)(W * 0.5), 2); // white horizontal line
+                            g.FillRectangle(high_brush, (int)(W * 0.5), H - 4, (int)(W * 0.5) - 4, 2); // red horizontal line
+                        }
                         double spacing = (W * 0.5 - 2.0) / 5.0;
                         double string_height = 0;
                         for (int i = 1; i < 6; i++)
                         {
+                            if (bDrawMarkers)
+                            {
+                                g.FillRectangle(low_brush, (int)(i * spacing - spacing * 0.5), H - 4 - 3, 1, 3); // short tic marks
+                                g.FillRectangle(low_brush, (int)(i * spacing), H - 4 - 6, 2, 6); // long tic marks
+                            }
+                            //Font f = new Font("Arial", 7.0f, FontStyle.Bold);
                             SizeF size = g.MeasureString((-1 + i * 2).ToString(), font7, 1, StringFormat.GenericTypographic);
                             double string_width = size.Width - 2.0;
                             string_height = size.Height - 2.0;
 
+                            //g.TextRenderingHint = TextRenderingHint.AntiAlias;
+                            //g.SmoothingMode = SmoothingMode.AntiAlias;
                             // 1 3 5 7 9
-                            g.DrawString((-1 + i * 2).ToString(), font7, low_brush, (int)(i * spacing - string_width + (int)(i / 5)), (int)(H - 2 - string_height));
+                            g.DrawString((-1 + i * 2).ToString(), font7, low_brush, (int)(i * spacing - string_width + (int)(i / 5)), (int)(H - nStringOffsetY - string_height));
+                            //g.SmoothingMode = SmoothingMode.None;
                         }
                         spacing = ((double)W * 0.5 - 2.0 - 4.0) / 3.0;
                         for (int i = 1; i < 4; i++)
                         {
+                            if (bDrawMarkers)
+                            {
+                                g.FillRectangle(high_brush, (int)((double)W * 0.5 + i * spacing - spacing * 0.5), H - 4 - 3, 1, 3); // long tic marks
+                                g.FillRectangle(high_brush, (int)((double)W * 0.5 + i * spacing), H - 4 - 6, 2, 6); // short tic marks
+                            }
+                            //Font f = new Font("Arial", 7.0f, FontStyle.Bold);
                             SizeF size = g.MeasureString("+" + (i * 20).ToString(), font7, 3, StringFormat.GenericTypographic);
                             double string_width = size.Width - 2.0;
 
-                            g.DrawString("+" + (i * 20).ToString(), font7, high_brush, (int)(W * 0.5 + i * spacing - (int)string_width * 3 - i / 3 * 2), (int)(H - 2 - string_height));
+                            //g.TextRenderingHint = TextRenderingHint.SystemDefault;
+                            g.DrawString("+" + (i * 20).ToString(), font7, high_brush, (int)(W * 0.5 + i * spacing - (int)string_width * 3 - i / 3 * 2), (int)(H - nStringOffsetY - string_height));
                         }
+
+                        if (bAbove30)
+                        {
+                            if (num > -93.0) // high area
+                            {
+                                pixel_x = (int)(W * 0.5 + (93.0 + num) / 63.0 * (W * 0.5 - 3));
+                            }
+                            else
+                            {
+                                pixel_x = (int)((num + 153.0) / 60.0 * (W * 0.5));
+                            }
+                        }
+                        else
+                        {
+                            if (num > -73.0) // high area
+                            {
+                                pixel_x = (int)(W * 0.5 + (73.0 + num) / 63.0 * (W * 0.5 - 3));
+                            }
+                            else
+                            {
+                                pixel_x = (int)((num + 133.0) / 60.0 * (W * 0.5));
+                            }
+                        }
+
                         break;
                     case MeterRXMode.ADC_L:
                     case MeterRXMode.ADC_R:
                     case MeterRXMode.ADC2_L:
                     case MeterRXMode.ADC2_R:
                         spacing = ((double)W - 5.0) / 6.0;
+                        if (bDrawMarkers)
+                        {
+                            g.FillRectangle(low_brush, 0, H - 4, (int)(W - 3.0 - spacing), 2);
+                            g.FillRectangle(high_brush, (int)(W - 3.0 - spacing), H - 4, (int)spacing, 2);
+                        }
                         for (int i = 1; i < 7; i++)
                         {
                             SolidBrush b = low_brush;
                             if (i == 6) b = high_brush;
-
+                            if (bDrawMarkers)
+                            {
+                                g.FillRectangle(b, (int)(i * spacing - spacing / 2), H - 4 - 3, 1, 5);
+                                g.FillRectangle(b, (int)(i * spacing), H - 4 - 6, 2, 8);
+                            }
+                            //Font f = new Font("Arial", 7.0f, FontStyle.Bold);
                             string s = (-120 + i * 20).ToString();
                             SizeF size = g.MeasureString(s, font7, 1, StringFormat.GenericTypographic);
                             double string_width = size.Width - 2.0;
                             size = g.MeasureString("0", font7, 1, StringFormat.GenericTypographic);
                             string_height = size.Height - 2.0;
 
-                            g.DrawString(s, font7, b, (int)(i * spacing - (int)string_width * (s.Length)), (int)(H - 2 - string_height));
+                            g.DrawString(s, font7, b, (int)(i * spacing - (int)string_width * (s.Length)), (int)(H - nStringOffsetY - string_height));
                         }
+
+                        pixel_x = (int)((num + 120.0) / 120.0 * (W - 5.0));
                         break;
                     case MeterRXMode.OFF:
                         break;
@@ -31422,9 +32303,9 @@ namespace Thetis
             }
             else
             {
-                MeterTXMode mode = current_meter_tx_mode;
-                if (chkTUN.Checked) mode = tune_meter_tx_mode;
-                switch (mode)
+                MeterTXMode txMode = current_meter_tx_mode;
+                if (chkTUN.Checked) txMode = tune_meter_tx_mode;
+                switch (txMode)
                 {
                     case MeterTXMode.MIC:
                     case MeterTXMode.EQ:
@@ -31432,179 +32313,536 @@ namespace Thetis
                     case MeterTXMode.CFC_PK:
                     case MeterTXMode.COMP:
                     case MeterTXMode.ALC:
+                        if (bDrawMarkers)
+                        {
+                            g.FillRectangle(low_brush, 0, H - 4, (int)(W * 0.665), 2);
+                            g.FillRectangle(high_brush, (int)(W * 0.665), H - 4, (int)(W * 0.335) - 2, 2);
+                        }
                         double spacing = (W * 0.665 - 2.0) / 3.0;
                         double string_height = 0;
                         for (int i = 1; i < 4; i++)
                         {
+                            if (bDrawMarkers)
+                            {
+                                g.FillRectangle(low_brush, (int)(i * spacing - spacing * 0.5), H - 4 - 3, 1, 3);
+                                g.FillRectangle(low_brush, (int)(i * spacing), H - 4 - 6, 2, 6);
+                            }
+
                             string s = (-30 + i * 10).ToString();
+                            //Font f = new Font("Arial", 7.0f, FontStyle.Bold);
                             SizeF size = g.MeasureString("0", font7, 1, StringFormat.GenericTypographic);
                             double string_width = size.Width - 2.0;
                             string_height = size.Height - 2.0;
 
-                            g.DrawString(s, font7, low_brush, (int)(i * spacing - string_width * s.Length + 1.0 - (int)(i / 2) + (int)(i / 3)), (int)(H - 2 - string_height));
+                            //g.TextRenderingHint = TextRenderingHint.AntiAlias;
+                            //g.SmoothingMode = SmoothingMode.AntiAlias;
+                            g.DrawString(s, font7, low_brush, (int)(i * spacing - string_width * s.Length + 1.0 - (int)(i / 2) + (int)(i / 3)), (int)(H - nStringOffsetY - string_height));
+                            //g.SmoothingMode = SmoothingMode.None;
                         }
                         spacing = (W * 0.335 - 2.0 - 3.0) / 3.0;
                         for (int i = 1; i < 4; i++)
                         {
+                            if (bDrawMarkers)
+                            {
+                                g.FillRectangle(high_brush, (int)((double)W * 0.665 + i * spacing - spacing * 0.5), H - 4 - 3, 1, 3);
+                                g.FillRectangle(high_brush, (int)((double)W * 0.665 + i * spacing), H - 4 - 6, 2, 6);
+                            }
                             string s = (i * 4).ToString();
+                            //Font f = new Font("Arial", 7.0f, FontStyle.Bold);
                             SizeF size = g.MeasureString(s, font7, 3, StringFormat.GenericTypographic);
                             double string_width = size.Width - 2.0;
 
                             g.TextRenderingHint = TextRenderingHint.SystemDefault;
-                            g.DrawString(s, font7, high_brush, (int)(W * 0.665 + i * spacing - (int)string_width * s.Length), (int)(H - 2 - string_height));
+                            g.DrawString(s, font7, high_brush, (int)(W * 0.665 + i * spacing - (int)string_width * s.Length), (int)(H - nStringOffsetY - string_height));
                         }
 
+                        if (num > 0.0) // high area
+                        {
+                            pixel_x = (int)(W * 0.665 + num / 12.0 * (W * 0.335 - 4));
+                        }
+                        else
+                        {
+                            pixel_x = (int)((num + 30.0) / 30.0 * (W * 0.665 - 1.0));
+                        }
+                        break;
+                    case MeterTXMode.ALC_GROUP:
+                        //MW0LGE combined ALC + ALCcomp display
+                        if (bDrawMarkers)
+                        {
+                            g.FillRectangle(low_brush, 0, H - 4, (int)(W * 0.5), 2); // white horizontal line
+                            g.FillRectangle(high_brush, (int)(W * 0.5), H - 4, (int)(W * 0.5) - 4, 2); // red horizontal line
+                                                                                                       // THE ALC section -30 to 0db
+                        }
+                        spacing = (W * 0.5 - 2.0) / 3.0;
+                        string_height = 0;
+                        for (int i = 1; i < 4; i++)
+                        {
+                            if (bDrawMarkers)
+                            {
+                                g.FillRectangle(low_brush, (int)(i * spacing - spacing * 0.5), H - 4 - 3, 1, 3); // short tic marks
+                                g.FillRectangle(low_brush, (int)(i * spacing), H - 4 - 6, 2, 6); // long tic marks
+                            }
+                            string s = (-30 + i * 10).ToString();
+                            SizeF size = g.MeasureString("0", font7, 100, StringFormat.GenericTypographic);
+                            double string_width = size.Width - 2.0;
+                            string_height = size.Height - 2.0;
+
+                            g.DrawString(s, font7, low_brush, (int)(i * spacing - (string_width * s.Length)), (int)(H - nStringOffsetY - string_height));
+                        }
+                        // THE ALC compression section 0 to +25db
+                        spacing = (W * 0.5 - 2.0 - 3.0) / 5.0;
+                        string_height = 0;
+                        string[] g_list = { "5", "10", "15", "20", "+25" };
+                        for (int i = 1; i < 6; i++)
+                        {
+                            if (bDrawMarkers)
+                            {
+                                g.FillRectangle(high_brush, (int)((double)W * 0.5 + i * spacing - spacing * 0.5), H - 4 - 3, 1, 3); // long tic marks
+                                g.FillRectangle(high_brush, (int)((double)W * 0.5 + i * spacing), H - 4 - 6, 2, 6); // short tic marks
+                            }
+                            string s = g_list[i - 1];
+                            SizeF size = g.MeasureString("0", font7, 1, StringFormat.GenericTypographic);
+                            double string_width = size.Width - 2.0;
+                            string_height = size.Height - 2.0;
+                            if (i == 5) spacing = (W * 0.50 - 2.0 - 6.0) / 5.0; // pull text back in on right edge if
+                            g.DrawString(s, font7, high_brush, (int)(W * 0.5 + i * spacing - (string_width * s.Length)), (int)(H - nStringOffsetY - string_height));
+                        }
+
+                        if (num > 0.0) // high area - alc compression
+                        {
+                            spacing = (W * 0.5 - 2.0 - 3.0) / 5.0;
+                            pixel_x = (int)((double)W * 0.5) + (int)(num / 5.0 * spacing);
+                        }
+                        else // alc only (sub 0db or less)
+                        {
+                            pixel_x = (int)((num + 30.0) / 30.0 * (W * 0.5 - 1.0));
+                        }
                         break;
                     case MeterTXMode.FORWARD_POWER:
                     case MeterTXMode.REVERSE_POWER:
+                        if (alexpresent || apollopresent) num = Math.Round(num);
+
                         if (alexpresent && ((orionmkiipresent || anan8000dpresent) && tx_xvtr_index < 0))
                         {
+                            if (bDrawMarkers)
+                            {
+                                g.FillRectangle(low_brush, 0, H - 4, (int)(W * 0.75), 2);
+                                g.FillRectangle(high_brush, (int)(W * 0.75), H - 4, (int)(W * 0.25) - 10, 2);
+                            }
                             spacing = (W * 0.75 - 2.0) / 4.0;
                             string_height = 0;
                             string[] list = { "10", "20", "100", "200" };
                             for (int i = 1; i < 5; i++)
                             {
+                                if (bDrawMarkers)
+                                {
+                                    g.FillRectangle(low_brush, (int)(i * spacing - spacing * 0.5), H - 4 - 3, 1, 3);
+                                    g.FillRectangle(low_brush, (int)(i * spacing), H - 4 - 6, 2, 6);
+                                }
                                 string s = list[i - 1];
                                 SizeF size = g.MeasureString("0", font7, 1, StringFormat.GenericTypographic);
                                 double string_width = size.Width - 2.0;
                                 string_height = size.Height - 2.0;
 
-                                g.DrawString(s, font7, low_brush, (int)(i * spacing - string_width * s.Length + (int)(i / 3) + (int)(i / 4)), (int)(H - 2 - string_height));
+                                g.DrawString(s, font7, low_brush, (int)(i * spacing - string_width * s.Length + (int)(i / 3) + (int)(i / 4)), (int)(H - nStringOffsetY - string_height));
                             }
                             spacing = (W * 0.25 - 2.0 - 10.0) / 1.0;
                             for (int i = 1; i < 2; i++)
                             {
+                                if (bDrawMarkers)
+                                {
+                                    g.FillRectangle(high_brush, (int)((double)W * 0.75 + i * spacing - spacing * 0.5), H - 4 - 3, 1, 3);
+                                    g.FillRectangle(high_brush, (int)((double)W * 0.75 + i * spacing), H - 4 - 6, 2, 6);
+                                }
+                                //Font f = new Font("Arial", 7.0f, FontStyle.Bold);
                                 SizeF size = g.MeasureString("0", font7, 3, StringFormat.GenericTypographic);
                                 double string_width = size.Width - 2.0;
 
                                 g.TextRenderingHint = TextRenderingHint.SystemDefault;
-                                g.DrawString("240+", font7, high_brush, (int)(W * 0.75 + i * spacing - (int)3.5 * string_width), (int)(H - 2 - string_height));
+                                g.DrawString("240+", font7, high_brush, (int)(W * 0.75 + i * spacing - (int)3.5 * string_width), (int)(H - nStringOffsetY - string_height));
+                            }
+
+                            if (num <= 200.0) // low area
+                            {
+                                spacing = (W * 0.75 - 2.0) / 4.0;
+                                if (num <= 10.0)
+                                    pixel_x = (int)(num / 10.0 * (int)spacing);
+                                else if (num <= 20.0)
+                                    pixel_x = (int)(spacing + (num - 10.0) / 10.0 * spacing);
+                                else if (num <= 100.0)
+                                    pixel_x = (int)(2 * spacing + (num - 20.0) / 80.0 * spacing);
+                                else // <= 100
+                                    pixel_x = (int)(3 * spacing + (num - 100.0) / 100.0 * spacing);
+                            }
+                            else
+                            {
+                                spacing = (W * 0.25 - 2.0 - 10.0) / 1.0;
+                                if (num <= 240.0)
+                                    pixel_x = (int)(W * 0.75 + (num - 200.0) / 40.0 * spacing);
+                                else
+                                    pixel_x = (int)(W * 0.75 + spacing + (num - 240.0) / 120.0 * spacing);
                             }
                         }
 
                         else if ((alexpresent || pa_present) && (!anan10present && !anan10Epresent && !apollopresent))
                         {
+                            if (bDrawMarkers)
+                            {
+                                g.FillRectangle(low_brush, 0, H - 4, (int)(W * 0.75), 2);
+                                g.FillRectangle(high_brush, (int)(W * 0.75), H - 4, (int)(W * 0.25) - 10, 2);
+                            }
                             spacing = (W * 0.75 - 2.0) / 4.0;
                             string_height = 0;
                             string[] list = { "5", "10", "50", "100" };
                             for (int i = 1; i < 5; i++)
                             {
+                                if (bDrawMarkers)
+                                {
+                                    g.FillRectangle(low_brush, (int)(i * spacing - spacing * 0.5), H - 4 - 3, 1, 3);
+                                    g.FillRectangle(low_brush, (int)(i * spacing), H - 4 - 6, 2, 6);
+                                }
                                 string s = list[i - 1];
+                                //Font f = new Font("Arial", 7.0f, FontStyle.Bold);
                                 SizeF size = g.MeasureString("0", font7, 1, StringFormat.GenericTypographic);
                                 double string_width = size.Width - 2.0;
                                 string_height = size.Height - 2.0;
 
-                                g.DrawString(s, font7, low_brush, (int)(i * spacing - string_width * s.Length + (int)(i / 3) + (int)(i / 4)), (int)(H - 2 - string_height));
+                                //g.TextRenderingHint = TextRenderingHint.AntiAlias;
+                                //g.SmoothingMode = SmoothingMode.AntiAlias;
+                                g.DrawString(s, font7, low_brush, (int)(i * spacing - string_width * s.Length + (int)(i / 3) + (int)(i / 4)), (int)(H - nStringOffsetY - string_height));
+                                //g.SmoothingMode = SmoothingMode.None;
                             }
                             spacing = (W * 0.25 - 2.0 - 10.0) / 1.0;
                             for (int i = 1; i < 2; i++)
                             {
+                                if (bDrawMarkers)
+                                {
+                                    g.FillRectangle(high_brush, (int)((double)W * 0.75 + i * spacing - spacing * 0.5), H - 4 - 3, 1, 3);
+                                    g.FillRectangle(high_brush, (int)((double)W * 0.75 + i * spacing), H - 4 - 6, 2, 6);
+                                }
+                                //Font f = new Font("Arial", 7.0f, FontStyle.Bold);
                                 SizeF size = g.MeasureString("0", font7, 3, StringFormat.GenericTypographic);
                                 double string_width = size.Width - 2.0;
 
                                 g.TextRenderingHint = TextRenderingHint.SystemDefault;
-                                g.DrawString("120+", font7, high_brush, (int)(W * 0.75 + i * spacing - (int)3.5 * string_width), (int)(H - 2 - string_height));
+                                g.DrawString("120+", font7, high_brush, (int)(W * 0.75 + i * spacing - (int)3.5 * string_width), (int)(H - nStringOffsetY - string_height));
+                            }
+
+                            if (num <= 100.0) // low area
+                            {
+                                spacing = (W * 0.75 - 2.0) / 4.0;
+                                if (num <= 5.0)
+                                    pixel_x = (int)(num / 5.0 * (int)spacing);
+                                else if (num <= 10.0)
+                                    pixel_x = (int)(spacing + (num - 5.0) / 5.0 * spacing);
+                                else if (num <= 50.0)
+                                    pixel_x = (int)(2 * spacing + (num - 10.0) / 40.0 * spacing);
+                                else // <= 100
+                                    pixel_x = (int)(3 * spacing + (num - 50.0) / 50.0 * spacing);
+                            }
+                            else
+                            {
+                                spacing = (W * 0.25 - 2.0 - 10.0) / 1.0;
+                                if (num <= 120.0)
+                                    pixel_x = (int)(W * 0.75 + (num - 100.0) / 20.0 * spacing);
+                                else
+                                    pixel_x = (int)(W * 0.75 + spacing + (num - 120.0) / 60.0 * spacing);
                             }
                         }
                         else if (anan10present || anan10Epresent)// || apollopresent)
                         {
+                            if (bDrawMarkers)
+                            {
+                                g.FillRectangle(low_brush, 0, H - 4, (int)(W * 0.75), 2);
+                                g.FillRectangle(high_brush, (int)(W * 0.75), H - 4, (int)(W * 0.25) - 10, 2);
+                            }
                             spacing = (W * 0.75 - 2.0) / 4.0;
                             string_height = 0;
                             string[] list = { "1", "5", "10", "15" };
                             for (int i = 1; i < 5; i++)
                             {
+                                if (bDrawMarkers)
+                                {
+                                    g.FillRectangle(low_brush, (int)(i * spacing - spacing * 0.5), H - 4 - 3, 1, 3);
+                                    g.FillRectangle(low_brush, (int)(i * spacing), H - 4 - 6, 2, 6);
+                                }
                                 string s = list[i - 1];
+                                //Font f = new Font("Arial", 7.0f, FontStyle.Bold);
                                 SizeF size = g.MeasureString("0", font7, 1, StringFormat.GenericTypographic);
                                 double string_width = size.Width - 2.0;
                                 string_height = size.Height - 2.0;
 
-                                g.DrawString(s, font7, low_brush, (int)(i * spacing - string_width * s.Length + (int)(i / 3) + (int)(i / 4)), (int)(H - 2 - string_height));
+                                //g.TextRenderingHint = TextRenderingHint.AntiAlias;
+                                //g.SmoothingMode = SmoothingMode.AntiAlias;
+                                g.DrawString(s, font7, low_brush, (int)(i * spacing - string_width * s.Length + (int)(i / 3) + (int)(i / 4)), (int)(H - nStringOffsetY - string_height));
+                                //g.SmoothingMode = SmoothingMode.None;
                             }
                             spacing = (W * 0.25 - 2.0 - 10.0) / 1.0;
                             for (int i = 1; i < 2; i++)
                             {
+                                if (bDrawMarkers)
+                                {
+                                    g.FillRectangle(high_brush, (int)((double)W * 0.75 + i * spacing - spacing * 0.5), H - 4 - 3, 1, 3);
+                                    g.FillRectangle(high_brush, (int)((double)W * 0.75 + i * spacing), H - 4 - 6, 2, 6);
+                                }
+                                //Font f = new Font("Arial", 7.0f, FontStyle.Bold);
                                 SizeF size = g.MeasureString("0", font7, 2, StringFormat.GenericTypographic);
                                 double string_width = size.Width - 2.0;
 
                                 g.TextRenderingHint = TextRenderingHint.SystemDefault;
-                                g.DrawString("25+", font7, high_brush, (int)(W * 0.75 + i * spacing - (int)3.5 * string_width), (int)(H - 2 - string_height));
+                                g.DrawString("25+", font7, high_brush, (int)(W * 0.75 + i * spacing - (int)3.5 * string_width), (int)(H - nStringOffsetY - string_height));
+                            }
+
+                            if (num <= 15.0) // low area
+                            {
+                                spacing = (W * 0.75 - 2.0) / 4.0;
+                                if (num <= 1.0)
+                                    pixel_x = (int)(num / 1.0 * (int)spacing);
+                                else if (num <= 5.0)
+                                    pixel_x = (int)(spacing + (num - 1.0) / 4.0 * spacing);
+                                else if (num <= 10.0)
+                                    pixel_x = (int)(2 * spacing + (num - 5.0) / 5.0 * spacing);
+                                else
+                                    pixel_x = (int)(3 * spacing + (num - 10.0) / 5.0 * spacing);
+                            }
+                            else
+                            {
+                                spacing = (W * 0.25 - 2.0 - 10.0) / 1.0;
+                                if (num <= 25.0)
+                                    pixel_x = (int)(W * 0.75 + (num - 15.0) / 10.0 * spacing);
+                                else
+                                    pixel_x = (int)(W * 0.75 + spacing + (num - 25.0) / 5.0 * spacing);
                             }
                         }
                         else if (apollopresent) //(anan10present || apollopresent) // 30W
                         {
+                            if (bDrawMarkers)
+                            {
+                                g.FillRectangle(low_brush, 0, H - 4, (int)(W * 0.75), 2);
+                                g.FillRectangle(high_brush, (int)(W * 0.75), H - 4, (int)(W * 0.25) - 10, 2);
+                            }
                             spacing = (W * 0.75 - 2.0) / 4.0;
                             string_height = 0;
                             string[] list = { "5", "10", "20", "30" };
                             for (int i = 1; i < 5; i++)
                             {
+                                if (bDrawMarkers)
+                                {
+                                    g.FillRectangle(low_brush, (int)(i * spacing - spacing * 0.5), H - 4 - 3, 1, 3);
+                                    g.FillRectangle(low_brush, (int)(i * spacing), H - 4 - 6, 2, 6);
+                                }
                                 string s = list[i - 1];
+                                //Font f = new Font("Arial", 7.0f, FontStyle.Bold);
                                 SizeF size = g.MeasureString("0", font7, 1, StringFormat.GenericTypographic);
                                 double string_width = size.Width - 2.0;
                                 string_height = size.Height - 2.0;
 
-                                g.DrawString(s, font7, low_brush, (int)(i * spacing - string_width * s.Length + (int)(i / 3) + (int)(i / 4)), (int)(H - 2 - string_height));
+                                //g.TextRenderingHint = TextRenderingHint.AntiAlias;
+                                //g.SmoothingMode = SmoothingMode.AntiAlias;
+                                g.DrawString(s, font7, low_brush, (int)(i * spacing - string_width * s.Length + (int)(i / 3) + (int)(i / 4)), (int)(H - nStringOffsetY - string_height));
+                                //g.SmoothingMode = SmoothingMode.None;
                             }
                             spacing = (W * 0.25 - 2.0 - 10.0) / 1.0;
                             for (int i = 1; i < 2; i++)
                             {
+                                if (bDrawMarkers)
+                                {
+                                    g.FillRectangle(high_brush, (int)((double)W * 0.75 + i * spacing - spacing * 0.5), H - 4 - 3, 1, 3);
+                                    g.FillRectangle(high_brush, (int)((double)W * 0.75 + i * spacing), H - 4 - 6, 2, 6);
+                                }
+                                //Font f = new Font("Arial", 7.0f, FontStyle.Bold);
                                 SizeF size = g.MeasureString("0", font7, 2, StringFormat.GenericTypographic);
                                 double string_width = size.Width - 2.0;
 
                                 g.TextRenderingHint = TextRenderingHint.SystemDefault;
-                                g.DrawString("50+", font7, high_brush, (int)(W * 0.75 + i * spacing - (int)3.5 * string_width), (int)(H - 2 - string_height));
+                                g.DrawString("50+", font7, high_brush, (int)(W * 0.75 + i * spacing - (int)3.5 * string_width), (int)(H - nStringOffsetY - string_height));
                             }
+
+                            if (num <= 30.0) // low area
+                            {
+                                spacing = (W * 0.75 - 2.0) / 4.0;
+                                if (num <= 5.0)
+                                    pixel_x = (int)(num / 5.0 * (int)spacing);
+                                else if (num <= 10.0)
+                                    pixel_x = (int)(spacing + (num - 5.0) / 5.0 * spacing);
+                                else if (num <= 20.0)
+                                    pixel_x = (int)(2 * spacing + (num - 10.0) / 10.0 * spacing);
+                                else // <= 30
+                                    pixel_x = (int)(3 * spacing + (num - 20.0) / 10.0 * spacing);
+                            }
+                            else
+                            {
+                                spacing = (W * 0.25 - 2.0 - 10.0) / 1.0;
+                                if (num <= 50.0)
+                                    pixel_x = (int)(W * 0.75 + (num - 30.0) / 20.0 * spacing);
+                                else
+                                    pixel_x = (int)(W * 0.75 + spacing + (num - 50.0) / 25.0 * spacing);
+                            }
+
                         }
                         else // 1W version
                         {
+                            if (bDrawMarkers)
+                            {
+                                g.FillRectangle(low_brush, 0, H - 4, (int)(W * 0.75), 2);
+                                g.FillRectangle(low_brush, (int)(W * 0.75), H - 4, (int)(W * 0.25) - 9, 2);
+                            }
                             spacing = (W * 0.75 - 2.0) / 4.0;
                             string_height = 0;
                             string[] list = { "100", "250", "500", "800", "1000" };
                             for (int i = 1; i < 5; i++)
                             {
+                                if (bDrawMarkers)
+                                {
+                                    g.FillRectangle(low_brush, (int)(i * spacing - spacing * 0.5), H - 4 - 3, 1, 3);
+                                    g.FillRectangle(low_brush, (int)(i * spacing), H - 4 - 6, 2, 6);
+                                }
                                 string s = list[i - 1];
+                                //Font f = new Font("Arial", 7.0f, FontStyle.Bold);
                                 SizeF size = g.MeasureString("0", font7, 1, StringFormat.GenericTypographic);
                                 double string_width = size.Width - 2.0;
                                 string_height = size.Height - 2.0;
-                                g.DrawString(s, font7, low_brush, (int)(i * spacing - string_width * s.Length + 1.0 + (int)(i / 2) - (int)(i / 4)), (int)(H - 2 - string_height));
+
+                                //g.TextRenderingHint = TextRenderingHint.AntiAlias;
+                                //g.SmoothingMode = SmoothingMode.AntiAlias;
+                                g.DrawString(s, font7, low_brush, (int)(i * spacing - string_width * s.Length + 1.0 + (int)(i / 2) - (int)(i / 4)), (int)(H - nStringOffsetY - string_height));
+                                //g.SmoothingMode = SmoothingMode.None;
                             }
                             spacing = (W * 0.25 - 2.0 - 9.0) / 1.0;
                             for (int i = 1; i < 2; i++)
                             {
+                                if (bDrawMarkers)
+                                {
+                                    g.FillRectangle(low_brush, (int)((double)W * 0.75 + i * spacing - spacing * 0.5), H - 4 - 3, 1, 3);
+                                    g.FillRectangle(low_brush, (int)((double)W * 0.75 + i * spacing), H - 4 - 6, 2, 6);
+                                }
+                                //Font f = new Font("Arial", 7.0f, FontStyle.Bold);
                                 SizeF size = g.MeasureString("0", font7, 3, StringFormat.GenericTypographic);
                                 double string_width = size.Width - 2.0;
-                                g.DrawString("1000", font7, low_brush, (int)(W * 0.75 + 2 + i * spacing - (int)4.0 * string_width), (int)(H - 2 - string_height));
+
+                                //g.TextRenderingHint = TextRenderingHint.SystemDefault;
+                                g.DrawString("1000", font7, low_brush, (int)(W * 0.75 + 2 + i * spacing - (int)4.0 * string_width), (int)(H - nStringOffsetY - string_height));
+                            }
+
+                            // num *= 1000;
+                            if (num < 801.0) // low area
+                            {
+                                spacing = (W * 0.75 - 2.0) / 4.0;
+                                if (num <= 100.0)
+                                    pixel_x = (int)(num / 100.0 * spacing);
+                                else if (num <= 250.0)
+                                    pixel_x = (int)(spacing + (num - 100.0) / 150.0 * spacing);
+                                else if (num <= 500.0)
+                                    pixel_x = (int)(2 * spacing + (num - 250.0) / 250.0 * spacing);
+                                else // <801.0
+                                    pixel_x = (int)(3 * spacing + (num - 500.0) / 300.0 * spacing);
+                            }
+                            else // >801
+                            {
+                                spacing = (W * 0.25 - 2.0 - 9.0) / 1.0;
+                                pixel_x = (int)(W * 0.75 + (num - 800.0) / 200.0 * spacing);
                             }
                         }
                         break;
                     case MeterTXMode.SWR_POWER:
-                        /* TODO !
+
                         if ((alexpresent || pa_present) && (!anan10present && !anan10Epresent && !apollopresent))
                         {
-                            // SWR stuff first
+                            if (bDrawMarkers)
+                            {
+                                g.FillRectangle(high_brush, (int)(W * 0.75), (H / 2) - 1, (int)(W * 0.25) - 4, 2);
+                                g.FillRectangle(low_brush, 0, (H / 2) - 1, (int)(W * 0.75), 4); // horizontal white line
+                                g.FillRectangle(high_brush, (int)(W * 0.75), (H / 2) + 1, (int)(W * 0.25) - 9, 2); //horizontal red line
+                            }                                                               // SWR stuff first
+                            spacing = (W * 0.5) / 10.0;
                             string_height = 0;
                             string[] swrx_list = { "1.5", "2" };
-                            spacing = (W * 0.5) / 2.0;
+                            for (int i = 1; i < 10; i++)
+                            {
+                                if (bDrawMarkers)
+                                {
+                                    g.FillRectangle(low_brush, (int)(i * spacing), (H / 2) - 4, 1, 3);
+                                }
+                            }
                             for (int i = 1; i < 3; i++)
                             {
-
+                                spacing = (W * 0.5) / 2.0;
+                                if (bDrawMarkers)
+                                {
+                                    g.FillRectangle(low_brush, (int)(i * spacing), (H / 2) - 7, 2, 6);
+                                }
                                 string s = swrx_list[i - 1];
+                                //Font f = new Font("Arial", 7.0f, FontStyle.Bold);
                                 SizeF size = g.MeasureString("0", font7, 1, StringFormat.GenericTypographic);
                                 double string_width = size.Width - 2.0;
                                 string_height = size.Height - 2.0;
-                                g.DrawString(s, font7, low_brush, (int)(i * spacing - string_width * s.Length + 2.0 - 1 * (int)(i / 2) + 3 * (int)(i / 4)), (int)((H / 2) - 9 - string_height));
-                            }
 
+                                //g.TextRenderingHint = TextRenderingHint.AntiAlias;
+                                //g.SmoothingMode = SmoothingMode.AntiAlias;
+                                g.DrawString(s, font7, low_brush, (int)(i * spacing - string_width * s.Length + 2.0 - 1 * (int)(i / 2) + 3 * (int)(i / 4)), (int)((H / 2) - 9 - string_height));
+                                //g.SmoothingMode = SmoothingMode.None;
+                            }
+                            if (bDrawMarkers)
+                            {
+                                g.FillRectangle(low_brush, (int)(W * 0.625), (H / 2) - 4, 1, 3); // small tic 2.5:1
+                            }
                             string[] swrx_hi_list = { "3", "4", "5" };
-                            spacing = (W * 0.25 - 6.0) / 2.0;
+
+                            spacing = (W * 0.75 - 2.0 - 9.0) / 2.0;
+                            for (int i = 1; i < 2; i++)
+                            {
+                                // g.FillRectangle(high_brush, (int)(i * spacing - spacing * 0.75), H - 4 - 3, 1, 3);
+                            }
 
                             for (int i = 1; i < 4; i++)
                             {
+                                // spacing = (W * 0.55 - 2.0) / 2.0;
+                                // spacing = (W * 0.33 - 2.0) / 3.0;
+                                spacing = (W * 0.25 - 6.0) / 2.0;
+                                if (bDrawMarkers)
+                                {
+                                    g.FillRectangle(high_brush, (int)((double)W * 0.75 + i * spacing - spacing * 0.5), (H / 2) - 4, 1, 3);
+                                    g.FillRectangle(high_brush, (int)((double)W * 0.75 + i * spacing - spacing), (H / 2) - 7, 2, 6);
+                                }
+                                // g.FillRectangle(high_brush, (int)((double)W * 0.55 + i * spacing - spacing * 0.5), H - 4 - 6, 2, 6);
                                 string s = swrx_hi_list[i - 1];
+                                //Font f = new Font("Arial", 7.0f, FontStyle.Bold);
                                 SizeF size = g.MeasureString("0", font7, 1, StringFormat.GenericTypographic);
                                 double string_width = size.Width - 2.0;
                                 string_height = size.Height - 2.0;
+
+                                //g.TextRenderingHint = TextRenderingHint.AntiAlias;
+                                //g.SmoothingMode = SmoothingMode.AntiAlias;
+                                //g.DrawString(s, font7, high_brush, (int)(i * spacing - string_width * s.Length + 2.0 - 2 * (int)(i / 2) + 3 * (int)(i / 4)), (int)(H - 4 - 8 - string_height));
+                                // g.DrawString(s, font7, high_brush, (int)(W * 0.75 + i * spacing - spacing - (int)2.5 * string_width), (int)(H - 4 - 8 - string_height));
                                 g.DrawString(s, font7, high_brush, (int)(W * 0.75 + i * spacing - spacing - (int)1.0 * string_width), (int)((H / 2) - 9 - string_height));
+                                //g.SmoothingMode = SmoothingMode.None;
                             }
+
+                            if (current_swrmeter_data <= 3.0) // low area
+                            {
+                                spacing = (W * 0.75) / 3.0;
+
+                                if (current_swrmeter_data <= 1.5)
+                                    pixel_x_swr = (int)((current_swrmeter_data - 1.0) / 0.5 * spacing);
+                                else if (current_swrmeter_data <= 2.0)
+                                    pixel_x_swr = (int)(spacing + (current_swrmeter_data - 1.5) / 0.5 * spacing);
+                                else //if (current_swrmeter_data <= 3.0)
+                                    pixel_x_swr = (int)(2 * spacing + (current_swrmeter_data - 2.0) / 1.0 * spacing);
+                                // else //  current_swrmeter_data <= 4.0
+                                //  pixel_x_swr = (int)(3 * spacing + (current_swrmeter_data - 3.0) / 1.0 * spacing);
+                            }
+                            else
+                            {
+                                spacing = (W * 0.25 - 6.0) / 2.0;
+                                if (current_swrmeter_data <= 4.0)
+                                    pixel_x_swr = (int)(W * 0.75 + (current_swrmeter_data - 3.0) / 1.0 * spacing);
+                                else if (current_swrmeter_data <= 5.0)
+                                    pixel_x_swr = (int)(W * 0.75 + spacing + (current_swrmeter_data - 4.0) / 1.0 * spacing);
+                                else
+                                    pixel_x_swr = (int)(W * 0.75 + 2 * spacing + (current_swrmeter_data - 5.0) / 4.0 * spacing);
+                            }
+                            if (double.IsInfinity(current_swrmeter_data)) pixel_x_swr = W - 2;
 
                             //PWR
                             spacing = (W * 0.75 - 2.0) / 4.0;
@@ -31612,178 +32850,604 @@ namespace Thetis
                             string[] list = { "5", "10", "50", "100" };
                             for (int i = 1; i < 5; i++)
                             {
+                                if (bDrawMarkers)
+                                {
+                                    g.FillRectangle(low_brush, (int)(i * spacing - spacing * 0.5), (H / 2) + 3, 1, 3);
+                                    g.FillRectangle(low_brush, (int)(i * spacing), (H / 2) + 3, 2, 6);
+                                }
                                 string s = list[i - 1];
+                                //Font f = new Font("Arial", 7.0f, FontStyle.Bold);
                                 SizeF size = g.MeasureString("0", font7, 1, StringFormat.GenericTypographic);
                                 double string_width = size.Width - 2.0;
                                 string_height = size.Height - 2.0;
+
+                                //g.TextRenderingHint = TextRenderingHint.AntiAlias;
+                                //g.SmoothingMode = SmoothingMode.AntiAlias;
                                 g.DrawString(s, font7, low_brush, (int)(i * spacing - string_width * s.Length + (int)(i / 3) + (int)(i / 4)), (int)(H - 1 - string_height));
+                                //g.SmoothingMode = SmoothingMode.None;
                             }
                             spacing = (W * 0.25 - 2.0 - 10.0) / 1.0;
                             for (int i = 1; i < 2; i++)
                             {
+                                if (bDrawMarkers)
+                                {
+                                    g.FillRectangle(high_brush, (int)((double)W * 0.75 + i * spacing - spacing * 0.5), (H / 2) + 3, 1, 3);
+                                    g.FillRectangle(high_brush, (int)((double)W * 0.75 + i * spacing), (H / 2) + 3, 2, 6);
+                                }
+                                //Font f = new Font("Arial", 7.0f, FontStyle.Bold);
                                 SizeF size = g.MeasureString("0", font7, 2, StringFormat.GenericTypographic);
                                 double string_width = size.Width - 2.0;
 
                                 g.TextRenderingHint = TextRenderingHint.SystemDefault;
                                 g.DrawString("120+", font7, high_brush, (int)(W * 0.75 + i * spacing - (int)3.5 * string_width), (int)(H - 1 - string_height));
                             }
+
+                            if (num <= 100.0) // low area
+                            {
+                                spacing = (W * 0.75 - 2.0) / 4.0;
+                                if (num <= 5.0)
+                                    pixel_x = (int)(num / 5.0 * (int)spacing);
+                                else if (num <= 10.0)
+                                    pixel_x = (int)(spacing + (num - 5.0) / 5.0 * spacing);
+                                else if (num <= 50.0)
+                                    pixel_x = (int)(2 * spacing + (num - 10.0) / 40.0 * spacing);
+                                else
+                                    pixel_x = (int)(3 * spacing + (num - 50.0) / 50.0 * spacing);
+                            }
+                            else
+                            {
+                                spacing = (W * 0.25 - 2.0 - 10.0) / 1.0;
+                                if (num <= 120.0)
+                                    pixel_x = (int)(W * 0.75 + (num - 100.0) / 20.0 * spacing);
+                                else
+                                    pixel_x = (int)(W * 0.75 + spacing + (num - 120.0) / 60.0 * spacing);
+                            }
                         }
 
                         else if (anan10present || anan10Epresent)
                         {
-                            // SWR stuff first
-                            spacing = (W * 0.5) / 2.0;
+                            if (bDrawMarkers)
+                            {
+                                g.FillRectangle(high_brush, (int)(W * 0.75), (H / 2) - 1, (int)(W * 0.25) - 4, 2);
+                                g.FillRectangle(low_brush, 0, (H / 2) - 1, (int)(W * 0.75), 4); // horizontal white line
+                                g.FillRectangle(high_brush, (int)(W * 0.75), (H / 2) + 1, (int)(W * 0.25) - 9, 2); //horizontal red line
+                                                                                                                   // SWR stuff first
+                            }
+                            spacing = (W * 0.5) / 10.0;
                             string_height = 0;
                             string[] swrx_list = { "1.5", "2" };
+                            for (int i = 1; i < 10; i++)
+                            {
+                                if (bDrawMarkers)
+                                {
+                                    g.FillRectangle(low_brush, (int)(i * spacing), (H / 2) - 4, 1, 3);
+                                }
+                            }
                             for (int i = 1; i < 3; i++)
                             {
+                                spacing = (W * 0.5) / 2.0;
+                                if (bDrawMarkers)
+                                {
+                                    g.FillRectangle(low_brush, (int)(i * spacing), (H / 2) - 7, 2, 6);
+                                }
                                 string s = swrx_list[i - 1];
+                                //Font f = new Font("Arial", 7.0f, FontStyle.Bold);
                                 SizeF size = g.MeasureString("0", font7, 1, StringFormat.GenericTypographic);
                                 double string_width = size.Width - 2.0;
                                 string_height = size.Height - 2.0;
-                                g.DrawString(s, font7, low_brush, (int)(i * spacing - string_width * s.Length + 2.0 - 1 * (int)(i / 2) + 3 * (int)(i / 4)), (int)((H / 2) - 9 - string_height));
-                            }
 
+                                //g.TextRenderingHint = TextRenderingHint.AntiAlias;
+                                //g.SmoothingMode = SmoothingMode.AntiAlias;
+                                g.DrawString(s, font7, low_brush, (int)(i * spacing - string_width * s.Length + 2.0 - 1 * (int)(i / 2) + 3 * (int)(i / 4)), (int)((H / 2) - 9 - string_height));
+                                //g.SmoothingMode = SmoothingMode.None;
+                            }
+                            if (bDrawMarkers)
+                            {
+                                g.FillRectangle(low_brush, (int)(W * 0.625), (H / 2) - 4, 1, 3); // small tic 2.5:1
+                            }
                             string[] swrx_hi_list = { "3", "4", "5" };
 
-                            spacing = (W * 0.25 - 6.0) / 2.0;
+                            spacing = (W * 0.75 - 2.0 - 9.0) / 2.0;
+                            for (int i = 1; i < 2; i++)
+                            {
+                                // g.FillRectangle(high_brush, (int)(i * spacing - spacing * 0.75), H - 4 - 3, 1, 3);
+                            }
 
                             for (int i = 1; i < 4; i++)
                             {
-                                g.FillRectangle(high_brush, (int)((double)W * 0.75 + i * spacing - spacing * 0.5), (H / 2) - 4, 1, 3);
-                                g.FillRectangle(high_brush, (int)((double)W * 0.75 + i * spacing - spacing), (H / 2) - 7, 2, 6);
+                                // spacing = (W * 0.55 - 2.0) / 2.0;
+                                // spacing = (W * 0.33 - 2.0) / 3.0;
+                                spacing = (W * 0.25 - 6.0) / 2.0;
+                                if (bDrawMarkers)
+                                {
+                                    g.FillRectangle(high_brush, (int)((double)W * 0.75 + i * spacing - spacing * 0.5), (H / 2) - 4, 1, 3);
+                                    g.FillRectangle(high_brush, (int)((double)W * 0.75 + i * spacing - spacing), (H / 2) - 7, 2, 6);
+                                }
+                                // g.FillRectangle(high_brush, (int)((double)W * 0.55 + i * spacing - spacing * 0.5), H - 4 - 6, 2, 6);
                                 string s = swrx_hi_list[i - 1];
+                                //Font f = new Font("Arial", 7.0f, FontStyle.Bold);
                                 SizeF size = g.MeasureString("0", font7, 1, StringFormat.GenericTypographic);
                                 double string_width = size.Width - 2.0;
                                 string_height = size.Height - 2.0;
+
+                                //g.TextRenderingHint = TextRenderingHint.AntiAlias;
+                                //g.SmoothingMode = SmoothingMode.AntiAlias;
+                                //g.DrawString(s, font7, high_brush, (int)(i * spacing - string_width * s.Length + 2.0 - 2 * (int)(i / 2) + 3 * (int)(i / 4)), (int)(H - 4 - 8 - string_height));
+                                // g.DrawString(s, font7, high_brush, (int)(W * 0.75 + i * spacing - spacing - (int)2.5 * string_width), (int)(H - 4 - 8 - string_height));
                                 g.DrawString(s, font7, high_brush, (int)(W * 0.75 + i * spacing - spacing - (int)1.0 * string_width), (int)((H / 2) - 9 - string_height));
+                                //g.SmoothingMode = SmoothingMode.None;
                             }
+
+
+                            if (current_swrmeter_data <= 3.0) // low area
+                            {
+                                spacing = (W * 0.75) / 3.0;
+
+                                if (current_swrmeter_data <= 1.5)
+                                    pixel_x_swr = (int)((current_swrmeter_data - 1.0) / 0.5 * spacing);
+                                else if (current_swrmeter_data <= 2.0)
+                                    pixel_x_swr = (int)(spacing + (current_swrmeter_data - 1.5) / 0.5 * spacing);
+                                else //if (current_swrmeter_data <= 3.0)
+                                    pixel_x_swr = (int)(2 * spacing + (current_swrmeter_data - 2.0) / 1.0 * spacing);
+                                // else //  current_swrmeter_data <= 4.0
+                                //  pixel_x_swr = (int)(3 * spacing + (current_swrmeter_data - 3.0) / 1.0 * spacing);
+                            }
+                            else
+                            {
+                                spacing = (W * 0.25 - 6.0) / 2.0;
+                                if (current_swrmeter_data <= 4.0)
+                                    pixel_x_swr = (int)(W * 0.75 + (current_swrmeter_data - 3.0) / 1.0 * spacing);
+                                else if (current_swrmeter_data <= 5.0)
+                                    pixel_x_swr = (int)(W * 0.75 + spacing + (current_swrmeter_data - 4.0) / 1.0 * spacing);
+                                else
+                                    pixel_x_swr = (int)(W * 0.75 + 2 * spacing + (current_swrmeter_data - 5.0) / 4.0 * spacing);
+                            }
+                            if (double.IsInfinity(current_swrmeter_data)) pixel_x_swr = W - 2;
+
 
                             // PWR
                             spacing = (W * 0.75 - 2.0) / 4.0;
                             string[] list = { "1", "5", "10", "15" };
                             for (int i = 1; i < 5; i++)
                             {
+                                if (bDrawMarkers)
+                                {
+                                    g.FillRectangle(low_brush, (int)(i * spacing - spacing * 0.5), (H / 2) + 3, 1, 3);
+                                    g.FillRectangle(low_brush, (int)(i * spacing), (H / 2) + 3, 2, 6);
+                                }
                                 string s = list[i - 1];
+                                //Font f = new Font("Arial", 7.0f, FontStyle.Bold);
                                 SizeF size = g.MeasureString("0", font7, 1, StringFormat.GenericTypographic);
                                 double string_width = size.Width - 2.0;
                                 string_height = size.Height - 2.0;
+
+                                //g.TextRenderingHint = TextRenderingHint.AntiAlias;
+                                //g.SmoothingMode = SmoothingMode.AntiAlias;
                                 g.DrawString(s, font7, low_brush, (int)(i * spacing - string_width * s.Length + (int)(i / 3) + (int)(i / 4)), (int)(H - 1 - string_height));
+                                //g.SmoothingMode = SmoothingMode.None;
                             }
                             spacing = (W * 0.25 - 2.0 - 10.0) / 1.0;
                             for (int i = 1; i < 2; i++)
                             {
+                                if (bDrawMarkers)
+                                {
+                                    g.FillRectangle(high_brush, (int)((double)W * 0.75 + i * spacing - spacing * 0.5), (H / 2) + 3, 1, 3);
+                                    g.FillRectangle(high_brush, (int)((double)W * 0.75 + i * spacing), (H / 2) + 3, 2, 6);
+                                }
+                                //Font f = new Font("Arial", 7.0f, FontStyle.Bold);
                                 SizeF size = g.MeasureString("0", font7, 2, StringFormat.GenericTypographic);
                                 double string_width = size.Width - 2.0;
 
                                 g.TextRenderingHint = TextRenderingHint.SystemDefault;
                                 g.DrawString("25+", font7, high_brush, (int)(W * 0.75 + i * spacing - (int)3.5 * string_width), (int)(H - 1 - string_height));
                             }
+
+                            if (num <= 15.0) // low area
+                            {
+                                spacing = (W * 0.75 - 2.0) / 4.0;
+                                if (num <= 1.0)
+                                    pixel_x = (int)(num / 1.0 * (int)spacing);
+                                else if (num <= 5.0)
+                                    pixel_x = (int)(spacing + (num - 1.0) / 4.0 * spacing);
+                                else if (num <= 10.0)
+                                    pixel_x = (int)(2 * spacing + (num - 5.0) / 5.0 * spacing);
+                                else
+                                    pixel_x = (int)(3 * spacing + (num - 10.0) / 5.0 * spacing);
+                            }
+                            else
+                            {
+                                spacing = (W * 0.25 - 2.0 - 10.0) / 1.0;
+                                if (num <= 25.0)
+                                    pixel_x = (int)(W * 0.75 + (num - 15.0) / 10.0 * spacing);
+                                else
+                                    pixel_x = (int)(W * 0.75 + spacing + (num - 25.0) / 5.0 * spacing);
+                            }
                         }
 
                         else if (apollopresent)
                         {
-                            // SWR stuff first
-                            spacing = (W * 0.5) / 2.0;
+                            if (bDrawMarkers)
+                            {
+                                g.FillRectangle(high_brush, (int)(W * 0.75), (H / 2) - 1, (int)(W * 0.25) - 4, 2);
+                                g.FillRectangle(low_brush, 0, (H / 2) - 1, (int)(W * 0.75), 4); // horizontal white line
+                                g.FillRectangle(high_brush, (int)(W * 0.75), (H / 2) + 1, (int)(W * 0.25) - 9, 2); //horizontal red line
+                                                                                                                   // SWR stuff first
+                            }
+                            spacing = (W * 0.5) / 10.0;
                             string_height = 0;
                             string[] swrx_list = { "1.5", "2" };
+                            for (int i = 1; i < 10; i++)
+                            {
+                                if (bDrawMarkers)
+                                {
+                                    g.FillRectangle(low_brush, (int)(i * spacing), (H / 2) - 4, 1, 3);
+                                }
+                            }
                             for (int i = 1; i < 3; i++)
                             {
-                                g.FillRectangle(low_brush, (int)(i * spacing), (H / 2) - 7, 2, 6);
-
+                                spacing = (W * 0.5) / 2.0;
+                                if (bDrawMarkers)
+                                {
+                                    g.FillRectangle(low_brush, (int)(i * spacing), (H / 2) - 7, 2, 6);
+                                }
                                 string s = swrx_list[i - 1];
+                                //Font f = new Font("Arial", 7.0f, FontStyle.Bold);
                                 SizeF size = g.MeasureString("0", font7, 1, StringFormat.GenericTypographic);
                                 double string_width = size.Width - 2.0;
                                 string_height = size.Height - 2.0;
 
+                                //g.TextRenderingHint = TextRenderingHint.AntiAlias;
+                                //g.SmoothingMode = SmoothingMode.AntiAlias;
                                 g.DrawString(s, font7, low_brush, (int)(i * spacing - string_width * s.Length + 2.0 - 1 * (int)(i / 2) + 3 * (int)(i / 4)), (int)((H / 2) - 9 - string_height));
+                                //g.SmoothingMode = SmoothingMode.None;
                             }
-                            g.FillRectangle(low_brush, (int)(W * 0.625), (H / 2) - 4, 1, 3); // small tic 2.5:1
-
+                            if (bDrawMarkers)
+                            {
+                                g.FillRectangle(low_brush, (int)(W * 0.625), (H / 2) - 4, 1, 3); // small tic 2.5:1
+                            }
                             string[] swrx_hi_list = { "3", "4", "5" };
 
-                            spacing = (W * 0.25 - 6.0) / 2.0;
+                            spacing = (W * 0.75 - 2.0 - 9.0) / 2.0;
+                            for (int i = 1; i < 2; i++)
+                            {
+                                // g.FillRectangle(high_brush, (int)(i * spacing - spacing * 0.75), H - 4 - 3, 1, 3);
+                            }
 
                             for (int i = 1; i < 4; i++)
                             {
+                                // spacing = (W * 0.55 - 2.0) / 2.0;
+                                // spacing = (W * 0.33 - 2.0) / 3.0;
+                                spacing = (W * 0.25 - 6.0) / 2.0;
+                                if (bDrawMarkers)
+                                {
+                                    g.FillRectangle(high_brush, (int)((double)W * 0.75 + i * spacing - spacing * 0.5), (H / 2) - 4, 1, 3);
+                                    g.FillRectangle(high_brush, (int)((double)W * 0.75 + i * spacing - spacing), (H / 2) - 7, 2, 6);
+                                }
+                                // g.FillRectangle(high_brush, (int)((double)W * 0.55 + i * spacing - spacing * 0.5), H - 4 - 6, 2, 6);
                                 string s = swrx_hi_list[i - 1];
+                                //Font f = new Font("Arial", 7.0f, FontStyle.Bold);
                                 SizeF size = g.MeasureString("0", font7, 1, StringFormat.GenericTypographic);
                                 double string_width = size.Width - 2.0;
                                 string_height = size.Height - 2.0;
+
+                                //g.TextRenderingHint = TextRenderingHint.AntiAlias;
+                                //g.SmoothingMode = SmoothingMode.AntiAlias;
+                                //g.DrawString(s, font7, high_brush, (int)(i * spacing - string_width * s.Length + 2.0 - 2 * (int)(i / 2) + 3 * (int)(i / 4)), (int)(H - 4 - 8 - string_height));
+                                // g.DrawString(s, font7, high_brush, (int)(W * 0.75 + i * spacing - spacing - (int)2.5 * string_width), (int)(H - 4 - 8 - string_height));
                                 g.DrawString(s, font7, high_brush, (int)(W * 0.75 + i * spacing - spacing - (int)1.0 * string_width), (int)((H / 2) - 9 - string_height));
+                                //g.SmoothingMode = SmoothingMode.None;
                             }
+
+
+                            if (current_swrmeter_data <= 3.0) // low area
+                            {
+                                spacing = (W * 0.75) / 3.0;
+
+                                if (current_swrmeter_data <= 1.5)
+                                    pixel_x_swr = (int)((current_swrmeter_data - 1.0) / 0.5 * spacing);
+                                else if (current_swrmeter_data <= 2.0)
+                                    pixel_x_swr = (int)(spacing + (current_swrmeter_data - 1.5) / 0.5 * spacing);
+                                else //if (current_swrmeter_data <= 3.0)
+                                    pixel_x_swr = (int)(2 * spacing + (current_swrmeter_data - 2.0) / 1.0 * spacing);
+                                // else //  current_swrmeter_data <= 4.0
+                                //  pixel_x_swr = (int)(3 * spacing + (current_swrmeter_data - 3.0) / 1.0 * spacing);
+                            }
+                            else
+                            {
+                                spacing = (W * 0.25 - 6.0) / 2.0;
+                                if (current_swrmeter_data <= 4.0)
+                                    pixel_x_swr = (int)(W * 0.75 + (current_swrmeter_data - 3.0) / 1.0 * spacing);
+                                else if (current_swrmeter_data <= 5.0)
+                                    pixel_x_swr = (int)(W * 0.75 + spacing + (current_swrmeter_data - 4.0) / 1.0 * spacing);
+                                else
+                                    pixel_x_swr = (int)(W * 0.75 + 2 * spacing + (current_swrmeter_data - 5.0) / 4.0 * spacing);
+                            }
+                            if (double.IsInfinity(current_swrmeter_data)) pixel_x_swr = W - 2;
 
                             // PWR
                             spacing = (W * 0.75 - 2.0) / 4.0;
                             string[] list = { "5", "10", "20", "30" };
                             for (int i = 1; i < 5; i++)
                             {
+                                if (bDrawMarkers)
+                                {
+                                    g.FillRectangle(low_brush, (int)(i * spacing - spacing * 0.5), (H / 2) + 3, 1, 3);
+                                    g.FillRectangle(low_brush, (int)(i * spacing), (H / 2) + 3, 2, 6);
+                                }
                                 string s = list[i - 1];
+                                //Font f = new Font("Arial", 7.0f, FontStyle.Bold);
                                 SizeF size = g.MeasureString("0", font7, 1, StringFormat.GenericTypographic);
                                 double string_width = size.Width - 2.0;
                                 string_height = size.Height - 2.0;
+
+                                //g.TextRenderingHint = TextRenderingHint.AntiAlias;
+                                //g.SmoothingMode = SmoothingMode.AntiAlias;
                                 g.DrawString(s, font7, low_brush, (int)(i * spacing - string_width * s.Length + (int)(i / 3) + (int)(i / 4)), (int)(H - 1 - string_height));
+                                //g.SmoothingMode = SmoothingMode.None;
                             }
                             spacing = (W * 0.25 - 2.0 - 10.0) / 1.0;
                             for (int i = 1; i < 2; i++)
                             {
+                                if (bDrawMarkers)
+                                {
+                                    g.FillRectangle(high_brush, (int)((double)W * 0.75 + i * spacing - spacing * 0.5), (H / 2) + 3, 1, 3);
+                                    g.FillRectangle(high_brush, (int)((double)W * 0.75 + i * spacing), (H / 2) + 3, 2, 6);
+                                }
+                                //Font f = new Font("Arial", 7.0f, FontStyle.Bold);
                                 SizeF size = g.MeasureString("0", font7, 2, StringFormat.GenericTypographic);
                                 double string_width = size.Width - 2.0;
 
                                 g.TextRenderingHint = TextRenderingHint.SystemDefault;
                                 g.DrawString("50+", font7, high_brush, (int)(W * 0.75 + i * spacing - (int)3.5 * string_width), (int)(H - 1 - string_height));
                             }
-                        }*/
+
+                            if (num <= 30.0) // low area
+                            {
+                                spacing = (W * 0.75 - 2.0) / 4.0;
+                                if (num <= 5.0)
+                                    pixel_x = (int)(num / 5.0 * (int)spacing);
+                                else if (num <= 10.0)
+                                    pixel_x = (int)(spacing + (num - 5.0) / 5.0 * spacing);
+                                else if (num <= 20.0)
+                                    pixel_x = (int)(2 * spacing + (num - 10.0) / 10.0 * spacing);
+                                else // <= 30
+                                    pixel_x = (int)(3 * spacing + (num - 20.0) / 10.0 * spacing);
+                            }
+                            else
+                            {
+                                spacing = (W * 0.25 - 2.0 - 10.0) / 1.0;
+                                if (num <= 50.0)
+                                    pixel_x = (int)(W * 0.75 + (num - 30.0) / 20.0 * spacing);
+                                else
+                                    pixel_x = (int)(W * 0.75 + spacing + (num - 50.0) / 25.0 * spacing);
+                            }
+                        }
                         break;
                     case MeterTXMode.SWR:
-                        spacing = (W * 0.5) / 2.0;
+                        if (bDrawMarkers)
+                        {
+                            g.FillRectangle(low_brush, 0, H - 4, (int)(W * 0.75), 2);
+                            g.FillRectangle(high_brush, (int)(W * 0.75), H - 4, (int)(W * 0.25) - 4, 2);
+                        }
+                        // spacing = (W * 0.75 - 2.0) / 4.0;
+                        spacing = (W * 0.5) / 10.0;
                         string_height = 0;
+                        // string[] swr_list = { "1.5", "2", "3", "4", "5" };
                         string[] swr_list = { "1.5", "2" };
+                        for (int i = 1; i < 10; i++)
+                        {
+                            if (bDrawMarkers)
+                            {
+                                g.FillRectangle(low_brush, (int)(i * spacing), H - 4 - 3, 1, 3);
+                            }
+                        }
                         for (int i = 1; i < 3; i++)
                         {
-
+                            spacing = (W * 0.5) / 2.0;
+                            if (bDrawMarkers)
+                            {
+                                g.FillRectangle(low_brush, (int)(i * spacing), H - 4 - 6, 2, 6);
+                            }
                             string s = swr_list[i - 1];
+                            //Font f = new Font("Arial", 7.0f, FontStyle.Bold);
                             SizeF size = g.MeasureString("0", font7, 1, StringFormat.GenericTypographic);
                             double string_width = size.Width - 2.0;
                             string_height = size.Height - 2.0;
 
-                            g.DrawString(s, font7, low_brush, (int)(i * spacing - string_width * s.Length + 2.0 - 1 * (int)(i / 2) + 3 * (int)(i / 4)), (int)(H - 2 - string_height));
+                            //g.TextRenderingHint = TextRenderingHint.AntiAlias;
+                            //g.SmoothingMode = SmoothingMode.AntiAlias;
+                            g.DrawString(s, font7, low_brush, (int)(i * spacing - string_width * s.Length + 2.0 - 1 * (int)(i / 2) + 3 * (int)(i / 4)), (int)(H - nStringOffsetY - string_height));
+                            //g.SmoothingMode = SmoothingMode.None;
                         }
-
+                        if (bDrawMarkers)
+                        {
+                            g.FillRectangle(low_brush, (int)(W * 0.625), H - 4 - 3, 1, 3); // small tic 2.5:1
+                        }
                         string[] swr_hi_list = { "3", "4", "5" };
 
-                        spacing = (W * 0.25 - 6.0) / 2.0;
+                        spacing = (W * 0.75 - 2.0 - 9.0) / 2.0;
+                        for (int i = 1; i < 2; i++)
+                        {
+                            // g.FillRectangle(high_brush, (int)(i * spacing - spacing * 0.75), H - 4 - 3, 1, 3);
+                        }
+
                         for (int i = 1; i < 4; i++)
                         {
+                            // spacing = (W * 0.55 - 2.0) / 2.0;
+                            // spacing = (W * 0.33 - 2.0) / 3.0;
+                            spacing = (W * 0.25 - 6.0) / 2.0;
+                            if (bDrawMarkers)
+                            {
+                                g.FillRectangle(high_brush, (int)((double)W * 0.75 + i * spacing - spacing * 0.5), H - 4 - 3, 1, 3);
+                                g.FillRectangle(high_brush, (int)((double)W * 0.75 + i * spacing - spacing), H - 4 - 6, 2, 6);
+                            }
+                            // g.FillRectangle(high_brush, (int)((double)W * 0.55 + i * spacing - spacing * 0.5), H - 4 - 6, 2, 6);
                             string s = swr_hi_list[i - 1];
+                            //Font f = new Font("Arial", 7.0f, FontStyle.Bold);
                             SizeF size = g.MeasureString("0", font7, 1, StringFormat.GenericTypographic);
                             double string_width = size.Width - 2.0;
                             string_height = size.Height - 2.0;
-                            g.DrawString(s, font7, high_brush, (int)(W * 0.75 + i * spacing - spacing - (int)1.0 * string_width), (int)(H - 2 - string_height));
+
+                            //g.TextRenderingHint = TextRenderingHint.AntiAlias;
+                            //g.SmoothingMode = SmoothingMode.AntiAlias;
+                            //g.DrawString(s, font7, high_brush, (int)(i * spacing - string_width * s.Length + 2.0 - 2 * (int)(i / 2) + 3 * (int)(i / 4)), (int)(H - 4 - 8 - string_height));
+                            // g.DrawString(s, font7, high_brush, (int)(W * 0.75 + i * spacing - spacing - (int)2.5 * string_width), (int)(H - 4 - 8 - string_height));
+                            g.DrawString(s, font7, high_brush, (int)(W * 0.75 + i * spacing - spacing - (int)1.0 * string_width), (int)(H - nStringOffsetY - string_height));
+                            //g.SmoothingMode = SmoothingMode.None;
                         }
+
+
+                        /*  spacing = (W * 0.25 - 2.0 - 9.0) / 1.0;
+                          for (int i = 1; i < 2; i++)
+                          {
+                            //  g.FillRectangle(high_brush, (int)((double)W * 0.75 + i * spacing - spacing * 0.5), H - 4 - 3, 1, 3);
+                            //  g.FillRectangle(high_brush, (int)((double)W * 0.75 + i * spacing), H - 4 - 6, 2, 6);
+
+                              //Font f = new Font("Arial", 7.0f, FontStyle.Bold);
+                              SizeF size = g.MeasureString("0", font7, 3, StringFormat.GenericTypographic);
+                              double string_width = size.Width - 2.0;
+
+                              //g.TextRenderingHint = TextRenderingHint.SystemDefault;
+                            //  g.DrawString("5+", font7, high_brush, (int)(W * 0.75 + i * spacing - (int)2.5 * string_width), (int)(H - 4 - 8 - string_height));
+                          } */
+
+                        if (num <= 3.0) // low area
+                        {
+                            spacing = (W * 0.75) / 3.0;
+
+                            if (num <= 1.5)
+                                pixel_x = (int)((num - 1.0) / 0.5 * spacing);
+                            else if (num <= 2.0)
+                                pixel_x = (int)(spacing + (num - 1.5) / 0.5 * spacing);
+                            else //if (num <= 3.0)
+                                pixel_x = (int)(2 * spacing + (num - 2.0) / 1.0 * spacing);
+                            // else //  num <= 4.0
+                            //  pixel_x = (int)(3 * spacing + (num - 3.0) / 1.0 * spacing);
+                        }
+                        else
+                        {
+                            spacing = (W * 0.25 - 6.0) / 2.0;
+                            if (num <= 4.0)
+                                pixel_x = (int)(W * 0.75 + (num - 3.0) / 1.0 * spacing);
+                            else if (num <= 5.0)
+                                pixel_x = (int)(W * 0.75 + spacing + (num - 4.0) / 1.0 * spacing);
+                            else
+                                pixel_x = (int)(W * 0.75 + 2 * spacing + (num - 5.0) / 4.0 * spacing);
+                        }
+                        if (double.IsInfinity(num)) pixel_x = W - 2;
                         break;
+                    // spacing = (W * 0.25 - 2.0 - 10.0) / 1.0;
+                    // if (num <= 25.0)
+                    //    pixel_x = (int)(W * 0.75 + (num - 15.0) / 10.0 * spacing);
+                    // else
+                    //   pixel_x = (int)(W * 0.75 + spacing + (num - 25.0) / 5.0 * spacing);
+
+                    /*
+                        g.FillRectangle(low_brush, 0, H - 4, (int)(W * 0.75), 2);
+                        g.FillRectangle(high_brush, (int)(W * 0.75), H - 4, (int)(W * 0.25) - 9, 2);
+                        spacing = (W * 0.75 - 2.0) / 4.0;
+                        string_height = 0;
+                        string[] swr_list = { "1.5", "2", "5", "10", "20" };
+                        for (int i = 1; i < 5; i++)
+                        {
+                            g.FillRectangle(low_brush, (int)(i * spacing - spacing * 0.5), H - 4 - 3, 1, 3);
+                            g.FillRectangle(low_brush, (int)(i * spacing), H - 4 - 6, 2, 6);
+
+                            string s = swr_list[i - 1];
+                            //Font f = new Font("Arial", 7.0f, FontStyle.Bold);
+                            SizeF size = g.MeasureString("0", font7, 1, StringFormat.GenericTypographic);
+                            double string_width = size.Width - 2.0;
+                            string_height = size.Height - 2.0;
+
+                            //g.TextRenderingHint = TextRenderingHint.AntiAlias;
+                            //g.SmoothingMode = SmoothingMode.AntiAlias;
+                            g.DrawString(s, font7, low_brush, (int)(i * spacing - string_width * s.Length + 2.0 - 2 * (int)(i / 2) + 3 * (int)(i / 4)), (int)(H - 4 - 8 - string_height));
+                            //g.SmoothingMode = SmoothingMode.None;
+                        }
+                        spacing = (W * 0.25 - 2.0 - 9.0) / 1.0;
+                        for (int i = 1; i < 2; i++)
+                        {
+                            g.FillRectangle(high_brush, (int)((double)W * 0.75 + i * spacing - spacing * 0.5), H - 4 - 3, 1, 3);
+                            g.FillRectangle(high_brush, (int)((double)W * 0.75 + i * spacing), H - 4 - 6, 2, 6);
+
+                            //Font f = new Font("Arial", 7.0f, FontStyle.Bold);
+                            SizeF size = g.MeasureString("0", font7, 3, StringFormat.GenericTypographic);
+                            double string_width = size.Width - 2.0;
+
+                            //g.TextRenderingHint = TextRenderingHint.SystemDefault;
+                            g.DrawString("20+", font7, high_brush, (int)(W * 0.75 + i * spacing - (int)2.5 * string_width), (int)(H - 4 - 8 - string_height));
+                        }
+
+                        if (num < 10.0) // low area
+                        {
+                            spacing = (W * 0.75 - 2.0) / 4.0;
+                            if (num <= 1.5)
+                                pixel_x = (int)((num - 1.0) / 0.5 * spacing);
+                            else if (num <= 2.0)
+                                pixel_x = (int)(spacing + (num - 1.5) / 0.5 * spacing);
+                            else if (num <= 5.0)
+                                pixel_x = (int)(2 * spacing + (num - 2.0) / 3.0 * spacing);
+                            else
+                                pixel_x = (int)(3 * spacing + (num - 5.0) / 5.0 * spacing);
+                        }
+                        else
+                        {
+                            spacing = (W * 0.25 - 2.0 - 9.0) / 1.0;
+                            pixel_x = (int)(W * 0.75 + (num - 10.0) / 10.0 * spacing);
+                        }
+                        if (double.IsInfinity(num)) pixel_x = W - 2;
+                        break;
+
+                     */
                     case MeterTXMode.ALC_G:
                     case MeterTXMode.LVL_G:
                     case MeterTXMode.CFC_G:
+                        if (bDrawMarkers)
+                        {
+                            g.FillRectangle(low_brush, 0, H - 4, (int)(W * 0.75), 2);
+                            g.FillRectangle(high_brush, (int)(W * 0.75), H - 4, (int)(W * 0.25) - 9, 2);
+                        }
                         spacing = (W * 0.75 - 2.0) / 4.0;
                         string_height = 0;
                         string[] gain_list = { "5", "10", "15", "20", "25" };
                         for (int i = 1; i < 5; i++)
                         {
+                            if (bDrawMarkers)
+                            {
+                                g.FillRectangle(low_brush, (int)(i * spacing - spacing * 0.5), H - 4 - 3, 1, 3);
+                                g.FillRectangle(low_brush, (int)(i * spacing), H - 4 - 6, 2, 6);
+                            }
+
                             string s = gain_list[i - 1];
+                            //Font f = new Font("Arial", 7.0f, FontStyle.Bold);
                             SizeF size = g.MeasureString("0", font7, 1, StringFormat.GenericTypographic);
                             double string_width = size.Width - 2.0;
                             string_height = size.Height - 2.0;
-                            g.DrawString(s, font7, low_brush, (int)(i * spacing - string_width * s.Length + (int)(i / 3)), (int)(H - 2 - string_height));
+
+                            //g.TextRenderingHint = TextRenderingHint.AntiAlias;
+                            //g.SmoothingMode = SmoothingMode.AntiAlias;
+                            g.DrawString(s, font7, low_brush, (int)(i * spacing - string_width * s.Length + (int)(i / 3)), (int)(H - nStringOffsetY - string_height));
+                            //g.SmoothingMode = SmoothingMode.None;
                         }
                         spacing = (W * 0.25 - 2.0 - 9.0) / 1.0;
                         for (int i = 1; i < 2; i++)
                         {
+                            if (bDrawMarkers)
+                            {
+                                g.FillRectangle(high_brush, (int)((double)W * 0.75 + i * spacing - spacing * 0.5), H - 4 - 3, 1, 3);
+                                g.FillRectangle(high_brush, (int)((double)W * 0.75 + i * spacing), H - 4 - 6, 2, 6);
+                            }
+                            //Font f = new Font("Arial", 7.0f, FontStyle.Bold);
                             SizeF size = g.MeasureString("0", font7, 3, StringFormat.GenericTypographic);
                             double string_width = size.Width - 2.0;
-                            g.DrawString("25+", font7, high_brush, (int)(W * 0.75 + i * spacing - (int)2.5 * string_width), (int)(H - 2 - string_height));
+
+                            //g.TextRenderingHint = TextRenderingHint.SystemDefault;
+                            g.DrawString("25+", font7, high_brush, (int)(W * 0.75 + i * spacing - (int)2.5 * string_width), (int)(H - nStringOffsetY - string_height));
                         }
 
+
+                        spacing = (W * 0.75 - 2.0) / 4.0;
+                        pixel_x = (int)(num / 5.0 * spacing);
                         break;
                     case MeterTXMode.OFF:
                         break;
@@ -31791,602 +33455,779 @@ namespace Thetis
             }
         }
 
-        private double handleOriginalMeter(int RXnumber, Graphics g, int H, int W)
+        //private double handleOriginalMeter(int RXnumber, Graphics g, int H, int W)
+        //{
+        //    // handle the ORIGINAL meter
+        //    // pass in 1 or 2 as RXnumber
+        //    // graphics object, and height/width of pic control that takes the output
+        //    // returns the current meter data
+        //    double num  = 0;
+        //    int pixel_x = 0;
+        //    bool bAbove = false;
+        //    bool bReady = false;
+        //    MeterRXMode metRXMode = MeterRXMode.LAST; // set to something impossible
+        //    MeterTXMode metTXMode = MeterTXMode.LAST;
+
+        //    switch (RXnumber)
+        //    {
+        //        case 1:
+        //            bReady = meter_data_ready;
+        //            if (bReady)
+        //            {
+        //                current_meter_data = new_meter_data;
+        //                meter_data_ready = false;
+        //            }
+        //            num = current_meter_data;
+        //            metRXMode = current_meter_rx_mode;
+        //            metTXMode = current_meter_tx_mode;
+        //            bAbove = rx1_above30;
+        //            break;
+        //        case 2:
+        //            bReady = rx2_meter_data_ready;
+        //            {
+        //                rx2_meter_current_data = rx2_meter_new_data;
+        //                rx2_meter_data_ready = false;
+        //            }
+        //            num = rx2_meter_current_data;
+        //            metRXMode = rx2_meter_mode;
+        //            bAbove = rx2_above30;
+        //            break;
+        //    }
+
+        //    if (!mox || RXnumber==2)  // will not run the else for rx2 (which cant tx)
+        //    {
+        //        switch (metRXMode)
+        //        {
+        //            case MeterRXMode.SIGNAL_STRENGTH:
+        //            case MeterRXMode.SIGNAL_AVERAGE:
+        //                switch ((int)g.DpiX)
+        //                {
+        //                    case 96:
+        //                        double s;
+        //                        if (bAbove)
+        //                        {
+        //                            if (collapsedDisplay)
+        //                            {
+        //                                s = (num + 147) / 6;
+        //                                if (s <= 9.0F)
+        //                                    pixel_x = (int)((s * 15) + 2);
+        //                                else
+        //                                {
+        //                                    double over_s9 = num + 93;
+        //                                    pixel_x = 138 + (int)(over_s9 * 2.10);
+        //                                }
+        //                            }
+        //                            else
+        //                            {
+        //                                s = (num + 147) / 6;
+        //                                if (s <= 9.0F)
+        //                                    pixel_x = (int)((s * 7.5) + 2);
+        //                                else
+        //                                {
+        //                                    double over_s9 = num + 93;
+        //                                    pixel_x = 69 + (int)(over_s9 * 1.05);
+        //                                }
+        //                            }
+        //                        }
+        //                        else
+        //                        {
+        //                            if (collapsedDisplay)
+        //                            {
+        //                                s = (num + 127) / 6;
+        //                                if (s <= 9.0F)
+        //                                    pixel_x = (int)((s * 15) + 2);
+        //                                else
+        //                                {
+        //                                    double over_s9 = num + 73;
+        //                                    pixel_x = 138 + (int)(over_s9 * 2.10);
+        //                                }
+        //                            }
+        //                            else
+        //                            {
+        //                                s = (num + 127) / 6;
+        //                                if (s <= 9.0F)
+        //                                    pixel_x = (int)((s * 7.5) + 2);
+        //                                else
+        //                                {
+        //                                    double over_s9 = num + 73;
+        //                                    pixel_x = 69 + (int)(over_s9 * 1.05);
+        //                                }
+        //                            }
+        //                        }
+        //                        break;
+        //                    case 120:
+        //                        if (num <= -97.0f)
+        //                            pixel_x = (int)(0 + (num + 100.0) / 3.0 * 10);
+        //                        else if (num <= -91.0f)
+        //                            pixel_x = (int)(10 + (num + 97.0) / 6.0 * 17);
+        //                        else if (num <= -85.0f)
+        //                            pixel_x = (int)(27 + (num + 91.0) / 6.0 * 16);
+        //                        else if (num <= -79.0f)
+        //                            pixel_x = (int)(43 + (num + 85.0) / 6.0 * 17);
+        //                        else if (num <= -73.0f)
+        //                            pixel_x = (int)(60 + (num + 79.0) / 6.0 * 16);
+        //                        else if (num <= -53.0f)
+        //                            pixel_x = (int)(76 + (num + 73.0) / 20.0 * 24);
+        //                        else if (num <= -33.0f)
+        //                            pixel_x = (int)(100 + (num + 53.0) / 20.0 * 24);
+        //                        else if (num <= -13.0f)
+        //                            pixel_x = (int)(124 + (num + 33.0) / 20.0 * 24);
+        //                        else
+        //                            pixel_x = (int)(148 + (num + 13.0) / 20.0 * 19);
+        //                        break;
+        //                }
+        //                break;
+        //            case MeterRXMode.ADC_L:
+        //            case MeterRXMode.ADC_R:
+        //                switch ((int)g.DpiX)
+        //                {
+        //                    case 96:
+        //                        if (collapsedDisplay)
+        //                            pixel_x = (int)(((num + 100) * 2.4) + 24);
+        //                        else pixel_x = (int)(((num + 100) * 1.2) + 12);
+        //                        break;
+        //                    case 120:
+        //                        if (num <= -100.0f)
+        //                            pixel_x = (int)(0 + (num + 110.0) / 10.0 * 14);
+        //                        else if (num <= -80.0f)
+        //                            pixel_x = (int)(14 + (num + 100.0) / 20.0 * 27);
+        //                        else if (num <= -60.0f)
+        //                            pixel_x = (int)(41 + (num + 80.0) / 20.0 * 28);
+        //                        else if (num <= -40.0f)
+        //                            pixel_x = (int)(69 + (num + 60.0) / 20.0 * 28);
+        //                        else if (num <= -20.0f)
+        //                            pixel_x = (int)(97 + (num + 40.0) / 20.0 * 27);
+        //                        else if (num <= 0.0f)
+        //                            pixel_x = (int)(124 + (num + 20.0) / 20.0 * 24);
+        //                        else
+        //                            pixel_x = (int)(148 + (num - 0.0) / 10.0 * 19);
+        //                        break;
+        //                }
+        //                break;
+        //            case MeterRXMode.OFF:
+        //                break;
+        //        }
+        //    }
+        //    else
+        //    {
+        //        MeterTXMode mode = current_meter_tx_mode;
+        //        if (chkTUN.Checked) mode = tune_meter_tx_mode;
+        //        switch (mode)
+        //        {
+        //            case MeterTXMode.MIC:
+        //            case MeterTXMode.EQ:
+        //            case MeterTXMode.LEVELER:
+        //            case MeterTXMode.CFC_PK:
+        //            case MeterTXMode.COMP:
+        //            case MeterTXMode.ALC:
+        //                //num += 3.0;  // number no longer has fudge factor added in the wdsp, must be remove
+        //                switch ((int)g.DpiX)
+        //                {
+        //                    case 96:
+        //                        if (collapsedDisplay)
+        //                        {
+        //                            if (num <= -20.0f)
+        //                                pixel_x = (int)(0 + (num + 25.0) / 5.0 * 18);
+        //                            else if (num <= -10.0f)
+        //                                pixel_x = (int)(18 + (num + 20.0) / 10.0 * 54);
+        //                            else if (num <= -5.0f)
+        //                                pixel_x = (int)(72 + (num + 10.0) / 5.0 * 54);
+        //                            else if (num <= 0.0f)
+        //                                pixel_x = (int)(126 + (num + 5.0) / 5.0 * 48);
+        //                            else if (num <= 4.0f)
+        //                                pixel_x = (int)(174 + (num - 0.0) / 4.0 * 30);
+        //                            else if (num <= 8.0f)
+        //                                pixel_x = (int)(204 + (num - 4.0) / 4.0 * 30);
+        //                            else if (num <= 12.0f)
+        //                                pixel_x = (int)(234 + (num - 8.0) / 4.0 * 30);
+        //                            else
+        //                                pixel_x = (int)(264 + (num - 12.0) / 0.5 * 16);
+        //                        }
+        //                        else
+        //                        {
+        //                            if (num <= -20.0f)
+        //                                pixel_x = (int)(0 + (num + 25.0) / 5.0 * 9);
+        //                            else if (num <= -10.0f)
+        //                                pixel_x = (int)(9 + (num + 20.0) / 10.0 * 27);
+        //                            else if (num <= -5.0f)
+        //                                pixel_x = (int)(36 + (num + 10.0) / 5.0 * 27);
+        //                            else if (num <= 0.0f)
+        //                                pixel_x = (int)(63 + (num + 5.0) / 5.0 * 24);
+        //                            else if (num <= 4.0f)
+        //                                pixel_x = (int)(87 + (num - 0.0) / 4.0 * 15);
+        //                            else if (num <= 8.0f)
+        //                                pixel_x = (int)(102 + (num - 4.0) / 4.0 * 15);
+        //                            else if (num <= 12.0f)
+        //                                pixel_x = (int)(117 + (num - 8.0) / 4.0 * 15);
+        //                            else
+        //                                pixel_x = (int)(132 + (num - 12.0) / 0.5 * 8);
+        //                        }
+        //                        break;
+        //                    case 120:
+        //                        if (num <= -20.0f)
+        //                            pixel_x = (int)(0 + (num + 25.0) / 5.0 * 10);
+        //                        else if (num <= -10.0f)
+        //                            pixel_x = (int)(10 + (num + 20.0) / 10.0 * 30);
+        //                        else if (num <= -5.0f)
+        //                            pixel_x = (int)(40 + (num + 10.0) / 5.0 * 30);
+        //                        else if (num <= 0.0f)
+        //                            pixel_x = (int)(70 + (num + 5.0) / 5.0 * 27);
+        //                        else if (num <= 4.0f)
+        //                            pixel_x = (int)(97 + (num - 0.0) / 4.0 * 17);
+        //                        else if (num <= 8.0f)
+        //                            pixel_x = (int)(114 + (num - 4.0) / 4.0 * 17);
+        //                        else if (num <= 12.0f)
+        //                            pixel_x = (int)(131 + (num - 8.0) / 4.0 * 17);
+        //                        else
+        //                            pixel_x = (int)(148 + (num - 12.0) / 0.5 * 23);
+        //                        break;
+        //                }
+        //                break;
+        //            case MeterTXMode.ALC_GROUP: //MW0LGE ignore the fixed pixel method
+        //                if (num > 0.0) // high area - alc compression
+        //                {
+        //                    double spacing = (W * 0.5 - 2.0 - 3.0) / 5.0;
+        //                    pixel_x = (int)((double)W * 0.5) + (int)(num / 5.0 * spacing);
+        //                }
+        //                else // alc only (sub 0db or less)
+        //                {
+        //                    pixel_x = (int)((num + 30.0) / 30.0 * (W * 0.5 - 1.0));
+        //                }
+        //                break;
+        //            case MeterTXMode.FORWARD_POWER:
+        //            case MeterTXMode.REVERSE_POWER:
+        //                // if (!alexpresent && !apollopresent)
+        //                // num *= 1000;
+
+        //                switch ((int)g.DpiX)
+        //                {
+        //                    case 96:
+        //                        if (collapsedDisplay)
+        //                        {
+        //                            if (anan10present || anan10Epresent)
+        //                            {
+        //                                if (num <= 1.0f)
+        //                                    pixel_x = (int)(0 + num * 16);
+        //                                else if (num <= 5.0f)
+        //                                    pixel_x = (int)(16 + (num - 1) / 4 * 48);
+        //                                else if (num <= 10.0f)
+        //                                    pixel_x = (int)(64 + (num - 5) / 5 * 48);
+        //                                else if (num <= 15.0f)
+        //                                    pixel_x = (int)(112 + (num - 10) / 5 * 48);
+        //                                else if (num <= 20.0f)
+        //                                    pixel_x = (int)(160 + (num - 15) / 5 * 48);
+        //                                else if (num <= 25.0f)
+        //                                    pixel_x = (int)(208 + (num - 20) / 5 * 48);
+        //                                else
+        //                                    pixel_x = (int)(256 + (num - 25) / 5 * 32);
+        //                            }
+        //                            else if (apollopresent)
+        //                            {
+        //                                if (num <= 1.0f)
+        //                                    pixel_x = (int)(0 + num * 16);
+        //                                else if (num <= 5.0f)
+        //                                    pixel_x = (int)(16 + (num - 1) / 4 * 48);
+        //                                else if (num <= 10.0f)
+        //                                    pixel_x = (int)(64 + (num - 5) / 5 * 48);
+        //                                else if (num <= 15.0f)
+        //                                    pixel_x = (int)(112 + (num - 10) / 5 * 48);
+        //                                else if (num <= 30.0f)
+        //                                    pixel_x = (int)(160 + (num - 15) / 15 * 48);
+        //                                else if (num <= 50.0f)
+        //                                    pixel_x = (int)(208 + (num - 30) / 20 * 48);
+        //                                else
+        //                                    pixel_x = (int)(256 + (num - 50) / 50 * 32);
+        //                            }
+        //                            else if (anan8000dpresent && tx_xvtr_index < 0)
+        //                            {
+        //                                if (num <= 1.0f)
+        //                                    pixel_x = (int)(0 + num * 16);
+        //                                else if (num <= 5.0f)
+        //                                    pixel_x = (int)(16 + (num - 1) / 4 * 48);
+        //                                else if (num <= 10.0f)
+        //                                    pixel_x = (int)(64 + (num - 5) / 5 * 48);
+        //                                else if (num <= 50.0f)
+        //                                    pixel_x = (int)(112 + (num - 10) / 40 * 48);
+        //                                else if (num <= 100.0f)
+        //                                    pixel_x = (int)(160 + (num - 50) / 50 * 48);
+        //                                else if (num <= 200.0f)
+        //                                    pixel_x = (int)(200 + (num - 100) / 20 * 48);
+        //                                else
+        //                                    pixel_x = (int)(256 + (num - 120) / 20 * 32);
+        //                            }
+        //                            else if (alexpresent && !anan8000dpresent)
+        //                            {
+        //                                if (num <= 1.0f)
+        //                                    pixel_x = (int)(0 + num * 16);
+        //                                else if (num <= 5.0f)
+        //                                    pixel_x = (int)(16 + (num - 1) / 4 * 48);
+        //                                else if (num <= 10.0f)
+        //                                    pixel_x = (int)(64 + (num - 5) / 5 * 48);
+        //                                else if (num <= 50.0f)
+        //                                    pixel_x = (int)(112 + (num - 10) / 40 * 48);
+        //                                else if (num <= 100.0f)
+        //                                    pixel_x = (int)(160 + (num - 50) / 50 * 48);
+        //                                else if (num <= 208.0f)
+        //                                    pixel_x = (int)(208 + (num - 100) / 20 * 48);
+        //                                else
+        //                                    pixel_x = (int)(256 + (num - 120) / 20 * 32);
+        //                            }
+        //                            else
+        //                            {
+        //                                if (num <= 25.0f)
+        //                                    pixel_x = (int)(0 + (num - 0.0) / 25.0 * 16);
+        //                                else if (num <= 50.0f)
+        //                                    pixel_x = (int)(16 + (num - 25.0) / 25.0 * 31);
+        //                                else if (num <= 100.0f)
+        //                                    pixel_x = (int)(31 + (num - 50.0) / 50.0 * 31);
+        //                                else if (num <= 200.0f)
+        //                                    pixel_x = (int)(62 + (num - 100.0) / 100.0 * 64);
+        //                                else if (num <= 500.0f)
+        //                                    pixel_x = (int)(126 + (num - 200.0) / 300.0 * 48);
+        //                                else if (num <= 600.0f)
+        //                                    pixel_x = (int)(174 + (num - 500.0) / 100.0 * 30);
+        //                                else if (num <= 700.0f)
+        //                                    pixel_x = (int)(204 + (num - 600.0) / 100.0 * 30);
+        //                                else if (num <= 800.0f)
+        //                                    pixel_x = (int)(234 + (num - 700.0) / 100.0 * 30);
+        //                                else
+        //                                    pixel_x = (int)(264 + (num - 800.0) / 100.0 * 16);
+        //                            }
+        //                        }
+        //                        else
+        //                        {
+        //                            if (anan10present || anan10Epresent)
+        //                            {
+        //                                if (num <= 1.0f)
+        //                                    pixel_x = (int)(0 + num * 2);
+        //                                else if (num <= 5.0f)
+        //                                    pixel_x = (int)(2 + (num - 1) / 4 * 24);
+        //                                else if (num <= 10.0f)
+        //                                    pixel_x = (int)(26 + (num - 5) / 5 * 24);
+        //                                else if (num <= 15.0f)
+        //                                    pixel_x = (int)(50 + (num - 10) / 5 * 24);
+        //                                else if (num <= 20.0f)
+        //                                    pixel_x = (int)(74 + (num - 15) / 5 * 24);
+        //                                else if (num <= 25.0f)
+        //                                    pixel_x = (int)(98 + (num - 20) / 5 * 24);
+        //                                else
+        //                                    pixel_x = (int)(122 + (num - 25) / 5 * 16);
+        //                            }
+        //                            else if (apollopresent)
+        //                            {
+        //                                if (num <= 1.0f)
+        //                                    pixel_x = (int)(0 + num * 2);
+        //                                else if (num <= 5.0f)
+        //                                    pixel_x = (int)(2 + (num - 1) / 4 * 24);
+        //                                else if (num <= 10.0f)
+        //                                    pixel_x = (int)(26 + (num - 5) / 5 * 24);
+        //                                else if (num <= 15.0f)
+        //                                    pixel_x = (int)(50 + (num - 10) / 5 * 24);
+        //                                else if (num <= 30.0f)
+        //                                    pixel_x = (int)(74 + (num - 15) / 15 * 24);
+        //                                else if (num <= 50.0f)
+        //                                    pixel_x = (int)(98 + (num - 30) / 20 * 24);
+        //                                else
+        //                                    pixel_x = (int)(122 + (num - 50) / 50 * 16);
+        //                            }
+        //                            else if (anan8000dpresent && tx_xvtr_index < 0)
+        //                            {
+        //                                if (num <= 5.0f)
+        //                                    pixel_x = (int)(0 + num * 2);
+        //                                else if (num <= 10.0f)
+        //                                    pixel_x = (int)(2 + (num - 1) / 4 * 24);
+        //                                else if (num <= 20.0f)
+        //                                    pixel_x = (int)(26 + (num - 10) / 5 * 24);
+        //                                else if (num <= 100.0f)
+        //                                    pixel_x = (int)(50 + (num - 20) / 40 * 24);
+        //                                else if (num <= 200.0f)
+        //                                    pixel_x = (int)(74 + (num - 100) / 50 * 24);
+        //                                else if (num <= 250.0f)
+        //                                    pixel_x = (int)(98 + (num - 200) / 20 * 24);
+        //                                else
+        //                                    pixel_x = (int)(122 + (num - 250) / 20 * 16);
+        //                            }
+        //                            else if (alexpresent && !anan8000dpresent)
+        //                            {
+        //                                if (num <= 1.0f)
+        //                                    pixel_x = (int)(0 + num * 2);
+        //                                else if (num <= 5.0f)
+        //                                    pixel_x = (int)(2 + (num - 1) / 4 * 24);
+        //                                else if (num <= 10.0f)
+        //                                    pixel_x = (int)(26 + (num - 5) / 5 * 24);
+        //                                else if (num <= 50.0f)
+        //                                    pixel_x = (int)(50 + (num - 10) / 40 * 24);
+        //                                else if (num <= 100.0f)
+        //                                    pixel_x = (int)(74 + (num - 50) / 50 * 24);
+        //                                else if (num <= 120.0f)
+        //                                    pixel_x = (int)(98 + (num - 100) / 20 * 24);
+        //                                else
+        //                                    pixel_x = (int)(122 + (num - 120) / 20 * 16);
+        //                            }
+        //                            else
+        //                            {
+        //                                if (num <= 100.0f)
+        //                                    pixel_x = (int)(0 + (num - 0.0) / 100.0 * 31);
+        //                                else if (num <= 200.0f)
+        //                                    pixel_x = (int)(31 + (num - 100.0) / 100.0 * 32);
+        //                                else if (num <= 500.0f)
+        //                                    pixel_x = (int)(63 + (num - 200.0) / 300.0 * 24);
+        //                                else if (num <= 600.0f)
+        //                                    pixel_x = (int)(87 + (num - 500.0) / 100.0 * 15);
+        //                                else if (num <= 700.0f)
+        //                                    pixel_x = (int)(102 + (num - 600.0) / 100.0 * 15);
+        //                                else if (num <= 800.0f)
+        //                                    pixel_x = (int)(117 + (num - 700.0) / 100.0 * 15);
+        //                                else
+        //                                    pixel_x = (int)(132 + (num - 800.0) / 100.0 * 8);
+        //                            }
+        //                        }
+        //                        break;
+
+        //                    case 120:
+        //                        if (num <= 1.0f)
+        //                            pixel_x = (int)(0 + num * 3);
+        //                        else if (num <= 5.0f)
+        //                            pixel_x = (int)(3 + (num - 1) / 4 * 26);
+        //                        else if (num <= 10.0f)
+        //                            pixel_x = (int)(29 + (num - 5) / 5 * 26);
+        //                        else if (num <= 50.0f)
+        //                            pixel_x = (int)(55 + (num - 10) / 40 * 27);
+        //                        else if (num <= 100.0f)
+        //                            pixel_x = (int)(82 + (num - 50) / 50 * 28);
+        //                        else if (num <= 120.0f)
+        //                            pixel_x = (int)(110 + (num - 100) / 20 * 27);
+        //                        else
+        //                            pixel_x = (int)(137 + (num - 120) / 20 * 30);
+        //                        break;
+        //                }
+        //                break;
+        //            case MeterTXMode.SWR:
+        //                switch ((int)g.DpiX)
+        //                {
+        //                    case 96:
+        //                        if (collapsedDisplay)
+        //                        {
+        //                            if (double.IsInfinity(num))
+        //                                pixel_x = 200;
+        //                            else if (num <= 1.0f)
+        //                                pixel_x = (int)(0 + num * 6);
+        //                            else if (num <= 1.5f)
+        //                                pixel_x = (int)(6 + (num - 1.0) / 0.5 * 54);
+        //                            else if (num <= 2.0f)
+        //                                pixel_x = (int)(60 + (num - 1.5) / 0.5 * 40);
+        //                            else if (num <= 3.0f)
+        //                                pixel_x = (int)(100 + (num - 2.0) / 1.0 * 42);
+        //                            else if (num <= 5.0f)
+        //                                pixel_x = (int)(142 + (num - 3.0) / 2.0 * 42);
+        //                            else if (num <= 10.0f)
+        //                                pixel_x = (int)(184 + (num - 5.0) / 5.0 * 42);
+        //                            else
+        //                                pixel_x = (int)(226 + (num - 10.0) / 15.0 * 52);
+        //                        }
+        //                        else
+        //                        {
+        //                            if (double.IsInfinity(num))
+        //                                pixel_x = 200;
+        //                            else if (num <= 1.0f)
+        //                                pixel_x = (int)(0 + num * 3);
+        //                            else if (num <= 1.5f)
+        //                                pixel_x = (int)(3 + (num - 1.0) / 0.5 * 27);
+        //                            else if (num <= 2.0f)
+        //                                pixel_x = (int)(30 + (num - 1.5) / 0.5 * 20);
+        //                            else if (num <= 3.0f)
+        //                                pixel_x = (int)(50 + (num - 2.0) / 1.0 * 21);
+        //                            else if (num <= 5.0f)
+        //                                pixel_x = (int)(71 + (num - 3.0) / 2.0 * 21);
+        //                            else if (num <= 10.0f)
+        //                                pixel_x = (int)(92 + (num - 5.0) / 5.0 * 21);
+        //                            else
+        //                                pixel_x = (int)(113 + (num - 10.0) / 15.0 * 26);
+        //                        }
+        //                        break;
+        //                    case 120:
+        //                        if (double.IsInfinity(num))
+        //                            pixel_x = 200;
+        //                        else if (num <= 1.0f)
+        //                            pixel_x = (int)(0 + num * 3);
+        //                        else if (num <= 1.5f)
+        //                            pixel_x = (int)(3 + (num - 1.0) / 0.5 * 31);
+        //                        else if (num <= 2.0f)
+        //                            pixel_x = (int)(34 + (num - 1.5) / 0.5 * 22);
+        //                        else if (num <= 3.0f)
+        //                            pixel_x = (int)(56 + (num - 2.0) / 1.0 * 22);
+        //                        else if (num <= 5.0f)
+        //                            pixel_x = (int)(78 + (num - 3.0) / 2.0 * 23);
+        //                        else if (num <= 10.0f)
+        //                            pixel_x = (int)(101 + (num - 5.0) / 5.0 * 23);
+        //                        else
+        //                            pixel_x = (int)(124 + (num - 10.0) / 15.0 * 43);
+        //                        break;
+        //                }
+        //                break;
+        //            case MeterTXMode.SWR_POWER:
+        //                break;
+        //            case MeterTXMode.ALC_G:
+        //            case MeterTXMode.LVL_G:
+        //            case MeterTXMode.CFC_G:
+        //                switch ((int)g.DpiX)
+        //                {
+        //                    case 96:
+        //                        if (collapsedDisplay)
+        //                        {
+        //                            if (num <= 0.0f)
+        //                                pixel_x = 6;
+        //                            else if (num <= 5.0f)
+        //                                pixel_x = (int)(6 + (num - 0.0) / 5.0 * 56);
+        //                            else if (num <= 10.0f)
+        //                                pixel_x = (int)(62 + (num - 5.0) / 5.0 * 58);
+        //                            else if (num <= 15.0f)
+        //                                pixel_x = (int)(120 + (num - 10.0) / 5.0 * 60);
+        //                            else if (num <= 20.0f)
+        //                                pixel_x = (int)(180 + (num - 15.0) / 5.0 * 62);
+        //                            else
+        //                                pixel_x = (int)(242 + (num - 20.0) / 5.0 * 58);
+        //                        }
+        //                        else
+        //                        {
+        //                            if (num <= 0.0f)
+        //                                pixel_x = 3;
+        //                            else if (num <= 5.0f)
+        //                                pixel_x = (int)(3 + (num - 0.0) / 5.0 * 28);
+        //                            else if (num <= 10.0f)
+        //                                pixel_x = (int)(31 + (num - 5.0) / 5.0 * 29);
+        //                            else if (num <= 15.0f)
+        //                                pixel_x = (int)(60 + (num - 10.0) / 5.0 * 30);
+        //                            else if (num <= 20.0f)
+        //                                pixel_x = (int)(90 + (num - 15.0) / 5.0 * 31);
+        //                            else
+        //                                pixel_x = (int)(121 + (num - 20.0) / 5.0 * 29);
+        //                        }
+        //                        break;
+        //                    case 120:
+        //                        if (num <= 0.0f)
+        //                            pixel_x = 3;
+        //                        else if (num <= 5.0f)
+        //                            pixel_x = (int)(3 + (num - 0.0) / 5.0 * 31);
+        //                        else if (num <= 10.0f)
+        //                            pixel_x = (int)(34 + (num - 5.0) / 5.0 * 33);
+        //                        else if (num <= 15.0f)
+        //                            pixel_x = (int)(77 + (num - 10.0) / 5.0 * 33);
+        //                        else if (num <= 20.0f)
+        //                            pixel_x = (int)(110 + (num - 15.0) / 5.0 * 35);
+        //                        else
+        //                            pixel_x = (int)(145 + (num - 20.0) / 5.0 * 32);
+        //                        break;
+        //                }
+        //                break;
+        //            case MeterTXMode.OFF:
+        //                break;
+        //        }
+        //    }
+
+        //    switch ((int)g.DpiX)
+        //    {
+        //        case 96:
+        //            if (!collapsedDisplay)
+        //            {
+        //                if (pixel_x > 139) pixel_x = 139;
+        //                pixel_x = (int)(((double)pixel_x / 139) * W);  // MW0LGE proportional green bar over total width
+        //            }
+        //            break;
+        //        case 120:
+        //            if (pixel_x > 167) pixel_x = 167;
+        //            pixel_x = (int)(((double)pixel_x / 167.0f) * W);  // MW0LGE proportional green bar over total width
+        //            break;
+        //    }
+
+        //    if ((!mox && metRXMode != MeterRXMode.OFF) ||
+        //        (mox && metTXMode != MeterTXMode.OFF) )
+        //    {
+        //        if (pixel_x <= 0) pixel_x = 1;
+
+        //        // MW0LGE reworked size/heights
+        //        using (LinearGradientBrush brush = new LinearGradientBrush(new Rectangle(0, 0, pixel_x, H - 10),
+        //            meter_left_color, meter_right_color, LinearGradientMode.Horizontal))
+
+        //            g.FillRectangle(brush, 0, 0, pixel_x, H - 10);
+
+        //        g.FillRectangle(meter_background_pen.Brush, 0, H - 10, W, H);
+
+        //        for (int i = 0; i < (W / 8) - 6; i++)
+        //            g.DrawLine(meter_background_pen, 6 + i * 8, 0, 6 + i * 8, H - 10);
+
+        //        g.DrawLine(Pens.Red, pixel_x, 0, pixel_x, H - 10);
+        //        g.FillRectangle(meter_background_pen.Brush, pixel_x + 1, 0, W - pixel_x, H - 10);
+
+        //        switch (RXnumber)
+        //        {
+        //            case 1:
+        //                if (pixel_x >= meter_peak_value)
+        //                {
+        //                    meter_peak_count = 0;
+        //                    meter_peak_value = pixel_x;
+        //                }
+        //                else
+        //                {
+        //                    if (meter_peak_count++ >= multimeter_peak_hold_samples)
+        //                    {
+        //                        meter_peak_count = 0;
+        //                        meter_peak_value = pixel_x;
+        //                    }
+        //                    else
+        //                    {
+        //                        g.DrawLine(Pens.Red, meter_peak_value, 0, meter_peak_value, H - 10);
+        //                        g.DrawLine(Pens.Red, meter_peak_value - 1, 0, meter_peak_value - 1, H - 10);
+        //                    }
+        //                }
+        //                break;
+        //            case 2:
+        //                if (pixel_x >= rx2_meter_peak_value)
+        //                {
+        //                    rx2_meter_peak_count = 0;
+        //                    rx2_meter_peak_value = pixel_x;
+        //                }
+        //                else
+        //                {
+        //                    if (rx2_meter_peak_count++ >= multimeter_peak_hold_samples)
+        //                    {
+        //                        rx2_meter_peak_count = 0;
+        //                        rx2_meter_peak_value = pixel_x;
+        //                    }
+        //                    else
+        //                    {
+        //                        g.DrawLine(Pens.Red, rx2_meter_peak_value, 0, rx2_meter_peak_value, H - 10);
+        //                        g.DrawLine(Pens.Red, rx2_meter_peak_value - 1, 0, rx2_meter_peak_value - 1, H - 10);
+        //                    }
+        //                }
+        //                break;
+        //        }
+        //    }
+
+        //    return num;
+        //}
+
+        private double getUVfromDBM(double dbm)
         {
-            // handle the ORIGINAL meter
-            // pass in 1 or 2 as RXnumber
-            // graphics object, and height/width of pic control that takes the output
-            // returns the current meter data
-            double num  = 0;
-            int pixel_x = 0;
-            bool bAbove = false;
-            bool bReady = false;
-            MeterRXMode metRXMode = MeterRXMode.LAST; // set to something impossible
-            MeterTXMode metTXMode = MeterTXMode.LAST;
+            //return uV (rms) from dBm (50 ohms)
+            return Math.Sqrt(Math.Pow(10, dbm / 10) * 50 * 1e-3) * 1e6;
+        }
+        private string getSMeter(int nRX, double dbm)
+        {
+            string sRet;
+            bool bAbove30;
 
-            switch (RXnumber)
+            if (nRX == 2)
             {
-                case 1:
-                    bReady = meter_data_ready;
-                    if (bReady)
-                    {
-                        current_meter_data = new_meter_data;
-                        meter_data_ready = false;
-                    }
-                    num = current_meter_data;
-                    metRXMode = current_meter_rx_mode;
-                    metTXMode = current_meter_tx_mode;
-                    bAbove = rx1_above30;
-                    break;
-                case 2:
-                    bReady = rx2_meter_data_ready;
-                    {
-                        rx2_meter_current_data = rx2_meter_new_data;
-                        rx2_meter_data_ready = false;
-                    }
-                    num = rx2_meter_current_data;
-                    metRXMode = rx2_meter_mode;
-                    bAbove = rx2_above30;
-                    break;
-            }
-
-            if (!mox || RXnumber==2)  // will not run the else for rx2 (which cant tx)
-            {
-                switch (metRXMode)
-                {
-                    case MeterRXMode.SIGNAL_STRENGTH:
-                    case MeterRXMode.SIGNAL_AVERAGE:
-                        switch ((int)g.DpiX)
-                        {
-                            case 96:
-                                double s;
-                                if (bAbove)
-                                {
-                                    if (collapsedDisplay)
-                                    {
-                                        s = (num + 147) / 6;
-                                        if (s <= 9.0F)
-                                            pixel_x = (int)((s * 15) + 2);
-                                        else
-                                        {
-                                            double over_s9 = num + 93;
-                                            pixel_x = 138 + (int)(over_s9 * 2.10);
-                                        }
-                                    }
-                                    else
-                                    {
-                                        s = (num + 147) / 6;
-                                        if (s <= 9.0F)
-                                            pixel_x = (int)((s * 7.5) + 2);
-                                        else
-                                        {
-                                            double over_s9 = num + 93;
-                                            pixel_x = 69 + (int)(over_s9 * 1.05);
-                                        }
-                                    }
-                                }
-                                else
-                                {
-                                    if (collapsedDisplay)
-                                    {
-                                        s = (num + 127) / 6;
-                                        if (s <= 9.0F)
-                                            pixel_x = (int)((s * 15) + 2);
-                                        else
-                                        {
-                                            double over_s9 = num + 73;
-                                            pixel_x = 138 + (int)(over_s9 * 2.10);
-                                        }
-                                    }
-                                    else
-                                    {
-                                        s = (num + 127) / 6;
-                                        if (s <= 9.0F)
-                                            pixel_x = (int)((s * 7.5) + 2);
-                                        else
-                                        {
-                                            double over_s9 = num + 73;
-                                            pixel_x = 69 + (int)(over_s9 * 1.05);
-                                        }
-                                    }
-                                }
-                                break;
-                            case 120:
-                                if (num <= -97.0f)
-                                    pixel_x = (int)(0 + (num + 100.0) / 3.0 * 10);
-                                else if (num <= -91.0f)
-                                    pixel_x = (int)(10 + (num + 97.0) / 6.0 * 17);
-                                else if (num <= -85.0f)
-                                    pixel_x = (int)(27 + (num + 91.0) / 6.0 * 16);
-                                else if (num <= -79.0f)
-                                    pixel_x = (int)(43 + (num + 85.0) / 6.0 * 17);
-                                else if (num <= -73.0f)
-                                    pixel_x = (int)(60 + (num + 79.0) / 6.0 * 16);
-                                else if (num <= -53.0f)
-                                    pixel_x = (int)(76 + (num + 73.0) / 20.0 * 24);
-                                else if (num <= -33.0f)
-                                    pixel_x = (int)(100 + (num + 53.0) / 20.0 * 24);
-                                else if (num <= -13.0f)
-                                    pixel_x = (int)(124 + (num + 33.0) / 20.0 * 24);
-                                else
-                                    pixel_x = (int)(148 + (num + 13.0) / 20.0 * 19);
-                                break;
-                        }
-                        break;
-                    case MeterRXMode.ADC_L:
-                    case MeterRXMode.ADC_R:
-                        switch ((int)g.DpiX)
-                        {
-                            case 96:
-                                if (collapsedDisplay)
-                                    pixel_x = (int)(((num + 100) * 2.4) + 24);
-                                else pixel_x = (int)(((num + 100) * 1.2) + 12);
-                                break;
-                            case 120:
-                                if (num <= -100.0f)
-                                    pixel_x = (int)(0 + (num + 110.0) / 10.0 * 14);
-                                else if (num <= -80.0f)
-                                    pixel_x = (int)(14 + (num + 100.0) / 20.0 * 27);
-                                else if (num <= -60.0f)
-                                    pixel_x = (int)(41 + (num + 80.0) / 20.0 * 28);
-                                else if (num <= -40.0f)
-                                    pixel_x = (int)(69 + (num + 60.0) / 20.0 * 28);
-                                else if (num <= -20.0f)
-                                    pixel_x = (int)(97 + (num + 40.0) / 20.0 * 27);
-                                else if (num <= 0.0f)
-                                    pixel_x = (int)(124 + (num + 20.0) / 20.0 * 24);
-                                else
-                                    pixel_x = (int)(148 + (num - 0.0) / 10.0 * 19);
-                                break;
-                        }
-                        break;
-                    case MeterRXMode.OFF:
-                        break;
-                }
+                bAbove30 = rx2_above30;
             }
             else
             {
-                MeterTXMode mode = current_meter_tx_mode;
-                if (chkTUN.Checked) mode = tune_meter_tx_mode;
-                switch (mode)
-                {
-                    case MeterTXMode.MIC:
-                    case MeterTXMode.EQ:
-                    case MeterTXMode.LEVELER:
-                    case MeterTXMode.CFC_PK:
-                    case MeterTXMode.COMP:
-                    case MeterTXMode.ALC:
-                        //num += 3.0;  // number no longer has fudge factor added in the wdsp, must be remove
-                        switch ((int)g.DpiX)
-                        {
-                            case 96:
-                                if (collapsedDisplay)
-                                {
-                                    if (num <= -20.0f)
-                                        pixel_x = (int)(0 + (num + 25.0) / 5.0 * 18);
-                                    else if (num <= -10.0f)
-                                        pixel_x = (int)(18 + (num + 20.0) / 10.0 * 54);
-                                    else if (num <= -5.0f)
-                                        pixel_x = (int)(72 + (num + 10.0) / 5.0 * 54);
-                                    else if (num <= 0.0f)
-                                        pixel_x = (int)(126 + (num + 5.0) / 5.0 * 48);
-                                    else if (num <= 4.0f)
-                                        pixel_x = (int)(174 + (num - 0.0) / 4.0 * 30);
-                                    else if (num <= 8.0f)
-                                        pixel_x = (int)(204 + (num - 4.0) / 4.0 * 30);
-                                    else if (num <= 12.0f)
-                                        pixel_x = (int)(234 + (num - 8.0) / 4.0 * 30);
-                                    else
-                                        pixel_x = (int)(264 + (num - 12.0) / 0.5 * 16);
-                                }
-                                else
-                                {
-                                    if (num <= -20.0f)
-                                        pixel_x = (int)(0 + (num + 25.0) / 5.0 * 9);
-                                    else if (num <= -10.0f)
-                                        pixel_x = (int)(9 + (num + 20.0) / 10.0 * 27);
-                                    else if (num <= -5.0f)
-                                        pixel_x = (int)(36 + (num + 10.0) / 5.0 * 27);
-                                    else if (num <= 0.0f)
-                                        pixel_x = (int)(63 + (num + 5.0) / 5.0 * 24);
-                                    else if (num <= 4.0f)
-                                        pixel_x = (int)(87 + (num - 0.0) / 4.0 * 15);
-                                    else if (num <= 8.0f)
-                                        pixel_x = (int)(102 + (num - 4.0) / 4.0 * 15);
-                                    else if (num <= 12.0f)
-                                        pixel_x = (int)(117 + (num - 8.0) / 4.0 * 15);
-                                    else
-                                        pixel_x = (int)(132 + (num - 12.0) / 0.5 * 8);
-                                }
-                                break;
-                            case 120:
-                                if (num <= -20.0f)
-                                    pixel_x = (int)(0 + (num + 25.0) / 5.0 * 10);
-                                else if (num <= -10.0f)
-                                    pixel_x = (int)(10 + (num + 20.0) / 10.0 * 30);
-                                else if (num <= -5.0f)
-                                    pixel_x = (int)(40 + (num + 10.0) / 5.0 * 30);
-                                else if (num <= 0.0f)
-                                    pixel_x = (int)(70 + (num + 5.0) / 5.0 * 27);
-                                else if (num <= 4.0f)
-                                    pixel_x = (int)(97 + (num - 0.0) / 4.0 * 17);
-                                else if (num <= 8.0f)
-                                    pixel_x = (int)(114 + (num - 4.0) / 4.0 * 17);
-                                else if (num <= 12.0f)
-                                    pixel_x = (int)(131 + (num - 8.0) / 4.0 * 17);
-                                else
-                                    pixel_x = (int)(148 + (num - 12.0) / 0.5 * 23);
-                                break;
-                        }
-                        break;
-                    case MeterTXMode.FORWARD_POWER:
-                    case MeterTXMode.REVERSE_POWER:
-                        // if (!alexpresent && !apollopresent)
-                        // num *= 1000;
-
-                        switch ((int)g.DpiX)
-                        {
-                            case 96:
-                                if (collapsedDisplay)
-                                {
-                                    if (anan10present || anan10Epresent)
-                                    {
-                                        if (num <= 1.0f)
-                                            pixel_x = (int)(0 + num * 16);
-                                        else if (num <= 5.0f)
-                                            pixel_x = (int)(16 + (num - 1) / 4 * 48);
-                                        else if (num <= 10.0f)
-                                            pixel_x = (int)(64 + (num - 5) / 5 * 48);
-                                        else if (num <= 15.0f)
-                                            pixel_x = (int)(112 + (num - 10) / 5 * 48);
-                                        else if (num <= 20.0f)
-                                            pixel_x = (int)(160 + (num - 15) / 5 * 48);
-                                        else if (num <= 25.0f)
-                                            pixel_x = (int)(208 + (num - 20) / 5 * 48);
-                                        else
-                                            pixel_x = (int)(256 + (num - 25) / 5 * 32);
-                                    }
-                                    else if (apollopresent)
-                                    {
-                                        if (num <= 1.0f)
-                                            pixel_x = (int)(0 + num * 16);
-                                        else if (num <= 5.0f)
-                                            pixel_x = (int)(16 + (num - 1) / 4 * 48);
-                                        else if (num <= 10.0f)
-                                            pixel_x = (int)(64 + (num - 5) / 5 * 48);
-                                        else if (num <= 15.0f)
-                                            pixel_x = (int)(112 + (num - 10) / 5 * 48);
-                                        else if (num <= 30.0f)
-                                            pixel_x = (int)(160 + (num - 15) / 15 * 48);
-                                        else if (num <= 50.0f)
-                                            pixel_x = (int)(208 + (num - 30) / 20 * 48);
-                                        else
-                                            pixel_x = (int)(256 + (num - 50) / 50 * 32);
-                                    }
-                                    else if (anan8000dpresent && tx_xvtr_index < 0)
-                                    {
-                                        if (num <= 1.0f)
-                                            pixel_x = (int)(0 + num * 16);
-                                        else if (num <= 5.0f)
-                                            pixel_x = (int)(16 + (num - 1) / 4 * 48);
-                                        else if (num <= 10.0f)
-                                            pixel_x = (int)(64 + (num - 5) / 5 * 48);
-                                        else if (num <= 50.0f)
-                                            pixel_x = (int)(112 + (num - 10) / 40 * 48);
-                                        else if (num <= 100.0f)
-                                            pixel_x = (int)(160 + (num - 50) / 50 * 48);
-                                        else if (num <= 200.0f)
-                                            pixel_x = (int)(200 + (num - 100) / 20 * 48);
-                                        else
-                                            pixel_x = (int)(256 + (num - 120) / 20 * 32);
-                                    }
-                                    else if (alexpresent && !anan8000dpresent)
-                                    {
-                                        if (num <= 1.0f)
-                                            pixel_x = (int)(0 + num * 16);
-                                        else if (num <= 5.0f)
-                                            pixel_x = (int)(16 + (num - 1) / 4 * 48);
-                                        else if (num <= 10.0f)
-                                            pixel_x = (int)(64 + (num - 5) / 5 * 48);
-                                        else if (num <= 50.0f)
-                                            pixel_x = (int)(112 + (num - 10) / 40 * 48);
-                                        else if (num <= 100.0f)
-                                            pixel_x = (int)(160 + (num - 50) / 50 * 48);
-                                        else if (num <= 208.0f)
-                                            pixel_x = (int)(208 + (num - 100) / 20 * 48);
-                                        else
-                                            pixel_x = (int)(256 + (num - 120) / 20 * 32);
-                                    }
-                                    else
-                                    {
-                                        if (num <= 25.0f)
-                                            pixel_x = (int)(0 + (num - 0.0) / 25.0 * 16);
-                                        else if (num <= 50.0f)
-                                            pixel_x = (int)(16 + (num - 25.0) / 25.0 * 31);
-                                        else if (num <= 100.0f)
-                                            pixel_x = (int)(31 + (num - 50.0) / 50.0 * 31);
-                                        else if (num <= 200.0f)
-                                            pixel_x = (int)(62 + (num - 100.0) / 100.0 * 64);
-                                        else if (num <= 500.0f)
-                                            pixel_x = (int)(126 + (num - 200.0) / 300.0 * 48);
-                                        else if (num <= 600.0f)
-                                            pixel_x = (int)(174 + (num - 500.0) / 100.0 * 30);
-                                        else if (num <= 700.0f)
-                                            pixel_x = (int)(204 + (num - 600.0) / 100.0 * 30);
-                                        else if (num <= 800.0f)
-                                            pixel_x = (int)(234 + (num - 700.0) / 100.0 * 30);
-                                        else
-                                            pixel_x = (int)(264 + (num - 800.0) / 100.0 * 16);
-                                    }
-                                }
-                                else
-                                {
-                                    if (anan10present || anan10Epresent)
-                                    {
-                                        if (num <= 1.0f)
-                                            pixel_x = (int)(0 + num * 2);
-                                        else if (num <= 5.0f)
-                                            pixel_x = (int)(2 + (num - 1) / 4 * 24);
-                                        else if (num <= 10.0f)
-                                            pixel_x = (int)(26 + (num - 5) / 5 * 24);
-                                        else if (num <= 15.0f)
-                                            pixel_x = (int)(50 + (num - 10) / 5 * 24);
-                                        else if (num <= 20.0f)
-                                            pixel_x = (int)(74 + (num - 15) / 5 * 24);
-                                        else if (num <= 25.0f)
-                                            pixel_x = (int)(98 + (num - 20) / 5 * 24);
-                                        else
-                                            pixel_x = (int)(122 + (num - 25) / 5 * 16);
-                                    }
-                                    else if (apollopresent)
-                                    {
-                                        if (num <= 1.0f)
-                                            pixel_x = (int)(0 + num * 2);
-                                        else if (num <= 5.0f)
-                                            pixel_x = (int)(2 + (num - 1) / 4 * 24);
-                                        else if (num <= 10.0f)
-                                            pixel_x = (int)(26 + (num - 5) / 5 * 24);
-                                        else if (num <= 15.0f)
-                                            pixel_x = (int)(50 + (num - 10) / 5 * 24);
-                                        else if (num <= 30.0f)
-                                            pixel_x = (int)(74 + (num - 15) / 15 * 24);
-                                        else if (num <= 50.0f)
-                                            pixel_x = (int)(98 + (num - 30) / 20 * 24);
-                                        else
-                                            pixel_x = (int)(122 + (num - 50) / 50 * 16);
-                                    }
-                                    else if (anan8000dpresent && tx_xvtr_index < 0)
-                                    {
-                                        if (num <= 5.0f)
-                                            pixel_x = (int)(0 + num * 2);
-                                        else if (num <= 10.0f)
-                                            pixel_x = (int)(2 + (num - 1) / 4 * 24);
-                                        else if (num <= 20.0f)
-                                            pixel_x = (int)(26 + (num - 10) / 5 * 24);
-                                        else if (num <= 100.0f)
-                                            pixel_x = (int)(50 + (num - 20) / 40 * 24);
-                                        else if (num <= 200.0f)
-                                            pixel_x = (int)(74 + (num - 100) / 50 * 24);
-                                        else if (num <= 250.0f)
-                                            pixel_x = (int)(98 + (num - 200) / 20 * 24);
-                                        else
-                                            pixel_x = (int)(122 + (num - 250) / 20 * 16);
-                                    }
-                                    else if (alexpresent && !anan8000dpresent)
-                                    {
-                                        if (num <= 1.0f)
-                                            pixel_x = (int)(0 + num * 2);
-                                        else if (num <= 5.0f)
-                                            pixel_x = (int)(2 + (num - 1) / 4 * 24);
-                                        else if (num <= 10.0f)
-                                            pixel_x = (int)(26 + (num - 5) / 5 * 24);
-                                        else if (num <= 50.0f)
-                                            pixel_x = (int)(50 + (num - 10) / 40 * 24);
-                                        else if (num <= 100.0f)
-                                            pixel_x = (int)(74 + (num - 50) / 50 * 24);
-                                        else if (num <= 120.0f)
-                                            pixel_x = (int)(98 + (num - 100) / 20 * 24);
-                                        else
-                                            pixel_x = (int)(122 + (num - 120) / 20 * 16);
-                                    }
-                                    else
-                                    {
-                                        if (num <= 100.0f)
-                                            pixel_x = (int)(0 + (num - 0.0) / 100.0 * 31);
-                                        else if (num <= 200.0f)
-                                            pixel_x = (int)(31 + (num - 100.0) / 100.0 * 32);
-                                        else if (num <= 500.0f)
-                                            pixel_x = (int)(63 + (num - 200.0) / 300.0 * 24);
-                                        else if (num <= 600.0f)
-                                            pixel_x = (int)(87 + (num - 500.0) / 100.0 * 15);
-                                        else if (num <= 700.0f)
-                                            pixel_x = (int)(102 + (num - 600.0) / 100.0 * 15);
-                                        else if (num <= 800.0f)
-                                            pixel_x = (int)(117 + (num - 700.0) / 100.0 * 15);
-                                        else
-                                            pixel_x = (int)(132 + (num - 800.0) / 100.0 * 8);
-                                    }
-                                }
-                                break;
-
-                            case 120:
-                                if (num <= 1.0f)
-                                    pixel_x = (int)(0 + num * 3);
-                                else if (num <= 5.0f)
-                                    pixel_x = (int)(3 + (num - 1) / 4 * 26);
-                                else if (num <= 10.0f)
-                                    pixel_x = (int)(29 + (num - 5) / 5 * 26);
-                                else if (num <= 50.0f)
-                                    pixel_x = (int)(55 + (num - 10) / 40 * 27);
-                                else if (num <= 100.0f)
-                                    pixel_x = (int)(82 + (num - 50) / 50 * 28);
-                                else if (num <= 120.0f)
-                                    pixel_x = (int)(110 + (num - 100) / 20 * 27);
-                                else
-                                    pixel_x = (int)(137 + (num - 120) / 20 * 30);
-                                break;
-                        }
-                        break;
-                    case MeterTXMode.SWR:
-                        switch ((int)g.DpiX)
-                        {
-                            case 96:
-                                if (collapsedDisplay)
-                                {
-                                    if (double.IsInfinity(num))
-                                        pixel_x = 200;
-                                    else if (num <= 1.0f)
-                                        pixel_x = (int)(0 + num * 6);
-                                    else if (num <= 1.5f)
-                                        pixel_x = (int)(6 + (num - 1.0) / 0.5 * 54);
-                                    else if (num <= 2.0f)
-                                        pixel_x = (int)(60 + (num - 1.5) / 0.5 * 40);
-                                    else if (num <= 3.0f)
-                                        pixel_x = (int)(100 + (num - 2.0) / 1.0 * 42);
-                                    else if (num <= 5.0f)
-                                        pixel_x = (int)(142 + (num - 3.0) / 2.0 * 42);
-                                    else if (num <= 10.0f)
-                                        pixel_x = (int)(184 + (num - 5.0) / 5.0 * 42);
-                                    else
-                                        pixel_x = (int)(226 + (num - 10.0) / 15.0 * 52);
-                                }
-                                else
-                                {
-                                    if (double.IsInfinity(num))
-                                        pixel_x = 200;
-                                    else if (num <= 1.0f)
-                                        pixel_x = (int)(0 + num * 3);
-                                    else if (num <= 1.5f)
-                                        pixel_x = (int)(3 + (num - 1.0) / 0.5 * 27);
-                                    else if (num <= 2.0f)
-                                        pixel_x = (int)(30 + (num - 1.5) / 0.5 * 20);
-                                    else if (num <= 3.0f)
-                                        pixel_x = (int)(50 + (num - 2.0) / 1.0 * 21);
-                                    else if (num <= 5.0f)
-                                        pixel_x = (int)(71 + (num - 3.0) / 2.0 * 21);
-                                    else if (num <= 10.0f)
-                                        pixel_x = (int)(92 + (num - 5.0) / 5.0 * 21);
-                                    else
-                                        pixel_x = (int)(113 + (num - 10.0) / 15.0 * 26);
-                                }
-                                break;
-                            case 120:
-                                if (double.IsInfinity(num))
-                                    pixel_x = 200;
-                                else if (num <= 1.0f)
-                                    pixel_x = (int)(0 + num * 3);
-                                else if (num <= 1.5f)
-                                    pixel_x = (int)(3 + (num - 1.0) / 0.5 * 31);
-                                else if (num <= 2.0f)
-                                    pixel_x = (int)(34 + (num - 1.5) / 0.5 * 22);
-                                else if (num <= 3.0f)
-                                    pixel_x = (int)(56 + (num - 2.0) / 1.0 * 22);
-                                else if (num <= 5.0f)
-                                    pixel_x = (int)(78 + (num - 3.0) / 2.0 * 23);
-                                else if (num <= 10.0f)
-                                    pixel_x = (int)(101 + (num - 5.0) / 5.0 * 23);
-                                else
-                                    pixel_x = (int)(124 + (num - 10.0) / 15.0 * 43);
-                                break;
-                        }
-                        break;
-                    case MeterTXMode.SWR_POWER:
-                        break;
-                    case MeterTXMode.ALC_G:
-                    case MeterTXMode.LVL_G:
-                    case MeterTXMode.CFC_G:
-                        switch ((int)g.DpiX)
-                        {
-                            case 96:
-                                if (collapsedDisplay)
-                                {
-                                    if (num <= 0.0f)
-                                        pixel_x = 6;
-                                    else if (num <= 5.0f)
-                                        pixel_x = (int)(6 + (num - 0.0) / 5.0 * 56);
-                                    else if (num <= 10.0f)
-                                        pixel_x = (int)(62 + (num - 5.0) / 5.0 * 58);
-                                    else if (num <= 15.0f)
-                                        pixel_x = (int)(120 + (num - 10.0) / 5.0 * 60);
-                                    else if (num <= 20.0f)
-                                        pixel_x = (int)(180 + (num - 15.0) / 5.0 * 62);
-                                    else
-                                        pixel_x = (int)(242 + (num - 20.0) / 5.0 * 58);
-                                }
-                                else
-                                {
-                                    if (num <= 0.0f)
-                                        pixel_x = 3;
-                                    else if (num <= 5.0f)
-                                        pixel_x = (int)(3 + (num - 0.0) / 5.0 * 28);
-                                    else if (num <= 10.0f)
-                                        pixel_x = (int)(31 + (num - 5.0) / 5.0 * 29);
-                                    else if (num <= 15.0f)
-                                        pixel_x = (int)(60 + (num - 10.0) / 5.0 * 30);
-                                    else if (num <= 20.0f)
-                                        pixel_x = (int)(90 + (num - 15.0) / 5.0 * 31);
-                                    else
-                                        pixel_x = (int)(121 + (num - 20.0) / 5.0 * 29);
-                                }
-                                break;
-                            case 120:
-                                if (num <= 0.0f)
-                                    pixel_x = 3;
-                                else if (num <= 5.0f)
-                                    pixel_x = (int)(3 + (num - 0.0) / 5.0 * 31);
-                                else if (num <= 10.0f)
-                                    pixel_x = (int)(34 + (num - 5.0) / 5.0 * 33);
-                                else if (num <= 15.0f)
-                                    pixel_x = (int)(77 + (num - 10.0) / 5.0 * 33);
-                                else if (num <= 20.0f)
-                                    pixel_x = (int)(110 + (num - 15.0) / 5.0 * 35);
-                                else
-                                    pixel_x = (int)(145 + (num - 20.0) / 5.0 * 32);
-                                break;
-                        }
-                        break;
-                    case MeterTXMode.OFF:
-                        break;
-                }
+                bAbove30 = rx1_above30;
             }
-            
-            switch ((int)g.DpiX)
+
+            if (bAbove30)
             {
-                case 96:
-                    if (!collapsedDisplay)
+                if (dbm <= -124.0f) sRet = "S 0";
+                else if (dbm > -144.0f & dbm <= -138.0f) sRet = "S 1";
+                else if (dbm > -138.0f & dbm <= -132.0f) sRet = "S 2";
+                else if (dbm > -132.0f & dbm <= -126.0f) sRet = "S 3";
+                else if (dbm > -126.0f & dbm <= -120.0f) sRet = "S 4";
+                else if (dbm > -120.0f & dbm <= -114.0f) sRet = "S 5";
+                else if (dbm > -114.0f & dbm <= -108.0f) sRet = "S 6";
+                else if (dbm > -108.0f & dbm <= -102.0f) sRet = "S 7";
+                else if (dbm > -102.0f & dbm <= -96.0f) sRet = "S 8";
+                else if (dbm > -96.0f & dbm <= -90.0f) sRet = "S 9";
+                else if (dbm > -90.0f & dbm <= -86.0f) sRet = "S 9 + 5";
+                else if (dbm > -86.0f & dbm <= -80.0f) sRet = "S 9 + 10";
+                else if (dbm > -80.0f & dbm <= -76.0f) sRet = "S 9 + 15";
+                else if (dbm > -76.0f & dbm <= -66.0f) sRet = "S 9 + 20";
+                else if (dbm > -66.0f & dbm <= -56.0f) sRet = "S 9 + 30";
+                else if (dbm > -56.0f & dbm <= -46.0f) sRet = "S 9 + 40";
+                else if (dbm > -46.0f & dbm <= -36.0f) sRet = "S 9 + 50";
+                else /*if (dbm > -36.0f)*/ sRet = "S 9 + 60";
+            }
+            else
+            {
+                if (dbm <= -124.0f) sRet = "S 0";
+                else if (dbm > -124.0f & dbm <= -118.0f) sRet = "S 1";
+                else if (dbm > -118.0f & dbm <= -112.0f) sRet = "S 2";
+                else if (dbm > -112.0f & dbm <= -106.0f) sRet = "S 3";
+                else if (dbm > -106.0f & dbm <= -100.0f) sRet = "S 4";
+                else if (dbm > -100.0f & dbm <= -94.0f) sRet = "S 5";
+                else if (dbm > -94.0f & dbm <= -88.0f) sRet = "S 6";
+                else if (dbm > -88.0f & dbm <= -82.0f) sRet = "S 7";
+                else if (dbm > -82.0f & dbm <= -76.0f) sRet = "S 8";
+                else if (dbm > -76.0f & dbm <= -70.0f) sRet = "S 9";
+                else if (dbm > -70.0f & dbm <= -66.0f) sRet = "S 9 + 5";
+                else if (dbm > -66.0f & dbm <= -60.0f) sRet = "S 9 + 10";
+                else if (dbm > -60.0f & dbm <= -56.0f) sRet = "S 9 + 15";
+                else if (dbm > -56.0f & dbm <= -46.0f) sRet = "S 9 + 20";
+                else if (dbm > -46.0f & dbm <= -36.0f) sRet = "S 9 + 30";
+                else if (dbm > -36.0f & dbm <= -26.0f) sRet = "S 9 + 40";
+                else if (dbm > -26.0f & dbm <= -16.0f) sRet = "S 9 + 50";
+                else /*if (dbm > -16.0f)*/ sRet = "S 9 + 60";
+            }
+            return "    " + sRet;
+        }
+
+        private Font font7 = new Font("Arial", 7.0f, FontStyle.Bold);
+        private double avg_num = -130.0;
+        private void picMultiMeterDigital_Paint(object sender, System.Windows.Forms.PaintEventArgs e)
+        {
+            int H = picMultiMeterDigital.ClientSize.Height;
+            int W = picMultiMeterDigital.ClientSize.Width;
+            Graphics g = e.Graphics;
+            double num = -200.0f;
+            int pixel_x = 0;
+            int pixel_x_swr = 0;
+            string output = "";
+            string format = "";
+
+            if (meter_data_ready)
+            {
+                current_meter_data = new_meter_data;
+                current_swrmeter_data = new_swrmeter_data;
+                meter_data_ready = false;
+            }
+
+            if (avg_num == Display.CLEAR_FLAG) // reset average -- just use new value
+            {
+                num = avg_num = current_meter_data;
+            }
+            else
+            {
+                if (current_meter_data > avg_num)
+                    num = avg_num = current_meter_data * 0.8 + avg_num * 0.2; // fast rise
+                else
+                    num = avg_num = current_meter_data * 0.2 + avg_num * 0.8; // slow decay
+            }
+
+            switch (current_meter_display_mode)
+            {
+                case MultiMeterDisplayMode.Original:
+                    #region Original                    
+                    g.FillRectangle(meter_background_pen.Brush, 0, 0, W, H);
+
+                    getMeterPixelPosAndDrawScales(1, g, H, W, num, ref pixel_x, ref pixel_x_swr, 1, false);
+
+                    if ((!mox && current_meter_rx_mode != MeterRXMode.OFF) ||
+                        (mox && current_meter_tx_mode != MeterTXMode.OFF))
                     {
-                        if (pixel_x > 139) pixel_x = 139;
-                        pixel_x = (int)(((double)pixel_x / 139.0f) * W);  // MW0LGE proportional green bar over total width
-                    }
-                    break;
-                case 120:
-                    if (pixel_x > 167) pixel_x = 167;
-                    pixel_x = (int)(((double)pixel_x / 167.0f) * W);  // MW0LGE proportional green bar over total width
-                    break;
-            }
+                        pixel_x = Math.Max(1, pixel_x);
+                        pixel_x = Math.Min(W - 3, pixel_x);
 
-            if ((!mox && metRXMode != MeterRXMode.OFF) ||
-                (mox && metTXMode != MeterTXMode.OFF) )
-            {
-                if (pixel_x <= 0) pixel_x = 1;
+                        using (LinearGradientBrush brush = new LinearGradientBrush(new Rectangle(0, 0, pixel_x, H - 10),
+                            meter_left_color, meter_right_color, LinearGradientMode.Horizontal))
 
-                // MW0LGE reworked size/heights
-                using (LinearGradientBrush brush = new LinearGradientBrush(new Rectangle(0, 0, pixel_x, H - 10),
-                    meter_left_color, meter_right_color, LinearGradientMode.Horizontal))
+                            g.FillRectangle(brush, 0, 0, pixel_x, H - 10);                        
 
-                    g.FillRectangle(brush, 0, 0, pixel_x, H - 10);
+                        for (int i = 0; i < (W / 8) - 1; i++)
+                            g.DrawLine(meter_background_pen, 8 + i * 8, 0, 8 + i * 8, H - 10);
 
-                g.FillRectangle(meter_background_pen.Brush, 0, H - 10, W, H);
+                        g.DrawLine(Pens.Red, pixel_x, 0, pixel_x, H - 10);
+                        g.FillRectangle(meter_background_pen.Brush, pixel_x + 1, 0, W - pixel_x, H - 10);
 
-                for (int i = 0; i < (W / 8) - 6; i++)
-                    g.DrawLine(meter_background_pen, 6 + i * 8, 0, 6 + i * 8, H - 10);
-
-                g.DrawLine(Pens.Red, pixel_x, 0, pixel_x, H - 10);
-                g.FillRectangle(meter_background_pen.Brush, pixel_x + 1, 0, W - pixel_x, H - 10);
-
-                switch (RXnumber)
-                {
-                    case 1:
                         if (pixel_x >= meter_peak_value)
                         {
                             meter_peak_count = 0;
@@ -32405,1270 +34246,19 @@ namespace Thetis
                                 g.DrawLine(Pens.Red, meter_peak_value - 1, 0, meter_peak_value - 1, H - 10);
                             }
                         }
-                        break;
-                    case 2:
-                        if (pixel_x >= rx2_meter_peak_value)
-                        {
-                            rx2_meter_peak_count = 0;
-                            rx2_meter_peak_value = pixel_x;
-                        }
-                        else
-                        {
-                            if (rx2_meter_peak_count++ >= multimeter_peak_hold_samples)
-                            {
-                                rx2_meter_peak_count = 0;
-                                rx2_meter_peak_value = pixel_x;
-                            }
-                            else
-                            {
-                                g.DrawLine(Pens.Red, rx2_meter_peak_value, 0, rx2_meter_peak_value, H - 10);
-                                g.DrawLine(Pens.Red, rx2_meter_peak_value - 1, 0, rx2_meter_peak_value - 1, H - 10);
-                            }
-                        }
-                        break;
-                }
-            }
-
-            return num;
-        }
-
-        private Font font7 = new Font("Arial", 7.0f, FontStyle.Bold);
-        private double avg_num = -130.0;
-        private void picMultiMeterDigital_Paint(object sender, System.Windows.Forms.PaintEventArgs e)
-        {
-            int H = picMultiMeterDigital.ClientSize.Height;
-            int W = picMultiMeterDigital.ClientSize.Width;
-            Graphics g = e.Graphics;
-            double num;
-            int pixel_x = 0;
-            int pixel_x_swr = 0;
-            string output = "";
-
-            switch (current_meter_display_mode)
-            {
-                case MultiMeterDisplayMode.Original:
-                    #region Original                    
-
-                    //MW0LGE
-                    num = handleOriginalMeter(1, g, H, W);
-                    drawOriginalMeterTextScale(g, H, W);
-                    //
-
-                    meter_timer.Stop();
-
-                    string format = "f0";
-                    if (meter_detail) format = "f1";
-
-                    if (meter_timer.DurationMsec >= meter_dig_delay)
-                    {
-                        if (!mox)
-                        {
-                            switch (current_meter_rx_mode)
-                            {
-                                case MeterRXMode.SIGNAL_STRENGTH:
-                                case MeterRXMode.SIGNAL_AVERAGE:
-                                    if (s_meter)      // modif F8CHK
-                                    {
-                                        if (rx1_above30)
-                                        {
-                                            if (num <= -124.0f) output = "    S 0";
-                                            else if (num > -144.0f & num <= -138.0f) output = "    S 1";
-                                            else if (num > -138.0f & num <= -132.0f) output = "    S 2";
-                                            else if (num > -132.0f & num <= -126.0f) output = "    S 3";
-                                            else if (num > -126.0f & num <= -120.0f) output = "    S 4";
-                                            else if (num > -120.0f & num <= -114.0f) output = "    S 5";
-                                            else if (num > -114.0f & num <= -108.0f) output = "    S 6";
-                                            else if (num > -108.0f & num <= -102.0f) output = "    S 7";
-                                            else if (num > -102.0f & num <= -96.0f) output = "    S 8";
-                                            else if (num > -96.0f & num <= -90.0f) output = "    S 9";
-                                            else if (num > -90.0f & num <= -86.0f) output = "    S 9 + 5";
-                                            else if (num > -86.0f & num <= -80.0f) output = "    S 9 + 10";
-                                            else if (num > -80.0f & num <= -76.0f) output = "    S 9 + 15";
-                                            else if (num > -76.0f & num <= -66.0f) output = "    S 9 + 20";
-                                            else if (num > -66.0f & num <= -56.0f) output = "    S 9 + 30";
-                                            else if (num > -56.0f & num <= -46.0f) output = "    S 9 + 40";
-                                            else if (num > -46.0f & num <= -36.0f) output = "    S 9 + 50";
-                                            else if (num > -36.0f) output = "    S 9 + 60";
-                                        }
-                                        else
-                                        {
-                                            if (num <= -124.0f) output = "    S 0";
-                                            else if (num > -124.0f & num <= -118.0f) output = "    S 1";
-                                            else if (num > -118.0f & num <= -112.0f) output = "    S 2";
-                                            else if (num > -112.0f & num <= -106.0f) output = "    S 3";
-                                            else if (num > -106.0f & num <= -100.0f) output = "    S 4";
-                                            else if (num > -100.0f & num <= -94.0f) output = "    S 5";
-                                            else if (num > -94.0f & num <= -88.0f) output = "    S 6";
-                                            else if (num > -88.0f & num <= -82.0f) output = "    S 7";
-                                            else if (num > -82.0f & num <= -76.0f) output = "    S 8";
-                                            else if (num > -76.0f & num <= -70.0f) output = "    S 9";
-                                            else if (num > -70.0f & num <= -66.0f) output = "    S 9 + 5";
-                                            else if (num > -66.0f & num <= -60.0f) output = "    S 9 + 10";
-                                            else if (num > -60.0f & num <= -56.0f) output = "    S 9 + 15";
-                                            else if (num > -56.0f & num <= -46.0f) output = "    S 9 + 20";
-                                            else if (num > -46.0f & num <= -36.0f) output = "    S 9 + 30";
-                                            else if (num > -36.0f & num <= -26.0f) output = "    S 9 + 40";
-                                            else if (num > -26.0f & num <= -16.0f) output = "    S 9 + 50";
-                                            else if (num > -16.0f) output = "    S 9 + 60";
-                                        }
-                                    }
-                                    else output = num.ToString(format) + " dBm";
-                                    break;
-                                case MeterRXMode.ADC_L:
-                                case MeterRXMode.ADC_R:
-                                    output = num.ToString("f1") + " dBFS";
-                                    break;
-                                case MeterRXMode.OFF:
-                                    output = "";
-                                    break;
-                            }
-                        }
-                        else
-                        {
-                            MeterTXMode mode = current_meter_tx_mode;
-                            if (chkTUN.Checked) mode = tune_meter_tx_mode;
-                            switch (mode)
-                            {
-                                case MeterTXMode.MIC:
-                                case MeterTXMode.LEVELER:
-                                case MeterTXMode.LVL_G:
-                                case MeterTXMode.EQ:
-                                case MeterTXMode.CFC_PK:
-                                case MeterTXMode.CFC_G:
-                                case MeterTXMode.COMP:
-                                case MeterTXMode.ALC:
-                                case MeterTXMode.ALC_G:
-                                    output = num.ToString(format) + " dB";
-                                    break;
-                                case MeterTXMode.FORWARD_POWER:
-                                case MeterTXMode.REVERSE_POWER:
-                                    if (alexpresent || pa_present || apollopresent)
-                                        output = num.ToString(format) + " W";
-                                    else
-                                        output = num.ToString(format) + " mW";
-                                    break;
-                                case MeterTXMode.SWR:
-                                    output = num.ToString("f1") + " : 1";
-                                    break;
-                                case MeterTXMode.OFF:
-                                    output = "";
-                                    break;
-                            }
-                        }
-                        txtMultiText.Text = output;
-                        meter_timer.Start();
-                    }
-
-                    if (meter_data_ready)
-                    {
-                        meter_data_ready = false;  //We do NOT want to do this before we have consumed it!!!! so do it here.
                     }
                     break;
-                    #endregion
+                #endregion
 
                 case MultiMeterDisplayMode.Edge:
                     #region Edge
-                    if (meter_data_ready)
-                    {
-                        current_meter_data = new_meter_data;
-                        current_swrmeter_data = new_swrmeter_data;
-                        meter_data_ready = false;
-                    }
-
-                    if (avg_num == Display.CLEAR_FLAG) // reset average -- just use new value
-                    {
-                        num = avg_num = current_meter_data;
-                    }
-                    else
-                    {
-                        if (current_meter_data > avg_num)
-                            num = avg_num = current_meter_data * 0.8 + avg_num * 0.2; // fast rise
-                        else
-                            num = avg_num = current_meter_data * 0.2 + avg_num * 0.8; // slow decay
-                    }
-
                     g.DrawRectangle(edge_meter_background_pen, 0, 0, W, H);
 
                     //using (Font f = new Font("Arial", 7.0f, FontStyle.Bold))
 
-                    if (!mox)
-                    {
-                        switch (current_meter_rx_mode)
-                        {
-                            case MeterRXMode.SIGNAL_STRENGTH:
-                            case MeterRXMode.SIGNAL_AVERAGE:
-                                g.FillRectangle(low_brush, 0, H - 4, (int)(W * 0.5), 2); // white horizontal line
-                                g.FillRectangle(high_brush, (int)(W * 0.5), H - 4, (int)(W * 0.5) - 4, 2); // red horizontal line
-                                double spacing = (W * 0.5 - 2.0) / 5.0;
-                                double string_height = 0;
-                                for (int i = 1; i < 6; i++)
-                                {
-                                    g.FillRectangle(low_brush, (int)(i * spacing - spacing * 0.5), H - 4 - 3, 1, 3); // short tic marks
-                                    g.FillRectangle(low_brush, (int)(i * spacing), H - 4 - 6, 2, 6); // long tic marks
-
-                                    //Font f = new Font("Arial", 7.0f, FontStyle.Bold);
-                                    SizeF size = g.MeasureString((-1 + i * 2).ToString(), font7, 1, StringFormat.GenericTypographic);
-                                    double string_width = size.Width - 2.0;
-                                    string_height = size.Height - 2.0;
-
-                                    //g.TextRenderingHint = TextRenderingHint.AntiAlias;
-                                    //g.SmoothingMode = SmoothingMode.AntiAlias;
-                                    // 1 3 5 7 9
-                                    g.DrawString((-1 + i * 2).ToString(), font7, low_brush, (int)(i * spacing - string_width + (int)(i / 5)), (int)(H - 4 - 8 - string_height));
-                                    //g.SmoothingMode = SmoothingMode.None;
-                                }
-                                spacing = ((double)W * 0.5 - 2.0 - 4.0) / 3.0;
-                                for (int i = 1; i < 4; i++)
-                                {
-                                    g.FillRectangle(high_brush, (int)((double)W * 0.5 + i * spacing - spacing * 0.5), H - 4 - 3, 1, 3); // long tic marks
-                                    g.FillRectangle(high_brush, (int)((double)W * 0.5 + i * spacing), H - 4 - 6, 2, 6); // short tic marks
-
-                                    //Font f = new Font("Arial", 7.0f, FontStyle.Bold);
-                                    SizeF size = g.MeasureString("+" + (i * 20).ToString(), font7, 3, StringFormat.GenericTypographic);
-                                    double string_width = size.Width - 2.0;
-
-                                    //g.TextRenderingHint = TextRenderingHint.SystemDefault;
-                                    g.DrawString("+" + (i * 20).ToString(), font7, high_brush, (int)(W * 0.5 + i * spacing - (int)string_width * 3 - i / 3 * 2), (int)(H - 4 - 8 - string_height));
-                                }
-
-                                if (rx1_above30)
-                                {
-                                    if (num > -93.0) // high area
-                                    {
-                                        pixel_x = (int)(W * 0.5 + (93.0 + num) / 63.0 * (W * 0.5 - 3));
-                                    }
-                                    else
-                                    {
-                                        pixel_x = (int)((num + 153.0) / 60.0 * (W * 0.5));
-                                    }
-                                }
-                                else
-                                {
-                                    if (num > -73.0) // high area
-                                    {
-                                        pixel_x = (int)(W * 0.5 + (73.0 + num) / 63.0 * (W * 0.5 - 3));
-                                    }
-                                    else
-                                    {
-                                        pixel_x = (int)((num + 133.0) / 60.0 * (W * 0.5));
-                                    }
-                                }
-
-                                break;
-                            case MeterRXMode.ADC_L:
-                            case MeterRXMode.ADC_R:
-                            case MeterRXMode.ADC2_L:
-                            case MeterRXMode.ADC2_R:
-                                spacing = ((double)W - 5.0) / 6.0;
-                                g.FillRectangle(low_brush, 0, H - 4, (int)(W - 3.0 - spacing), 2);
-                                g.FillRectangle(high_brush, (int)(W - 3.0 - spacing), H - 4, (int)spacing, 2);
-                                for (int i = 1; i < 7; i++)
-                                {
-                                    SolidBrush b = low_brush;
-                                    if (i == 6) b = high_brush;
-                                    g.FillRectangle(b, (int)(i * spacing - spacing / 2), H - 4 - 3, 1, 5);
-                                    g.FillRectangle(b, (int)(i * spacing), H - 4 - 6, 2, 8);
-
-                                    //Font f = new Font("Arial", 7.0f, FontStyle.Bold);
-                                    string s = (-120 + i * 20).ToString();
-                                    SizeF size = g.MeasureString(s, font7, 1, StringFormat.GenericTypographic);
-                                    double string_width = size.Width - 2.0;
-                                    size = g.MeasureString("0", font7, 1, StringFormat.GenericTypographic);
-                                    string_height = size.Height - 2.0;
-
-                                    g.DrawString(s, font7, b, (int)(i * spacing - (int)string_width * (s.Length)), (int)(H - 4 - 8 - string_height));
-                                }
-
-                                pixel_x = (int)((num + 120.0) / 120.0 * (W - 5.0));
-                                break;
-                            case MeterRXMode.OFF:
-                                break;
-                        }
-                    }
-                    else
-                    {
-                        MeterTXMode mode = current_meter_tx_mode;
-                        if (chkTUN.Checked) mode = tune_meter_tx_mode;
-                        switch (mode)
-                        {
-                            case MeterTXMode.MIC:
-                            case MeterTXMode.EQ:
-                            case MeterTXMode.LEVELER:
-                            case MeterTXMode.CFC_PK:
-                            case MeterTXMode.COMP:
-                            case MeterTXMode.ALC:
-                                g.FillRectangle(low_brush, 0, H - 4, (int)(W * 0.665), 2);
-                                g.FillRectangle(high_brush, (int)(W * 0.665), H - 4, (int)(W * 0.335) - 2, 2);
-                                double spacing = (W * 0.665 - 2.0) / 3.0;
-                                double string_height = 0;
-                                for (int i = 1; i < 4; i++)
-                                {
-                                    g.FillRectangle(low_brush, (int)(i * spacing - spacing * 0.5), H - 4 - 3, 1, 3);
-                                    g.FillRectangle(low_brush, (int)(i * spacing), H - 4 - 6, 2, 6);
-
-                                    string s = (-30 + i * 10).ToString();
-                                    //Font f = new Font("Arial", 7.0f, FontStyle.Bold);
-                                    SizeF size = g.MeasureString("0", font7, 1, StringFormat.GenericTypographic);
-                                    double string_width = size.Width - 2.0;
-                                    string_height = size.Height - 2.0;
-
-                                    //g.TextRenderingHint = TextRenderingHint.AntiAlias;
-                                    //g.SmoothingMode = SmoothingMode.AntiAlias;
-                                    g.DrawString(s, font7, low_brush, (int)(i * spacing - string_width * s.Length + 1.0 - (int)(i / 2) + (int)(i / 3)), (int)(H - 4 - 8 - string_height));
-                                    //g.SmoothingMode = SmoothingMode.None;
-                                }
-                                spacing = (W * 0.335 - 2.0 - 3.0) / 3.0;
-                                for (int i = 1; i < 4; i++)
-                                {
-                                    g.FillRectangle(high_brush, (int)((double)W * 0.665 + i * spacing - spacing * 0.5), H - 4 - 3, 1, 3);
-                                    g.FillRectangle(high_brush, (int)((double)W * 0.665 + i * spacing), H - 4 - 6, 2, 6);
-                                    string s = (i * 4).ToString();
-                                    //Font f = new Font("Arial", 7.0f, FontStyle.Bold);
-                                    SizeF size = g.MeasureString(s, font7, 3, StringFormat.GenericTypographic);
-                                    double string_width = size.Width - 2.0;
-
-                                    g.TextRenderingHint = TextRenderingHint.SystemDefault;
-                                    g.DrawString(s, font7, high_brush, (int)(W * 0.665 + i * spacing - (int)string_width * s.Length), (int)(H - 4 - 8 - string_height));
-                                }
-
-                                if (num > 0.0) // high area
-                                {
-                                    pixel_x = (int)(W * 0.665 + num / 12.0 * (W * 0.335 - 4));
-                                }
-                                else
-                                {
-                                    pixel_x = (int)((num + 30.0) / 30.0 * (W * 0.665 - 1.0));
-                                }
-                                break;
-                            case MeterTXMode.FORWARD_POWER:
-                            case MeterTXMode.REVERSE_POWER:
-                                if (alexpresent || apollopresent) num = Math.Round(num);
-
-                                if (alexpresent && ((orionmkiipresent || anan8000dpresent) && tx_xvtr_index < 0))
-                                {
-                                    g.FillRectangle(low_brush, 0, H - 4, (int)(W * 0.75), 2);
-                                    g.FillRectangle(high_brush, (int)(W * 0.75), H - 4, (int)(W * 0.25) - 10, 2);
-                                    spacing = (W * 0.75 - 2.0) / 4.0;
-                                    string_height = 0;
-                                    string[] list = { "10", "20", "100", "200" };
-                                    for (int i = 1; i < 5; i++)
-                                    {
-                                        g.FillRectangle(low_brush, (int)(i * spacing - spacing * 0.5), H - 4 - 3, 1, 3);
-                                        g.FillRectangle(low_brush, (int)(i * spacing), H - 4 - 6, 2, 6);
-
-                                        string s = list[i - 1];
-                                        SizeF size = g.MeasureString("0", font7, 1, StringFormat.GenericTypographic);
-                                        double string_width = size.Width - 2.0;
-                                        string_height = size.Height - 2.0;
-
-                                        g.DrawString(s, font7, low_brush, (int)(i * spacing - string_width * s.Length + (int)(i / 3) + (int)(i / 4)), (int)(H - 4 - 8 - string_height));
-                                    }
-                                    spacing = (W * 0.25 - 2.0 - 10.0) / 1.0;
-                                    for (int i = 1; i < 2; i++)
-                                    {
-                                        g.FillRectangle(high_brush, (int)((double)W * 0.75 + i * spacing - spacing * 0.5), H - 4 - 3, 1, 3);
-                                        g.FillRectangle(high_brush, (int)((double)W * 0.75 + i * spacing), H - 4 - 6, 2, 6);
-
-                                        //Font f = new Font("Arial", 7.0f, FontStyle.Bold);
-                                        SizeF size = g.MeasureString("0", font7, 3, StringFormat.GenericTypographic);
-                                        double string_width = size.Width - 2.0;
-
-                                        g.TextRenderingHint = TextRenderingHint.SystemDefault;
-                                        g.DrawString("240+", font7, high_brush, (int)(W * 0.75 + i * spacing - (int)3.5 * string_width), (int)(H - 4 - 8 - string_height));
-                                    }
-
-                                    if (num <= 200.0) // low area
-                                    {
-                                        spacing = (W * 0.75 - 2.0) / 4.0;
-                                        if (num <= 10.0)
-                                            pixel_x = (int)(num / 10.0 * (int)spacing);
-                                        else if (num <= 20.0)
-                                            pixel_x = (int)(spacing + (num - 10.0) / 10.0 * spacing);
-                                        else if (num <= 100.0)
-                                            pixel_x = (int)(2 * spacing + (num - 20.0) / 80.0 * spacing);
-                                        else // <= 100
-                                            pixel_x = (int)(3 * spacing + (num - 100.0) / 100.0 * spacing);
-                                    }
-                                    else
-                                    {
-                                        spacing = (W * 0.25 - 2.0 - 10.0) / 1.0;
-                                        if (num <= 240.0)
-                                            pixel_x = (int)(W * 0.75 + (num - 200.0) / 40.0 * spacing);
-                                        else
-                                            pixel_x = (int)(W * 0.75 + spacing + (num - 240.0) / 120.0 * spacing);
-                                    }
-                                }
-
-                                else if ((alexpresent || pa_present) && (!anan10present && !anan10Epresent && !apollopresent))
-                                {
-                                    g.FillRectangle(low_brush, 0, H - 4, (int)(W * 0.75), 2);
-                                    g.FillRectangle(high_brush, (int)(W * 0.75), H - 4, (int)(W * 0.25) - 10, 2);
-                                    spacing = (W * 0.75 - 2.0) / 4.0;
-                                    string_height = 0;
-                                    string[] list = { "5", "10", "50", "100" };
-                                    for (int i = 1; i < 5; i++)
-                                    {
-                                        g.FillRectangle(low_brush, (int)(i * spacing - spacing * 0.5), H - 4 - 3, 1, 3);
-                                        g.FillRectangle(low_brush, (int)(i * spacing), H - 4 - 6, 2, 6);
-
-                                        string s = list[i - 1];
-                                        //Font f = new Font("Arial", 7.0f, FontStyle.Bold);
-                                        SizeF size = g.MeasureString("0", font7, 1, StringFormat.GenericTypographic);
-                                        double string_width = size.Width - 2.0;
-                                        string_height = size.Height - 2.0;
-
-                                        //g.TextRenderingHint = TextRenderingHint.AntiAlias;
-                                        //g.SmoothingMode = SmoothingMode.AntiAlias;
-                                        g.DrawString(s, font7, low_brush, (int)(i * spacing - string_width * s.Length + (int)(i / 3) + (int)(i / 4)), (int)(H - 4 - 8 - string_height));
-                                        //g.SmoothingMode = SmoothingMode.None;
-                                    }
-                                    spacing = (W * 0.25 - 2.0 - 10.0) / 1.0;
-                                    for (int i = 1; i < 2; i++)
-                                    {
-                                        g.FillRectangle(high_brush, (int)((double)W * 0.75 + i * spacing - spacing * 0.5), H - 4 - 3, 1, 3);
-                                        g.FillRectangle(high_brush, (int)((double)W * 0.75 + i * spacing), H - 4 - 6, 2, 6);
-
-                                        //Font f = new Font("Arial", 7.0f, FontStyle.Bold);
-                                        SizeF size = g.MeasureString("0", font7, 3, StringFormat.GenericTypographic);
-                                        double string_width = size.Width - 2.0;
-
-                                        g.TextRenderingHint = TextRenderingHint.SystemDefault;
-                                        g.DrawString("120+", font7, high_brush, (int)(W * 0.75 + i * spacing - (int)3.5 * string_width), (int)(H - 4 - 8 - string_height));
-                                    }
-
-                                    if (num <= 100.0) // low area
-                                    {
-                                        spacing = (W * 0.75 - 2.0) / 4.0;
-                                        if (num <= 5.0)
-                                            pixel_x = (int)(num / 5.0 * (int)spacing);
-                                        else if (num <= 10.0)
-                                            pixel_x = (int)(spacing + (num - 5.0) / 5.0 * spacing);
-                                        else if (num <= 50.0)
-                                            pixel_x = (int)(2 * spacing + (num - 10.0) / 40.0 * spacing);
-                                        else // <= 100
-                                            pixel_x = (int)(3 * spacing + (num - 50.0) / 50.0 * spacing);
-                                    }
-                                    else
-                                    {
-                                        spacing = (W * 0.25 - 2.0 - 10.0) / 1.0;
-                                        if (num <= 120.0)
-                                            pixel_x = (int)(W * 0.75 + (num - 100.0) / 20.0 * spacing);
-                                        else
-                                            pixel_x = (int)(W * 0.75 + spacing + (num - 120.0) / 60.0 * spacing);
-                                    }
-                                }
-                                else if (anan10present || anan10Epresent)// || apollopresent)
-                                {
-                                    g.FillRectangle(low_brush, 0, H - 4, (int)(W * 0.75), 2);
-                                    g.FillRectangle(high_brush, (int)(W * 0.75), H - 4, (int)(W * 0.25) - 10, 2);
-                                    spacing = (W * 0.75 - 2.0) / 4.0;
-                                    string_height = 0;
-                                    string[] list = { "1", "5", "10", "15" };
-                                    for (int i = 1; i < 5; i++)
-                                    {
-                                        g.FillRectangle(low_brush, (int)(i * spacing - spacing * 0.5), H - 4 - 3, 1, 3);
-                                        g.FillRectangle(low_brush, (int)(i * spacing), H - 4 - 6, 2, 6);
-
-                                        string s = list[i - 1];
-                                        //Font f = new Font("Arial", 7.0f, FontStyle.Bold);
-                                        SizeF size = g.MeasureString("0", font7, 1, StringFormat.GenericTypographic);
-                                        double string_width = size.Width - 2.0;
-                                        string_height = size.Height - 2.0;
-
-                                        //g.TextRenderingHint = TextRenderingHint.AntiAlias;
-                                        //g.SmoothingMode = SmoothingMode.AntiAlias;
-                                        g.DrawString(s, font7, low_brush, (int)(i * spacing - string_width * s.Length + (int)(i / 3) + (int)(i / 4)), (int)(H - 4 - 8 - string_height));
-                                        //g.SmoothingMode = SmoothingMode.None;
-                                    }
-                                    spacing = (W * 0.25 - 2.0 - 10.0) / 1.0;
-                                    for (int i = 1; i < 2; i++)
-                                    {
-                                        g.FillRectangle(high_brush, (int)((double)W * 0.75 + i * spacing - spacing * 0.5), H - 4 - 3, 1, 3);
-                                        g.FillRectangle(high_brush, (int)((double)W * 0.75 + i * spacing), H - 4 - 6, 2, 6);
-
-                                        //Font f = new Font("Arial", 7.0f, FontStyle.Bold);
-                                        SizeF size = g.MeasureString("0", font7, 2, StringFormat.GenericTypographic);
-                                        double string_width = size.Width - 2.0;
-
-                                        g.TextRenderingHint = TextRenderingHint.SystemDefault;
-                                        g.DrawString("25+", font7, high_brush, (int)(W * 0.75 + i * spacing - (int)3.5 * string_width), (int)(H - 4 - 8 - string_height));
-                                    }
-
-                                    if (num <= 15.0) // low area
-                                    {
-                                        spacing = (W * 0.75 - 2.0) / 4.0;
-                                        if (num <= 1.0)
-                                            pixel_x = (int)(num / 1.0 * (int)spacing);
-                                        else if (num <= 5.0)
-                                            pixel_x = (int)(spacing + (num - 1.0) / 4.0 * spacing);
-                                        else if (num <= 10.0)
-                                            pixel_x = (int)(2 * spacing + (num - 5.0) / 5.0 * spacing);
-                                        else
-                                            pixel_x = (int)(3 * spacing + (num - 10.0) / 5.0 * spacing);
-                                    }
-                                    else
-                                    {
-                                        spacing = (W * 0.25 - 2.0 - 10.0) / 1.0;
-                                        if (num <= 25.0)
-                                            pixel_x = (int)(W * 0.75 + (num - 15.0) / 10.0 * spacing);
-                                        else
-                                            pixel_x = (int)(W * 0.75 + spacing + (num - 25.0) / 5.0 * spacing);
-                                    }
-                                }
-                                else if (apollopresent) //(anan10present || apollopresent) // 30W
-                                {
-                                    g.FillRectangle(low_brush, 0, H - 4, (int)(W * 0.75), 2);
-                                    g.FillRectangle(high_brush, (int)(W * 0.75), H - 4, (int)(W * 0.25) - 10, 2);
-                                    spacing = (W * 0.75 - 2.0) / 4.0;
-                                    string_height = 0;
-                                    string[] list = { "5", "10", "20", "30" };
-                                    for (int i = 1; i < 5; i++)
-                                    {
-                                        g.FillRectangle(low_brush, (int)(i * spacing - spacing * 0.5), H - 4 - 3, 1, 3);
-                                        g.FillRectangle(low_brush, (int)(i * spacing), H - 4 - 6, 2, 6);
-
-                                        string s = list[i - 1];
-                                        //Font f = new Font("Arial", 7.0f, FontStyle.Bold);
-                                        SizeF size = g.MeasureString("0", font7, 1, StringFormat.GenericTypographic);
-                                        double string_width = size.Width - 2.0;
-                                        string_height = size.Height - 2.0;
-
-                                        //g.TextRenderingHint = TextRenderingHint.AntiAlias;
-                                        //g.SmoothingMode = SmoothingMode.AntiAlias;
-                                        g.DrawString(s, font7, low_brush, (int)(i * spacing - string_width * s.Length + (int)(i / 3) + (int)(i / 4)), (int)(H - 4 - 8 - string_height));
-                                        //g.SmoothingMode = SmoothingMode.None;
-                                    }
-                                    spacing = (W * 0.25 - 2.0 - 10.0) / 1.0;
-                                    for (int i = 1; i < 2; i++)
-                                    {
-                                        g.FillRectangle(high_brush, (int)((double)W * 0.75 + i * spacing - spacing * 0.5), H - 4 - 3, 1, 3);
-                                        g.FillRectangle(high_brush, (int)((double)W * 0.75 + i * spacing), H - 4 - 6, 2, 6);
-
-                                        //Font f = new Font("Arial", 7.0f, FontStyle.Bold);
-                                        SizeF size = g.MeasureString("0", font7, 2, StringFormat.GenericTypographic);
-                                        double string_width = size.Width - 2.0;
-
-                                        g.TextRenderingHint = TextRenderingHint.SystemDefault;
-                                        g.DrawString("50+", font7, high_brush, (int)(W * 0.75 + i * spacing - (int)3.5 * string_width), (int)(H - 4 - 8 - string_height));
-                                    }
-
-                                    if (num <= 30.0) // low area
-                                    {
-                                        spacing = (W * 0.75 - 2.0) / 4.0;
-                                        if (num <= 5.0)
-                                            pixel_x = (int)(num / 5.0 * (int)spacing);
-                                        else if (num <= 10.0)
-                                            pixel_x = (int)(spacing + (num - 5.0) / 5.0 * spacing);
-                                        else if (num <= 20.0)
-                                            pixel_x = (int)(2 * spacing + (num - 10.0) / 10.0 * spacing);
-                                        else // <= 30
-                                            pixel_x = (int)(3 * spacing + (num - 20.0) / 10.0 * spacing);
-                                    }
-                                    else
-                                    {
-                                        spacing = (W * 0.25 - 2.0 - 10.0) / 1.0;
-                                        if (num <= 50.0)
-                                            pixel_x = (int)(W * 0.75 + (num - 30.0) / 20.0 * spacing);
-                                        else
-                                            pixel_x = (int)(W * 0.75 + spacing + (num - 50.0) / 25.0 * spacing);
-                                    }
-
-                                }
-                                else // 1W version
-                                {
-                                    g.FillRectangle(low_brush, 0, H - 4, (int)(W * 0.75), 2);
-                                    g.FillRectangle(low_brush, (int)(W * 0.75), H - 4, (int)(W * 0.25) - 9, 2);
-                                    spacing = (W * 0.75 - 2.0) / 4.0;
-                                    string_height = 0;
-                                    string[] list = { "100", "250", "500", "800", "1000" };
-                                    for (int i = 1; i < 5; i++)
-                                    {
-                                        g.FillRectangle(low_brush, (int)(i * spacing - spacing * 0.5), H - 4 - 3, 1, 3);
-                                        g.FillRectangle(low_brush, (int)(i * spacing), H - 4 - 6, 2, 6);
-
-                                        string s = list[i - 1];
-                                        //Font f = new Font("Arial", 7.0f, FontStyle.Bold);
-                                        SizeF size = g.MeasureString("0", font7, 1, StringFormat.GenericTypographic);
-                                        double string_width = size.Width - 2.0;
-                                        string_height = size.Height - 2.0;
-
-                                        //g.TextRenderingHint = TextRenderingHint.AntiAlias;
-                                        //g.SmoothingMode = SmoothingMode.AntiAlias;
-                                        g.DrawString(s, font7, low_brush, (int)(i * spacing - string_width * s.Length + 1.0 + (int)(i / 2) - (int)(i / 4)), (int)(H - 4 - 8 - string_height));
-                                        //g.SmoothingMode = SmoothingMode.None;
-                                    }
-                                    spacing = (W * 0.25 - 2.0 - 9.0) / 1.0;
-                                    for (int i = 1; i < 2; i++)
-                                    {
-                                        g.FillRectangle(low_brush, (int)((double)W * 0.75 + i * spacing - spacing * 0.5), H - 4 - 3, 1, 3);
-                                        g.FillRectangle(low_brush, (int)((double)W * 0.75 + i * spacing), H - 4 - 6, 2, 6);
-
-                                        //Font f = new Font("Arial", 7.0f, FontStyle.Bold);
-                                        SizeF size = g.MeasureString("0", font7, 3, StringFormat.GenericTypographic);
-                                        double string_width = size.Width - 2.0;
-
-                                        //g.TextRenderingHint = TextRenderingHint.SystemDefault;
-                                        g.DrawString("1000", font7, low_brush, (int)(W * 0.75 + 2 + i * spacing - (int)4.0 * string_width), (int)(H - 4 - 8 - string_height));
-                                    }
-
-                                    // num *= 1000;
-                                    if (num < 801.0) // low area
-                                    {
-                                        spacing = (W * 0.75 - 2.0) / 4.0;
-                                        if (num <= 100.0)
-                                            pixel_x = (int)(num / 100.0 * spacing);
-                                        else if (num <= 250.0)
-                                            pixel_x = (int)(spacing + (num - 100.0) / 150.0 * spacing);
-                                        else if (num <= 500.0)
-                                            pixel_x = (int)(2 * spacing + (num - 250.0) / 250.0 * spacing);
-                                        else // <801.0
-                                            pixel_x = (int)(3 * spacing + (num - 500.0) / 300.0 * spacing);
-                                    }
-                                    else // >801
-                                    {
-                                        spacing = (W * 0.25 - 2.0 - 9.0) / 1.0;
-                                        pixel_x = (int)(W * 0.75 + (num - 800.0) / 200.0 * spacing);
-                                    }
-                                }
-                                break;
-                            case MeterTXMode.SWR_POWER:
-
-                                if ((alexpresent || pa_present) && (!anan10present && !anan10Epresent && !apollopresent))
-                                {
-                                    g.FillRectangle(high_brush, (int)(W * 0.75), (H / 2) - 1, (int)(W * 0.25) - 4, 2);
-                                    g.FillRectangle(low_brush, 0, (H / 2) - 1, (int)(W * 0.75), 4); // horizontal white line
-                                    g.FillRectangle(high_brush, (int)(W * 0.75), (H / 2) + 1, (int)(W * 0.25) - 9, 2); //horizontal red line
-                                    // SWR stuff first
-                                    spacing = (W * 0.5) / 10.0;
-                                    string_height = 0;
-                                    string[] swrx_list = { "1.5", "2" };
-                                    for (int i = 1; i < 10; i++)
-                                    {
-                                        g.FillRectangle(low_brush, (int)(i * spacing), (H / 2) - 4, 1, 3);
-                                    }
-                                    for (int i = 1; i < 3; i++)
-                                    {
-                                        spacing = (W * 0.5) / 2.0;
-                                        g.FillRectangle(low_brush, (int)(i * spacing), (H / 2) - 7, 2, 6);
-
-                                        string s = swrx_list[i - 1];
-                                        //Font f = new Font("Arial", 7.0f, FontStyle.Bold);
-                                        SizeF size = g.MeasureString("0", font7, 1, StringFormat.GenericTypographic);
-                                        double string_width = size.Width - 2.0;
-                                        string_height = size.Height - 2.0;
-
-                                        //g.TextRenderingHint = TextRenderingHint.AntiAlias;
-                                        //g.SmoothingMode = SmoothingMode.AntiAlias;
-                                        g.DrawString(s, font7, low_brush, (int)(i * spacing - string_width * s.Length + 2.0 - 1 * (int)(i / 2) + 3 * (int)(i / 4)), (int)((H / 2) - 9 - string_height));
-                                        //g.SmoothingMode = SmoothingMode.None;
-                                    }
-                                    g.FillRectangle(low_brush, (int)(W * 0.625), (H / 2) - 4, 1, 3); // small tic 2.5:1
-
-                                    string[] swrx_hi_list = { "3", "4", "5" };
-
-                                    spacing = (W * 0.75 - 2.0 - 9.0) / 2.0;
-                                    for (int i = 1; i < 2; i++)
-                                    {
-                                        // g.FillRectangle(high_brush, (int)(i * spacing - spacing * 0.75), H - 4 - 3, 1, 3);
-                                    }
-
-                                    for (int i = 1; i < 4; i++)
-                                    {
-                                        // spacing = (W * 0.55 - 2.0) / 2.0;
-                                        // spacing = (W * 0.33 - 2.0) / 3.0;
-                                        spacing = (W * 0.25 - 6.0) / 2.0;
-                                        g.FillRectangle(high_brush, (int)((double)W * 0.75 + i * spacing - spacing * 0.5), (H / 2) - 4, 1, 3);
-                                        g.FillRectangle(high_brush, (int)((double)W * 0.75 + i * spacing - spacing), (H / 2) - 7, 2, 6);
-                                        // g.FillRectangle(high_brush, (int)((double)W * 0.55 + i * spacing - spacing * 0.5), H - 4 - 6, 2, 6);
-                                        string s = swrx_hi_list[i - 1];
-                                        //Font f = new Font("Arial", 7.0f, FontStyle.Bold);
-                                        SizeF size = g.MeasureString("0", font7, 1, StringFormat.GenericTypographic);
-                                        double string_width = size.Width - 2.0;
-                                        string_height = size.Height - 2.0;
-
-                                        //g.TextRenderingHint = TextRenderingHint.AntiAlias;
-                                        //g.SmoothingMode = SmoothingMode.AntiAlias;
-                                        //g.DrawString(s, font7, high_brush, (int)(i * spacing - string_width * s.Length + 2.0 - 2 * (int)(i / 2) + 3 * (int)(i / 4)), (int)(H - 4 - 8 - string_height));
-                                        // g.DrawString(s, font7, high_brush, (int)(W * 0.75 + i * spacing - spacing - (int)2.5 * string_width), (int)(H - 4 - 8 - string_height));
-                                        g.DrawString(s, font7, high_brush, (int)(W * 0.75 + i * spacing - spacing - (int)1.0 * string_width), (int)((H / 2) - 9 - string_height));
-                                        //g.SmoothingMode = SmoothingMode.None;
-                                    }
-
-                                    if (current_swrmeter_data <= 3.0) // low area
-                                    {
-                                        spacing = (W * 0.75) / 3.0;
-
-                                        if (current_swrmeter_data <= 1.5)
-                                            pixel_x_swr = (int)((current_swrmeter_data - 1.0) / 0.5 * spacing);
-                                        else if (current_swrmeter_data <= 2.0)
-                                            pixel_x_swr = (int)(spacing + (current_swrmeter_data - 1.5) / 0.5 * spacing);
-                                        else //if (current_swrmeter_data <= 3.0)
-                                            pixel_x_swr = (int)(2 * spacing + (current_swrmeter_data - 2.0) / 1.0 * spacing);
-                                        // else //  current_swrmeter_data <= 4.0
-                                        //  pixel_x_swr = (int)(3 * spacing + (current_swrmeter_data - 3.0) / 1.0 * spacing);
-                                    }
-                                    else
-                                    {
-                                        spacing = (W * 0.25 - 6.0) / 2.0;
-                                        if (current_swrmeter_data <= 4.0)
-                                            pixel_x_swr = (int)(W * 0.75 + (current_swrmeter_data - 3.0) / 1.0 * spacing);
-                                        else if (current_swrmeter_data <= 5.0)
-                                            pixel_x_swr = (int)(W * 0.75 + spacing + (current_swrmeter_data - 4.0) / 1.0 * spacing);
-                                        else
-                                            pixel_x_swr = (int)(W * 0.75 + 2 * spacing + (current_swrmeter_data - 5.0) / 4.0 * spacing);
-                                    }
-                                    if (double.IsInfinity(current_swrmeter_data)) pixel_x_swr = W - 2;
-
-                                    //PWR
-                                    spacing = (W * 0.75 - 2.0) / 4.0;
-                                    string_height = 0;
-                                    string[] list = { "5", "10", "50", "100" };
-                                    for (int i = 1; i < 5; i++)
-                                    {
-                                        g.FillRectangle(low_brush, (int)(i * spacing - spacing * 0.5), (H / 2) + 3, 1, 3);
-                                        g.FillRectangle(low_brush, (int)(i * spacing), (H / 2) + 3, 2, 6);
-
-                                        string s = list[i - 1];
-                                        //Font f = new Font("Arial", 7.0f, FontStyle.Bold);
-                                        SizeF size = g.MeasureString("0", font7, 1, StringFormat.GenericTypographic);
-                                        double string_width = size.Width - 2.0;
-                                        string_height = size.Height - 2.0;
-
-                                        //g.TextRenderingHint = TextRenderingHint.AntiAlias;
-                                        //g.SmoothingMode = SmoothingMode.AntiAlias;
-                                        g.DrawString(s, font7, low_brush, (int)(i * spacing - string_width * s.Length + (int)(i / 3) + (int)(i / 4)), (int)(H - 1 - string_height));
-                                        //g.SmoothingMode = SmoothingMode.None;
-                                    }
-                                    spacing = (W * 0.25 - 2.0 - 10.0) / 1.0;
-                                    for (int i = 1; i < 2; i++)
-                                    {
-                                        g.FillRectangle(high_brush, (int)((double)W * 0.75 + i * spacing - spacing * 0.5), (H / 2) + 3, 1, 3);
-                                        g.FillRectangle(high_brush, (int)((double)W * 0.75 + i * spacing), (H / 2) + 3, 2, 6);
-
-                                        //Font f = new Font("Arial", 7.0f, FontStyle.Bold);
-                                        SizeF size = g.MeasureString("0", font7, 2, StringFormat.GenericTypographic);
-                                        double string_width = size.Width - 2.0;
-
-                                        g.TextRenderingHint = TextRenderingHint.SystemDefault;
-                                        g.DrawString("120+", font7, high_brush, (int)(W * 0.75 + i * spacing - (int)3.5 * string_width), (int)(H - 1 - string_height));
-                                    }
-
-                                    if (num <= 100.0) // low area
-                                    {
-                                        spacing = (W * 0.75 - 2.0) / 4.0;
-                                        if (num <= 5.0)
-                                            pixel_x = (int)(num / 5.0 * (int)spacing);
-                                        else if (num <= 10.0)
-                                            pixel_x = (int)(spacing + (num - 5.0) / 5.0 * spacing);
-                                        else if (num <= 50.0)
-                                            pixel_x = (int)(2 * spacing + (num - 10.0) / 40.0 * spacing);
-                                        else
-                                            pixel_x = (int)(3 * spacing + (num - 50.0) / 50.0 * spacing);
-                                    }
-                                    else
-                                    {
-                                        spacing = (W * 0.25 - 2.0 - 10.0) / 1.0;
-                                        if (num <= 120.0)
-                                            pixel_x = (int)(W * 0.75 + (num - 100.0) / 20.0 * spacing);
-                                        else
-                                            pixel_x = (int)(W * 0.75 + spacing + (num - 120.0) / 60.0 * spacing);
-                                    }
-                                }
-
-                                else if (anan10present || anan10Epresent)
-                                {
-                                    g.FillRectangle(high_brush, (int)(W * 0.75), (H / 2) - 1, (int)(W * 0.25) - 4, 2);
-                                    g.FillRectangle(low_brush, 0, (H / 2) - 1, (int)(W * 0.75), 4); // horizontal white line
-                                    g.FillRectangle(high_brush, (int)(W * 0.75), (H / 2) + 1, (int)(W * 0.25) - 9, 2); //horizontal red line
-                                    // SWR stuff first
-                                    spacing = (W * 0.5) / 10.0;
-                                    string_height = 0;
-                                    string[] swrx_list = { "1.5", "2" };
-                                    for (int i = 1; i < 10; i++)
-                                    {
-                                        g.FillRectangle(low_brush, (int)(i * spacing), (H / 2) - 4, 1, 3);
-                                    }
-                                    for (int i = 1; i < 3; i++)
-                                    {
-                                        spacing = (W * 0.5) / 2.0;
-                                        g.FillRectangle(low_brush, (int)(i * spacing), (H / 2) - 7, 2, 6);
-
-                                        string s = swrx_list[i - 1];
-                                        //Font f = new Font("Arial", 7.0f, FontStyle.Bold);
-                                        SizeF size = g.MeasureString("0", font7, 1, StringFormat.GenericTypographic);
-                                        double string_width = size.Width - 2.0;
-                                        string_height = size.Height - 2.0;
-
-                                        //g.TextRenderingHint = TextRenderingHint.AntiAlias;
-                                        //g.SmoothingMode = SmoothingMode.AntiAlias;
-                                        g.DrawString(s, font7, low_brush, (int)(i * spacing - string_width * s.Length + 2.0 - 1 * (int)(i / 2) + 3 * (int)(i / 4)), (int)((H / 2) - 9 - string_height));
-                                        //g.SmoothingMode = SmoothingMode.None;
-                                    }
-                                    g.FillRectangle(low_brush, (int)(W * 0.625), (H / 2) - 4, 1, 3); // small tic 2.5:1
-
-                                    string[] swrx_hi_list = { "3", "4", "5" };
-
-                                    spacing = (W * 0.75 - 2.0 - 9.0) / 2.0;
-                                    for (int i = 1; i < 2; i++)
-                                    {
-                                        // g.FillRectangle(high_brush, (int)(i * spacing - spacing * 0.75), H - 4 - 3, 1, 3);
-                                    }
-
-                                    for (int i = 1; i < 4; i++)
-                                    {
-                                        // spacing = (W * 0.55 - 2.0) / 2.0;
-                                        // spacing = (W * 0.33 - 2.0) / 3.0;
-                                        spacing = (W * 0.25 - 6.0) / 2.0;
-                                        g.FillRectangle(high_brush, (int)((double)W * 0.75 + i * spacing - spacing * 0.5), (H / 2) - 4, 1, 3);
-                                        g.FillRectangle(high_brush, (int)((double)W * 0.75 + i * spacing - spacing), (H / 2) - 7, 2, 6);
-                                        // g.FillRectangle(high_brush, (int)((double)W * 0.55 + i * spacing - spacing * 0.5), H - 4 - 6, 2, 6);
-                                        string s = swrx_hi_list[i - 1];
-                                        //Font f = new Font("Arial", 7.0f, FontStyle.Bold);
-                                        SizeF size = g.MeasureString("0", font7, 1, StringFormat.GenericTypographic);
-                                        double string_width = size.Width - 2.0;
-                                        string_height = size.Height - 2.0;
-
-                                        //g.TextRenderingHint = TextRenderingHint.AntiAlias;
-                                        //g.SmoothingMode = SmoothingMode.AntiAlias;
-                                        //g.DrawString(s, font7, high_brush, (int)(i * spacing - string_width * s.Length + 2.0 - 2 * (int)(i / 2) + 3 * (int)(i / 4)), (int)(H - 4 - 8 - string_height));
-                                        // g.DrawString(s, font7, high_brush, (int)(W * 0.75 + i * spacing - spacing - (int)2.5 * string_width), (int)(H - 4 - 8 - string_height));
-                                        g.DrawString(s, font7, high_brush, (int)(W * 0.75 + i * spacing - spacing - (int)1.0 * string_width), (int)((H / 2) - 9 - string_height));
-                                        //g.SmoothingMode = SmoothingMode.None;
-                                    }
-
-
-                                    if (current_swrmeter_data <= 3.0) // low area
-                                    {
-                                        spacing = (W * 0.75) / 3.0;
-
-                                        if (current_swrmeter_data <= 1.5)
-                                            pixel_x_swr = (int)((current_swrmeter_data - 1.0) / 0.5 * spacing);
-                                        else if (current_swrmeter_data <= 2.0)
-                                            pixel_x_swr = (int)(spacing + (current_swrmeter_data - 1.5) / 0.5 * spacing);
-                                        else //if (current_swrmeter_data <= 3.0)
-                                            pixel_x_swr = (int)(2 * spacing + (current_swrmeter_data - 2.0) / 1.0 * spacing);
-                                        // else //  current_swrmeter_data <= 4.0
-                                        //  pixel_x_swr = (int)(3 * spacing + (current_swrmeter_data - 3.0) / 1.0 * spacing);
-                                    }
-                                    else
-                                    {
-                                        spacing = (W * 0.25 - 6.0) / 2.0;
-                                        if (current_swrmeter_data <= 4.0)
-                                            pixel_x_swr = (int)(W * 0.75 + (current_swrmeter_data - 3.0) / 1.0 * spacing);
-                                        else if (current_swrmeter_data <= 5.0)
-                                            pixel_x_swr = (int)(W * 0.75 + spacing + (current_swrmeter_data - 4.0) / 1.0 * spacing);
-                                        else
-                                            pixel_x_swr = (int)(W * 0.75 + 2 * spacing + (current_swrmeter_data - 5.0) / 4.0 * spacing);
-                                    }
-                                    if (double.IsInfinity(current_swrmeter_data)) pixel_x_swr = W - 2;
-
-
-                                    // PWR
-                                    spacing = (W * 0.75 - 2.0) / 4.0;
-                                    string[] list = { "1", "5", "10", "15" };
-                                    for (int i = 1; i < 5; i++)
-                                    {
-                                        g.FillRectangle(low_brush, (int)(i * spacing - spacing * 0.5), (H / 2) + 3, 1, 3);
-                                        g.FillRectangle(low_brush, (int)(i * spacing), (H / 2) + 3, 2, 6);
-
-                                        string s = list[i - 1];
-                                        //Font f = new Font("Arial", 7.0f, FontStyle.Bold);
-                                        SizeF size = g.MeasureString("0", font7, 1, StringFormat.GenericTypographic);
-                                        double string_width = size.Width - 2.0;
-                                        string_height = size.Height - 2.0;
-
-                                        //g.TextRenderingHint = TextRenderingHint.AntiAlias;
-                                        //g.SmoothingMode = SmoothingMode.AntiAlias;
-                                        g.DrawString(s, font7, low_brush, (int)(i * spacing - string_width * s.Length + (int)(i / 3) + (int)(i / 4)), (int)(H - 1 - string_height));
-                                        //g.SmoothingMode = SmoothingMode.None;
-                                    }
-                                    spacing = (W * 0.25 - 2.0 - 10.0) / 1.0;
-                                    for (int i = 1; i < 2; i++)
-                                    {
-                                        g.FillRectangle(high_brush, (int)((double)W * 0.75 + i * spacing - spacing * 0.5), (H / 2) + 3, 1, 3);
-                                        g.FillRectangle(high_brush, (int)((double)W * 0.75 + i * spacing), (H / 2) + 3, 2, 6);
-
-                                        //Font f = new Font("Arial", 7.0f, FontStyle.Bold);
-                                        SizeF size = g.MeasureString("0", font7, 2, StringFormat.GenericTypographic);
-                                        double string_width = size.Width - 2.0;
-
-                                        g.TextRenderingHint = TextRenderingHint.SystemDefault;
-                                        g.DrawString("25+", font7, high_brush, (int)(W * 0.75 + i * spacing - (int)3.5 * string_width), (int)(H - 1 - string_height));
-                                    }
-
-                                    if (num <= 15.0) // low area
-                                    {
-                                        spacing = (W * 0.75 - 2.0) / 4.0;
-                                        if (num <= 1.0)
-                                            pixel_x = (int)(num / 1.0 * (int)spacing);
-                                        else if (num <= 5.0)
-                                            pixel_x = (int)(spacing + (num - 1.0) / 4.0 * spacing);
-                                        else if (num <= 10.0)
-                                            pixel_x = (int)(2 * spacing + (num - 5.0) / 5.0 * spacing);
-                                        else
-                                            pixel_x = (int)(3 * spacing + (num - 10.0) / 5.0 * spacing);
-                                    }
-                                    else
-                                    {
-                                        spacing = (W * 0.25 - 2.0 - 10.0) / 1.0;
-                                        if (num <= 25.0)
-                                            pixel_x = (int)(W * 0.75 + (num - 15.0) / 10.0 * spacing);
-                                        else
-                                            pixel_x = (int)(W * 0.75 + spacing + (num - 25.0) / 5.0 * spacing);
-                                    }
-                                }
-
-                                else if (apollopresent)
-                                {
-                                    g.FillRectangle(high_brush, (int)(W * 0.75), (H / 2) - 1, (int)(W * 0.25) - 4, 2);
-                                    g.FillRectangle(low_brush, 0, (H / 2) - 1, (int)(W * 0.75), 4); // horizontal white line
-                                    g.FillRectangle(high_brush, (int)(W * 0.75), (H / 2) + 1, (int)(W * 0.25) - 9, 2); //horizontal red line
-                                    // SWR stuff first
-                                    spacing = (W * 0.5) / 10.0;
-                                    string_height = 0;
-                                    string[] swrx_list = { "1.5", "2" };
-                                    for (int i = 1; i < 10; i++)
-                                    {
-                                        g.FillRectangle(low_brush, (int)(i * spacing), (H / 2) - 4, 1, 3);
-                                    }
-                                    for (int i = 1; i < 3; i++)
-                                    {
-                                        spacing = (W * 0.5) / 2.0;
-                                        g.FillRectangle(low_brush, (int)(i * spacing), (H / 2) - 7, 2, 6);
-
-                                        string s = swrx_list[i - 1];
-                                        //Font f = new Font("Arial", 7.0f, FontStyle.Bold);
-                                        SizeF size = g.MeasureString("0", font7, 1, StringFormat.GenericTypographic);
-                                        double string_width = size.Width - 2.0;
-                                        string_height = size.Height - 2.0;
-
-                                        //g.TextRenderingHint = TextRenderingHint.AntiAlias;
-                                        //g.SmoothingMode = SmoothingMode.AntiAlias;
-                                        g.DrawString(s, font7, low_brush, (int)(i * spacing - string_width * s.Length + 2.0 - 1 * (int)(i / 2) + 3 * (int)(i / 4)), (int)((H / 2) - 9 - string_height));
-                                        //g.SmoothingMode = SmoothingMode.None;
-                                    }
-                                    g.FillRectangle(low_brush, (int)(W * 0.625), (H / 2) - 4, 1, 3); // small tic 2.5:1
-
-                                    string[] swrx_hi_list = { "3", "4", "5" };
-
-                                    spacing = (W * 0.75 - 2.0 - 9.0) / 2.0;
-                                    for (int i = 1; i < 2; i++)
-                                    {
-                                        // g.FillRectangle(high_brush, (int)(i * spacing - spacing * 0.75), H - 4 - 3, 1, 3);
-                                    }
-
-                                    for (int i = 1; i < 4; i++)
-                                    {
-                                        // spacing = (W * 0.55 - 2.0) / 2.0;
-                                        // spacing = (W * 0.33 - 2.0) / 3.0;
-                                        spacing = (W * 0.25 - 6.0) / 2.0;
-                                        g.FillRectangle(high_brush, (int)((double)W * 0.75 + i * spacing - spacing * 0.5), (H / 2) - 4, 1, 3);
-                                        g.FillRectangle(high_brush, (int)((double)W * 0.75 + i * spacing - spacing), (H / 2) - 7, 2, 6);
-                                        // g.FillRectangle(high_brush, (int)((double)W * 0.55 + i * spacing - spacing * 0.5), H - 4 - 6, 2, 6);
-                                        string s = swrx_hi_list[i - 1];
-                                        //Font f = new Font("Arial", 7.0f, FontStyle.Bold);
-                                        SizeF size = g.MeasureString("0", font7, 1, StringFormat.GenericTypographic);
-                                        double string_width = size.Width - 2.0;
-                                        string_height = size.Height - 2.0;
-
-                                        //g.TextRenderingHint = TextRenderingHint.AntiAlias;
-                                        //g.SmoothingMode = SmoothingMode.AntiAlias;
-                                        //g.DrawString(s, font7, high_brush, (int)(i * spacing - string_width * s.Length + 2.0 - 2 * (int)(i / 2) + 3 * (int)(i / 4)), (int)(H - 4 - 8 - string_height));
-                                        // g.DrawString(s, font7, high_brush, (int)(W * 0.75 + i * spacing - spacing - (int)2.5 * string_width), (int)(H - 4 - 8 - string_height));
-                                        g.DrawString(s, font7, high_brush, (int)(W * 0.75 + i * spacing - spacing - (int)1.0 * string_width), (int)((H / 2) - 9 - string_height));
-                                        //g.SmoothingMode = SmoothingMode.None;
-                                    }
-
-
-                                    if (current_swrmeter_data <= 3.0) // low area
-                                    {
-                                        spacing = (W * 0.75) / 3.0;
-
-                                        if (current_swrmeter_data <= 1.5)
-                                            pixel_x_swr = (int)((current_swrmeter_data - 1.0) / 0.5 * spacing);
-                                        else if (current_swrmeter_data <= 2.0)
-                                            pixel_x_swr = (int)(spacing + (current_swrmeter_data - 1.5) / 0.5 * spacing);
-                                        else //if (current_swrmeter_data <= 3.0)
-                                            pixel_x_swr = (int)(2 * spacing + (current_swrmeter_data - 2.0) / 1.0 * spacing);
-                                        // else //  current_swrmeter_data <= 4.0
-                                        //  pixel_x_swr = (int)(3 * spacing + (current_swrmeter_data - 3.0) / 1.0 * spacing);
-                                    }
-                                    else
-                                    {
-                                        spacing = (W * 0.25 - 6.0) / 2.0;
-                                        if (current_swrmeter_data <= 4.0)
-                                            pixel_x_swr = (int)(W * 0.75 + (current_swrmeter_data - 3.0) / 1.0 * spacing);
-                                        else if (current_swrmeter_data <= 5.0)
-                                            pixel_x_swr = (int)(W * 0.75 + spacing + (current_swrmeter_data - 4.0) / 1.0 * spacing);
-                                        else
-                                            pixel_x_swr = (int)(W * 0.75 + 2 * spacing + (current_swrmeter_data - 5.0) / 4.0 * spacing);
-                                    }
-                                    if (double.IsInfinity(current_swrmeter_data)) pixel_x_swr = W - 2;
-
-                                    // PWR
-                                    spacing = (W * 0.75 - 2.0) / 4.0;
-                                    string[] list = { "5", "10", "20", "30" };
-                                    for (int i = 1; i < 5; i++)
-                                    {
-                                        g.FillRectangle(low_brush, (int)(i * spacing - spacing * 0.5), (H / 2) + 3, 1, 3);
-                                        g.FillRectangle(low_brush, (int)(i * spacing), (H / 2) + 3, 2, 6);
-
-                                        string s = list[i - 1];
-                                        //Font f = new Font("Arial", 7.0f, FontStyle.Bold);
-                                        SizeF size = g.MeasureString("0", font7, 1, StringFormat.GenericTypographic);
-                                        double string_width = size.Width - 2.0;
-                                        string_height = size.Height - 2.0;
-
-                                        //g.TextRenderingHint = TextRenderingHint.AntiAlias;
-                                        //g.SmoothingMode = SmoothingMode.AntiAlias;
-                                        g.DrawString(s, font7, low_brush, (int)(i * spacing - string_width * s.Length + (int)(i / 3) + (int)(i / 4)), (int)(H - 1 - string_height));
-                                        //g.SmoothingMode = SmoothingMode.None;
-                                    }
-                                    spacing = (W * 0.25 - 2.0 - 10.0) / 1.0;
-                                    for (int i = 1; i < 2; i++)
-                                    {
-                                        g.FillRectangle(high_brush, (int)((double)W * 0.75 + i * spacing - spacing * 0.5), (H / 2) + 3, 1, 3);
-                                        g.FillRectangle(high_brush, (int)((double)W * 0.75 + i * spacing), (H / 2) + 3, 2, 6);
-
-                                        //Font f = new Font("Arial", 7.0f, FontStyle.Bold);
-                                        SizeF size = g.MeasureString("0", font7, 2, StringFormat.GenericTypographic);
-                                        double string_width = size.Width - 2.0;
-
-                                        g.TextRenderingHint = TextRenderingHint.SystemDefault;
-                                        g.DrawString("50+", font7, high_brush, (int)(W * 0.75 + i * spacing - (int)3.5 * string_width), (int)(H - 1 - string_height));
-                                    }
-
-                                    if (num <= 30.0) // low area
-                                    {
-                                        spacing = (W * 0.75 - 2.0) / 4.0;
-                                        if (num <= 5.0)
-                                            pixel_x = (int)(num / 5.0 * (int)spacing);
-                                        else if (num <= 10.0)
-                                            pixel_x = (int)(spacing + (num - 5.0) / 5.0 * spacing);
-                                        else if (num <= 20.0)
-                                            pixel_x = (int)(2 * spacing + (num - 10.0) / 10.0 * spacing);
-                                        else // <= 30
-                                            pixel_x = (int)(3 * spacing + (num - 20.0) / 10.0 * spacing);
-                                    }
-                                    else
-                                    {
-                                        spacing = (W * 0.25 - 2.0 - 10.0) / 1.0;
-                                        if (num <= 50.0)
-                                            pixel_x = (int)(W * 0.75 + (num - 30.0) / 20.0 * spacing);
-                                        else
-                                            pixel_x = (int)(W * 0.75 + spacing + (num - 50.0) / 25.0 * spacing);
-                                    }
-                                }
-                                break;
-                            case MeterTXMode.SWR:
-                                g.FillRectangle(low_brush, 0, H - 4, (int)(W * 0.75), 2);
-                                g.FillRectangle(high_brush, (int)(W * 0.75), H - 4, (int)(W * 0.25) - 4, 2);
-                                // spacing = (W * 0.75 - 2.0) / 4.0;
-                                spacing = (W * 0.5) / 10.0;
-                                string_height = 0;
-                                // string[] swr_list = { "1.5", "2", "3", "4", "5" };
-                                string[] swr_list = { "1.5", "2" };
-                                for (int i = 1; i < 10; i++)
-                                {
-                                    g.FillRectangle(low_brush, (int)(i * spacing), H - 4 - 3, 1, 3);
-                                }
-                                for (int i = 1; i < 3; i++)
-                                {
-                                    spacing = (W * 0.5) / 2.0;
-                                    g.FillRectangle(low_brush, (int)(i * spacing), H - 4 - 6, 2, 6);
-
-                                    string s = swr_list[i - 1];
-                                    //Font f = new Font("Arial", 7.0f, FontStyle.Bold);
-                                    SizeF size = g.MeasureString("0", font7, 1, StringFormat.GenericTypographic);
-                                    double string_width = size.Width - 2.0;
-                                    string_height = size.Height - 2.0;
-
-                                    //g.TextRenderingHint = TextRenderingHint.AntiAlias;
-                                    //g.SmoothingMode = SmoothingMode.AntiAlias;
-                                    g.DrawString(s, font7, low_brush, (int)(i * spacing - string_width * s.Length + 2.0 - 1 * (int)(i / 2) + 3 * (int)(i / 4)), (int)(H - 4 - 8 - string_height));
-                                    //g.SmoothingMode = SmoothingMode.None;
-                                }
-                                g.FillRectangle(low_brush, (int)(W * 0.625), H - 4 - 3, 1, 3); // small tic 2.5:1
-
-                                string[] swr_hi_list = { "3", "4", "5" };
-
-                                spacing = (W * 0.75 - 2.0 - 9.0) / 2.0;
-                                for (int i = 1; i < 2; i++)
-                                {
-                                    // g.FillRectangle(high_brush, (int)(i * spacing - spacing * 0.75), H - 4 - 3, 1, 3);
-                                }
-
-                                for (int i = 1; i < 4; i++)
-                                {
-                                    // spacing = (W * 0.55 - 2.0) / 2.0;
-                                    // spacing = (W * 0.33 - 2.0) / 3.0;
-                                    spacing = (W * 0.25 - 6.0) / 2.0;
-                                    g.FillRectangle(high_brush, (int)((double)W * 0.75 + i * spacing - spacing * 0.5), H - 4 - 3, 1, 3);
-                                    g.FillRectangle(high_brush, (int)((double)W * 0.75 + i * spacing - spacing), H - 4 - 6, 2, 6);
-                                    // g.FillRectangle(high_brush, (int)((double)W * 0.55 + i * spacing - spacing * 0.5), H - 4 - 6, 2, 6);
-                                    string s = swr_hi_list[i - 1];
-                                    //Font f = new Font("Arial", 7.0f, FontStyle.Bold);
-                                    SizeF size = g.MeasureString("0", font7, 1, StringFormat.GenericTypographic);
-                                    double string_width = size.Width - 2.0;
-                                    string_height = size.Height - 2.0;
-
-                                    //g.TextRenderingHint = TextRenderingHint.AntiAlias;
-                                    //g.SmoothingMode = SmoothingMode.AntiAlias;
-                                    //g.DrawString(s, font7, high_brush, (int)(i * spacing - string_width * s.Length + 2.0 - 2 * (int)(i / 2) + 3 * (int)(i / 4)), (int)(H - 4 - 8 - string_height));
-                                    // g.DrawString(s, font7, high_brush, (int)(W * 0.75 + i * spacing - spacing - (int)2.5 * string_width), (int)(H - 4 - 8 - string_height));
-                                    g.DrawString(s, font7, high_brush, (int)(W * 0.75 + i * spacing - spacing - (int)1.0 * string_width), (int)(H - 4 - 8 - string_height));
-                                    //g.SmoothingMode = SmoothingMode.None;
-                                }
-
-
-                                /*  spacing = (W * 0.25 - 2.0 - 9.0) / 1.0;
-                                  for (int i = 1; i < 2; i++)
-                                  {
-                                    //  g.FillRectangle(high_brush, (int)((double)W * 0.75 + i * spacing - spacing * 0.5), H - 4 - 3, 1, 3);
-                                    //  g.FillRectangle(high_brush, (int)((double)W * 0.75 + i * spacing), H - 4 - 6, 2, 6);
-
-                                      //Font f = new Font("Arial", 7.0f, FontStyle.Bold);
-                                      SizeF size = g.MeasureString("0", font7, 3, StringFormat.GenericTypographic);
-                                      double string_width = size.Width - 2.0;
-
-                                      //g.TextRenderingHint = TextRenderingHint.SystemDefault;
-                                    //  g.DrawString("5+", font7, high_brush, (int)(W * 0.75 + i * spacing - (int)2.5 * string_width), (int)(H - 4 - 8 - string_height));
-                                  } */
-
-                                if (num <= 3.0) // low area
-                                {
-                                    spacing = (W * 0.75) / 3.0;
-
-                                    if (num <= 1.5)
-                                        pixel_x = (int)((num - 1.0) / 0.5 * spacing);
-                                    else if (num <= 2.0)
-                                        pixel_x = (int)(spacing + (num - 1.5) / 0.5 * spacing);
-                                    else //if (num <= 3.0)
-                                        pixel_x = (int)(2 * spacing + (num - 2.0) / 1.0 * spacing);
-                                    // else //  num <= 4.0
-                                    //  pixel_x = (int)(3 * spacing + (num - 3.0) / 1.0 * spacing);
-                                }
-                                else
-                                {
-                                    spacing = (W * 0.25 - 6.0) / 2.0;
-                                    if (num <= 4.0)
-                                        pixel_x = (int)(W * 0.75 + (num - 3.0) / 1.0 * spacing);
-                                    else if (num <= 5.0)
-                                        pixel_x = (int)(W * 0.75 + spacing + (num - 4.0) / 1.0 * spacing);
-                                    else
-                                        pixel_x = (int)(W * 0.75 + 2 * spacing + (num - 5.0) / 4.0 * spacing);
-                                }
-                                if (double.IsInfinity(num)) pixel_x = W - 2;
-                                break;
-                            // spacing = (W * 0.25 - 2.0 - 10.0) / 1.0;
-                            // if (num <= 25.0)
-                            //    pixel_x = (int)(W * 0.75 + (num - 15.0) / 10.0 * spacing);
-                            // else
-                            //   pixel_x = (int)(W * 0.75 + spacing + (num - 25.0) / 5.0 * spacing);
-
-                            /*
-                                g.FillRectangle(low_brush, 0, H - 4, (int)(W * 0.75), 2);
-                                g.FillRectangle(high_brush, (int)(W * 0.75), H - 4, (int)(W * 0.25) - 9, 2);
-                                spacing = (W * 0.75 - 2.0) / 4.0;
-                                string_height = 0;
-                                string[] swr_list = { "1.5", "2", "5", "10", "20" };
-                                for (int i = 1; i < 5; i++)
-                                {
-                                    g.FillRectangle(low_brush, (int)(i * spacing - spacing * 0.5), H - 4 - 3, 1, 3);
-                                    g.FillRectangle(low_brush, (int)(i * spacing), H - 4 - 6, 2, 6);
-
-                                    string s = swr_list[i - 1];
-                                    //Font f = new Font("Arial", 7.0f, FontStyle.Bold);
-                                    SizeF size = g.MeasureString("0", font7, 1, StringFormat.GenericTypographic);
-                                    double string_width = size.Width - 2.0;
-                                    string_height = size.Height - 2.0;
-
-                                    //g.TextRenderingHint = TextRenderingHint.AntiAlias;
-                                    //g.SmoothingMode = SmoothingMode.AntiAlias;
-                                    g.DrawString(s, font7, low_brush, (int)(i * spacing - string_width * s.Length + 2.0 - 2 * (int)(i / 2) + 3 * (int)(i / 4)), (int)(H - 4 - 8 - string_height));
-                                    //g.SmoothingMode = SmoothingMode.None;
-                                }
-                                spacing = (W * 0.25 - 2.0 - 9.0) / 1.0;
-                                for (int i = 1; i < 2; i++)
-                                {
-                                    g.FillRectangle(high_brush, (int)((double)W * 0.75 + i * spacing - spacing * 0.5), H - 4 - 3, 1, 3);
-                                    g.FillRectangle(high_brush, (int)((double)W * 0.75 + i * spacing), H - 4 - 6, 2, 6);
-
-                                    //Font f = new Font("Arial", 7.0f, FontStyle.Bold);
-                                    SizeF size = g.MeasureString("0", font7, 3, StringFormat.GenericTypographic);
-                                    double string_width = size.Width - 2.0;
-
-                                    //g.TextRenderingHint = TextRenderingHint.SystemDefault;
-                                    g.DrawString("20+", font7, high_brush, (int)(W * 0.75 + i * spacing - (int)2.5 * string_width), (int)(H - 4 - 8 - string_height));
-                                }
-
-                                if (num < 10.0) // low area
-                                {
-                                    spacing = (W * 0.75 - 2.0) / 4.0;
-                                    if (num <= 1.5)
-                                        pixel_x = (int)((num - 1.0) / 0.5 * spacing);
-                                    else if (num <= 2.0)
-                                        pixel_x = (int)(spacing + (num - 1.5) / 0.5 * spacing);
-                                    else if (num <= 5.0)
-                                        pixel_x = (int)(2 * spacing + (num - 2.0) / 3.0 * spacing);
-                                    else
-                                        pixel_x = (int)(3 * spacing + (num - 5.0) / 5.0 * spacing);
-                                }
-                                else
-                                {
-                                    spacing = (W * 0.25 - 2.0 - 9.0) / 1.0;
-                                    pixel_x = (int)(W * 0.75 + (num - 10.0) / 10.0 * spacing);
-                                }
-                                if (double.IsInfinity(num)) pixel_x = W - 2;
-                                break;
-
-                             */
-                            case MeterTXMode.ALC_G:
-                            case MeterTXMode.LVL_G:
-                            case MeterTXMode.CFC_G:
-                                g.FillRectangle(low_brush, 0, H - 4, (int)(W * 0.75), 2);
-                                g.FillRectangle(high_brush, (int)(W * 0.75), H - 4, (int)(W * 0.25) - 9, 2);
-                                spacing = (W * 0.75 - 2.0) / 4.0;
-                                string_height = 0;
-                                string[] gain_list = { "5", "10", "15", "20", "25" };
-                                for (int i = 1; i < 5; i++)
-                                {
-                                    g.FillRectangle(low_brush, (int)(i * spacing - spacing * 0.5), H - 4 - 3, 1, 3);
-                                    g.FillRectangle(low_brush, (int)(i * spacing), H - 4 - 6, 2, 6);
-
-                                    string s = gain_list[i - 1];
-                                    //Font f = new Font("Arial", 7.0f, FontStyle.Bold);
-                                    SizeF size = g.MeasureString("0", font7, 1, StringFormat.GenericTypographic);
-                                    double string_width = size.Width - 2.0;
-                                    string_height = size.Height - 2.0;
-
-                                    //g.TextRenderingHint = TextRenderingHint.AntiAlias;
-                                    //g.SmoothingMode = SmoothingMode.AntiAlias;
-                                    g.DrawString(s, font7, low_brush, (int)(i * spacing - string_width * s.Length + (int)(i / 3)), (int)(H - 4 - 8 - string_height));
-                                    //g.SmoothingMode = SmoothingMode.None;
-                                }
-                                spacing = (W * 0.25 - 2.0 - 9.0) / 1.0;
-                                for (int i = 1; i < 2; i++)
-                                {
-                                    g.FillRectangle(high_brush, (int)((double)W * 0.75 + i * spacing - spacing * 0.5), H - 4 - 3, 1, 3);
-                                    g.FillRectangle(high_brush, (int)((double)W * 0.75 + i * spacing), H - 4 - 6, 2, 6);
-
-                                    //Font f = new Font("Arial", 7.0f, FontStyle.Bold);
-                                    SizeF size = g.MeasureString("0", font7, 3, StringFormat.GenericTypographic);
-                                    double string_width = size.Width - 2.0;
-
-                                    //g.TextRenderingHint = TextRenderingHint.SystemDefault;
-                                    g.DrawString("25+", font7, high_brush, (int)(W * 0.75 + i * spacing - (int)2.5 * string_width), (int)(H - 4 - 8 - string_height));
-                                }
-
-
-                                spacing = (W * 0.75 - 2.0) / 4.0;
-                                pixel_x = (int)(num / 5.0 * spacing);
-                                break;
-                            case MeterTXMode.OFF:
-                                break;
-                        }
-                    }
+                    //MW0LGE moved all code into common function, used by both edge and original meter
+                    getMeterPixelPosAndDrawScales(1, g, H, W, num, ref pixel_x, ref pixel_x_swr, 12, true);
+                    //-
 
                     // draw meter movement
                     if (((!mox && current_meter_rx_mode != MeterRXMode.OFF) ||
@@ -33728,119 +34318,6 @@ namespace Thetis
                         g.InterpolationMode = InterpolationMode.Default;
                         g.SmoothingMode = SmoothingMode.Default;
                     }
-
-                    meter_timer.Stop();
-
-                    format = "f0";
-                    if (meter_detail) format = "f1";
-
-                    if (meter_timer.DurationMsec >= meter_dig_delay)
-                    {
-                        if (!mox)
-                        {
-                            switch (current_meter_rx_mode)
-                            {
-                                case MeterRXMode.SIGNAL_STRENGTH:
-                                case MeterRXMode.SIGNAL_AVERAGE:
-                                    if (s_meter)      // modif F8CHK
-                                    {
-                                        if (rx1_above30)
-                                        {
-                                            if (num <= -124.0f) output = "    S 0";
-                                            else if (num > -144.0f & num <= -138.0f) output = "    S 1";
-                                            else if (num > -138.0f & num <= -132.0f) output = "    S 2";
-                                            else if (num > -132.0f & num <= -126.0f) output = "    S 3";
-                                            else if (num > -126.0f & num <= -120.0f) output = "    S 4";
-                                            else if (num > -120.0f & num <= -114.0f) output = "    S 5";
-                                            else if (num > -114.0f & num <= -108.0f) output = "    S 6";
-                                            else if (num > -108.0f & num <= -102.0f) output = "    S 7";
-                                            else if (num > -102.0f & num <= -96.0f) output = "    S 8";
-                                            else if (num > -96.0f & num <= -90.0f) output = "    S 9";
-                                            else if (num > -90.0f & num <= -86.0f) output = "    S 9 + 5";
-                                            else if (num > -86.0f & num <= -80.0f) output = "    S 9 + 10";
-                                            else if (num > -80.0f & num <= -76.0f) output = "    S 9 + 15";
-                                            else if (num > -76.0f & num <= -66.0f) output = "    S 9 + 20";
-                                            else if (num > -66.0f & num <= -56.0f) output = "    S 9 + 30";
-                                            else if (num > -56.0f & num <= -46.0f) output = "    S 9 + 40";
-                                            else if (num > -46.0f & num <= -36.0f) output = "    S 9 + 50";
-                                            else if (num > -36.0f) output = "    S 9 + 60";
-                                        }
-                                        else
-                                        {
-                                            if (num <= -124.0f) output = "    S 0";
-                                            else if (num > -124.0f & num <= -118.0f) output = "    S 1";
-                                            else if (num > -118.0f & num <= -112.0f) output = "    S 2";
-                                            else if (num > -112.0f & num <= -106.0f) output = "    S 3";
-                                            else if (num > -106.0f & num <= -100.0f) output = "    S 4";
-                                            else if (num > -100.0f & num <= -94.0f) output = "    S 5";
-                                            else if (num > -94.0f & num <= -88.0f) output = "    S 6";
-                                            else if (num > -88.0f & num <= -82.0f) output = "    S 7";
-                                            else if (num > -82.0f & num <= -76.0f) output = "    S 8";
-                                            else if (num > -76.0f & num <= -70.0f) output = "    S 9";
-                                            else if (num > -70.0f & num <= -66.0f) output = "    S 9 + 5";
-                                            else if (num > -66.0f & num <= -60.0f) output = "    S 9 + 10";
-                                            else if (num > -60.0f & num <= -56.0f) output = "    S 9 + 15";
-                                            else if (num > -56.0f & num <= -46.0f) output = "    S 9 + 20";
-                                            else if (num > -46.0f & num <= -36.0f) output = "    S 9 + 30";
-                                            else if (num > -36.0f & num <= -26.0f) output = "    S 9 + 40";
-                                            else if (num > -26.0f & num <= -16.0f) output = "    S 9 + 50";
-                                            else if (num > -16.0f) output = "    S 9 + 60";
-                                        }
-                                    }
-                                    else output = num.ToString(format) + " dBm";
-                                    break;
-                                case MeterRXMode.ADC_L:
-                                case MeterRXMode.ADC_R:
-                                case MeterRXMode.ADC2_L:
-                                case MeterRXMode.ADC2_R:
-                                    output = num.ToString("f1") + " dBFS";
-                                    break;
-                                case MeterRXMode.OFF:
-                                    output = "";
-                                    break;
-                            }
-                        }
-                        else
-                        {
-                            MeterTXMode mode = current_meter_tx_mode;
-                            if (chkTUN.Checked) mode = tune_meter_tx_mode;
-                            switch (mode)
-                            {
-                                case MeterTXMode.MIC:
-                                case MeterTXMode.LEVELER:
-                                case MeterTXMode.LVL_G:
-                                case MeterTXMode.EQ:
-                                case MeterTXMode.CFC_PK:
-                                case MeterTXMode.CFC_G:
-                                case MeterTXMode.COMP:
-                                case MeterTXMode.ALC:
-                                case MeterTXMode.ALC_G:
-                                    output = num.ToString(format) + " dB";
-                                    break;
-                                case MeterTXMode.FORWARD_POWER:
-                                case MeterTXMode.REVERSE_POWER:
-                                case MeterTXMode.SWR_POWER:
-                                    if (anan10present || anan10Epresent || apollopresent) output = num.ToString(format) + " W";
-                                    else if (alexpresent || pa_present) output = num.ToString(format) + " W";
-                                    else output = num.ToString(format) + " mW";
-                                    break;
-                                case MeterTXMode.SWR:
-                                    output = num.ToString("f1") + " : 1";
-                                    break;
-                                case MeterTXMode.OFF:
-                                    output = "";
-                                    break;
-                            }
-                        }
-                        txtMultiText.Text = output;
-                        meter_timer.Start();
-                    }
-
-                    if (meter_data_ready)
-                    {
-                        meter_data_ready = false;  //We do NOT want to do this before we have consumed it!!!! so do it here.
-                    }
-
                     break;
                     #endregion
                 case MultiMeterDisplayMode.Analog:
@@ -33848,6 +34325,86 @@ namespace Thetis
 
                     #endregion
                     break;
+            }
+
+            meter_timer.Stop();
+
+            format = "f0";
+            if (meter_detail) format = "f1";
+
+            if (meter_timer.DurationMsec >= meter_dig_delay)
+            {
+                if (!mox)
+                {
+                    switch (current_meter_rx_mode)
+                    {
+                        case MeterRXMode.SIGNAL_STRENGTH:
+                        case MeterRXMode.SIGNAL_AVERAGE:
+                            switch (m_eMeasureMode)
+                            {
+                                case MultiMeterMeasureMode.SMeter:
+                                    output = getSMeter(1, num);
+                                    break;
+                                case MultiMeterMeasureMode.DBM:
+                                    output = num.ToString(format) + " dBm";
+                                    break;
+                                case MultiMeterMeasureMode.UV:
+                                    if (meter_detail) format = "f2";
+                                    output = getUVfromDBM(num).ToString(format) + " uV";
+                                    break;
+                            }
+                            break;
+                        case MeterRXMode.ADC_L:
+                        case MeterRXMode.ADC_R:
+                        case MeterRXMode.ADC2_L:
+                        case MeterRXMode.ADC2_R:
+                            output = num.ToString("f1") + " dBFS";
+                            break;
+                        case MeterRXMode.OFF:
+                            output = "";
+                            break;
+                    }
+                }
+                else
+                {
+                    MeterTXMode mode = current_meter_tx_mode;
+                    if (chkTUN.Checked) mode = tune_meter_tx_mode;
+                    switch (mode)
+                    {
+                        case MeterTXMode.MIC:
+                        case MeterTXMode.LEVELER:
+                        case MeterTXMode.LVL_G:
+                        case MeterTXMode.EQ:
+                        case MeterTXMode.CFC_PK:
+                        case MeterTXMode.CFC_G:
+                        case MeterTXMode.COMP:
+                        case MeterTXMode.ALC:
+                        case MeterTXMode.ALC_G:
+                        case MeterTXMode.ALC_GROUP:
+                            output = num.ToString(format) + " dB";
+                            break;
+                        case MeterTXMode.FORWARD_POWER:
+                        case MeterTXMode.REVERSE_POWER:
+                        case MeterTXMode.SWR_POWER:
+                            if (anan10present || anan10Epresent || apollopresent) output = num.ToString(format) + " W";
+                            else if (alexpresent || pa_present) output = num.ToString(format) + " W";
+                            else output = num.ToString(format) + " mW";
+                            break;
+                        case MeterTXMode.SWR:
+                            output = num.ToString("f1") + " : 1";
+                            break;
+                        case MeterTXMode.OFF:
+                            output = "";
+                            break;
+                    }
+                }
+                txtMultiText.Text = output;
+                meter_timer.Start();
+            }
+
+            if (meter_data_ready)
+            {
+                meter_data_ready = false;  //We do NOT want to do this before we have consumed it!!!! so do it here.
             }
         }
 
@@ -33857,216 +34414,89 @@ namespace Thetis
             int H = picRX2Meter.ClientSize.Height;
             int W = picRX2Meter.ClientSize.Width;
             Graphics g = e.Graphics;
-            double num;
+            double num = -200.0f;
             int pixel_x = 0;
+            int pixel_x_swr = 0;
             string output = "";
+            string format = "";
+
+            if (rx2_meter_data_ready)
+            {
+                rx2_meter_current_data = rx2_meter_new_data;
+                rx2_meter_data_ready = false;
+            }
+
+            if (rx2_avg_num == Display.CLEAR_FLAG) // reset average -- just use new value
+            {
+                num = rx2_avg_num = rx2_meter_current_data;
+            }
+            else
+            {
+                if (rx2_meter_current_data > rx2_avg_num)
+                    num = rx2_avg_num = rx2_meter_current_data * 0.8 + rx2_avg_num * 0.2; // fast rise
+                else
+                    num = rx2_avg_num = rx2_meter_current_data * 0.2 + rx2_avg_num * 0.8; // slow decay
+            }
 
             switch (current_meter_display_mode)
             {
                 case MultiMeterDisplayMode.Original:
                     #region Original
+                    g.FillRectangle(meter_background_pen.Brush, 0, 0, W, H);
 
-                    //MW0LGE
-                    num = handleOriginalMeter(2, g, H, W);
-                    drawOriginalMeterTextScale(g, H, W);
-                    //
+                    getMeterPixelPosAndDrawScales(2, g, H, W, num, ref pixel_x, ref pixel_x_swr, 1, false);
 
-                    rx2_meter_timer.Stop();
-
-                    string format = "f0";
-                    if (meter_detail) format = "f1";
-
-                    if (rx2_meter_timer.DurationMsec >= meter_dig_delay)
+                    if (rx2_meter_mode != MeterRXMode.OFF)
                     {
-                        switch (rx2_meter_mode)
+                        //if (pixel_x <= 0) pixel_x = 1;
+                        pixel_x = Math.Max(1, pixel_x);
+                        pixel_x = Math.Min(W - 3, pixel_x);
+
+                        // MW0LGE reworked size/heights
+                        using (LinearGradientBrush brush = new LinearGradientBrush(new Rectangle(0, 0, pixel_x, H - 10),
+                            meter_left_color, meter_right_color, LinearGradientMode.Horizontal))
+
+                            g.FillRectangle(brush, 0, 0, pixel_x, H - 10);
+
+                        for (int i = 0; i < (W / 8) - 1; i++)
+                            g.DrawLine(meter_background_pen, 8 + i * 8, 0, 8 + i * 8, H - 10);
+
+                        g.DrawLine(Pens.Red, pixel_x, 0, pixel_x, H - 10);
+                        g.FillRectangle(meter_background_pen.Brush, pixel_x + 1, 0, W - pixel_x, H - 10);
+
+                        if (pixel_x >= rx2_meter_peak_value)
                         {
-                            case MeterRXMode.SIGNAL_STRENGTH:
-                            case MeterRXMode.SIGNAL_AVERAGE:
-                                if (s_meter)      // modif F8CHK
-                                {
-                                    if (rx1_above30)
-                                    {
-                                        if (num <= -124.0f) output = "    S 0";
-                                        else if (num > -144.0f & num <= -138.0f) output = "    S 1";
-                                        else if (num > -138.0f & num <= -132.0f) output = "    S 2";
-                                        else if (num > -132.0f & num <= -126.0f) output = "    S 3";
-                                        else if (num > -126.0f & num <= -120.0f) output = "    S 4";
-                                        else if (num > -120.0f & num <= -114.0f) output = "    S 5";
-                                        else if (num > -114.0f & num <= -108.0f) output = "    S 6";
-                                        else if (num > -108.0f & num <= -102.0f) output = "    S 7";
-                                        else if (num > -102.0f & num <= -96.0f) output = "    S 8";
-                                        else if (num > -96.0f & num <= -90.0f) output = "    S 9";
-                                        else if (num > -90.0f & num <= -86.0f) output = "    S 9 + 5";
-                                        else if (num > -86.0f & num <= -80.0f) output = "    S 9 + 10";
-                                        else if (num > -80.0f & num <= -76.0f) output = "    S 9 + 15";
-                                        else if (num > -76.0f & num <= -66.0f) output = "    S 9 + 20";
-                                        else if (num > -66.0f & num <= -56.0f) output = "    S 9 + 30";
-                                        else if (num > -56.0f & num <= -46.0f) output = "    S 9 + 40";
-                                        else if (num > -46.0f & num <= -36.0f) output = "    S 9 + 50";
-                                        else if (num > -36.0f) output = "    S 9 + 60";
-                                    }
-                                    else
-                                    {
-                                        if (num <= -124.0f) output = "    S 0";
-                                        else if (num > -124.0f & num <= -118.0f) output = "    S 1";
-                                        else if (num > -118.0f & num <= -112.0f) output = "    S 2";
-                                        else if (num > -112.0f & num <= -106.0f) output = "    S 3";
-                                        else if (num > -106.0f & num <= -100.0f) output = "    S 4";
-                                        else if (num > -100.0f & num <= -94.0f) output = "    S 5";
-                                        else if (num > -94.0f & num <= -88.0f) output = "    S 6";
-                                        else if (num > -88.0f & num <= -82.0f) output = "    S 7";
-                                        else if (num > -82.0f & num <= -76.0f) output = "    S 8";
-                                        else if (num > -76.0f & num <= -70.0f) output = "    S 9";
-                                        else if (num > -70.0f & num <= -66.0f) output = "    S 9 + 5";
-                                        else if (num > -66.0f & num <= -60.0f) output = "    S 9 + 10";
-                                        else if (num > -60.0f & num <= -56.0f) output = "    S 9 + 15";
-                                        else if (num > -56.0f & num <= -46.0f) output = "    S 9 + 20";
-                                        else if (num > -46.0f & num <= -36.0f) output = "    S 9 + 30";
-                                        else if (num > -36.0f & num <= -26.0f) output = "    S 9 + 40";
-                                        else if (num > -26.0f & num <= -16.0f) output = "    S 9 + 50";
-                                        else if (num > -16.0f) output = "    S 9 + 60";
-                                    }
-                                }
-                                else
-                                    output = num.ToString(format) + " dBm";
-                                break;
-                            case MeterRXMode.ADC_L:
-                            case MeterRXMode.ADC_R:
-                                output = num.ToString("f1") + " dBFS";
-                                break;
-                            case MeterRXMode.OFF:
-                                output = "";
-                                break;
+                            rx2_meter_peak_count = 0;
+                            rx2_meter_peak_value = pixel_x;
                         }
-                        txtRX2Meter.Text = output;
-                        rx2_meter_timer.Start();
-                    }
-
-                    if (rx2_meter_data_ready)
-                    {
-                        rx2_meter_data_ready = false;  //We do NOT want to do this before we have consumed it!!!! so do it here.
+                        else
+                        {
+                            if (rx2_meter_peak_count++ >= multimeter_peak_hold_samples)
+                            {
+                                rx2_meter_peak_count = 0;
+                                rx2_meter_peak_value = pixel_x;
+                            }
+                            else
+                            {
+                                g.DrawLine(Pens.Red, rx2_meter_peak_value, 0, rx2_meter_peak_value, H - 10);
+                                g.DrawLine(Pens.Red, rx2_meter_peak_value - 1, 0, rx2_meter_peak_value - 1, H - 10);
+                            }
+                        }
                     }
                     break;
                     #endregion
                 case MultiMeterDisplayMode.Edge:
                     #region Edge
-                    if (rx2_meter_data_ready)
-                    {
-                        rx2_meter_current_data = rx2_meter_new_data;
-                        rx2_meter_data_ready = false;
-                    }
-
-                    if (rx2_avg_num == Display.CLEAR_FLAG) // reset average -- just use new value
-                    {
-                        num = rx2_avg_num = rx2_meter_current_data;
-                    }
-                    else
-                    {
-                        if (rx2_meter_current_data > rx2_avg_num)
-                            num = rx2_avg_num = rx2_meter_current_data * 0.8 + rx2_avg_num * 0.2; // fast rise
-                        else
-                            num = rx2_avg_num = rx2_meter_current_data * 0.2 + rx2_avg_num * 0.8; // slow decay
-                    }
-                    //using (Pen p = new Pen(edge_meter_background_color))
                     g.DrawRectangle(edge_meter_background_pen, 0, 0, W, H);
 
-                    //using (SolidBrush low_brush = new SolidBrush(edge_low_color),
-                    // high_brush = new SolidBrush(edge_high_color))
                     //using (Font f = new Font("Arial", 7.0f, FontStyle.Bold))
 
-                    switch (rx2_meter_mode)
-                    {
-                        case MeterRXMode.SIGNAL_STRENGTH:
-                        case MeterRXMode.SIGNAL_AVERAGE:
-                            g.FillRectangle(low_brush, 0, H - 4, (int)(W * 0.5), 2);
-                            g.FillRectangle(high_brush, (int)(W * 0.5), H - 4, (int)(W * 0.5) - 4, 2);
-                            double spacing = (W * 0.5 - 2.0) / 5.0;
-                            double string_height = 0;
-                            for (int i = 1; i < 6; i++)
-                            {
-                                g.FillRectangle(low_brush, (int)(i * spacing - spacing * 0.5), H - 4 - 3, 1, 3);
-                                g.FillRectangle(low_brush, (int)(i * spacing), H - 4 - 6, 2, 6);
+                    //MW0LGE moved all code into common function, used by both edge and original meter
+                    getMeterPixelPosAndDrawScales(2, g, H, W, num, ref pixel_x, ref pixel_x_swr, 12, true);
+                    //-
 
-                                //Font f = new Font("Arial", 7.0f, FontStyle.Bold);
-                                SizeF size = g.MeasureString((-1 + i * 2).ToString(), font7, 1, StringFormat.GenericTypographic);
-                                double string_width = size.Width - 2.0;
-                                string_height = size.Height - 2.0;
-
-                                //g.TextRenderingHint = TextRenderingHint.AntiAlias;
-                                //g.SmoothingMode = SmoothingMode.AntiAlias;
-                                g.DrawString((-1 + i * 2).ToString(), font7, low_brush, (int)(i * spacing - string_width + (int)(i / 5)), (int)(H - 4 - 8 - string_height));
-                                //g.SmoothingMode = SmoothingMode.None;
-                            }
-                            spacing = ((double)W * 0.5 - 2.0 - 4.0) / 3.0;
-                            for (int i = 1; i < 4; i++)
-                            {
-                                g.FillRectangle(high_brush, (int)((double)W * 0.5 + i * spacing - spacing * 0.5), H - 4 - 3, 1, 3);
-                                g.FillRectangle(high_brush, (int)((double)W * 0.5 + i * spacing), H - 4 - 6, 2, 6);
-
-                                //Font f = new Font("Arial", 7.0f, FontStyle.Bold);
-                                SizeF size = g.MeasureString("+" + (i * 20).ToString(), font7, 3, StringFormat.GenericTypographic);
-                                double string_width = size.Width - 2.0;
-
-                                //g.TextRenderingHint = TextRenderingHint.SystemDefault;
-                                g.DrawString("+" + (i * 20).ToString(), font7, high_brush, (int)(W * 0.5 + i * spacing - (int)string_width * 3 - i / 3 * 2), (int)(H - 4 - 8 - string_height));
-                            }
-
-                            if (rx2_above30)
-                            {
-                                if (num > -93.0) // high area
-                                {
-                                    pixel_x = (int)(W * 0.5 + (93.0 + num) / 63.0 * (W * 0.5 - 3));
-                                }
-                                else
-                                {
-                                    pixel_x = (int)((num + 153.0) / 60.0 * (W * 0.5));
-                                }
-                            }
-                            else
-                            {
-
-                                if (num > -73.0) // high area
-                                {
-                                    pixel_x = (int)(W * 0.5 + (73.0 + num) / 63.0 * (W * 0.5 - 3));
-                                }
-                                else
-                                {
-                                    pixel_x = (int)((num + 133.0) / 60.0 * (W * 0.5));
-                                }
-                            }
-                            break;
-                        case MeterRXMode.ADC_L:
-                        case MeterRXMode.ADC_R:
-                        case MeterRXMode.ADC2_L:
-                        case MeterRXMode.ADC2_R:
-                            spacing = ((double)W - 5.0) / 6.0;
-                            g.FillRectangle(low_brush, 0, H - 4, (int)(W - 3.0 - spacing), 2);
-                            g.FillRectangle(high_brush, (int)(W - 3.0 - spacing), H - 4, (int)spacing, 2);
-                            for (int i = 1; i < 7; i++)
-                            {
-                                SolidBrush b = low_brush;
-                                if (i == 6) b = high_brush;
-                                g.FillRectangle(b, (int)(i * spacing - spacing / 2), H - 4 - 3, 1, 5);
-                                g.FillRectangle(b, (int)(i * spacing), H - 4 - 6, 2, 8);
-
-                                //Font f = new Font("Arial", 7.0f, FontStyle.Bold);
-                                string s = (-120 + i * 20).ToString();
-                                SizeF size = g.MeasureString(s, font7, 1, StringFormat.GenericTypographic);
-                                double string_width = size.Width - 2.0;
-                                size = g.MeasureString("0", font7, 1, StringFormat.GenericTypographic);
-                                string_height = size.Height - 2.0;
-
-                                g.DrawString(s, font7, b, (int)(i * spacing - (int)string_width * (s.Length)), (int)(H - 4 - 8 - string_height));
-                            }
-
-                            pixel_x = (int)((num + 120.0) / 120.0 * (W - 5.0));
-                            break;
-                        case MeterRXMode.OFF:
-                            break;
-                    }
-
-                    if ((!mox && current_meter_rx_mode != MeterRXMode.OFF) ||
-                        (mox && current_meter_tx_mode != MeterTXMode.OFF))
+                    // draw meter movement
+                    if (rx2_meter_mode != MeterRXMode.OFF)
                     {
                         pixel_x = Math.Max(0, pixel_x);
                         pixel_x = Math.Min(W - 3, pixel_x);
@@ -34078,100 +34508,87 @@ namespace Thetis
 
                         g.InterpolationMode = InterpolationMode.HighQualityBicubic;
                         g.SmoothingMode = SmoothingMode.HighQuality;
-                        g.DrawLine(line_dark_pen, pixel_x - 1, 0, pixel_x - 1, H);
-                        g.DrawLine(line_pen, pixel_x, 0, pixel_x, H);
-                        g.DrawLine(line_dark_pen, pixel_x + 1, 0, pixel_x + 1, H);
+
+                        g.DrawLine(line_dark_pen, pixel_x - 1, 0, pixel_x - 1, H); // left side
+                        g.DrawLine(line_pen, pixel_x, 0, pixel_x, H); // center line
+                        g.DrawLine(line_dark_pen, pixel_x + 1, 0, pixel_x + 1, H);// right side
+
                         g.InterpolationMode = InterpolationMode.Default;
                         g.SmoothingMode = SmoothingMode.Default;
-
                     }
 
-                    rx2_meter_timer.Stop();
-
-                    format = "f0";
-                    if (meter_detail) format = "f1";
-
-                    if (rx2_meter_timer.DurationMsec >= meter_dig_delay)
+                    if (rx2_meter_mode != MeterRXMode.OFF)
                     {
-                        switch (rx2_meter_mode)
-                        {
-                            case MeterRXMode.SIGNAL_STRENGTH:
-                            case MeterRXMode.SIGNAL_AVERAGE:
-                                if (s_meter)      // modif F8CHK
-                                {
-                                    if (rx2_above30)
-                                    {
-                                        if (num <= -124.0f) output = "    S 0";
-                                        else if (num > -144.0f & num <= -138.0f) output = "    S 1";
-                                        else if (num > -138.0f & num <= -132.0f) output = "    S 2";
-                                        else if (num > -132.0f & num <= -126.0f) output = "    S 3";
-                                        else if (num > -126.0f & num <= -120.0f) output = "    S 4";
-                                        else if (num > -120.0f & num <= -114.0f) output = "    S 5";
-                                        else if (num > -114.0f & num <= -108.0f) output = "    S 6";
-                                        else if (num > -108.0f & num <= -102.0f) output = "    S 7";
-                                        else if (num > -102.0f & num <= -96.0f) output = "    S 8";
-                                        else if (num > -96.0f & num <= -90.0f) output = "    S 9";
-                                        else if (num > -90.0f & num <= -86.0f) output = "    S 9 + 5";
-                                        else if (num > -86.0f & num <= -80.0f) output = "    S 9 + 10";
-                                        else if (num > -80.0f & num <= -76.0f) output = "    S 9 + 15";
-                                        else if (num > -76.0f & num <= -66.0f) output = "    S 9 + 20";
-                                        else if (num > -66.0f & num <= -56.0f) output = "    S 9 + 30";
-                                        else if (num > -56.0f & num <= -46.0f) output = "    S 9 + 40";
-                                        else if (num > -46.0f & num <= -36.0f) output = "    S 9 + 50";
-                                        else if (num > -36.0f) output = "    S 9 + 60";
-                                    }
-                                    else
-                                    {
-                                        if (num <= -124.0f) output = "    S 0";
-                                        else if (num > -124.0f & num <= -118.0f) output = "    S 1";
-                                        else if (num > -118.0f & num <= -112.0f) output = "    S 2";
-                                        else if (num > -112.0f & num <= -106.0f) output = "    S 3";
-                                        else if (num > -106.0f & num <= -100.0f) output = "    S 4";
-                                        else if (num > -100.0f & num <= -94.0f) output = "    S 5";
-                                        else if (num > -94.0f & num <= -88.0f) output = "    S 6";
-                                        else if (num > -88.0f & num <= -82.0f) output = "    S 7";
-                                        else if (num > -82.0f & num <= -76.0f) output = "    S 8";
-                                        else if (num > -76.0f & num <= -70.0f) output = "    S 9";
-                                        else if (num > -70.0f & num <= -66.0f) output = "    S 9 + 5";
-                                        else if (num > -66.0f & num <= -60.0f) output = "    S 9 + 10";
-                                        else if (num > -60.0f & num <= -56.0f) output = "    S 9 + 15";
-                                        else if (num > -56.0f & num <= -46.0f) output = "    S 9 + 20";
-                                        else if (num > -46.0f & num <= -36.0f) output = "    S 9 + 30";
-                                        else if (num > -36.0f & num <= -26.0f) output = "    S 9 + 40";
-                                        else if (num > -26.0f & num <= -16.0f) output = "    S 9 + 50";
-                                        else if (num > -16.0f) output = "    S 9 + 60";
-                                    }
-                                }
-                                else
-                                    output = num.ToString(format) + " dBm";
-                                break;
-                            case MeterRXMode.ADC_L:
-                            case MeterRXMode.ADC_R:
-                            case MeterRXMode.ADC2_L:
-                            case MeterRXMode.ADC2_R:
-                                output = num.ToString("f1") + " dBFS";
-                                break;
-                            case MeterRXMode.OFF:
-                                output = "";
-                                break;
-                        }
+                        pixel_x = Math.Max(0, pixel_x);
+                        pixel_x = Math.Min(W - 3, pixel_x);
 
-                        txtRX2Meter.Text = output;
-                        rx2_meter_timer.Start();
+                        line_dark_pen.Color =
+                            Color.FromArgb((edge_avg_color.R + edge_meter_background_color.R) / 2,
+                            (edge_avg_color.G + edge_meter_background_color.G) / 2,
+                            (edge_avg_color.B + edge_meter_background_color.B) / 2);
+
+                        g.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                        g.SmoothingMode = SmoothingMode.HighQuality;
+
+                        g.DrawLine(line_dark_pen, pixel_x - 1, 0, pixel_x - 1, H); // left side
+                        g.DrawLine(line_pen, pixel_x, 0, pixel_x, H); // center line
+                        g.DrawLine(line_dark_pen, pixel_x + 1, 0, pixel_x + 1, H);// right side
+
+                        g.InterpolationMode = InterpolationMode.Default;
+                        g.SmoothingMode = SmoothingMode.Default;
                     }
-
-                    if (rx2_meter_data_ready)
-                    {
-                        rx2_meter_data_ready = false;  //We do NOT want to do this before we have consumed it!!!! so do it here.
-                    }
-
                     break;
-                    #endregion
+                #endregion
                 case MultiMeterDisplayMode.Analog:
                     #region Analog
 
                     #endregion
                     break;
+            }
+
+            rx2_meter_timer.Stop();
+
+            format = "f0";
+            if (meter_detail) format = "f1";
+
+            if (rx2_meter_timer.DurationMsec >= meter_dig_delay)
+            {
+                switch (rx2_meter_mode)
+                {
+                    case MeterRXMode.SIGNAL_STRENGTH:
+                    case MeterRXMode.SIGNAL_AVERAGE:
+                        switch (m_eMeasureMode)
+                        {
+                            case MultiMeterMeasureMode.SMeter:
+                                output = getSMeter(2, num);
+                                break;
+                            case MultiMeterMeasureMode.DBM:
+                                output = num.ToString(format) + " dBm";
+                                break;
+                            case MultiMeterMeasureMode.UV:
+                                if (meter_detail) format = "f2";
+                                output = getUVfromDBM(num).ToString(format) + " uV";
+                                break;
+                        }
+                        break;
+                    case MeterRXMode.ADC_L:
+                    case MeterRXMode.ADC_R:
+                    case MeterRXMode.ADC2_L:
+                    case MeterRXMode.ADC2_R:
+                        output = num.ToString("f1") + " dBFS";
+                        break;
+                    case MeterRXMode.OFF:
+                        output = "";
+                        break;
+                }
+
+                txtRX2Meter.Text = output;
+                rx2_meter_timer.Start();
+            }
+
+            if (rx2_meter_data_ready)
+            {
+                rx2_meter_data_ready = false;  //We do NOT want to do this before we have consumed it!!!! so do it here.
             }
         }
 
@@ -34505,9 +34922,6 @@ namespace Thetis
             // we acheive desired fps rate
             System.Diagnostics.Stopwatch objStopWatch = System.Diagnostics.Stopwatch.StartNew();
 
-            //System.Diagnostics.Stopwatch objStopWatch2 = System.Diagnostics.Stopwatch.StartNew();
-            //int frames = 0;
-
             //uint thread = 0;
             //			display_running = true;
             while (true) //(chkPower.Checked)
@@ -34516,10 +34930,12 @@ namespace Thetis
                 uint bottom_thread = 2;
                 int flag;
 
+                bool bLocalMox = mox;                                                            
+
                 objStopWatch.Restart();
                 //objStopWatch2.Start();
 
-                if (mox)
+                if (bLocalMox)
                 {
                     if (chkVFOATX.Checked || !chkRX2.Checked) top_thread = 1;
                     else if (chkVFOBTX.Checked && chkRX2.Checked) bottom_thread = 1;
@@ -34543,7 +34959,7 @@ namespace Thetis
                         {
                             case DisplayMode.WATERFALL:
                             case DisplayMode.PANAFALL:
-                                if (mox && !display_duplex)
+                                if (bLocalMox && !display_duplex)
                                 {
                                     if (chkVFOATX.Checked || !chkRX2.Checked)
                                     {
@@ -34581,7 +34997,7 @@ namespace Thetis
                             case DisplayMode.SPECTRASCOPE:
                             case DisplayMode.PANADAPTER:
                             case DisplayMode.PANASCOPE:
-                                if (mox && !display_duplex)
+                                if (bLocalMox && !display_duplex)
                                 {
                                     if (chkVFOATX.Checked || !chkRX2.Checked)
                                     {
@@ -34627,14 +35043,17 @@ namespace Thetis
                                 Display.DataReady = true;
                                 break;
                             case DisplayMode.PHASE2:
-                                //Audio.phase_mutex.WaitOne();
-                                for (int i = 0; i < Display.PhaseNumPts; i++)
+                                if (Audio.phase_buf_l != null && Audio.phase_buf_r != null) // MW0LGE would be null if audio not running (ie not connected?)
                                 {
-                                    Display.new_display_data[i * 2] = Audio.phase_buf_l[i];
-                                    Display.new_display_data[i * 2 + 1] = Audio.phase_buf_r[i];
+                                    //Audio.phase_mutex.WaitOne();
+                                    for (int i = 0; i < Display.PhaseNumPts; i++)
+                                    {
+                                        Display.new_display_data[i * 2] = Audio.phase_buf_l[i];
+                                        Display.new_display_data[i * 2 + 1] = Audio.phase_buf_r[i];
+                                    }
+                                    Display.DataReady = true;
+                                    //Audio.phase_mutex.ReleaseMutex();
                                 }
-                                Display.DataReady = true;
-                                //Audio.phase_mutex.ReleaseMutex();
                                 break;
                         }
                     }
@@ -34650,7 +35069,7 @@ namespace Thetis
                             case DisplayMode.HISTOGRAM:
                                 break;
                             case DisplayMode.WATERFALL:
-                                if (mox && VFOBTX)
+                                if (bLocalMox && VFOBTX)
                                 {
                                     fixed (float* ptr = &Display.new_waterfall_data_bottom[0])
                                         SpecHPSDRDLL.GetPixels(cmaster.inid(1, 0), 1, ptr, ref flag);
@@ -34663,7 +35082,7 @@ namespace Thetis
                                 Display.WaterfallDataReadyBottom = true; //(flag == 1);
                                 break;
                             case DisplayMode.PANADAPTER:
-                                if (mox && VFOBTX)
+                                if (bLocalMox && VFOBTX)
                                 {
 
                                     fixed (float* ptr = &Display.new_display_data_bottom[0])
@@ -34677,7 +35096,7 @@ namespace Thetis
                                 Display.DataReadyBottom = true; //(flag == 1);
                                 break;
                             case DisplayMode.PANAFALL:  // MW0LGE
-                                if (mox && VFOBTX)
+                                if (bLocalMox && VFOBTX)
                                 {
                                     fixed (float* ptr = &Display.new_display_data_bottom[0])
                                         SpecHPSDRDLL.GetPixels(cmaster.inid(1, 0), 0, ptr, ref flag);
@@ -34720,14 +35139,17 @@ namespace Thetis
                                 Display.DataReadyBottom = true;
                                 break;
                             case DisplayMode.PHASE2:
-                                //Audio.phase_mutex.WaitOne();
-                                for (int i = 0; i < Display.PhaseNumPts; i++)
+                                if (Audio.phase_buf_l != null && Audio.phase_buf_r != null) // MW0LGE would be null if audio not running (ie not connected?)
                                 {
-                                    Display.new_display_data_bottom[i * 2] = Audio.phase_buf_l[i];
-                                    Display.new_display_data_bottom[i * 2 + 1] = Audio.phase_buf_r[i];
+                                    //Audio.phase_mutex.WaitOne();
+                                    for (int i = 0; i < Display.PhaseNumPts; i++)
+                                    {
+                                        Display.new_display_data_bottom[i * 2] = Audio.phase_buf_l[i];
+                                        Display.new_display_data_bottom[i * 2 + 1] = Audio.phase_buf_r[i];
+                                    }
+                                    //Audio.phase_mutex.ReleaseMutex();
+                                    Display.DataReadyBottom = true;
                                 }
-                                //Audio.phase_mutex.ReleaseMutex();
-                                Display.DataReadyBottom = true;
                                 break;
                         }
                     }
@@ -34754,15 +35176,6 @@ namespace Thetis
                     }
                 }
 
-                //objStopWatch2.Stop();
-                //frames++;
-                //if (frames == 1000)
-                //{
-                //    Debug.Print(objStopWatch2.ElapsedMilliseconds.ToString());
-                //    objStopWatch2.Reset();
-                //    frames = 0;
-                //}
-
                 //MW0LGE delay changed to take into consideration how long all the above took
                 objStopWatch.Stop();
 
@@ -34777,7 +35190,7 @@ namespace Thetis
                     Display.FrameRateIssue = false;
                 }
 
-                Thread.Sleep(dly);
+                Thread.Sleep(dly);                
             }
         }
 
@@ -34892,6 +35305,14 @@ namespace Thetis
                                 num = (float)Math.Max(0, -WDSP.CalculateTXMeter(1, WDSP.MeterType.ALC_G));
                                 new_meter_data = num;
                                 break;
+                            case MeterTXMode.ALC_GROUP: //MW0LGE ALC_GROUP is the sum of ALC and ALC_G
+                                if (peak_tx_meter) num = (float)Math.Max(-30.0f, -WDSP.CalculateTXMeter(1, WDSP.MeterType.ALC_PK));
+                                else num = (float)Math.Max(-30.0f, -WDSP.CalculateTXMeter(1, WDSP.MeterType.ALC));
+
+                                num += (float)Math.Max(0, -WDSP.CalculateTXMeter(1, WDSP.MeterType.ALC_G));
+
+                                new_meter_data = num;
+                                break;
                             case MeterTXMode.FORWARD_POWER:
                             case MeterTXMode.SWR_POWER:
                                 if (alexpresent || apollopresent)
@@ -35003,7 +35424,7 @@ namespace Thetis
                             num = WDSP.CalculateRXMeter(2, 0, WDSP.MeterType.SIGNAL_STRENGTH);
 
                             num = num +
-                              rx1_meter_cal_offset +
+                              rx2_meter_cal_offset + // MW0LGE was rx1_meter_cal_offset
                               rx2PreampOffset +
                               rx2_xvtr_gain_offset;
                             if (anan7000dpresent || anan8000dpresent) num += rx2_6m_gain_offset;
@@ -35012,7 +35433,7 @@ namespace Thetis
                         case MeterRXMode.SIGNAL_AVERAGE:
                             num = WDSP.CalculateRXMeter(2, 0, WDSP.MeterType.AVG_SIGNAL_STRENGTH);
                             num = num +
-                            rx1_meter_cal_offset +
+                            rx2_meter_cal_offset + // MW0LGE was rx1_meter_cal_offset
                             rx2PreampOffset +
                             rx2_xvtr_gain_offset;
                             if (anan7000dpresent || anan8000dpresent) num += rx2_6m_gain_offset;
@@ -35842,7 +36263,7 @@ namespace Thetis
                 return;
             }
 
-            if (!mox && attontx && !initializing)
+            if (!mox && m_bAttontx && !initializing)
             {
                 if (update_preamp_mode && !update_preamp_mutex)
                 {
@@ -36639,18 +37060,20 @@ namespace Thetis
         {
             if (callsignfocus == 1) return; // ke9ns add to focus on waterfall ID text
             if (e.KeyChar == (char)Keys.Enter)
-                btnHidden.Focus();
+            {
+                if(!(txtVFOAFreq.Focused || txtVFOBFreq.Focused || txtVFOABand.Focused)) btnHidden.Focus(); // only do this if vfo boxes dont have focus //MW0LGE
+            }                
         }
 
         private void Console_KeyUp(object sender, System.Windows.Forms.KeyEventArgs e)
         {
             //MW0LGE
             m_bShiftKeyDown = e.Shift;
+            m_bControlKeyDown = e.Control;
             //----
 
             if (!m_bShiftKeyDown) DisplaySpot = true;
-
-            regBand = 0;  // ke9ns add
+            
             ToggleFocusMasterTimer();
             if (callsignfocus == 1) return; // ke9ns add to focus on waterfall ID text
 
@@ -36658,12 +37081,13 @@ namespace Thetis
             //    shift_down = false;
         }
 
-        private static byte regBand = 0; // ke9ns add (used for an extra right click + CTRL function: add bandstacking and hyperlinking)
+        private static bool m_bControlKeyDown = false; // ke9ns add (used for an extra right click + CTRL function: add bandstacking and hyperlinking) // MW0LGE changed to bool
         public static bool ALTM = false; // ke9ns add
         private void Console_KeyDown(object sender, System.Windows.Forms.KeyEventArgs e)
         {
             //MW0LGE
             m_bShiftKeyDown = e.Shift;
+            m_bControlKeyDown = e.Control;
             //----
 
             if (m_bShiftKeyDown && (callsignfocus == 0))// ke9ns add (check for CTRL key but not while callsign text box is in focus)
@@ -36695,10 +37119,10 @@ namespace Thetis
 
             ALTM = false;
 
-            if (e.Control == true) // ke9ns add (check for CTRL key press to do a QRZ lookup) 
+            if (m_bControlKeyDown) // ke9ns add (check for CTRL key press to do a QRZ lookup) 
             {
 
-                regBand = 1; // ke9ns add (used for an extra right click + CTRL function: add bandstacking and hyperlinking)
+                //MW0LGE m_bControlKeyDown = 1; // ke9ns add (used for an extra right click + CTRL function: add bandstacking and hyperlinking)
 
 
                 if ((SpotControl.SP4_Active == 0) && (SpotControl.SP_Active > 2) && (SpotControl.DX_Index > 0))  // Do below if not in the middle of processing a DX spot, but DX spotting is Active
@@ -37067,11 +37491,11 @@ namespace Thetis
 
 
             } // e.control key
-            else
-            {
+            //MW0LGE else
+            //{
 
-                regBand = 0;
-            }
+            //    m_bControlKeyDown = 0;
+            //}
 
             SpotControl.Map_Last = 2; // force map update
 
@@ -38197,7 +38621,7 @@ namespace Thetis
                 Thread.Sleep(100); // wait for hardware to settle before starting audio (possible sample rate change)
                 psform.ForcePS();
 
-                if (attontx) NetworkIO.SetTxAttenData(tx_step_attenuator_by_band[(int)rx1_band]);
+                if (m_bAttontx) NetworkIO.SetTxAttenData(tx_step_attenuator_by_band[(int)rx1_band]);
                 else NetworkIO.SetTxAttenData(0);
 
                 if (!Audio.Start())   // starts JanusAudio running
@@ -38916,6 +39340,8 @@ namespace Thetis
             radio.GetDSPRX(0, 1).RXAGCMode = (AGCMode)comboAGC.SelectedIndex;
             lblAGCLabel.Text = "AGC: " + comboAGC.Text;
 
+            m_RX1agcMode = (AGCMode)comboAGC.SelectedIndex; // MW0LGE
+
             // set whether custom controls are active
             switch ((AGCMode)comboAGC.SelectedIndex)
             {
@@ -39128,6 +39554,7 @@ namespace Thetis
             //  if (preSelForm != null) preSelForm.Hide();
             if (psform != null) psform.Hide();
             if (m_frmNotchPopup != null) m_frmNotchPopup.Hide();
+            if (m_frmSeqLog != null) m_frmSeqLog.Hide();
 
             //MW0LGE getwb performs a show, so the window will flash.
             //as Hidewb handles null ref ok, then just call cmaster.Hidewb(0);
@@ -39139,16 +39566,17 @@ namespace Thetis
             //MW0LGE
             //Change to check if existing save is happening. Without this
             //it is possible to crash on save and corrupt settings file
-            //There is a timeout in CompleteAnyExistingSave, so not 100% failure
-            //resistant
             if (SetupForm != null)
             {
-                if(SetupForm.CompleteAnyExistingSave()) SetupForm.SaveOptions();
+                //if(SetupForm.CompleteAnyExistingSave()) SetupForm.SaveOptions();
+                SetupForm.IgnoreButtonState = true; // prevents threads from updating controls in the blocked thead caused by WaitForSaveLoad
+                Debug.Write("waiting existing save/load...");
+                SetupForm.WaitForSaveLoad();
+                Debug.Write("done...");
+                SetupForm.SaveOptions();
+                Debug.WriteLine("Saved!");
             }
-            else
-            {
-                // TODO display warning here that save didnt happen?
-            }
+
             if (EQForm != null) EQForm.Close();
             if (memoryForm != null) memoryForm.Close();
             if (diversityForm != null) diversityForm.Close();
@@ -39891,7 +40319,7 @@ namespace Thetis
                 chkPower.BackColor = Color.Red;
             }
 
-            if (attontx)
+            if (m_bAttontx)
             {
                 comboPreamp.Enabled = !chkMOX.Checked;
             }
@@ -39933,7 +40361,7 @@ namespace Thetis
             for (int i = 0; i < meter_text_history.Length; i++)
                 meter_text_history[i] = 0.0f;
 
-            if (attontx)
+            if (m_bAttontx)
             {
                 comboPreamp.Enabled = !chkMOX.Checked;
             }
@@ -39956,6 +40384,7 @@ namespace Thetis
         private bool mox = false;
         private PreampMode temp_mode = PreampMode.HPSDR_OFF; // HPSDR preamp mode
         private PreampMode temp_mode2 = PreampMode.HPSDR_OFF; // HPSDR preamp mode
+
         private void chkMOX_CheckedChanged2(object sender, System.EventArgs e)
         {
             NetworkIO.SendHighPriority(1);
@@ -40210,7 +40639,7 @@ namespace Thetis
 
                 }
 
-                if (attontx)
+                if (m_bAttontx)
                 {
                     if (current_hpsdr_model == HPSDRModel.HPSDR)
                     {
@@ -40247,16 +40676,16 @@ namespace Thetis
                 HdwMOXChanged(tx, freq);   // flip the hardware
                 psform.Mox = tx;
                 cmaster.Mox = tx;          // loads router bit, among other things
-
+                
                 Audio.RX1BlankDisplayTX = blank_rx1_on_vfob_tx;
-
+                
                 //  if (rf_delay > 0) Thread.Sleep(rf_delay);
                 if (radio.GetDSPTX(0).CurrentDSPMode != DSPMode.CWL &&
                     radio.GetDSPTX(0).CurrentDSPMode != DSPMode.CWU) // turn on the transmitter unless in CW mode
                 {
                     if (rf_delay > 0) Thread.Sleep(rf_delay);
                     AudioMOXChanged(tx);    // set MOX in audio.cs - wait 'til here to allow last audio to clear AAMix before changing to MON volume
-                    WDSP.SetChannelState(WDSP.id(1, 0), 1, 0);
+                    WDSP.SetChannelState(WDSP.id(1, 0), 1, 0);                    
                 }
                 else
                     AudioMOXChanged(tx);    // set MOX in audio.cs
@@ -40292,7 +40721,7 @@ namespace Thetis
 
                 Audio.RX1BlankDisplayTX = blank_rx1_on_vfob_tx;
 
-                if (attontx)
+                if (m_bAttontx)
                 {
                     if (current_hpsdr_model == HPSDRModel.HPSDR)
                     {
@@ -40384,45 +40813,9 @@ namespace Thetis
                 current_meter_rx_mode = mode;
                 if (show_rx1)                                      // collapsed label is RX1/2 dependent
                     lblRXMeter.Text = comboMeterRXMode.Text;
+
                 if (!mox)
                 {
-                    // MW0LGE not used
-                    //if (collapsedDisplay)
-                    //{
-                    //    switch (mode)
-                    //    {
-                    //        case MeterRXMode.SIGNAL_STRENGTH:
-                    //        case MeterRXMode.SIGNAL_AVERAGE:
-                    //            //MW0LGE lblMultiSMeter.Text = "     1       3         5        7        9          +20         +40         +60";
-                    //            break;
-                    //        case MeterRXMode.ADC_L:
-                    //        case MeterRXMode.ADC_R:
-                    //            //MW0LGE lblMultiSMeter.Text = "   -100           -80           -60           -40           -20             0";
-                    //            break;
-                    //        case MeterRXMode.OFF:
-                    //            //MW0LGE lblMultiSMeter.Text = "";
-                    //            break;
-                    //    }
-
-                    //}
-                    //else
-                    //{
-                    //    switch (mode)
-                    //    {
-                    //        case MeterRXMode.SIGNAL_STRENGTH:
-                    //        case MeterRXMode.SIGNAL_AVERAGE:
-                    //            //MW0LGE lblMultiSMeter.Text = "   1   3   5   7   9  +20 +40 +60";
-                    //            break;
-                    //        case MeterRXMode.ADC_L:
-                    //        case MeterRXMode.ADC_R:
-                    //            //MW0LGE lblMultiSMeter.Text = "-100  -80   -60   -40   -20    0";
-                    //            break;
-                    //        case MeterRXMode.OFF:
-                    //            //MW0LGE lblMultiSMeter.Text = "";
-                    //            break;
-                    //    }
-                    //}
-
                     ResetMultiMeterPeak();
                 }
             }
@@ -40484,6 +40877,9 @@ namespace Thetis
                     case "ALC Comp":
                         mode = MeterTXMode.ALC_G;
                         break;
+                    case "ALC Group":
+                        mode = MeterTXMode.ALC_GROUP; //MW0LGE
+                        break;
                     case "SWR":
                         mode = MeterTXMode.SWR;
                         break;
@@ -40502,95 +40898,95 @@ namespace Thetis
 
             if (mox)
             {
-                if (collapsedDisplay)
-                {
-                    switch (mode)
-                    {
-                        case MeterTXMode.FIRST:
-                            //MW0LGE lblMultiSMeter.Text = "";
-                            break;
-                        case MeterTXMode.MIC:
-                        case MeterTXMode.EQ:
-                        case MeterTXMode.LEVELER:
-                        case MeterTXMode.CFC_PK:
-                        case MeterTXMode.COMP:
-                        case MeterTXMode.ALC:
-                            //MW0LGE lblMultiSMeter.Text = "   -20            -10               -5              0        4        8       12";
-                            // lblMultiSMeter.Text = "   -20            -10               -5              0        1        2        3";
-                            break;
-                        case MeterTXMode.FORWARD_POWER:
-                        case MeterTXMode.REVERSE_POWER:
-                        case MeterTXMode.SWR_POWER:
-                            //MW0LGE 
-                            /*
-                            if (anan10present || anan10Epresent)
-                                lblMultiSMeter.Text = "    1              5             10            15            20            25+";
-                            else if (apollopresent)
-                                lblMultiSMeter.Text = "    1              5             10            15            30            50+";
-                            else if (alexpresent || pa_present)
-                                lblMultiSMeter.Text = "    1              5             10            50           100          120+";
-                            else
-                                        lblMultiSMeter.Text = "   25    50   100     150       200     400         600           800+";
-                                        */
-                                        break;
-                        case MeterTXMode.SWR:
-                            //MW0LGE lblMultiSMeter.Text = " 1               1.5         2            3            5            10";
-                            //  lblMultiSMeter.Text = "0             10              20";
-                            break;
-                        case MeterTXMode.OFF:
-                            //MW0LGE lblMultiSMeter.Text = "";
-                            break;
-                        case MeterTXMode.LVL_G:
-                        case MeterTXMode.ALC_G:
-                            //MW0LGE lblMultiSMeter.Text = "0                  5                10                15                20";
-                            break;
-                    }
-                }
-                else
-                {
-                    switch (mode)
-                    {
-                        case MeterTXMode.FIRST:
-                            //MW0LGE lblMultiSMeter.Text = "";
-                            break;
-                        case MeterTXMode.MIC:
-                        case MeterTXMode.EQ:
-                        case MeterTXMode.LEVELER:
-                        case MeterTXMode.CFC_PK:
-                        case MeterTXMode.COMP:
-                        case MeterTXMode.ALC:
-                            //MW0LGE lblMultiSMeter.Text = "-20    -10     -5      0   4   8  12";
-                            // lblMultiSMeter.Text = "-20    -10     -5      0   1   2   3";
-                            break;
-                        case MeterTXMode.FORWARD_POWER:
-                        case MeterTXMode.REVERSE_POWER:
-                        case MeterTXMode.SWR_POWER:
-                            //MW0LGE
-                            /*
-                            if (anan10present || anan10Epresent)
-                                lblMultiSMeter.Text = "1      5     10    15   20    25+";
-                            else if (apollopresent)
-                                lblMultiSMeter.Text = "1      5     10    15   30    50+";
-                            else if (alexpresent || pa_present)
-                                lblMultiSMeter.Text = "1      5     10    50   100  120+";
-                            else
-                                lblMultiSMeter.Text = "0      0.1     0.2     0.5        0.8";
-                                */
-                            break;
-                        case MeterTXMode.SWR:
-                            //MW0LGE lblMultiSMeter.Text = "1      1.5   2     3     5    10";
-                            //  lblMultiSMeter.Text = "0             10              20";
-                            break;
-                        case MeterTXMode.OFF:
-                            //MW0LGE lblMultiSMeter.Text = "";
-                            break;
-                        case MeterTXMode.LVL_G:
-                        case MeterTXMode.CFC_G:
-                        case MeterTXMode.ALC_G:
-                            //MW0LGE lblMultiSMeter.Text = "0       5       10      15      20";
-                            break;
-                    }
-                }
+                //if (collapsedDisplay)
+                //{
+                //    switch (mode)
+                //    {
+                //        case MeterTXMode.FIRST:
+                //            //MW0LGE lblMultiSMeter.Text = "";
+                //            break;
+                //        case MeterTXMode.MIC:
+                //        case MeterTXMode.EQ:
+                //        case MeterTXMode.LEVELER:
+                //        case MeterTXMode.CFC_PK:
+                //        case MeterTXMode.COMP:
+                //        case MeterTXMode.ALC:
+                //            //MW0LGE lblMultiSMeter.Text = "   -20            -10               -5              0        4        8       12";
+                //            // lblMultiSMeter.Text = "   -20            -10               -5              0        1        2        3";
+                //            break;
+                //        case MeterTXMode.FORWARD_POWER:
+                //        case MeterTXMode.REVERSE_POWER:
+                //        case MeterTXMode.SWR_POWER:
+                //            //MW0LGE 
+                //            /*
+                //            if (anan10present || anan10Epresent)
+                //                lblMultiSMeter.Text = "    1              5             10            15            20            25+";
+                //            else if (apollopresent)
+                //                lblMultiSMeter.Text = "    1              5             10            15            30            50+";
+                //            else if (alexpresent || pa_present)
+                //                lblMultiSMeter.Text = "    1              5             10            50           100          120+";
+                //            else
+                //                        lblMultiSMeter.Text = "   25    50   100     150       200     400         600           800+";
+                //                        */
+                //                        break;
+                //        case MeterTXMode.SWR:
+                //            //MW0LGE lblMultiSMeter.Text = " 1               1.5         2            3            5            10";
+                //            //  lblMultiSMeter.Text = "0             10              20";
+                //            break;
+                //        case MeterTXMode.OFF:
+                //            //MW0LGE lblMultiSMeter.Text = "";
+                //            break;
+                //        case MeterTXMode.LVL_G:
+                //        case MeterTXMode.ALC_G:
+                //            //MW0LGE lblMultiSMeter.Text = "0                  5                10                15                20";
+                //            break;
+                //    }
+                //}
+                //else
+                //{
+                //    switch (mode)
+                //    {
+                //        case MeterTXMode.FIRST:
+                //            //MW0LGE lblMultiSMeter.Text = "";
+                //            break;
+                //        case MeterTXMode.MIC:
+                //        case MeterTXMode.EQ:
+                //        case MeterTXMode.LEVELER:
+                //        case MeterTXMode.CFC_PK:
+                //        case MeterTXMode.COMP:
+                //        case MeterTXMode.ALC:
+                //            //MW0LGE lblMultiSMeter.Text = "-20    -10     -5      0   4   8  12";
+                //            // lblMultiSMeter.Text = "-20    -10     -5      0   1   2   3";
+                //            break;
+                //        case MeterTXMode.FORWARD_POWER:
+                //        case MeterTXMode.REVERSE_POWER:
+                //        case MeterTXMode.SWR_POWER:
+                //            //MW0LGE
+                //            /*
+                //            if (anan10present || anan10Epresent)
+                //                lblMultiSMeter.Text = "1      5     10    15   20    25+";
+                //            else if (apollopresent)
+                //                lblMultiSMeter.Text = "1      5     10    15   30    50+";
+                //            else if (alexpresent || pa_present)
+                //                lblMultiSMeter.Text = "1      5     10    50   100  120+";
+                //            else
+                //                lblMultiSMeter.Text = "0      0.1     0.2     0.5        0.8";
+                //                */
+                //            break;
+                //        case MeterTXMode.SWR:
+                //            //MW0LGE lblMultiSMeter.Text = "1      1.5   2     3     5    10";
+                //            //  lblMultiSMeter.Text = "0             10              20";
+                //            break;
+                //        case MeterTXMode.OFF:
+                //            //MW0LGE lblMultiSMeter.Text = "";
+                //            break;
+                //        case MeterTXMode.LVL_G:
+                //        case MeterTXMode.CFC_G:
+                //        case MeterTXMode.ALC_G:
+                //            //MW0LGE lblMultiSMeter.Text = "0       5       10      15      20";
+                //            break;
+                //    }
+                //}
                 ResetMultiMeterPeak();
             }
 
@@ -41873,7 +42269,7 @@ namespace Thetis
                     if (mult <= 1.0)
                     {
                         freq += mult * num_steps;
-                        //Debug.WriteLine("freq: "+freq.ToString("f6"));
+                        Debug.WriteLine("freq: "+freq.ToString("f6"));
                         VFOAFreq = freq;
                     }
                     break;
@@ -42000,8 +42396,14 @@ namespace Thetis
             set { m_bCATChangesCenterFreq = value; }
         }
 
+        private bool m_bVFOAChangedByKeys = false;  // true if frequency has been changed by pressing enter on vfo box
+        private bool m_bVFOBChangedByKeys = false;
+        private bool m_bVFOABandChangedByKeys = false;
+
         private void txtVFOAFreq_LostFocus(object sender, System.EventArgs e)
         {
+            if (initializing) return; //MW0LGE
+
             if (current_hpsdr_model == HPSDRModel.ANAN200D ||
                  current_hpsdr_model == HPSDRModel.ORIONMKII ||
                  current_hpsdr_model == HPSDRModel.ANAN7000D ||
@@ -42012,10 +42414,19 @@ namespace Thetis
                 VFOAFreq = saved_vfoa_freq;
                 return;
             }
-            double freq = double.Parse(txtVFOAFreq.Text);
+            double freq;
+            if (m_bVFOAChangedByKeys)
+            {
+                freq = double.Parse(txtVFOAFreq.Text); //MW0LGE
+                m_dVFOAFreq = freq;
+                m_bVFOAChangedByKeys = false;
+            }
+            else
+            {
+                freq = m_dVFOAFreq;
+            }
 
-            if (freq > 30.0) rx1_above30 = true;
-            else rx1_above30 = false;
+            rx1_above30 = (freq > 30.0);
 
             if (!click_tune_display || update_centerfreq) // || initializing) !!!! - G3OQD - !!!!
             {
@@ -42028,7 +42439,7 @@ namespace Thetis
             double dispMargin = 0.05; // Margin from display edge to start scrolling - in fraction of total display width   
 
             // Lock the display //-W2PA Don't freeze display if we are zoomed in too far to fit the passband
-            if (!initializing && click_tune_display && (passbandWidth < (dispWidth * (1.0 - 2.0 * dispMargin))) &&
+            if (/*!initializing && */click_tune_display && (passbandWidth < (dispWidth * (1.0 - 2.0 * dispMargin))) &&   //MW0LGE blanket init check at head of function
                 ((Display.CurrentDisplayMode == DisplayMode.PANADAPTER && mox && VFOBTX) ||
                 (Display.CurrentDisplayMode == DisplayMode.WATERFALL && mox && VFOBTX) ||
                 (Display.CurrentDisplayMode == DisplayMode.PANAFALL && mox && VFOBTX) ||
@@ -42130,6 +42541,13 @@ namespace Thetis
             }
             else
             {
+                if (click_tune_display && !rx1_spectrum_tune_drag)
+                {
+                    // work around if filter is off the edge of view, and there
+                    // is no room to put it back in the middle, essentially
+                    // do a spectrum drag but in reverse
+                    center_frequency = freq;
+                }
                 radio.GetDSPRX(0, 0).RXOsc = 0.0; // keep tuning
                 if (rx1_dsp_mode == DSPMode.DRM)
                 {
@@ -42542,15 +42960,17 @@ namespace Thetis
                 FWCDDSFreq = center_frequency;
 
 
-            if (chkVFOSync.Checked && txtVFOBFreq.Text != txtVFOAFreq.Text)
+            if (chkVFOSync.Checked && VFOBFreq != VFOAFreq)//MW0LGE txtVFOBFreq.Text != txtVFOAFreq.Text)
             {
-                txtVFOBFreq.Text = txtVFOAFreq.Text;
-                txtVFOBFreq_LostFocus(this, EventArgs.Empty);
+                //MW0LGE txtVFOBFreq.Text = txtVFOAFreq.Text;
+                //MW0LGE txtVFOBFreq_LostFocus(this, EventArgs.Empty);
+                //MW0LG VFOBFreq = VFOAFreq;
                 if (!initializing && RX2Enabled)
                 {
                     if(RX2DSPMode != RX1DSPMode) RX2DSPMode = RX1DSPMode; // MW0LGE only set if different
                     if(RX2Filter != RX1Filter) RX2Filter = RX1Filter; // MW0LGE only set if different
                 }
+                VFOBFreq = VFOAFreq; // MW0LGE do after dsp change
             }
 
             if (small_lsd)
@@ -42596,7 +43016,9 @@ namespace Thetis
             }
             if (e.KeyChar == (char)Keys.Enter)
             {
-                txtVFOAFreq_LostFocus(txtVFOAFreq, new System.EventArgs());
+                //txtVFOAFreq_LostFocus(txtVFOAFreq, new System.EventArgs());  //MW0LGE     TODO FIX       
+                //VFOAFreq = double.Parse(txtVFOAFreq.Text); //MW0LGE  
+                m_bVFOAChangedByKeys = true;
                 btnHidden.Focus();
             }
         }
@@ -42660,10 +43082,21 @@ namespace Thetis
                 return;
             }
 
-            double freq = VFOASubFreq;
             double vfoa = VFOAFreq;
 
-            txtVFOABand.Text = freq.ToString("f6");
+            double freq;
+            if (m_bVFOABandChangedByKeys)
+            {
+                freq = double.Parse(txtVFOABand.Text); //MW0LGE
+                m_dVFOASubFreq = freq;
+                m_bVFOABandChangedByKeys = false;
+            }
+            else
+            {
+                freq = VFOASubFreq;
+            }
+            //MW0LGE txtVFOABand.Text = freq.ToString("f6");
+
             Display.VFOASub = (long)(freq * 1e6);
             if (chkTUN.Checked && chkVFOATX.Checked && chkVFOSplit.Checked)
             {
@@ -42849,7 +43282,8 @@ namespace Thetis
             }
             if (e.KeyChar == (char)Keys.Enter)
             {
-                txtVFOABand_LostFocus(txtVFOABand, new System.EventArgs());
+                //(txtVFOABand, new System.EventArgs()); //MW0LGE fix todo
+                m_bVFOABandChangedByKeys = true;
                 btnHidden.Focus();
             }
         }
@@ -42857,15 +43291,27 @@ namespace Thetis
         // txtVFOBFreq
         private void txtVFOBFreq_LostFocus(object sender, System.EventArgs e)
         {
+            if (initializing) return; //MW0LGE
+
             if (txtVFOBFreq.Text == "" || txtVFOBFreq.Text == ".")
             {
                 VFOBFreq = saved_vfob_freq;
                 return;
             }
 
-            double freq = double.Parse(txtVFOBFreq.Text);
-            if (freq > 30.0) rx2_above30 = true;
-            else rx2_above30 = false;
+            double freq;
+            if (m_bVFOBChangedByKeys)
+            {
+                freq = double.Parse(txtVFOBFreq.Text); //MW0LGE
+                m_dVFOBFreq = freq;
+                m_bVFOBChangedByKeys = false;
+            }
+            else
+            {
+                freq = m_dVFOBFreq;
+            }
+
+            rx2_above30 = (freq > 30.0);
 
             if (anan7000dpresent || anan8000dpresent)
             {
@@ -42886,7 +43332,7 @@ namespace Thetis
             double dispMargin = 0.05; // Margin from display edge to start scrolling - in fraction of total display width   
 
             // Lock the display //-W2PA Don't freeze display if we are zoomed in too far to fit the passband
-            if (!initializing && click_tune_rx2_display && (passbandWidth < (dispWidth * (1.0 - 2.0 * dispMargin))) &&
+            if (/*!initializing && */click_tune_rx2_display && (passbandWidth < (dispWidth * (1.0 - 2.0 * dispMargin))) &&  //MW0LGE blanket init check at head of function
                             ((Display.CurrentDisplayModeBottom == DisplayMode.PANADAPTER && mox && !VFOBTX) ||
                             (Display.CurrentDisplayModeBottom == DisplayMode.WATERFALL && mox && !VFOBTX) ||
                             (Display.CurrentDisplayModeBottom == DisplayMode.PANAFALL && mox && !VFOBTX) ||
@@ -42982,6 +43428,14 @@ namespace Thetis
             }
             else
             {
+                if (click_tune_rx2_display && !rx2_spectrum_tune_drag)
+                {
+                    // work around if filter is off the edge of view, and there
+                    // is no room to put it back in the middle, essentially
+                    // do a spectrum drag but in reverse
+                    center_rx2_frequency = freq;
+                }
+
                 radio.GetDSPRX(1, 0).RXOsc = 0.0;
                 Display.RX2FreqDiff = (int)radio.GetDSPRX(1, 0).RXOsc;
             }
@@ -43450,10 +43904,11 @@ namespace Thetis
 
         end:
 
-            if (chkVFOSync.Checked && txtVFOAFreq.Text != txtVFOBFreq.Text)
+            if (chkVFOSync.Checked && VFOAFreq != VFOBFreq)//MW0LGE txtVFOAFreq.Text != txtVFOBFreq.Text)
             {
-                txtVFOAFreq.Text = txtVFOBFreq.Text;
-                txtVFOAFreq_LostFocus(this, EventArgs.Empty);
+                //MW0LGE txtVFOAFreq.Text = txtVFOBFreq.Text;
+                //MW0LGE txtVFOAFreq_LostFocus(this, EventArgs.Empty);
+                VFOAFreq = freqFromString(txtVFOBFreq.Text);
             }
 
             if (small_lsd)
@@ -43490,7 +43945,9 @@ namespace Thetis
             }
             if (e.KeyChar == (char)Keys.Enter)
             {
-                txtVFOBFreq_LostFocus(txtVFOBFreq, new System.EventArgs());
+                //txtVFOBFreq_LostFocus(txtVFOBFreq, new System.EventArgs());   //MW0LGE TODO FIX
+                //VFOBFreq = double.Parse(txtVFOBFreq.Text);                      //MW0LGE
+                m_bVFOBChangedByKeys = true;
                 btnHidden.Focus();
             }
         }
@@ -44035,6 +44492,8 @@ namespace Thetis
                 }
                 //END NOTCH
 
+                bool bHighlightNumberScaleRX1 = false;
+                bool bHighlightNumberScaleRX2 = false;
                 if (bOverRX1)
                 {
                     switch (Display.CurrentDisplayMode)
@@ -44051,6 +44510,7 @@ namespace Thetis
                                 if (gridminmaxadjust || gridmaxadjust) Cursor = grabbing;
                                 else Cursor = grab;
                                 rx1_grid_adjust = true;
+                                bHighlightNumberScaleRX1 = true;
                             }
                             break;
                     }
@@ -44072,10 +44532,13 @@ namespace Thetis
                                 if (gridminmaxadjust || gridmaxadjust) Cursor = grabbing;
                                 else Cursor = grab;
                                 rx2_grid_adjust = true;
+                                bHighlightNumberScaleRX2 = true;
                             }
                             break;
                     }
                 }
+                Display.HighlightNumberScaleRX1 = bHighlightNumberScaleRX1; //MW0LGE
+                Display.HighlightNumberScaleRX2 = bHighlightNumberScaleRX2; 
 
                 //switch (Display.CurrentDisplayMode)
                 //{
@@ -45245,6 +45708,9 @@ namespace Thetis
         {
             if(!m_frmNotchPopup.Visible) SelectedNotch = null; // clear the selected notch (if there was one)
 
+            Display.HighlightNumberScaleRX1 = false;
+            Display.HighlightNumberScaleRX2 = false;
+
             txtDisplayCursorOffset.Text = "";
             txtDisplayCursorPower.Text = "";
             txtDisplayCursorFreq.Text = "";
@@ -46399,15 +46865,6 @@ namespace Thetis
                         Display.ResizeDX2D();
                         break;
                     }
-                //case (DisplayEngine.DIRECT_X):
-                //    if (!booting)
-                //    {
-                //        Display.WaterfallTarget = picWaterfall;
-                //        //Display.DirectXRelease();
-                //       // Display.DirectXInit();
-                //        // Display.RenderDirectX();
-                //    }
-                //break;
             }
             pause_DisplayThread = false;
 
@@ -46589,7 +47046,7 @@ namespace Thetis
                 SetBand(mode, filter, freq, CTUN, ZoomFactor, CenterFreq);
             }
             UpdateWaterfallLevelValues();
-            UpdateDisplayGridLevelValues();
+            updateDisplayGridLevelValues();
             UpdateDiversityValues();
             NetworkIO.SendHighPriority(1);
         }
@@ -46621,7 +47078,7 @@ namespace Thetis
                 SetBand(mode, filter, freq, CTUN, ZoomFactor, CenterFreq);
             }
             UpdateWaterfallLevelValues();
-            UpdateDisplayGridLevelValues();
+            updateDisplayGridLevelValues();
             UpdateDiversityValues();
             NetworkIO.SendHighPriority(1);
         }
@@ -46681,7 +47138,7 @@ namespace Thetis
                 }
             }
             UpdateWaterfallLevelValues();
-            UpdateDisplayGridLevelValues();
+            updateDisplayGridLevelValues();
             UpdateDiversityValues();
             NetworkIO.SendHighPriority(1);
         }
@@ -46713,7 +47170,7 @@ namespace Thetis
                 SetBand(mode, filter, freq, CTUN, ZoomFactor, CenterFreq);
             }
             UpdateWaterfallLevelValues();
-            UpdateDisplayGridLevelValues();
+            updateDisplayGridLevelValues();
             UpdateDiversityValues();
             NetworkIO.SendHighPriority(1);
         }
@@ -46745,7 +47202,7 @@ namespace Thetis
                 SetBand(mode, filter, freq, CTUN, ZoomFactor, CenterFreq);
             }
             UpdateWaterfallLevelValues();
-            UpdateDisplayGridLevelValues();
+            updateDisplayGridLevelValues();
             UpdateDiversityValues();
             NetworkIO.SendHighPriority(1);
         }
@@ -46777,7 +47234,7 @@ namespace Thetis
                 SetBand(mode, filter, freq, CTUN, ZoomFactor, CenterFreq);
             }
             UpdateWaterfallLevelValues();
-            UpdateDisplayGridLevelValues();
+            updateDisplayGridLevelValues();
             UpdateDiversityValues();
             NetworkIO.SendHighPriority(1);
         }
@@ -46809,7 +47266,7 @@ namespace Thetis
                 SetBand(mode, filter, freq, CTUN, ZoomFactor, CenterFreq);
             }
             UpdateWaterfallLevelValues();
-            UpdateDisplayGridLevelValues();
+            updateDisplayGridLevelValues();
             UpdateDiversityValues();
             NetworkIO.SendHighPriority(1);
         }
@@ -46841,7 +47298,7 @@ namespace Thetis
                 SetBand(mode, filter, freq, CTUN, ZoomFactor, CenterFreq);
             }
             UpdateWaterfallLevelValues();
-            UpdateDisplayGridLevelValues();
+            updateDisplayGridLevelValues();
             UpdateDiversityValues();
             NetworkIO.SendHighPriority(1);
         }
@@ -46873,7 +47330,7 @@ namespace Thetis
                 SetBand(mode, filter, freq, CTUN, ZoomFactor, CenterFreq);
             }
             UpdateWaterfallLevelValues();
-            UpdateDisplayGridLevelValues();
+            updateDisplayGridLevelValues();
             UpdateDiversityValues();
             NetworkIO.SendHighPriority(1);
         }
@@ -46905,7 +47362,7 @@ namespace Thetis
                 SetBand(mode, filter, freq, CTUN, ZoomFactor, CenterFreq);
             }
             UpdateWaterfallLevelValues();
-            UpdateDisplayGridLevelValues();
+            updateDisplayGridLevelValues();
             UpdateDiversityValues();
             NetworkIO.SendHighPriority(1);
         }
@@ -46937,7 +47394,7 @@ namespace Thetis
                 SetBand(mode, filter, freq, CTUN, ZoomFactor, CenterFreq);
             }
             UpdateWaterfallLevelValues();
-            UpdateDisplayGridLevelValues();
+            updateDisplayGridLevelValues();
             UpdateDiversityValues();
             NetworkIO.SendHighPriority(1);
         }
@@ -46968,7 +47425,7 @@ namespace Thetis
                 SetBand(mode, filter, freq, CTUN, ZoomFactor, CenterFreq);
             }
             UpdateWaterfallLevelValues();
-            UpdateDisplayGridLevelValues();
+            updateDisplayGridLevelValues();
         }
 
         private void radBandWWV_Click(object sender, EventArgs e)
@@ -46998,7 +47455,7 @@ namespace Thetis
                 SetBand(mode, filter, freq, CTUN, ZoomFactor, CenterFreq);
             }
             UpdateWaterfallLevelValues();
-            UpdateDisplayGridLevelValues();
+            updateDisplayGridLevelValues();
             UpdateDiversityValues();
             NetworkIO.SendHighPriority(1);
         }
@@ -47030,7 +47487,7 @@ namespace Thetis
                 SetBand(mode, filter, freq, CTUN, ZoomFactor, CenterFreq);
             }
             UpdateWaterfallLevelValues();
-            UpdateDisplayGridLevelValues();
+            updateDisplayGridLevelValues();
             UpdateDiversityValues();
             NetworkIO.SendHighPriority(1);
         }
@@ -47135,7 +47592,7 @@ namespace Thetis
                 SetBand(mode, filter, freq, CTUN, ZoomFactor, CenterFreq);
             }
             UpdateWaterfallLevelValues();
-            UpdateDisplayGridLevelValues();
+            updateDisplayGridLevelValues();
             UpdateDiversityValues();
             NetworkIO.SendHighPriority(1);
         }
@@ -47243,7 +47700,7 @@ namespace Thetis
                     chkANF_CheckedChanged(this, EventArgs.Empty);
 
 
-                    if (!RX1IsOn60mChannel())
+                    if (!RX1IsIn60mChannel())
                     {
                         switch (new_mode)
                         {
@@ -47257,7 +47714,8 @@ namespace Thetis
                                 break;
                         }
                         // UpdateVFOAFreq(rx1_freq.ToString("f6"));
-                        txtVFOAFreq.Text = rx1_freq.ToString("f6");
+                        //MW0LGE txtVFOAFreq.Text = rx1_freq.ToString("f6");
+                        VFOAFreq = rx1_freq;
                     }
                     break;
                 case DSPMode.CWU:
@@ -47280,7 +47738,7 @@ namespace Thetis
                     chkANF.Enabled = true;
                     chkANF_CheckedChanged(this, EventArgs.Empty);
 
-                    if (!RX1IsOn60mChannel())
+                    if (!RX1IsIn60mChannel())
                     {
                         switch (new_mode)
                         {
@@ -47294,7 +47752,8 @@ namespace Thetis
                                 break;
                         }
                         //UpdateVFOAFreq(rx1_freq.ToString("f6"));
-                        txtVFOAFreq.Text = rx1_freq.ToString("f6");
+                        //MW0LGE txtVFOAFreq.Text = rx1_freq.ToString("f6");
+                        VFOAFreq = rx1_freq;
                     }
                     break;
                 case DSPMode.FM:
@@ -47480,7 +47939,7 @@ namespace Thetis
                         SetTXFilters(new_mode, tx_filter_low, tx_filter_high);
                     }
 
-                    if (!RX1IsOn60mChannel())
+                    if (!RX1IsIn60mChannel())
                     {
                         switch (rx1_dsp_mode)
                         {
@@ -47493,7 +47952,8 @@ namespace Thetis
                                 rx1_freq -= (cw_pitch * 1e-6);
                                 break;
                         }
-                        txtVFOAFreq.Text = rx1_freq.ToString("f6");
+                        //MW0LGE txtVFOAFreq.Text = rx1_freq.ToString("f6");
+                        VFOAFreq = rx1_freq;
                     }
 
                     // enable APF
@@ -47532,7 +47992,7 @@ namespace Thetis
                         SetTXFilters(new_mode, tx_filter_low, tx_filter_high);
                     }
 
-                    if (!RX1IsOn60mChannel())
+                    if (!RX1IsIn60mChannel())
                     {
                         switch (rx1_dsp_mode)
                         {
@@ -47545,7 +48005,8 @@ namespace Thetis
                                 rx1_freq += (cw_pitch * 1e-6);
                                 break;
                         }
-                        txtVFOAFreq.Text = rx1_freq.ToString("f6");
+                        //MW0LGE txtVFOAFreq.Text = rx1_freq.ToString("f6");
+                        VFOAFreq = rx1_freq;
                     }
 
                     // enable APF
@@ -47718,7 +48179,8 @@ namespace Thetis
             if (RX1IsOn60mChannel() && current_region == FRSRegion.US)
             {
                 rx1_freq += (-ModeFreqOffset(old_mode) + ModeFreqOffset(new_mode));
-                txtVFOAFreq.Text = rx1_freq.ToString("f6");
+                //MW0LGE txtVFOAFreq.Text = rx1_freq.ToString("f6");
+                VFOAFreq = rx1_freq;
             }
 
             // int new_txosc = (int)radio.GetDSPTX(0).TXOsc;
@@ -48073,6 +48535,80 @@ namespace Thetis
             UpdateRX1Filters(low, high);
         }
 
+        private void setRX2SmallFilterLabel()
+        {
+            //radRX2Filter1.Checked;
+            if (radRX2Filter1.Checked)
+            {
+                setRX2SmallFilterLabel(radRX2Filter1.Name);
+            }
+            else if (radRX2Filter2.Checked)
+            {
+                setRX2SmallFilterLabel(radRX2Filter2.Name);
+            }
+            else if (radRX2Filter3.Checked)
+            {
+                setRX2SmallFilterLabel(radRX2Filter3.Name);
+            }
+            else if (radRX2Filter4.Checked)
+            {
+                setRX2SmallFilterLabel(radRX2Filter4.Name);
+            }
+            else if (radRX2Filter5.Checked)
+            {
+                setRX2SmallFilterLabel(radRX2Filter5.Name);
+            }
+            else if (radRX2Filter6.Checked)
+            {
+                setRX2SmallFilterLabel(radRX2Filter6.Name);
+            }
+            else if (radRX2Filter7.Checked)
+            {
+                setRX2SmallFilterLabel(radRX2Filter7.Name);
+            }
+            else if (radRX2FilterVar1.Checked)
+            {
+                setRX2SmallFilterLabel(radRX2FilterVar1.Name);
+            }
+            else if (radRX2FilterVar2.Checked)
+            {
+                setRX2SmallFilterLabel(radRX2FilterVar2.Name);
+            }
+        }
+        private void setRX2SmallFilterLabel(string radioButtonName)
+        {
+            switch (radioButtonName)
+            {
+                case "radRX2Filter1":
+                    lblRX2FilterLabel.Text = radRX2Filter1.Text;
+                    break;
+                case "radRX2Filter2":
+                    lblRX2FilterLabel.Text = radRX2Filter2.Text;
+                    break;
+                case "radRX2Filter3":
+                    lblRX2FilterLabel.Text = radRX2Filter3.Text;
+                    break;
+                case "radRX2Filter4":
+                    lblRX2FilterLabel.Text = radRX2Filter4.Text;
+                    break;
+                case "radRX2Filter5":
+                    lblRX2FilterLabel.Text = radRX2Filter5.Text;
+                    break;
+                case "radRX2Filter6":
+                    lblRX2FilterLabel.Text = radRX2Filter6.Text;
+                    break;
+                case "radRX2Filter7":
+                    lblRX2FilterLabel.Text = radRX2Filter7.Text;
+                    break;
+                case "radRX2FilterVar1":
+                    lblRX2FilterLabel.Text = radRX2FilterVar1.Text;
+                    break;
+                case "radRX2FilterVar2":
+                    lblRX2FilterLabel.Text = radRX2FilterVar2.Text;
+                    break;
+            }
+        }
+
         private void radRX2Filter_CheckedChanged(object sender, EventArgs e)
         {
             if (sender == null) return;
@@ -48086,55 +48622,49 @@ namespace Thetis
             {
                 case "radRX2Filter1":
                     SetRX2Filter(Filter.F1);
-                    lblRX2FilterLabel.Text = radRX2Filter1.Text;
                     kToolStripMenuItem.Text = radRX2Filter1.Text;
                     break;
                 case "radRX2Filter2":
                     SetRX2Filter(Filter.F2);
-                    lblRX2FilterLabel.Text = radRX2Filter2.Text;
                     kToolStripMenuItem1.Text = radRX2Filter2.Text;
                     break;
                 case "radRX2Filter3":
                     SetRX2Filter(Filter.F3);
-                    lblRX2FilterLabel.Text = radRX2Filter3.Text;
                     kToolStripMenuItem2.Text = radRX2Filter3.Text;
                     break;
                 case "radRX2Filter4":
                     SetRX2Filter(Filter.F4);
-                    lblRX2FilterLabel.Text = radRX2Filter4.Text;
                     kToolStripMenuItem3.Text = radRX2Filter4.Text;
                     break;
                 case "radRX2Filter5":
                     SetRX2Filter(Filter.F5);
-                    lblRX2FilterLabel.Text = radRX2Filter5.Text;
                     kToolStripMenuItem4.Text = radRX2Filter5.Text;
                     break;
                 case "radRX2Filter6":
                     SetRX2Filter(Filter.F6);
-                    lblRX2FilterLabel.Text = radRX2Filter6.Text;
                     toolStripMenuItem13.Text = radRX2Filter6.Text;
                     break;
                 case "radRX2Filter7":
                     SetRX2Filter(Filter.F7);
-                    lblRX2FilterLabel.Text = radRX2Filter7.Text;
                     toolStripMenuItem14.Text = radRX2Filter7.Text;
                     break;
                 case "radRX2FilterVar1":
                     SetRX2Filter(Filter.VAR1);
-                    lblRX2FilterLabel.Text = radRX2FilterVar1.Text;
                     break;
                 case "radRX2FilterVar2":
                     SetRX2Filter(Filter.VAR2);
-                    lblRX2FilterLabel.Text = radRX2FilterVar2.Text;
                     break;
             }
+
+            setRX2SmallFilterLabel(radiobut);
+
             kToolStripMenuItem.Checked = radRX2Filter1.Checked;
             kToolStripMenuItem1.Checked = radRX2Filter2.Checked;
             kToolStripMenuItem2.Checked = radRX2Filter3.Checked;
             kToolStripMenuItem3.Checked = radRX2Filter4.Checked;
             kToolStripMenuItem4.Checked = radRX2Filter5.Checked;
             toolStripMenuItem13.Checked = radRX2Filter6.Checked;
-            toolStripMenuItem14.Checked = radRX2Filter7.Checked;
+            toolStripMenuItem14.Checked = radRX2Filter7.Checked;            
             if (filterPopupForm != null) filterPopupForm.RepopulateForm();          // G8NJJ update popup
 
         }
@@ -48221,6 +48751,8 @@ namespace Thetis
             FilterToolStripMenuItem10.Checked = radFilter10.Checked;
             if (filterPopupForm != null) filterPopupForm.RepopulateForm();      // G8NJJ update popup
 
+            // MW0LGE
+            setSmallRX2ModeFilterLabels();
         }
 
         /*       private void radFilter1_CheckedChanged(object sender, System.EventArgs e)
@@ -49050,8 +49582,9 @@ namespace Thetis
             if (rx2_enabled)
             {
                 RX2DSPMode = rx1_dsp_mode;
-                txtVFOBFreq.Text = txtVFOAFreq.Text;
-                txtVFOBFreq_LostFocus(this, EventArgs.Empty);
+                //MW0LGE txtVFOBFreq.Text = txtVFOAFreq.Text;
+                //MW0LGE txtVFOBFreq_LostFocus(this, EventArgs.Empty);
+                VFOBFreq = VFOAFreq;
                 switch (rx1_filter)
                 {
                     case Filter.F8:
@@ -49077,8 +49610,9 @@ namespace Thetis
             }
             else
             {
-                txtVFOBFreq.Text = txtVFOAFreq.Text;
-                txtVFOBFreq_LostFocus(this, EventArgs.Empty);
+                //MW0LGE txtVFOBFreq.Text = txtVFOAFreq.Text;
+                //MW0LGE txtVFOBFreq_LostFocus(this, EventArgs.Empty);
+                VFOBFreq = VFOAFreq;
                 vfob_dsp_mode = rx1_dsp_mode;
                 vfob_filter = rx1_filter;
             }
@@ -49099,16 +49633,18 @@ namespace Thetis
                     RX1Filter = vfob_filter;
                 }
                 //UpdateVFOAFreq(txtVFOBFreq.Text);
-                txtVFOAFreq.Text = txtVFOBFreq.Text;
-                txtVFOAFreq_LostFocus(this, EventArgs.Empty);
+                //MW0LGE txtVFOAFreq.Text = txtVFOBFreq.Text;
+                //MW0LGE txtVFOAFreq_LostFocus(this, EventArgs.Empty);
+                VFOAFreq = VFOBFreq;
             }
             else
             {
                 RX1DSPMode = rx2_dsp_mode;
 
                 // UpdateVFOAFreq(txtVFOBFreq.Text);
-                txtVFOAFreq.Text = txtVFOBFreq.Text;
-                txtVFOAFreq_LostFocus(this, EventArgs.Empty);
+                //MW0LGE txtVFOAFreq.Text = txtVFOBFreq.Text;
+                //MW0LGE txtVFOAFreq_LostFocus(this, EventArgs.Empty);
+                VFOAFreq = VFOBFreq;
                 switch (rx2_filter)
                 {
                     case Filter.VAR1:
@@ -49138,7 +49674,8 @@ namespace Thetis
         {
             if (!rx2_enabled)
             {
-                string temp = txtVFOAFreq.Text;
+                //MW0LGE string temp = txtVFOAFreq.Text;
+                double temp = VFOAFreq;
 
                 if (!chkEnableMultiRX.Checked)
                 {
@@ -49151,14 +49688,18 @@ namespace Thetis
                     vfob_filter = filter;
                 }
 
-                txtVFOAFreq.Text = txtVFOBFreq.Text;
-                txtVFOBFreq.Text = temp;
-                txtVFOAFreq_LostFocus(this, EventArgs.Empty);
-                txtVFOBFreq_LostFocus(this, EventArgs.Empty);
+                //MW0LGE txtVFOAFreq.Text = txtVFOBFreq.Text;
+                //MW0LGE txtVFOBFreq.Text = temp;
+                //MW0LGE txtVFOAFreq_LostFocus(this, EventArgs.Empty);
+                //MW0LGE txtVFOBFreq_LostFocus(this, EventArgs.Empty);
+                VFOAFreq = VFOBFreq;
+                VFOBFreq = temp;
             }
             else
             {
-                string a_freq = txtVFOAFreq.Text;
+                //MW0LGE string a_freq = txtVFOAFreq.Text;
+                double a_freq = VFOAFreq;
+
                 DSPMode a_mode = rx1_dsp_mode;
                 Filter a_filter = rx1_filter;
                 int a_filter_low = 0, a_filter_high = 0;
@@ -49173,8 +49714,9 @@ namespace Thetis
                 RX1Filter = rx2_filter;
 
                 RX2DSPMode = a_mode;
-                txtVFOBFreq.Text = a_freq;
-                txtVFOBFreq_LostFocus(this, EventArgs.Empty);
+                //MW0LGE txtVFOBFreq.Text = a_freq;
+                //MW0LGE txtVFOBFreq_LostFocus(this, EventArgs.Empty);
+                VFOBFreq = a_freq;
                 switch (a_filter)
                 {
                     case Filter.F8:
@@ -49211,7 +49753,9 @@ namespace Thetis
                 {
                     txtVFOABand.Font = new Font("Microsoft Sans Sarif", 14.0f, FontStyle.Regular);
                     if (saved_vfoa_sub_freq == Display.CLEAR_FLAG) saved_vfoa_sub_freq = saved_vfoa_freq;
-                    txtVFOABand.Text = saved_vfoa_sub_freq.ToString("f6");
+                    //MW0LGE txtVFOABand.Text = saved_vfoa_sub_freq.ToString("f6");
+                    VFOASubFreq = saved_vfoa_sub_freq;
+
                     tx_xvtr_index = XVTRForm.XVTRFreq(VFOASubFreq);
                     TXBand = BandByFreq(VFOASubFreq, tx_xvtr_index, true, current_region, true);
                     if (chkPower.Checked) txtVFOABand.ForeColor = Color.Red;
@@ -49225,7 +49769,9 @@ namespace Thetis
                 else if (chkEnableMultiRX.Checked)
                 {
                     txtVFOABand.Font = new Font("Microsoft Sans Sarif", 14.0f, FontStyle.Regular);
-                    txtVFOABand.Text = saved_vfoa_sub_freq.ToString("f6");
+                    //MW0LGE txtVFOABand.Text = saved_vfoa_sub_freq.ToString("f6");
+                    VFOASubFreq = saved_vfoa_sub_freq;
+
                     if (chkPower.Checked) txtVFOABand.ForeColor = vfo_text_light_color;
                     else txtVFOABand.ForeColor = vfo_text_dark_color;
                     txtVFOABand.TextAlign = HorizontalAlignment.Right;
@@ -49989,8 +50535,10 @@ namespace Thetis
             SaveBand();
             last_band = "";
             RX1DSPMode = quick_save_mode;
-            txtVFOAFreq.Text = txtMemoryQuick.Text;
-            txtVFOAFreq_LostFocus(this, EventArgs.Empty);
+            //MW0LGE txtVFOAFreq.Text = txtMemoryQuick.Text;
+            //MW0LGE txtVFOAFreq_LostFocus(this, EventArgs.Empty);
+            VFOAFreq = freqFromString(txtMemoryQuick.Text);
+
             RX1Filter = quick_save_filter;
         }
 
@@ -50205,10 +50753,14 @@ namespace Thetis
                 }
                 if (current_click_tune_mode == ClickTuneMode.VFOB && !chkFullDuplex.Checked && !chkVFOSplit.Checked)
                     CurrentClickTuneMode = ClickTuneMode.VFOA;
+
             }
             Display.SubRX1Enabled = chkEnableMultiRX.Checked;
             MultiRXToolStripMenuItem.Checked = chkEnableMultiRX.Checked;
             //UpdateRX1SubNotches();
+
+            // MW0LGE
+            setSmallRX2ModeFilterLabels();
         }
 
         private void chkPanSwap_CheckedChanged(object sender, System.EventArgs e)
@@ -50572,7 +51124,7 @@ namespace Thetis
 
                     panelDisplay.Size = new Size(gr_display_size_basis.Width + h_delta, gr_display_size_basis.Height + v_delta);
                     picDisplay.Size = new Size(pic_display_size_basis.Width + h_delta, pic_display_size_basis.Height + v_delta);
-                    picWaterfall.Size = new Size(pic_waterfall_size_basis.Width + h_delta, pic_waterfall_size_basis.Height + v_delta);
+                    //picWaterfall.Size = new Size(pic_waterfall_size_basis.Width + h_delta, pic_waterfall_size_basis.Height + v_delta);
                     txtOverload.Size = new Size(txtOverload_size_basis.Width + h_delta, txtOverload_size_basis.Height);
                     txtOverload.Location = new Point(txtOverload_basis.X, txtOverload_basis.Y + v_delta);
                     panelDisplay2.Location = new Point(gr_display2_basis.X + (h_delta / 2), gr_display2_basis.Y + v_delta);
@@ -50704,7 +51256,7 @@ namespace Thetis
 
             gr_display_size_basis = this.panelDisplay.Size;
             pic_display_size_basis = this.picDisplay.Size;
-            pic_waterfall_size_basis = this.picWaterfall.Size;
+            //pic_waterfall_size_basis = this.picWaterfall.Size;
             txtOverload_size_basis = this.txtOverload.Size;
             txtOverload_basis = this.txtOverload.Location;
             gr_display2_basis = this.panelDisplay2.Location;
@@ -50761,7 +51313,6 @@ namespace Thetis
 
             //MW0LGE
             txt_multi_text_size_basis = this.txtMultiText.Size;
-            gr_multi_meter_basis = this.grpMultimeter.Location;
             gr_multi_meter_menus_basis = this.grpMultimeterMenus.Location;
             gr_multi_meter_menus_size_basis = this.grpMultimeterMenus.Size;
 
@@ -50799,7 +51350,7 @@ namespace Thetis
             tb_rx2af_basis = this.ptbRX2AF.Location;
             gr_display_basis = this.panelDisplay.Location;
             pic_display_basis = this.picDisplay.Location;
-            pic_waterfall_basis = this.picWaterfall.Location;
+            //pic_waterfall_basis = this.picWaterfall.Location;
             combo_display_mode_basis = this.comboDisplayMode.Location;
             combo_rx2_display_mode_basis = this.comboRX2DisplayMode.Location;
             combo_agc_basis = this.comboAGC.Location;
@@ -51119,6 +51670,24 @@ namespace Thetis
                 Console_Resize(this, EventArgs.Empty);
             }
             update_rx2_display = true;
+
+            // MW0LGE
+            setSmallRX2ModeFilterLabels();
+        }
+
+        private void setSmallRX2ModeFilterLabels()
+        {
+            if (chkEnableMultiRX.Checked && !rx2_enabled)
+            {
+                lblRX2ModeLabel.Text = lblModeLabel.Text;
+                lblRX2ModeBigLabel.Text = lblModeBigLabel.Text;
+                lblRX2FilterLabel.Text = lblFilterLabel.Text;
+            }
+            else
+            {
+                setRX2ModeLabels(rx2_dsp_mode);
+                setRX2SmallFilterLabel();
+            }            
         }
 
         private void chkRX2SR_CheckedChanged(object sender, System.EventArgs e)
@@ -51299,7 +51868,7 @@ namespace Thetis
                 case DSPMode.CWL:
                     radRX2ModeCWL.BackColor = SystemColors.Control;
 
-                    if (!RX2IsOn60mChannel())
+                    if (!RX2IsIn60mChannel())
                     {
                         switch (new_mode)
                         {
@@ -51312,7 +51881,8 @@ namespace Thetis
                                 rx2_freq += (cw_pitch * 1e-6);
                                 break;
                         }
-                        txtVFOBFreq.Text = rx2_freq.ToString("f6");
+                        //MW0LGE txtVFOBFreq.Text = rx2_freq.ToString("f6");
+                        VFOBFreq = rx2_freq;
                     }
 
                     radio.GetDSPRX(1, 0).RXAPFRun = false;
@@ -51322,7 +51892,7 @@ namespace Thetis
                 case DSPMode.CWU:
                     radRX2ModeCWU.BackColor = SystemColors.Control;
 
-                    if (!RX2IsOn60mChannel())
+                    if (!RX2IsIn60mChannel())
                     {
                         switch (new_mode)
                         {
@@ -51335,7 +51905,8 @@ namespace Thetis
                                 rx2_freq -= (cw_pitch * 1e-6);
                                 break;
                         }
-                        txtVFOBFreq.Text = rx2_freq.ToString("f6");
+                        //MW0LGE txtVFOBFreq.Text = rx2_freq.ToString("f6");
+                        VFOBFreq = rx2_freq;
                     }
 
                     radio.GetDSPRX(1, 0).RXAPFRun = false;
@@ -51486,7 +52057,7 @@ namespace Thetis
                         CWPitch = cw_pitch;
                     }
 
-                    if (!RX2IsOn60mChannel())
+                    if (!RX2IsIn60mChannel())
                     {
                         switch (rx2_dsp_mode)
                         {
@@ -51499,7 +52070,8 @@ namespace Thetis
                                 rx2_freq -= (cw_pitch * 1e-6);
                                 break;
                         }
-                        txtVFOBFreq.Text = rx2_freq.ToString("f6");
+                        //MW0LGE txtVFOBFreq.Text = rx2_freq.ToString("f6");
+                        VFOBFreq = rx2_freq;
                     }
                     SetupForm.EnableRX2APFControl = true;
                     lblRX2APF.Show();
@@ -51516,7 +52088,7 @@ namespace Thetis
                         CWPitch = cw_pitch;
                     }
 
-                    if (!RX2IsOn60mChannel())
+                    if (!RX2IsIn60mChannel())
                     {
                         switch (rx2_dsp_mode)
                         {
@@ -51529,7 +52101,8 @@ namespace Thetis
                                 rx2_freq += (cw_pitch * 1e-6);
                                 break;
                         }
-                        txtVFOBFreq.Text = rx2_freq.ToString("f6");
+                        //MW0LGE txtVFOBFreq.Text = rx2_freq.ToString("f6");
+                        VFOBFreq = rx2_freq;
                     }
                     SetupForm.EnableRX2APFControl = true;
                     lblRX2APF.Show();
@@ -51682,7 +52255,8 @@ namespace Thetis
             {
                 // adjust freq offset to ensure center of energy for new mode in 60m
                 rx2_freq += (-ModeFreqOffset(old_mode) + ModeFreqOffset(new_mode));
-                txtVFOBFreq.Text = rx2_freq.ToString("f6");
+                //MW0LGE txtVFOBFreq.Text = rx2_freq.ToString("f6");
+                VFOBFreq = rx2_freq;
             }
 
             /* int new_txosc = (int)radio.GetDSPTX(0).TXOsc;
@@ -51767,6 +52341,61 @@ namespace Thetis
             if (rx2_enabled)
                 WDSP.SetChannelState(WDSP.id(2, 0), 1, 0);              // turn ON the DSP channel
         }
+      
+        private void setRX2ModeLabels(DSPMode mode)
+        {
+            setRX2ModeLabels(mode.ToString().ToUpper());
+        }
+        private void setRX2ModeLabels(string sMode)
+        {
+            switch (sMode.ToUpper())
+            {
+                case "LSB":
+                    lblRX2ModeLabel.Text = radModeLSB.Text;
+                    lblRX2ModeBigLabel.Text = radModeLSB.Text;
+                    break;
+                case "USB":
+                    lblRX2ModeLabel.Text = radModeUSB.Text;
+                    lblRX2ModeBigLabel.Text = radModeUSB.Text;
+                    break;
+                case "DSB":
+                    lblRX2ModeLabel.Text = radModeDSB.Text;
+                    lblRX2ModeBigLabel.Text = radModeDSB.Text;
+                    break;
+                case "CWL":
+                    lblRX2ModeLabel.Text = radModeCWL.Text;
+                    lblRX2ModeBigLabel.Text = radModeCWL.Text;
+                    break;
+                case "CWU":
+                    lblRX2ModeLabel.Text = radModeCWU.Text;
+                    lblRX2ModeBigLabel.Text = radModeCWU.Text;
+                    break;
+                case "FM":
+                    lblRX2ModeLabel.Text = radModeFMN.Text;
+                    lblRX2ModeBigLabel.Text = radModeFMN.Text;
+                    break;
+                case "AM":
+                    lblRX2ModeLabel.Text = radModeAM.Text;
+                    lblRX2ModeBigLabel.Text = radModeAM.Text;
+                    break;
+                case "SAM":
+                    lblRX2ModeLabel.Text = radModeSAM.Text;
+                    lblRX2ModeBigLabel.Text = radModeSAM.Text;
+                    break;
+                case "DIGL":
+                    lblRX2ModeLabel.Text = radModeDIGL.Text;
+                    lblRX2ModeBigLabel.Text = radModeDIGL.Text;
+                    break;
+                case "DIGU":
+                    lblRX2ModeLabel.Text = radModeDIGU.Text;
+                    lblRX2ModeBigLabel.Text = radModeDIGU.Text;
+                    break;
+                case "DRM":
+                    lblRX2ModeLabel.Text = radModeDRM.Text;
+                    lblRX2ModeBigLabel.Text = radModeDRM.Text;
+                    break;
+            }
+        }
 
         private void radRX2ModeButton_CheckedChanged(object sender, System.EventArgs e)
         {
@@ -51780,60 +52409,41 @@ namespace Thetis
             {
                 case "LSB":
                     SetRX2Mode(DSPMode.LSB);
-                    lblRX2ModeLabel.Text = radModeLSB.Text;
-                    lblRX2ModeBigLabel.Text = radModeLSB.Text;
                     break;
                 case "USB":
                     SetRX2Mode(DSPMode.USB);
-                    lblRX2ModeLabel.Text = radModeUSB.Text;
-                    lblRX2ModeBigLabel.Text = radModeUSB.Text;
                     break;
                 case "DSB":
                     SetRX2Mode(DSPMode.DSB);
-                    lblRX2ModeLabel.Text = radModeDSB.Text;
-                    lblRX2ModeBigLabel.Text = radModeDSB.Text;
                     break;
                 case "CWL":
                     SetRX2Mode(DSPMode.CWL);
-                    lblRX2ModeLabel.Text = radModeCWL.Text;
-                    lblRX2ModeBigLabel.Text = radModeCWL.Text;
                     break;
                 case "CWU":
                     SetRX2Mode(DSPMode.CWU);
-                    lblRX2ModeLabel.Text = radModeCWU.Text;
-                    lblRX2ModeBigLabel.Text = radModeCWU.Text;
                     break;
                 case "FM":
                     SetRX2Mode(DSPMode.FM);
-                    lblRX2ModeLabel.Text = radModeFMN.Text;
-                    lblRX2ModeBigLabel.Text = radModeFMN.Text;
                     break;
                 case "AM":
                     SetRX2Mode(DSPMode.AM);
-                    lblRX2ModeLabel.Text = radModeAM.Text;
-                    lblRX2ModeBigLabel.Text = radModeAM.Text;
                     break;
                 case "SAM":
                     SetRX2Mode(DSPMode.SAM);
-                    lblRX2ModeLabel.Text = radModeSAM.Text;
-                    lblRX2ModeBigLabel.Text = radModeSAM.Text;
                     break;
                 case "DIGL":
                     SetRX2Mode(DSPMode.DIGL);
-                    lblRX2ModeLabel.Text = radModeDIGL.Text;
-                    lblRX2ModeBigLabel.Text = radModeDIGL.Text;
                     break;
                 case "DIGU":
                     SetRX2Mode(DSPMode.DIGU);
-                    lblRX2ModeLabel.Text = radModeDIGU.Text;
-                    lblRX2ModeBigLabel.Text = radModeDIGU.Text;
                     break;
                 case "DRM":
                     SetRX2Mode(DSPMode.DRM);
-                    lblRX2ModeLabel.Text = radModeDRM.Text;
-                    lblRX2ModeBigLabel.Text = radModeDRM.Text;
                     break;
             }
+
+            setRX2ModeLabels(radiobut);
+
             lSBToolStripMenuItem1.Checked = radRX2ModeLSB.Checked;
             uSBToolStripMenuItem1.Checked = radRX2ModeUSB.Checked;
             dSBToolStripMenuItem1.Checked = radRX2ModeDSB.Checked;
@@ -53389,6 +53999,8 @@ namespace Thetis
             if (SetupForm == null) return;
             radio.GetDSPRX(1, 0).RXAGCMode = (AGCMode)comboRX2AGC.SelectedIndex;
             lblRX2AGCLabel.Text = "AGC: " + comboRX2AGC.Text;
+
+            m_RX2agcMode = (AGCMode)comboRX2AGC.SelectedIndex; // MW0LGE
 
             switch ((AGCMode)comboRX2AGC.SelectedIndex)
             {
@@ -55415,8 +56027,8 @@ namespace Thetis
             panelDisplay.Size = new Size(gr_display_size_basis.Width + h_delta, gr_display_size_basis.Height + v_delta);
             picDisplay.Location = pic_display_basis;
             picDisplay.Size = new Size(pic_display_size_basis.Width + h_delta, pic_display_size_basis.Height + v_delta);
-            picWaterfall.Location = pic_waterfall_basis;
-            picWaterfall.Size = new Size(pic_waterfall_size_basis.Width + h_delta, pic_waterfall_size_basis.Height + v_delta);
+            //picWaterfall.Location = pic_waterfall_basis;
+            //picWaterfall.Size = new Size(pic_waterfall_size_basis.Width + h_delta, pic_waterfall_size_basis.Height + v_delta);
             txtOverload.Size = new Size(txtOverload_size_basis.Width + h_delta, txtOverload_size_basis.Height);
             txtOverload.Location = new Point(txtOverload_basis.X, txtOverload_basis.Y + v_delta);
             panelDisplay2.Location = new Point(gr_display2_basis.X + (h_delta / 2), gr_display2_basis.Y + v_delta);
@@ -56470,8 +57082,8 @@ namespace Thetis
 
             picDisplay.Location = new Point(0, 0);
             picDisplay.Size = new Size(panelDisplay.Size.Width, panelDisplay.Size.Height - (txtOverload_size_basis.Height + 5 + tb_display_pan_size_basis.Height + 5));
-            picWaterfall.Location = new Point(0, 0);
-            picWaterfall.Size = new Size(panelDisplay.Size.Width, panelDisplay.Size.Height - (txtOverload_size_basis.Height + 5 + tb_display_pan_size_basis.Height + 5));
+            //picWaterfall.Location = new Point(0, 0);
+            //picWaterfall.Size = new Size(panelDisplay.Size.Width, panelDisplay.Size.Height - (txtOverload_size_basis.Height + 5 + tb_display_pan_size_basis.Height + 5));
 
             top = picDisplay.Location.Y + picDisplay.Height;
             txtDisplayCursorOffset.Location = new Point(picDisplay.Location.X, top);
@@ -57138,7 +57750,7 @@ namespace Thetis
 
         private void ptbRX1AF_Scroll(object sender, EventArgs e)
         {
-            RX0Gain = ptbRX1AF.Value;
+            RX0Gain = ptbRX1AF.Value;            
             if (sender.GetType() == typeof(PrettyTrackBar))
             {
                 ptbRX1AF.Focus();
@@ -57249,34 +57861,34 @@ namespace Thetis
                 SetupForm.RX2EnableAtt = !SetupForm.RX2EnableAtt;
         }
 
-        private void picWaterfall_Resize(object sender, EventArgs e)
-        {
-            if (chkPower.Checked)
-                pause_DisplayThread = true;
+        //private void picWaterfall_Resize(object sender, EventArgs e)
+        //{
+        //    if (chkPower.Checked)
+        //        pause_DisplayThread = true;
 
-            Display.Target = picDisplay;
-            switch (current_display_engine)
-            {
-                case (DisplayEngine.GDI_PLUS):
-                    {
-                        //  Thread.Sleep(100);
-                        //  Display.Init();
-                        // UpdateDisplay();
-                        //  picDisplay.Invalidate();
-                    }
-                    break;
-                //case (DisplayEngine.DIRECT_X):
-                //    if (!booting)
-                //    {
-                //        Display.WaterfallTarget = picWaterfall;
-                //        Display.DirectXRelease();
-                //        Display.DirectXInit();
-                //        //  Display.RenderDirectX();
-                //    }
-                // break;
-            }
-            pause_DisplayThread = false;
-        }
+        //    Display.Target = picDisplay;
+        //    switch (current_display_engine)
+        //    {
+        //        case (DisplayEngine.GDI_PLUS):
+        //            {
+        //                //  Thread.Sleep(100);
+        //                //  Display.Init();
+        //                // UpdateDisplay();
+        //                //  picDisplay.Invalidate();
+        //            }
+        //            break;
+        //        //case (DisplayEngine.DIRECT_X):
+        //        //    if (!booting)
+        //        //    {
+        //        //        Display.WaterfallTarget = picWaterfall;
+        //        //        Display.DirectXRelease();
+        //        //        Display.DirectXInit();
+        //        //        //  Display.RenderDirectX();
+        //        //    }
+        //        // break;
+        //    }
+        //    pause_DisplayThread = false;
+        //}
 
         private byte n1mm_state = 0;
         public void SetFocusMaster(bool state)
@@ -58079,7 +58691,7 @@ namespace Thetis
             double CenterFreq = center_frequency;
             MouseEventArgs me = (MouseEventArgs)e;
 
-            if ((regBand == 1) && (me.Button == System.Windows.Forms.MouseButtons.Right))
+            if (m_bControlKeyDown && (me.Button == System.Windows.Forms.MouseButtons.Right))
             {
 
                 if (band_wwv_register < 9)
@@ -61356,6 +61968,28 @@ namespace Thetis
             }
         }
         #endregion
+
+        private void incrementMutliMeterDisplayMode()
+        {
+            // step through the display modes for the multimeter, smeter, dbm, uv, etc
+
+            MultiMeterMeasureMode tmp = m_eMeasureMode;
+            tmp++;
+            if (tmp >= MultiMeterMeasureMode.LAST) tmp = MultiMeterMeasureMode.FIRST + 1;
+
+            //set it through setupform so that settings are updated
+            if (SetupForm != null) SetupForm.SetMultiMeterMode(tmp);
+        }
+
+        private void txtMultiText_Click(object sender, EventArgs e)
+        {
+            incrementMutliMeterDisplayMode();
+        }
+
+        private void txtRX2Meter_Click(object sender, EventArgs e)
+        {
+            incrementMutliMeterDisplayMode();
+        }
     }
 
     public class DigiMode

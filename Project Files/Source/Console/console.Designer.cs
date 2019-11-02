@@ -491,7 +491,6 @@
         private LabelTS lblRX2APF;
         private ToolStripMenuItem wBToolStripMenuItem;
         private ToolStripMenuItem pIToolStripMenuItem;
-        public PictureBox picWaterfall;
         public ToolStripMenuItem spotterMenu;
         private TextBoxTS txtDisplayOrionMKIIPAVolts;
         private TextBoxTS txtDisplayOrionMKIIPAAmps;
@@ -1018,7 +1017,6 @@
             this.txtDisplayPeakFreq = new System.Windows.Forms.TextBoxTS();
             this.lblDisplayPan = new System.Windows.Forms.LabelTS();
             this.picDisplay = new System.Windows.Forms.PictureBox();
-            this.picWaterfall = new System.Windows.Forms.PictureBox();
             this.txtDisplayCursorPower = new System.Windows.Forms.TextBoxTS();
             this.txtDisplayCursorFreq = new System.Windows.Forms.TextBoxTS();
             this.txtDisplayOrionMKIIPAAmps = new System.Windows.Forms.TextBoxTS();
@@ -1026,7 +1024,6 @@
             this.txtDisplayCursorOffset = new System.Windows.Forms.TextBoxTS();
             this.txtDisplayOrionMKIIPAVolts = new System.Windows.Forms.TextBoxTS();
             this.panelMode = new System.Windows.Forms.PanelTS();
-            this.buttonTS1 = new System.Windows.Forms.ButtonTS();
             this.panelBandHF = new System.Windows.Forms.PanelTS();
             this.txtVFOAFreq = new System.Windows.Forms.TextBoxTS();
             this.grpVFOA = new System.Windows.Forms.GroupBoxTS();
@@ -1174,7 +1171,6 @@
             this.grpDIGSampleRate.SuspendLayout();
             this.panelDisplay.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picDisplay)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picWaterfall)).BeginInit();
             this.panelMode.SuspendLayout();
             this.panelBandHF.SuspendLayout();
             this.grpVFOA.SuspendLayout();
@@ -5912,7 +5908,6 @@
             this.panelDisplay.Controls.Add(this.txtDisplayPeakFreq);
             this.panelDisplay.Controls.Add(this.lblDisplayPan);
             this.panelDisplay.Controls.Add(this.picDisplay);
-            this.panelDisplay.Controls.Add(this.picWaterfall);
             this.panelDisplay.Controls.Add(this.txtDisplayCursorPower);
             this.panelDisplay.Controls.Add(this.txtDisplayCursorFreq);
             this.panelDisplay.Controls.Add(this.txtDisplayOrionMKIIPAAmps);
@@ -5989,15 +5984,6 @@
             this.picDisplay.MouseUp += new System.Windows.Forms.MouseEventHandler(this.picDisplay_MouseUp);
             this.picDisplay.Resize += new System.EventHandler(this.picDisplay_Resize);
             // 
-            // picWaterfall
-            // 
-            this.picWaterfall.BackColor = System.Drawing.Color.Black;
-            this.picWaterfall.Cursor = System.Windows.Forms.Cursors.Cross;
-            resources.ApplyResources(this.picWaterfall, "picWaterfall");
-            this.picWaterfall.Name = "picWaterfall";
-            this.picWaterfall.TabStop = false;
-            this.picWaterfall.Resize += new System.EventHandler(this.picWaterfall_Resize);
-            // 
             // txtDisplayCursorPower
             // 
             this.txtDisplayCursorPower.BackColor = System.Drawing.Color.Black;
@@ -6063,7 +6049,6 @@
             // 
             resources.ApplyResources(this.panelMode, "panelMode");
             this.panelMode.BackColor = System.Drawing.Color.Transparent;
-            this.panelMode.Controls.Add(this.buttonTS1);
             this.panelMode.Controls.Add(this.radModeAM);
             this.panelMode.Controls.Add(this.radModeLSB);
             this.panelMode.Controls.Add(this.radModeSAM);
@@ -6078,12 +6063,6 @@
             this.panelMode.Controls.Add(this.radModeSPEC);
             this.panelMode.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.panelMode.Name = "panelMode";
-            // 
-            // buttonTS1
-            // 
-            resources.ApplyResources(this.buttonTS1, "buttonTS1");
-            this.buttonTS1.Name = "buttonTS1";
-            this.buttonTS1.UseVisualStyleBackColor = true;
             // 
             // panelBandHF
             // 
@@ -6382,6 +6361,7 @@
             this.txtMultiText.ForeColor = System.Drawing.Color.Yellow;
             this.txtMultiText.Name = "txtMultiText";
             this.txtMultiText.ReadOnly = true;
+            this.txtMultiText.Click += new System.EventHandler(this.txtMultiText_Click);
             this.txtMultiText.GotFocus += new System.EventHandler(this.HideFocus);
             // 
             // lblTuneStep
@@ -6454,8 +6434,8 @@
             // picRX2Meter
             // 
             this.picRX2Meter.BackColor = System.Drawing.Color.Black;
-            this.picRX2Meter.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             resources.ApplyResources(this.picRX2Meter, "picRX2Meter");
+            this.picRX2Meter.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.picRX2Meter.Name = "picRX2Meter";
             this.picRX2Meter.TabStop = false;
             this.picRX2Meter.Paint += new System.Windows.Forms.PaintEventHandler(this.picRX2Meter_Paint);
@@ -6468,6 +6448,7 @@
             this.txtRX2Meter.ForeColor = System.Drawing.Color.Yellow;
             this.txtRX2Meter.Name = "txtRX2Meter";
             this.txtRX2Meter.ReadOnly = true;
+            this.txtRX2Meter.Click += new System.EventHandler(this.txtRX2Meter_Click);
             // 
             // panelBandVHF
             // 
@@ -6949,7 +6930,6 @@
             this.panelDisplay.ResumeLayout(false);
             this.panelDisplay.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picDisplay)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picWaterfall)).EndInit();
             this.panelMode.ResumeLayout(false);
             this.panelBandHF.ResumeLayout(false);
             this.grpVFOA.ResumeLayout(false);
@@ -7034,7 +7014,6 @@
         private LabelTS lblRXMeter;
         public ToolStripMenuItem andromedaTopControlsToolStripMenuItem;
         public ToolStripMenuItem andromedaButtonBarToolStripMenuItem;
-        private ButtonTS buttonTS1;
         private GroupBoxTS grpMultimeterMenus;
         private ToolStripMenuItem BPFToolStripMenuItem;
         private ToolStripMenuItem BPF1ToolStripMenuItem;
