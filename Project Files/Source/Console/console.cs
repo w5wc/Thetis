@@ -3877,7 +3877,7 @@ namespace Thetis
                     string[] list = val.Split('|');
                     for (int i = 0; i < (int)Band.LAST; i++) {
                         power_by_band[i] = int.Parse(list[i]);
-                        Debug.Print(((Band)i).ToString() + " = " + power_by_band[i].ToString());                   
+                        //Debug.Print(((Band)i).ToString() + " = " + power_by_band[i].ToString());                   
                     }
                 }
                 else if (name.StartsWith("fm_tx_offset_by_band_mhz"))
@@ -6077,7 +6077,7 @@ namespace Thetis
                 RX1Filter = (Filter)Enum.Parse(typeof(Filter), filter, true);
             }
 
-            txtVFOBFreq_LostFocus(this, EventArgs.Empty);
+            //txtVFOBFreq_LostFocus(this, EventArgs.Empty);  //MW0LGE why?
             ClickTuneDisplay = CTUN;
             chkFWCATU.Checked = ClickTuneDisplay;
             VFOAFreq = freq;                                       // Restore actual receive frequency after CTUN status restored - G3OQD
@@ -22517,8 +22517,8 @@ namespace Thetis
                                 picRX2Meter.BackColor = meter_background_color;
                                 //MW0LGE lblMultiSMeter.Show();
                                 //MW0LGE lblRX2Meter.Show();
-                                if (comboMeterTXMode.Items.Contains("Fwd SWR"))
-                                    comboMeterTXMode.Items.Remove("Fwd SWR");
+                                //MW0LGE if (comboMeterTXMode.Items.Contains("Fwd SWR"))
+                                //MW0LGE comboMeterTXMode.Items.Remove("Fwd SWR");
                                 break;
                         }
                         break;
@@ -22532,8 +22532,8 @@ namespace Thetis
                                 picRX2Meter.BackColor = edge_meter_background_color;
                                 //MW0LGE lblMultiSMeter.Hide();
                                 //MW0LGE lblRX2Meter.Hide();
-                                if (!comboMeterTXMode.Items.Contains("Fwd SWR"))
-                                    comboMeterTXMode.Items.Insert(3, "Fwd SWR");
+                                //MW0LGE if (!comboMeterTXMode.Items.Contains("Fwd SWR"))
+                                //MW0LGE comboMeterTXMode.Items.Insert(3, "Fwd SWR");
                                 break;
                         }
                         break;
@@ -24868,11 +24868,11 @@ namespace Thetis
                             comboMeterTXMode.Items.Insert(1, "Ref Pwr");
                         if (!comboMeterTXMode.Items.Contains("SWR"))
                             comboMeterTXMode.Items.Insert(2, "SWR");
-                        if (current_meter_display_mode == MultiMeterDisplayMode.Edge)
-                        {
+                        //if (current_meter_display_mode == MultiMeterDisplayMode.Edge)
+                        //{
                             if (!comboMeterTXMode.Items.Contains("Fwd SWR"))
                                 comboMeterTXMode.Items.Insert(3, "Fwd SWR");
-                        }
+                        //}
                         chkDX.Checked = false;
                         chkDX.Visible = false;
                         break;
@@ -24885,11 +24885,11 @@ namespace Thetis
                             comboMeterTXMode.Items.Insert(1, "Ref Pwr");
                         if (!comboMeterTXMode.Items.Contains("SWR"))
                             comboMeterTXMode.Items.Insert(2, "SWR");
-                        if (current_meter_display_mode == MultiMeterDisplayMode.Edge)
-                        {
+                        //if (current_meter_display_mode == MultiMeterDisplayMode.Edge)
+                        //{
                             if (!comboMeterTXMode.Items.Contains("Fwd SWR"))
                                 comboMeterTXMode.Items.Insert(3, "Fwd SWR");
-                        }
+                        //}
                         chkDX.Visible = true;
                         break;
 
@@ -24958,11 +24958,11 @@ namespace Thetis
                                 comboMeterTXMode.Items.Insert(1, "Ref Pwr");
                             if (!comboMeterTXMode.Items.Contains("SWR"))
                                 comboMeterTXMode.Items.Insert(2, "SWR");
-                            if (current_meter_display_mode == MultiMeterDisplayMode.Edge)
-                            {
+                            //if (current_meter_display_mode == MultiMeterDisplayMode.Edge)
+                            //{
                                 if (!comboMeterTXMode.Items.Contains("Fwd SWR"))
                                     comboMeterTXMode.Items.Insert(3, "Fwd SWR");
-                            }
+                            //}
                         }
                         break;
                 }
@@ -28064,6 +28064,7 @@ namespace Thetis
                 //r.Select();
                 //r.PerformClick();
                 r.Checked = true;
+                
                 // G8NJJ make popup forms have up to date values
                 if (modePopupForm != null) modePopupForm.RepopulateForm();
                 if (filterPopupForm != null) filterPopupForm.RepopulateForm();
@@ -29477,6 +29478,7 @@ namespace Thetis
             set
             {
                 m_bAttontx = value;
+
                 if (PowerOn)
                 {
                     if (m_bAttontx) NetworkIO.SetTxAttenData(tx_step_attenuator_by_band[(int)rx1_band]);
@@ -29489,6 +29491,27 @@ namespace Thetis
             }
         }
 
+        private void setupFwdSWRInCombo(bool bAdd)
+        {
+            if (bAdd)
+            {
+                //if (current_meter_display_mode == MultiMeterDisplayMode.Edge)
+                //{
+
+                    if (!comboMeterTXMode.Items.Contains("Fwd SWR"))
+                        comboMeterTXMode.Items.Insert(3, "Fwd SWR");
+                //}
+            }
+            else
+            {
+                if (!initializing)
+                {
+                    if (comboMeterTXMode.Items.Contains("Fwd SWR"))
+                        comboMeterTXMode.Items.Remove("Fwd SWR");
+                }
+            }
+        }
+
         private bool anan10present = false;
         public bool ANAN10Present
         {
@@ -29498,23 +29521,24 @@ namespace Thetis
                 anan10present = value;
                 CurrentHPSDRHardware = HPSDRHW.Hermes;
 
-                if (anan10present)
-                {
-                    if (current_meter_display_mode == MultiMeterDisplayMode.Edge)
-                    {
+                setupFwdSWRInCombo(anan10present); //MW0LGE
+                //if (anan10present)
+                //{
+                //    if (current_meter_display_mode == MultiMeterDisplayMode.Edge)
+                //    {
 
-                        if (!comboMeterTXMode.Items.Contains("Fwd SWR"))
-                            comboMeterTXMode.Items.Insert(3, "Fwd SWR");
-                    }
-                }
-                else
-                {
-                    if (!initializing)
-                    {
-                        if (comboMeterTXMode.Items.Contains("Fwd SWR"))
-                            comboMeterTXMode.Items.Remove("Fwd SWR");
-                    }
-                }
+                //        if (!comboMeterTXMode.Items.Contains("Fwd SWR"))
+                //            comboMeterTXMode.Items.Insert(3, "Fwd SWR");
+                //    }
+                //}
+                //else
+                //{
+                //    if (!initializing)
+                //    {
+                //        if (comboMeterTXMode.Items.Contains("Fwd SWR"))
+                //            comboMeterTXMode.Items.Remove("Fwd SWR");
+                //    }
+                //}
             }
         }
 
@@ -29527,23 +29551,24 @@ namespace Thetis
                 anan10Epresent = value;
                 CurrentHPSDRHardware = HPSDRHW.HermesII;
 
-                if (anan10Epresent)
-                {
-                    if (current_meter_display_mode == MultiMeterDisplayMode.Edge)
-                    {
+                setupFwdSWRInCombo(anan10Epresent); //MW0LGE
+                //if (anan10Epresent)
+                //{
+                //    if (current_meter_display_mode == MultiMeterDisplayMode.Edge)
+                //    {
 
-                        if (!comboMeterTXMode.Items.Contains("Fwd SWR"))
-                            comboMeterTXMode.Items.Insert(3, "Fwd SWR");
-                    }
-                }
-                else
-                {
-                    if (!initializing)
-                    {
-                        if (comboMeterTXMode.Items.Contains("Fwd SWR"))
-                            comboMeterTXMode.Items.Remove("Fwd SWR");
-                    }
-                }
+                //        if (!comboMeterTXMode.Items.Contains("Fwd SWR"))
+                //            comboMeterTXMode.Items.Insert(3, "Fwd SWR");
+                //    }
+                //}
+                //else
+                //{
+                //    if (!initializing)
+                //    {
+                //        if (comboMeterTXMode.Items.Contains("Fwd SWR"))
+                //            comboMeterTXMode.Items.Remove("Fwd SWR");
+                //    }
+                //}
             }
         }
 
@@ -29556,23 +29581,24 @@ namespace Thetis
                 anan100Bpresent = value;
                 CurrentHPSDRHardware = HPSDRHW.HermesII;
 
-                if (anan100Bpresent)
-                {
-                    if (current_meter_display_mode == MultiMeterDisplayMode.Edge)
-                    {
+                setupFwdSWRInCombo(anan100Bpresent); //MW0LGE
+                //if (anan100Bpresent)
+                //{
+                //    if (current_meter_display_mode == MultiMeterDisplayMode.Edge)
+                //    {
 
-                        if (!comboMeterTXMode.Items.Contains("Fwd SWR"))
-                            comboMeterTXMode.Items.Insert(3, "Fwd SWR");
-                    }
-                }
-                else
-                {
-                    if (!initializing)
-                    {
-                        if (comboMeterTXMode.Items.Contains("Fwd SWR"))
-                            comboMeterTXMode.Items.Remove("Fwd SWR");
-                    }
-                }
+                //        if (!comboMeterTXMode.Items.Contains("Fwd SWR"))
+                //            comboMeterTXMode.Items.Insert(3, "Fwd SWR");
+                //    }
+                //}
+                //else
+                //{
+                //    if (!initializing)
+                //    {
+                //        if (comboMeterTXMode.Items.Contains("Fwd SWR"))
+                //            comboMeterTXMode.Items.Remove("Fwd SWR");
+                //    }
+                //}
             }
         }
 
@@ -29677,15 +29703,17 @@ namespace Thetis
             set
             {
                 apollopresent = value;
+
+                setupFwdSWRInCombo(apollopresent);  //MW0LGE
                 if (apollopresent)
                 {
                     if (!comboMeterTXMode.Items.Contains("Ref Pwr"))
                         comboMeterTXMode.Items.Insert(1, "Ref Pwr");
-                    if (current_meter_display_mode == MultiMeterDisplayMode.Edge)
-                    {
-                        if (!comboMeterTXMode.Items.Contains("Fwd SWR"))
-                            comboMeterTXMode.Items.Insert(3, "Fwd SWR");
-                    }
+                    //if (current_meter_display_mode == MultiMeterDisplayMode.Edge)
+                    //{
+                    //    if (!comboMeterTXMode.Items.Contains("Fwd SWR"))
+                    //        comboMeterTXMode.Items.Insert(3, "Fwd SWR");
+                    //}
                 }
                 else
                 {
@@ -29693,8 +29721,8 @@ namespace Thetis
                     {
                         if (comboMeterTXMode.Items.Contains("Ref Pwr"))
                             comboMeterTXMode.Items.Remove("Ref Pwr");
-                        if (comboMeterTXMode.Items.Contains("Fwd SWR"))
-                            comboMeterTXMode.Items.Remove("Fwd SWR");
+                        //if (comboMeterTXMode.Items.Contains("Fwd SWR"))
+                        //    comboMeterTXMode.Items.Remove("Fwd SWR");
                     }
                 }
 
@@ -29720,15 +29748,18 @@ namespace Thetis
             set
             {
                 alexpresent = value;
+
+                setupFwdSWRInCombo(alexpresent); //MW0LGE
+
                 if (alexpresent)
                 {
                     if (!comboMeterTXMode.Items.Contains("Ref Pwr"))
                         comboMeterTXMode.Items.Insert(1, "Ref Pwr");
-                    if (current_meter_display_mode == MultiMeterDisplayMode.Edge)
-                    {
-                        if (!comboMeterTXMode.Items.Contains("Fwd SWR"))
-                            comboMeterTXMode.Items.Insert(3, "Fwd SWR");
-                    }
+                    //if (current_meter_display_mode == MultiMeterDisplayMode.Edge)
+                    //{
+                    //    if (!comboMeterTXMode.Items.Contains("Fwd SWR"))
+                    //        comboMeterTXMode.Items.Insert(3, "Fwd SWR");
+                    //}
 
                     if (!comboMeterTXMode.Items.Contains("SWR"))
                         comboMeterTXMode.Items.Insert(2, "SWR");
@@ -29755,8 +29786,8 @@ namespace Thetis
                             comboMeterTXMode.Items.Remove("Ref Pwr");
                         if (comboMeterTXMode.Items.Contains("SWR"))
                             comboMeterTXMode.Items.Remove("SWR");
-                        if (comboMeterTXMode.Items.Contains("Fwd SWR"))
-                            comboMeterTXMode.Items.Remove("Fwd SWR");
+                        //if (comboMeterTXMode.Items.Contains("Fwd SWR"))
+                        //    comboMeterTXMode.Items.Remove("Fwd SWR");
                     }
 
                     comboMeterTXMode.Text = cur_txt;
@@ -32779,7 +32810,7 @@ namespace Thetis
 
                                 //g.TextRenderingHint = TextRenderingHint.AntiAlias;
                                 //g.SmoothingMode = SmoothingMode.AntiAlias;
-                                g.DrawString(s, font7, low_brush, (int)(i * spacing - string_width * s.Length + 2.0 - 1 * (int)(i / 2) + 3 * (int)(i / 4)), (int)((H / 2) - 9 - string_height));
+                                g.DrawString(s, font7, low_brush, (int)(i * spacing - string_width * s.Length + 2.0 - 1 * (int)(i / 2) + 3 * (int)(i / 4)), (int)((H / 2) - 8 - string_height));
                                 //g.SmoothingMode = SmoothingMode.None;
                             }
                             if (bDrawMarkers)
@@ -32815,7 +32846,7 @@ namespace Thetis
                                 //g.SmoothingMode = SmoothingMode.AntiAlias;
                                 //g.DrawString(s, font7, high_brush, (int)(i * spacing - string_width * s.Length + 2.0 - 2 * (int)(i / 2) + 3 * (int)(i / 4)), (int)(H - 4 - 8 - string_height));
                                 // g.DrawString(s, font7, high_brush, (int)(W * 0.75 + i * spacing - spacing - (int)2.5 * string_width), (int)(H - 4 - 8 - string_height));
-                                g.DrawString(s, font7, high_brush, (int)(W * 0.75 + i * spacing - spacing - (int)1.0 * string_width), (int)((H / 2) - 9 - string_height));
+                                g.DrawString(s, font7, high_brush, (int)(W * 0.75 + i * spacing - spacing - (int)1.0 * string_width), (int)((H / 2) - 8 - string_height));
                                 //g.SmoothingMode = SmoothingMode.None;
                             }
 
@@ -34211,8 +34242,9 @@ namespace Thetis
 
                     getMeterPixelPosAndDrawScales(1, g, H, W, num, ref pixel_x, ref pixel_x_swr, 1, false);
 
-                    if ((!mox && current_meter_rx_mode != MeterRXMode.OFF) ||
-                        (mox && current_meter_tx_mode != MeterTXMode.OFF))
+                    if (  (!mox && (current_meter_rx_mode != MeterRXMode.OFF)) ||
+                          ( (mox && (current_meter_tx_mode != MeterTXMode.OFF)) &&
+                            current_meter_tx_mode != MeterTXMode.SWR_POWER)  )
                     {
                         pixel_x = Math.Max(1, pixel_x);
                         pixel_x = Math.Min(W - 3, pixel_x);
@@ -34246,6 +34278,58 @@ namespace Thetis
                                 g.DrawLine(Pens.Red, meter_peak_value - 1, 0, meter_peak_value - 1, H - 10);
                             }
                         }
+                    }
+                    else
+                    if (mox && current_meter_tx_mode == MeterTXMode.SWR_POWER)
+                    {
+                        //MW0LGE to do, just draw lines atm
+                        pixel_x = Math.Max(1, pixel_x);
+                        pixel_x = Math.Min(W - 3, pixel_x);
+                        pixel_x_swr = Math.Max(1, pixel_x_swr);
+                        pixel_x_swr = Math.Min(W - 3, pixel_x_swr);
+
+                        using (LinearGradientBrush brush = new LinearGradientBrush(new Rectangle(0, 0, pixel_x_swr, (H / 2) - 8),
+                            meter_left_color, meter_right_color, LinearGradientMode.Horizontal))
+                            g.FillRectangle(brush, 0, 8, pixel_x_swr, (H / 2) - 8);
+                        
+                        using (LinearGradientBrush brush = new LinearGradientBrush(new Rectangle(0, 0, pixel_x, (H / 2) - 8),
+                            meter_left_color, meter_right_color, LinearGradientMode.Horizontal))
+                            g.FillRectangle(brush, 0, H / 2, pixel_x, (H / 2) - 8);
+
+
+                        for (int i = 0; i < (W / 8) - 1; i++)
+                        {
+                            g.DrawLine(meter_background_pen, 8 + i * 8, H / 2, 8 + i * 8, H - 8);
+                            g.DrawLine(meter_background_pen, 8 + i * 8, 10, 8 + i * 8, (H/2) - 8);
+                        }
+
+                        g.DrawLine(Pens.Red, pixel_x, H / 2, pixel_x, H); // drop down end lines so we can see them
+                        g.DrawLine(Pens.Red, pixel_x_swr, 0, pixel_x_swr, H / 2);
+
+                        g.FillRectangle(meter_background_pen.Brush, pixel_x + 1, H / 2, W - pixel_x, (H / 2) - 8);
+                        g.FillRectangle(meter_background_pen.Brush, pixel_x_swr + 1, 8, W - pixel_x_swr, (H / 2) - 8);
+
+                        if (pixel_x >= meter_peak_value)
+                        {
+                            meter_peak_count = 0;
+                            meter_peak_value = pixel_x;
+                        }
+                        else
+                        {
+                            if (meter_peak_count++ >= multimeter_peak_hold_samples)
+                            {
+                                meter_peak_count = 0;
+                                meter_peak_value = pixel_x;
+                            }
+                            else
+                            {
+                                g.DrawLine(Pens.Red, meter_peak_value, H / 2, meter_peak_value, H);
+                                g.DrawLine(Pens.Red, meter_peak_value - 1, H / 2, meter_peak_value - 1, H);
+                            }
+                        }
+
+                        //g.DrawLine(Pens.Red, pixel_x_swr, 0, pixel_x_swr, H / 2);
+                        //g.DrawLine(Pens.Red, pixel_x, H / 2, pixel_x, H);
                     }
                     break;
                 #endregion
@@ -34282,7 +34366,7 @@ namespace Thetis
                         g.InterpolationMode = InterpolationMode.Default;
                         g.SmoothingMode = SmoothingMode.Default;
                     }
-
+                    else
                     if (((!mox && current_meter_rx_mode != MeterRXMode.OFF) ||
                        (mox && current_meter_tx_mode != MeterTXMode.OFF)) && current_meter_tx_mode == MeterTXMode.SWR_POWER)
                     {
@@ -34670,241 +34754,241 @@ namespace Thetis
                 e.Graphics.DrawLine(p, x, 1, width, 1);
         }
 
-        public void UpdateRX1DisplayAverage(float[] buffer, float[] new_data)
-        {
-            // Debug.WriteLine("last vfo: " + avg_last_ddsfreq + " vfo: " + DDSFreq); 
-            if (buffer[0] == Display.CLEAR_FLAG)
-            {
-                //Debug.WriteLine("Clearing average buf"); 
-                for (int i = 0; i < Display.BUFFER_SIZE; i++)
-                    buffer[i] = new_data[i];
-            }
-            else
-            {
-                // wjt added -- stop hosing the avg display when scrolling the vfo 
-                if (rx1_avg_last_ddsfreq != 0 && rx1_avg_last_ddsfreq != FWCDDSFreq) // vfo has changed, need to shift things around 
-                {
-                    //Debug.WriteLine("dttsp_osc: " + dttsp_osc); 
-                    double delta_vfo;
+        //public void UpdateRX1DisplayAverage(float[] buffer, float[] new_data)
+        //{
+        //    // Debug.WriteLine("last vfo: " + avg_last_ddsfreq + " vfo: " + DDSFreq); 
+        //    if (buffer[0] == Display.CLEAR_FLAG)
+        //    {
+        //        //Debug.WriteLine("Clearing average buf"); 
+        //        for (int i = 0; i < Display.BUFFER_SIZE; i++)
+        //            buffer[i] = new_data[i];
+        //    }
+        //    else
+        //    {
+        //        // wjt added -- stop hosing the avg display when scrolling the vfo 
+        //        if (rx1_avg_last_ddsfreq != 0 && rx1_avg_last_ddsfreq != FWCDDSFreq) // vfo has changed, need to shift things around 
+        //        {
+        //            //Debug.WriteLine("dttsp_osc: " + dttsp_osc); 
+        //            double delta_vfo;
 
-                    delta_vfo = FWCDDSFreq - rx1_avg_last_ddsfreq;
-                    delta_vfo *= 1000000.0; // vfo in mhz moron!
+        //            delta_vfo = FWCDDSFreq - rx1_avg_last_ddsfreq;
+        //            delta_vfo *= 1000000.0; // vfo in mhz moron!
 
-                    double hz_per_bin = sample_rate_rx1 / Display.BUFFER_SIZE;
+        //            double hz_per_bin = sample_rate_rx1 / Display.BUFFER_SIZE;
 
-                    int bucket_shift = (int)(delta_vfo / hz_per_bin);
-                    double leftover = delta_vfo - ((double)bucket_shift * hz_per_bin);
-                    leftover = leftover / hz_per_bin; // conver to fractions of bucket 
-                    double total_leftover = leftover + rx1_last_bin_shift_leftover;
-                    if (total_leftover < -0.5)
-                    {
-                        bucket_shift -= 1;
-                        total_leftover += 1;
-                        //Debug.WriteLine("bump down"); 
-                    }
-                    else if (total_leftover > 0.5)
-                    {
-                        bucket_shift += 1;
-                        total_leftover -= 1;
-                        //Debug.WriteLine("bump up"); 
-                    }
-                    rx1_last_bin_shift_leftover = total_leftover;
-                    //Debug.WriteLine("leftover: " + leftover + " total_leftover: " + total_leftover); 
+        //            int bucket_shift = (int)(delta_vfo / hz_per_bin);
+        //            double leftover = delta_vfo - ((double)bucket_shift * hz_per_bin);
+        //            leftover = leftover / hz_per_bin; // conver to fractions of bucket 
+        //            double total_leftover = leftover + rx1_last_bin_shift_leftover;
+        //            if (total_leftover < -0.5)
+        //            {
+        //                bucket_shift -= 1;
+        //                total_leftover += 1;
+        //                //Debug.WriteLine("bump down"); 
+        //            }
+        //            else if (total_leftover > 0.5)
+        //            {
+        //                bucket_shift += 1;
+        //                total_leftover -= 1;
+        //                //Debug.WriteLine("bump up"); 
+        //            }
+        //            rx1_last_bin_shift_leftover = total_leftover;
+        //            //Debug.WriteLine("leftover: " + leftover + " total_leftover: " + total_leftover); 
 
-                    // bucket_shift = bucket_shift/2; 						
-                    // indexed_value pre_max = findMax(average_buffer, display_buffer_size); 
-                    // Debug.WriteLine("\nPre max: " + pre_max.val + " " + pre_max.idx); 
-                    // Debug.WriteLine("bshift: " + bucket_shift + " delta_vfo: " + delta_vfo); 
-                    if (bucket_shift > 0) // vfo increased, need to shift avgs to the left 
-                    {
-                        if (bucket_shift >= Display.BUFFER_SIZE)
-                        {
-                            buffer[0] = Display.CLEAR_FLAG;
-                        }
-                        else
-                        {
-                            for (int j = 0; j < Display.BUFFER_SIZE - bucket_shift; j++)
-                                buffer[j] = buffer[j + bucket_shift];  // wjt fix use memmove 
+        //            // bucket_shift = bucket_shift/2; 						
+        //            // indexed_value pre_max = findMax(average_buffer, display_buffer_size); 
+        //            // Debug.WriteLine("\nPre max: " + pre_max.val + " " + pre_max.idx); 
+        //            // Debug.WriteLine("bshift: " + bucket_shift + " delta_vfo: " + delta_vfo); 
+        //            if (bucket_shift > 0) // vfo increased, need to shift avgs to the left 
+        //            {
+        //                if (bucket_shift >= Display.BUFFER_SIZE)
+        //                {
+        //                    buffer[0] = Display.CLEAR_FLAG;
+        //                }
+        //                else
+        //                {
+        //                    for (int j = 0; j < Display.BUFFER_SIZE - bucket_shift; j++)
+        //                        buffer[j] = buffer[j + bucket_shift];  // wjt fix use memmove 
 
-                            // fill avg with last good data on the end
-                            for (int j = Display.BUFFER_SIZE - bucket_shift; j < Display.BUFFER_SIZE; j++)
-                                buffer[j] = buffer[Display.BUFFER_SIZE - bucket_shift - 1];
-                        }
-                    }
-                    else if (bucket_shift < 0) // vfo decreased, move samples up 
-                    {
-                        if (-bucket_shift >= Display.BUFFER_SIZE)
-                        {
-                            buffer[0] = Display.CLEAR_FLAG;
-                        }
-                        else
-                        {
-                            for (int j = Display.BUFFER_SIZE - 1; j > -bucket_shift; j--)
-                                buffer[j] = buffer[j + bucket_shift];
+        //                    // fill avg with last good data on the end
+        //                    for (int j = Display.BUFFER_SIZE - bucket_shift; j < Display.BUFFER_SIZE; j++)
+        //                        buffer[j] = buffer[Display.BUFFER_SIZE - bucket_shift - 1];
+        //                }
+        //            }
+        //            else if (bucket_shift < 0) // vfo decreased, move samples up 
+        //            {
+        //                if (-bucket_shift >= Display.BUFFER_SIZE)
+        //                {
+        //                    buffer[0] = Display.CLEAR_FLAG;
+        //                }
+        //                else
+        //                {
+        //                    for (int j = Display.BUFFER_SIZE - 1; j > -bucket_shift; j--)
+        //                        buffer[j] = buffer[j + bucket_shift];
 
-                            for (int j = 0; j < -bucket_shift; j++)
-                                buffer[j] = buffer[-bucket_shift];
-                        }
-                    }
-                    //					indexed_value post_max = findMax(average_buffer, display_buffer_size); 
-                    //					Debug.WriteLine("Post max: " + post_max.val + " " + post_max.idx); 
-                    //					indexed_value disp_max = findMax(display_data, display_buffer_size); 		
-                    //					Debug.WriteLine("Disp max: " + disp_max.val + " " + disp_max.idx); 
-                }
-                else
-                {
-                    rx1_last_bin_shift_leftover = 0; // reset, this vfo = last vfo 
-                }
+        //                    for (int j = 0; j < -bucket_shift; j++)
+        //                        buffer[j] = buffer[-bucket_shift];
+        //                }
+        //            }
+        //            //					indexed_value post_max = findMax(average_buffer, display_buffer_size); 
+        //            //					Debug.WriteLine("Post max: " + post_max.val + " " + post_max.idx); 
+        //            //					indexed_value disp_max = findMax(display_data, display_buffer_size); 		
+        //            //					Debug.WriteLine("Disp max: " + disp_max.val + " " + disp_max.idx); 
+        //        }
+        //        else
+        //        {
+        //            rx1_last_bin_shift_leftover = 0; // reset, this vfo = last vfo 
+        //        }
 
-                float new_mult = 0.0f;
-                float old_mult = 0.0f;
+        //        float new_mult = 0.0f;
+        //        float old_mult = 0.0f;
 
-                switch (Display.CurrentDisplayMode)
-                {
-                    case DisplayMode.WATERFALL:
-                        new_mult = Display.waterfall_avg_mult_new;
-                        old_mult = Display.waterfall_avg_mult_old;
-                        break;
-                    default:
-                        new_mult = Display.display_avg_mult_new;
-                        old_mult = Display.display_avg_mult_old;
-                        break;
-                }
+        //        switch (Display.CurrentDisplayMode)
+        //        {
+        //            case DisplayMode.WATERFALL:
+        //                new_mult = Display.waterfall_avg_mult_new;
+        //                old_mult = Display.waterfall_avg_mult_old;
+        //                break;
+        //            default:
+        //                new_mult = Display.display_avg_mult_new;
+        //                old_mult = Display.display_avg_mult_old;
+        //                break;
+        //        }
 
-                for (int i = 0; i < Display.BUFFER_SIZE; i++)
-                    buffer[i] = new_data[i] =
-                        (float)(new_data[i] * new_mult +
-                        buffer[i] * old_mult);
-            }
+        //        for (int i = 0; i < Display.BUFFER_SIZE; i++)
+        //            buffer[i] = new_data[i] =
+        //                (float)(new_data[i] * new_mult +
+        //                buffer[i] * old_mult);
+        //    }
 
-            if (buffer[0] == Display.CLEAR_FLAG)
-            {
-                rx1_avg_last_ddsfreq = 0;
-                rx1_avg_last_dttsp_osc = 0;
-            }
-            else
-            {
-                rx1_avg_last_ddsfreq = FWCDDSFreq;
-            }
-        }
+        //    if (buffer[0] == Display.CLEAR_FLAG)
+        //    {
+        //        rx1_avg_last_ddsfreq = 0;
+        //        rx1_avg_last_dttsp_osc = 0;
+        //    }
+        //    else
+        //    {
+        //        rx1_avg_last_ddsfreq = FWCDDSFreq;
+        //    }
+        //}
 
-        public void UpdateRX2DisplayAverage(float[] buffer, float[] new_data)
-        {
-            //  double dttsp_osc = radio.GetDSPRX(1, 0).RXOsc;
-            // Debug.WriteLine("last vfo: " + avg_last_ddsfreq + " vfo: " + DDSFreq); 
-            if (buffer[0] == Display.CLEAR_FLAG)
-            {
-                //Debug.WriteLine("Clearing average buf"); 
-                for (int i = 0; i < Display.BUFFER_SIZE; i++)
-                    buffer[i] = new_data[i];
-            }
-            else
-            {
-                // wjt added -- stop hosing the avg display when scrolling the vfo 
-                if (rx2_avg_last_ddsfreq != 0 && rx2_avg_last_ddsfreq != RX2DDSFreq) // vfo has changed, need to shift things around 
-                {
-                    //Debug.WriteLine("dttsp_osc: " + dttsp_osc); 
-                    double delta_vfo;
+        //public void UpdateRX2DisplayAverage(float[] buffer, float[] new_data)
+        //{
+        //    //  double dttsp_osc = radio.GetDSPRX(1, 0).RXOsc;
+        //    // Debug.WriteLine("last vfo: " + avg_last_ddsfreq + " vfo: " + DDSFreq); 
+        //    if (buffer[0] == Display.CLEAR_FLAG)
+        //    {
+        //        //Debug.WriteLine("Clearing average buf"); 
+        //        for (int i = 0; i < Display.BUFFER_SIZE; i++)
+        //            buffer[i] = new_data[i];
+        //    }
+        //    else
+        //    {
+        //        // wjt added -- stop hosing the avg display when scrolling the vfo 
+        //        if (rx2_avg_last_ddsfreq != 0 && rx2_avg_last_ddsfreq != RX2DDSFreq) // vfo has changed, need to shift things around 
+        //        {
+        //            //Debug.WriteLine("dttsp_osc: " + dttsp_osc); 
+        //            double delta_vfo;
 
-                    delta_vfo = RX2DDSFreq - rx2_avg_last_ddsfreq;
-                    delta_vfo *= 1000000.0; // vfo in mhz moron!
+        //            delta_vfo = RX2DDSFreq - rx2_avg_last_ddsfreq;
+        //            delta_vfo *= 1000000.0; // vfo in mhz moron!
 
-                    double hz_per_bin = sample_rate_rx1 / Display.BUFFER_SIZE;
+        //            double hz_per_bin = sample_rate_rx2 / Display.BUFFER_SIZE; //MW0LGE was sample_rate_rx1
 
-                    int bucket_shift = (int)(delta_vfo / hz_per_bin);
-                    double leftover = delta_vfo - ((double)bucket_shift * hz_per_bin);
-                    leftover = leftover / hz_per_bin; // conver to fractions of bucket 
-                    double total_leftover = leftover + rx2_last_bin_shift_leftover;
-                    if (total_leftover < -0.5)
-                    {
-                        bucket_shift -= 1;
-                        total_leftover += 1;
-                        //Debug.WriteLine("bump down"); 
-                    }
-                    else if (total_leftover > 0.5)
-                    {
-                        bucket_shift += 1;
-                        total_leftover -= 1;
-                        //Debug.WriteLine("bump up"); 
-                    }
-                    rx2_last_bin_shift_leftover = total_leftover;
-                    //Debug.WriteLine("leftover: " + leftover + " total_leftover: " + total_leftover); 
+        //            int bucket_shift = (int)(delta_vfo / hz_per_bin);
+        //            double leftover = delta_vfo - ((double)bucket_shift * hz_per_bin);
+        //            leftover = leftover / hz_per_bin; // conver to fractions of bucket 
+        //            double total_leftover = leftover + rx2_last_bin_shift_leftover;
+        //            if (total_leftover < -0.5)
+        //            {
+        //                bucket_shift -= 1;
+        //                total_leftover += 1;
+        //                //Debug.WriteLine("bump down"); 
+        //            }
+        //            else if (total_leftover > 0.5)
+        //            {
+        //                bucket_shift += 1;
+        //                total_leftover -= 1;
+        //                //Debug.WriteLine("bump up"); 
+        //            }
+        //            rx2_last_bin_shift_leftover = total_leftover;
+        //            //Debug.WriteLine("leftover: " + leftover + " total_leftover: " + total_leftover); 
 
-                    // bucket_shift = bucket_shift/2; 						
-                    // indexed_value pre_max = findMax(average_buffer, display_buffer_size); 
-                    // Debug.WriteLine("\nPre max: " + pre_max.val + " " + pre_max.idx); 
-                    // Debug.WriteLine("bshift: " + bucket_shift + " delta_vfo: " + delta_vfo); 
-                    if (bucket_shift > 0) // vfo increased, need to shift avgs to the left 
-                    {
-                        if (bucket_shift >= Display.BUFFER_SIZE)
-                        {
-                            buffer[0] = Display.CLEAR_FLAG;
-                        }
-                        else
-                        {
-                            for (int j = 0; j < Display.BUFFER_SIZE - bucket_shift; j++)
-                                buffer[j] = buffer[j + bucket_shift];  // wjt fix use memmove 
+        //            // bucket_shift = bucket_shift/2; 						
+        //            // indexed_value pre_max = findMax(average_buffer, display_buffer_size); 
+        //            // Debug.WriteLine("\nPre max: " + pre_max.val + " " + pre_max.idx); 
+        //            // Debug.WriteLine("bshift: " + bucket_shift + " delta_vfo: " + delta_vfo); 
+        //            if (bucket_shift > 0) // vfo increased, need to shift avgs to the left 
+        //            {
+        //                if (bucket_shift >= Display.BUFFER_SIZE)
+        //                {
+        //                    buffer[0] = Display.CLEAR_FLAG;
+        //                }
+        //                else
+        //                {
+        //                    for (int j = 0; j < Display.BUFFER_SIZE - bucket_shift; j++)
+        //                        buffer[j] = buffer[j + bucket_shift];  // wjt fix use memmove 
 
-                            // fill avg with last good data on the end
-                            for (int j = Display.BUFFER_SIZE - bucket_shift; j < Display.BUFFER_SIZE; j++)
-                                buffer[j] = buffer[Display.BUFFER_SIZE - bucket_shift - 1];
-                        }
-                    }
-                    else if (bucket_shift < 0) // vfo decreased, move samples up 
-                    {
-                        if (-bucket_shift >= Display.BUFFER_SIZE)
-                        {
-                            buffer[0] = Display.CLEAR_FLAG;
-                        }
-                        else
-                        {
-                            for (int j = Display.BUFFER_SIZE - 1; j > -bucket_shift; j--)
-                                buffer[j] = buffer[j + bucket_shift];
+        //                    // fill avg with last good data on the end
+        //                    for (int j = Display.BUFFER_SIZE - bucket_shift; j < Display.BUFFER_SIZE; j++)
+        //                        buffer[j] = buffer[Display.BUFFER_SIZE - bucket_shift - 1];
+        //                }
+        //            }
+        //            else if (bucket_shift < 0) // vfo decreased, move samples up 
+        //            {
+        //                if (-bucket_shift >= Display.BUFFER_SIZE)
+        //                {
+        //                    buffer[0] = Display.CLEAR_FLAG;
+        //                }
+        //                else
+        //                {
+        //                    for (int j = Display.BUFFER_SIZE - 1; j > -bucket_shift; j--)
+        //                        buffer[j] = buffer[j + bucket_shift];
 
-                            for (int j = 0; j < -bucket_shift; j++)
-                                buffer[j] = buffer[-bucket_shift];
-                        }
-                    }
-                    //					indexed_value post_max = findMax(average_buffer, display_buffer_size); 
-                    //					Debug.WriteLine("Post max: " + post_max.val + " " + post_max.idx); 
-                    //					indexed_value disp_max = findMax(display_data, display_buffer_size); 		
-                    //					Debug.WriteLine("Disp max: " + disp_max.val + " " + disp_max.idx); 
-                }
-                else
-                {
-                    rx2_last_bin_shift_leftover = 0; // reset, this vfo = last vfo 
-                }
+        //                    for (int j = 0; j < -bucket_shift; j++)
+        //                        buffer[j] = buffer[-bucket_shift];
+        //                }
+        //            }
+        //            //					indexed_value post_max = findMax(average_buffer, display_buffer_size); 
+        //            //					Debug.WriteLine("Post max: " + post_max.val + " " + post_max.idx); 
+        //            //					indexed_value disp_max = findMax(display_data, display_buffer_size); 		
+        //            //					Debug.WriteLine("Disp max: " + disp_max.val + " " + disp_max.idx); 
+        //        }
+        //        else
+        //        {
+        //            rx2_last_bin_shift_leftover = 0; // reset, this vfo = last vfo 
+        //        }
 
-                float new_mult = 0.0f;
-                float old_mult = 0.0f;
+        //        float new_mult = 0.0f;
+        //        float old_mult = 0.0f;
 
-                switch (Display.CurrentDisplayModeBottom)
-                {
-                    case DisplayMode.WATERFALL:
-                        new_mult = Display.waterfall_avg_mult_new;
-                        old_mult = Display.waterfall_avg_mult_old;
-                        break;
-                    default:
-                        new_mult = Display.display_avg_mult_new;
-                        old_mult = Display.display_avg_mult_old;
-                        break;
-                }
+        //        switch (Display.CurrentDisplayModeBottom)
+        //        {
+        //            case DisplayMode.WATERFALL:
+        //                new_mult = Display.rx2_waterfall_avg_mult_new;//Display.waterfall_avg_mult_new;  //MW0LGE
+        //                old_mult = Display.rx2_waterfall_avg_mult_old;//Display.waterfall_avg_mult_old;  //MW0LGE
+        //                break;
+        //            default:
+        //                new_mult = Display.rx2_display_avg_mult_new;//Display.display_avg_mult_new;  //MW0LGE
+        //                old_mult = Display.rx2_display_avg_mult_old;//Display.display_avg_mult_old;  //MW0LGE
+        //                break;
+        //        }
 
-                for (int i = 0; i < Display.BUFFER_SIZE; i++)
-                    buffer[i] = new_data[i] =
-                        (float)(new_data[i] * new_mult +
-                        buffer[i] * old_mult);
-            }
+        //        for (int i = 0; i < Display.BUFFER_SIZE; i++)
+        //            buffer[i] = new_data[i] =
+        //                (float)(new_data[i] * new_mult +
+        //                buffer[i] * old_mult);
+        //    }
 
-            if (buffer[0] == Display.CLEAR_FLAG)
-            {
-                rx2_avg_last_ddsfreq = 0;
-            }
-            else
-            {
-                rx2_avg_last_ddsfreq = RX2DDSFreq;
-            }
-        }
+        //    if (buffer[0] == Display.CLEAR_FLAG)
+        //    {
+        //        rx2_avg_last_ddsfreq = 0;
+        //    }
+        //    else
+        //    {
+        //        rx2_avg_last_ddsfreq = RX2DDSFreq;
+        //    }
+        //}
 
         #endregion
 
@@ -37061,7 +37145,10 @@ namespace Thetis
             if (callsignfocus == 1) return; // ke9ns add to focus on waterfall ID text
             if (e.KeyChar == (char)Keys.Enter)
             {
-                if(!(txtVFOAFreq.Focused || txtVFOBFreq.Focused || txtVFOABand.Focused)) btnHidden.Focus(); // only do this if vfo boxes dont have focus //MW0LGE
+                if(!(txtVFOAFreq.Focused || txtVFOBFreq.Focused || txtVFOABand.Focused))
+                    btnHidden.Focus(); // only do this if vfo boxes dont have focus //MW0LGE
+                                       // reason being is that txtVFOA/B has enter key detection already
+                                       // and doing both causes potential multiple lost focus
             }                
         }
 
@@ -42213,7 +42300,9 @@ namespace Thetis
                 this.ActiveControl is TrackBarTS ||
                 this.ActiveControl is PrettyTrackBar)
             {
-                Console_KeyPress(this, new KeyPressEventArgs((char)Keys.Enter));
+                // MW0LGE Console_KeyPress(this, new KeyPressEventArgs((char)Keys.Enter));
+                // console keypress does nothing but buttonfocus
+                btnHidden.Focus();
                 return;
             }
 
@@ -42964,13 +43053,12 @@ namespace Thetis
             {
                 //MW0LGE txtVFOBFreq.Text = txtVFOAFreq.Text;
                 //MW0LGE txtVFOBFreq_LostFocus(this, EventArgs.Empty);
-                //MW0LG VFOBFreq = VFOAFreq;
+                VFOBFreq = VFOAFreq;
                 if (!initializing && RX2Enabled)
                 {
                     if(RX2DSPMode != RX1DSPMode) RX2DSPMode = RX1DSPMode; // MW0LGE only set if different
                     if(RX2Filter != RX1Filter) RX2Filter = RX1Filter; // MW0LGE only set if different
                 }
-                VFOBFreq = VFOAFreq; // MW0LGE do after dsp change
             }
 
             if (small_lsd)
@@ -43908,7 +43996,7 @@ namespace Thetis
             {
                 //MW0LGE txtVFOAFreq.Text = txtVFOBFreq.Text;
                 //MW0LGE txtVFOAFreq_LostFocus(this, EventArgs.Empty);
-                VFOAFreq = freqFromString(txtVFOBFreq.Text);
+                VFOAFreq = VFOBFreq;
             }
 
             if (small_lsd)
@@ -47604,6 +47692,17 @@ namespace Thetis
         // Mode Button Events
         // ======================================================
 
+        private void setVFOAFreqNoUpdate(double freq)
+        {
+            m_dVFOAFreq = freq;
+            txtVFOAFreq.Text = freq.ToString("f6");
+        }
+        private void setVFOBFreqNoUpdate(double freq)
+        {
+            m_dVFOBFreq = freq;
+            txtVFOBFreq.Text = freq.ToString("f6");
+        }
+
         private void SetRX1Mode(DSPMode new_mode)
         {
             if (new_mode == DSPMode.FIRST || new_mode == DSPMode.LAST) return;
@@ -47715,7 +47814,7 @@ namespace Thetis
                         }
                         // UpdateVFOAFreq(rx1_freq.ToString("f6"));
                         //MW0LGE txtVFOAFreq.Text = rx1_freq.ToString("f6");
-                        VFOAFreq = rx1_freq;
+                        setVFOAFreqNoUpdate(rx1_freq);
                     }
                     break;
                 case DSPMode.CWU:
@@ -47753,7 +47852,7 @@ namespace Thetis
                         }
                         //UpdateVFOAFreq(rx1_freq.ToString("f6"));
                         //MW0LGE txtVFOAFreq.Text = rx1_freq.ToString("f6");
-                        VFOAFreq = rx1_freq;
+                        setVFOAFreqNoUpdate(rx1_freq);
                     }
                     break;
                 case DSPMode.FM:
@@ -47953,7 +48052,7 @@ namespace Thetis
                                 break;
                         }
                         //MW0LGE txtVFOAFreq.Text = rx1_freq.ToString("f6");
-                        VFOAFreq = rx1_freq;
+                        setVFOAFreqNoUpdate(rx1_freq);
                     }
 
                     // enable APF
@@ -48006,7 +48105,7 @@ namespace Thetis
                                 break;
                         }
                         //MW0LGE txtVFOAFreq.Text = rx1_freq.ToString("f6");
-                        VFOAFreq = rx1_freq;
+                        setVFOAFreqNoUpdate(rx1_freq);
                     }
 
                     // enable APF
@@ -48180,7 +48279,7 @@ namespace Thetis
             {
                 rx1_freq += (-ModeFreqOffset(old_mode) + ModeFreqOffset(new_mode));
                 //MW0LGE txtVFOAFreq.Text = rx1_freq.ToString("f6");
-                VFOAFreq = rx1_freq;
+                setVFOAFreqNoUpdate(rx1_freq);
             }
 
             // int new_txosc = (int)radio.GetDSPTX(0).TXOsc;
@@ -51882,7 +51981,7 @@ namespace Thetis
                                 break;
                         }
                         //MW0LGE txtVFOBFreq.Text = rx2_freq.ToString("f6");
-                        VFOBFreq = rx2_freq;
+                        setVFOBFreqNoUpdate(rx2_freq);
                     }
 
                     radio.GetDSPRX(1, 0).RXAPFRun = false;
@@ -51906,7 +52005,7 @@ namespace Thetis
                                 break;
                         }
                         //MW0LGE txtVFOBFreq.Text = rx2_freq.ToString("f6");
-                        VFOBFreq = rx2_freq;
+                        setVFOBFreqNoUpdate(rx2_freq);
                     }
 
                     radio.GetDSPRX(1, 0).RXAPFRun = false;
@@ -52071,7 +52170,7 @@ namespace Thetis
                                 break;
                         }
                         //MW0LGE txtVFOBFreq.Text = rx2_freq.ToString("f6");
-                        VFOBFreq = rx2_freq;
+                        setVFOBFreqNoUpdate(rx2_freq);
                     }
                     SetupForm.EnableRX2APFControl = true;
                     lblRX2APF.Show();
@@ -52102,7 +52201,7 @@ namespace Thetis
                                 break;
                         }
                         //MW0LGE txtVFOBFreq.Text = rx2_freq.ToString("f6");
-                        VFOBFreq = rx2_freq;
+                        setVFOBFreqNoUpdate(rx2_freq);
                     }
                     SetupForm.EnableRX2APFControl = true;
                     lblRX2APF.Show();
@@ -52256,7 +52355,7 @@ namespace Thetis
                 // adjust freq offset to ensure center of energy for new mode in 60m
                 rx2_freq += (-ModeFreqOffset(old_mode) + ModeFreqOffset(new_mode));
                 //MW0LGE txtVFOBFreq.Text = rx2_freq.ToString("f6");
-                VFOBFreq = rx2_freq;
+                setVFOBFreqNoUpdate(rx2_freq);
             }
 
             /* int new_txosc = (int)radio.GetDSPTX(0).TXOsc;
@@ -61989,7 +62088,7 @@ namespace Thetis
         private void txtRX2Meter_Click(object sender, EventArgs e)
         {
             incrementMutliMeterDisplayMode();
-        }
+        }        
     }
 
     public class DigiMode

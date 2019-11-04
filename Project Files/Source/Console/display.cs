@@ -121,9 +121,6 @@ namespace Thetis
         private static SharpDX.Direct2D1.Bitmap waterfall_bmp_dx2d = null;					// MW0LGE
         private static SharpDX.Direct2D1.Bitmap waterfall_bmp2_dx2d = null;
 
-        //private static int m_nLastTickCount = System.Environment.TickCount;
-
-
         #endregion
 
         #region Properties
@@ -995,47 +992,53 @@ namespace Thetis
             set { waterfall_data_ready = value; }
         }
 
-        public static float display_avg_mult_old = 1 - (float)1 / 5;
-        public static float display_avg_mult_new = (float)1 / 5;
-        private static int display_avg_num_blocks = 5;
-        public static int DisplayAvgBlocks
-        {
-            get { return display_avg_num_blocks; }
-            set
-            {
-                display_avg_num_blocks = value;
-                display_avg_mult_old = 1 - (float)1 / display_avg_num_blocks;
-                display_avg_mult_new = (float)1 / display_avg_num_blocks;
-            }
-        }
+        //public static float display_avg_mult_old = 1 - (float)1 / 5;
+        //public static float display_avg_mult_new = (float)1 / 5;
+        //private static int display_avg_num_blocks = 5;
+        //public static int DisplayAvgBlocks {
+        //    get { return display_avg_num_blocks; }
+        //    set {
+        //        display_avg_num_blocks = value;
+        //        display_avg_mult_old = 1 - (float)1 / display_avg_num_blocks;
+        //        display_avg_mult_new = (float)1 / display_avg_num_blocks;
+        //    }
+        //}
 
-        public static float waterfall_avg_mult_old = 1 - (float)1 / 18;
-        public static float waterfall_avg_mult_new = (float)1 / 18;
-        private static int waterfall_avg_num_blocks = 18;
-        public static int WaterfallAvgBlocks
-        {
-            get { return waterfall_avg_num_blocks; }
-            set
-            {
-                waterfall_avg_num_blocks = value;
-                waterfall_avg_mult_old = 1 - (float)1 / waterfall_avg_num_blocks;
-                waterfall_avg_mult_new = (float)1 / waterfall_avg_num_blocks;
-            }
-        }
+        //public static float rx2_display_avg_mult_old = 1 - (float)1 / 5;
+        //public static float rx2_display_avg_mult_new = (float)1 / 5;
+        //private static int rx2_display_avg_num_blocks = 5;
+        //public static int RX2DisplayAvgBlocks {
+        //    get { return rx2_display_avg_num_blocks; }
+        //    set {
+        //        rx2_display_avg_num_blocks = value;
+        //        rx2_display_avg_mult_old = 1 - (float)1 / rx2_display_avg_num_blocks;
+        //        rx2_display_avg_mult_new = (float)1 / rx2_display_avg_num_blocks;
+        //    }
+        //}
 
-        public static float rx2_waterfall_avg_mult_old = 1 - (float)1 / 18;
-        public static float rx2_waterfall_avg_mult_new = (float)1 / 18;
-        private static int rx2_waterfall_avg_num_blocks = 18;
-        public static int RX2WaterfallAvgBlocks
-        {
-            get { return rx2_waterfall_avg_num_blocks; }
-            set
-            {
-                rx2_waterfall_avg_num_blocks = value;
-                rx2_waterfall_avg_mult_old = 1 - (float)1 / rx2_waterfall_avg_num_blocks;
-                rx2_waterfall_avg_mult_new = (float)1 / rx2_waterfall_avg_num_blocks;
-            }
-        }
+        //public static float waterfall_avg_mult_old = 1 - (float)1 / 18;
+        //public static float waterfall_avg_mult_new = (float)1 / 18;
+        //private static int waterfall_avg_num_blocks = 18;
+        //public static int WaterfallAvgBlocks {
+        //    get { return waterfall_avg_num_blocks; }
+        //    set {
+        //        waterfall_avg_num_blocks = value;
+        //        waterfall_avg_mult_old = 1 - (float)1 / waterfall_avg_num_blocks;
+        //        waterfall_avg_mult_new = (float)1 / waterfall_avg_num_blocks;
+        //    }
+        //}
+
+        //public static float rx2_waterfall_avg_mult_old = 1 - (float)1 / 18;
+        //public static float rx2_waterfall_avg_mult_new = (float)1 / 18;
+        //private static int rx2_waterfall_avg_num_blocks = 18;
+        //public static int RX2WaterfallAvgBlocks {
+        //    get { return rx2_waterfall_avg_num_blocks; }
+        //    set {
+        //        rx2_waterfall_avg_num_blocks = value;
+        //        rx2_waterfall_avg_mult_old = 1 - (float)1 / rx2_waterfall_avg_num_blocks;
+        //        rx2_waterfall_avg_mult_new = (float)1 / rx2_waterfall_avg_num_blocks;
+        //    }
+        //}
 
         private static int spectrum_grid_max = -40;
         public static int SpectrumGridMax
@@ -6772,23 +6775,16 @@ namespace Thetis
                 // HIGH swr display warning
                 if (high_swr) drawStringDX2D("High SWR", fontDX2d_font14, m_bDX2_Red, 245, 20);
 
-                if (m_bFramRateIssue)
-                {
-                    d2dRenderTarget.FillRectangle(new RectangleF(0, 0, 8, 8), m_bDX2_Red);
-                }
+                if (m_bFramRateIssue) d2dRenderTarget.FillRectangle(new RectangleF(0, 0, 8, 8), m_bDX2_Red);
 
                 calcFps();
-                if (m_bShowFPS)
-                {
-                    d2dRenderTarget.DrawText(m_fps.ToString(), fontDX2d_callout, new RectangleF(10, 0, 100, 100), m_bDX2_m_bTextCallOutActive, DrawTextOptions.None);
-                }
+                if (m_bShowFPS) d2dRenderTarget.DrawText(m_fps.ToString(), fontDX2d_callout, new RectangleF(10, 0, 100, 100), m_bDX2_m_bTextCallOutActive, DrawTextOptions.None);
 
                 d2dRenderTarget.EndDraw();
 
                 // render
                 swapChain.Present(0, PresentFlags.DoNotWait);                
             }
-            //m_nLastTickCount = System.Environment.TickCount;
         }
         
         private static int m_fps = 0;
@@ -7000,7 +6996,8 @@ namespace Thetis
 
                     //Y = (int)(Math.Floor((grid_max - max) * H / yRange));
                     Y = (int)(((grid_max - max) * H / yRange) - 0.5f); // -0.5 to mimic floor
-                    Y = Math.Min(Y, H);
+                    //Y = Math.Min(Y, H);
+                    Y = (H < Y) ? H : Y;
 
                     point.X = i + 0.5f; // the 0.5f pushes it into the middle of a 'pixel', so that it is not drawn half in one, and half in the other
                     point.Y = Y + nOffset2 + 0.5f;

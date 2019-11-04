@@ -1027,6 +1027,7 @@
             this.panelBandHF = new System.Windows.Forms.PanelTS();
             this.txtVFOAFreq = new System.Windows.Forms.TextBoxTS();
             this.grpVFOA = new System.Windows.Forms.GroupBoxTS();
+            this.panelVFOAHover = new System.Windows.Forms.Panel();
             this.lblModeBigLabel = new System.Windows.Forms.LabelTS();
             this.lblRX1APF = new System.Windows.Forms.LabelTS();
             this.lblRX1MuteVFOA = new System.Windows.Forms.LabelTS();
@@ -1035,7 +1036,6 @@
             this.txtVFOALSD = new System.Windows.Forms.TextBoxTS();
             this.txtVFOAMSD = new System.Windows.Forms.TextBoxTS();
             this.panelVFOASubHover = new System.Windows.Forms.Panel();
-            this.panelVFOAHover = new System.Windows.Forms.Panel();
             this.txtVFOABand = new System.Windows.Forms.TextBoxTS();
             this.btnHidden = new System.Windows.Forms.ButtonTS();
             this.grpVFOB = new System.Windows.Forms.GroupBoxTS();
@@ -6101,6 +6101,7 @@
             // grpVFOA
             // 
             this.grpVFOA.BackColor = System.Drawing.Color.Transparent;
+            this.grpVFOA.Controls.Add(this.panelVFOAHover);
             this.grpVFOA.Controls.Add(this.lblModeBigLabel);
             this.grpVFOA.Controls.Add(this.lblRX1APF);
             this.grpVFOA.Controls.Add(this.lblRX1MuteVFOA);
@@ -6110,7 +6111,6 @@
             this.grpVFOA.Controls.Add(this.txtVFOAMSD);
             this.grpVFOA.Controls.Add(this.chkVFOATX);
             this.grpVFOA.Controls.Add(this.panelVFOASubHover);
-            this.grpVFOA.Controls.Add(this.panelVFOAHover);
             this.grpVFOA.Controls.Add(this.txtVFOABand);
             this.grpVFOA.Controls.Add(this.txtVFOAFreq);
             this.grpVFOA.Controls.Add(this.btnHidden);
@@ -6118,6 +6118,15 @@
             this.grpVFOA.ForeColor = System.Drawing.Color.Red;
             this.grpVFOA.Name = "grpVFOA";
             this.grpVFOA.TabStop = false;
+            // 
+            // panelVFOAHover
+            // 
+            this.panelVFOAHover.BackColor = System.Drawing.Color.Black;
+            this.panelVFOAHover.ForeColor = System.Drawing.Color.White;
+            resources.ApplyResources(this.panelVFOAHover, "panelVFOAHover");
+            this.panelVFOAHover.Name = "panelVFOAHover";
+            this.panelVFOAHover.Paint += new System.Windows.Forms.PaintEventHandler(this.panelVFOAHover_Paint);
+            this.panelVFOAHover.MouseMove += new System.Windows.Forms.MouseEventHandler(this.panelVFOAHover_MouseMove);
             // 
             // lblModeBigLabel
             // 
@@ -6185,15 +6194,6 @@
             this.panelVFOASubHover.Name = "panelVFOASubHover";
             this.panelVFOASubHover.Paint += new System.Windows.Forms.PaintEventHandler(this.panelVFOASubHover_Paint);
             this.panelVFOASubHover.MouseMove += new System.Windows.Forms.MouseEventHandler(this.panelVFOASubHover_MouseMove);
-            // 
-            // panelVFOAHover
-            // 
-            this.panelVFOAHover.BackColor = System.Drawing.Color.Black;
-            this.panelVFOAHover.ForeColor = System.Drawing.Color.White;
-            resources.ApplyResources(this.panelVFOAHover, "panelVFOAHover");
-            this.panelVFOAHover.Name = "panelVFOAHover";
-            this.panelVFOAHover.Paint += new System.Windows.Forms.PaintEventHandler(this.panelVFOAHover_Paint);
-            this.panelVFOAHover.MouseMove += new System.Windows.Forms.MouseEventHandler(this.panelVFOAHover_MouseMove);
             // 
             // txtVFOABand
             // 

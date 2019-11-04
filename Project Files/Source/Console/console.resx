@@ -4492,7 +4492,7 @@
     <value>grpVFOA</value>
   </data>
   <data name="&gt;&gt;chkVFOATX.ZOrder" xml:space="preserve">
-    <value>7</value>
+    <value>8</value>
   </data>
   <data name="txtWheelTune.Font" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft Sans Serif, 8.25pt</value>
@@ -14495,6 +14495,27 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
   <data name="&gt;&gt;txtVFOAFreq.ZOrder" xml:space="preserve">
     <value>11</value>
   </data>
+  <data name="panelVFOAHover.Location" type="System.Drawing.Point, System.Drawing">
+    <value>63, 49</value>
+  </data>
+  <data name="panelVFOAHover.Size" type="System.Drawing.Size, System.Drawing">
+    <value>156, 2</value>
+  </data>
+  <data name="panelVFOAHover.TabIndex" type="System.Int32, mscorlib">
+    <value>16</value>
+  </data>
+  <data name="&gt;&gt;panelVFOAHover.Name" xml:space="preserve">
+    <value>panelVFOAHover</value>
+  </data>
+  <data name="&gt;&gt;panelVFOAHover.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;panelVFOAHover.Parent" xml:space="preserve">
+    <value>grpVFOA</value>
+  </data>
+  <data name="&gt;&gt;panelVFOAHover.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
   <data name="lblModeBigLabel.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
@@ -14535,7 +14556,7 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
     <value>grpVFOA</value>
   </data>
   <data name="&gt;&gt;lblModeBigLabel.ZOrder" xml:space="preserve">
-    <value>0</value>
+    <value>1</value>
   </data>
   <data name="lblRX1APF.Font" type="System.Drawing.Font, System.Drawing">
     <value>Tahoma, 6.75pt, style=Bold</value>
@@ -14571,7 +14592,7 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
     <value>grpVFOA</value>
   </data>
   <data name="&gt;&gt;lblRX1APF.ZOrder" xml:space="preserve">
-    <value>1</value>
+    <value>2</value>
   </data>
   <data name="lblRX1MuteVFOA.Font" type="System.Drawing.Font, System.Drawing">
     <value>Tahoma, 6.75pt, style=Bold</value>
@@ -14604,7 +14625,7 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
     <value>grpVFOA</value>
   </data>
   <data name="&gt;&gt;lblRX1MuteVFOA.ZOrder" xml:space="preserve">
-    <value>2</value>
+    <value>3</value>
   </data>
   <data name="lblFilterLabel.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -14646,7 +14667,7 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
     <value>grpVFOA</value>
   </data>
   <data name="&gt;&gt;lblFilterLabel.ZOrder" xml:space="preserve">
-    <value>3</value>
+    <value>4</value>
   </data>
   <data name="lblModeLabel.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -14688,7 +14709,7 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
     <value>grpVFOA</value>
   </data>
   <data name="&gt;&gt;lblModeLabel.ZOrder" xml:space="preserve">
-    <value>4</value>
+    <value>5</value>
   </data>
   <data name="txtVFOALSD.Font" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft Sans Serif, 15.75pt</value>
@@ -14718,7 +14739,7 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
     <value>grpVFOA</value>
   </data>
   <data name="&gt;&gt;txtVFOALSD.ZOrder" xml:space="preserve">
-    <value>5</value>
+    <value>6</value>
   </data>
   <data name="txtVFOAMSD.Font" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft Sans Serif, 20.25pt</value>
@@ -14748,7 +14769,7 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
     <value>grpVFOA</value>
   </data>
   <data name="&gt;&gt;txtVFOAMSD.ZOrder" xml:space="preserve">
-    <value>6</value>
+    <value>7</value>
   </data>
   <data name="panelVFOASubHover.Location" type="System.Drawing.Point, System.Drawing">
     <value>92, 80</value>
@@ -14772,27 +14793,6 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
     <value>grpVFOA</value>
   </data>
   <data name="&gt;&gt;panelVFOASubHover.ZOrder" xml:space="preserve">
-    <value>8</value>
-  </data>
-  <data name="panelVFOAHover.Location" type="System.Drawing.Point, System.Drawing">
-    <value>63, 49</value>
-  </data>
-  <data name="panelVFOAHover.Size" type="System.Drawing.Size, System.Drawing">
-    <value>156, 2</value>
-  </data>
-  <data name="panelVFOAHover.TabIndex" type="System.Int32, mscorlib">
-    <value>16</value>
-  </data>
-  <data name="&gt;&gt;panelVFOAHover.Name" xml:space="preserve">
-    <value>panelVFOAHover</value>
-  </data>
-  <data name="&gt;&gt;panelVFOAHover.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;panelVFOAHover.Parent" xml:space="preserve">
-    <value>grpVFOA</value>
-  </data>
-  <data name="&gt;&gt;panelVFOAHover.ZOrder" xml:space="preserve">
     <value>9</value>
   </data>
   <data name="txtVFOABand.Font" type="System.Drawing.Font, System.Drawing">

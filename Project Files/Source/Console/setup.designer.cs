@@ -34603,6 +34603,7 @@
             this.comboTXTUNMeter.Items.AddRange(new object[] {
             "Fwd Pwr",
             "Ref Pwr",
+            "Fwd SWR",
             "SWR",
             "Off"});
             this.comboTXTUNMeter.Location = new System.Drawing.Point(64, 48);
@@ -53251,7 +53252,7 @@
             // timer_LED_Mirror
             // 
             this.timer_LED_Mirror.Enabled = true;
-            this.timer_LED_Mirror.Interval = 10;
+            this.timer_LED_Mirror.Interval = 500;
             this.timer_LED_Mirror.Tick += new System.EventHandler(this.timer_LED_Mirror_Tick);
             // 
             // grpDiagInfo

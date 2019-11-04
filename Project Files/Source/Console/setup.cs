@@ -8831,7 +8831,7 @@ namespace Thetis
             console.UpdateTXSpectrumDisplayVars();
             double display_time = 1 / (double)udDisplayFPS.Value;
             int buffersToAvg = (int)((float)udDisplayAVGTime.Value * 0.001 / display_time);
-            Display.DisplayAvgBlocks = (int)Math.Max(2, buffersToAvg);
+            // Display.DisplayAvgBlocks = (int)Math.Max(2, buffersToAvg);  //MW0LGE not needed
         }
 
         private void udRX2DisplayAVGTime_ValueChanged(object sender, System.EventArgs e)
@@ -13244,10 +13244,10 @@ namespace Thetis
 
         private void udDisplayWaterfallAvgTime_ValueChanged(object sender, System.EventArgs e)
         {
-            double buffer_time = (double)console.BlockSize1 / (double)console.SampleRateRX1;
-            int buffersToAvg = (int)((float)udDisplayWaterfallAvgTime.Value * 0.001 / buffer_time);
-            buffersToAvg = Math.Max(2, buffersToAvg);
-            Display.WaterfallAvgBlocks = buffersToAvg;
+            //double buffer_time = (double)console.BlockSize1 / (double)console.SampleRateRX1;
+            //int buffersToAvg = (int)((float)udDisplayWaterfallAvgTime.Value * 0.001 / buffer_time);
+            //buffersToAvg = Math.Max(2, buffersToAvg);
+            //Display.WaterfallAvgBlocks = buffersToAvg;
         }
 
         private void udDisplayWaterfallUpdatePeriod_ValueChanged(object sender, System.EventArgs e)
@@ -13257,10 +13257,10 @@ namespace Thetis
 
         private void udRX2DisplayWaterfallAvgTime_ValueChanged(object sender, System.EventArgs e)
         {
-            double buffer_time = (double)console.BlockSize2 / (double)console.SampleRateRX2;
-            int buffersToAvg = (int)((float)udRX2DisplayWaterfallAvgTime.Value * 0.001 / buffer_time);
-            buffersToAvg = Math.Max(2, buffersToAvg);
-            Display.RX2WaterfallAvgBlocks = buffersToAvg;
+            //double buffer_time = (double)console.BlockSize2 / (double)console.SampleRateRX2;
+            //int buffersToAvg = (int)((float)udRX2DisplayWaterfallAvgTime.Value * 0.001 / buffer_time);
+            //buffersToAvg = Math.Max(2, buffersToAvg);
+            //Display.RX2WaterfallAvgBlocks = buffersToAvg;
         }
 
         private void udRX2DisplayWaterfallUpdatePeriod_ValueChanged(object sender, System.EventArgs e)
@@ -13440,10 +13440,10 @@ namespace Thetis
                         break;
                     case MeterTXMode.REVERSE_POWER:
                         comboTXTUNMeter.Text = "Ref Pwr";
+                        break;                        
+                   case MeterTXMode.SWR_POWER: // MW0LGE re-added 
+                        comboTXTUNMeter.Text = "Fwd SWR";
                         break;
-                   // case MeterTXMode.SWR_POWER:
-                   //     comboTXTUNMeter.Text = "Fwd SWR";
-                   //     break;
                     case MeterTXMode.SWR:
                         comboTXTUNMeter.Text = "SWR";
                         break;
@@ -13464,9 +13464,9 @@ namespace Thetis
                 case "Ref Pwr":
                     console.TuneTXMeterMode = MeterTXMode.REVERSE_POWER;
                     break;
-              //  case "Fwd SWR" :
-              //      console.TuneTXMeterMode = MeterTXMode.SWR_POWER;
-              //      break;
+                case "Fwd SWR": //MW0LGE re-added
+                    console.TuneTXMeterMode = MeterTXMode.SWR_POWER;
+                    break;
                 case "SWR":
                     console.TuneTXMeterMode = MeterTXMode.SWR;
                     break;
@@ -19653,6 +19653,13 @@ namespace Thetis
 
         private void timer_LED_Mirror_Tick(object sender, EventArgs e)
         {
+            if (!lblLED01.Visible) //MW0LGE who cares if we cant see it?
+            {
+                timer_LED_Mirror.Interval = 500; // slow down
+                return;
+            }
+            timer_LED_Mirror.Interval = 10;
+
             int LED_data = 0;
             LED_data = cmaster.getLEDs();
             Color[] LEDColor = new Color[10];
@@ -20083,7 +20090,6 @@ namespace Thetis
         {
             console.AntiAlias = chkAntiAlias.Checked;
         }
-
         //--
     }
 

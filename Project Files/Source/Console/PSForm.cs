@@ -482,14 +482,14 @@ namespace Thetis
         {
             bool newcal = (puresignal.Info[5] != oldCalCount2);
             oldCalCount2 = puresignal.Info[5];
-            //if (autoattenuate && !console.ATTOnTX) console.ATTOnTX = true; // MW0LGE
+            //if (autoattenuate && !console.ATTOnTX) console.ATTOnTX = true;//MW0LGE moved into 0 state
             switch (aastate)
             {
                 case 0: // monitor
                     if (autoattenuate && newcal
                         && (puresignal.Info[4] > 181 || (puresignal.Info[4] <= 128 && console.SetupForm.ATTOnTX > 0)))
                     {
-                        if (autoattenuate && !console.ATTOnTX) AutoAttenuate = true; //MW0LGE
+                        if (!console.ATTOnTX) AutoAttenuate = true; //MW0LGE
                         aastate = 1;
                         double ddB;
                         if (puresignal.Info[4] <= 256)
