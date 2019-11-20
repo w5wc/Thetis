@@ -45,6 +45,7 @@ typedef struct _seqLogSnapshot {
 	struct _seqLogSnapshot* previous;
 
 	int rx_in_seq_snapshot[MAX_IN_SEQ_LOG];
+	char dateTimeStamp[24];
 } _seqLogSnapshot_t;
 
 typedef struct CACHE_ALIGN _radionet
@@ -81,6 +82,7 @@ typedef struct CACHE_ALIGN _radionet
 	CRITICAL_SECTION udpOUT;
 	CRITICAL_SECTION rcvpkt;
 	CRITICAL_SECTION sndpkt;
+	CRITICAL_SECTION seqErrors;
 	WSAEVENT hDataEvent;
 	WSANETWORKEVENTS wsaProcessEvents;
 

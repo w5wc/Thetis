@@ -35,20 +35,20 @@ namespace Thetis
     class TitleBar
     {
         public const string BUILD_NAME = "";
-        public const string BUILD_DATE = "(11/3/19)";
+        public const string BUILD_DATE = "(11/19/19)";
 
         public static string GetString()
         {
             string version = GetVerNum();
             string s = "Thetis";
-           // if (BUILD_NAME != "") s += " " + BUILD_NAME;
+            // if (BUILD_NAME != "") s += " " + BUILD_NAME;
             s += " v" + version;
             if (BUILD_DATE != "") s += " " + BUILD_DATE;
 
             return s;
         }
 
-        // returns the PowerSDR version number in "a.b.c" format
+        // returns the Thetis version number in "a.b.c" format
         public static string GetVerNum()
         {
             Assembly assembly = Assembly.GetExecutingAssembly();

@@ -65,7 +65,10 @@ namespace Thetis
             FlexProfilerInstalled = false;
             InitializeComponent();
             console = c;
-            Skin.SetConsole(c); //MW0LGE
+
+            udDisplayFPS.Maximum = console.MAX_FPS;
+
+            Skin.SetConsole(console); //MW0LGE
             openFileDialog1.InitialDirectory = console.AppDataPath;
 
 #if(!DEBUG)
@@ -20089,6 +20092,16 @@ namespace Thetis
         private void chkAntiAlias_CheckedChanged(object sender, EventArgs e)
         {
             console.AntiAlias = chkAntiAlias.Checked;
+        }
+
+        private void clrbtnStatusBarBackground_Changed(object sender, EventArgs e)
+        {
+            console.StatusBarBackColour = clrbtnStatusBarBackground.Color;
+        }
+
+        private void clrbtnStatusBarText_Changed(object sender, EventArgs e)
+        {
+            console.StatusBarTextColour = clrbtnStatusBarText.Color;
         }
         //--
     }

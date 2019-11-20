@@ -1176,12 +1176,12 @@ namespace System.Windows.Forms
 
 		public override void UpButton()
 		{
-			if(base.InvokeRequired)
-				this.Invoke(new MethodInvoker(base.UpButton));
-			else base.UpButton();
-		}
+            if(base.InvokeRequired)
+                this.Invoke(new MethodInvoker(base.UpButton));
+            else base.UpButton();
+        }
 
-		public new void Update()
+        public new void Update()
 		{
 			if(base.InvokeRequired)
 				this.Invoke(new MethodInvoker(base.Update));

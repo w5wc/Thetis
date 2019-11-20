@@ -69,7 +69,6 @@
         private System.Windows.Forms.LabelTS lblFilterShift;
         private System.Windows.Forms.ButtonTS btnFilterShiftReset;
         private System.Windows.Forms.Timer timer_clock;
-        private System.Windows.Forms.TextBoxTS txtDate;
         private System.Windows.Forms.Panel panelVFOAHover;
         private System.Windows.Forms.Panel panelVFOBHover;
         private System.Windows.Forms.ComboBoxTS comboMeterRXMode;
@@ -86,7 +85,6 @@
         private System.Windows.Forms.ButtonTS btnBandVHF;
         private System.Windows.Forms.ButtonTS btnIFtoVFO;
         private System.Windows.Forms.ButtonTS btnZeroBeat;
-        private System.Windows.Forms.TextBoxTS txtTime;
         private System.Windows.Forms.RadioButtonTS radModeDIGU;
         private System.Windows.Forms.RadioButtonTS radFilter1;
         private System.Windows.Forms.RadioButtonTS radFilter2;
@@ -222,7 +220,6 @@
         private PanelTS panelDisplay;
         private PanelTS panelOptions;
         private PanelTS panelSoundControls;
-        private PanelTS panelDateTime;
         private PanelTS panelVFO;
         private PanelTS panelDSP;
         private PanelTS panelDisplay2;
@@ -306,7 +303,6 @@
         private CheckBoxTS chkFWCATUBypass;
         private CheckBoxTS chkFWCATU;
         private CheckBoxTS chkMicMute;
-        private TextBoxTS txtCPUMeter;
         private CheckBoxTS chkMUT;
         private PanelTS panelPower;
         private LabelTS lblAF2;
@@ -873,15 +869,48 @@
             this.BPF2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.timerNotchZoom = new System.Windows.Forms.Timer(this.components);
             this.picRX2Squelch = new System.Windows.Forms.PictureBox();
-            this.panelButtonBar = new System.Windows.Forms.PanelTS();
-            this.btnAndrBar8 = new System.Windows.Forms.ButtonTS();
-            this.btnAndrBar7 = new System.Windows.Forms.ButtonTS();
-            this.btnAndrBar6 = new System.Windows.Forms.ButtonTS();
-            this.btnAndrBar5 = new System.Windows.Forms.ButtonTS();
-            this.btnAndrBar4 = new System.Windows.Forms.ButtonTS();
-            this.btnAndrBar3 = new System.Windows.Forms.ButtonTS();
-            this.btnAndrBar2 = new System.Windows.Forms.ButtonTS();
-            this.btnAndrBar1 = new System.Windows.Forms.ButtonTS();
+            this.statusStripMain = new System.Windows.Forms.StatusStrip();
+            this.toolStripDropDownButton_ScreenSize = new System.Windows.Forms.ToolStripDropDownButton();
+            this.includeBordersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripMenuItem_4by3 = new System.Windows.Forms.ToolStripMenuItem();
+            this.x768ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.x864ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.x960ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.x1050ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.x1200ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem_16by9 = new System.Windows.Forms.ToolStripMenuItem();
+            this.x720ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.x768ToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.x900ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.x1080ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.x1440ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.x2160ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem_16by10 = new System.Windows.Forms.ToolStripMenuItem();
+            this.x800ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.x900ToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.x1050ToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.x1200ToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.x1600ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.x2400ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.youTubeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.pToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.pToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.pToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
+            this.pToolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabel_CPUperc = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabel_Volts = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabel_Amps = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabel_SeqWarning = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabel_Fill = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabel_UTCTime = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabel_Date = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabel_LocalTime = new System.Windows.Forms.ToolStripStatusLabel();
+            this.grpMultimeter = new System.Windows.Forms.GroupBoxTS();
+            this.pnlResizeMeter = new System.Windows.Forms.PanelTS();
+            this.picMultiMeterDigital = new System.Windows.Forms.PictureBox();
+            this.txtMultiText = new System.Windows.Forms.TextBoxTS();
             this.panelFilter = new System.Windows.Forms.PanelTS();
             this.radFilter1 = new System.Windows.Forms.RadioButtonTS();
             this.lblFilterHigh = new System.Windows.Forms.LabelTS();
@@ -903,6 +932,15 @@
             this.ptbRX2Squelch = new Thetis.PrettyTrackBar();
             this.panelRX2DSP = new System.Windows.Forms.PanelTS();
             this.panelOptions = new System.Windows.Forms.PanelTS();
+            this.panelButtonBar = new System.Windows.Forms.PanelTS();
+            this.btnAndrBar8 = new System.Windows.Forms.ButtonTS();
+            this.btnAndrBar7 = new System.Windows.Forms.ButtonTS();
+            this.btnAndrBar6 = new System.Windows.Forms.ButtonTS();
+            this.btnAndrBar5 = new System.Windows.Forms.ButtonTS();
+            this.btnAndrBar4 = new System.Windows.Forms.ButtonTS();
+            this.btnAndrBar3 = new System.Windows.Forms.ButtonTS();
+            this.btnAndrBar2 = new System.Windows.Forms.ButtonTS();
+            this.btnAndrBar1 = new System.Windows.Forms.ButtonTS();
             this.panelVFOLabels = new System.Windows.Forms.PanelTS();
             this.lblStepValue = new System.Windows.Forms.LabelTS();
             this.lblStep = new System.Windows.Forms.LabelTS();
@@ -972,10 +1010,6 @@
             this.panelDSP = new System.Windows.Forms.PanelTS();
             this.panelVFO = new System.Windows.Forms.PanelTS();
             this.lblCPUMeter = new System.Windows.Forms.LabelTS();
-            this.txtCPUMeter = new System.Windows.Forms.TextBoxTS();
-            this.panelDateTime = new System.Windows.Forms.PanelTS();
-            this.txtTime = new System.Windows.Forms.TextBoxTS();
-            this.txtDate = new System.Windows.Forms.TextBoxTS();
             this.panelSoundControls = new System.Windows.Forms.PanelTS();
             this.lblRX2AF = new System.Windows.Forms.LabelTS();
             this.lblRX1AF = new System.Windows.Forms.LabelTS();
@@ -1051,9 +1085,6 @@
             this.lblVFOBLSD = new System.Windows.Forms.LabelTS();
             this.txtVFOBFreq = new System.Windows.Forms.TextBoxTS();
             this.btnBandHF = new System.Windows.Forms.ButtonTS();
-            this.grpMultimeter = new System.Windows.Forms.GroupBoxTS();
-            this.picMultiMeterDigital = new System.Windows.Forms.PictureBox();
-            this.txtMultiText = new System.Windows.Forms.TextBoxTS();
             this.lblTuneStep = new System.Windows.Forms.LabelTS();
             this.grpVFOBetween = new System.Windows.Forms.GroupBoxTS();
             this.labelTS1 = new System.Windows.Forms.LabelTS();
@@ -1134,12 +1165,15 @@
             this.contextMenuStripNotch.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picRX2Squelch)).BeginInit();
-            this.panelButtonBar.SuspendLayout();
+            this.statusStripMain.SuspendLayout();
+            this.grpMultimeter.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picMultiMeterDigital)).BeginInit();
             this.panelFilter.SuspendLayout();
             this.panelRX2RF.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ptbRX2Squelch)).BeginInit();
             this.panelRX2DSP.SuspendLayout();
             this.panelOptions.SuspendLayout();
+            this.panelButtonBar.SuspendLayout();
             this.panelVFOLabels.SuspendLayout();
             this.panelVFOALabels.SuspendLayout();
             this.panelVFOBLabels.SuspendLayout();
@@ -1156,7 +1190,6 @@
             this.panelDisplay2.SuspendLayout();
             this.panelDSP.SuspendLayout();
             this.panelVFO.SuspendLayout();
-            this.panelDateTime.SuspendLayout();
             this.panelSoundControls.SuspendLayout();
             this.panelModeSpecificPhone.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picNoiseGate)).BeginInit();
@@ -1175,8 +1208,6 @@
             this.panelBandHF.SuspendLayout();
             this.grpVFOA.SuspendLayout();
             this.grpVFOB.SuspendLayout();
-            this.grpMultimeter.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.picMultiMeterDigital)).BeginInit();
             this.grpVFOBetween.SuspendLayout();
             this.grpDisplaySplit.SuspendLayout();
             this.grpRX2Meter.SuspendLayout();
@@ -4679,83 +4710,302 @@
             this.picRX2Squelch.Name = "picRX2Squelch";
             this.picRX2Squelch.TabStop = false;
             // 
-            // panelButtonBar
+            // statusStripMain
             // 
-            resources.ApplyResources(this.panelButtonBar, "panelButtonBar");
-            this.panelButtonBar.Controls.Add(this.btnAndrBar8);
-            this.panelButtonBar.Controls.Add(this.btnAndrBar7);
-            this.panelButtonBar.Controls.Add(this.btnAndrBar6);
-            this.panelButtonBar.Controls.Add(this.btnAndrBar5);
-            this.panelButtonBar.Controls.Add(this.btnAndrBar4);
-            this.panelButtonBar.Controls.Add(this.btnAndrBar3);
-            this.panelButtonBar.Controls.Add(this.btnAndrBar2);
-            this.panelButtonBar.Controls.Add(this.btnAndrBar1);
-            this.panelButtonBar.Name = "panelButtonBar";
-            this.panelButtonBar.Layout += new System.Windows.Forms.LayoutEventHandler(this.panelButtonBar_Layout);
+            resources.ApplyResources(this.statusStripMain, "statusStripMain");
+            this.statusStripMain.BackColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.statusStripMain.ImageScalingSize = new System.Drawing.Size(24, 24);
+            this.statusStripMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripDropDownButton_ScreenSize,
+            this.toolStripStatusLabel1,
+            this.toolStripStatusLabel_CPUperc,
+            this.toolStripStatusLabel_Volts,
+            this.toolStripStatusLabel_Amps,
+            this.toolStripStatusLabel_SeqWarning,
+            this.toolStripStatusLabel_Fill,
+            this.toolStripStatusLabel_UTCTime,
+            this.toolStripStatusLabel_Date,
+            this.toolStripStatusLabel_LocalTime});
+            this.statusStripMain.Name = "statusStripMain";
+            this.statusStripMain.ShowItemToolTips = true;
             // 
-            // btnAndrBar8
+            // toolStripDropDownButton_ScreenSize
             // 
-            this.btnAndrBar8.BackColor = System.Drawing.SystemColors.ButtonFace;
-            resources.ApplyResources(this.btnAndrBar8, "btnAndrBar8");
-            this.btnAndrBar8.Name = "btnAndrBar8";
-            this.btnAndrBar8.UseVisualStyleBackColor = false;
-            this.btnAndrBar8.Click += new System.EventHandler(this.btnAndrBar8_Click);
+            resources.ApplyResources(this.toolStripDropDownButton_ScreenSize, "toolStripDropDownButton_ScreenSize");
+            this.toolStripDropDownButton_ScreenSize.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.includeBordersToolStripMenuItem,
+            this.toolStripSeparator2,
+            this.toolStripMenuItem_4by3,
+            this.toolStripMenuItem_16by9,
+            this.toolStripMenuItem_16by10,
+            this.youTubeToolStripMenuItem});
+            this.toolStripDropDownButton_ScreenSize.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.toolStripDropDownButton_ScreenSize.Image = global::Thetis.Properties.Resources.screen4;
+            this.toolStripDropDownButton_ScreenSize.Name = "toolStripDropDownButton_ScreenSize";
             // 
-            // btnAndrBar7
+            // includeBordersToolStripMenuItem
             // 
-            this.btnAndrBar7.BackColor = System.Drawing.SystemColors.ButtonFace;
-            resources.ApplyResources(this.btnAndrBar7, "btnAndrBar7");
-            this.btnAndrBar7.Name = "btnAndrBar7";
-            this.btnAndrBar7.UseVisualStyleBackColor = false;
-            this.btnAndrBar7.Click += new System.EventHandler(this.btnAndrBar7_Click);
+            this.includeBordersToolStripMenuItem.Name = "includeBordersToolStripMenuItem";
+            resources.ApplyResources(this.includeBordersToolStripMenuItem, "includeBordersToolStripMenuItem");
+            this.includeBordersToolStripMenuItem.Click += new System.EventHandler(this.includeBordersToolStripMenuItem_Click);
             // 
-            // btnAndrBar6
+            // toolStripSeparator2
             // 
-            this.btnAndrBar6.BackColor = System.Drawing.SystemColors.ButtonFace;
-            resources.ApplyResources(this.btnAndrBar6, "btnAndrBar6");
-            this.btnAndrBar6.Name = "btnAndrBar6";
-            this.btnAndrBar6.UseVisualStyleBackColor = false;
-            this.btnAndrBar6.Click += new System.EventHandler(this.btnAndrBar6_Click);
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            resources.ApplyResources(this.toolStripSeparator2, "toolStripSeparator2");
             // 
-            // btnAndrBar5
+            // toolStripMenuItem_4by3
             // 
-            this.btnAndrBar5.BackColor = System.Drawing.SystemColors.ButtonFace;
-            resources.ApplyResources(this.btnAndrBar5, "btnAndrBar5");
-            this.btnAndrBar5.Name = "btnAndrBar5";
-            this.btnAndrBar5.UseVisualStyleBackColor = false;
-            this.btnAndrBar5.Click += new System.EventHandler(this.btnAndrBar5_Click);
+            this.toolStripMenuItem_4by3.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.x768ToolStripMenuItem,
+            this.x864ToolStripMenuItem,
+            this.x960ToolStripMenuItem,
+            this.x1050ToolStripMenuItem,
+            this.x1200ToolStripMenuItem});
+            this.toolStripMenuItem_4by3.Name = "toolStripMenuItem_4by3";
+            resources.ApplyResources(this.toolStripMenuItem_4by3, "toolStripMenuItem_4by3");
+            this.toolStripMenuItem_4by3.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.toolStripMenuItem_4by3_DropDownItemClicked);
             // 
-            // btnAndrBar4
+            // x768ToolStripMenuItem
             // 
-            this.btnAndrBar4.BackColor = System.Drawing.SystemColors.ButtonFace;
-            resources.ApplyResources(this.btnAndrBar4, "btnAndrBar4");
-            this.btnAndrBar4.Name = "btnAndrBar4";
-            this.btnAndrBar4.UseVisualStyleBackColor = false;
-            this.btnAndrBar4.Click += new System.EventHandler(this.btnAndrBar4_Click);
+            this.x768ToolStripMenuItem.Name = "x768ToolStripMenuItem";
+            resources.ApplyResources(this.x768ToolStripMenuItem, "x768ToolStripMenuItem");
             // 
-            // btnAndrBar3
+            // x864ToolStripMenuItem
             // 
-            this.btnAndrBar3.BackColor = System.Drawing.SystemColors.ButtonFace;
-            resources.ApplyResources(this.btnAndrBar3, "btnAndrBar3");
-            this.btnAndrBar3.Name = "btnAndrBar3";
-            this.btnAndrBar3.UseVisualStyleBackColor = false;
-            this.btnAndrBar3.Click += new System.EventHandler(this.btnAndrBar3_Click);
+            this.x864ToolStripMenuItem.Name = "x864ToolStripMenuItem";
+            resources.ApplyResources(this.x864ToolStripMenuItem, "x864ToolStripMenuItem");
             // 
-            // btnAndrBar2
+            // x960ToolStripMenuItem
             // 
-            this.btnAndrBar2.BackColor = System.Drawing.SystemColors.ButtonFace;
-            resources.ApplyResources(this.btnAndrBar2, "btnAndrBar2");
-            this.btnAndrBar2.Name = "btnAndrBar2";
-            this.btnAndrBar2.UseVisualStyleBackColor = false;
-            this.btnAndrBar2.Click += new System.EventHandler(this.btnAndrBar2_Click);
+            this.x960ToolStripMenuItem.Name = "x960ToolStripMenuItem";
+            resources.ApplyResources(this.x960ToolStripMenuItem, "x960ToolStripMenuItem");
             // 
-            // btnAndrBar1
+            // x1050ToolStripMenuItem
             // 
-            this.btnAndrBar1.BackColor = System.Drawing.SystemColors.ButtonFace;
-            resources.ApplyResources(this.btnAndrBar1, "btnAndrBar1");
-            this.btnAndrBar1.Name = "btnAndrBar1";
-            this.btnAndrBar1.UseVisualStyleBackColor = false;
-            this.btnAndrBar1.Click += new System.EventHandler(this.btnAndrBar1_Click);
+            this.x1050ToolStripMenuItem.Name = "x1050ToolStripMenuItem";
+            resources.ApplyResources(this.x1050ToolStripMenuItem, "x1050ToolStripMenuItem");
+            // 
+            // x1200ToolStripMenuItem
+            // 
+            this.x1200ToolStripMenuItem.Name = "x1200ToolStripMenuItem";
+            resources.ApplyResources(this.x1200ToolStripMenuItem, "x1200ToolStripMenuItem");
+            // 
+            // toolStripMenuItem_16by9
+            // 
+            this.toolStripMenuItem_16by9.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.x720ToolStripMenuItem,
+            this.x768ToolStripMenuItem1,
+            this.x900ToolStripMenuItem,
+            this.x1080ToolStripMenuItem,
+            this.x1440ToolStripMenuItem,
+            this.x2160ToolStripMenuItem});
+            this.toolStripMenuItem_16by9.Name = "toolStripMenuItem_16by9";
+            resources.ApplyResources(this.toolStripMenuItem_16by9, "toolStripMenuItem_16by9");
+            this.toolStripMenuItem_16by9.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.toolStripMenuItem_16by9_DropDownItemClicked);
+            // 
+            // x720ToolStripMenuItem
+            // 
+            this.x720ToolStripMenuItem.Name = "x720ToolStripMenuItem";
+            resources.ApplyResources(this.x720ToolStripMenuItem, "x720ToolStripMenuItem");
+            // 
+            // x768ToolStripMenuItem1
+            // 
+            this.x768ToolStripMenuItem1.Name = "x768ToolStripMenuItem1";
+            resources.ApplyResources(this.x768ToolStripMenuItem1, "x768ToolStripMenuItem1");
+            // 
+            // x900ToolStripMenuItem
+            // 
+            this.x900ToolStripMenuItem.Name = "x900ToolStripMenuItem";
+            resources.ApplyResources(this.x900ToolStripMenuItem, "x900ToolStripMenuItem");
+            // 
+            // x1080ToolStripMenuItem
+            // 
+            this.x1080ToolStripMenuItem.Name = "x1080ToolStripMenuItem";
+            resources.ApplyResources(this.x1080ToolStripMenuItem, "x1080ToolStripMenuItem");
+            // 
+            // x1440ToolStripMenuItem
+            // 
+            this.x1440ToolStripMenuItem.Name = "x1440ToolStripMenuItem";
+            resources.ApplyResources(this.x1440ToolStripMenuItem, "x1440ToolStripMenuItem");
+            // 
+            // x2160ToolStripMenuItem
+            // 
+            this.x2160ToolStripMenuItem.Name = "x2160ToolStripMenuItem";
+            resources.ApplyResources(this.x2160ToolStripMenuItem, "x2160ToolStripMenuItem");
+            // 
+            // toolStripMenuItem_16by10
+            // 
+            this.toolStripMenuItem_16by10.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.x800ToolStripMenuItem,
+            this.x900ToolStripMenuItem1,
+            this.x1050ToolStripMenuItem1,
+            this.x1200ToolStripMenuItem1,
+            this.x1600ToolStripMenuItem,
+            this.x2400ToolStripMenuItem});
+            this.toolStripMenuItem_16by10.Name = "toolStripMenuItem_16by10";
+            resources.ApplyResources(this.toolStripMenuItem_16by10, "toolStripMenuItem_16by10");
+            this.toolStripMenuItem_16by10.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.toolStripMenuItem_16by10_DropDownItemClicked);
+            // 
+            // x800ToolStripMenuItem
+            // 
+            this.x800ToolStripMenuItem.Name = "x800ToolStripMenuItem";
+            resources.ApplyResources(this.x800ToolStripMenuItem, "x800ToolStripMenuItem");
+            // 
+            // x900ToolStripMenuItem1
+            // 
+            this.x900ToolStripMenuItem1.Name = "x900ToolStripMenuItem1";
+            resources.ApplyResources(this.x900ToolStripMenuItem1, "x900ToolStripMenuItem1");
+            // 
+            // x1050ToolStripMenuItem1
+            // 
+            this.x1050ToolStripMenuItem1.Name = "x1050ToolStripMenuItem1";
+            resources.ApplyResources(this.x1050ToolStripMenuItem1, "x1050ToolStripMenuItem1");
+            // 
+            // x1200ToolStripMenuItem1
+            // 
+            this.x1200ToolStripMenuItem1.Name = "x1200ToolStripMenuItem1";
+            resources.ApplyResources(this.x1200ToolStripMenuItem1, "x1200ToolStripMenuItem1");
+            // 
+            // x1600ToolStripMenuItem
+            // 
+            this.x1600ToolStripMenuItem.Name = "x1600ToolStripMenuItem";
+            resources.ApplyResources(this.x1600ToolStripMenuItem, "x1600ToolStripMenuItem");
+            // 
+            // x2400ToolStripMenuItem
+            // 
+            this.x2400ToolStripMenuItem.Name = "x2400ToolStripMenuItem";
+            resources.ApplyResources(this.x2400ToolStripMenuItem, "x2400ToolStripMenuItem");
+            // 
+            // youTubeToolStripMenuItem
+            // 
+            this.youTubeToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.pToolStripMenuItem,
+            this.pToolStripMenuItem1,
+            this.pToolStripMenuItem2,
+            this.pToolStripMenuItem3});
+            this.youTubeToolStripMenuItem.Name = "youTubeToolStripMenuItem";
+            resources.ApplyResources(this.youTubeToolStripMenuItem, "youTubeToolStripMenuItem");
+            this.youTubeToolStripMenuItem.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.youTubeToolStripMenuItem_DropDownItemClicked);
+            // 
+            // pToolStripMenuItem
+            // 
+            this.pToolStripMenuItem.Name = "pToolStripMenuItem";
+            resources.ApplyResources(this.pToolStripMenuItem, "pToolStripMenuItem");
+            // 
+            // pToolStripMenuItem1
+            // 
+            this.pToolStripMenuItem1.Name = "pToolStripMenuItem1";
+            resources.ApplyResources(this.pToolStripMenuItem1, "pToolStripMenuItem1");
+            // 
+            // pToolStripMenuItem2
+            // 
+            this.pToolStripMenuItem2.Name = "pToolStripMenuItem2";
+            resources.ApplyResources(this.pToolStripMenuItem2, "pToolStripMenuItem2");
+            // 
+            // pToolStripMenuItem3
+            // 
+            this.pToolStripMenuItem3.Name = "pToolStripMenuItem3";
+            resources.ApplyResources(this.pToolStripMenuItem3, "pToolStripMenuItem3");
+            // 
+            // toolStripStatusLabel1
+            // 
+            resources.ApplyResources(this.toolStripStatusLabel1, "toolStripStatusLabel1");
+            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
+            // 
+            // toolStripStatusLabel_CPUperc
+            // 
+            resources.ApplyResources(this.toolStripStatusLabel_CPUperc, "toolStripStatusLabel_CPUperc");
+            this.toolStripStatusLabel_CPUperc.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.toolStripStatusLabel_CPUperc.Image = global::Thetis.Properties.Resources.cpu;
+            this.toolStripStatusLabel_CPUperc.Name = "toolStripStatusLabel_CPUperc";
+            // 
+            // toolStripStatusLabel_Volts
+            // 
+            resources.ApplyResources(this.toolStripStatusLabel_Volts, "toolStripStatusLabel_Volts");
+            this.toolStripStatusLabel_Volts.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.toolStripStatusLabel_Volts.Image = global::Thetis.Properties.Resources.zap;
+            this.toolStripStatusLabel_Volts.Name = "toolStripStatusLabel_Volts";
+            // 
+            // toolStripStatusLabel_Amps
+            // 
+            resources.ApplyResources(this.toolStripStatusLabel_Amps, "toolStripStatusLabel_Amps");
+            this.toolStripStatusLabel_Amps.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.toolStripStatusLabel_Amps.Name = "toolStripStatusLabel_Amps";
+            // 
+            // toolStripStatusLabel_SeqWarning
+            // 
+            this.toolStripStatusLabel_SeqWarning.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripStatusLabel_SeqWarning.Image = global::Thetis.Properties.Resources.warning4;
+            resources.ApplyResources(this.toolStripStatusLabel_SeqWarning, "toolStripStatusLabel_SeqWarning");
+            this.toolStripStatusLabel_SeqWarning.Name = "toolStripStatusLabel_SeqWarning";
+            this.toolStripStatusLabel_SeqWarning.Click += new System.EventHandler(this.toolStripStatusLabel_SeqWarning_Click);
+            // 
+            // toolStripStatusLabel_Fill
+            // 
+            this.toolStripStatusLabel_Fill.Name = "toolStripStatusLabel_Fill";
+            resources.ApplyResources(this.toolStripStatusLabel_Fill, "toolStripStatusLabel_Fill");
+            this.toolStripStatusLabel_Fill.Spring = true;
+            // 
+            // toolStripStatusLabel_UTCTime
+            // 
+            resources.ApplyResources(this.toolStripStatusLabel_UTCTime, "toolStripStatusLabel_UTCTime");
+            this.toolStripStatusLabel_UTCTime.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.toolStripStatusLabel_UTCTime.Name = "toolStripStatusLabel_UTCTime";
+            // 
+            // toolStripStatusLabel_Date
+            // 
+            resources.ApplyResources(this.toolStripStatusLabel_Date, "toolStripStatusLabel_Date");
+            this.toolStripStatusLabel_Date.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.toolStripStatusLabel_Date.Name = "toolStripStatusLabel_Date";
+            // 
+            // toolStripStatusLabel_LocalTime
+            // 
+            resources.ApplyResources(this.toolStripStatusLabel_LocalTime, "toolStripStatusLabel_LocalTime");
+            this.toolStripStatusLabel_LocalTime.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.toolStripStatusLabel_LocalTime.Name = "toolStripStatusLabel_LocalTime";
+            // 
+            // grpMultimeter
+            // 
+            this.grpMultimeter.BackColor = System.Drawing.Color.Transparent;
+            this.grpMultimeter.Controls.Add(this.pnlResizeMeter);
+            this.grpMultimeter.Controls.Add(this.picMultiMeterDigital);
+            this.grpMultimeter.Controls.Add(this.txtMultiText);
+            this.grpMultimeter.ForeColor = System.Drawing.Color.White;
+            resources.ApplyResources(this.grpMultimeter, "grpMultimeter");
+            this.grpMultimeter.Name = "grpMultimeter";
+            this.grpMultimeter.TabStop = false;
+            // 
+            // pnlResizeMeter
+            // 
+            resources.ApplyResources(this.pnlResizeMeter, "pnlResizeMeter");
+            this.pnlResizeMeter.Cursor = System.Windows.Forms.Cursors.SizeWE;
+            this.pnlResizeMeter.Name = "pnlResizeMeter";
+            this.pnlResizeMeter.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pnlResizeMeter_MouseDown);
+            this.pnlResizeMeter.MouseEnter += new System.EventHandler(this.pnlResizeMeter_MouseEnter);
+            this.pnlResizeMeter.MouseLeave += new System.EventHandler(this.pnlResizeMeter_MouseLeave);
+            this.pnlResizeMeter.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pnlResizeMeter_MouseMove);
+            this.pnlResizeMeter.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pnlResizeMeter_MouseUp);
+            // 
+            // picMultiMeterDigital
+            // 
+            this.picMultiMeterDigital.BackColor = System.Drawing.Color.Black;
+            resources.ApplyResources(this.picMultiMeterDigital, "picMultiMeterDigital");
+            this.picMultiMeterDigital.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.picMultiMeterDigital.Name = "picMultiMeterDigital";
+            this.picMultiMeterDigital.TabStop = false;
+            this.picMultiMeterDigital.Paint += new System.Windows.Forms.PaintEventHandler(this.picMultiMeterDigital_Paint);
+            // 
+            // txtMultiText
+            // 
+            this.txtMultiText.BackColor = System.Drawing.Color.Black;
+            this.txtMultiText.Cursor = System.Windows.Forms.Cursors.Default;
+            resources.ApplyResources(this.txtMultiText, "txtMultiText");
+            this.txtMultiText.ForeColor = System.Drawing.Color.Yellow;
+            this.txtMultiText.Name = "txtMultiText";
+            this.txtMultiText.ReadOnly = true;
+            this.txtMultiText.Click += new System.EventHandler(this.txtMultiText_Click);
+            this.txtMultiText.GotFocus += new System.EventHandler(this.HideFocus);
             // 
             // panelFilter
             // 
@@ -4958,6 +5208,84 @@
             this.panelOptions.Controls.Add(this.comboTuneMode);
             this.panelOptions.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.panelOptions.Name = "panelOptions";
+            // 
+            // panelButtonBar
+            // 
+            resources.ApplyResources(this.panelButtonBar, "panelButtonBar");
+            this.panelButtonBar.Controls.Add(this.btnAndrBar8);
+            this.panelButtonBar.Controls.Add(this.btnAndrBar7);
+            this.panelButtonBar.Controls.Add(this.btnAndrBar6);
+            this.panelButtonBar.Controls.Add(this.btnAndrBar5);
+            this.panelButtonBar.Controls.Add(this.btnAndrBar4);
+            this.panelButtonBar.Controls.Add(this.btnAndrBar3);
+            this.panelButtonBar.Controls.Add(this.btnAndrBar2);
+            this.panelButtonBar.Controls.Add(this.btnAndrBar1);
+            this.panelButtonBar.Name = "panelButtonBar";
+            this.panelButtonBar.Layout += new System.Windows.Forms.LayoutEventHandler(this.panelButtonBar_Layout);
+            // 
+            // btnAndrBar8
+            // 
+            this.btnAndrBar8.BackColor = System.Drawing.SystemColors.ButtonFace;
+            resources.ApplyResources(this.btnAndrBar8, "btnAndrBar8");
+            this.btnAndrBar8.Name = "btnAndrBar8";
+            this.btnAndrBar8.UseVisualStyleBackColor = false;
+            this.btnAndrBar8.Click += new System.EventHandler(this.btnAndrBar8_Click);
+            // 
+            // btnAndrBar7
+            // 
+            this.btnAndrBar7.BackColor = System.Drawing.SystemColors.ButtonFace;
+            resources.ApplyResources(this.btnAndrBar7, "btnAndrBar7");
+            this.btnAndrBar7.Name = "btnAndrBar7";
+            this.btnAndrBar7.UseVisualStyleBackColor = false;
+            this.btnAndrBar7.Click += new System.EventHandler(this.btnAndrBar7_Click);
+            // 
+            // btnAndrBar6
+            // 
+            this.btnAndrBar6.BackColor = System.Drawing.SystemColors.ButtonFace;
+            resources.ApplyResources(this.btnAndrBar6, "btnAndrBar6");
+            this.btnAndrBar6.Name = "btnAndrBar6";
+            this.btnAndrBar6.UseVisualStyleBackColor = false;
+            this.btnAndrBar6.Click += new System.EventHandler(this.btnAndrBar6_Click);
+            // 
+            // btnAndrBar5
+            // 
+            this.btnAndrBar5.BackColor = System.Drawing.SystemColors.ButtonFace;
+            resources.ApplyResources(this.btnAndrBar5, "btnAndrBar5");
+            this.btnAndrBar5.Name = "btnAndrBar5";
+            this.btnAndrBar5.UseVisualStyleBackColor = false;
+            this.btnAndrBar5.Click += new System.EventHandler(this.btnAndrBar5_Click);
+            // 
+            // btnAndrBar4
+            // 
+            this.btnAndrBar4.BackColor = System.Drawing.SystemColors.ButtonFace;
+            resources.ApplyResources(this.btnAndrBar4, "btnAndrBar4");
+            this.btnAndrBar4.Name = "btnAndrBar4";
+            this.btnAndrBar4.UseVisualStyleBackColor = false;
+            this.btnAndrBar4.Click += new System.EventHandler(this.btnAndrBar4_Click);
+            // 
+            // btnAndrBar3
+            // 
+            this.btnAndrBar3.BackColor = System.Drawing.SystemColors.ButtonFace;
+            resources.ApplyResources(this.btnAndrBar3, "btnAndrBar3");
+            this.btnAndrBar3.Name = "btnAndrBar3";
+            this.btnAndrBar3.UseVisualStyleBackColor = false;
+            this.btnAndrBar3.Click += new System.EventHandler(this.btnAndrBar3_Click);
+            // 
+            // btnAndrBar2
+            // 
+            this.btnAndrBar2.BackColor = System.Drawing.SystemColors.ButtonFace;
+            resources.ApplyResources(this.btnAndrBar2, "btnAndrBar2");
+            this.btnAndrBar2.Name = "btnAndrBar2";
+            this.btnAndrBar2.UseVisualStyleBackColor = false;
+            this.btnAndrBar2.Click += new System.EventHandler(this.btnAndrBar2_Click);
+            // 
+            // btnAndrBar1
+            // 
+            this.btnAndrBar1.BackColor = System.Drawing.SystemColors.ButtonFace;
+            resources.ApplyResources(this.btnAndrBar1, "btnAndrBar1");
+            this.btnAndrBar1.Name = "btnAndrBar1";
+            this.btnAndrBar1.UseVisualStyleBackColor = false;
+            this.btnAndrBar1.Click += new System.EventHandler(this.btnAndrBar1_Click);
             // 
             // panelVFOLabels
             // 
@@ -5546,43 +5874,6 @@
             resources.ApplyResources(this.lblCPUMeter, "lblCPUMeter");
             this.lblCPUMeter.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.lblCPUMeter.Name = "lblCPUMeter";
-            // 
-            // txtCPUMeter
-            // 
-            this.txtCPUMeter.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(46)))), ((int)(((byte)(46)))));
-            resources.ApplyResources(this.txtCPUMeter, "txtCPUMeter");
-            this.txtCPUMeter.ForeColor = System.Drawing.Color.White;
-            this.txtCPUMeter.Name = "txtCPUMeter";
-            this.txtCPUMeter.ReadOnly = true;
-            this.txtCPUMeter.MouseDown += new System.Windows.Forms.MouseEventHandler(this.DateTime_MouseDown);
-            // 
-            // panelDateTime
-            // 
-            resources.ApplyResources(this.panelDateTime, "panelDateTime");
-            this.panelDateTime.BackColor = System.Drawing.Color.Transparent;
-            this.panelDateTime.Controls.Add(this.txtTime);
-            this.panelDateTime.Controls.Add(this.txtDate);
-            this.panelDateTime.Controls.Add(this.txtCPUMeter);
-            this.panelDateTime.Name = "panelDateTime";
-            this.panelDateTime.MouseDown += new System.Windows.Forms.MouseEventHandler(this.DateTime_MouseDown);
-            // 
-            // txtTime
-            // 
-            this.txtTime.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(46)))), ((int)(((byte)(46)))));
-            resources.ApplyResources(this.txtTime, "txtTime");
-            this.txtTime.ForeColor = System.Drawing.Color.White;
-            this.txtTime.Name = "txtTime";
-            this.txtTime.ReadOnly = true;
-            this.txtTime.MouseDown += new System.Windows.Forms.MouseEventHandler(this.DateTime_MouseDown);
-            // 
-            // txtDate
-            // 
-            this.txtDate.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(46)))), ((int)(((byte)(46)))));
-            resources.ApplyResources(this.txtDate, "txtDate");
-            this.txtDate.ForeColor = System.Drawing.Color.White;
-            this.txtDate.Name = "txtDate";
-            this.txtDate.ReadOnly = true;
-            this.txtDate.MouseDown += new System.Windows.Forms.MouseEventHandler(this.DateTime_MouseDown);
             // 
             // panelSoundControls
             // 
@@ -6334,36 +6625,6 @@
             this.btnBandHF.Name = "btnBandHF";
             this.btnBandHF.Click += new System.EventHandler(this.btnBandHF_Click);
             // 
-            // grpMultimeter
-            // 
-            this.grpMultimeter.BackColor = System.Drawing.Color.Transparent;
-            this.grpMultimeter.Controls.Add(this.picMultiMeterDigital);
-            this.grpMultimeter.Controls.Add(this.txtMultiText);
-            this.grpMultimeter.ForeColor = System.Drawing.Color.White;
-            resources.ApplyResources(this.grpMultimeter, "grpMultimeter");
-            this.grpMultimeter.Name = "grpMultimeter";
-            this.grpMultimeter.TabStop = false;
-            // 
-            // picMultiMeterDigital
-            // 
-            this.picMultiMeterDigital.BackColor = System.Drawing.Color.Black;
-            resources.ApplyResources(this.picMultiMeterDigital, "picMultiMeterDigital");
-            this.picMultiMeterDigital.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.picMultiMeterDigital.Name = "picMultiMeterDigital";
-            this.picMultiMeterDigital.TabStop = false;
-            this.picMultiMeterDigital.Paint += new System.Windows.Forms.PaintEventHandler(this.picMultiMeterDigital_Paint);
-            // 
-            // txtMultiText
-            // 
-            this.txtMultiText.BackColor = System.Drawing.Color.Black;
-            this.txtMultiText.Cursor = System.Windows.Forms.Cursors.Default;
-            resources.ApplyResources(this.txtMultiText, "txtMultiText");
-            this.txtMultiText.ForeColor = System.Drawing.Color.Yellow;
-            this.txtMultiText.Name = "txtMultiText";
-            this.txtMultiText.ReadOnly = true;
-            this.txtMultiText.Click += new System.EventHandler(this.txtMultiText_Click);
-            this.txtMultiText.GotFocus += new System.EventHandler(this.HideFocus);
-            // 
             // lblTuneStep
             // 
             this.lblTuneStep.ForeColor = System.Drawing.SystemColors.ControlLightLight;
@@ -6789,6 +7050,7 @@
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.SystemColors.ControlDark;
+            this.Controls.Add(this.statusStripMain);
             this.Controls.Add(this.grpMultimeter);
             this.Controls.Add(this.panelFilter);
             this.Controls.Add(this.panelRX2RF);
@@ -6808,7 +7070,6 @@
             this.Controls.Add(this.panelDisplay2);
             this.Controls.Add(this.panelDSP);
             this.Controls.Add(this.panelVFO);
-            this.Controls.Add(this.panelDateTime);
             this.Controls.Add(this.panelSoundControls);
             this.Controls.Add(this.grpRX2Meter);
             this.Controls.Add(this.grpDisplaySplit);
@@ -6887,12 +7148,17 @@
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picRX2Squelch)).EndInit();
-            this.panelButtonBar.ResumeLayout(false);
+            this.statusStripMain.ResumeLayout(false);
+            this.statusStripMain.PerformLayout();
+            this.grpMultimeter.ResumeLayout(false);
+            this.grpMultimeter.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picMultiMeterDigital)).EndInit();
             this.panelFilter.ResumeLayout(false);
             this.panelRX2RF.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.ptbRX2Squelch)).EndInit();
             this.panelRX2DSP.ResumeLayout(false);
             this.panelOptions.ResumeLayout(false);
+            this.panelButtonBar.ResumeLayout(false);
             this.panelVFOLabels.ResumeLayout(false);
             this.panelVFOALabels.ResumeLayout(false);
             this.panelVFOALabels.PerformLayout();
@@ -6911,8 +7177,6 @@
             this.panelDisplay2.ResumeLayout(false);
             this.panelDSP.ResumeLayout(false);
             this.panelVFO.ResumeLayout(false);
-            this.panelDateTime.ResumeLayout(false);
-            this.panelDateTime.PerformLayout();
             this.panelSoundControls.ResumeLayout(false);
             this.panelModeSpecificPhone.ResumeLayout(false);
             this.panelModeSpecificPhone.PerformLayout();
@@ -6936,9 +7200,6 @@
             this.grpVFOA.PerformLayout();
             this.grpVFOB.ResumeLayout(false);
             this.grpVFOB.PerformLayout();
-            this.grpMultimeter.ResumeLayout(false);
-            this.grpMultimeter.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.picMultiMeterDigital)).EndInit();
             this.grpVFOBetween.ResumeLayout(false);
             this.grpVFOBetween.PerformLayout();
             this.grpDisplaySplit.ResumeLayout(false);
@@ -7019,5 +7280,44 @@
         private ToolStripMenuItem BPF1ToolStripMenuItem;
         private ToolStripMenuItem BPF2ToolStripMenuItem;
         private ComboBoxTS comboAMTXProfile;
+        private StatusStrip statusStripMain;
+        private ToolStripStatusLabel toolStripStatusLabel_CPUperc;
+        private ToolStripStatusLabel toolStripStatusLabel_Amps;
+        private ToolStripStatusLabel toolStripStatusLabel_Volts;
+        private ToolStripStatusLabel toolStripStatusLabel_Fill;
+        private ToolStripStatusLabel toolStripStatusLabel_UTCTime;
+        private ToolStripStatusLabel toolStripStatusLabel_Date;
+        private ToolStripStatusLabel toolStripStatusLabel_LocalTime;
+        private ToolStripStatusLabel toolStripStatusLabel_SeqWarning;
+        private ToolStripDropDownButton toolStripDropDownButton_ScreenSize;
+        private ToolStripMenuItem toolStripMenuItem_4by3;
+        private ToolStripMenuItem toolStripMenuItem_16by9;
+        private ToolStripMenuItem toolStripMenuItem_16by10;
+        private ToolStripMenuItem x768ToolStripMenuItem;
+        private ToolStripMenuItem x864ToolStripMenuItem;
+        private ToolStripMenuItem x960ToolStripMenuItem;
+        private ToolStripMenuItem x1050ToolStripMenuItem;
+        private ToolStripMenuItem x1200ToolStripMenuItem;
+        private ToolStripMenuItem x720ToolStripMenuItem;
+        private ToolStripMenuItem x768ToolStripMenuItem1;
+        private ToolStripMenuItem x900ToolStripMenuItem;
+        private ToolStripMenuItem x1080ToolStripMenuItem;
+        private ToolStripMenuItem x800ToolStripMenuItem;
+        private ToolStripMenuItem x900ToolStripMenuItem1;
+        private ToolStripMenuItem x1050ToolStripMenuItem1;
+        private ToolStripMenuItem x1200ToolStripMenuItem1;
+        private ToolStripMenuItem youTubeToolStripMenuItem;
+        private ToolStripMenuItem pToolStripMenuItem;
+        private ToolStripMenuItem pToolStripMenuItem1;
+        private ToolStripMenuItem pToolStripMenuItem2;
+        private ToolStripMenuItem pToolStripMenuItem3;
+        private ToolStripStatusLabel toolStripStatusLabel1;
+        private ToolStripMenuItem includeBordersToolStripMenuItem;
+        private ToolStripSeparator toolStripSeparator2;
+        private ToolStripMenuItem x1440ToolStripMenuItem;
+        private ToolStripMenuItem x2160ToolStripMenuItem;
+        private ToolStripMenuItem x1600ToolStripMenuItem;
+        private ToolStripMenuItem x2400ToolStripMenuItem;
+        private PanelTS pnlResizeMeter;
     }
 }

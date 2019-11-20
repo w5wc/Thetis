@@ -2816,6 +2816,11 @@
             this.tpAppearance = new System.Windows.Forms.TabPage();
             this.tcAppearance = new System.Windows.Forms.TabControl();
             this.tpAppearanceGeneral = new System.Windows.Forms.TabPage();
+            this.groupBoxTS12 = new System.Windows.Forms.GroupBoxTS();
+            this.clrbtnStatusBarText = new Thetis.ColorButton();
+            this.nlblStatusBarTextColour = new System.Windows.Forms.LabelTS();
+            this.clrbtnStatusBarBackground = new Thetis.ColorButton();
+            this.nlblStatusBarBackground = new System.Windows.Forms.LabelTS();
             this.chkEnableLEDFont = new System.Windows.Forms.CheckBoxTS();
             this.btnSkinExport = new System.Windows.Forms.ButtonTS();
             this.grpAppSkins = new System.Windows.Forms.GroupBoxTS();
@@ -4132,6 +4137,7 @@
             this.tpAppearance.SuspendLayout();
             this.tcAppearance.SuspendLayout();
             this.tpAppearanceGeneral.SuspendLayout();
+            this.groupBoxTS12.SuspendLayout();
             this.grpAppSkins.SuspendLayout();
             this.grpAppearanceBand.SuspendLayout();
             this.grpAppearanceVFO.SuspendLayout();
@@ -24595,7 +24601,7 @@
             0});
             this.udDisplayFPS.Location = new System.Drawing.Point(120, 24);
             this.udDisplayFPS.Maximum = new decimal(new int[] {
-            60,
+            144,
             0,
             0,
             0});
@@ -47985,6 +47991,7 @@
             // tpAppearanceGeneral
             // 
             this.tpAppearanceGeneral.BackColor = System.Drawing.SystemColors.Control;
+            this.tpAppearanceGeneral.Controls.Add(this.groupBoxTS12);
             this.tpAppearanceGeneral.Controls.Add(this.chkEnableLEDFont);
             this.tpAppearanceGeneral.Controls.Add(this.btnSkinExport);
             this.tpAppearanceGeneral.Controls.Add(this.grpAppSkins);
@@ -47999,6 +48006,63 @@
             this.tpAppearanceGeneral.Size = new System.Drawing.Size(592, 318);
             this.tpAppearanceGeneral.TabIndex = 0;
             this.tpAppearanceGeneral.Text = "General";
+            // 
+            // groupBoxTS12
+            // 
+            this.groupBoxTS12.Controls.Add(this.clrbtnStatusBarText);
+            this.groupBoxTS12.Controls.Add(this.nlblStatusBarTextColour);
+            this.groupBoxTS12.Controls.Add(this.clrbtnStatusBarBackground);
+            this.groupBoxTS12.Controls.Add(this.nlblStatusBarBackground);
+            this.groupBoxTS12.Location = new System.Drawing.Point(296, 166);
+            this.groupBoxTS12.Name = "groupBoxTS12";
+            this.groupBoxTS12.Size = new System.Drawing.Size(144, 89);
+            this.groupBoxTS12.TabIndex = 89;
+            this.groupBoxTS12.TabStop = false;
+            this.groupBoxTS12.Text = "Status Bar";
+            // 
+            // clrbtnStatusBarText
+            // 
+            this.clrbtnStatusBarText.Automatic = "Automatic";
+            this.clrbtnStatusBarText.Color = System.Drawing.Color.White;
+            this.clrbtnStatusBarText.Image = null;
+            this.clrbtnStatusBarText.Location = new System.Drawing.Point(78, 52);
+            this.clrbtnStatusBarText.MoreColors = "More Colors...";
+            this.clrbtnStatusBarText.Name = "clrbtnStatusBarText";
+            this.clrbtnStatusBarText.Size = new System.Drawing.Size(40, 23);
+            this.clrbtnStatusBarText.TabIndex = 77;
+            this.clrbtnStatusBarText.Changed += new System.EventHandler(this.clrbtnStatusBarText_Changed);
+            // 
+            // nlblStatusBarTextColour
+            // 
+            this.nlblStatusBarTextColour.Image = null;
+            this.nlblStatusBarTextColour.Location = new System.Drawing.Point(6, 52);
+            this.nlblStatusBarTextColour.Name = "nlblStatusBarTextColour";
+            this.nlblStatusBarTextColour.Size = new System.Drawing.Size(72, 23);
+            this.nlblStatusBarTextColour.TabIndex = 76;
+            this.nlblStatusBarTextColour.Text = "Text:";
+            this.nlblStatusBarTextColour.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // clrbtnStatusBarBackground
+            // 
+            this.clrbtnStatusBarBackground.Automatic = "Automatic";
+            this.clrbtnStatusBarBackground.Color = System.Drawing.SystemColors.ControlDarkDark;
+            this.clrbtnStatusBarBackground.Image = null;
+            this.clrbtnStatusBarBackground.Location = new System.Drawing.Point(78, 23);
+            this.clrbtnStatusBarBackground.MoreColors = "More Colors...";
+            this.clrbtnStatusBarBackground.Name = "clrbtnStatusBarBackground";
+            this.clrbtnStatusBarBackground.Size = new System.Drawing.Size(40, 23);
+            this.clrbtnStatusBarBackground.TabIndex = 75;
+            this.clrbtnStatusBarBackground.Changed += new System.EventHandler(this.clrbtnStatusBarBackground_Changed);
+            // 
+            // nlblStatusBarBackground
+            // 
+            this.nlblStatusBarBackground.Image = null;
+            this.nlblStatusBarBackground.Location = new System.Drawing.Point(6, 23);
+            this.nlblStatusBarBackground.Name = "nlblStatusBarBackground";
+            this.nlblStatusBarBackground.Size = new System.Drawing.Size(72, 23);
+            this.nlblStatusBarBackground.TabIndex = 74;
+            this.nlblStatusBarBackground.Text = "Background:";
+            this.nlblStatusBarBackground.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // chkEnableLEDFont
             // 
@@ -55236,6 +55300,7 @@
             this.tcAppearance.ResumeLayout(false);
             this.tpAppearanceGeneral.ResumeLayout(false);
             this.tpAppearanceGeneral.PerformLayout();
+            this.groupBoxTS12.ResumeLayout(false);
             this.grpAppSkins.ResumeLayout(false);
             this.grpAppSkins.PerformLayout();
             this.grpAppearanceBand.ResumeLayout(false);
@@ -58659,5 +58724,10 @@
         private RadioButtonTS radDBM;
         private RadioButtonTS radSReading;
         private CheckBoxTS chkAntiAlias;
+        private GroupBoxTS groupBoxTS12;
+        private ColorButton clrbtnStatusBarText;
+        private LabelTS nlblStatusBarTextColour;
+        private ColorButton clrbtnStatusBarBackground;
+        private LabelTS nlblStatusBarBackground;
     }
 }

@@ -2634,7 +2634,7 @@ namespace Thetis
 					s = s.Insert(5, separator);
 
                 if (!isMidi && console.CATChangesCenterFreq) // MW0LGE changed to take into consideration the flag
-                console.UpdateCenterFreq = true;
+                    console.UpdateCenterFreq = true;
 				console.VFOAFreq = double.Parse(s);
 				return "";
 			}

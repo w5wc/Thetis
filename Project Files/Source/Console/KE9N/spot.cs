@@ -4825,8 +4825,8 @@ namespace Thetis
             if (SP5_Active == 0)  // if OFF then turn ON
             {
 
-                if (chkPanMode.Checked == true) Display.map = 1; // special panafall mode (80 - 20)
-                else Display.map = 0;
+                if (chkPanMode.Checked == true) Display.SpecialPanafall = true; // special panafall mode (80 - 20)
+                else Display.SpecialPanafall = false;
 
                 btnTrack.Text = "Track ON";
 
@@ -4874,7 +4874,7 @@ namespace Thetis
 
                 SP5_Active = 0;                     // turn off tracking
 
-                Display.map = 0;                    // tell display program to got back to standard panafall mode
+                Display.SpecialPanafall = false;                    // tell display program to got back to standard panafall mode
 
                 if (chkPanMode.Checked == true) Display.CurrentDisplayMode = LastDisplayMode;
                
@@ -6334,14 +6334,14 @@ namespace Thetis
                 if (chkPanMode.Checked == true)
                 {
 
-                    Display.map = 1;
+                    Display.SpecialPanafall = true;
                     Display.CurrentDisplayMode = DisplayMode.PANAFALL;
 
 
                 }
                 else if (chkPanMode.Checked == false) // turn off special pan and put back original display mode
                 {
-                    Display.map = 0;
+                    Display.SpecialPanafall = false;
                     Display.CurrentDisplayMode = LastDisplayMode;
                 }
             }
@@ -7087,8 +7087,8 @@ namespace Thetis
                 {
                     Debug.WriteLine(">>>>>>>>BEACON: turn on mapping");
 
-                    if (chkPanMode.Checked == true) Display.map = 1;
-                    else Display.map = 0;
+                    if (chkPanMode.Checked == true) Display.SpecialPanafall = true;
+                    else Display.SpecialPanafall = false;
 
                 //    btnTrack.Text = "Track ON";
 
@@ -7312,7 +7312,7 @@ namespace Thetis
 
                     SP5_Active = 0;                     // turn off tracking
 
-                    Display.map = 0;                    // tell display program to got back to standard panafall mode
+                    Display.SpecialPanafall = false;                    // tell display program to got back to standard panafall mode
 
                     if (chkPanMode.Checked == true) Display.CurrentDisplayMode = LastDisplayMode;
 

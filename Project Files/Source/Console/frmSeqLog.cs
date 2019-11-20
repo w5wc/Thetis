@@ -18,21 +18,33 @@ namespace Thetis
         public frmSeqLog()
         {
             InitializeComponent();
+            btnClear.Text = "Close";
+            btnCopyImageToClipboard.Enabled = false;
+            btnCopyToClipboard.Enabled = false;
         }
 
         private void btnClear_Click(object sender, EventArgs e)
         {
+            btnClear.Text = "Close";
+            btnCopyImageToClipboard.Enabled = false;
+            btnCopyToClipboard.Enabled = false;
             txtLog.Text = "";
+            log.Clear();
             clearButtonEvents();
+            this.Close();
         }
 
+        private StringBuilder log = new StringBuilder();
         public void LogString(string s)
         {
-            if(txtLog.Text.Length > 32000) // some arbitary max lengh
-            {
-                txtLog.Text = txtLog.Text.Substring(0, 32000);
-            }
-            txtLog.Text = s + System.Environment.NewLine + txtLog.Text;
+            log.Insert(0, s + System.Environment.NewLine);
+            if (log.Length > 16000) log.Remove(16000, log.Length - 16000);
+
+            txtLog.Text = log.ToString();
+
+            btnClear.Text = "Clear Log + Close";
+            btnCopyImageToClipboard.Enabled = true;
+            btnCopyToClipboard.Enabled = true;
         }
 
         private void frmSeqLog_FormClosing(object sender, FormClosingEventArgs e)
@@ -47,6 +59,20 @@ namespace Thetis
             }
             remove {
                 clearButtonEvents -= value;
+            }
+        }
+
+        private void btnCopyToClipboard_Click(object sender, EventArgs e)
+        {
+            Clipboard.SetText(txtLog.Text);
+        }
+
+        private void btnCopyImageToClipboard_Click(object sender, EventArgs e)
+        {
+            using (Bitmap bmp = new Bitmap(txtLog.Width, txtLog.Height))
+            {
+                txtLog.DrawToBitmap(bmp, new Rectangle(new Point(0, 0), txtLog.Size));
+                Clipboard.SetImage(bmp);
             }
         }
     }

@@ -309,13 +309,13 @@ namespace Thetis
         RTS,
     }
 
-    public enum DateTimeMode
-    {
-        OFF = 0,
-        LOCAL,
-        UTC,
-        LAST,
-    }
+    //public enum DateTimeMode
+    //{
+    //    OFF = 0,
+    //    LOCAL,
+    //    UTC,
+    //    LAST,
+    //}
 
     public enum FRSRegion
     {
@@ -554,6 +554,7 @@ namespace Thetis
 
     unsafe public partial class Console : System.Windows.Forms.Form
     {
+        public int MAX_FPS = 144;
 
         //==================================================================================
         //==================================================================================
@@ -997,7 +998,7 @@ namespace Thetis
         private Point gr_antenna_basis = new Point(100, 100);		//k6jca
         private Point chk_bci_basis = new Point(100, 100);		//k6jca
         private Point button1_basis = new Point(100, 100);		//k6jca
-        private Point gr_date_time_basis = new Point(100, 100);		//k6jca
+        //private Point gr_date_time_basis = new Point(100, 100);		//k6jca
         //private Point lbl_cpu_meter_basis = new Point (100,100);		//k6jca
 
         private Point gr_rx2_meter_basis = new Point(100, 100);
@@ -1686,6 +1687,11 @@ namespace Thetis
             SendMessage(parent.Handle, WM_SETREDRAW, true, 0);
             parent.Refresh();
         }
+        private void ResumeDrawingNoRefresh(Control parent)
+        {
+            if (initializing) return;
+            SendMessage(parent.Handle, WM_SETREDRAW, true, 0);
+        }
         //--
         private void OnAutoStartTimerEvent(Object source, ElapsedEventArgs e)
         {
@@ -1751,6 +1757,16 @@ namespace Thetis
         #endregion
 
         #region Main
+        static void Application_ThreadException(object sender, ThreadExceptionEventArgs e)
+        {
+            Debug.WriteLine(e.Exception.Message);
+            Common.LogException(e.Exception);
+        }
+        static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            Debug.WriteLine((e.ExceptionObject as Exception).Message);
+            Common.LogException(e.ExceptionObject as Exception);
+        }
         // ======================================================
         // Main
         // ======================================================
@@ -1758,6 +1774,17 @@ namespace Thetis
         [STAThread]
         static void Main(string[] args)
         {
+            //--
+            Application.ThreadException += new ThreadExceptionEventHandler(Application_ThreadException);
+            AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
+//#if DEBUG
+//            AppDomain.CurrentDomain.FirstChanceException += (sender, eventArgs) =>
+//            {
+//                Debug.WriteLine(eventArgs.Exception.ToString());
+//                Common.LogException(eventArgs.Exception);
+//            };
+//#endif
+            //--
             string app_data_path = "";
             foreach (string s in args)
             {
@@ -1801,8 +1828,8 @@ namespace Thetis
 #endif
             }
 
-            //try
-            //{
+            try
+            {
                 {
                     // Need to create the directory in %appdata% before we go run wisdom
                     if (!Directory.Exists(app_data_path))
@@ -1819,6 +1846,8 @@ namespace Thetis
 
                 }
 
+                Common.SetLogPath(app_data_path); // init the logger MW0LGE
+
                 Win32.TimeBeginPeriod(1); // set timer resolution to 1ms => freq=1000Hz
                 Application.EnableVisualStyles();
                 Application.DoEvents();
@@ -1829,14 +1858,15 @@ namespace Thetis
                     Application.Exit();
                 }
                 else Application.Run(theConsole);
-            //}
-            //catch (Exception ex)
-            //{
-            //    string msg = ex.Message + "\n\n" + ex.StackTrace.ToString();
-            //    if (ex.InnerException != null) msg += "\n\n" + ex.InnerException.Message;
-            //    MessageBox.Show(msg, "Fatal Error",
-            //        MessageBoxButtons.OK, MessageBoxIcon.Error);
-            //}
+            }
+            catch (Exception ex)
+            {
+                string msg = ex.Message + "\n\n" + ex.StackTrace.ToString();
+                if (ex.InnerException != null) msg += "\n\n" + ex.InnerException.Message;
+                MessageBox.Show(msg, "Fatal Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
         }
 
         #endregion
@@ -1932,6 +1962,7 @@ namespace Thetis
         }
         private void onClearButton()
         {
+            toolStripStatusLabel_SeqWarning.Visible = false;
             NetworkIO.clearSnapshots();
         }
 
@@ -2190,7 +2221,7 @@ namespace Thetis
 
             Display.Target = picDisplay;
             // Display.WaterfallTarget = picWaterfall;
-            Display.Init();						// Initialize Display variables
+            //Display.Init();						// Initialize Display variables //MW0LGE now done in Target above
             InitDisplayModes();					// Initialize Display Modes
             InitAGCModes();						// Initialize AGC Modes
             InitMultiMeterModes();				// Initialize MultiMeter Modes
@@ -2719,7 +2750,7 @@ namespace Thetis
             a.Add("chkRX2NB_checkstate/" + chkRX2NB.CheckState.ToString());
             // a.Add("chkSyncIT_checkstate/" + chkSyncIT.CheckState.ToString());  //-W2PA Checkbox for synched RIT/XIT
 
-            a.Add("current_datetime_mode/" + (int)current_datetime_mode);
+            //a.Add("current_datetime_mode/" + (int)current_datetime_mode);
             a.Add("rx1_display_cal_offset/" + rx1_display_cal_offset.ToString("f3"));
             a.Add("rx1_meter_cal_offset/" + rx1_meter_cal_offset);
 
@@ -3298,12 +3329,18 @@ namespace Thetis
             a.Add("vfob_dsp_mode/" + ((int)vfob_dsp_mode).ToString());			// Save VFO B values 
             a.Add("vfob_filter/" + ((int)vfob_filter).ToString());
 
+            a.Add("RX1MeterPaddingRatio/" + m_fMeterPadRatio.ToString());
+
             a.Add("console_top/" + this.Top.ToString());		// save form positions
             a.Add("console_left/" + this.Left.ToString());
             a.Add("console_width/" + this.Width.ToString());
             a.Add("console_height/" + this.Height.ToString());
             a.Add("setup_top/" + SetupForm.Top.ToString());
             a.Add("setup_left/" + SetupForm.Left.ToString());
+
+            a.Add("IncludeWindowBorders/" + m_bIncludeWindowBorders);   // used in status bar resize form calcs
+            a.Add("PanafallSplitBarPerc/" + Display.PanafallSplitBarPerc.ToString());  // the percentage of displayheight that is used in panafall rx1 only
+
             a.Add("saved_rx_only/" + saved_rx_only.ToString());
             a.Add("mon_recall/" + mon_recall.ToString());
 
@@ -3326,6 +3363,9 @@ namespace Thetis
 
             string file_name2 = AppDataPath + "ke9ns8.dat"; // save data for my mods
 
+            bool bNeedUpdate = false; // MW0LGE used to rebuild main form collapsed/expanded, done at the very end
+            Point consoleLocation = new Point(this.Top, this.Left);
+            Size consoleSize = new Size(this.Width, this.Height);
 
             if (!File.Exists(file_name2))
             {
@@ -4146,9 +4186,9 @@ namespace Thetis
                     case "band_vhf13_index":
                         band_vhf13_index = Int32.Parse(val);
                         break;
-                    case "current_datetime_mode":
-                        CurrentDateTimeMode = (DateTimeMode)(Int32.Parse(val));
-                        break;
+                    //case "current_datetime_mode":
+                    //    CurrentDateTimeMode = (DateTimeMode)(Int32.Parse(val));
+                        //break;
                     case "wheel_tune_index":
                         tune_step_index = Int32.Parse(val);
                         break;
@@ -4195,7 +4235,8 @@ namespace Thetis
                         iscollapsed = bool.Parse(val);    //added by w3sz
                         if (iscollapsed)   //added by w3sz
                         {
-                            this.CollapseDisplay();
+                            //this.CollapseDisplay();
+                            bNeedUpdate = true;
                             iscollapsed = true;
                             isexpanded = false;
                         }
@@ -4204,7 +4245,8 @@ namespace Thetis
                         isexpanded = bool.Parse(val);    //added by w3sz
                         if (isexpanded)   //added by w3sz
                         {
-                            this.ExpandDisplay(); // MW0LGE reinstated
+                            //this.ExpandDisplay();
+                            bNeedUpdate = true;
                             isexpanded = true;
                             iscollapsed = false;
                         }
@@ -4224,24 +4266,33 @@ namespace Thetis
                     case "vfob_filter":
                         vfob_filter = (Filter)(Int32.Parse(val));
                         break;
+                    case "RX1MeterPaddingRatio":
+                        m_fMeterPadRatio = float.Parse(val);
+                        break;
                     case "console_top":
                         num = Int32.Parse(val);
                         /*if((num < 0) || (num > Screen.PrimaryScreen.Bounds.Height && Screen.AllScreens.Length == 1))
                             num = 0;*/
-                        this.Top = num;
+                        //this.Top = num;
+                        bNeedUpdate = true;
+                        consoleLocation.Y = num;
                         break;
                     case "console_left":
                         num = Int32.Parse(val);
                         /*if((num < 0) || (num > Screen.PrimaryScreen.Bounds.Width && Screen.AllScreens.Length == 1))
                             num = 0;*/
-                        this.Left = num;
+                        //this.Left = num;
+                        bNeedUpdate = true;
+                        consoleLocation.X = num;
                         break;
                     case "console_width":
                         if (dpi <= 96)
                         {
                             int tmp = int.Parse(val);
                             if (isexpanded) this.expandedSize.Width = tmp;  //MW0LGE
-                            this.Width = int.Parse(val);
+                            //this.Width = tmp;
+                            bNeedUpdate = true;
+                            consoleSize.Width = tmp;
                         }
                         break;
                     case "console_height":
@@ -4249,7 +4300,9 @@ namespace Thetis
                         {
                             int tmp = int.Parse(val);
                             if (isexpanded) this.expandedSize.Height = tmp;  //MW0LGE
-                            this.Height = tmp;
+                            //this.Height = tmp;
+                            bNeedUpdate = true;
+                            consoleSize.Height = tmp;
                         }
                         break;
                     case "setup_top":
@@ -4276,6 +4329,12 @@ namespace Thetis
                                 num = 0;
                             MemForm.Left = num;
                             break; */
+                    case "IncludeWindowBorders":  
+                        IncludeWindowBorders = bool.Parse(val); // used for statusbar form resize calcs
+                        break;
+                    case "PanafallSplitBarPerc":
+                        Display.PanafallSplitBarPerc = float.Parse(val); // used for the splitter percentage when rx1 only displayed in panafall mode
+                        break;
                     case "SetupWizard":
                         if (val == "1")
                             run_setup_wizard = false;
@@ -5000,6 +5059,21 @@ namespace Thetis
                     }
                 }
 
+            }
+
+            if (bNeedUpdate)
+            {
+                this.Size = consoleSize;
+                this.Location = consoleLocation;
+
+                if(iscollapsed)
+                {
+                    this.CollapseDisplay();
+                }
+                else
+                {
+                    this.ExpandDisplay();
+                }
             }
 
             Common.ForceFormOnScreen(this);
@@ -23643,8 +23717,8 @@ namespace Thetis
                         {
                             Display.ShutdownDX2D();
 
-                            Thread.Sleep(100);
-                            Display.Init();
+                            //Thread.Sleep(100);
+                            //Display.Init();
 
                             PicDisplayBackgroundImage = m_imgBackgroundCopy;//MW0LGE restore pciture box background that would have been turned off when in DX mode
                         }
@@ -23652,10 +23726,12 @@ namespace Thetis
                     case DisplayEngine.DIRECT_X:
                         {
                             Display.InitDX2D();
-                            Display.Init();
+                            //Display.Init();
                         }
                         break;
                 }
+
+                Display.Target = picDisplay;  //MW0LGE reset this, causes an update to the arrays, and rebuilds bitmaps
 
                 pause_DisplayThread = false;
 
@@ -24973,33 +25049,33 @@ namespace Thetis
             }
         }
 
-        private DateTimeMode current_datetime_mode = DateTimeMode.LOCAL;
-        public DateTimeMode CurrentDateTimeMode
-        {
-            get { return current_datetime_mode; }
-            set
-            {
-                current_datetime_mode = value;
-                if (current_datetime_mode == DateTimeMode.OFF)
-                {
-                    txtDate.Visible = false;
-                    txtTime.Visible = false;
-                    panelDateTime.Text = "Date/Time - Off";
-                    timer_clock.Enabled = false;
-                    txtDate.Text = "";
-                    txtTime.Text = "";
-                }
-                else
-                {
-                    txtDate.Visible = true;
-                    txtTime.Visible = true;
-                    if (panelDateTime.Text != "Date/Time")
-                        panelDateTime.Text = "Date/Time";
-                    if (!timer_clock.Enabled)
-                        timer_clock.Enabled = true;
-                }
-            }
-        }
+        //private DateTimeMode current_datetime_mode = DateTimeMode.LOCAL;
+        //public DateTimeMode CurrentDateTimeMode
+        //{
+        //    get { return current_datetime_mode; }
+        //    set
+        //    {
+        //        current_datetime_mode = value;
+        //        if (current_datetime_mode == DateTimeMode.OFF)
+        //        {
+        //            txtDate.Visible = false;
+        //            txtTime.Visible = false;
+        //            panelDateTime.Text = "Date/Time - Off";
+        //            timer_clock.Enabled = false;
+        //            txtDate.Text = "";
+        //            txtTime.Text = "";
+        //        }
+        //        else
+        //        {
+        //            txtDate.Visible = true;
+        //            txtTime.Visible = true;
+        //            if (panelDateTime.Text != "Date/Time")
+        //                panelDateTime.Text = "Date/Time";
+        //            if (!timer_clock.Enabled)
+        //                timer_clock.Enabled = true;
+        //        }
+        //    }
+        //}
 
         private int alex_preamp_offset = 0;
         public int AlexPreampOffset
@@ -30665,23 +30741,37 @@ namespace Thetis
             }
         }
 
-        private int display_grid_x = 0;
-        public int DisplayGridX
+        private int RX1display_grid_x = 0;
+        public int RX1DisplayGridX
         {
-            get { return display_grid_x; }
+            get { return RX1display_grid_x; }
             set
             {
-                display_grid_x = value;
+                RX1display_grid_x = value;
             }
         }
 
-        private int display_grid_w = 0;
-        public int DisplayGridW
-        {
-            get { return display_grid_w; }
+        private int RX1display_grid_w = 0;
+        public int RX1DisplayGridW {
+            get { return RX1display_grid_w; }
             set
             {
-                display_grid_w = value;
+                RX1display_grid_w = value;
+            }
+        }
+        private int RX2display_grid_x = 0;
+        public int RX2DisplayGridX {
+            get { return RX2display_grid_x; }
+            set {
+                RX2display_grid_x = value;
+            }
+        }
+
+        private int RX2display_grid_w = 0;
+        public int RX2DisplayGridW {
+            get { return RX2display_grid_w; }
+            set {
+                RX2display_grid_w = value;
             }
         }
 
@@ -30693,7 +30783,7 @@ namespace Thetis
             set
             {
                 display_fps = value;
-                if (display_fps > 60) display_fps = 60;
+                if (display_fps > MAX_FPS) display_fps = MAX_FPS;
                 if (display_fps < 1) display_fps = 1;
                 display_delay = 1000 / display_fps;
 
@@ -31216,16 +31306,16 @@ namespace Thetis
             }
         }
 
-        private bool ozy_control = false;
-        public bool OzyControl
-        {
-            get { return ozy_control; }
-            set
-            {
-                ozy_control = value;
+        //private bool ozy_control = false;
+        //public bool OzyControl
+        //{
+        //    get { return ozy_control; }
+        //    set
+        //    {
+        //        ozy_control = value;
 
-            }
-        }
+        //    }
+        //}
 
         public PerformanceCounter cpu_usage = null;
         private void CpuUsage()
@@ -31242,8 +31332,10 @@ namespace Thetis
             {
                 timer_cpu_meter.Enabled = false;
                 //lblCPUMeter.Visible = false;
-                txtCPUMeter.Visible = false;
+                //txtCPUMeter.Visible = false;
                 //return 0.0f;
+
+                toolStripStatusLabel_CPUperc.Visible = false;
             }
         }
         // }
@@ -31578,7 +31670,8 @@ namespace Thetis
         private int HaveSync = 1;
         private int change_overload_color_count = 0;
         private int oload_select = 0;                   // selection of which overload to display this time
-        private const int num_oloads = 2;               // number of possible overload displays
+        private const int num_oloads = 2;               // number of possible overload displays        
+
         private void UpdatePeakText()
         {
             // return;
@@ -31679,30 +31772,46 @@ namespace Thetis
                     if (isBitSet(ooo, 8)) s += "Mic ";
 
                     int[] d = new int[40]; //MAX_IN_SEQ_LOG
+                    StringBuilder sDateTimeStamp = new StringBuilder(24); // same size as dateTimeStamp in network.h
 
+                    bool bNegative = false;
+                    bool bDCCSeqErrors = false;
                     for (int ll=1; ll < 8; ll++)
                     {
                         if (isBitSet(ooo, ll))
                         {
+                            bDCCSeqErrors = true;
                             string ss = "DCC" + (ll-1).ToString() + System.Environment.NewLine;
-                           
-                            if (NetworkIO.getSeqInDeltaStart(ll - 1))
-                            {
-                                int n = 0;
-                                while (NetworkIO.getSeqInDelta(ll - 1, d))
-                                {
-                                    ss += "s" + n.ToString() + "=";
-                                    for (int ff = 0; ff < d.Length; ff++)
-                                    {
-                                        ss += d[ff].ToString() + " ";
-                                    }
-                                    ss += System.Environment.NewLine;
-                                    n++;
-                                }
-                            }
 
+                            int n = 0;
+                            bool bInit = true;
+                            while (NetworkIO.getSeqInDelta(ll - 1, d, sDateTimeStamp, bInit))
+                            {
+                                bInit = false;
+                                ss += "s" + n.ToString() + "=";
+                                for (int ff = 0; ff < d.Length; ff++)
+                                {
+                                    ss += d[ff].ToString() + " ";
+                                    if (d[ff] < 0) bNegative = true;// there have been negative packets, these are out of order, important !
+                                }
+                                ss += " " + sDateTimeStamp.ToString() + System.Environment.NewLine;
+                                n++;
+                            }
                             m_frmSeqLog.LogString(ss);
                         }
+                    }
+
+                    if (bDCCSeqErrors)
+                    {
+                        if (bNegative)
+                        {
+                            toolStripStatusLabel_SeqWarning.BackColor = Color.Red;
+                        }
+                        else
+                        {
+                            toolStripStatusLabel_SeqWarning.BackColor = Color.Transparent;
+                        }
+                        toolStripStatusLabel_SeqWarning.Visible = true;
                     }
 
                     //txtOverload.ForeColor = Color.Red;
@@ -32141,36 +32250,61 @@ namespace Thetis
 
         private float PixelToDb(float y)
         {
-            if (chkSplitDisplay.Checked || Display.CurrentDisplayMode == DisplayMode.PANAFALL ||
-                Display.CurrentDisplayMode == DisplayMode.PANASCOPE)
-            {
-                if (y <= picDisplay.Height / 2) y *= 2.0f;
-                else y = (y - picDisplay.Height / 2) * 2.0f;
-            }
-            if (Display.CurrentDisplayMode == DisplayMode.PANAFALL && RX2Enabled) y *= 2f; //MW0LGE
-            return (float)(Display.SpectrumGridMax - y * (double)(Display.SpectrumGridMax - Display.SpectrumGridMin) / picDisplay.Height);
+            //if (chkSplitDisplay.Checked || Display.CurrentDisplayMode == DisplayMode.PANAFALL ||
+            //    Display.CurrentDisplayMode == DisplayMode.PANASCOPE)
+            //{
+            //    if (y <= picDisplay.Height / 2) y *= 2.0f;
+            //    else y = (y - picDisplay.Height / 2) * 2.0f;
+            //}
+            //if (Display.CurrentDisplayMode == DisplayMode.PANAFALL && RX2Enabled) y *= 2f; //MW0LGE
+            //return (float)(Display.SpectrumGridMax - y * (double)(Display.SpectrumGridMax - Display.SpectrumGridMin) / picDisplay.Height);
+            return (float)(Display.SpectrumGridMax - y * (double)(Display.SpectrumGridMax - Display.SpectrumGridMin) / Display.RX1DisplayHeight);
         }
 
         private float PixelToRx2Db(float y)
         {
-            if (chkSplitDisplay.Checked || Display.CurrentDisplayMode == DisplayMode.PANAFALL ||
-                Display.CurrentDisplayMode == DisplayMode.PANASCOPE)
+            //if (chkSplitDisplay.Checked || Display.CurrentDisplayMode == DisplayMode.PANAFALL ||
+            //    Display.CurrentDisplayMode == DisplayMode.PANASCOPE)
+            //{
+            //    if (y <= picDisplay.Height / 2) y *= 2.0f;
+            //    else y = (y - picDisplay.Height / 2) * 2.0f;
+            //}
+            //if (Display.CurrentDisplayModeBottom == DisplayMode.PANAFALL && RX2Enabled) y *= 2f; //MW0LGE
+            //return (float)(Display.RX2SpectrumGridMax - y * (double)(Display.RX2SpectrumGridMax - Display.RX2SpectrumGridMin) / picDisplay.Height);   
+
+            if (Display.CurrentDisplayMode == DisplayMode.PANAFALL)
             {
-                if (y <= picDisplay.Height / 2) y *= 2.0f;
-                else y = (y - picDisplay.Height / 2) * 2.0f;
+                // if rx1 is a panafall then we need to offset double rx1 height (height returned is just the panadapter section)
+                y -= Display.RX1DisplayHeight * 2;
             }
-            if (Display.CurrentDisplayModeBottom == DisplayMode.PANAFALL && RX2Enabled) y *= 2f; //MW0LGE
-            return (float)(Display.RX2SpectrumGridMax - y * (double)(Display.RX2SpectrumGridMax - Display.RX2SpectrumGridMin) / picDisplay.Height);
+            else
+            {
+                y -= Display.RX1DisplayHeight;
+            }
+
+            return (float)(Display.RX2SpectrumGridMax - y * (double)(Display.RX2SpectrumGridMax - Display.RX2SpectrumGridMin) / Display.RX2DisplayHeight);
         }
 
         private float WaterfallPixelToTime(float y)
         {
-            if (chkSplitDisplay.Checked || Display.CurrentDisplayMode == DisplayMode.PANAFALL)
+            //if (chkSplitDisplay.Checked || Display.CurrentDisplayMode == DisplayMode.PANAFALL)
+            //{
+            //    if (y <= picDisplay.Height / 2) y *= 2.0f;
+            //    else y = (y - picDisplay.Height / 2) * 2.0f;
+            //}
+            //if (y < 16) return 0f;
+            int h = Display.RX1DisplayHeight;
+            if (rx2_enabled && Display.CurrentDisplayMode == DisplayMode.PANAFALL) h *= 2;
+
+            if (rx2_enabled && y > h)
             {
-                if (y <= picDisplay.Height / 2) y *= 2.0f;
-                else y = (y - picDisplay.Height / 2) * 2.0f;
+                y -= h;
             }
-            if (y < 16) return 0f;
+            else if (Display.CurrentDisplayMode == DisplayMode.PANAFALL)
+            {
+                y -= h;
+            }
+            
             int i;
             for (i = 1; i * display_delay < Display.WaterfallUpdatePeriod; i++)
             {
@@ -34213,7 +34347,6 @@ namespace Thetis
             int pixel_x = 0;
             int pixel_x_swr = 0;
             string output = "";
-            string format = "";
 
             if (meter_data_ready)
             {
@@ -34413,7 +34546,7 @@ namespace Thetis
 
             meter_timer.Stop();
 
-            format = "f0";
+            string format = "f0";
             if (meter_detail) format = "f1";
 
             if (meter_timer.DurationMsec >= meter_dig_delay)
@@ -34502,7 +34635,6 @@ namespace Thetis
             int pixel_x = 0;
             int pixel_x_swr = 0;
             string output = "";
-            string format = "";
 
             if (rx2_meter_data_ready)
             {
@@ -34632,7 +34764,7 @@ namespace Thetis
 
             rx2_meter_timer.Stop();
 
-            format = "f0";
+            string format = "f0";
             if (meter_detail) format = "f1";
 
             if (rx2_meter_timer.DurationMsec >= meter_dig_delay)
@@ -34999,95 +35131,104 @@ namespace Thetis
 
         private void RunDisplay()
         {
-            // MW0LGE use diagnostics timer for now as
-            // System.Windows.Threading.DispatcherTimer
-            // and System.Timers.Timer not that accurate
-            // the aim of this is to delay accurately, so that if possible
-            // we acheive desired fps rate
-            System.Diagnostics.Stopwatch objStopWatch = System.Diagnostics.Stopwatch.StartNew();
+            try 
+            { 
+                // MW0LGE use diagnostics timer for now as
+                // System.Windows.Threading.DispatcherTimer
+                // and System.Timers.Timer not that accurate
+                // the aim of this is to delay accurately, so that if possible
+                // we acheive desired fps rate
+                System.Diagnostics.Stopwatch objStopWatch = System.Diagnostics.Stopwatch.StartNew();
 
-            //uint thread = 0;
-            //			display_running = true;
-            while (true) //(chkPower.Checked)
-            {
-                uint top_thread = 0;
-                uint bottom_thread = 2;
-                int flag;
-
-                bool bLocalMox = mox;                                                            
-
-                objStopWatch.Restart();
-                //objStopWatch2.Start();
-
-                if (bLocalMox)
+                //uint thread = 0;
+                //			display_running = true;
+                while (true) //(chkPower.Checked)
                 {
-                    if (chkVFOATX.Checked || !chkRX2.Checked) top_thread = 1;
-                    else if (chkVFOBTX.Checked && chkRX2.Checked) bottom_thread = 1;
-                }
+                    uint top_thread = 0;
+                    uint bottom_thread = 2;
+                    int flag;
 
-                if ((!Display.DataReady || !Display.WaterfallDataReady) ||
-                    (chkSplitDisplay.Checked && (!Display.DataReadyBottom || !Display.WaterfallDataReadyBottom)))
-                {
+                    bool bLocalMox = mox;
 
-                    if (calibration_running)
+                    objStopWatch.Restart();
+                    //objStopWatch2.Start();
+
+                    if (bLocalMox)
                     {
-                        calibration_mutex.WaitOne();
-                        displaydidit = true;
+                        if (chkVFOATX.Checked || !chkRX2.Checked) top_thread = 1;
+                        else if (chkVFOBTX.Checked && chkRX2.Checked) bottom_thread = 1;
                     }
 
-                    if (!pause_DisplayThread && (!Display.DataReady || !Display.WaterfallDataReady) &&
-                        Display.CurrentDisplayMode != DisplayMode.OFF)
+                    if ((!Display.DataReady || !Display.WaterfallDataReady) ||
+                        (chkSplitDisplay.Checked && (!Display.DataReadyBottom || !Display.WaterfallDataReadyBottom)))
                     {
-                        flag = 0;
-                        switch (Display.CurrentDisplayMode)
+
+                        if (calibration_running)
                         {
-                            case DisplayMode.WATERFALL:
-                            case DisplayMode.PANAFALL:
-                                if (bLocalMox && !display_duplex)
-                                {
-                                    if (chkVFOATX.Checked || !chkRX2.Checked)
+                            calibration_mutex.WaitOne();
+                            displaydidit = true;
+                        }
+
+                        if (!pause_DisplayThread && (!Display.DataReady || !Display.WaterfallDataReady) &&
+                            Display.CurrentDisplayMode != DisplayMode.OFF)
+                        {
+                            flag = 0;
+                            switch (Display.CurrentDisplayMode)
+                            {
+                                case DisplayMode.WATERFALL:
+                                case DisplayMode.PANAFALL:
+                                    if (bLocalMox && !display_duplex)
                                     {
-                                        fixed (float* ptr = &Display.new_display_data[0])
-                                            SpecHPSDRDLL.GetPixels(cmaster.inid(1, 0), 0, ptr, ref flag);
-                                        Display.DataReady = true; //(flag==1);
-                                        fixed (float* ptr = &Display.new_waterfall_data[0])
-                                            SpecHPSDRDLL.GetPixels(cmaster.inid(1, 0), 1, ptr, ref flag);
-                                        Display.WaterfallDataReady = true; //(flag == 1);
+                                        if (chkVFOATX.Checked || !chkRX2.Checked)
+                                        {
+                                            fixed (float* ptr = &Display.new_display_data[0])
+                                                SpecHPSDRDLL.GetPixels(cmaster.inid(1, 0), 0, ptr, ref flag);
+                                            Display.DataReady = true; //(flag==1);
+                                            fixed (float* ptr = &Display.new_waterfall_data[0])
+                                                SpecHPSDRDLL.GetPixels(cmaster.inid(1, 0), 1, ptr, ref flag);
+                                            Display.WaterfallDataReady = true; //(flag == 1);
+                                        }
+                                        else
+                                        {
+                                            fixed (float* ptr = &Display.new_display_data[0])
+                                                // SpecHPSDRDLL.GetPixels(cmaster.inid(1, 0), 0, ptr, ref flag);
+                                                SpecHPSDRDLL.GetPixels(0, 0, ptr, ref flag);
+                                            Display.DataReady = true; //(flag == 1);
+                                            fixed (float* ptr = &Display.new_waterfall_data[0])
+                                                //SpecHPSDRDLL.GetPixels(cmaster.inid(1, 0), 1, ptr, ref flag); 
+                                                SpecHPSDRDLL.GetPixels(0, 1, ptr, ref flag);
+                                            Display.WaterfallDataReady = true; //(flag == 1);
+                                        }
                                     }
-                                    else
+                                    else //rx
                                     {
                                         fixed (float* ptr = &Display.new_display_data[0])
-                                            // SpecHPSDRDLL.GetPixels(cmaster.inid(1, 0), 0, ptr, ref flag);
                                             SpecHPSDRDLL.GetPixels(0, 0, ptr, ref flag);
                                         Display.DataReady = true; //(flag == 1);
                                         fixed (float* ptr = &Display.new_waterfall_data[0])
-                                            //SpecHPSDRDLL.GetPixels(cmaster.inid(1, 0), 1, ptr, ref flag); 
                                             SpecHPSDRDLL.GetPixels(0, 1, ptr, ref flag);
                                         Display.WaterfallDataReady = true; //(flag == 1);
                                     }
-                                }
-                                else //rx
-                                {
-                                    fixed (float* ptr = &Display.new_display_data[0])
-                                        SpecHPSDRDLL.GetPixels(0, 0, ptr, ref flag);
-                                    Display.DataReady = true; //(flag == 1);
-                                    fixed (float* ptr = &Display.new_waterfall_data[0])
-                                        SpecHPSDRDLL.GetPixels(0, 1, ptr, ref flag);
-                                    Display.WaterfallDataReady = true; //(flag == 1);
-                                }
-                                break;
-                            case DisplayMode.SPECTRUM:
-                            case DisplayMode.HISTOGRAM:
-                            case DisplayMode.SPECTRASCOPE:
-                            case DisplayMode.PANADAPTER:
-                            case DisplayMode.PANASCOPE:
-                                if (bLocalMox && !display_duplex)
-                                {
-                                    if (chkVFOATX.Checked || !chkRX2.Checked)
+                                    break;
+                                case DisplayMode.SPECTRUM:
+                                case DisplayMode.HISTOGRAM:
+                                case DisplayMode.SPECTRASCOPE:
+                                case DisplayMode.PANADAPTER:
+                                case DisplayMode.PANASCOPE:
+                                    if (bLocalMox && !display_duplex)
                                     {
-                                        fixed (float* ptr = &Display.new_display_data[0])
-                                            SpecHPSDRDLL.GetPixels(cmaster.inid(1, 0), 0, ptr, ref flag);
-                                        Display.DataReady = true; //(flag == 1);
+                                        if (chkVFOATX.Checked || !chkRX2.Checked)
+                                        {
+                                            fixed (float* ptr = &Display.new_display_data[0])
+                                                SpecHPSDRDLL.GetPixels(cmaster.inid(1, 0), 0, ptr, ref flag);
+                                            Display.DataReady = true; //(flag == 1);
+                                        }
+                                        else
+                                        {
+                                            fixed (float* ptr = &Display.new_display_data[0])
+                                                SpecHPSDRDLL.GetPixels(0, 0, ptr, ref flag);
+                                            Display.DataReady = true; //(flag == 1);
+                                        }
                                     }
                                     else
                                     {
@@ -35095,186 +35236,185 @@ namespace Thetis
                                             SpecHPSDRDLL.GetPixels(0, 0, ptr, ref flag);
                                         Display.DataReady = true; //(flag == 1);
                                     }
-                                }
-                                else
-                                {
+                                    break;
+                                case DisplayMode.SCOPE:
+                                case DisplayMode.SCOPE2:
                                     fixed (float* ptr = &Display.new_display_data[0])
-                                        SpecHPSDRDLL.GetPixels(0, 0, ptr, ref flag);
-                                    Display.DataReady = true; //(flag == 1);
-                                }
-                                break;
-                            case DisplayMode.SCOPE:
-                            case DisplayMode.SCOPE2:
-                                fixed (float* ptr = &Display.new_display_data[0])
-                                //DttSP.GetScope(top_thread, ptr, (int)(scope_time * 48));
-                                {
-                                    if (top_thread != 1)
-                                        WDSP.RXAGetaSipF(WDSP.id(top_thread, 0), ptr, (int)(scope_time * 48));
-                                    else
-                                        WDSP.TXAGetaSipF(WDSP.id(top_thread, 0), ptr, (int)(scope_time * 48));
-                                }
-                                Display.DataReady = true;
-                                break;
-                            case DisplayMode.PHASE:
-                                fixed (float* ptr = &Display.new_display_data[0])
-                                //DttSP.GetPhase(top_thread, ptr, Display.PhaseNumPts);
-                                {
-                                    if (top_thread != 1)
-                                        WDSP.RXAGetaSipF1(WDSP.id(top_thread, 0), ptr, Display.PhaseNumPts);
-                                    else
-                                        WDSP.TXAGetaSipF1(WDSP.id(top_thread, 0), ptr, Display.PhaseNumPts);
-                                }
-                                Display.DataReady = true;
-                                break;
-                            case DisplayMode.PHASE2:
-                                if (Audio.phase_buf_l != null && Audio.phase_buf_r != null) // MW0LGE would be null if audio not running (ie not connected?)
-                                {
-                                    //Audio.phase_mutex.WaitOne();
-                                    for (int i = 0; i < Display.PhaseNumPts; i++)
+                                    //DttSP.GetScope(top_thread, ptr, (int)(scope_time * 48));
                                     {
-                                        Display.new_display_data[i * 2] = Audio.phase_buf_l[i];
-                                        Display.new_display_data[i * 2 + 1] = Audio.phase_buf_r[i];
+                                        if (top_thread != 1)
+                                            WDSP.RXAGetaSipF(WDSP.id(top_thread, 0), ptr, (int)(scope_time * 48));
+                                        else
+                                            WDSP.TXAGetaSipF(WDSP.id(top_thread, 0), ptr, (int)(scope_time * 48));
                                     }
                                     Display.DataReady = true;
-                                    //Audio.phase_mutex.ReleaseMutex();
-                                }
-                                break;
-                        }
-                    }
-
-                    if (!pause_DisplayThread && chkSplitDisplay.Checked &&
-                        (!Display.DataReadyBottom || !Display.WaterfallDataReadyBottom) &&
-                        Display.CurrentDisplayModeBottom != DisplayMode.OFF)
-                    {
-                        flag = 0;
-                        switch (Display.CurrentDisplayModeBottom)
-                        {
-                            case DisplayMode.SPECTRUM:
-                            case DisplayMode.HISTOGRAM:
-                                break;
-                            case DisplayMode.WATERFALL:
-                                if (bLocalMox && VFOBTX)
-                                {
-                                    fixed (float* ptr = &Display.new_waterfall_data_bottom[0])
-                                        SpecHPSDRDLL.GetPixels(cmaster.inid(1, 0), 1, ptr, ref flag);
-                                }
-                                else
-                                {
-                                    fixed (float* ptr = &Display.new_waterfall_data_bottom[0])
-                                        SpecHPSDRDLL.GetPixels(1, 1, ptr, ref flag);
-                                }
-                                Display.WaterfallDataReadyBottom = true; //(flag == 1);
-                                break;
-                            case DisplayMode.PANADAPTER:
-                                if (bLocalMox && VFOBTX)
-                                {
-
-                                    fixed (float* ptr = &Display.new_display_data_bottom[0])
-                                        SpecHPSDRDLL.GetPixels(cmaster.inid(1, 0), 0, ptr, ref flag);
-                                }
-                                else
-                                {
-                                    fixed (float* ptr = &Display.new_display_data_bottom[0])
-                                        SpecHPSDRDLL.GetPixels(1, 0, ptr, ref flag);
-                                }
-                                Display.DataReadyBottom = true; //(flag == 1);
-                                break;
-                            case DisplayMode.PANAFALL:  // MW0LGE
-                                if (bLocalMox && VFOBTX)
-                                {
-                                    fixed (float* ptr = &Display.new_display_data_bottom[0])
-                                        SpecHPSDRDLL.GetPixels(cmaster.inid(1, 0), 0, ptr, ref flag);
-                                    Display.DataReadyBottom = true; //(flag == 1);
-                                    fixed (float* ptr = &Display.new_waterfall_data_bottom[0])
-                                        SpecHPSDRDLL.GetPixels(cmaster.inid(1, 0), 1, ptr, ref flag);
-                                    Display.WaterfallDataReadyBottom = true; //(flag == 1);
-                                }
-                                else
-                                {
-                                    fixed (float* ptr = &Display.new_display_data_bottom[0])
-                                        SpecHPSDRDLL.GetPixels(1, 0, ptr, ref flag);
-                                    Display.DataReadyBottom = true; //(flag == 1);
-                                    fixed (float* ptr = &Display.new_waterfall_data_bottom[0])
-                                        SpecHPSDRDLL.GetPixels(1, 1, ptr, ref flag);
-                                    Display.WaterfallDataReadyBottom = true; //(flag == 1);
-                                }
-                                break;
-                            case DisplayMode.SCOPE:
-                            case DisplayMode.SCOPE2:
-                                fixed (float* ptr = &Display.new_display_data_bottom[0])
-                                //DttSP.GetScope(bottom_thread, ptr, (int)(scope_time * 48));
-                                {
-                                    if (bottom_thread != 1)
-                                        WDSP.RXAGetaSipF(WDSP.id(bottom_thread, 0), ptr, (int)(scope_time * 48));
-                                    else
-                                        WDSP.TXAGetaSipF(WDSP.id(bottom_thread, 0), ptr, (int)(scope_time * 48));
-                                }
-                                Display.DataReadyBottom = true;
-                                break;
-                            case DisplayMode.PHASE:
-                                fixed (float* ptr = &Display.new_display_data_bottom[0])
-                                //DttSP.GetPhase(bottom_thread, ptr, Display.PhaseNumPts);
-                                {
-                                    if (bottom_thread != 1)
-                                        WDSP.RXAGetaSipF1(WDSP.id(bottom_thread, 0), ptr, Display.PhaseNumPts);
-                                    else
-                                        WDSP.TXAGetaSipF1(WDSP.id(bottom_thread, 0), ptr, Display.PhaseNumPts);
-                                }
-                                Display.DataReadyBottom = true;
-                                break;
-                            case DisplayMode.PHASE2:
-                                if (Audio.phase_buf_l != null && Audio.phase_buf_r != null) // MW0LGE would be null if audio not running (ie not connected?)
-                                {
-                                    //Audio.phase_mutex.WaitOne();
-                                    for (int i = 0; i < Display.PhaseNumPts; i++)
+                                    break;
+                                case DisplayMode.PHASE:
+                                    fixed (float* ptr = &Display.new_display_data[0])
+                                    //DttSP.GetPhase(top_thread, ptr, Display.PhaseNumPts);
                                     {
-                                        Display.new_display_data_bottom[i * 2] = Audio.phase_buf_l[i];
-                                        Display.new_display_data_bottom[i * 2 + 1] = Audio.phase_buf_r[i];
+                                        if (top_thread != 1)
+                                            WDSP.RXAGetaSipF1(WDSP.id(top_thread, 0), ptr, Display.PhaseNumPts);
+                                        else
+                                            WDSP.TXAGetaSipF1(WDSP.id(top_thread, 0), ptr, Display.PhaseNumPts);
                                     }
-                                    //Audio.phase_mutex.ReleaseMutex();
+                                    Display.DataReady = true;
+                                    break;
+                                case DisplayMode.PHASE2:
+                                    if (Audio.phase_buf_l != null && Audio.phase_buf_r != null) // MW0LGE would be null if audio not running (ie not connected?)
+                                    {
+                                        //Audio.phase_mutex.WaitOne();
+                                        for (int i = 0; i < Display.PhaseNumPts; i++)
+                                        {
+                                            Display.new_display_data[i * 2] = Audio.phase_buf_l[i];
+                                            Display.new_display_data[i * 2 + 1] = Audio.phase_buf_r[i];
+                                        }
+                                        Display.DataReady = true;
+                                        //Audio.phase_mutex.ReleaseMutex();
+                                    }
+                                    break;
+                            }
+                        }
+
+                        if (!pause_DisplayThread && chkSplitDisplay.Checked &&
+                            (!Display.DataReadyBottom || !Display.WaterfallDataReadyBottom) &&
+                            Display.CurrentDisplayModeBottom != DisplayMode.OFF)
+                        {
+                            flag = 0;
+                            switch (Display.CurrentDisplayModeBottom)
+                            {
+                                case DisplayMode.SPECTRUM:
+                                case DisplayMode.HISTOGRAM:
+                                    break;
+                                case DisplayMode.WATERFALL:
+                                    if (bLocalMox && VFOBTX)
+                                    {
+                                        fixed (float* ptr = &Display.new_waterfall_data_bottom[0])
+                                            SpecHPSDRDLL.GetPixels(cmaster.inid(1, 0), 1, ptr, ref flag);
+                                    }
+                                    else
+                                    {
+                                        fixed (float* ptr = &Display.new_waterfall_data_bottom[0])
+                                            SpecHPSDRDLL.GetPixels(1, 1, ptr, ref flag);
+                                    }
+                                    Display.WaterfallDataReadyBottom = true; //(flag == 1);
+                                    break;
+                                case DisplayMode.PANADAPTER:
+                                    if (bLocalMox && VFOBTX)
+                                    {
+
+                                        fixed (float* ptr = &Display.new_display_data_bottom[0])
+                                            SpecHPSDRDLL.GetPixels(cmaster.inid(1, 0), 0, ptr, ref flag);
+                                    }
+                                    else
+                                    {
+                                        fixed (float* ptr = &Display.new_display_data_bottom[0])
+                                            SpecHPSDRDLL.GetPixels(1, 0, ptr, ref flag);
+                                    }
+                                    Display.DataReadyBottom = true; //(flag == 1);
+                                    break;
+                                case DisplayMode.PANAFALL:  // MW0LGE
+                                    if (bLocalMox && VFOBTX)
+                                    {
+                                        fixed (float* ptr = &Display.new_display_data_bottom[0])
+                                            SpecHPSDRDLL.GetPixels(cmaster.inid(1, 0), 0, ptr, ref flag);
+                                        Display.DataReadyBottom = true; //(flag == 1);
+                                        fixed (float* ptr = &Display.new_waterfall_data_bottom[0])
+                                            SpecHPSDRDLL.GetPixels(cmaster.inid(1, 0), 1, ptr, ref flag);
+                                        Display.WaterfallDataReadyBottom = true; //(flag == 1);
+                                    }
+                                    else
+                                    {
+                                        fixed (float* ptr = &Display.new_display_data_bottom[0])
+                                            SpecHPSDRDLL.GetPixels(1, 0, ptr, ref flag);
+                                        Display.DataReadyBottom = true; //(flag == 1);
+                                        fixed (float* ptr = &Display.new_waterfall_data_bottom[0])
+                                            SpecHPSDRDLL.GetPixels(1, 1, ptr, ref flag);
+                                        Display.WaterfallDataReadyBottom = true; //(flag == 1);
+                                    }
+                                    break;
+                                case DisplayMode.SCOPE:
+                                case DisplayMode.SCOPE2:
+                                    fixed (float* ptr = &Display.new_display_data_bottom[0])
+                                    //DttSP.GetScope(bottom_thread, ptr, (int)(scope_time * 48));
+                                    {
+                                        if (bottom_thread != 1)
+                                            WDSP.RXAGetaSipF(WDSP.id(bottom_thread, 0), ptr, (int)(scope_time * 48));
+                                        else
+                                            WDSP.TXAGetaSipF(WDSP.id(bottom_thread, 0), ptr, (int)(scope_time * 48));
+                                    }
                                     Display.DataReadyBottom = true;
-                                }
+                                    break;
+                                case DisplayMode.PHASE:
+                                    fixed (float* ptr = &Display.new_display_data_bottom[0])
+                                    //DttSP.GetPhase(bottom_thread, ptr, Display.PhaseNumPts);
+                                    {
+                                        if (bottom_thread != 1)
+                                            WDSP.RXAGetaSipF1(WDSP.id(bottom_thread, 0), ptr, Display.PhaseNumPts);
+                                        else
+                                            WDSP.TXAGetaSipF1(WDSP.id(bottom_thread, 0), ptr, Display.PhaseNumPts);
+                                    }
+                                    Display.DataReadyBottom = true;
+                                    break;
+                                case DisplayMode.PHASE2:
+                                    if (Audio.phase_buf_l != null && Audio.phase_buf_r != null) // MW0LGE would be null if audio not running (ie not connected?)
+                                    {
+                                        //Audio.phase_mutex.WaitOne();
+                                        for (int i = 0; i < Display.PhaseNumPts; i++)
+                                        {
+                                            Display.new_display_data_bottom[i * 2] = Audio.phase_buf_l[i];
+                                            Display.new_display_data_bottom[i * 2 + 1] = Audio.phase_buf_r[i];
+                                        }
+                                        //Audio.phase_mutex.ReleaseMutex();
+                                        Display.DataReadyBottom = true;
+                                    }
+                                    break;
+                            }
+                        }
+                        if (displaydidit)
+                        {
+                            displaydidit = false;
+                            calibration_mutex.ReleaseMutex();
+                        }
+                    }
+
+                    // MW0LGE - note, if both displays are off, then the refresh to hide the final one
+                    // will not happen. This is now forced in combo display mode to force a refresh
+                    if (!pause_DisplayThread && ((Display.CurrentDisplayMode != DisplayMode.OFF) ||
+                        (RX2Enabled && Display.CurrentDisplayModeBottom != DisplayMode.OFF)))
+                    {
+                        switch (current_display_engine)
+                        {
+                            case DisplayEngine.GDI_PLUS:
+                                picDisplay.Refresh();
+                                break;
+                            case DisplayEngine.DIRECT_X:
+                                Display.RenderDX2D();
                                 break;
                         }
                     }
-                    if (displaydidit)
+
+                    //MW0LGE delay changed to take into consideration how long all the above took
+                    objStopWatch.Stop();
+
+                    int dly = display_delay - (int)objStopWatch.ElapsedMilliseconds;
+                    if (dly < 1)
                     {
-                        displaydidit = false;
-                        calibration_mutex.ReleaseMutex();
+                        Display.FrameRateIssue = true;
+                        dly = 1;
                     }
-                }
-
-                // MW0LGE - note, if both displays are off, then the refresh to hide the final one
-                // will not happen. This is now forced in combo display mode to force a refresh
-                if (!pause_DisplayThread && ((Display.CurrentDisplayMode != DisplayMode.OFF) ||
-                    (RX2Enabled && Display.CurrentDisplayModeBottom != DisplayMode.OFF)))
-                {
-                    switch (current_display_engine)
+                    else
                     {
-                        case DisplayEngine.GDI_PLUS:
-                            picDisplay.Refresh();
-                            break;
-                        case DisplayEngine.DIRECT_X:
-                            Display.RenderDX2D();
-                            break;
+                        Display.FrameRateIssue = false;
                     }
-                }
 
-                //MW0LGE delay changed to take into consideration how long all the above took
-                objStopWatch.Stop();
-
-                int dly = display_delay - (int)objStopWatch.ElapsedMilliseconds;
-                if (dly < 1)
-                {
-                    Display.FrameRateIssue = true;
-                    dly = 1;
+                    Thread.Sleep(dly);
                 }
-                else
-                {
-                    Display.FrameRateIssue = false;
-                }
-
-                Thread.Sleep(dly);                
+            }
+            catch(Exception e)
+            {
+                //MessageBox.Show("Error in RunDisplay.\n" + e.Message);
+                Common.LogException(e);
             }
         }
 
@@ -37057,14 +37197,38 @@ namespace Thetis
 
         private void timer_cpu_meter_Tick(object sender, System.EventArgs e)
         {
+            //if ((anan7000dpresent || anan8000dpresent) && ANAN8000DLEDisplayVoltsAmps)
+            //{
+            //    txtCPUMeter.Text = String.Format("{0:#0.0}V {1:#0.0}A", MKIIPAVolts, MKIIPAAmps);
+            //}
+            //else
+            //{
+            //    if (cpu_usage != null)
+            //        txtCPUMeter.Text = String.Format("CPU%  {0:##0}", cpu_usage.NextValue());
+            //}
+
             if ((anan7000dpresent || anan8000dpresent) && ANAN8000DLEDisplayVoltsAmps)
             {
-                txtCPUMeter.Text = String.Format("{0:#0.0}V {1:#0.0}A", MKIIPAVolts, MKIIPAAmps);
+                if (!toolStripStatusLabel_Volts.Visible) toolStripStatusLabel_Volts.Visible = true;
+                if (!toolStripStatusLabel_Amps.Visible) toolStripStatusLabel_Amps.Visible = true;
+
+                toolStripStatusLabel_Volts.Text = String.Format("{0:#0.0}V", MKIIPAVolts);
+                toolStripStatusLabel_Amps.Text = String.Format("{0:#0.0}A", MKIIPAAmps);
             }
             else
             {
-                if (cpu_usage != null)
-                    txtCPUMeter.Text = String.Format("CPU%  {0:##0}", cpu_usage.NextValue());
+                if (toolStripStatusLabel_Volts.Visible) toolStripStatusLabel_Volts.Visible = false;
+                if (toolStripStatusLabel_Amps.Visible) toolStripStatusLabel_Amps.Visible = false;
+            }
+
+            if (cpu_usage != null)
+            {
+                if (!toolStripStatusLabel_CPUperc.Visible) toolStripStatusLabel_CPUperc.Visible = true;
+                toolStripStatusLabel_CPUperc.Text = String.Format("{0:##0}%", cpu_usage.NextValue());
+            }
+            else
+            {
+                if (toolStripStatusLabel_CPUperc.Visible) toolStripStatusLabel_CPUperc.Visible = false;
             }
         }
 
@@ -37073,48 +37237,53 @@ namespace Thetis
             UpdatePeakText();
         }
 
-        private int last_sec;		// for time of day clock
-        private DateTime last_date;	// for date
+        //private int last_sec;		// for time of day clock
+        //private DateTime last_date;	// for date
         private void timer_clock_Tick(object sender, System.EventArgs e)
         {
+            //switch (current_datetime_mode)
+            //{
+            //    case DateTimeMode.LOCAL:
+            //        DateTime date = DateTime.Now.Date;
+            //        if (date != last_date || txtDate.Text == "")
+            //        {
+            //            last_date = date;
+            //            txtDate.Text = DateTime.Now.ToShortDateString();
+            //        }
 
-            switch (current_datetime_mode)
-            {
-                case DateTimeMode.LOCAL:
-                    DateTime date = DateTime.Now.Date;
-                    if (date != last_date || txtDate.Text == "")
-                    {
-                        last_date = date;
-                        txtDate.Text = DateTime.Now.ToShortDateString();
-                    }
+            //        int sec = DateTime.Now.Second;
+            //        if (sec != last_sec)
+            //        {
+            //            last_sec = sec;
+            //            txtTime.Text = "LOC " + DateTime.Now.ToString("HH:mm:ss");
+            //        }
+            //        break;
+            //    case DateTimeMode.UTC:
+            //        date = DateTime.UtcNow.Date;
+            //        if (date != last_date || txtDate.Text == "")
+            //        {
+            //            last_date = date;
+            //            txtDate.Text = DateTime.UtcNow.ToShortDateString();
+            //        }
 
-                    int sec = DateTime.Now.Second;
-                    if (sec != last_sec)
-                    {
-                        last_sec = sec;
-                        txtTime.Text = "LOC " + DateTime.Now.ToString("HH:mm:ss");
-                    }
-                    break;
-                case DateTimeMode.UTC:
-                    date = DateTime.UtcNow.Date;
-                    if (date != last_date || txtDate.Text == "")
-                    {
-                        last_date = date;
-                        txtDate.Text = DateTime.UtcNow.ToShortDateString();
-                    }
+            //        sec = DateTime.UtcNow.Second;
+            //        if (sec != last_sec)
+            //        {
+            //            last_sec = sec;
+            //            txtTime.Text = "UTC " + DateTime.UtcNow.ToString("HH:mm:ss");
+            //        }
+            //        break;
+            //    case DateTimeMode.OFF:
+            //        txtDate.Text = "";
+            //        txtTime.Text = "";
+            //        break;
+            //}
 
-                    sec = DateTime.UtcNow.Second;
-                    if (sec != last_sec)
-                    {
-                        last_sec = sec;
-                        txtTime.Text = "UTC " + DateTime.UtcNow.ToString("HH:mm:ss");
-                    }
-                    break;
-                case DateTimeMode.OFF:
-                    txtDate.Text = "";
-                    txtTime.Text = "";
-                    break;
-            }
+            DateTime now = DateTime.Now;
+            DateTime UTCnow = DateTime.UtcNow;
+            toolStripStatusLabel_UTCTime.Text = UTCnow.ToString("HH:mm:ss") + " utc";
+            toolStripStatusLabel_LocalTime.Text = now.ToString("HH:mm:ss") + " loc";
+            toolStripStatusLabel_Date.Text = now.ToString("ddd d MMM yyyy");//DateTime.Now.ToLongDateString();
         }
 
         private void DelayedDisplayReset()
@@ -37160,7 +37329,7 @@ namespace Thetis
             //----
 
             if (!m_bShiftKeyDown) DisplaySpot = true;
-            
+
             ToggleFocusMasterTimer();
             if (callsignfocus == 1) return; // ke9ns add to focus on waterfall ID text
 
@@ -38933,12 +39102,12 @@ namespace Thetis
                 //}
                 if (multimeter_thread != null)
                 {
-                    if (!multimeter_thread.Join(500))
+                    if (!multimeter_thread.Join(/*500*/Math.Max(meter_delay, meter_dig_delay) + 50)) //MW0LGE change to meter delay
                         multimeter_thread.Abort();
                 }
                 if (rx2_meter_thread != null)
                 {
-                    if (!rx2_meter_thread.Join(500))
+                    if (!rx2_meter_thread.Join(/*500*/Math.Max(meter_delay, meter_dig_delay) + 50)) //MW0LGE change to meter delay
                         rx2_meter_thread.Abort();
                 }
                 if (rx2_sql_update_thread != null)
@@ -38988,7 +39157,7 @@ namespace Thetis
                 }
                 if (display_volts_amps_thead != null)
                 {
-                    if (!display_volts_amps_thead.Join(500))
+                    if (!display_volts_amps_thead.Join(650)) // there is a sleep 600 in there MW0LGE
                         display_volts_amps_thead.Abort();
                 }
 
@@ -39115,22 +39284,41 @@ namespace Thetis
             }
         }
 
-        static private void resizeWaterfallBitmaps(bool bIsPanafall = false)
+        private void resizeWaterfallBitmaps(/*bool bIsPanafall*/)
         {
-            if (!bIsPanafall)
-            {
-                if (Display.RX2Enabled)
-                    Display.ResetWaterfallBmp(2);
-                else
-                    Display.ResetWaterfallBmp(1);
-            }
-            else
-            {
-                if (Display.RX2Enabled)
-                    Display.ResetWaterfallBmp(4);
-                else
-                    Display.ResetWaterfallBmp(2);
-            }
+            Display.ResetWaterfallBmp(/*0*/);
+            //if (!bIsPanafall)
+            //{
+            //    if (Display.RX2Enabled)
+            //        Display.ResetWaterfallBmp(2);
+            //    else
+            //        Display.ResetWaterfallBmp(1);
+            //}
+            //else
+            //{
+            //    if (Display.RX2Enabled)
+            //        Display.ResetWaterfallBmp(4);
+            //    else
+            //        Display.ResetWaterfallBmp(2);
+            //}
+        }
+        private void resizeWaterfallBitmaps2(/*bool bIsPanafall*/)
+        {
+            Display.ResetWaterfallBmp2(/*0*/);
+            //if (!bIsPanafall)
+            //{
+            //    if (Display.RX2Enabled)
+            //        Display.ResetWaterfallBmp(2);
+            //    else
+            //        Display.ResetWaterfallBmp(1);
+            //}
+            //else
+            //{
+            //    if (Display.RX2Enabled)
+            //        Display.ResetWaterfallBmp(4);
+            //    else
+            //        Display.ResetWaterfallBmp(2);
+            //}
         }
 
         public void comboDisplayMode_SelectedIndexChanged(object sender, System.EventArgs e)
@@ -39260,7 +39448,7 @@ namespace Thetis
                     break;
                 case DisplayMode.WATERFALL:
                     //MW0LGE
-                    resizeWaterfallBitmaps();
+                    resizeWaterfallBitmaps(/*false*/);
 
                     chkDisplayAVG.Enabled = true;
                     if (chkDisplayAVG.Checked)
@@ -39336,7 +39524,7 @@ namespace Thetis
                     break;
                 case DisplayMode.PANAFALL:
                     //MW0LGE
-                    resizeWaterfallBitmaps(true);
+                    resizeWaterfallBitmaps(/*true*/);
 
                     chkDisplayAVG.Enabled = true;
                     if (chkDisplayAVG.Checked)
@@ -39937,7 +40125,6 @@ namespace Thetis
             if (sliderForm != null)
                 sliderForm.MasterAFGain = ptbAF.Value;
 
-
             //if (ptbAF.Focused) btnHidden.Focus();
         }
 
@@ -40212,7 +40399,7 @@ namespace Thetis
         private void chkMON_CheckedChanged(object sender, System.EventArgs e)
         {
             Audio.MON = chkMON.Checked;
-
+            
             if (chkMON.Checked)
                 chkMON.BackColor = button_selected_color;
             else
@@ -40308,7 +40495,8 @@ namespace Thetis
                     (RX1DSPMode == DSPMode.CWL || RX1DSPMode == DSPMode.CWU) &&
                      !chkTUN.Checked &&
                      current_ptt_mode != PTTMode.SPACE &&
-                    current_ptt_mode != PTTMode.CAT)
+                    current_ptt_mode != PTTMode.CAT &&
+                    current_ptt_mode != PTTMode.CW) // W5WC from PowerSDR
                     NetworkIO.SetPttOut(0);
                 else NetworkIO.SetPttOut(1);
                 if (serialPTT != null) serialPTT.setDTR(true);
@@ -41710,12 +41898,12 @@ namespace Thetis
             udXIT_ValueChanged(sender, e);
         }
 
-        private void DateTime_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e)
-        {
-            if (current_datetime_mode + 1 == DateTimeMode.LAST)
-                CurrentDateTimeMode = DateTimeMode.OFF;
-            else CurrentDateTimeMode = current_datetime_mode + 1;
-        }
+        //private void DateTime_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e)
+        //{
+        //    if (current_datetime_mode + 1 == DateTimeMode.LAST)
+        //        CurrentDateTimeMode = DateTimeMode.OFF;
+        //    else CurrentDateTimeMode = current_datetime_mode + 1;
+        //}
 
         private void chkSR_CheckedChanged(object sender, System.EventArgs e)
         {
@@ -44282,7 +44470,7 @@ namespace Thetis
                 if (!rx2_enabled)
                 {
                     // top half is available only
-                    nMaxHeightRX1 = picDisplay.Height / 2;
+                    nMaxHeightRX1 = Display.PanafallSplitBarPos;//picDisplay.Height / 2;
                 }
                 else
                 {
@@ -44582,7 +44770,7 @@ namespace Thetis
 
                 bool bHighlightNumberScaleRX1 = false;
                 bool bHighlightNumberScaleRX2 = false;
-                if (bOverRX1)
+                if (bOverRX1 && !bDraggingAFilter)
                 {
                     switch (Display.CurrentDisplayMode)
                     {
@@ -44593,7 +44781,7 @@ namespace Thetis
                         case DisplayMode.PANASCOPE:
                         case DisplayMode.SPECTRASCOPE:
                             // check if we are over scale on left
-                            if (e.X > display_grid_x && e.X < display_grid_w)
+                            if (e.X > RX1display_grid_x && e.X < RX1display_grid_w)
                             {
                                 if (gridminmaxadjust || gridmaxadjust) Cursor = grabbing;
                                 else Cursor = grab;
@@ -44604,7 +44792,7 @@ namespace Thetis
                     }
                 }
 
-                if (rx2_enabled && bOverRX2)
+                if (rx2_enabled && bOverRX2 && !bDraggingAFilter)
                 {
                     switch (Display.CurrentDisplayModeBottom)
                     {
@@ -44615,7 +44803,7 @@ namespace Thetis
                         case DisplayMode.PANASCOPE:
                         case DisplayMode.SPECTRASCOPE:
                             // check if we are over scale on left
-                            if (e.X > display_grid_x && e.X < display_grid_w)
+                            if (e.X > RX2display_grid_x && e.X < RX2display_grid_w)
                             {
                                 if (gridminmaxadjust || gridmaxadjust) Cursor = grabbing;
                                 else Cursor = grab;
@@ -44626,7 +44814,7 @@ namespace Thetis
                     }
                 }
                 Display.HighlightNumberScaleRX1 = bHighlightNumberScaleRX1; //MW0LGE
-                Display.HighlightNumberScaleRX2 = bHighlightNumberScaleRX2; 
+                Display.HighlightNumberScaleRX2 = bHighlightNumberScaleRX2;
 
                 //switch (Display.CurrentDisplayMode)
                 //{
@@ -44679,6 +44867,21 @@ namespace Thetis
                 //            break;
                 //    }
                 //}
+
+                //MIDDLE OF PANAFALL MOVEUPDOWN MW0LGE
+                if (!rx2_enabled && Display.CurrentDisplayMode==DisplayMode.PANAFALL)
+                {
+                    if (e.Y >= Display.PanafallSplitBarPos && e.Y < Display.PanafallSplitBarPos + 20) Cursor = Cursors.SizeNS;
+
+                    if (m_bDraggingPanafallSplit)
+                    {
+                        float f = (float)e.Y / (float)picDisplay.Height;
+                        f = Math.Max(0.1f, f);
+                        f = Math.Min(0.9f, f);
+                        Display.PanafallSplitBarPerc = f;
+                    }
+                }
+                //END SPLITTER DRAG
 
                 if (rx1_grid_adjust || rx2_grid_adjust)
                 {
@@ -45434,7 +45637,7 @@ namespace Thetis
                         switch (Display.CurrentDisplayMode)
                         {
                             case DisplayMode.PANAFALL:
-                                if (e.Y < picDisplay.Height / 2)
+                                if (e.Y < Display.PanafallSplitBarPos/*picDisplay.Height / 2*/)
                                 {
                                     y = PixelToDb(e.Y);
                                     txtDisplayCursorPower.Text = y.ToString("f1") + "dBm";
@@ -45795,6 +45998,7 @@ namespace Thetis
         private void picDisplay_MouseLeave(object sender, System.EventArgs e)
         {
             if(!m_frmNotchPopup.Visible) SelectedNotch = null; // clear the selected notch (if there was one)
+            m_bDraggingPanafallSplit = false;
 
             Display.HighlightNumberScaleRX1 = false;
             Display.HighlightNumberScaleRX2 = false;
@@ -45983,6 +46187,13 @@ namespace Thetis
                     }
                     //END NOTCH
 
+                    //MIDDLE OF PANAFALL MOVEUPDOWN MW0LGE
+                    if (!rx2_enabled && Display.CurrentDisplayMode == DisplayMode.PANAFALL)
+                    {
+                        m_bDraggingPanafallSplit = (e.Y >= Display.PanafallSplitBarPos && e.Y < Display.PanafallSplitBarPos + 20);
+                        if(m_bDraggingPanafallSplit) return;
+                    }
+                    //END SPLITTER DRAG
 
                     // if (!mox)
                     // {
@@ -46531,6 +46742,17 @@ namespace Thetis
                     // if we have a notch highlighted, then all other right click is ignored
                     if (SelectedNotch != null) return;
 
+                    // right click in the middle splitter bar will recentre it
+                    if (!rx2_enabled && Display.CurrentDisplayMode == DisplayMode.PANAFALL)
+                    {
+                        if (e.Y >= Display.PanafallSplitBarPos && e.Y < Display.PanafallSplitBarPos + 20) 
+                        {
+                            Display.PanafallSplitBarPerc = 0.5f;
+                            Display.ResetWaterfallBmp();
+                            return;
+                        }
+                    }
+
                     double cfreq;
 
                     if (rx2_enabled && e.Y > picDisplay.Height / 2)
@@ -46773,6 +46995,8 @@ namespace Thetis
         public static int DX_X = 0;               //x cursor pos inside picdisplay 
         public static int DX_Y = 0;               //y  cursor pos inside picdisplay
 
+        private bool m_bDraggingPanafallSplit = false;
+
         private void picDisplay_MouseUp(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
@@ -46860,6 +47084,12 @@ namespace Thetis
                     double tmp = SelectedNotch.FWidth;
                     changeNotchBW(SelectedNotch, tmp);
                 }
+
+                if (m_bDraggingPanafallSplit)
+                {
+                    m_bDraggingPanafallSplit = false;
+                    Display.ResetWaterfallBmp();
+                }
             }
 
             if (e.Button == MouseButtons.Right)
@@ -46929,8 +47159,8 @@ namespace Thetis
             {
                 case (DisplayEngine.GDI_PLUS):
                     {
-                        Thread.Sleep(100);
-                        Display.Init();
+                        Thread.Sleep(1);
+                        //Display.Init();//MW0LGE now done in Target above
 
                         comboDisplayMode_SelectedIndexChanged(this, EventArgs.Empty); // MW0LGE - this needs work TODO CHECK
 
@@ -46945,8 +47175,8 @@ namespace Thetis
                     break;
                 case DisplayEngine.DIRECT_X:
                     {
-                        Thread.Sleep(100);
-                        Display.Init();
+                        Thread.Sleep(1);
+                        //Display.Init();//MW0LGE now done in Target above
 
                         comboDisplayMode_SelectedIndexChanged(this, EventArgs.Empty); // MW0LGE - this needs work TODO CHECK
 
@@ -51069,7 +51299,7 @@ namespace Thetis
 
         private void comboDisplayModeBottom_SelectedIndexChanged(object sender, System.EventArgs e)
         {
-            switch (comboDisplayModeBottom.Text)
+            /*switch (comboDisplayModeBottom.Text)
             {
                 case "Spectrum":
                     Display.CurrentDisplayModeBottom = DisplayMode.SPECTRUM;
@@ -51109,7 +51339,7 @@ namespace Thetis
                     Display.CurrentDisplayModeBottom = DisplayMode.OFF;
                     break;
             }
-            UpdateRX2DisplayOffsets();
+            UpdateRX2DisplayOffsets();*/
         }
 
         private void ckQuickPlay_CheckedChanged(object sender, System.EventArgs e)
@@ -51158,7 +51388,6 @@ namespace Thetis
             // has resized the image, (if the video is set for "120 dpi" in lieu of the
             // normal 96 dpi).  These will be used as the "basis" for all new size calcs.
 
-
             if ((h_delta == 0) && (v_delta == 0) && (previous_delta == 0))
             {
                 // do nothing - this only occurs for my first call to Resize with both deltas zero during init
@@ -51168,20 +51397,13 @@ namespace Thetis
             }
             else
             {
-                //this.Size = new Size (console_basis_size.Width + h_delta,console_basis_size.Height + v_delta);
-                //this.Width = console_basis_size.Width + h_delta;
-                //this.Height = console_basis_size.Height + v_delta;
                 panelFilter.Location = new Point(gr_filter_basis_location.X + h_delta, gr_filter_basis_location.Y + v_delta);
-
-                //grpMultimeter.Location = new Point(gr_Multimeter_basis_location.X + h_delta, gr_Multimeter_basis_location.Y);  // MW0LGE commented out 
 
                 panelBandHF.Location = new Point(gr_BandHF_basis_location.X + h_delta, gr_BandHF_basis_location.Y + (v_delta / 4));
                 panelBandGEN.Location = new Point(gr_BandGEN_basis_location.X + h_delta, gr_BandGEN_basis_location.Y + (v_delta / 4));
                 panelBandVHF.Location = new Point(gr_BandVHF_basis_location.X + h_delta, gr_BandVHF_basis_location.Y + (v_delta / 4));
+
                 panelMode.Location = new Point(gr_Mode_basis_location.X + h_delta, gr_Mode_basis_location.Y + (v_delta / 2));
-                // MW0LGE down below as well !!??? panelRX2Mode.Location = new Point(gr_RX2Mode_basis_location.X + h_delta, gr_RX2Mode_basis_location.Y + (v_delta / 2));
-                //grpVFOB.Location = new Point(gr_VFOB_basis_location.X+h_delta-(h_delta/4),gr_VFOB_basis_location.Y);
-                //grpVFOA.Location = new Point(gr_VFOA_basis_location.X+(h_delta/4),gr_VFOA_basis_location.Y);
                 panelModeSpecificPhone.Location = new Point(gr_ModePhone_basis_location.X + h_delta - (h_delta / 4), gr_ModePhone_basis_location.Y + v_delta);
                 panelModeSpecificCW.Location = new Point(gr_ModeCW_basis_location.X + h_delta - (h_delta / 4), gr_ModeCW_basis_location.Y + v_delta);
                 panelModeSpecificDigital.Location = new Point(gr_ModeDig_basis_location.X + h_delta - (h_delta / 4), gr_ModeDig_basis_location.Y + v_delta);
@@ -51200,36 +51422,44 @@ namespace Thetis
                     //need to make loaction of grpMultimeter just after right side of vfoB group
                     //meter will now fill to the right of VFOB
                     //size /4 as based off VFOB
-                    grpMultimeter.Location = new Point(grpVFOB.Location.X + grpVFOB.Size.Width + 8, gr_Multimeter_basis_location.Y);
-                    grpMultimeter.Size = new Size(gr_multi_meter_size_basis.Width + (h_delta/4), gr_multi_meter_size_basis.Height);
-                    grpMultimeterMenus.Location = new Point(grpMultimeter.Location.X + grpMultimeter.Size.Width - gr_multi_meter_menus_size_basis.Width, gr_multi_meter_menus_basis.Y);
 
-                    txtMultiText.Size = new Size(txt_multi_text_size_basis.Width + (h_delta / 4), txt_multi_text_size_basis.Height);
-                    picMultiMeterDigital.Size = new Size(pic_multi_meter_size_basis.Width + (h_delta / 4), pic_multi_meter_size_basis.Height);
+                    //MW0LGE -- uses pad radio between meter and vfoB
+                    grpMultimeterMenus.Location = new Point(gr_multi_meter_menus_basis.X + h_delta, gr_multi_meter_menus_basis.Y);
+
+                    int tmp = (grpVFOB.Location.X + grpVFOB.Size.Width + 8) + (int)(m_fMeterPadRatio * (grpMultimeterMenus.Left - (grpVFOB.Right + 8)));
+
+                    //grpMultimeter.Location = new Point(grpVFOB.Location.X + grpVFOB.Size.Width + 8, gr_Multimeter_basis_location.Y);
+                    grpMultimeter.Location = new Point(tmp, gr_Multimeter_basis_location.Y);
+                    //grpMultimeter.Size = new Size(gr_multi_meter_size_basis.Width + (h_delta/4), gr_multi_meter_size_basis.Height);
+                    grpMultimeter.Size = new Size(grpMultimeterMenus.Right - grpMultimeter.Left, gr_multi_meter_size_basis.Height);
+
+                    //grpMultimeterMenus.Location = new Point(grpMultimeter.Location.X + grpMultimeter.Size.Width - gr_multi_meter_menus_size_basis.Width, gr_multi_meter_menus_basis.Y);
+
+                    //txtMultiText.Size = new Size(txt_multi_text_size_basis.Width + (h_delta / 4), txt_multi_text_size_basis.Height);
+                    //picMultiMeterDigital.Size = new Size(pic_multi_meter_size_basis.Width + (h_delta / 4), pic_multi_meter_size_basis.Height);
+                    txtMultiText.Size = new Size(grpMultimeter.Size.Width - (gr_multi_meter_size_basis.Width - txt_multi_text_size_basis.Width), txt_multi_text_size_basis.Height);
+                    picMultiMeterDigital.Size = new Size(grpMultimeter.Size.Width - (gr_multi_meter_size_basis.Width - pic_multi_meter_size_basis.Width), pic_multi_meter_size_basis.Height);
                     //
 
-                    //btnDisplayPanCenter.Location = new Point(btn_display_pan_center_basis.X+(h_delta),btn_display_pan_center_basis.Y+v_delta);
                     btnDisplayPanCenter.Location = new Point(btn_display_pan_center_basis.X, btn_display_pan_center_basis.Y + v_delta);
-                    // ptbDisplayPan.Size = new Size(tb_display_pan_size_basis.Width+(h_delta),tb_display_pan_size_basis.Height);
                     radDisplayZoom4x.Location = new Point(btn_display_zoom_4x_basis.X + h_delta, btn_display_zoom_4x_basis.Y + v_delta);
                     radDisplayZoom2x.Location = new Point(btn_display_zoom_2x_basis.X + h_delta, btn_display_zoom_2x_basis.Y + v_delta);
                     radDisplayZoom1x.Location = new Point(btn_display_zoom_1x_basis.X + h_delta, btn_display_zoom_1x_basis.Y + v_delta);
                     radDisplayZoom05.Location = new Point(btn_display_zoom_05_basis.X + h_delta, btn_display_zoom_05_basis.Y + v_delta);
                     ptbDisplayZoom.Location = new Point(tb_display_zoom_basis.X + h_delta, tb_display_zoom_basis.Y + v_delta);
+                    lblDisplayZoom.Location = new Point(lbl_display_zoom_basis.X + h_delta, lbl_display_zoom_basis.Y + v_delta);
+
                     txtDisplayPeakFreq.Location = new Point(txt_display_peak_freq_basis.X + h_delta, txt_display_peak_freq_basis.Y + v_delta);
                     txtDisplayPeakPower.Location = new Point(txt_display_peak_power_basis.X + h_delta, txt_display_peak_power_basis.Y + v_delta);
                     txtDisplayPeakOffset.Location = new Point(txt_display_peak_offset_basis.X + h_delta, txt_display_peak_offset_basis.Y + v_delta);
-                    lblDisplayZoom.Location = new Point(lbl_display_zoom_basis.X + h_delta, lbl_display_zoom_basis.Y + v_delta);
 
                     panelDisplay.Size = new Size(gr_display_size_basis.Width + h_delta, gr_display_size_basis.Height + v_delta);
                     picDisplay.Size = new Size(pic_display_size_basis.Width + h_delta, pic_display_size_basis.Height + v_delta);
-                    //picWaterfall.Size = new Size(pic_waterfall_size_basis.Width + h_delta, pic_waterfall_size_basis.Height + v_delta);
                     txtOverload.Size = new Size(txtOverload_size_basis.Width + h_delta, txtOverload_size_basis.Height);
                     txtOverload.Location = new Point(txtOverload_basis.X, txtOverload_basis.Y + v_delta);
                     panelDisplay2.Location = new Point(gr_display2_basis.X + (h_delta / 2), gr_display2_basis.Y + v_delta);
                     panelDSP.Location = new Point(gr_dsp_basis.X + (h_delta / 2), gr_dsp_basis.Y + v_delta);
 
-                    //panelMultiRX.Location = new Point(gr_multirx_basis.X + (h_delta / 2), gr_multirx_basis.Y + v_delta);
                     ptbDisplayPan.Location = new Point(tb_displaypan_basis.X, tb_displaypan_basis.Y + v_delta);
                     lblDisplayPan.Location = new Point(lbl_displaypan_basis.X, lbl_displaypan_basis.Y + v_delta);
                     txtDisplayCursorFreq.Location = new Point(txt_display_cursor_freq_basis.X, txt_display_cursor_freq_basis.Y + v_delta);
@@ -51240,53 +51470,39 @@ namespace Thetis
                     txtDisplayOrionMKIIBlank.Location = new Point(txt_display_orion_mkii_blank_basis.X, txt_display_orion_mkii_blank_basis.Y + v_delta);
                     txtDisplayOrionMKIIPAAmps.Location = new Point(txt_display_orion_mkii_pa_amps_basis.X, txt_display_orion_mkii_pa_amps_basis.Y + v_delta);
 
-                    //chkPower.Location = new Point(chk_power_basis.X, chk_power_basis.Y + (v_delta / 8));
                     panelPower.Location = new Point(gr_power_basis.X, gr_power_basis.Y + (v_delta / 8));
-                    //chkRX2.Location = new Point(chk_rx2_enable_basis.X, chk_rx2_enable_basis.Y + v_delta);
                     panelRX2Power.Location = new Point(gr_rx2_enable_basis.X, gr_rx2_enable_basis.Y + v_delta);
                     panelOptions.Location = new Point(gr_options_basis.X, gr_options_basis.Y + (v_delta / 4));
 
                 }
-                //chkPower.Location = new Point(chk_power_basis.X, chk_power_basis.Y + (v_delta / 8));
                 panelMultiRX.Location = new Point(gr_multirx_basis.X + (h_delta / 2), gr_multirx_basis.Y + v_delta);
                 panelSoundControls.Location = new Point(gr_sound_controls_basis.X, gr_sound_controls_basis.Y + (v_delta / 8) + (v_delta / 4));
                 chkSquelch.Location = new Point(chk_squelch_basis.X, chk_squelch_basis.Y + (v_delta / 2));
                 picSquelch.Location = new Point(pic_sql_basis.X, pic_sql_basis.Y + (v_delta / 2));
                 ptbSquelch.Location = new Point(tb_sql_basis.X, tb_sql_basis.Y + (v_delta / 2));
-                // panelAntenna.Location = new Point(gr_antenna_basis.X, gr_antenna_basis.Y + (v_delta / 8) + (v_delta / 2));
-                panelDateTime.Location = new Point(gr_date_time_basis.X, gr_date_time_basis.Y + (v_delta / 2) + (v_delta / 4));
-                //lblCPUMeter.Location = new Point(lbl_cpu_meter_basis.X,lbl_cpu_meter_basis.Y+(v_delta/8)+(v_delta/2)+(v_delta/4));
-
-                //panelRX2Divider.Location = new Point(pan_rx2_divider_basis.X, pan_rx2_divider_basis.Y+v_delta);
-                //panelRX2Divider.Size = new Size(pan_rx2_divider_size_basis.Width+h_delta, pan_rx2_divider_size_basis.Height);
-
+                //panelDateTime.Location = new Point(gr_date_time_basis.X, gr_date_time_basis.Y + (v_delta / 2) + (v_delta / 4));
                 grpDisplaySplit.Location = new Point(gr_display_split_basis.X + (h_delta / 2), gr_display_split_basis.Y + v_delta);
                 grpRX2Meter.Location = new Point(gr_rx2_meter_basis.X + h_delta, gr_rx2_meter_basis.Y + v_delta);
                 panelRX2Filter.Location = new Point(gr_rx2_filter_basis.X + (int)(h_delta * 0.66), gr_rx2_filter_basis.Y + v_delta);
                 panelRX2Mode.Location = new Point(gr_RX2Mode_basis_location.X + (int)(h_delta * 0.492), gr_RX2Mode_basis_location.Y + v_delta); // MW0LGE changed to gr_RX2Mode_basis_location
                 panelRX2Display.Location = new Point(gr_rx2_display_basis.X + (int)(h_delta * 0.383), gr_rx2_display_basis.Y + v_delta);
                 panelRX2DSP.Location = new Point(gr_rx2_dsp_basis.X + (int)(h_delta * 0.258), gr_rx2_dsp_basis.Y + v_delta);
-
-                //lblRX2RF.Location = new Point(lbl_rx2_rf_basis.X+(int)(h_delta*0.164), lbl_rx2_rf_basis.Y+v_delta);
-                //ptbRX2RF.Location = new Point(tb_rx2_rf_basis.X+(int)(h_delta*0.164), tb_rx2_rf_basis.Y+v_delta);
                 panelRX2RF.Location = new Point(gr_rx2_rf_basis.X + (int)(h_delta * 0.164), gr_rx2_rf_basis.Y + v_delta);
+
                 chkRX2Squelch.Location = new Point(chk_rx2_squelch_basis.X + (int)(h_delta * 0.164), chk_rx2_squelch_basis.Y + v_delta);
                 ptbRX2Squelch.Location = new Point(tb_rx2_squelch_basis.X + (int)(h_delta * 0.164), tb_rx2_squelch_basis.Y + v_delta);
                 picRX2Squelch.Location = new Point(pic_rx2_squelch_basis.X + (int)(h_delta * 0.164), pic_rx2_squelch_basis.Y + v_delta);
 
                 panelRX2Mixer.Location = new Point(gr_rx2_mixer_basis.X + (int)(h_delta * 0.078), gr_rx2_mixer_basis.Y + v_delta);
-                //chkRX2.Location = new Point(chk_rx2_enable_basis.X, chk_rx2_enable_basis.Y+v_delta);
-                //chkRX2Preamp.Location = new Point(chk_rx2_preamp_basis.X, chk_rx2_preamp_basis.Y+v_delta);
-                //  lblRX2Band.Location = new Point(lbl_rx2_band_basis.X, lbl_rx2_band_basis.Y + v_delta);
-                // comboRX2Band.Location = new Point(combo_rx2_band_basis.X, combo_rx2_band_basis.Y + v_delta);
             }
+
             previous_delta = h_delta + v_delta; //we'll check this next time through...
 
-
             if (collapsedDisplay)
+            {
                 RepositionControlsForCollapsedlDisplay();
-
-            if (!collapsedDisplay)
+            }
+            else
             {
                 // set all Andromedia console controls to hidden
                 panelButtonBar.Hide();
@@ -51380,7 +51596,7 @@ namespace Thetis
             pic_sql_basis = this.picSquelch.Location;
             tb_sql_basis = this.ptbSquelch.Location;
             // gr_antenna_basis = this.panelAntenna.Location;
-            gr_date_time_basis = this.panelDateTime.Location;
+            //gr_date_time_basis = this.panelDateTime.Location;
             //lbl_cpu_meter_basis = this.lblCPUMeter.Location;
 
             //pan_rx2_divider_basis = this.panelRX2Divider.Location;
@@ -51575,7 +51791,7 @@ namespace Thetis
                 cmaster.CMSetSRXWavePlayRun(1);
                 cmaster.CMSetSRXWaveRecordRun(1);
                 chkRX2.Checked = value;
-                Display.Init();
+                //Display.Init(); // not needed MW0LGE
                 if (rx2_enabled)
                 {
                     old_rx1_display_mode = comboDisplayMode.Text;
@@ -51751,7 +51967,8 @@ namespace Thetis
                     //if (!(this.WindowState == FormWindowState.Maximized))
                     //    this.Height += (panelRX2Filter.Height + 8);
 
-                    resizeWaterfallBitmaps(Display.CurrentDisplayModeBottom == DisplayMode.PANAFALL); //MW0LGE
+                    resizeWaterfallBitmaps(/*Display.CurrentDisplayModeBottom == DisplayMode.PANAFALL*/); //MW0LGE
+                    resizeWaterfallBitmaps2(/*Display.CurrentDisplayModeBottom == DisplayMode.PANAFALL*/); //MW0LGE
                 }
                 else
                 {
@@ -51763,7 +51980,7 @@ namespace Thetis
                     //if (!(this.WindowState == FormWindowState.Maximized))
                     //    this.Height -= (panelRX2Filter.Height + 8);
 
-                    resizeWaterfallBitmaps(Display.CurrentDisplayMode == DisplayMode.PANAFALL); //MW0LGE
+                    resizeWaterfallBitmaps(/*Display.CurrentDisplayMode == DisplayMode.PANAFALL*/); //MW0LGE
                 }
 
                 Console_Resize(this, EventArgs.Empty);
@@ -53212,16 +53429,18 @@ namespace Thetis
                     Display.CurrentDisplayModeBottom = DisplayMode.PHASE2;
                     break;
                 case "Waterfall":
-                    Display.ResetWaterfallBmp2(2);
                     Display.CurrentDisplayModeBottom = DisplayMode.WATERFALL;
+                    //Display.ResetWaterfallBmp2(2);
+                    resizeWaterfallBitmaps2(/*false*/);
                     if (chkSplitDisplay.Checked) CalcDisplayFreq();
                     break;
                 case "Histogram":
                     Display.CurrentDisplayModeBottom = DisplayMode.HISTOGRAM;
                     break;
                 case "Panafall":
-                    Display.ResetWaterfallBmp2(4);
                     Display.CurrentDisplayModeBottom = DisplayMode.PANAFALL;
+                    //Display.ResetWaterfallBmp2(4);
+                    resizeWaterfallBitmaps2(/*false*/);
                     if (chkSplitDisplay.Checked) CalcDisplayFreq();
                     break;
                 case "Off":
@@ -53976,6 +54195,28 @@ namespace Thetis
             }
         }
 
+        private bool m_bIncludeWindowBorders = false;
+        public bool IncludeWindowBorders {
+            get { return m_bIncludeWindowBorders; }
+            set { 
+                m_bIncludeWindowBorders = value;
+                includeBordersToolStripMenuItem.Checked = m_bIncludeWindowBorders;
+                updateResolutionStatusBarText();
+            }
+        }
+
+        private void updateResolutionStatusBarText()
+        {
+            if (m_bIncludeWindowBorders)
+            {
+                toolStripDropDownButton_ScreenSize.Text = this.Width.ToString() + " x " + this.Height.ToString();
+            }
+            else
+            {
+                toolStripDropDownButton_ScreenSize.Text = this.ClientSize.Width.ToString() + " x " + this.ClientSize.Height.ToString();
+            }
+        }
+
         //bool done_console_basis = false;
         int dpi = 0;
         SizeF base_size = new SizeF(0, 0);
@@ -53983,6 +54224,8 @@ namespace Thetis
         //bool set_min_size = false;
         private void Console_Resize(object sender, System.EventArgs e)
         {
+            updateResolutionStatusBarText();
+
             //this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
 
             if (this.WindowState == FormWindowState.Minimized)
@@ -55815,6 +56058,8 @@ namespace Thetis
                 lblRX2FilterLabel.Hide();
             }
 
+            statusStripMain.Show();
+
             // added G8NJJ
             panelVFOLabels.Hide();
             panelVFOALabels.Hide();
@@ -55850,7 +56095,7 @@ namespace Thetis
             chkSquelch.Show();
             ptbSquelch.Show();
             picSquelch.Show();
-            panelDateTime.Show();
+            //panelDateTime.Show();
             panelVFO.Show();
             panelDSP.Show();
             panelDisplay2.Show();
@@ -55954,17 +56199,40 @@ namespace Thetis
             //picMultiMeterDigital.Size = pic_multi_meter_size_basis;  //MW0LGE
             picMultiMeterDigital.Location = pic_multi_meter_digital_basis;
 
+            ////MW0LGE
+            ////need to make loaction of grpMultimeter just after right side of vfoB group
+            ////meter will now fill to the right of VFOB
+            ////size /4 as based off VFOB
+            //grpMultimeter.Location = new Point(grpVFOB.Location.X + grpVFOB.Size.Width + 8, gr_Multimeter_basis_location.Y);
+            //grpMultimeter.Size = new Size(gr_multi_meter_size_basis.Width + (h_delta / 4), gr_multi_meter_size_basis.Height);
+            //grpMultimeterMenus.Location = new Point(grpMultimeter.Location.X + grpMultimeter.Size.Width - gr_multi_meter_menus_size_basis.Width, gr_multi_meter_menus_basis.Y);
+
+            //txtMultiText.Size = new Size(txt_multi_text_size_basis.Width + (h_delta / 4), txt_multi_text_size_basis.Height);
+            //picMultiMeterDigital.Size = new Size(pic_multi_meter_size_basis.Width + (h_delta / 4), pic_multi_meter_size_basis.Height);
+            ////end MW0LGE
+            ///
             //MW0LGE
             //need to make loaction of grpMultimeter just after right side of vfoB group
             //meter will now fill to the right of VFOB
             //size /4 as based off VFOB
-            grpMultimeter.Location = new Point(grpVFOB.Location.X + grpVFOB.Size.Width + 8, gr_Multimeter_basis_location.Y);
-            grpMultimeter.Size = new Size(gr_multi_meter_size_basis.Width + (h_delta / 4), gr_multi_meter_size_basis.Height);
-            grpMultimeterMenus.Location = new Point(grpMultimeter.Location.X + grpMultimeter.Size.Width - gr_multi_meter_menus_size_basis.Width, gr_multi_meter_menus_basis.Y);
 
-            txtMultiText.Size = new Size(txt_multi_text_size_basis.Width + (h_delta / 4), txt_multi_text_size_basis.Height);
-            picMultiMeterDigital.Size = new Size(pic_multi_meter_size_basis.Width + (h_delta / 4), pic_multi_meter_size_basis.Height);
-            //end MW0LGE
+            //MW0LGE -- uses pad radio between meter and vfoB
+            grpMultimeterMenus.Location = new Point(gr_multi_meter_menus_basis.X + h_delta, gr_multi_meter_menus_basis.Y);
+
+            int tmp = (grpVFOB.Location.X + grpVFOB.Size.Width + 8) + (int)(m_fMeterPadRatio * (grpMultimeterMenus.Left - (grpVFOB.Right + 8)));
+
+            //grpMultimeter.Location = new Point(grpVFOB.Location.X + grpVFOB.Size.Width + 8, gr_Multimeter_basis_location.Y);
+            grpMultimeter.Location = new Point(tmp, gr_Multimeter_basis_location.Y);
+            //grpMultimeter.Size = new Size(gr_multi_meter_size_basis.Width + (h_delta/4), gr_multi_meter_size_basis.Height);
+            grpMultimeter.Size = new Size(grpMultimeterMenus.Right - grpMultimeter.Left, gr_multi_meter_size_basis.Height);
+
+            //grpMultimeterMenus.Location = new Point(grpMultimeter.Location.X + grpMultimeter.Size.Width - gr_multi_meter_menus_size_basis.Width, gr_multi_meter_menus_basis.Y);
+
+            //txtMultiText.Size = new Size(txt_multi_text_size_basis.Width + (h_delta / 4), txt_multi_text_size_basis.Height);
+            //picMultiMeterDigital.Size = new Size(pic_multi_meter_size_basis.Width + (h_delta / 4), pic_multi_meter_size_basis.Height);
+            txtMultiText.Size = new Size(grpMultimeter.Size.Width - (gr_multi_meter_size_basis.Width - txt_multi_text_size_basis.Width), txt_multi_text_size_basis.Height);
+            picMultiMeterDigital.Size = new Size(grpMultimeter.Size.Width - (gr_multi_meter_size_basis.Width - pic_multi_meter_size_basis.Width), pic_multi_meter_size_basis.Height);
+            //
 
             //MW0LGE lblMultiSMeter.Parent = grpMultimeter;
             //MW0LGE lblMultiSMeter.Location = lbl_multi_smeter_basis;
@@ -56243,6 +56511,20 @@ namespace Thetis
             ResumeDrawing(this);
         }
 
+        public Color StatusBarBackColour {
+            get { return statusStripMain.BackColor; }
+            set { statusStripMain.BackColor = value; }
+        }
+        public Color StatusBarTextColour {
+            // use one to return the colour, as all will be the same
+            get { return toolStripDropDownButton_ScreenSize.ForeColor; }
+            set {
+                foreach(ToolStripItem c in statusStripMain.Items)
+                {
+                    c.ForeColor = value;
+                }
+            }
+        }
         //
         // modified G8NJJ to add alternate top/button controls for Andromeda
         // optimised for 1024x600 touchscreen display
@@ -56324,6 +56606,8 @@ namespace Thetis
 
             this.MinimumSize = new Size(minWidth, minHeight);
 
+            statusStripMain.Hide();
+
             grpMultimeterMenus.Hide(); //MW0LGE
 
             panelPower.Hide();
@@ -56333,7 +56617,7 @@ namespace Thetis
             chkSquelch.Hide();
             ptbSquelch.Hide();
             picSquelch.Hide();
-            panelDateTime.Hide();
+            //panelDateTime.Hide();
             panelVFO.Hide();
             panelDSP.Hide();
             panelDisplay2.Hide();
@@ -57849,7 +58133,7 @@ namespace Thetis
 
         private void ptbRX1AF_Scroll(object sender, EventArgs e)
         {
-            RX0Gain = ptbRX1AF.Value;            
+            RX0Gain = ptbRX1AF.Value;
             if (sender.GetType() == typeof(PrettyTrackBar))
             {
                 ptbRX1AF.Focus();
@@ -62088,7 +62372,167 @@ namespace Thetis
         private void txtRX2Meter_Click(object sender, EventArgs e)
         {
             incrementMutliMeterDisplayMode();
-        }        
+        }
+
+        private void toolStripStatusLabel_SeqWarning_Click(object sender, EventArgs e)
+        {
+            ShowSEQLog();
+        }
+
+        private void toolStripMenuItem_4by3_DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+            setResolution(e.ClickedItem.Text);
+        }
+
+        private void toolStripMenuItem_16by9_DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+            setResolution(e.ClickedItem.Text);
+        }
+
+        private void toolStripMenuItem_16by10_DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+            setResolution(e.ClickedItem.Text);
+        }
+
+        private void youTubeToolStripMenuItem_DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+            setResolution(e.ClickedItem.Text);
+        }
+
+        private void setResolution(string resolutionString)
+        {
+            if (resolutionString.Length < 1) return;
+
+            int W=0, H=0;
+            bool bOK = false;
+
+            if (resolutionString[resolutionString.Length - 1] == 'p')
+            {
+                // youtube
+                if (resolutionString == "720p")
+                {
+                    W = 1280;
+                    H = 720;
+                }
+                else if (resolutionString == "1080p")
+                {
+                    W = 1920;
+                    H = 1080;
+                }
+                else if (resolutionString == "1440p")
+                {
+                    W = 2560;
+                    H = 1440;
+                }
+                else if (resolutionString == "2160p")
+                {
+                    W = 3840;
+                    H = 2160;
+                }
+                else
+                {
+                    W = 1280;
+                    H = 720;
+                }
+                bOK = true;
+            }
+            else if (resolutionString.Contains(" x "))
+            {
+                // W x H
+                int xPos = resolutionString.IndexOf("x");
+                W = int.Parse(resolutionString.Substring(0, xPos - 1));
+                H = int.Parse(resolutionString.Substring(xPos + 2));
+                bOK = true;
+            }
+
+            if (bOK)
+            {
+                // limit to screen
+                Rectangle r = Screen.FromControl(this).Bounds;
+                W = Math.Min(W, r.Width);
+                H = Math.Min(H, r.Height);
+
+                if (this.WindowState == FormWindowState.Maximized) this.WindowState = FormWindowState.Normal;
+
+                Size s = new Size(W, H);
+                if (m_bIncludeWindowBorders)
+                {
+                    this.Size = s;
+                }
+                else
+                {
+                    this.ClientSize = s;
+                }
+            }
+        }
+
+        private void includeBordersToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            IncludeWindowBorders = !IncludeWindowBorders;
+        }
+
+        private bool m_bDraggingMeter = false;
+        private int m_nStartDragX = 0;
+        private float m_fMeterPadRatio = 0f;
+
+        private void pnlResizeMeter_MouseDown(object sender, MouseEventArgs e)
+        {
+            if(e.Button == MouseButtons.Left && !m_bDraggingMeter)
+            {
+                m_nStartDragX = e.X;
+                m_bDraggingMeter = true;
+            }
+        }
+
+        private void pnlResizeMeter_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (m_bDraggingMeter)
+            {
+                int nDelta = e.X - m_nStartDragX;
+
+                int oldLeft = grpMultimeter.Left;
+                int newLeft = nDelta + grpMultimeter.Left;
+
+                if (newLeft < grpVFOB.Right + 8)
+                {
+                    newLeft = grpVFOB.Right + 8;
+                }
+                if (newLeft > grpMultimeterMenus.Left)
+                {
+                    newLeft = grpMultimeterMenus.Left;
+                }
+
+                Rectangle r = new Rectangle(grpMultimeter.Location, grpMultimeter.Size);
+
+                SuspendDrawing(grpMultimeter);
+                grpMultimeter.Left = newLeft;
+                grpMultimeter.Width += (oldLeft - grpMultimeter.Left);
+
+                txtMultiText.Size = new Size(grpMultimeter.Size.Width - (gr_multi_meter_size_basis.Width - txt_multi_text_size_basis.Width), txt_multi_text_size_basis.Height);
+                picMultiMeterDigital.Size = new Size(grpMultimeter.Size.Width - (gr_multi_meter_size_basis.Width - pic_multi_meter_size_basis.Width), pic_multi_meter_size_basis.Height);
+                ResumeDrawingNoRefresh(grpMultimeter);
+
+                this.Invalidate(r, true);
+                this.Update();
+
+                m_fMeterPadRatio = (float)(newLeft - (grpVFOB.Right + 8)) / (float)(grpMultimeterMenus.Left - (grpVFOB.Right + 8));
+            }
+        }
+
+        private void pnlResizeMeter_MouseUp(object sender, MouseEventArgs e)
+        {
+            m_bDraggingMeter = false;
+        }
+
+        private void pnlResizeMeter_MouseEnter(object sender, EventArgs e)
+        {
+            pnlResizeMeter.BackColor = SystemColors.MenuHighlight;
+        }
+
+        private void pnlResizeMeter_MouseLeave(object sender, EventArgs e)
+        {
+            pnlResizeMeter.BackColor = Color.Transparent;
+        }
     }
 
     public class DigiMode

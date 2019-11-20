@@ -45,6 +45,7 @@ namespace Thetis
     using System.Windows.Forms;
     using System.Runtime.InteropServices;
     using System.Buffers;
+    using System.Text;
 
     //
     using SharpDX;
@@ -470,7 +471,7 @@ namespace Thetis
         //private static PixelFormat WtrColor = PixelFormat.Format24bppRgb;  //          
 
 
-        public static int map = 0; // ke9ns add 1=map mode (panafall but only a small waterfall) and only when just in RX1 mode)
+        private static bool m_bSpecialPanafall = false; // ke9ns add 1=map mode (panafall but only a small waterfall) and only when just in RX1 mode)
 
         public static int H1 = 0;  //  ke9ns add used to fool draw routines when displaying in 3rds 
         public static int H2 = 0;  //  ke9ns add used to fool draw routines when displaying in 4ths   
@@ -507,10 +508,17 @@ namespace Thetis
             set
             {
                 displayTarget = value;
+
+                init(displayTarget.Width, displayTarget.Height);  // we cant change displayTargetWidth, without first updating arrays ! //MW0LGE
+
                 displayTargetHeight = displayTarget.Height;
                 displayTargetWidth = displayTarget.Width;
                 displayTargetWidth = Math.Min(displayTargetWidth, BUFFER_SIZE); //MW0LGE prevent larger width than BUFFERSIZE
                 Audio.ScopeDisplayWidth = displayTargetWidth;
+
+                ResetWaterfallBmp();
+                ResetWaterfallBmp2();
+
                 if (specready)
                 {
                     console.specRX.GetSpecRX(0).Pixels = displayTargetWidth;
@@ -1738,37 +1746,37 @@ namespace Thetis
         private static ArrayPool<float> m_objFloatPool = ArrayPool<float>.Shared;
         private static ArrayPool<int> m_objIntPool = ArrayPool<int>.Shared;
 
-        public static void Init()
+        private static void init(int W, int H)
         {
             if (histogram_data != null) m_objIntPool.Return(histogram_data);
             if (histogram_history != null) m_objIntPool.Return(histogram_history);
 
-            histogram_data = m_objIntPool.Rent(displayTargetWidth);
-            histogram_history = m_objIntPool.Rent(displayTargetWidth);
+            histogram_data = m_objIntPool.Rent(W);
+            histogram_history = m_objIntPool.Rent(W);
 
-            Parallel.For(0, displayTargetWidth, (i) => //for (int i = 0; i < displayTargetWidth; i++)
+            Parallel.For(0, W, (i) => //for (int i = 0; i < displayTargetWidth; i++)
             {
                 histogram_data[i] = Int32.MaxValue;
                 histogram_history[i] = 0;
             });
 
-            if (current_display_engine == DisplayEngine.GDI_PLUS)
-            {
-                if (waterfall_bmp != null) waterfall_bmp.Dispose(); //MW0GLE added dispose
-                if (waterfall_bmp2 != null) waterfall_bmp2.Dispose();
-                waterfall_bmp = new Bitmap(displayTargetWidth, displayTargetHeight - 20, PixelFormat.Format24bppRgb);  // initialize waterfall display
-                waterfall_bmp2 = new Bitmap(displayTargetWidth, displayTargetHeight - 20, PixelFormat.Format24bppRgb);
-            }
-            else // dx2d MW0LGE
-            {
-                lock (m_objDX2Lock)
-                {
-                    if (waterfall_bmp_dx2d != null) waterfall_bmp_dx2d.Dispose();
-                    if (waterfall_bmp2_dx2d != null) waterfall_bmp2_dx2d.Dispose();
-                    waterfall_bmp_dx2d = new SharpDX.Direct2D1.Bitmap(d2dRenderTarget, new Size2(displayTargetWidth, displayTargetHeight - 20), new BitmapProperties(new SDXPixelFormat(Format.B8G8R8A8_UNorm, AlphaMode.Premultiplied)));
-                    waterfall_bmp2_dx2d = new SharpDX.Direct2D1.Bitmap(d2dRenderTarget, new Size2(displayTargetWidth, displayTargetHeight - 20), new BitmapProperties(new SDXPixelFormat(Format.B8G8R8A8_UNorm, AlphaMode.Premultiplied)));
-                }
-            }
+            //if (current_display_engine == DisplayEngine.GDI_PLUS)
+            //{
+            //    if (waterfall_bmp != null) waterfall_bmp.Dispose(); //MW0GLE added dispose
+            //    if (waterfall_bmp2 != null) waterfall_bmp2.Dispose();
+            //    waterfall_bmp = new Bitmap(W, H - 20, PixelFormat.Format24bppRgb);  // initialize waterfall display
+            //    waterfall_bmp2 = new Bitmap(W, H - 20, PixelFormat.Format24bppRgb);
+            //}
+            //else // dx2d MW0LGE
+            //{
+            //    lock (m_objDX2Lock)
+            //    {
+            //        if (waterfall_bmp_dx2d != null) waterfall_bmp_dx2d.Dispose();
+            //        if (waterfall_bmp2_dx2d != null) waterfall_bmp2_dx2d.Dispose();
+            //        waterfall_bmp_dx2d = new SharpDX.Direct2D1.Bitmap(d2dRenderTarget, new Size2(W, H - 20), new BitmapProperties(new SDXPixelFormat(Format.B8G8R8A8_UNorm, AlphaMode.Premultiplied)));
+            //        waterfall_bmp2_dx2d = new SharpDX.Direct2D1.Bitmap(d2dRenderTarget, new Size2(W, H - 20), new BitmapProperties(new SDXPixelFormat(Format.B8G8R8A8_UNorm, AlphaMode.Premultiplied)));
+            //    }
+            //}
 
             if (rx1_average_buffer != null) m_objFloatPool.Return(rx1_average_buffer);
             if (rx2_average_buffer != null) m_objFloatPool.Return(rx2_average_buffer);
@@ -1776,16 +1784,16 @@ namespace Thetis
             if (rx2_peak_buffer != null) m_objFloatPool.Return(rx2_peak_buffer);
 
             //displayTargetWidth  or BUFFER_SIZE?
-            rx1_average_buffer = m_objFloatPool.Rent(displayTargetWidth);	// initialize averaging buffer array
+            rx1_average_buffer = m_objFloatPool.Rent(W);	// initialize averaging buffer array
             rx1_average_buffer[0] = CLEAR_FLAG;	// set the clear flag
 
-            rx2_average_buffer = m_objFloatPool.Rent(displayTargetWidth);  // initialize averaging buffer array
+            rx2_average_buffer = m_objFloatPool.Rent(W);  // initialize averaging buffer array
             rx2_average_buffer[0] = CLEAR_FLAG;		// set the clear flag
 
-            rx1_peak_buffer = m_objFloatPool.Rent(displayTargetWidth);
+            rx1_peak_buffer = m_objFloatPool.Rent(W);
             rx1_peak_buffer[0] = CLEAR_FLAG;
 
-            rx2_peak_buffer = m_objFloatPool.Rent(displayTargetWidth);
+            rx2_peak_buffer = m_objFloatPool.Rent(W);
             rx2_peak_buffer[0] = CLEAR_FLAG;
 
             if (new_display_data != null) m_objFloatPool.Return(new_display_data);
@@ -1802,22 +1810,23 @@ namespace Thetis
             //if (peakHold_time != null) m_objFloatPool.Return(peakHold_time);
             //if (peakHold_time_bottom != null) m_objFloatPool.Return(peakHold_time_bottom);
 
-            new_display_data = m_objFloatPool.Rent(displayTargetWidth);
-            current_display_data = m_objFloatPool.Rent(displayTargetWidth);
-            new_display_data_bottom = m_objFloatPool.Rent(displayTargetWidth);
-            current_display_data_bottom = m_objFloatPool.Rent(displayTargetWidth);
+            // cant be W width, as more info can be stored in these, for example scope data
+            new_display_data = m_objFloatPool.Rent(BUFFER_SIZE);
+            current_display_data = m_objFloatPool.Rent(BUFFER_SIZE);
+            new_display_data_bottom = m_objFloatPool.Rent(BUFFER_SIZE);
+            current_display_data_bottom = m_objFloatPool.Rent(BUFFER_SIZE);
 
-            new_waterfall_data = m_objFloatPool.Rent(displayTargetWidth);
-            current_waterfall_data = m_objFloatPool.Rent(displayTargetWidth);
-            new_waterfall_data_bottom = m_objFloatPool.Rent(displayTargetWidth);
-            current_waterfall_data_bottom = m_objFloatPool.Rent(displayTargetWidth);
+            new_waterfall_data = m_objFloatPool.Rent(W);
+            current_waterfall_data = m_objFloatPool.Rent(W);
+            new_waterfall_data_bottom = m_objFloatPool.Rent(W);
+            current_waterfall_data_bottom = m_objFloatPool.Rent(W);
 
             //peakHold_data = m_objFloatPool.Rent(BUFFER_SIZE);
             //peakHold_data_bottom = m_objFloatPool.Rent(BUFFER_SIZE);
             //peakHold_time = m_objFloatPool.Rent(BUFFER_SIZE);
             //peakHold_time_bottom = m_objFloatPool.Rent(BUFFER_SIZE);
 
-            Parallel.For(0, displayTargetWidth, (i) => //for (int i = 0; i < displayTargetWidth; i++)
+            Parallel.For(0, W, (i) => //for (int i = 0; i < displayTargetWidth; i++)
             {
                 new_display_data[i] = -200.0f;
                 current_display_data[i] = -200.0f;
@@ -1883,68 +1892,72 @@ namespace Thetis
 
         unsafe public static void RenderGDIPlus(ref PaintEventArgs e)
         {
-            if (m_bAntiAlias)
-            {
-                e.Graphics.SmoothingMode = SmoothingMode.HighQuality;
-            }
-            else
-            {
-                e.Graphics.SmoothingMode = SmoothingMode.HighSpeed;
-            }
-
             // MW0LGE to do, sort out K variables, and stuff for Map overlay, some has been commented for now
             // just to get dual panafalls up and running
             try
             {
+                float fTopHeight;
+                fTopHeight = SpecialPanafall ? 0.8f : 0.5f;
+
+                if (m_bAntiAlias)
+                {
+                    e.Graphics.SmoothingMode = SmoothingMode.HighQuality;
+                }
+                else
+                {
+                    e.Graphics.SmoothingMode = SmoothingMode.HighSpeed;
+                }
 
                 if (!split_display)
                 {
+                    m_nRX1DisplayHeight = displayTargetHeight;
                     switch (current_display_mode)
                     {
                         case DisplayMode.SPECTRUM:
                             K9 = 4;
                             K11 = 0;
-                            DrawSpectrum(e.Graphics, displayTargetWidth, displayTargetHeight, false);
+                            DrawSpectrum(e.Graphics, displayTargetWidth, m_nRX1DisplayHeight, false);
                             break;
                         case DisplayMode.PANADAPTER:
                             K9 = 2;
                             K11 = 0;
-                            DrawPanadapter(e.Graphics, displayTargetWidth, displayTargetHeight, 1, false);
+                            DrawPanadapter(e.Graphics, 0, displayTargetWidth, m_nRX1DisplayHeight, 1, false);
                             break;
                         case DisplayMode.SCOPE:
                             K9 = 4;
                             K11 = 0;
-                            DrawScope(e.Graphics, displayTargetWidth, displayTargetHeight, false);
+                            DrawScope(e.Graphics, displayTargetWidth, m_nRX1DisplayHeight, false);
                             break;
                         case DisplayMode.SCOPE2:
-                            DrawScope2(e.Graphics, displayTargetWidth, displayTargetHeight, false);
+                            DrawScope2(e.Graphics, displayTargetWidth, m_nRX1DisplayHeight, false);
                             break;
                         case DisplayMode.PHASE:
                             K9 = 4;
                             K11 = 0;
-                            DrawPhase(e.Graphics, displayTargetWidth, displayTargetHeight, false);
+                            DrawPhase(e.Graphics, displayTargetWidth, m_nRX1DisplayHeight, false);
                             break;
                         case DisplayMode.PHASE2:
                             K9 = 4;
                             K11 = 0;
-                            DrawPhase2(e.Graphics, displayTargetWidth, displayTargetHeight, false);
+                            DrawPhase2(e.Graphics, displayTargetWidth, m_nRX1DisplayHeight, false);
                             break;
                         case DisplayMode.WATERFALL:
                             K9 = 1;
                             K11 = 0;
-                            DrawWaterfall(e.Graphics, displayTargetWidth, displayTargetHeight, 1, false);
+                            DrawWaterfall(e.Graphics, 0, displayTargetWidth, m_nRX1DisplayHeight, 1, false);
                             break;
                         case DisplayMode.HISTOGRAM:
                             K9 = 4;
                             K11 = 0;
-                            DrawHistogram(e.Graphics, displayTargetWidth, displayTargetHeight);
+                            DrawHistogram(e.Graphics, displayTargetWidth, m_nRX1DisplayHeight);
                             break;
                         case DisplayMode.PANAFALL:
                             K9 = 3;
                             K11 = 0;
-                            split_display = true;
-                            DrawPanadapter(e.Graphics, displayTargetWidth, displayTargetHeight / 2, 1, false);
-                            DrawWaterfall(e.Graphics, displayTargetWidth, displayTargetHeight / 2, 1, true);
+                            m_nRX1DisplayHeight = (int)(displayTargetHeight * m_fPanafallSplitPerc);
+                            split_display = PanafallSplitBarPos <= (displayTargetHeight / 2); // add more granularity, TODO change based on avaialble height
+                            DrawPanadapter(e.Graphics, 0, displayTargetWidth, m_nRX1DisplayHeight, 1, false);
+                            DrawWaterfall(e.Graphics, PanafallSplitBarPos, displayTargetWidth, displayTargetHeight - m_nRX1DisplayHeight, 1, true);
                             split_display = false;
                             /*if (map == 1) // ke9ns add  if in special map viewing panafall mode
                             {
@@ -1970,17 +1983,19 @@ namespace Thetis
                         case DisplayMode.PANASCOPE:
                             K9 = 4;
                             K11 = 0;
+                            m_nRX1DisplayHeight = displayTargetHeight / 2;
                             split_display = true;
-                            DrawPanadapter(e.Graphics, displayTargetWidth, displayTargetHeight / 2, 1, false);
-                            DrawScope(e.Graphics, displayTargetWidth, displayTargetHeight / 2, true);
+                            DrawPanadapter(e.Graphics, 0, displayTargetWidth, m_nRX1DisplayHeight, 1, false);
+                            DrawScope(e.Graphics, displayTargetWidth, m_nRX1DisplayHeight, true);
                             split_display = false;
                             break;
                         case DisplayMode.SPECTRASCOPE:
                             K9 = 4;
                             K11 = 0;
+                            m_nRX1DisplayHeight = displayTargetHeight / 2;
                             split_display = true;
-                            DrawSpectrum(e.Graphics, displayTargetWidth, displayTargetHeight / 2, false);
-                            DrawScope(e.Graphics, displayTargetWidth, displayTargetHeight / 2, true);
+                            DrawSpectrum(e.Graphics, displayTargetWidth, m_nRX1DisplayHeight, false);
+                            DrawScope(e.Graphics, displayTargetWidth, m_nRX1DisplayHeight, true);
                             split_display = false;
                             break;
                         case DisplayMode.OFF:
@@ -1993,42 +2008,43 @@ namespace Thetis
                 }
                 else
                 {
+                    m_nRX1DisplayHeight = displayTargetHeight / 2;
                     switch (current_display_mode)
                     {
                         case DisplayMode.SPECTRUM:
                             K9 = 4;
                             K11 = 0;
-                            DrawSpectrum(e.Graphics, displayTargetWidth, displayTargetHeight / 2, false);
+                            DrawSpectrum(e.Graphics, displayTargetWidth, m_nRX1DisplayHeight, false);
                             break;
                         case DisplayMode.PANADAPTER:
                             K9 = 2;
                             K11 = 0;
-                            DrawPanadapter(e.Graphics, displayTargetWidth, displayTargetHeight / 2, 1, false);
+                            DrawPanadapter(e.Graphics, 0, displayTargetWidth, m_nRX1DisplayHeight, 1, false);
                             break;
                         case DisplayMode.SCOPE:
                             K9 = 4;
                             K11 = 0;
-                            DrawScope(e.Graphics, displayTargetWidth, displayTargetHeight / 2, false);
+                            DrawScope(e.Graphics, displayTargetWidth, m_nRX1DisplayHeight, false);
                             break;
                         case DisplayMode.PHASE:
                             K9 = 4;
                             K11 = 0;
-                            DrawPhase(e.Graphics, displayTargetWidth, displayTargetHeight / 2, false);
+                            DrawPhase(e.Graphics, displayTargetWidth, m_nRX1DisplayHeight, false);
                             break;
                         case DisplayMode.PHASE2:
                             //K9 = 4;
                             //K11 = 0; // these were outside phase2 for some reason //MW0LGE , commented for now
-                            DrawPhase2(e.Graphics, displayTargetWidth, displayTargetHeight / 2, false);
+                            DrawPhase2(e.Graphics, displayTargetWidth, m_nRX1DisplayHeight, false);
                             break;
                         case DisplayMode.WATERFALL:
                             K9 = 6;
                             K11 = 0;
-                            DrawWaterfall(e.Graphics, displayTargetWidth, displayTargetHeight / 2, 1, false);
+                            DrawWaterfall(e.Graphics, 0, displayTargetWidth, m_nRX1DisplayHeight, 1, false);
                             break;
                         case DisplayMode.HISTOGRAM:
                             K9 = 4;
                             K11 = 0;
-                            DrawHistogram(e.Graphics, displayTargetWidth, displayTargetHeight / 2);
+                            DrawHistogram(e.Graphics, displayTargetWidth, m_nRX1DisplayHeight);
                             break;
                         case DisplayMode.PANAFALL:   // ke9ns pan rX1 (KE9NS ADDED CODE)
                             K9 = 5;
@@ -2069,13 +2085,14 @@ namespace Thetis
                                     break; // rx2 off
 
                             } // switch (current_display_mode_bottom) */  // MW0LGE - rx2
-                            DrawPanadapter(e.Graphics, displayTargetWidth, displayTargetHeight / 4, 1, false);// MW0LGE - rx2
-                            DrawWaterfall(e.Graphics, displayTargetWidth, displayTargetHeight / 4, 1, true);// MW0LGE - rx2
+                            m_nRX1DisplayHeight = displayTargetHeight / 4;
+                            DrawPanadapter(e.Graphics, 0, displayTargetWidth, m_nRX1DisplayHeight, 1, false);// MW0LGE - rx2
+                            DrawWaterfall(e.Graphics, m_nRX1DisplayHeight, displayTargetWidth, m_nRX1DisplayHeight, 1, true);// MW0LGE - rx2
                             break;  // rx1 panafall
                         case DisplayMode.OFF:
                             K9 = 0;
                             K11 = 0;
-                            DrawOffBackground(e.Graphics, displayTargetWidth, displayTargetHeight / 2, false);
+                            DrawOffBackground(e.Graphics, displayTargetWidth, m_nRX1DisplayHeight, false);
                             break;
                         default:
                             break;
@@ -2083,39 +2100,40 @@ namespace Thetis
 
                     // MW0LGE - rx2if (K11 == 0) //if rx1 is in panafall skip below
                     // MW0LGE - rx2{
+                    m_nRX2DisplayHeight = displayTargetHeight / 2;
                     switch (current_display_mode_bottom)
                     {
-                        case DisplayMode.SPECTRUM:
-                                K10 = 0;
-                            DrawSpectrum(e.Graphics, displayTargetWidth, displayTargetHeight / 2, true);
-                            break;
+                        //case DisplayMode.SPECTRUM:
+                        //        K10 = 0;
+                        //    DrawSpectrum(e.Graphics, displayTargetWidth, m_nRX2DisplayHeight, true);
+                        //    break;
                         case DisplayMode.PANADAPTER:
                                 K10 = 2;
-                            DrawPanadapter(e.Graphics, displayTargetWidth, displayTargetHeight / 2, 2, true);
+                            DrawPanadapter(e.Graphics, m_nRX2DisplayHeight, displayTargetWidth, m_nRX2DisplayHeight, 2, true);
                             break;
-                        case DisplayMode.SCOPE:
-                                K10 = 0;
-                            DrawScope(e.Graphics, displayTargetWidth, displayTargetHeight / 2, true);
-                            break;
-                        case DisplayMode.PHASE:
-                                K10 = 0;
-                            DrawPhase(e.Graphics, displayTargetWidth, displayTargetHeight / 2, true);
-                            break;
-                        case DisplayMode.PHASE2:
-                                K10 = 0;
-                            DrawPhase2(e.Graphics, displayTargetWidth, displayTargetHeight / 2, true);
-                            break;
+                        //case DisplayMode.SCOPE:
+                        //        K10 = 0;
+                        //    DrawScope(e.Graphics, displayTargetWidth, m_nRX2DisplayHeight, true);
+                        //    break;
+                        //case DisplayMode.PHASE:
+                        //        K10 = 0;
+                        //    DrawPhase(e.Graphics, displayTargetWidth, m_nRX2DisplayHeight, true);
+                        //    break;
+                        //case DisplayMode.PHASE2:
+                        //        K10 = 0;
+                        //    DrawPhase2(e.Graphics, displayTargetWidth, m_nRX2DisplayHeight, true);
+                        //    break;
                         case DisplayMode.WATERFALL:
                                 K10 = 1;
-                            DrawWaterfall(e.Graphics, displayTargetWidth, displayTargetHeight / 2, 2, true);
+                            DrawWaterfall(e.Graphics, m_nRX2DisplayHeight, displayTargetWidth, m_nRX2DisplayHeight, 2, true);
                             break;
-                        case DisplayMode.HISTOGRAM:
-                                K10 = 0;
-                            DrawHistogram(e.Graphics, displayTargetWidth, displayTargetHeight / 2);
-                            break;
+                        //case DisplayMode.HISTOGRAM:
+                        //        K10 = 0;
+                        //    DrawHistogram(e.Graphics, displayTargetWidth, m_nRX2DisplayHeight);
+                        //    break;
                         case DisplayMode.OFF:
                                 K10 = 0;
-                            DrawOffBackground(e.Graphics, displayTargetWidth, displayTargetHeight / 2, true);
+                            DrawOffBackground(e.Graphics, displayTargetWidth, m_nRX2DisplayHeight, true);
                                 /*switch (current_display_mode) // ke9ns split display (RX1 top  and RX2 on bottom)
                                 {
                                     case DisplayMode.PANAFALL:
@@ -2132,8 +2150,9 @@ namespace Thetis
                         case DisplayMode.PANAFALL:
                                 K10 = 2;
                             //DrawPanadapter(e.Graphics, W, H / 2, 2, true); // RX2  (standard mode)  // MW0LGE - rx2
-                            DrawPanadapter(e.Graphics, displayTargetWidth, displayTargetHeight / 4, 2, false);  // MW0LGE - rx2
-                            DrawWaterfall(e.Graphics, displayTargetWidth, displayTargetHeight / 4, 2, true); // MW0LGE - rx2
+                            m_nRX2DisplayHeight = displayTargetHeight / 4;
+                            DrawPanadapter(e.Graphics, m_nRX2DisplayHeight * 2, displayTargetWidth, m_nRX2DisplayHeight, 2, false);  // MW0LGE - rx2
+                            DrawWaterfall(e.Graphics, m_nRX2DisplayHeight * 3, displayTargetWidth, m_nRX2DisplayHeight, 2, true); // MW0LGE - rx2
                             break;
                         default:
                                 //MW0LGE//K10 = 2;
@@ -2158,20 +2177,14 @@ namespace Thetis
                 if (high_swr) e.Graphics.DrawString("High SWR", font14, Brushes.Red, 245, 20);
 
                 //MW0LGE framrate issue, this will be true if less than desired frame rate achevied, set in RunDisplay thread of console.cs
-                if (m_bFramRateIssue)
-                {
-                    e.Graphics.FillRectangle(new SolidBrush(Color.Red), 0, 0, 8, 8);
-                }
+                if (m_bFramRateIssue) e.Graphics.FillRectangle(new SolidBrush(Color.Red), 0, 0, 8, 8);
 
                 calcFps();
-                if (m_bShowFPS)
-                {                    
-                    e.Graphics.DrawString(m_fps.ToString(), m_fntCallOutFont, m_bTextCallOutActive, 10, 0);
-                }
+                if (m_bShowFPS) e.Graphics.DrawString(m_nFps.ToString(), m_fntCallOutFont, m_bTextCallOutActive, 10, 0);
             }
             catch (Exception ex)
             {
-                Debug.Write(ex.ToString());
+                Common.LogException(ex);
             }
         }
 
@@ -2347,8 +2360,8 @@ namespace Thetis
                                 x = W;
                                 break;
                         }
-                        console.DisplayGridX = x;
-                        console.DisplayGridW = (int)(x + size.Width);
+                        console.RX1DisplayGridX = x;
+                        console.RX1DisplayGridW = (int)(x + size.Width);
                         y -= 8;
                         if (y + 9 < H)
                         {
@@ -2448,8 +2461,8 @@ namespace Thetis
                                 x = W;
                                 break;
                         }
-                        console.DisplayGridX = x;
-                        console.DisplayGridW = (int)(x + size.Width);
+                        console.RX1DisplayGridX = x;
+                        console.RX1DisplayGridW = (int)(x + size.Width);
                         y -= 8;
                         if (y + 9 < H)
                         {
@@ -2567,8 +2580,8 @@ namespace Thetis
                                 break;
                         }
 
-                        console.DisplayGridX = x;
-                        console.DisplayGridW = (int)(x + size.Width);
+                        console.RX1DisplayGridX = x;
+                        console.RX1DisplayGridW = (int)(x + size.Width);
                         y -= 8;
                         if (y + 9 < H)
                         {
@@ -2674,31 +2687,17 @@ namespace Thetis
 
             if(rx==1)
             {
-                if(current_display_mode == DisplayMode.PANAFALL)
-                {
-                    if (bottom)
-                    {
-                         nVerticalShift = H;                        
-                    }
-                }
+                if(current_display_mode == DisplayMode.PANAFALL && bottom) nVerticalShift = H;                        
             }
             else
             {
                 if (current_display_mode_bottom == DisplayMode.PANAFALL)
                 {
-                    if (bottom)
-                    {
-                        nVerticalShift = 3 * H;
-                    }
-                    else
-                    {
-                        nVerticalShift = 2 * H;
-                    }
+                    if (bottom) nVerticalShift = 3 * H;
+                    else nVerticalShift = 2 * H;
                 }
                 else
-                {
                     nVerticalShift = H;
-                }
             }
 
             return nVerticalShift;
@@ -2709,7 +2708,7 @@ namespace Thetis
             return Color.FromArgb(A, c.R, c.G, c.B);
         }
 
-        unsafe private static void drawPanadapterAndWaterfallGrid(ref Graphics g, int W, int H, int rx, bool bottom, bool bIsWaterfall = false)
+        unsafe private static void drawPanadapterAndWaterfallGrid(ref Graphics g, int nVerticalShift, int W, int H, int rx, bool bottom, bool bIsWaterfall = false)
         {
             // MW0LGE
             // this now draws the grid for either panadapter or waterfall, pass in a bool to pick
@@ -2735,7 +2734,7 @@ namespace Thetis
             int sample_rate;
 
             //MW0LGE
-            int nVerticalShift = getVerticalShift(rx, bottom, W, H);
+            //int nVerticalShift = getVerticalShift(rx, bottom, W, H);
             int cwSideToneShift = getCWSideToneShift(rx);
             int cwSideToneShiftInverted = cwSideToneShift * -1; // invert the sign as cw zero lines/tx lines etc are a shift in opposite direction to the grid
 
@@ -3043,14 +3042,15 @@ namespace Thetis
                 {
                     // draw Sub RX 0Hz line
                     int x = (int)((float)(vfoa_sub_hz - vfoa_hz - Low) / width * W);
-                    if (bottom || (current_display_mode_bottom == DisplayMode.PANAFALL && rx == 2))
-                    {
-                        g.DrawLine(sub_rx_zero_line_pen, x, H + top, x, H + H);
-                    }
-                    else
-                    {
-                        g.DrawLine(sub_rx_zero_line_pen, x, top, x, H);
-                    }
+                    //if (bottom || (current_display_mode_bottom == DisplayMode.PANAFALL && rx == 2))
+                    //{
+                    //    g.DrawLine(sub_rx_zero_line_pen, x, H + top, x, H + H);
+                    //}
+                    //else
+                    //{
+                    //    g.DrawLine(sub_rx_zero_line_pen, x, top, x, H);
+                    //}
+                    g.DrawLine(sub_rx_zero_line_pen, x, nVerticalShift + top, x, nVerticalShift + H);
                 }
             }
 
@@ -3466,7 +3466,7 @@ namespace Thetis
             {
                 Brush brBrush = local_mox ? tx_grid_zero_pen.Brush : grid_zero_pen.Brush;
 
-                g.DrawString("0", font9, brBrush, center_line_x - 5, nVerticalShift + (float)Math.Floor(H * .01));
+                g.DrawString("0", font9, brBrush, center_line_x - 5, nVerticalShift + 4/*(float)Math.Floor(H * .01)*/);
             }
 
             //MW0LGE
@@ -3602,7 +3602,6 @@ namespace Thetis
 
             int f_steps = (width / freq_step_size) + 1;
 
-
             // Draw vertical lines - band edge markers and freq text
             for (int i = -1; i < f_steps + 1; i++)  // MW0LGE was from i=0, fixes inbetweenies not drawn if major is < 0
             {
@@ -3613,7 +3612,7 @@ namespace Thetis
                 double actual_fgrid = ((double)(vfo_round + fgrid)) / 1000000;
                 int vgrid = (int)((double)(fgrid - vfo_delta - Low) / width * W);
                 string freq_num = actual_fgrid.ToString();
-
+                
                 bool bBandEdge = false;
 
                 if (!show_freq_offset)
@@ -3692,10 +3691,10 @@ namespace Thetis
                     else
                     {
                         //display freqencies
-                        string temp_string;
+                        //string temp_string;
                         int jper;
                         label = actual_fgrid.ToString("f4");
-                        temp_string = label;
+                        //temp_string = label;
                         jper = label.IndexOf('.') + 4;
                         label = label.Insert(jper, " ");
 
@@ -3704,7 +3703,7 @@ namespace Thetis
                         else offsetL = (int)((label.Length) * 4.1) - 8;
                     }
 
-                    g.DrawString(label, font9, brTextBrush, vgrid - offsetL, nVerticalShift + (float)Math.Floor(H * .01));
+                    g.DrawString(label, font9, brTextBrush, vgrid - offsetL, nVerticalShift + 4/*(float)Math.Floor(H * .01)*/);
                     //--------------
                 }
                 else
@@ -3725,7 +3724,7 @@ namespace Thetis
                     {
                         Brush brBrush = local_mox ? grid_tx_text_brush : grid_text_brush;
 
-                        g.DrawString(label, font9, brBrush, vgrid - offsetL, nVerticalShift + (float)Math.Floor(H * .01));
+                        g.DrawString(label, font9, brBrush, vgrid - offsetL, nVerticalShift + 4/*(float)Math.Floor(H * .01)*/);
                     }
                 }
             }
@@ -3766,6 +3765,48 @@ namespace Thetis
             if (grid_control && !bIsWaterfall)
             {
                 // Draw horizontal lines
+                //int nLeft = 0;
+                //int nRight = 0;
+                //int nW = (int)g.MeasureString("-", font9).Width + 12;
+
+                //switch (label_align)//MW0LGE display_label_align)
+                //{
+                //    case DisplayLabelAlignment.LEFT:
+                //        nLeft = 0;
+                //        nRight = nW;
+                //        break;
+                //    case DisplayLabelAlignment.CENTER:
+
+                //        if (rx == 1 && (rx1_dsp_mode == DSPMode.USB || rx1_dsp_mode == DSPMode.DIGU || rx1_dsp_mode == DSPMode.CWU))
+                //        {
+                //            nLeft = center_line_x - nW;
+                //            nRight = nLeft + nW;
+                //        }
+                //        else if (rx == 2 && (rx2_dsp_mode == DSPMode.USB || rx2_dsp_mode == DSPMode.DIGU || rx2_dsp_mode == DSPMode.CWU))
+                //        {
+                //            nLeft = center_line_x - nW;
+                //            nRight = nLeft + nW;
+                //        }
+                //        else
+                //        {
+                //            nLeft = center_line_x;
+                //            nRight = nLeft + nW;
+                //        }
+                //        break;
+                //    case DisplayLabelAlignment.RIGHT:
+                //        nLeft = W - nW;
+                //        nRight = W;
+                //        break;
+                //    case DisplayLabelAlignment.AUTO:
+                //        nLeft = 0;
+                //        nRight = nW;
+                //        break;
+                //    case DisplayLabelAlignment.OFF:
+                //        nLeft = W;
+                //        nRight = W + nW;
+                //        break;
+                //}
+
                 for (int i = 1; i < h_steps; i++)
                 {
                     int xOffset = 0;
@@ -3798,7 +3839,15 @@ namespace Thetis
                                 x = xOffset + 3;
                                 break;
                             case DisplayLabelAlignment.CENTER:
-                                x = center_line_x + xOffset;
+                                if (rx == 1 && (rx1_dsp_mode == DSPMode.USB || rx1_dsp_mode == DSPMode.DIGU || rx1_dsp_mode == DSPMode.CWU))
+                                {
+                                    x = center_line_x - xOffset - (int)size.Width;
+                                }
+                                else if (rx == 2 && (rx2_dsp_mode == DSPMode.USB || rx2_dsp_mode == DSPMode.DIGU || rx2_dsp_mode == DSPMode.CWU))
+                                {
+                                    x = center_line_x - xOffset - (int)size.Width;
+                                }
+                                else x = center_line_x + xOffset;
                                 break;
                             case DisplayLabelAlignment.RIGHT:
                                 x = (int)(W - size.Width - 3);
@@ -3810,8 +3859,16 @@ namespace Thetis
                                 x = W;
                                 break;
                         }
-                        console.DisplayGridX = x;
-                        console.DisplayGridW = (int)(x + size.Width);
+                        if (rx == 1)
+                        {
+                            console.RX1DisplayGridX = x;
+                            console.RX1DisplayGridW = (int)(x + size.Width);
+                        }
+                        else
+                        {
+                            console.RX2DisplayGridX = x;
+                            console.RX2DisplayGridW = (int)(x + size.Width);
+                        }
                         y -= 8;
                         if (y + 9 < H)
                         {
@@ -3832,78 +3889,59 @@ namespace Thetis
             // draw long cursor & filter overlay
             if (current_click_tune_mode != ClickTuneMode.Off)
             {
-                    bool bShow = false;
+                bool bShow = false;
 
-                    Pen p;
-                    // if we are sub tx then the cross will be red
-                    p = current_click_tune_mode == ClickTuneMode.VFOA ? grid_text_pen : Pens.Red;
+                Pen p;
+                // if we are sub tx then the cross will be red
+                p = current_click_tune_mode == ClickTuneMode.VFOA ? grid_text_pen : Pens.Red;
 
-                    int y1 = top;
-                    int y2 = H;
+                int y1 = nVerticalShift + top;
+                int y2 = H;
 
-                    if(rx==1)
+                if (rx == 1)
+                {
+                    if (rx2_enabled)
                     {
-                        if(bottom)
-                        {
-                            if (current_display_mode == DisplayMode.PANAFALL)
-                            {
-                                y1 = H + top;
-                            }
-                        }
                         bShow = (current_display_mode == DisplayMode.PANAFALL) ? display_cursor_y <= 2 * H : display_cursor_y <= H;
                     }
-                    else// if(rx==2)
+                    else
                     {
-                        if (bottom)
+                        bShow = true;
+                    }
+                }
+                else
+                {
+                    bShow = (current_display_mode_bottom == DisplayMode.PANAFALL) ? display_cursor_y > 2 * H : display_cursor_y > H;
+                }
+
+                if (bShow)
+                {
+                    double freq_low = freq + filter_low;
+                    double freq_high = freq + filter_high;
+                    int x1 = (int)((freq_low - Low) / width * W);
+                    int x2 = (int)((freq_high - Low) / width * W);
+
+                    if (ClickTuneFilter) { // only show filter if option set MW0LGE
+                        if (((rx1_dsp_mode == DSPMode.CWL || rx1_dsp_mode == DSPMode.CWU) && rx == 1) || ((rx2_dsp_mode == DSPMode.CWL || rx2_dsp_mode == DSPMode.CWU) && rx == 2))
                         {
-                            if (current_display_mode_bottom == DisplayMode.PANAFALL)
-                            {
-                                y1 = H * 3 + top;
-                            }
-                            else
-                            {
-                                y1 = H + top;
-                            }
+                            g.FillRectangle(display_filter_brush, display_cursor_x -
+                                ((x2 - x1) / 2), y1, x2 - x1, y2 - top);
                         }
                         else
                         {
-                            if (current_display_mode_bottom == DisplayMode.PANAFALL)
-                            {
-                                y1 = H * 2 + top;
-                            }
+                            g.FillRectangle(display_filter_brush, x1, y1, x2 - x1, y2 - top);
                         }
-                        bShow = (current_display_mode_bottom == DisplayMode.PANAFALL) ? ((display_cursor_y > H * 2) && (display_cursor_y <= 4 * H)) : ((display_cursor_y > H) && (display_cursor_y <= H * 2));
                     }
 
-                    if (bShow)
-                    {
-                        double freq_low = freq + filter_low;
-                        double freq_high = freq + filter_high;
-                        int x1 = (int)((freq_low - Low) / width * W);
-                        int x2 = (int)((freq_high - Low) / width * W);
+                    g.DrawLine(p, display_cursor_x, y1-top, display_cursor_x, (y1 - top) + y2);
 
-                        if (ClickTuneFilter) { // only show filter if option set MW0LGE
-                            if (((rx1_dsp_mode == DSPMode.CWL || rx1_dsp_mode == DSPMode.CWU) && rx == 1) || ((rx2_dsp_mode == DSPMode.CWL || rx2_dsp_mode == DSPMode.CWU) && rx == 2))
-                            {
-                                g.FillRectangle(display_filter_brush, display_cursor_x -
-                                    ((x2 - x1) / 2), y1, x2 - x1, y2 - top);
-                            }
-                            else
-                            {
-                                g.FillRectangle(display_filter_brush, x1, y1, x2 - x1, y2 - top);
-                            }
-                        }
-
-                        g.DrawLine(p, display_cursor_x, y1-top, display_cursor_x, (y1 - top) + y2);
-
-                        // draw horiz cursor line
-                        if (ShowCTHLine) g.DrawLine(p, 0, display_cursor_y, W, display_cursor_y);
-                    }
-                //}                
+                    // draw horiz cursor line
+                    if (ShowCTHLine) g.DrawLine(p, 0, display_cursor_y, W, display_cursor_y);
+                }             
             }
 
             // MW0LGE all the code for F/G/H overlay line/grab boxes
-            if (!bIsWaterfall)
+            if (!bIsWaterfall && !local_mox)
             {
                 //MW0LGE include bottom check
                 if (console.PowerOn && (((current_display_mode == DisplayMode.PANADAPTER ||
@@ -3978,7 +4016,7 @@ namespace Thetis
                         }
                     }
 
-                    if (rx == 1 && !local_mox)
+                    if (rx == 1/* && !local_mox*/)
                     {
                         float rx1_cal_offset = 0.0f;
                         switch (console.RX1AGCMode)
@@ -4007,13 +4045,13 @@ namespace Thetis
                         switch (console.RX1AGCMode)
                         {
                             case AGCMode.FIXD:
-                                rx1_agcknee_y_value = dBToPixel(-(float)rx1_agc_fixed_gain + rx1_cal_offset);
+                                rx1_agcknee_y_value = dBToPixel(-(float)rx1_agc_fixed_gain + rx1_cal_offset, H);
                                 // Debug.WriteLine("agcknee_y_D:" + agcknee_y_value);
                                 rx1_agc = "-F";
                                 break;
                             default:
-                                rx1_agcknee_y_value = dBToPixel((float)rx1_thresh + rx1_cal_offset);
-                                rx1_agc_hang_y = dBToPixel((float)rx1_hang + rx1_cal_offset);
+                                rx1_agcknee_y_value = dBToPixel((float)rx1_thresh + rx1_cal_offset, H);
+                                rx1_agc_hang_y = dBToPixel((float)rx1_hang + rx1_cal_offset, H);
 
                                 if (console.RX2Enabled && CurrentDisplayMode == DisplayMode.PANAFALL)
                                     rx1_agc_hang_y = rx1_agc_hang_y / 4;
@@ -4037,10 +4075,12 @@ namespace Thetis
                                 break;
                         }
 
-                        if (console.RX2Enabled && CurrentDisplayMode == DisplayMode.PANAFALL)
-                            rx1_agcknee_y_value = rx1_agcknee_y_value / 4;
-                        else if (console.RX2Enabled || split_display)
-                            rx1_agcknee_y_value = rx1_agcknee_y_value / 2;
+                        //if (console.RX2Enabled && CurrentDisplayMode == DisplayMode.PANAFALL)
+                        //    rx1_agcknee_y_value = rx1_agcknee_y_value / 4;
+                        //else if (console.RX2Enabled || split_display)
+                        //    rx1_agcknee_y_value = rx1_agcknee_y_value / 2;
+
+                        rx1_agcknee_y_value += nVerticalShift;
 
                         // show agc line
                         if (show_agc)
@@ -4056,7 +4096,7 @@ namespace Thetis
                             }
                         }
                     }
-                    else if (rx == 2 && !local_mox)
+                    else if (rx == 2/* && !local_mox*/)
                     {
                         float rx2_cal_offset = 0.0f;
                         double rx2_thresh = 0.0;
@@ -4086,28 +4126,31 @@ namespace Thetis
                         switch (console.RX2AGCMode)
                         {
                             case AGCMode.FIXD:
-                                rx2_agcknee_y_value = dBToRX2Pixel(-(float)rx2_agc_fixed_gain + rx2_cal_offset);
+                                rx2_agcknee_y_value = dBToRX2Pixel(-(float)rx2_agc_fixed_gain + rx2_cal_offset, H);
                                 // Debug.WriteLine("agcknee_y_D:" + agcknee_y_value);
                                 rx2_agc = "-F";
                                 break;
                             default:
-                                rx2_agcknee_y_value = dBToRX2Pixel((float)rx2_thresh + rx2_cal_offset);
-                                rx2_agc_hang_y = dBToRX2Pixel((float)rx2_hang + rx2_cal_offset);// + rx2_fft_size_offset);  MW0LGE   NOT IN RX1 WHY?  TODO CHECK
+                                rx2_agcknee_y_value = dBToRX2Pixel((float)rx2_thresh + rx2_cal_offset, H);
+                                rx2_agc_hang_y = dBToRX2Pixel((float)rx2_hang + rx2_cal_offset, H);// + rx2_fft_size_offset);  MW0LGE   NOT IN RX1 WHY?  TODO CHECK
 
-                                if ((console.RX2Enabled || split_display) && current_display_mode_bottom != DisplayMode.PANAFALL)
-                                    rx2_agc_hang_y = rx2_agc_hang_y / 2;
-                                else
-                                    rx2_agc_hang_y = rx2_agc_hang_y / 4;
+                                //if ((console.RX2Enabled || split_display) && current_display_mode_bottom != DisplayMode.PANAFALL)
+                                //    rx2_agc_hang_y = rx2_agc_hang_y / 2;
+                                //else
+                                //    rx2_agc_hang_y = rx2_agc_hang_y / 4;
+
+                                rx2_agc_hang_y += nVerticalShift;
 
                                 if (display_rx2_hang_line && console.RX2AGCMode != AGCMode.MED && console.RX2AGCMode != AGCMode.FAST)
                                 {
                                     AGCRX2Hang.Height = 8; AGCRX2Hang.Width = 8; AGCRX2Hang.X = 40;
 
                                     //MW0LGE
-                                    if (current_display_mode_bottom == DisplayMode.PANAFALL)
-                                        AGCRX2Hang.Y = ((int)rx2_agc_hang_y + 2 * H) - AGCRX2Hang.Height;
-                                    else
-                                        AGCRX2Hang.Y = ((int)rx2_agc_hang_y + H) - AGCRX2Hang.Height;
+                                    //if (current_display_mode_bottom == DisplayMode.PANAFALL)
+                                    //    AGCRX2Hang.Y = ((int)rx2_agc_hang_y + 2 * H) - AGCRX2Hang.Height;
+                                    //else
+                                    //    AGCRX2Hang.Y = ((int)rx2_agc_hang_y + H) - AGCRX2Hang.Height;
+                                    AGCRX2Hang.Y = (int)rx2_agc_hang_y - AGCRX2Hang.Height;
 
                                     g.FillRectangle(Brushes.Yellow, AGCRX2Hang);
                                     using (Pen p = new Pen(Color.Yellow))
@@ -4126,19 +4169,22 @@ namespace Thetis
                                 break;
                         }
 
-                        if (current_display_mode_bottom == DisplayMode.PANAFALL)
-                            rx2_agcknee_y_value = rx2_agcknee_y_value / 4;
-                        else
-                            rx2_agcknee_y_value = rx2_agcknee_y_value / 2;
+                        //if (current_display_mode_bottom == DisplayMode.PANAFALL)
+                        //    rx2_agcknee_y_value = rx2_agcknee_y_value / 4;
+                        //else
+                        //    rx2_agcknee_y_value = rx2_agcknee_y_value / 2;
 
                         if (display_rx2_gain_line)
                         {
+                            rx2_agcknee_y_value += nVerticalShift;
+
                             AGCRX2Knee.Height = 8; AGCRX2Knee.Width = 8; AGCRX2Knee.X = 40;
 
-                            if (current_display_mode_bottom == DisplayMode.PANAFALL)
-                                AGCRX2Knee.Y = ((int)rx2_agcknee_y_value + 2 * H) - AGCRX2Knee.Height;
-                            else
-                                AGCRX2Knee.Y = ((int)rx2_agcknee_y_value + H) - AGCRX2Knee.Height;
+                            //if (current_display_mode_bottom == DisplayMode.PANAFALL)
+                            //    AGCRX2Knee.Y = ((int)rx2_agcknee_y_value + 2 * H) - AGCRX2Knee.Height;
+                            //else
+                            //    AGCRX2Knee.Y = ((int)rx2_agcknee_y_value + H) - AGCRX2Knee.Height;
+                            AGCRX2Knee.Y = (int)rx2_agcknee_y_value - AGCRX2Knee.Height;
 
                             g.FillRectangle(Brushes.YellowGreen, AGCRX2Knee);
                             using (Pen p = new Pen(Color.YellowGreen))
@@ -4404,22 +4450,22 @@ namespace Thetis
             }
         }
 
-        private static float dBToPixel(float dB)
+        private static float dBToPixel(float dB, int H)
         {
-            return (float)(spectrum_grid_max - dB) * Target.Height / (spectrum_grid_max - spectrum_grid_min);
+            return (float)(spectrum_grid_max - dB) * H / (spectrum_grid_max - spectrum_grid_min);
         }
 
-        private static float dBToRX2Pixel(float dB)
+        private static float dBToRX2Pixel(float dB, int H)
         {
-            return (float)(rx2_spectrum_grid_max - dB) * Target.Height / (rx2_spectrum_grid_max - rx2_spectrum_grid_min);
+            return (float)(rx2_spectrum_grid_max - dB) * H / (rx2_spectrum_grid_max - rx2_spectrum_grid_min);
         }
 
-        private static float PixelToDb(float y)
+        private static float PixelToDb(float y, int H)
         {
-            if (y <= displayTargetHeight / 2) y *= 2.0f;
-            else y = (y - displayTargetHeight / 2) * 2.0f;
+            if (y <= H / 2) y *= 2.0f;
+            else y = (y - H / 2) * 2.0f;
 
-            return (float)(spectrum_grid_max - y * (double)(spectrum_grid_max - spectrum_grid_min) / displayTargetHeight);
+            return (float)(spectrum_grid_max - y * (double)(spectrum_grid_max - spectrum_grid_min) / H);
         }
 
         //private static void DrawWaterfallGrid(ref Graphics g, int W, int H, int rx, bool bottom)
@@ -4631,7 +4677,7 @@ namespace Thetis
         unsafe private static bool DrawPhase(Graphics g, int W, int H, bool bottom)
         {
             DrawPhaseGrid(ref g, W, H, bottom);
-            int num_points = phase_num_pts;
+            int num_points = phase_num_pts;            
 
             if (!bottom && data_ready)
             {
@@ -4786,7 +4832,7 @@ namespace Thetis
             {
                 if (mox && (rx1_dsp_mode == DSPMode.CWL || rx1_dsp_mode == DSPMode.CWU))
                 {
-                    for (int i = 0; i < current_display_data.Length; i++)
+                    for (int i = 0; i < W/*current_display_data.Length*/; i++)
                         current_display_data[i] = grid_min - rx1_display_cal_offset;
                 }
                 else
@@ -4868,10 +4914,13 @@ namespace Thetis
             return true;
         }
 
-        unsafe static private bool DrawPanadapter(Graphics g, int W, int H, int rx, bool bottom)
+        unsafe static private bool DrawPanadapter(Graphics g, int nVerticalShift, int W, int H, int rx, bool bottom)
         {
-            if (grid_control) clearBackground(ref g, rx, W, H, bottom);
-            drawPanadapterAndWaterfallGrid(ref g, W, H, rx, bottom, false);
+            if (grid_control)
+            {
+                clearBackground(ref g, rx, W, H, bottom);
+                drawPanadapterAndWaterfallGrid(ref g, nVerticalShift, W, H, rx, bottom, false);
+            }
 
             if (pan_fill)
             {
@@ -4918,7 +4967,7 @@ namespace Thetis
                 {
                     if (!displayduplex && (local_mox || (mox && tx_on_vfob)) && (rx1_dsp_mode == DSPMode.CWL || rx1_dsp_mode == DSPMode.CWU))
                     {
-                        for (int i = 0; i < current_display_data.Length; i++)
+                        for (int i = 0; i < W/*current_display_data.Length*/; i++)
                             current_display_data[i] = grid_min - rx1_display_cal_offset;
                     }
                     else
@@ -4954,7 +5003,7 @@ namespace Thetis
                     //MW0LGE//if (local_mox && (rx2_dsp_mode == DSPMode.CWL || rx2_dsp_mode == DSPMode.CWU))
                     if (blank_bottom_display || (local_mox && (rx2_dsp_mode == DSPMode.CWL || rx2_dsp_mode == DSPMode.CWU)))
                     {
-                        for (int i = 0; i < current_display_data_bottom.Length; i++)
+                        for (int i = 0; i < W/*current_display_data_bottom.Length*/; i++)
                             current_display_data_bottom[i] = grid_min - rx2_display_cal_offset;
                     }
                     else
@@ -4969,8 +5018,8 @@ namespace Thetis
                 data = current_display_data_bottom;
             }
 
-            try
-            {
+            //try
+            //{
                 float max;
                 //MW0LGE block of code pulled from loop, += in there for now - TODO
                 float fOffset = 0;
@@ -5018,16 +5067,16 @@ namespace Thetis
 
                     points[i].Y += nOffset2;
                 }
-            }
-            catch (Exception ex)
-            {
-                Trace.WriteLine(ex);
-            }
+            //}
+            //catch (Exception ex)
+            //{
+            //    Trace.WriteLine(ex);
+            //}
 
             if (!bottom) max_y = local_max_y;
 
-            try
-            {
+            //try
+            //{
                 if (pan_fill)
                 {
                     points[W].X = W; points[W].Y = H;
@@ -5060,11 +5109,11 @@ namespace Thetis
 
                 // MW0LGE - TODO peak blob
                 //g.DrawEllipse(tx_filter_pen, points[(int)max_x].X - 2, points[(int)max_x].Y - 2, 4, 4);
-            }
-            catch (Exception ex)
-            {
-                // Trace.WriteLine(ex);
-            }
+            //}
+            //catch (Exception ex)
+            //{
+            //    // Trace.WriteLine(ex);
+            //}
 
             return true;
         }
@@ -5116,7 +5165,7 @@ namespace Thetis
         private static float RX1waterfallPreviousMinValue = 0.0f;
         private static float RX2waterfallPreviousMinValue = 0.0f;
 
-        unsafe static private bool DrawWaterfall(Graphics g, int W, int H, int rx, bool bottom)
+        unsafe static private bool DrawWaterfall(Graphics g, int nVerticalShift, int W, int H, int rx, bool bottom)
         {
             //if (grid_control) clearBackground(ref g, rx, W, H, bottom);
 
@@ -5231,7 +5280,7 @@ namespace Thetis
                 {
                     if (!displayduplex && local_mox && (rx1_dsp_mode == DSPMode.CWL || rx1_dsp_mode == DSPMode.CWU))
                     {
-                        for (int i = 0; i < current_waterfall_data.Length; i++)
+                        for (int i = 0; i < W/*current_waterfall_data.Length*/; i++)
                             current_waterfall_data[i] = -200.0f;
                     }
                     else
@@ -5247,7 +5296,7 @@ namespace Thetis
                 {
                     if (local_mox && (rx2_dsp_mode == DSPMode.CWL || rx2_dsp_mode == DSPMode.CWU))
                     {
-                        for (int i = 0; i < current_waterfall_data_bottom.Length; i++)
+                        for (int i = 0; i < W/*current_waterfall_data_bottom.Length*/; i++)
                             current_waterfall_data_bottom[i] = -200.0f;
                     }
                     else
@@ -6248,34 +6297,42 @@ namespace Thetis
                         RX2waterfallPreviousMinValue = ((RX2waterfallPreviousMinValue * 8) + (waterfall_minimum * 2)) / 10 + 1; //wfagc
                 }
 
-                //MW0LGE
-                if (bottom)
+                if(rx == 1)
                 {
-                    if (rx == 1) g.DrawImageUnscaled(waterfall_bmp, 0, H + 20);
-                    else if (rx == 2)
-                    {
-                        switch (current_display_mode_bottom)
-                        {
-                            case DisplayMode.PANAFALL:
-                                g.DrawImageUnscaled(waterfall_bmp2, 0, 3 * H + 20);
-                                break;
-                            default:
-                                g.DrawImageUnscaled(waterfall_bmp2, 0, H + 20);
-                                break;
-                        }
-                    }
+                    g.DrawImageUnscaled(waterfall_bmp, 0, nVerticalShift + 20);
                 }
                 else
                 {
-                    if (rx == 1) g.DrawImageUnscaled(waterfall_bmp, 0, 20); // draw the image on the background	
-                    else if (rx == 2) g.DrawImageUnscaled(waterfall_bmp2, 0, 20);   // draw the image on the background	
+                    g.DrawImageUnscaled(waterfall_bmp2, 0, nVerticalShift + 20);
                 }
+                //MW0LGE
+                //if (bottom)
+                //{
+                //    if (rx == 1) g.DrawImageUnscaled(waterfall_bmp, 0, H + 20);
+                //    else if (rx == 2)
+                //    {
+                //        switch (current_display_mode_bottom)
+                //        {
+                //            case DisplayMode.PANAFALL:
+                //                g.DrawImageUnscaled(waterfall_bmp2, 0, 3 * H + 20);
+                //                break;
+                //            default:
+                //                g.DrawImageUnscaled(waterfall_bmp2, 0, H + 20);
+                //                break;
+                //        }
+                //    }
+                //}
+                //else
+                //{
+                //    if (rx == 1) g.DrawImageUnscaled(waterfall_bmp, 0, 20); // draw the image on the background	
+                //    else if (rx == 2) g.DrawImageUnscaled(waterfall_bmp2, 0, 20);   // draw the image on the background	
+                //}
                 //-
 
             }
 
             // MW0LGE now draw any grid/labels/scales over the top of waterfall
-            if (grid_control) drawPanadapterAndWaterfallGrid(ref g, W, H, rx, bottom, true);
+            if (grid_control) drawPanadapterAndWaterfallGrid(ref g, nVerticalShift, W, H, rx, bottom, true);
 
             return true;
         }
@@ -6436,36 +6493,104 @@ namespace Thetis
                 rx2_peak_buffer[0] = CLEAR_FLAG; // set reset flag
         }
 
-        public static void ResetWaterfallBmp(int scale)
+        public static void ResetWaterfallBmp(/*int scale*/)
         {
+            //if (!bIsPanafall)
+            //{
+            //    if (Display.RX2Enabled)
+            //        Display.ResetWaterfallBmp(2);
+            //    else
+            //        Display.ResetWaterfallBmp(1);
+            //}
+            //else
+            //{
+            //    if (Display.RX2Enabled)
+            //        Display.ResetWaterfallBmp(4);
+            //    else
+            //        Display.ResetWaterfallBmp(2);
+            //}
+
+            int H = displayTargetHeight;
+            if (current_display_mode == DisplayMode.PANAFALL) H /= 2;
+            if (rx2_enabled) H /= 2;
+
+            //override for splitter pos, when only one rx and it is panafall
+            if (!rx2_enabled && current_display_mode == DisplayMode.PANAFALL) H = displayTargetHeight - PanafallSplitBarPos;
+
             if (current_display_engine == DisplayEngine.GDI_PLUS)
             {
-                waterfall_bmp.Dispose();
-                waterfall_bmp = new Bitmap(displayTargetWidth, (displayTargetHeight / scale) - 20, PixelFormat.Format24bppRgb);
+                if(waterfall_bmp != null) waterfall_bmp.Dispose();
+                waterfall_bmp = new Bitmap(displayTargetWidth, /*(displayTargetHeight / scale)*/ H - 20, PixelFormat.Format24bppRgb);
             }
             else
             {
                 lock (m_objDX2Lock)
                 {
-                    waterfall_bmp_dx2d.Dispose();
-                    waterfall_bmp_dx2d = new SharpDX.Direct2D1.Bitmap(d2dRenderTarget, new Size2(displayTargetWidth, (displayTargetHeight / scale) - 20), new BitmapProperties(new SDXPixelFormat(Format.B8G8R8A8_UNorm, AlphaMode.Premultiplied)));
+                    SharpDX.Direct2D1.Bitmap tmp = null;
+                    if (waterfall_bmp_dx2d != null && !waterfall_bmp_dx2d.IsDisposed)
+                    {
+                        if (displayTargetWidth == waterfall_bmp_dx2d.Size.Width)
+                        {
+                            // make copy only if widths equal
+                            tmp = new SharpDX.Direct2D1.Bitmap(d2dRenderTarget, new Size2((int)waterfall_bmp_dx2d.Size.Width, (int)waterfall_bmp_dx2d.Size.Height),
+                                    new BitmapProperties(new SDXPixelFormat(Format.B8G8R8A8_UNorm, AlphaMode.Premultiplied)));
+
+                            tmp.CopyFromBitmap(waterfall_bmp_dx2d, new SharpDX.Point(0, 0), new SharpDX.Rectangle(0, 0, (int)tmp.Size.Width, (int)tmp.Size.Height));
+                            //
+                        }
+                    }
+
+                    if (waterfall_bmp_dx2d != null) waterfall_bmp_dx2d.Dispose();
+                    waterfall_bmp_dx2d = new SharpDX.Direct2D1.Bitmap(d2dRenderTarget, new Size2(displayTargetWidth, /*(displayTargetHeight / scale)*/ H - 20), new BitmapProperties(new SDXPixelFormat(Format.B8G8R8A8_UNorm, AlphaMode.Premultiplied)));
+
+                    if (tmp != null)
+                    {
+                        // copy old waterfall into new bitmap
+                        waterfall_bmp_dx2d.CopyFromBitmap(tmp, new SharpDX.Point(0, 0)); // anything outside will be 'ignored'
+                        tmp.Dispose();
+                    }
                 }
             }
         }
 
-        public static void ResetWaterfallBmp2(int scale)
+        public static void ResetWaterfallBmp2(/*int scale*/)
         {
+            int H = displayTargetHeight;
+            if (current_display_mode_bottom == DisplayMode.PANAFALL) H /= 2;
+            H /= 2; // it will always be
+
             if (current_display_engine == DisplayEngine.GDI_PLUS)
             {
-                waterfall_bmp2.Dispose();
-                waterfall_bmp2 = new Bitmap(displayTargetWidth, (displayTargetHeight / scale) - 20, PixelFormat.Format24bppRgb);
+                if(waterfall_bmp2 != null) waterfall_bmp2.Dispose();
+                waterfall_bmp2 = new Bitmap(displayTargetWidth, /*(displayTargetHeight / scale)*/ H - 20, PixelFormat.Format24bppRgb);
             }
             else
             {
                 lock (m_objDX2Lock)
                 {
-                    waterfall_bmp2_dx2d.Dispose();
-                    waterfall_bmp2_dx2d = new SharpDX.Direct2D1.Bitmap(d2dRenderTarget, new Size2(displayTargetWidth, (displayTargetHeight / scale) - 20), new BitmapProperties(new SDXPixelFormat(Format.B8G8R8A8_UNorm, AlphaMode.Premultiplied)));
+                    SharpDX.Direct2D1.Bitmap tmp = null;
+                    if (waterfall_bmp2_dx2d != null && !waterfall_bmp2_dx2d.IsDisposed)
+                    {
+                        if (displayTargetWidth == waterfall_bmp2_dx2d.Size.Width)
+                        {
+                            // make copy only if widths equal
+                            tmp = new SharpDX.Direct2D1.Bitmap(d2dRenderTarget, new Size2((int)waterfall_bmp2_dx2d.Size.Width, (int)waterfall_bmp2_dx2d.Size.Height),
+                                    new BitmapProperties(new SDXPixelFormat(Format.B8G8R8A8_UNorm, AlphaMode.Premultiplied)));
+
+                            tmp.CopyFromBitmap(waterfall_bmp2_dx2d, new SharpDX.Point(0, 0), new SharpDX.Rectangle(0, 0, (int)tmp.Size.Width, (int)tmp.Size.Height));
+                            //
+                        }
+                    }
+
+                    if (waterfall_bmp2_dx2d != null) waterfall_bmp2_dx2d.Dispose();
+                    waterfall_bmp2_dx2d = new SharpDX.Direct2D1.Bitmap(d2dRenderTarget, new Size2(displayTargetWidth, /*(displayTargetHeight / scale)*/ H - 20), new BitmapProperties(new SDXPixelFormat(Format.B8G8R8A8_UNorm, AlphaMode.Premultiplied)));
+
+                    if (tmp != null)
+                    {
+                        // copy old waterfall into new bitmap
+                        waterfall_bmp2_dx2d.CopyFromBitmap(tmp, new SharpDX.Point(0, 0)); // anything outside will be 'ignored'
+                        tmp.Dispose();
+                    }
                 }
             }
         }
@@ -6527,13 +6652,13 @@ namespace Thetis
                 if (m_bDX2Setup) return;
 
                 try
-                {                   
+                {
                     SwapChainDescription desc = new SwapChainDescription()
                     {
                         BufferCount = 1,
                         ModeDescription =
                                            new ModeDescription(displayTargetWidth, displayTargetHeight,
-                                                               new Rational(60, 1), Format.B8G8R8A8_UNorm),
+                                                               new Rational(console.MAX_FPS, 1), Format.B8G8R8A8_UNorm),
                         IsWindowed = true,
                         OutputHandle = displayTarget.Handle,
                         SampleDescription = new SampleDescription(1, 0), // no multi sampling (1 sample), no antialiasing
@@ -6541,7 +6666,7 @@ namespace Thetis
                         Usage = Usage.RenderTargetOutput
                     };
 
-                    Device.CreateWithSwapChain(DriverType.Hardware, DeviceCreationFlags.BgraSupport | DeviceCreationFlags.SingleThreaded, new SharpDX.Direct3D.FeatureLevel[] { SharpDX.Direct3D.FeatureLevel.Level_10_0 }, desc, out device, out swapChain);
+                    Device.CreateWithSwapChain(DriverType.Hardware, DeviceCreationFlags.PreventAlteringLayerSettingsFromRegistry | DeviceCreationFlags.BgraSupport | DeviceCreationFlags.SingleThreaded, new SharpDX.Direct3D.FeatureLevel[] { SharpDX.Direct3D.FeatureLevel.Level_10_0 }, desc, out device, out swapChain);
 
                     //int maxQuality = device.CheckMultisampleQualityLevels(Format.B8G8R8A8_UNorm, 2); // 2 = MSAA_2, 2 times multisampling
 
@@ -6551,18 +6676,9 @@ namespace Thetis
                     surface = backBuffer.QueryInterface<Surface>();
                     d2dRenderTarget = new RenderTarget(d2dFactory, surface,
                                                                     new RenderTargetProperties(new SDXPixelFormat(Format.B8G8R8A8_UNorm, AlphaMode.Premultiplied)));
-                    
-                    //d2dRenderTarget.AntialiasMode = AntialiasMode.Aliased;
-                    //d2dRenderTarget.TextAntialiasMode = TextAntialiasMode.Default;
 
-                    waterfall_bmp_dx2d = new SharpDX.Direct2D1.Bitmap(d2dRenderTarget, new Size2(displayTargetWidth, displayTargetHeight - 20), new BitmapProperties(new SDXPixelFormat(Format.B8G8R8A8_UNorm, AlphaMode.Premultiplied)));
-                    waterfall_bmp2_dx2d = new SharpDX.Direct2D1.Bitmap(d2dRenderTarget, new Size2(displayTargetWidth, displayTargetHeight - 20), new BitmapProperties(new SDXPixelFormat(Format.B8G8R8A8_UNorm, AlphaMode.Premultiplied)));
-
-
-                    //// midldle pixel align shift
-                    //Matrix3x2 t = d2dRenderTarget.Transform;
-                    //t.TranslationVector += new Vector2(0.5f, 0.5f);
-                    //d2dRenderTarget.Transform = t;
+                    ResetWaterfallBmp();
+                    ResetWaterfallBmp2();
 
                     m_bDX2Setup = true;
 
@@ -6582,232 +6698,327 @@ namespace Thetis
         }
         public static void ResizeDX2D()
         {
-            lock (m_objDX2Lock)
+            try
             {
-                if (!m_bDX2Setup) return;
+                lock (m_objDX2Lock)
+                {
+                    if (!m_bDX2Setup) return;
 
-                d2dRenderTarget.Dispose();
-                surface.Dispose();
-                renderView.Dispose();
-                backBuffer.Dispose();
+                    d2dRenderTarget.Dispose();
+                    surface.Dispose();
+                    renderView.Dispose();
+                    backBuffer.Dispose();
 
-                swapChain.ResizeBuffers(1, displayTargetWidth, displayTargetHeight, Format.B8G8R8A8_UNorm, SwapChainFlags.None);
-                backBuffer = Texture2D.FromSwapChain<Texture2D>(swapChain, 0);
-                renderView = new RenderTargetView(device, backBuffer);
-                surface = backBuffer.QueryInterface<Surface>();
-                d2dRenderTarget = new RenderTarget(d2dFactory, surface,
-                                                                new RenderTargetProperties(new SDXPixelFormat(Format.B8G8R8A8_UNorm, AlphaMode.Premultiplied)));
+                    swapChain.ResizeBuffers(1, displayTargetWidth, displayTargetHeight, Format.B8G8R8A8_UNorm, SwapChainFlags.None);
+                    backBuffer = Texture2D.FromSwapChain<Texture2D>(swapChain, 0);
+                    renderView = new RenderTargetView(device, backBuffer);
+                    surface = backBuffer.QueryInterface<Surface>();
+                    d2dRenderTarget = new RenderTarget(d2dFactory, surface,
+                                                                    new RenderTargetProperties(new SDXPixelFormat(Format.B8G8R8A8_UNorm, AlphaMode.Premultiplied)));
+                }
+            }
+            catch (Exception e)
+            {
+                //ShutdownDX2D();
+                //MessageBox.Show("DirectX ResizeDX2D() failure\n" + e.Message, "DirectX", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
+        public static int PanafallSplitBarPos {
+            get { return (int)(displayTargetHeight * m_fPanafallSplitPerc); }
+            //set { 
+            //    m_nPanafallSplitBarPosY = value;
+            //}
+        }
+        private static float m_fPanafallSplitPerc = 0.5f;
+        public static float PanafallSplitBarPerc {
+            get { return m_fPanafallSplitPerc; }
+            set {
+                m_fPanafallSplitPerc = value;
+            }
+        }
         private static bool m_bAntiAlias = false;
         public static bool AntiAlias
         {
             get { return m_bAntiAlias;  }
             set { m_bAntiAlias = value; }
         }
+        public static bool SpecialPanafall {
+            get { return m_bSpecialPanafall; }
+            set {
+                m_bSpecialPanafall = value;
+                if (m_bSpecialPanafall)
+                {
+                    m_fPanafallSplitPerc = 0.8f;
+                }
+                else
+                {
+                    m_fPanafallSplitPerc = 0.5f;
+                }
+                ResetWaterfallBmp();
+            }
+        }
+
+        private static int m_nRX1DisplayHeight = 0;
+        public static int RX1DisplayHeight {
+            get { return m_nRX1DisplayHeight; }
+            set { }
+        }
+        private static int m_nRX2DisplayHeight = 0;
+        public static int RX2DisplayHeight {
+            get { return m_nRX2DisplayHeight; }
+            set { }
+        }
+
+        private static Vector2 m_pixelShift = new Vector2(0.5f, 0.5f);
         public static void RenderDX2D()
         {
-            lock (m_objDX2Lock)
+            try
             {
-                if (!m_bDX2Setup) return; // moved inside the lock so that a change in state by shutdown becomes thread safe
+                //float fTopHeight;
+                //fTopHeight = SpecialPanafall ? 0.8f : 0.5f;
 
-                d2dRenderTarget.BeginDraw();
-
-                if (m_bAntiAlias)
+                lock (m_objDX2Lock)
                 {
-                    d2dRenderTarget.AntialiasMode = AntialiasMode.PerPrimitive; // this will antialias even if multisampling is off
-                }
-                else
-                {
-                    d2dRenderTarget.AntialiasMode = AntialiasMode.Aliased; // this will result in non antialiased lines only if multisampling = 1
-                }
+                    if (!m_bDX2Setup) return; // moved inside the lock so that a change in state by shutdown becomes thread safe
 
-                d2dRenderTarget.TextAntialiasMode = TextAntialiasMode.Default;
+                    d2dRenderTarget.BeginDraw();
 
-                d2dRenderTarget.Clear(SharpDX.Color.Black);
+                    // midldle pixel align shift, NOTE: waterfall will switch internally to identity, and then restore
+                    Matrix3x2 t = d2dRenderTarget.Transform;
+                    t.TranslationVector = m_pixelShift;
+                    d2dRenderTarget.Transform = t;
 
-                if (m_bitmapBackground != null)
-                {
-                    // draw background image
-                    RectangleF rectDest = new RectangleF(0,0, displayTargetWidth, displayTargetHeight);
-                    d2dRenderTarget.DrawBitmap(m_bitmapBackground, rectDest, 1f, BitmapInterpolationMode.Linear);
-                }
-
-                if (!split_display)
-                {
-                    switch (current_display_mode)
+                    if (m_bAntiAlias)
                     {
-                        case DisplayMode.SPECTRUM:
-                            DrawSpectrumDX2D(displayTargetWidth, displayTargetHeight, false);
-                            break;
-                        case DisplayMode.PANADAPTER:
-                            DrawPanadapterDX2D(displayTargetWidth, displayTargetHeight, 1, false);
-                            break;
-                        case DisplayMode.SCOPE:
-                            DrawScopeDX2D(displayTargetWidth, displayTargetHeight, false);
-                            break;
-                        case DisplayMode.SCOPE2:
-                            DrawScope2DX2D(displayTargetWidth, displayTargetHeight, false);
-                            break;
-                        case DisplayMode.PHASE:
-                            DrawPhaseDX2D(displayTargetWidth, displayTargetHeight, false);
-                            break;
-                        case DisplayMode.PHASE2:
-                            DrawPhase2DX2D(displayTargetWidth, displayTargetHeight, false);
-                            break;
-                        case DisplayMode.WATERFALL:
-                            DrawWaterfallDX2D(displayTargetWidth, displayTargetHeight, 1, false);
-                            break;
-                        case DisplayMode.HISTOGRAM:
-                            DrawHistogramDX2D(displayTargetWidth, displayTargetHeight);
-                            break;
-                        case DisplayMode.PANAFALL:
-                            lock (m_objSplitDisplayLock)
-                            {
-                                split_display = true;
-                                DrawPanadapterDX2D(displayTargetWidth, displayTargetHeight / 2, 1, false);
-                                DrawWaterfallDX2D(displayTargetWidth, displayTargetHeight / 2, 1, true);
-                                split_display = false;
-                            }
-                            break;
-                        case DisplayMode.PANASCOPE:
-                            lock (m_objSplitDisplayLock)
-                            {
-                                split_display = true;
-                                DrawPanadapterDX2D(displayTargetWidth, displayTargetHeight / 2, 1, false);
-                                DrawScopeDX2D(displayTargetWidth, displayTargetHeight / 2, true);
-                                split_display = false;
-                            }
-                            break;
-                        case DisplayMode.SPECTRASCOPE:
-                            lock (m_objSplitDisplayLock)
-                            {
-                                split_display = true;
-                                DrawSpectrumDX2D(displayTargetWidth, displayTargetHeight / 2, false);
-                                DrawScopeDX2D(displayTargetWidth, displayTargetHeight / 2, true);
-                                split_display = false;
-                            }
-                            break;
+                        d2dRenderTarget.AntialiasMode = AntialiasMode.PerPrimitive; // this will antialias even if multisampling is off
+                    }
+                    else
+                    {
+                        d2dRenderTarget.AntialiasMode = AntialiasMode.Aliased; // this will result in non antialiased lines only if multisampling = 1
+                    }
+
+                    d2dRenderTarget.TextAntialiasMode = TextAntialiasMode.Default;
+
+                    d2dRenderTarget.Clear(SharpDX.Color.Black);
+
+                    if (m_bitmapBackground != null)
+                    {
+                        // draw background image
+                        RectangleF rectDest = new RectangleF(0, 0, displayTargetWidth, displayTargetHeight);
+                        d2dRenderTarget.DrawBitmap(m_bitmapBackground, rectDest, 1f, BitmapInterpolationMode.Linear);
+                    }
+
+
+                    if (!split_display)
+                    {
+                        m_nRX1DisplayHeight = displayTargetHeight;
+                        switch (current_display_mode)
+                        {
+                            case DisplayMode.SPECTRUM:
+                                DrawSpectrumDX2D(displayTargetWidth, m_nRX1DisplayHeight, false);
+                                break;
+                            case DisplayMode.PANADAPTER:
+                                DrawPanadapterDX2D(0, displayTargetWidth, m_nRX1DisplayHeight, 1, false);
+                                break;
+                            case DisplayMode.SCOPE:
+                                DrawScopeDX2D(displayTargetWidth, m_nRX1DisplayHeight, false);
+                                break;
+                            case DisplayMode.SCOPE2:
+                                DrawScope2DX2D(displayTargetWidth, m_nRX1DisplayHeight, false);
+                                break;
+                            case DisplayMode.PHASE:
+                                DrawPhaseDX2D(displayTargetWidth, m_nRX1DisplayHeight, false);
+                                break;
+                            case DisplayMode.PHASE2:
+                                DrawPhase2DX2D(displayTargetWidth, m_nRX1DisplayHeight, false);
+                                break;
+                            case DisplayMode.WATERFALL:
+                                DrawWaterfallDX2D(0, displayTargetWidth, m_nRX1DisplayHeight, 1, false);
+                                break;
+                            case DisplayMode.HISTOGRAM:
+                                DrawHistogramDX2D(displayTargetWidth, m_nRX1DisplayHeight);
+                                break;
+                            case DisplayMode.PANAFALL:
+                                lock (m_objSplitDisplayLock)
+                                {
+                                    m_nRX1DisplayHeight = (int)(displayTargetHeight * m_fPanafallSplitPerc);
+                                    split_display = PanafallSplitBarPos <= (displayTargetHeight / 2); // add more granularity, TODO change based on avaialble height
+                                    DrawPanadapterDX2D(0, displayTargetWidth, m_nRX1DisplayHeight, 1, false);
+                                    DrawWaterfallDX2D(PanafallSplitBarPos, displayTargetWidth, displayTargetHeight - m_nRX1DisplayHeight, 1, true);
+                                    split_display = false;
+                                }
+                                break;
+                            case DisplayMode.PANASCOPE:
+                                lock (m_objSplitDisplayLock)
+                                {
+                                    m_nRX1DisplayHeight = displayTargetHeight / 2;
+                                    split_display = true;
+                                    DrawPanadapterDX2D(0, displayTargetWidth, m_nRX1DisplayHeight, 1, false);
+                                    DrawScopeDX2D(displayTargetWidth, m_nRX1DisplayHeight, true);
+                                    split_display = false;
+                                }
+                                break;
+                            case DisplayMode.SPECTRASCOPE:
+                                lock (m_objSplitDisplayLock)
+                                {
+                                    m_nRX1DisplayHeight = displayTargetHeight / 2;
+                                    split_display = true;
+                                    DrawSpectrumDX2D(displayTargetWidth, m_nRX1DisplayHeight, false);
+                                    DrawScopeDX2D(displayTargetWidth, m_nRX1DisplayHeight, true);
+                                    split_display = false;
+                                }
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        m_nRX1DisplayHeight = displayTargetHeight / 2;
+                        switch (current_display_mode)
+                        {
+                            case DisplayMode.SPECTRUM:
+                                DrawSpectrumDX2D(displayTargetWidth, m_nRX1DisplayHeight, false);
+                                break;
+                            case DisplayMode.SCOPE:
+                                DrawScopeDX2D(displayTargetWidth, m_nRX1DisplayHeight, false);
+                                break;
+                            //case DisplayMode.SCOPE2:
+                            //    DrawScope2DX2D(displayTargetWidth, displayTargetHeight / 2, false);
+                            //    break;
+                            case DisplayMode.PHASE:
+                                DrawPhaseDX2D(displayTargetWidth, m_nRX1DisplayHeight, false);
+                                break;
+                            case DisplayMode.PHASE2:
+                                DrawPhase2DX2D(displayTargetWidth, m_nRX1DisplayHeight, false);
+                                break;
+                            case DisplayMode.PANADAPTER:
+                                DrawPanadapterDX2D(0, displayTargetWidth, m_nRX1DisplayHeight, 1, false);
+                                break;
+                            case DisplayMode.WATERFALL:
+                                DrawWaterfallDX2D(0, displayTargetWidth, m_nRX1DisplayHeight, 1, false);
+                                break;
+                            case DisplayMode.HISTOGRAM:
+                                DrawHistogramDX2D(displayTargetWidth, m_nRX1DisplayHeight);
+                                break;
+                            case DisplayMode.PANAFALL:
+                                m_nRX1DisplayHeight = displayTargetHeight / 4;
+                                DrawPanadapterDX2D(0, displayTargetWidth, m_nRX1DisplayHeight, 1, false);
+                                DrawWaterfallDX2D(m_nRX1DisplayHeight, displayTargetWidth, m_nRX1DisplayHeight, 1, true);
+                                break;
+                                //case DisplayMode.PANASCOPE:
+                                //    DrawPanadapterDX2D(displayTargetWidth, displayTargetHeight / 4, 1, false);
+                                //    DrawScopeDX2D(displayTargetWidth, displayTargetHeight / 4, true);
+                                //    break;
+                                //case DisplayMode.SPECTRASCOPE:
+                                //    DrawSpectrumDX2D(displayTargetWidth, displayTargetHeight / 4, false);
+                                //    DrawScopeDX2D(displayTargetWidth, displayTargetHeight / 4, true);
+                                //    break;
+                        }
+
+                        m_nRX2DisplayHeight = displayTargetHeight / 2;
+                        switch (current_display_mode_bottom)
+                        {
+                            //case DisplayMode.SPECTRUM:
+                            //    DrawSpectrumDX2D(displayTargetWidth, m_nRX2DisplayHeight, true);
+                            //    break;
+                            //case DisplayMode.SCOPE:
+                            //    DrawScopeDX2D(displayTargetWidth, m_nRX2DisplayHeight, true);
+                            //    break;
+                            //case DisplayMode.SCOPE2:
+                            //    DrawScope2DX2D(displayTargetWidth, displayTargetHeight / 2, true);
+                            //    break;
+                            //case DisplayMode.PHASE:
+                            //    DrawPhaseDX2D(displayTargetWidth, m_nRX2DisplayHeight, true);
+                            //    break;
+                            //case DisplayMode.PHASE2:
+                            //    DrawPhase2DX2D(displayTargetWidth, m_nRX2DisplayHeight, true);
+                            //    break;
+                            case DisplayMode.PANADAPTER:
+                                DrawPanadapterDX2D(m_nRX2DisplayHeight, displayTargetWidth, m_nRX2DisplayHeight, 2, true);
+                                break;
+                            case DisplayMode.WATERFALL:
+                                DrawWaterfallDX2D(m_nRX2DisplayHeight, displayTargetWidth, m_nRX2DisplayHeight, 2, true);
+                                break;
+                            //case DisplayMode.HISTOGRAM:
+                            //    DrawHistogramDX2D(displayTargetWidth, m_nRX2DisplayHeight);
+                            //    break;
+                            case DisplayMode.PANAFALL:
+                                m_nRX2DisplayHeight = displayTargetHeight / 4;
+                                DrawPanadapterDX2D(m_nRX2DisplayHeight * 2, displayTargetWidth, m_nRX2DisplayHeight, 2, false);
+                                DrawWaterfallDX2D(m_nRX2DisplayHeight * 3, displayTargetWidth, m_nRX2DisplayHeight, 2, true);
+                                break;
+                                //case DisplayMode.PANASCOPE:
+                                //    DrawPanadapterDX2D(displayTargetWidth, displayTargetHeight / 4, 2, false);
+                                //    DrawScopeDX2D(displayTargetWidth, displayTargetHeight / 4, true);
+                                //    break;
+                                //case DisplayMode.SPECTRASCOPE:
+                                //    DrawSpectrumDX2D(displayTargetWidth, displayTargetHeight / 4, false);
+                                //    DrawScopeDX2D(displayTargetWidth, displayTargetHeight / 4, true);
+                        }
+                    }
+
+                    // HIGH swr display warning
+                    if (high_swr) drawStringDX2D("High SWR", fontDX2d_font14, m_bDX2_Red, 245, 20);
+
+                    if (m_bFramRateIssue) d2dRenderTarget.FillRectangle(new RectangleF(0, 0, 8, 8), m_bDX2_Red);
+
+                    calcFps();
+                    if (m_bShowFPS) d2dRenderTarget.DrawText(m_nFps.ToString(), fontDX2d_callout, new RectangleF(10, 0, 100, 100), m_bDX2_m_bTextCallOutActive, DrawTextOptions.None);
+
+                    // undo the translate
+                    d2dRenderTarget.Transform = Matrix3x2.Identity;
+
+                    d2dRenderTarget.EndDraw();
+
+                    // render
+                    try
+                    {
+                        swapChain.Present(0, PresentFlags.DoNotWait);
+                    }
+                    catch (SharpDXException se)
+                    {
+                        // ignore these... 0x887A000A = DXGI_ERROR_WAS_STILL_DRAWING
+                        if (!(((se.ResultCode.Code & 0x887A000A) == 0x887A000A) || ((se.HResult & 0x887A000A) == 0x887A000A)))
+                        {
+                            Common.LogString("swapchain issue HR : " + se.HResult.ToString());
+                            Common.LogString("swapchain issue RC : " + se.ResultCode.Code.ToString());
+                            Common.LogException(se);
+                        }
                     }
                 }
-                else
-                {
-                    switch (current_display_mode)
-                    {
-                        case DisplayMode.SPECTRUM:
-                            DrawSpectrumDX2D(displayTargetWidth, displayTargetHeight / 2, false);
-                            break;
-                        case DisplayMode.SCOPE:
-                            DrawScopeDX2D(displayTargetWidth, displayTargetHeight / 2, false);
-                            break;
-                        //case DisplayMode.SCOPE2:
-                        //    DrawScope2DX2D(displayTargetWidth, displayTargetHeight / 2, false);
-                        //    break;
-                        case DisplayMode.PHASE:
-                            DrawPhaseDX2D(displayTargetWidth, displayTargetHeight / 2, false);
-                            break;
-                        case DisplayMode.PHASE2:
-                            DrawPhase2DX2D(displayTargetWidth, displayTargetHeight / 2, false);
-                            break;
-                        case DisplayMode.PANADAPTER:
-                            DrawPanadapterDX2D(displayTargetWidth, displayTargetHeight / 2, 1, false);
-                            break;
-                        case DisplayMode.WATERFALL:
-                            DrawWaterfallDX2D(displayTargetWidth, displayTargetHeight / 2, 1, false);
-                            break;
-                        case DisplayMode.HISTOGRAM:
-                            DrawHistogramDX2D(displayTargetWidth, displayTargetHeight / 2);
-                            break;
-                        case DisplayMode.PANAFALL:
-                            DrawPanadapterDX2D(displayTargetWidth, displayTargetHeight / 4, 1, false);
-                            DrawWaterfallDX2D(displayTargetWidth, displayTargetHeight / 4, 1, true);
-                            break;
-                        //case DisplayMode.PANASCOPE:
-                        //    DrawPanadapterDX2D(displayTargetWidth, displayTargetHeight / 4, 1, false);
-                        //    DrawScopeDX2D(displayTargetWidth, displayTargetHeight / 4, true);
-                        //    break;
-                        //case DisplayMode.SPECTRASCOPE:
-                        //    DrawSpectrumDX2D(displayTargetWidth, displayTargetHeight / 4, false);
-                        //    DrawScopeDX2D(displayTargetWidth, displayTargetHeight / 4, true);
-                        //    break;
-                    }
-                    switch (current_display_mode_bottom)
-                    {
-                        case DisplayMode.SPECTRUM:
-                            DrawSpectrumDX2D(displayTargetWidth, displayTargetHeight / 2, true);
-                            break;
-                        case DisplayMode.SCOPE:
-                            DrawScopeDX2D(displayTargetWidth, displayTargetHeight / 2, true);
-                            break;
-                        //case DisplayMode.SCOPE2:
-                        //    DrawScope2DX2D(displayTargetWidth, displayTargetHeight / 2, true);
-                        //    break;
-                        case DisplayMode.PHASE:
-                            DrawPhaseDX2D(displayTargetWidth, displayTargetHeight / 2, true);
-                            break;
-                        case DisplayMode.PHASE2:
-                            DrawPhase2DX2D(displayTargetWidth, displayTargetHeight / 2, true);
-                            break;
-                        case DisplayMode.PANADAPTER:
-                            DrawPanadapterDX2D(displayTargetWidth, displayTargetHeight / 2, 2, true);
-                            break;
-                        case DisplayMode.WATERFALL:
-                            DrawWaterfallDX2D(displayTargetWidth, displayTargetHeight / 2, 2, true);
-                            break;
-                        case DisplayMode.HISTOGRAM:
-                            DrawHistogramDX2D(displayTargetWidth, displayTargetHeight / 2);
-                            break;
-                        case DisplayMode.PANAFALL:
-                            DrawPanadapterDX2D(displayTargetWidth, displayTargetHeight / 4, 2, false);
-                            DrawWaterfallDX2D(displayTargetWidth, displayTargetHeight / 4, 2, true);
-                            break;
-                        //case DisplayMode.PANASCOPE:
-                        //    DrawPanadapterDX2D(displayTargetWidth, displayTargetHeight / 4, 2, false);
-                        //    DrawScopeDX2D(displayTargetWidth, displayTargetHeight / 4, true);
-                        //    break;
-                        //case DisplayMode.SPECTRASCOPE:
-                        //    DrawSpectrumDX2D(displayTargetWidth, displayTargetHeight / 4, false);
-                        //    DrawScopeDX2D(displayTargetWidth, displayTargetHeight / 4, true);
-                    }
-                }
-
-                // HIGH swr display warning
-                if (high_swr) drawStringDX2D("High SWR", fontDX2d_font14, m_bDX2_Red, 245, 20);
-
-                if (m_bFramRateIssue) d2dRenderTarget.FillRectangle(new RectangleF(0, 0, 8, 8), m_bDX2_Red);
-
-                calcFps();
-                if (m_bShowFPS) d2dRenderTarget.DrawText(m_fps.ToString(), fontDX2d_callout, new RectangleF(10, 0, 100, 100), m_bDX2_m_bTextCallOutActive, DrawTextOptions.None);
-
-                d2dRenderTarget.EndDraw();
-
-                // render
-                swapChain.Present(0, PresentFlags.DoNotWait);                
+            }
+            catch (Exception e)
+            {
+                ShutdownDX2D();
+                Common.LogException(e);
             }
         }
         
-        private static int m_fps = 0;
-        private static int m_count = 0;
-        private static int m_startTime = System.Environment.TickCount;
+        private static int m_nFps = 0;
+        private static int m_nFrameCount = 0;
+        private static int m_nStartTime = System.Environment.TickCount;
         private static void calcFps()
         {
-            m_count++;
             int s = System.Environment.TickCount;
-            if (s >= (m_startTime + 1000))
+            int d = m_nStartTime + 1000;
+
+            m_nFrameCount++;
+
+            if (s >= d)
             {
-                m_fps = m_count;
-
-                m_count = 0;
-
-                m_startTime = s - (s - (m_startTime + 1000));
+                m_nFps = m_nFrameCount;
+                m_nFrameCount = 0;
+                m_nStartTime = s - (s - d);
             }
         }
 
-        unsafe static private bool DrawPanadapterDX2D(int W, int H, int rx, bool bottom)
+        unsafe static private bool DrawPanadapterDX2D(int nVerticalShift, int W, int H, int rx, bool bottom)
         {
-            if (grid_control) clearBackgroundDX2D(rx, W, H, bottom);
-            drawPanadapterAndWaterfallGridDX2D(W, H, rx, bottom, false);
+            if (grid_control)
+            {
+                clearBackgroundDX2D(rx, W, H, bottom);
+                drawPanadapterAndWaterfallGridDX2D(nVerticalShift, W, H, rx, bottom, false);
+            }
 
             float local_max_y = float.MinValue;
             float local_max_x = float.MinValue;
@@ -6849,7 +7060,7 @@ namespace Thetis
                 {
                     if (!displayduplex && (local_mox || (mox && tx_on_vfob)) && (rx1_dsp_mode == DSPMode.CWL || rx1_dsp_mode == DSPMode.CWU))
                     {
-                        for (int i = 0; i < current_display_data.Length; i++)
+                        for (int i = 0; i < W/*current_display_data.Length*/; i++)
                             current_display_data[i] = grid_min - rx1_display_cal_offset;
                     }
                     else
@@ -6885,7 +7096,7 @@ namespace Thetis
                     //MW0LGE//if (local_mox && (rx2_dsp_mode == DSPMode.CWL || rx2_dsp_mode == DSPMode.CWU))
                     if (blank_bottom_display || (local_mox && (rx2_dsp_mode == DSPMode.CWL || rx2_dsp_mode == DSPMode.CWU)))
                     {
-                        for (int i = 0; i < current_display_data_bottom.Length; i++)
+                        for (int i = 0; i < W/*current_display_data_bottom.Length*/; i++)
                             current_display_data_bottom[i] = grid_min - rx2_display_cal_offset;
                     }
                     else
@@ -6900,89 +7111,72 @@ namespace Thetis
                 data = current_display_data_bottom;
             }
 
-            try
+            float max;
+            float fOffset;
+
+            if (rx == 1)
             {
-                float max;
-                float fOffset;// = 0;
-
-                if (rx == 1)
+                if (local_mox) fOffset = tx_display_cal_offset;
+                else if (mox && tx_on_vfob && !displayduplex)
                 {
-                    if (local_mox) fOffset = tx_display_cal_offset;
-                    else if (mox && tx_on_vfob && !displayduplex)
-                    {
-                        if (console.RX2Enabled) fOffset = rx1_display_cal_offset;
-                        else fOffset = tx_display_cal_offset;
-                    }
-                    else fOffset = rx1_display_cal_offset;
+                    if (console.RX2Enabled) fOffset = rx1_display_cal_offset;
+                    else fOffset = tx_display_cal_offset;
                 }
-                else //if (rx == 2)
-                {
-                    if (local_mox) fOffset = tx_display_cal_offset;
-                    else fOffset = rx2_display_cal_offset;
-                }
+                else fOffset = rx1_display_cal_offset;
+            }
+            else //if (rx == 2)
+            {
+                if (local_mox) fOffset = tx_display_cal_offset;
+                else fOffset = rx2_display_cal_offset;
+            }
 
-                if (!local_mox || (local_mox && displayduplex))
-                {
-                    if (rx == 1) fOffset += rx1_preamp_offset;
-                    else /*if (rx == 2)*/ fOffset += rx2_preamp_offset;
-                }
+            if (!local_mox || (local_mox && displayduplex))
+            {
+                if (rx == 1) fOffset += rx1_preamp_offset;
+                else /*if (rx == 2)*/ fOffset += rx2_preamp_offset;
+            }
 
+            //MW0LGE not used, as filling vertically with lines is faster than a filled very detailed
+            //geometry. Just kept for reference
+            //PathGeometry sharpGeometry = new PathGeometry(d2dRenderTarget.Factory);
+            //using (GeometrySink geo = sharpGeometry.Open())
+            //geo.BeginFigure(new SharpDX.Vector2(0, lowerH), FigureBegin.Filled);
+            //geo.AddLine(new SharpDX.Vector2(i, Y));
+            //        geo.EndFigure(FigureEnd.Closed);
+            //        geo.Close();
+            //        geo.Dispose();
+            //    }
+            //sharpGeometry.Dispose();
 
-                //if (bottom) nOffset2 = H;
-                //else if (current_display_mode_bottom == DisplayMode.PANAFALL && rx == 2) nOffset2 = 2 * H;  //MW0LGE
+            SharpDX.Direct2D1.Brush lineBrush;
+            SharpDX.Direct2D1.Brush fillBrush;
 
-                int nOffset2 = 0;
-                int lowerH = H; // the bottom edge                  
-                if (bottom)
-                {
-                    nOffset2 = H;
-                    lowerH += H;
-                }
-                else if (current_display_mode_bottom == DisplayMode.PANAFALL && rx == 2)                     //MW0LGE - RX2
-                {
-                    nOffset2 = 2 * H;
-                    lowerH += 2 * H;
-                }
+            if (local_mox)
+            {
+                lineBrush = m_bDX2_tx_data_line_pen_brush;
+                fillBrush = m_bDX2_tx_data_line_fpen_brush;
+            }
+            else
+            {
+                lineBrush = m_bDX2_data_line_pen_brush;
+                fillBrush = m_bDX2_data_fill_fpen_brush;
+            }
+            float penWidth = data_line_pen.Width;
 
-                //MW0LGE not used anymore, as filling vertically with lines is faster than a filled very detailed
-                //geometry. Just kept for reference
-                //PathGeometry sharpGeometry = new PathGeometry(d2dRenderTarget.Factory);
-                //using (GeometrySink geo = sharpGeometry.Open())
-                //geo.BeginFigure(new SharpDX.Vector2(0, lowerH), FigureBegin.Filled);
-                //geo.AddLine(new SharpDX.Vector2(i, Y));
-                //        geo.EndFigure(FigureEnd.Closed);
-                //        geo.Close();
-                //        geo.Dispose();
-                //    }
-                //sharpGeometry.Dispose();
+            // calc start pos
+            int Y;
+            max = data[0] + fOffset;
+            //Y = (int)(Math.Floor((grid_max - max) * H / yRange));
+            Y = (int)(((grid_max - max) * H / yRange) - 0.5f); // -0.5 to mimic floor
+            //Y = Math.Min(Y, H);
+            Y = Y < H ? Y : H;
 
-                SharpDX.Vector2 point = new SharpDX.Vector2();
-                SharpDX.Vector2 previousPoint = new SharpDX.Vector2();
-                SharpDX.Vector2 bottomPoint = new SharpDX.Vector2(0, lowerH + 0.5f);
+            SharpDX.Vector2 point = new SharpDX.Vector2();
+            SharpDX.Vector2 bottomPoint = new SharpDX.Vector2(0, nVerticalShift + H);
+            SharpDX.Vector2 previousPoint = new SharpDX.Vector2(0, Y + nVerticalShift);
 
-                SharpDX.Direct2D1.Brush lineBrush;
-                SharpDX.Direct2D1.Brush fillBrush;
-
-                if (local_mox)
-                {
-                    lineBrush = m_bDX2_tx_data_line_pen_brush;
-                    fillBrush = m_bDX2_tx_data_line_fpen_brush;
-                }
-                else
-                {
-                    lineBrush = m_bDX2_data_line_pen_brush;
-                    fillBrush = m_bDX2_data_fill_fpen_brush;
-                }
-                float penWidth = data_line_pen.Width;
-
-                // start pos
-                int Y;
-                max = data[0] + fOffset;
-                Y = (int)(Math.Floor((grid_max - max) * H / yRange));
-                Y = Math.Min(Y, H);
-                previousPoint.X = 0 + 0.5f; // the 0.5f pushes it into the middle of a 'pixel', so that it is not drawn half in one, and half in the other
-                previousPoint.Y = Y + nOffset2 + 0.5f;
-
+            unchecked // we dont expect any overflows
+            {
                 for (int i = 0; i < W; i++)
                 {
                     max = data[i] + fOffset;
@@ -6997,26 +7191,22 @@ namespace Thetis
                     //Y = (int)(Math.Floor((grid_max - max) * H / yRange));
                     Y = (int)(((grid_max - max) * H / yRange) - 0.5f); // -0.5 to mimic floor
                     //Y = Math.Min(Y, H);
-                    Y = (H < Y) ? H : Y;
+                    Y = Y < H ? Y : H;
 
-                    point.X = i + 0.5f; // the 0.5f pushes it into the middle of a 'pixel', so that it is not drawn half in one, and half in the other
-                    point.Y = Y + nOffset2 + 0.5f;
+                    point.X = i;
+                    point.Y = Y + nVerticalShift;
 
                     if (pan_fill)
                     {
                         // draw vertical line, this is so much faster than FillGeometry as the geo created would be so complex any fill alogorthm would struggle
-                        bottomPoint.X = point.X;
-                        d2dRenderTarget.DrawLine(bottomPoint, point, fillBrush, 1f);
+                        bottomPoint.X = i;
+                        d2dRenderTarget.DrawLine(bottomPoint, point, fillBrush/*, 1f*/); // defaults to 1f width
                     }
 
                     d2dRenderTarget.DrawLine(previousPoint, point, lineBrush, penWidth);
 
                     previousPoint = point;
                 }
-            }
-            catch (Exception ex)
-            {
-                Trace.WriteLine(ex);
             }
 
             if (!bottom)
@@ -7027,12 +7217,14 @@ namespace Thetis
 
             return true;
         }
-
-        unsafe static private bool DrawWaterfallDX2D(int W, int H, int rx, bool bottom)
+        unsafe static private bool DrawWaterfallDX2D(int nVerticalShift, int W, int H, int rx, bool bottom)
         {
             // grid draw now moved to end, so that everything can get put
             // on top of waterfall
             //if (grid_control) DrawWaterfallGrid(ref g, W, H, rx, bottom);
+
+            Matrix3x2 originalTransform = d2dRenderTarget.Transform;
+            d2dRenderTarget.Transform = Matrix3x2.Identity;
 
             if (waterfall_data == null || waterfall_data.Length < W)
             {
@@ -7142,7 +7334,7 @@ namespace Thetis
                 {
                     if (!displayduplex && local_mox && (rx1_dsp_mode == DSPMode.CWL || rx1_dsp_mode == DSPMode.CWU))
                     {
-                        for (int i = 0; i < current_waterfall_data.Length; i++)
+                        for (int i = 0; i < W/*current_waterfall_data.Length*/; i++)
                             current_waterfall_data[i] = -200.0f;
                     }
                     else
@@ -7158,7 +7350,7 @@ namespace Thetis
                 {
                     if (local_mox && (rx2_dsp_mode == DSPMode.CWL || rx2_dsp_mode == DSPMode.CWU))
                     {
-                        for (int i = 0; i < current_waterfall_data_bottom.Length; i++)
+                        for (int i = 0; i < W/*current_waterfall_data_bottom.Length*/; i++)
                             current_waterfall_data_bottom[i] = -200.0f;
                     }
                     else
@@ -7177,7 +7369,7 @@ namespace Thetis
                     timer_waterfall.Stop();
                     duration = (int)timer_waterfall.DurationMsec;
                 }
-                else if (rx == 2)
+                else/* if (rx == 2)*/
                 {
                     timer_waterfall2.Stop();
                     duration = (int)timer_waterfall2.DurationMsec;
@@ -7194,15 +7386,10 @@ namespace Thetis
                         data = current_waterfall_data;
                         timer_waterfall.Start();
                     }
-                    else if (rx == 2)
+                    else/* if (rx == 2)*/
                     {
                         data = current_waterfall_data_bottom;
                         timer_waterfall2.Start();
-                    }
-                    else
-                    {
-                        // should never happen
-                        data = current_waterfall_data;
                     }
 
                     float max;
@@ -8167,48 +8354,27 @@ namespace Thetis
 
                     topPixels.Dispose();
 
-
                     if (rx == 1)
                         RX1waterfallPreviousMinValue = (((RX1waterfallPreviousMinValue * 8) + (waterfall_minimum * 2)) / 10) + 1; //wfagc
                     else
                         RX2waterfallPreviousMinValue = ((RX2waterfallPreviousMinValue * 8) + (waterfall_minimum * 2)) / 10 + 1; //wfagc
                 }
 
-                if (bottom)
+                if (rx == 1)
                 {
-                    if (rx == 1)
-                    {
-                        d2dRenderTarget.DrawBitmap(waterfall_bmp_dx2d, new RectangleF(0, H + 20, waterfall_bmp_dx2d.Size.Width, waterfall_bmp_dx2d.Size.Height), 1, BitmapInterpolationMode.Linear);
-                    }
-                    else //rx2
-                    {
-                        switch (current_display_mode_bottom)
-                        {
-                            case DisplayMode.PANAFALL:
-                                d2dRenderTarget.DrawBitmap(waterfall_bmp2_dx2d, new RectangleF(0, 3 * H + 20, waterfall_bmp2_dx2d.Size.Width, waterfall_bmp2_dx2d.Size.Height), 1f, BitmapInterpolationMode.Linear);
-                                break;
-                            default:
-                                d2dRenderTarget.DrawBitmap(waterfall_bmp2_dx2d, new RectangleF(0, H + 20, waterfall_bmp2_dx2d.Size.Width, waterfall_bmp2_dx2d.Size.Height), 1f, BitmapInterpolationMode.Linear);
-                                break;
-                        }
-                    }
+                    d2dRenderTarget.DrawBitmap(waterfall_bmp_dx2d, new RectangleF(0, nVerticalShift + 20, waterfall_bmp_dx2d.Size.Width, waterfall_bmp_dx2d.Size.Height), 1f, BitmapInterpolationMode.Linear);
                 }
                 else
                 {
-                    if (rx == 1)
-                    {
-                        d2dRenderTarget.DrawBitmap(waterfall_bmp_dx2d, new RectangleF(0, 20, waterfall_bmp_dx2d.Size.Width, waterfall_bmp_dx2d.Size.Height), 1f, BitmapInterpolationMode.Linear);
-                    }
-                    else // rx2
-                    {
-                        d2dRenderTarget.DrawBitmap(waterfall_bmp2_dx2d, new RectangleF(0, 20, waterfall_bmp2_dx2d.Size.Width, waterfall_bmp2_dx2d.Size.Height), 1f, BitmapInterpolationMode.Linear);
-                    }
+                    d2dRenderTarget.DrawBitmap(waterfall_bmp2_dx2d, new RectangleF(0, nVerticalShift + 20, waterfall_bmp2_dx2d.Size.Width, waterfall_bmp2_dx2d.Size.Height), 1f, BitmapInterpolationMode.Linear);
                 }
-
             }
 
+            // return the transform to what it was
+            d2dRenderTarget.Transform = originalTransform;
+
             // MW0LGE now draw any grid/labels/scales over the top of waterfall
-            if (grid_control) drawPanadapterAndWaterfallGridDX2D(W, H, rx, bottom, true);
+            if (grid_control) drawPanadapterAndWaterfallGridDX2D(nVerticalShift, W, H, rx, bottom, true);
 
             return true;
         }
@@ -8532,12 +8698,12 @@ namespace Thetis
         private static void drawLineDX2D(SharpDX.Direct2D1.Brush b, float x1, float y1, float x2, float y2, float strokeWidth = 1f )
         {
             //0.5f's to move into 'centre' of desired pixel
-            d2dRenderTarget.DrawLine(new SharpDX.Vector2(x1 + 0.5f, y1 + 0.5f), new SharpDX.Vector2(x2 + 0.5f, y2 + 0.5f), b, strokeWidth);
+            d2dRenderTarget.DrawLine(new SharpDX.Vector2(x1/* + 0.5f*/, y1/* + 0.5f*/), new SharpDX.Vector2(x2/* + 0.5f*/, y2/* + 0.5f*/), b, strokeWidth);
         }
         private static void drawLineDX2D(SharpDX.Direct2D1.Brush b, float x1, float y1, float x2, float y2, StrokeStyle strokeStyle, float strokeWidth = 1f)
         {
             //0.5f's to move into 'centre' of desired pixel
-            d2dRenderTarget.DrawLine(new SharpDX.Vector2(x1 + 0.5f, y1 + 0.5f), new SharpDX.Vector2(x2 + 0.5f, y2 + 0.5f), b, strokeWidth, strokeStyle);
+            d2dRenderTarget.DrawLine(new SharpDX.Vector2(x1/* + 0.5f*/, y1/* + 0.5f*/), new SharpDX.Vector2(x2/* + 0.5f*/, y2/* + 0.5f*/), b, strokeWidth, strokeStyle);
         }
         private static void drawFillRectangleDX2D(SharpDX.Direct2D1.Brush b, float x, float y, float w, float h)
         {
@@ -8547,7 +8713,7 @@ namespace Thetis
         }
         private static void drawElipseDX2D(SharpDX.Direct2D1.Brush b, float xMiddle, float yMiddle, float w, float h)
         {
-            Ellipse e = new Ellipse(new SharpDX.Vector2(xMiddle + 0.5f, yMiddle + 0.5f), w / 2, h / 2);
+            Ellipse e = new Ellipse(new SharpDX.Vector2(xMiddle/* + 0.5f*/, yMiddle/* + 0.5f*/), w / 2, h / 2);
 
             d2dRenderTarget.DrawEllipse(e, b);
         }
@@ -8590,30 +8756,28 @@ namespace Thetis
                 drawLineDX2D(convertBrush((SolidBrush)p.Brush), right, top, right, top + height - 1, p.Width);
             }
         }
+        private static Dictionary<string, System.Drawing.SizeF> stringSizes = new Dictionary<string, System.Drawing.SizeF>();
         private static System.Drawing.SizeF measureStringDX2D(String s, SharpDX.DirectWrite.TextFormat tf)
         {
-            SharpDX.DirectWrite.TextLayout layout = new SharpDX.DirectWrite.TextLayout(fontFactory, s, tf, float.MaxValue, float.MaxValue);
-            float w = layout.Metrics.Width;
-            float h = layout.Metrics.Height;
-            layout.Dispose();
+            // keep cache of calced sizes as this is quite a slow process
+            //String key = s + tf.FontFamilyName + tf.FontSize; // very unlikely we will have different fonts of same string, let us just use 's' as key
 
-            return new System.Drawing.SizeF(w, h);
+            if (stringSizes.ContainsKey(s)) return stringSizes[s];
+
+            SharpDX.DirectWrite.TextLayout layout = new SharpDX.DirectWrite.TextLayout(fontFactory, s, tf, float.MaxValue, float.MaxValue);
+            if(stringSizes.Count>100) stringSizes.Remove(stringSizes.Keys.First()); // keep 100, dump oldest
+            System.Drawing.SizeF sz = new System.Drawing.SizeF(layout.Metrics.Width, layout.Metrics.Height);
+            layout.Dispose();
+            stringSizes.Add(s, sz);
+
+            return sz;
         }
         //--------------------------
 
         private static int getCWSideToneShift(int rx)
         {
             int nRet = 0;
-            DSPMode mode;
-
-            if(rx == 1)
-            {
-                mode = rx1_dsp_mode;
-            }
-            else
-            {
-                mode = rx2_dsp_mode;
-            }
+            DSPMode mode = (rx==1) ? rx1_dsp_mode : rx2_dsp_mode;
 
             switch (mode)
             {
@@ -8627,7 +8791,7 @@ namespace Thetis
 
             return nRet;
         }
-        unsafe private static void drawPanadapterAndWaterfallGridDX2D(int W, int H, int rx, bool bottom, bool bIsWaterfall = false)
+        private static void drawPanadapterAndWaterfallGridDX2D(int nVerticalShift, int W, int H, int rx, bool bottom, bool bIsWaterfall = false)
         {
             // MW0LGE
             // this now draws the grid for either panadapter or waterfall, pass in a bool to pick
@@ -8635,9 +8799,12 @@ namespace Thetis
             DisplayLabelAlignment label_align = display_label_align;
             bool local_mox = false;
             bool displayduplex = false;
-            if (mox && rx == 1 && !tx_on_vfob) local_mox = true;
-            if (mox && rx == 2 && tx_on_vfob) local_mox = true;
-            if (rx == 1 && tx_on_vfob && mox && !console.RX2Enabled) local_mox = true;
+            if (mox)
+            {
+                if (rx == 1 && !tx_on_vfob) local_mox = true;
+                if (rx == 2 && tx_on_vfob) local_mox = true;
+                if (rx == 1 && tx_on_vfob && !console.RX2Enabled) local_mox = true;
+            }
             int Low = 0;					// initialize variables
             int High = 0;
             int mid_w = W / 2;
@@ -8654,7 +8821,7 @@ namespace Thetis
 
             #region setup
             //MW0LGE
-            int nVerticalShift = getVerticalShift(rx, bottom, W, H);
+            //int nVerticalShift = getVerticalShift(rx, bottom, W, H);
             int cwSideToneShift = getCWSideToneShift(rx);
             int cwSideToneShiftInverted = cwSideToneShift * -1; // invert the sign as cw zero lines/tx lines etc are a shift in opposite direction to the grid
 
@@ -8827,7 +8994,7 @@ namespace Thetis
             // calculate vertical step size
             int h_steps = (grid_max - grid_min) / grid_step;
             int top;
-            
+
             if (bIsWaterfall) top = 20; //change top so that the filter gap doesnt change, inore grid spacing
             else top = (int)((double)grid_step * H / y_range); // top is based on grid spacing
             #endregion
@@ -8849,14 +9016,15 @@ namespace Thetis
                 {
                     // draw Sub RX 0Hz line
                     int x = (int)((float)(vfoa_sub_hz - vfoa_hz - Low) / width * W);
-                    if (bottom || (current_display_mode_bottom == DisplayMode.PANAFALL && rx == 2))
-                    {
-                        drawLineDX2D(m_bDX2_sub_rx_zero_line_pen, x, H + top, x, H + H, 2);
-                    }
-                    else
-                    {
-                        drawLineDX2D(m_bDX2_sub_rx_zero_line_pen, x, top, x, H, 2);
-                    }
+                    //if (bottom || (current_display_mode_bottom == DisplayMode.PANAFALL && rx == 2))
+                    //{
+                    //    drawLineDX2D(m_bDX2_sub_rx_zero_line_pen, x, H + top, x, H + H, 2);
+                    //}
+                    //else
+                    //{
+                    //    drawLineDX2D(m_bDX2_sub_rx_zero_line_pen, x, top, x, H, 2);
+                    //}
+                    drawLineDX2D(m_bDX2_sub_rx_zero_line_pen, x, nVerticalShift + top, x, nVerticalShift + H, 2);
                 }
             }
 
@@ -9056,7 +9224,7 @@ namespace Thetis
             if (!local_mox && !bIsWaterfall)
             {
                 long rf_freq = vfoa_hz;
-                int rit = rit_hz;                
+                int rit = rit_hz;
 
                 if (bottom || (current_display_mode_bottom == DisplayMode.PANAFALL && rx == 2)) // MW0LGE
                 {
@@ -9229,7 +9397,7 @@ namespace Thetis
             {
                 SharpDX.Direct2D1.Brush brBrush = local_mox ? m_bDX2_tx_grid_zero_pen : m_bDX2_grid_zero_pen;
 
-                drawStringDX2D("0", fontDX2d_font9, brBrush, center_line_x - 5, nVerticalShift + (float)Math.Floor(H * .01));
+                drawStringDX2D("0", fontDX2d_font9, brBrush, center_line_x - 5, nVerticalShift + 4/*(float)Math.Floor(H * .01)*/);
             }
 
             #region Band edges, H+V lines and labels
@@ -9469,7 +9637,7 @@ namespace Thetis
                         else offsetL = (int)((label.Length) * 4.1) - 8;
                     }
 
-                    drawStringDX2D(label, fontDX2d_font9, brTextBrush, vgrid - offsetL, nVerticalShift + (float)Math.Floor(H * .01));
+                    drawStringDX2D(label, fontDX2d_font9, brTextBrush, vgrid - offsetL, nVerticalShift + 4/*(float)Math.Floor(H * .01)*/);
                     //--------------
                 }
                 else
@@ -9490,7 +9658,7 @@ namespace Thetis
                     {
                         SharpDX.Direct2D1.Brush brBrush = local_mox ? m_bDX2_grid_tx_text_brush : m_bDX2_grid_text_brush;
 
-                        drawStringDX2D(label, fontDX2d_font9, brBrush, vgrid - offsetL, nVerticalShift + (float)Math.Floor(H * .01));
+                        drawStringDX2D(label, fontDX2d_font9, brBrush, vgrid - offsetL, nVerticalShift + 4/*(float)Math.Floor(H * .01)*/);
                     }
                 }
             }
@@ -9531,9 +9699,17 @@ namespace Thetis
             {
                 SharpDX.Direct2D1.Brush brTextLabel;
 
-                if ((m_bHighlightNumberScaleRX1 && rx==1) || (m_bHighlightNumberScaleRX2 && rx == 2))
+                if ((m_bHighlightNumberScaleRX1 && rx == 1) || (m_bHighlightNumberScaleRX2 && rx == 2))
                 {
-                    drawFillRectangleDX2D(m_bDX2_m_bHightlightNumberScale, console.DisplayGridX, nVerticalShift + top, console.DisplayGridW - console.DisplayGridX, H - top);
+                    if (rx == 1)
+                    {
+                        drawFillRectangleDX2D(m_bDX2_m_bHightlightNumberScale, console.RX1DisplayGridX, nVerticalShift + top, console.RX1DisplayGridW - console.RX1DisplayGridX, H - top);
+                    }
+                    else
+                    {
+                        drawFillRectangleDX2D(m_bDX2_m_bHightlightNumberScale, console.RX2DisplayGridX, nVerticalShift + top, console.RX2DisplayGridW - console.RX2DisplayGridX, H - top);
+
+                    }
                     brTextLabel = m_bDX2_m_bHightlightNumbers;
                 }
                 else
@@ -9549,8 +9725,8 @@ namespace Thetis
 
                 }
                 // Draw horizontal lines
-                int nLeft=0;
-                int nRight=0;
+                int nLeft = 0;
+                int nRight = 0;
                 int nW = (int)measureStringDX2D("-999", fontDX2d_font9).Width + 12;
 
                 switch (label_align)//MW0LGE display_label_align)
@@ -9560,8 +9736,20 @@ namespace Thetis
                         nRight = nW;
                         break;
                     case DisplayLabelAlignment.CENTER:
-                        nLeft = center_line_x;
-                        nRight = center_line_x + nW;
+                        if (rx == 1 && (rx1_dsp_mode == DSPMode.USB || rx1_dsp_mode == DSPMode.DIGU || rx1_dsp_mode == DSPMode.CWU))
+                        {
+                            nLeft = center_line_x - nW;
+                            nRight = nLeft + nW;
+                        }
+                        else if (rx == 2 && (rx2_dsp_mode == DSPMode.USB || rx2_dsp_mode == DSPMode.DIGU || rx2_dsp_mode == DSPMode.CWU))
+                        {
+                            nLeft = center_line_x - nW;
+                            nRight = nLeft + nW;
+                        }
+                        else {
+                            nLeft = center_line_x;
+                            nRight = nLeft + nW;
+                        }
                         break;
                     case DisplayLabelAlignment.RIGHT:
                         nLeft = W - nW;
@@ -9584,14 +9772,14 @@ namespace Thetis
                     int y = (int)((double)(grid_max - num) * H / y_range);
 
                     // MW0LGE
-                    if (local_mox)
-                    {
-                        drawLineDX2D(m_bDX2_tx_hgrid_pen, 0, nVerticalShift + y, W, nVerticalShift + y);
-                    }
-                    else
-                    {
-                        drawLineDX2D(m_bDX2_hgrid_pen, 0, nVerticalShift + y, W, nVerticalShift + y);
-                    }
+                    //if (local_mox)
+                    //{
+                        drawLineDX2D(local_mox ? m_bDX2_tx_hgrid_pen : m_bDX2_hgrid_pen, 0, nVerticalShift + y, W, nVerticalShift + y);
+                    //}
+                    //else
+                    //{
+                    //    drawLineDX2D(m_bDX2_hgrid_pen, 0, nVerticalShift + y, W, nVerticalShift + y);
+                    //}
 
                     // Draw horizontal line labels
                     if (i != 1) // avoid intersecting vertical and horizontal labels
@@ -9609,7 +9797,15 @@ namespace Thetis
                                 x = xOffset + 3;
                                 break;
                             case DisplayLabelAlignment.CENTER:
-                                x = center_line_x + xOffset;
+                                if(rx == 1 && (rx1_dsp_mode==DSPMode.USB || rx1_dsp_mode == DSPMode.DIGU || rx1_dsp_mode == DSPMode.CWU))
+                                {
+                                    x = center_line_x - xOffset - (int)size.Width;
+                                }
+                                else if (rx == 2 && (rx2_dsp_mode == DSPMode.USB || rx2_dsp_mode == DSPMode.DIGU || rx2_dsp_mode == DSPMode.CWU))
+                                {
+                                    x = center_line_x - xOffset - (int)size.Width;
+                                }
+                                else x = center_line_x + xOffset;
                                 break;
                             case DisplayLabelAlignment.RIGHT:
                                 x = (int)(W - size.Width - 3);
@@ -9630,8 +9826,16 @@ namespace Thetis
                         }
                     }
                 }
-                console.DisplayGridX = nLeft;
-                console.DisplayGridW = nRight;
+                if (rx == 1)
+                {
+                    console.RX1DisplayGridX = nLeft;
+                    console.RX1DisplayGridW = nRight;
+                }
+                else
+                {
+                    console.RX2DisplayGridX = nLeft;
+                    console.RX2DisplayGridW = nRight;
+                }
             }
             #endregion
 
@@ -9645,41 +9849,23 @@ namespace Thetis
                 // if we are sub tx then the cross will be red
                 p = current_click_tune_mode == ClickTuneMode.VFOA ? m_bDX2_grid_text_pen : m_bDX2_Red;
 
-                int y1 = top;
+                int y1 = nVerticalShift + top;
                 int y2 = H;
 
                 if (rx == 1)
                 {
-                    if (bottom)
+                    if (rx2_enabled)
                     {
-                        if (current_display_mode == DisplayMode.PANAFALL)
-                        {
-                            y1 = H + top;
-                        }
-                    }
-                    bShow = (current_display_mode == DisplayMode.PANAFALL) ? display_cursor_y <= 2 * H : display_cursor_y <= H;
-                }
-                else// if(rx==2)
-                {
-                    if (bottom)
-                    {
-                        if (current_display_mode_bottom == DisplayMode.PANAFALL)
-                        {
-                            y1 = H * 3 + top;
-                        }
-                        else
-                        {
-                            y1 = H + top;
-                        }
+                        bShow = (current_display_mode == DisplayMode.PANAFALL) ? display_cursor_y <= 2 * H : display_cursor_y <= H;
                     }
                     else
                     {
-                        if (current_display_mode_bottom == DisplayMode.PANAFALL)
-                        {
-                            y1 = H * 2 + top;
-                        }
+                        bShow = true;
                     }
-                    bShow = (current_display_mode_bottom == DisplayMode.PANAFALL) ? ((display_cursor_y > H * 2) && (display_cursor_y <= 4 * H)) : ((display_cursor_y > H) && (display_cursor_y <= H * 2));
+                }
+                else
+                {
+                    bShow = (current_display_mode_bottom == DisplayMode.PANAFALL) ? display_cursor_y > 2 * H : display_cursor_y > H;
                 }
 
                 if (bShow)
@@ -9706,8 +9892,7 @@ namespace Thetis
 
                     // draw horiz cursor line
                     if (ShowCTHLine) drawLineDX2D(p, 0, display_cursor_y, W, display_cursor_y);
-                }
-                //}                
+                }               
             }
             #endregion
 
@@ -9802,33 +9987,35 @@ namespace Thetis
                                 break;
                         }
                         // get AGC-T level
+                        // get Hang Threshold level
                         double rx1_thresh = 0.0;
                         float rx1_agcknee_y_value = 0.0f;
-                        WDSP.GetRXAAGCThresh(WDSP.id(0, 0), &rx1_thresh, 4096.0, sample_rate);
-
-                        rx1_thresh = Math.Round(rx1_thresh);
-
-                        // get Hang Threshold level
                         double rx1_hang = 0.0;
                         float rx1_agc_hang_y = 0.0f;
-                        WDSP.GetRXAAGCHangLevel(WDSP.id(0, 0), &rx1_hang);
+                        unsafe { 
+                            WDSP.GetRXAAGCThresh(WDSP.id(0, 0), &rx1_thresh, 4096.0, sample_rate);
+                            WDSP.GetRXAAGCHangLevel(WDSP.id(0, 0), &rx1_hang);
+                        }
+                        rx1_thresh = Math.Round(rx1_thresh);
                         int rx1_agc_fixed_gain = console.SetupForm.AGCFixedGain;
                         string rx1_agc = "";
                         switch (console.RX1AGCMode)
                         {
                             case AGCMode.FIXD:
-                                rx1_agcknee_y_value = dBToPixel(-(float)rx1_agc_fixed_gain + rx1_cal_offset);
+                                rx1_agcknee_y_value = dBToPixel(-(float)rx1_agc_fixed_gain + rx1_cal_offset, H);
                                 // Debug.WriteLine("agcknee_y_D:" + agcknee_y_value);
                                 rx1_agc = "-F";
                                 break;
                             default:
-                                rx1_agcknee_y_value = dBToPixel((float)rx1_thresh + rx1_cal_offset);
-                                rx1_agc_hang_y = dBToPixel((float)rx1_hang + rx1_cal_offset);
+                                rx1_agcknee_y_value = dBToPixel((float)rx1_thresh + rx1_cal_offset, H);
+                                rx1_agc_hang_y = dBToPixel((float)rx1_hang + rx1_cal_offset, H);
 
-                                if (console.RX2Enabled && CurrentDisplayMode == DisplayMode.PANAFALL)
-                                    rx1_agc_hang_y = rx1_agc_hang_y / 4;
-                                else if (console.RX2Enabled || split_display)
-                                    rx1_agc_hang_y = rx1_agc_hang_y / 2;
+                                //if (console.RX2Enabled && CurrentDisplayMode == DisplayMode.PANAFALL)
+                                //    rx1_agc_hang_y = rx1_agc_hang_y / 4;
+                                //else if (console.RX2Enabled || split_display)
+                                //    rx1_agc_hang_y = rx1_agc_hang_y / 2;
+
+                                rx1_agc_hang_y += nVerticalShift;
 
                                 //show hang line
                                 if (display_agc_hang_line && console.RX1AGCMode != AGCMode.MED && console.RX1AGCMode != AGCMode.FAST)
@@ -9843,10 +10030,12 @@ namespace Thetis
                                 break;
                         }
 
-                        if (console.RX2Enabled && CurrentDisplayMode == DisplayMode.PANAFALL)
-                            rx1_agcknee_y_value = rx1_agcknee_y_value / 4;
-                        else if (console.RX2Enabled || split_display)
-                            rx1_agcknee_y_value = rx1_agcknee_y_value / 2;
+                        //if (console.RX2Enabled && CurrentDisplayMode == DisplayMode.PANAFALL)
+                        //    rx1_agcknee_y_value = rx1_agcknee_y_value / 4;
+                        //else if (console.RX2Enabled || split_display)
+                        //    rx1_agcknee_y_value = rx1_agcknee_y_value / 2;
+
+                        rx1_agcknee_y_value += nVerticalShift;
 
                         // show agc line
                         if (show_agc)
@@ -9878,77 +10067,84 @@ namespace Thetis
                                       rx2_preamp_offset) - rx2_fft_size_offset;
                                 break;
                         }
-                        // get AGC-T level
-                        WDSP.GetRXAAGCThresh(WDSP.id(2, 0), &rx2_thresh, 4096.0, sample_rate);
-                        rx2_thresh = Math.Round(rx2_thresh);
-
-                        WDSP.GetRXAAGCHangLevel(WDSP.id(2, 0), &rx2_hang);
-                        rx2_agc_fixed_gain = console.SetupForm.AGCRX2FixedGain;
-
+                        unsafe
+                        {
+                            // get AGC-T level
+                            WDSP.GetRXAAGCThresh(WDSP.id(2, 0), &rx2_thresh, 4096.0, sample_rate);
+                            rx2_thresh = Math.Round(rx2_thresh);
+                            WDSP.GetRXAAGCHangLevel(WDSP.id(2, 0), &rx2_hang);
+                            rx2_agc_fixed_gain = console.SetupForm.AGCRX2FixedGain;
+                        }
                         switch (console.RX2AGCMode)
                         {
                             case AGCMode.FIXD:
-                                rx2_agcknee_y_value = dBToRX2Pixel(-(float)rx2_agc_fixed_gain + rx2_cal_offset);
+                                rx2_agcknee_y_value = dBToRX2Pixel(-(float)rx2_agc_fixed_gain + rx2_cal_offset, H);
                                 // Debug.WriteLine("agcknee_y_D:" + agcknee_y_value);
                                 rx2_agc = "-F";
                                 break;
                             default:
-                                rx2_agcknee_y_value = dBToRX2Pixel((float)rx2_thresh + rx2_cal_offset);
-                                rx2_agc_hang_y = dBToRX2Pixel((float)rx2_hang + rx2_cal_offset);// + rx2_fft_size_offset);  MW0LGE   NOT IN RX1 WHY?  TODO CHECK
+                                rx2_agcknee_y_value = dBToRX2Pixel((float)rx2_thresh + rx2_cal_offset, H);
+                                rx2_agc_hang_y = dBToRX2Pixel((float)rx2_hang + rx2_cal_offset, H);// + rx2_fft_size_offset);  MW0LGE   NOT IN RX1 WHY?  TODO CHECK
 
-                                if ((console.RX2Enabled || split_display) && current_display_mode_bottom != DisplayMode.PANAFALL)
-                                    rx2_agc_hang_y = rx2_agc_hang_y / 2;
-                                else
-                                    rx2_agc_hang_y = rx2_agc_hang_y / 4;
+                                //if ((console.RX2Enabled || split_display) && current_display_mode_bottom != DisplayMode.PANAFALL)
+                                //    rx2_agc_hang_y = rx2_agc_hang_y / 2;
+                                //else
+                                //    rx2_agc_hang_y = rx2_agc_hang_y / 4;
+
+                                rx2_agc_hang_y += nVerticalShift;
 
                                 if (display_rx2_hang_line && console.RX2AGCMode != AGCMode.MED && console.RX2AGCMode != AGCMode.FAST)
                                 {
                                     AGCRX2Hang.Height = 8; AGCRX2Hang.Width = 8; AGCRX2Hang.X = 40;
 
                                     //MW0LGE
-                                    if (current_display_mode_bottom == DisplayMode.PANAFALL)
-                                        AGCRX2Hang.Y = ((int)rx2_agc_hang_y + 2 * H) - AGCRX2Hang.Height;
-                                    else
-                                        AGCRX2Hang.Y = ((int)rx2_agc_hang_y + H) - AGCRX2Hang.Height;
+                                    //if (current_display_mode_bottom == DisplayMode.PANAFALL)
+                                    //    AGCRX2Hang.Y = ((int)rx2_agc_hang_y + 2 * H) - AGCRX2Hang.Height;
+                                    //else
+                                    //    AGCRX2Hang.Y = ((int)rx2_agc_hang_y + H) - AGCRX2Hang.Height;
+                                    AGCRX2Hang.Y = (int)rx2_agc_hang_y - AGCRX2Hang.Height;
 
                                     drawFillRectangleDX2D(m_bDX2_Yellow, AGCRX2Hang);
-                                        if (current_display_mode_bottom == DisplayMode.PANAFALL)
-                                        {
-                                            drawLineDX2D(m_bDX2_Yellow, x3_rx2_hang, rx2_agc_hang_y + 2 * H, x2_rx2_hang, rx2_agc_hang_y + 2 * H, m_styleDots);
-                                        }
-                                        else
-                                        {
-                                            drawLineDX2D(m_bDX2_Yellow, x3_rx2_hang, rx2_agc_hang_y + H, x2_rx2_hang, rx2_agc_hang_y + H, m_styleDots);
-                                        }
-                                        drawStringDX2D("-H", fontDX2d_panafont, m_bDX2_pana_text_brush, AGCRX2Hang.X + AGCRX2Hang.Width, AGCRX2Hang.Y - (AGCRX2Hang.Height / 2));
+                                    //if (current_display_mode_bottom == DisplayMode.PANAFALL)
+                                    //{
+                                    drawLineDX2D(m_bDX2_Yellow, x3_rx2_hang, rx2_agc_hang_y/* + 2 * H*/, x2_rx2_hang, rx2_agc_hang_y/* + 2 * H*/, m_styleDots);
+                                    //}
+                                    //else
+                                    //{
+                                    //    drawLineDX2D(m_bDX2_Yellow, x3_rx2_hang, rx2_agc_hang_y + H, x2_rx2_hang, rx2_agc_hang_y + H, m_styleDots);
+                                    //}
+                                    drawStringDX2D("-H", fontDX2d_panafont, m_bDX2_pana_text_brush, AGCRX2Hang.X + AGCRX2Hang.Width, AGCRX2Hang.Y - (AGCRX2Hang.Height / 2));
                                 }
                                 rx2_agc = "-G";
                                 break;
                         }
 
-                        if (current_display_mode_bottom == DisplayMode.PANAFALL)
-                            rx2_agcknee_y_value = rx2_agcknee_y_value / 4;
-                        else
-                            rx2_agcknee_y_value = rx2_agcknee_y_value / 2;
+                        //if (current_display_mode_bottom == DisplayMode.PANAFALL)
+                        //    rx2_agcknee_y_value = rx2_agcknee_y_value / 4;
+                        //else
+                        //    rx2_agcknee_y_value = rx2_agcknee_y_value / 2;
 
                         if (display_rx2_gain_line)
                         {
+                            rx2_agcknee_y_value += nVerticalShift;
+
                             AGCRX2Knee.Height = 8; AGCRX2Knee.Width = 8; AGCRX2Knee.X = 40;
 
-                            if (current_display_mode_bottom == DisplayMode.PANAFALL)
-                                AGCRX2Knee.Y = ((int)rx2_agcknee_y_value + 2 * H) - AGCRX2Knee.Height;
-                            else
-                                AGCRX2Knee.Y = ((int)rx2_agcknee_y_value + H) - AGCRX2Knee.Height;
+                            //if (current_display_mode_bottom == DisplayMode.PANAFALL)
+                            //    AGCRX2Knee.Y = ((int)rx2_agcknee_y_value + 2 * H) - AGCRX2Knee.Height;
+                            //else
+                            //    AGCRX2Knee.Y = ((int)rx2_agcknee_y_value + H) - AGCRX2Knee.Height;
+                            AGCRX2Knee.Y = (int)rx2_agcknee_y_value - AGCRX2Knee.Height;
 
                             drawFillRectangleDX2D(m_bDX2_YellowGreen, AGCRX2Knee);
-                            if (current_display_mode_bottom == DisplayMode.PANAFALL)
-                            {
-                                drawLineDX2D(m_bDX2_YellowGreen, x1_rx2_gain, rx2_agcknee_y_value + 2 * H, x2_rx2_gain, rx2_agcknee_y_value + 2 * H, m_styleDots);
-                            }
-                            else
-                            {
-                                drawLineDX2D(m_bDX2_YellowGreen, x1_rx2_gain, rx2_agcknee_y_value + H, x2_rx2_gain, rx2_agcknee_y_value + H, m_styleDots);
-                            }
+                            //if (current_display_mode_bottom == DisplayMode.PANAFALL)
+                            //{
+                            drawLineDX2D(m_bDX2_YellowGreen, x1_rx2_gain, rx2_agcknee_y_value/* + 2 * H*/, x2_rx2_gain, rx2_agcknee_y_value/* + 2 * H*/, m_styleDots);
+                            //}
+                            //else
+                            //{
+                            //    drawLineDX2D(m_bDX2_YellowGreen, x1_rx2_gain, rx2_agcknee_y_value + H, x2_rx2_gain, rx2_agcknee_y_value + H, m_styleDots);
+                            //}
                             drawStringDX2D(rx2_agc, fontDX2d_panafont, m_bDX2_pana_text_brush, AGCRX2Knee.X + AGCRX2Knee.Width, AGCRX2Knee.Y - (AGCRX2Knee.Height / 2));
                         }
                     }
@@ -9961,7 +10157,7 @@ namespace Thetis
             //=====================================================================
             //=====================================================================
 
-            if (SpotControl.SP_Active != 0 && !bIsWaterfall)
+            if (!bIsWaterfall && SpotControl.SP_Active != 0)
             {
 
                 int iii = 0;                          // ke9ns add stairstep holder
@@ -10204,7 +10400,7 @@ namespace Thetis
             }
             #endregion
         }
-
+        
         unsafe static private bool DrawSpectrumDX2D(int W, int H, bool bottom)
         {
             DrawSpectrumGridDX2D(W, H, bottom);
@@ -10244,7 +10440,7 @@ namespace Thetis
             {
                 if (mox && (rx1_dsp_mode == DSPMode.CWL || rx1_dsp_mode == DSPMode.CWU))
                 {
-                    for (int i = 0; i < current_display_data.Length; i++)
+                    for (int i = 0; i < W/*current_display_data.Length*/; i++)
                         current_display_data[i] = grid_min - rx1_display_cal_offset;
                 }
                 else
@@ -10297,8 +10493,8 @@ namespace Thetis
             }
 
             Y = (int)Math.Min((Math.Floor((grid_max - max) * H / yRange)), H);
-            previousPoint.X = 0 + 0.5f; // the 0.5f pushes it into the middle of a 'pixel', so that it is not drawn half in one, and half in the other
-            previousPoint.Y = Y + 0.5f;
+            previousPoint.X = 0;// + 0.5f; // the 0.5f pushes it into the middle of a 'pixel', so that it is not drawn half in one, and half in the other
+            previousPoint.Y = Y;// + 0.5f;
 
             for (int i = 0; i < W; i++)
             {
@@ -10334,8 +10530,8 @@ namespace Thetis
                 }
 
                 Y = (int)Math.Min((Math.Floor((grid_max - max) * H / yRange)), H);
-                point.X = i + 0.5f; // the 0.5f pushes it into the middle of a 'pixel', so that it is not drawn half in one, and half in the other
-                point.Y = Y + 0.5f;
+                point.X = i;// + 0.5f; // the 0.5f pushes it into the middle of a 'pixel', so that it is not drawn half in one, and half in the other
+                point.Y = Y;// + 0.5f;
 
                 d2dRenderTarget.DrawLine(previousPoint, point, m_bDX2_data_line_pen_brush, data_line_pen.Width);
 
@@ -10493,8 +10689,8 @@ namespace Thetis
                                 x = W;
                                 break;
                         }
-                        console.DisplayGridX = x;
-                        console.DisplayGridW = (int)(x + size.Width);
+                        console.RX1DisplayGridX = x;
+                        console.RX1DisplayGridW = (int)(x + size.Width);
                         y -= 8;
                         if (y + 9 < H)
                         {
@@ -10594,8 +10790,8 @@ namespace Thetis
                                 x = W;
                                 break;
                         }
-                        console.DisplayGridX = x;
-                        console.DisplayGridW = (int)(x + size.Width);
+                        console.RX1DisplayGridX = x;
+                        console.RX1DisplayGridW = (int)(x + size.Width);
                         y -= 8;
                         if (y + 9 < H)
                         {
@@ -10714,8 +10910,8 @@ namespace Thetis
                                 break;
                         }
 
-                        console.DisplayGridX = x;
-                        console.DisplayGridW = (int)(x + size.Width);
+                        console.RX1DisplayGridX = x;
+                        console.RX1DisplayGridW = (int)(x + size.Width);
                         y -= 8;
                         if (y + 9 < H)
                         {
@@ -10788,15 +10984,15 @@ namespace Thetis
                 /*if (bottom) pixel = (int)(H / 2 * scope_max[i]);
                 else */pixel = (int)(H / 2 * scope_max[i]);
                 y = H / 2 - pixel;
-                pointMax.X = i + 0.5f;
-                pointMax.Y = y + 0.5f;
+                pointMax.X = i;// + 0.5f;
+                pointMax.Y = y;// + 0.5f;
                 if (bottom) pointMax.Y += H;
 
                 /*if (bottom) pixel = (int)(H / 2 * scope_min[i]);
                 else */pixel = (int)(H / 2 * scope_min[i]);
                 y = H / 2 - pixel;
-                pointMin.X = i + 0.5f;
-                pointMin.Y = y + 0.5f;
+                pointMin.X = i;// + 0.5f;
+                pointMin.Y = y;// + 0.5f;
                 if (bottom) pointMin.Y += H;
 
                 d2dRenderTarget.DrawLine(pointMin, pointMax, m_bDX2_data_line_pen_brush);
@@ -10877,8 +11073,8 @@ namespace Thetis
             {
                 int i = (int)Math.Truncate((float)x * xScale);
                 int y = (int)(y1 - (scope2_max[i] * yScale));
-                point.X = x + 0.5f;
-                point.Y = y + 0.5f;
+                point.X = x;// + 0.5f;
+                point.Y = y;// + 0.5f;
 
                 d2dRenderTarget.DrawLine(previousPoint, point, m_bDX2_waveform_line_pen);
 
@@ -10893,8 +11089,8 @@ namespace Thetis
             {
                 int i = (int)Math.Truncate((float)x * xScale);
                 int y = (int)(y3 - (scope_max[i] * yScale));
-                point.X = x + 0.5f;
-                point.Y = y + 0.5f;
+                point.X = x;// + 0.5f;
+                point.Y = y;// + 0.5f;
 
                 d2dRenderTarget.DrawLine(previousPoint, point, m_bDX2_waveform_line_pen);
 
