@@ -20223,6 +20223,11 @@ namespace Thetis
         {
             console.BypassVACWhenPlayingRecording = chkBypassVACPlayingRecording.Checked;
         }
+
+        private void ButtonAndromeda_Click(object sender, EventArgs e)
+        {
+            console.EditAndromedaDataSet();
+        }
         //--
     }
 

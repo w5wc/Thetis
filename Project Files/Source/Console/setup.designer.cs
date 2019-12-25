@@ -51058,6 +51058,7 @@
             this.buttonAndromeda.TabIndex = 98;
             this.buttonAndromeda.Text = "Edit Controls";
             this.buttonAndromeda.UseVisualStyleBackColor = true;
+            this.buttonAndromeda.Click += new System.EventHandler(this.ButtonAndromeda_Click);
             // 
             // comboAndromedaCATPort
             // 
