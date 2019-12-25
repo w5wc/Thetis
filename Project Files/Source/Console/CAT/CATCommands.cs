@@ -3964,19 +3964,6 @@ namespace Thetis
                 return parser.Error1;
         }
 
-        //Andromeda front panel h/w version
-        //write only
-        public string ZZZH(string s)
-        {
-            if (s.Length == parser.nSet)
-            {
-                int Version = Convert.ToInt32(s);
-                console.HandleFrontPanelHWVersion(Version);
-                return "";
-            }
-            else
-                return parser.Error1;
-        }
 
         //Andromeda front panel s/w version
         //write only
@@ -3985,7 +3972,7 @@ namespace Thetis
             if (s.Length == parser.nSet)
             {
                 int Version = Convert.ToInt32(s);
-                console.HandleFrontPanelSWVersion(Version);
+                console.HandleAttachedHardwareID = Version;
                 return "";
             }
             else
@@ -4026,6 +4013,38 @@ namespace Thetis
                     LongPress = true;
                 Button = Button / 10;           // 1-99
                 console.HandleFrontPanelButtonPress(Button-1, State, LongPress);
+                return "";
+            }
+            else
+                return parser.Error1;
+        }
+        //CATHandleAriesTuneMessage
+        //Ganymeda amplifier trip state
+        //write only
+        public string ZZZA(string s)
+        {
+            if (s.Length == parser.nSet)
+            {
+                int Version = Convert.ToInt32(s);
+                console.CATHandleAmplifierTripMessage(Version);
+                return "";
+            }
+            else
+                return parser.Error1;
+        }
+
+        //
+        //ARIES ATU tune state message
+        //write only
+        public string ZZOX(string s)
+        {
+            if (s.Length == parser.nSet)
+            {
+                bool Tuned = false;
+                int Version = Convert.ToInt32(s);
+                if (Version == 1)
+                    Tuned = true;
+                console.CATHandleAriesTuneMessage(Tuned);
                 return "";
             }
             else

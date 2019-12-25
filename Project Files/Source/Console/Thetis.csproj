@@ -252,6 +252,9 @@
     <Compile Include="AmpView.Designer.cs">
       <DependentUpon>AmpView.cs</DependentUpon>
     </Compile>
+    <Compile Include="AndromedaEditForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="BandButtonsPopup.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -260,6 +263,7 @@
     <Compile Include="displaysettingsform.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Dumpcap.cs" />
     <Compile Include="FilterButtonsPopup.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -545,6 +549,9 @@
     <None Include="Resources\screen.png" />
     <None Include="Resources\warning4.png" />
     <None Include="Resources\zap.png" />
+    <EmbeddedResource Include="AndromedaEditForm.resx">
+      <DependentUpon>AndromedaEditForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="displaysettingsform.resx">
       <DependentUpon>displaysettingsform.cs</DependentUpon>
     </EmbeddedResource>

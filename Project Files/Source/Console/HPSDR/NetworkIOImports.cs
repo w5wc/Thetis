@@ -43,7 +43,7 @@ namespace Thetis
         public static extern int getOOO();     
 
         [DllImport("ChannelMaster.dll", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool getSeqInDelta(int rx, int[] deltas, StringBuilder dateTimeStamp, bool bInit);
+        public static extern bool getSeqInDelta(bool bInit, int rx, int[] deltas, StringBuilder dateTimeStamp, out uint received_seqnum, out uint last_seqnum);
 
         [DllImport("ChannelMaster.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern void clearSnapshots();

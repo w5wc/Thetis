@@ -899,7 +899,9 @@
             this.pToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             this.pToolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripStatusLabel_CPUperc = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripDropDownButton_CPU = new System.Windows.Forms.ToolStripDropDownButton();
+            this.systemToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.thetisOnlyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripStatusLabel_Volts = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel_Amps = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel_SeqWarning = new System.Windows.Forms.ToolStripStatusLabel();
@@ -4718,7 +4720,7 @@
             this.statusStripMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripDropDownButton_ScreenSize,
             this.toolStripStatusLabel1,
-            this.toolStripStatusLabel_CPUperc,
+            this.toolStripDropDownButton_CPU,
             this.toolStripStatusLabel_Volts,
             this.toolStripStatusLabel_Amps,
             this.toolStripStatusLabel_SeqWarning,
@@ -4913,12 +4915,27 @@
             resources.ApplyResources(this.toolStripStatusLabel1, "toolStripStatusLabel1");
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
             // 
-            // toolStripStatusLabel_CPUperc
+            // toolStripDropDownButton_CPU
             // 
-            resources.ApplyResources(this.toolStripStatusLabel_CPUperc, "toolStripStatusLabel_CPUperc");
-            this.toolStripStatusLabel_CPUperc.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.toolStripStatusLabel_CPUperc.Image = global::Thetis.Properties.Resources.cpu;
-            this.toolStripStatusLabel_CPUperc.Name = "toolStripStatusLabel_CPUperc";
+            resources.ApplyResources(this.toolStripDropDownButton_CPU, "toolStripDropDownButton_CPU");
+            this.toolStripDropDownButton_CPU.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.systemToolStripMenuItem,
+            this.thetisOnlyToolStripMenuItem});
+            this.toolStripDropDownButton_CPU.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.toolStripDropDownButton_CPU.Image = global::Thetis.Properties.Resources.cpu;
+            this.toolStripDropDownButton_CPU.Name = "toolStripDropDownButton_CPU";
+            // 
+            // systemToolStripMenuItem
+            // 
+            this.systemToolStripMenuItem.Name = "systemToolStripMenuItem";
+            resources.ApplyResources(this.systemToolStripMenuItem, "systemToolStripMenuItem");
+            this.systemToolStripMenuItem.Click += new System.EventHandler(this.systemToolStripMenuItem_Click);
+            // 
+            // thetisOnlyToolStripMenuItem
+            // 
+            this.thetisOnlyToolStripMenuItem.Name = "thetisOnlyToolStripMenuItem";
+            resources.ApplyResources(this.thetisOnlyToolStripMenuItem, "thetisOnlyToolStripMenuItem");
+            this.thetisOnlyToolStripMenuItem.Click += new System.EventHandler(this.thetisOnlyToolStripMenuItem_Click);
             // 
             // toolStripStatusLabel_Volts
             // 
@@ -7281,7 +7298,6 @@
         private ToolStripMenuItem BPF2ToolStripMenuItem;
         private ComboBoxTS comboAMTXProfile;
         private StatusStrip statusStripMain;
-        private ToolStripStatusLabel toolStripStatusLabel_CPUperc;
         private ToolStripStatusLabel toolStripStatusLabel_Amps;
         private ToolStripStatusLabel toolStripStatusLabel_Volts;
         private ToolStripStatusLabel toolStripStatusLabel_Fill;
@@ -7319,5 +7335,8 @@
         private ToolStripMenuItem x1600ToolStripMenuItem;
         private ToolStripMenuItem x2400ToolStripMenuItem;
         private PanelTS pnlResizeMeter;
+        private ToolStripDropDownButton toolStripDropDownButton_CPU;
+        private ToolStripMenuItem systemToolStripMenuItem;
+        private ToolStripMenuItem thetisOnlyToolStripMenuItem;
     }
 }

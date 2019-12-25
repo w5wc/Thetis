@@ -471,7 +471,7 @@ void StopReadThread(void) {
 //	}
 //}
 
-void addSnapShot(int rx)
+void addSnapShot(int rx, unsigned int received_seqnum, unsigned int last_seqnum)
 {
 	// add newest to head
 	EnterCriticalSection(&prn->seqErrors);
@@ -489,6 +489,9 @@ void addSnapShot(int rx)
 	SYSTEMTIME localTime;
 	GetLocalTime(&localTime);
 	sprintf(snapshot->dateTimeStamp, "%02d/%02d %02d:%02d:%02d:%03d", localTime.wMonth, localTime.wDay, localTime.wHour, localTime.wMinute, localTime.wSecond, localTime.wMilliseconds);
+
+	snapshot->received_seqnum = received_seqnum;
+	snapshot->last_seqnum = last_seqnum;
 
 	if (prn->rx[rx].snapshot_length == MAX_IN_SEQ_SNAPSHOTS) {
 		// too many in the list, dump tail
@@ -526,10 +529,12 @@ void addSnapShot(int rx)
 	LeaveCriticalSection(&prn->seqErrors);
 }
 
-void storeRXSeqDelta(int rx, int delta) {
+void storeRXSeqDelta(int rx, unsigned int received_seqnum) {
 	EnterCriticalSection(&prn->seqErrors);
 
-	unsigned int i = prn->rx[rx].rx_in_seq_delta_index;
+	int delta = (int)received_seqnum - (1 + prn->rx[rx].rx_in_seq_no);
+
+	int i = prn->rx[rx].rx_in_seq_delta_index;
 
 	prn->rx[rx].rx_in_seq_delta[i] = delta;
 
@@ -553,7 +558,7 @@ int ReadUDPFrame(unsigned char *bufp) {
 
 	nrecv = recvfrom(listenSock, readbuf, sizeof(readbuf), 0, (SOCKADDR *)&fromaddr, &fromlen);
 
-	if (nrecv == -1)
+	if (nrecv == -1) //SOCKET_ERROR
 	{
 		errno = WSAGetLastError();
 		if (errno == WSAEWOULDBLOCK || errno == WSAEMSGSIZE)
@@ -705,14 +710,14 @@ int ReadUDPFrame(unsigned char *bufp) {
 
 		int ddc = inport - 1035;
 
-		if (seqnum != 0) storeRXSeqDelta(ddc, (int)seqnum - (1 + prn->rx[ddc].rx_in_seq_no));
+		if (seqnum != 0) storeRXSeqDelta(ddc, seqnum);
 
 		if (seqnum != (1 + prn->rx[ddc].rx_in_seq_no) && seqnum != 0)  {
 			prn->rx[ddc].rx_in_seq_err += 1;
 			printf("- Rx%d I/Q: seq error this: %d last: %d\n", ddc, seqnum, prn->rx[ddc].rx_in_seq_no);
 			fflush(stdout);
 
-			addSnapShot(ddc);
+			addSnapShot(ddc, seqnum, prn->rx[ddc].rx_in_seq_no);
 		}
 
 		prn->rx[ddc].rx_in_seq_no = seqnum;
@@ -1030,7 +1035,7 @@ void CmdGeneral() { // port 1024
 	// Wideband ADC0 port default #1027
 	packetbuf[21] = prn->wb_base_port >> 8;
 	packetbuf[22] = prn->wb_base_port & 0xff;
-	// Wideband enable WB0  = [0], WB1 = 1…..WB7 = [7]
+	// Wideband enable WB0  = [0], WB1 = 1ï¿½..WB7 = [7]
 	packetbuf[23] = (char)_InterlockedAnd(&prn->wb_enable, 0xff);
 	// Wideband Samples per packet 512
 	packetbuf[24] = prn->wb_samples_per_packet >> 8;

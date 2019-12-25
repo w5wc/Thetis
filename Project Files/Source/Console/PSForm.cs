@@ -43,7 +43,7 @@ namespace Thetis
         public static AmpView ampv = null;
         public static Thread ampvThread = null;
 
-        private int oldCalCount2 = 0;
+        //private int oldCalCount2 = 0;
         private int save_autoON = 0;
         private int save_singlecalON = 0;
         private int deltadB = 0;
@@ -624,21 +624,19 @@ namespace Thetis
 
         private void timer2_Tick(object sender, EventArgs e)
         {
-            bool newcal = (puresignal.Info[5] != oldCalCount2);
-            oldCalCount2 = puresignal.Info[5];
             //if (autoattenuate && !console.ATTOnTX) console.ATTOnTX = true;//MW0LGE moved into 0 state
             switch (aastate)
             {
                 case 0: // monitor
-                    if (autoattenuate && newcal
-                        && (puresignal.Info[4] > 181 || (puresignal.Info[4] <= 128 && console.SetupForm.ATTOnTX > 0)))
+                    if (autoattenuate && puresignal.CalibrationAttemptsChanged
+                        && puresignal.NeedToRecalibrate(console.SetupForm.ATTOnTX))
                     {
                         if (!console.ATTOnTX) AutoAttenuate = true; //MW0LGE
                         aastate = 1;
                         double ddB;
-                        if (puresignal.Info[4] <= 256)
+                        if (puresignal.IsFeedbackLevelOK)
                         {
-                            ddB = 20.0 * Math.Log10((double)puresignal.Info[4] / 152.293);
+                            ddB = 20.0 * Math.Log10((double)puresignal.FeedbackLevel / 152.293);
                             if (Double.IsNaN(ddB)) ddB = 31.1;
                             if (ddB < -100.0) ddB = -100.0;
                             if (ddB > +100.0) ddB = +100.0;
@@ -647,9 +645,9 @@ namespace Thetis
                             ddB = 31.1;
                         deltadB = Convert.ToInt32(ddB);
                         if (cmdstate == 2) save_autoON = 1;
-                        else               save_autoON = 0;
+                        else save_autoON = 0;
                         if (cmdstate == 4) save_singlecalON = 1;
-                        else               save_singlecalON = 0;
+                        else save_singlecalON = 0;
                         puresignal.SetPSControl(txachannel, 1, 0, 0, 0);
                     }
                     break;
@@ -665,6 +663,48 @@ namespace Thetis
                     puresignal.SetPSControl(txachannel, 0, save_singlecalON, save_autoON, 0);
                     break;
             }
+
+            //bool newcal = (puresignal.Info[5] != oldCalCount2);
+            //oldCalCount2 = puresignal.Info[5];
+            ////if (autoattenuate && !console.ATTOnTX) console.ATTOnTX = true;//MW0LGE moved into 0 state
+            //switch (aastate)
+            //{
+            //    case 0: // monitor
+            //        if (autoattenuate && newcal
+            //            && (puresignal.Info[4] > 181 || (puresignal.Info[4] <= 128 && console.SetupForm.ATTOnTX > 0)))
+            //        {
+            //            if (!console.ATTOnTX) AutoAttenuate = true; //MW0LGE
+            //            aastate = 1;
+            //            double ddB;
+            //            if (puresignal.Info[4] <= 256)
+            //            {
+            //                ddB = 20.0 * Math.Log10((double)puresignal.Info[4] / 152.293);
+            //                if (Double.IsNaN(ddB)) ddB = 31.1;
+            //                if (ddB < -100.0) ddB = -100.0;
+            //                if (ddB > +100.0) ddB = +100.0;
+            //            }
+            //            else
+            //                ddB = 31.1;
+            //            deltadB = Convert.ToInt32(ddB);
+            //            if (cmdstate == 2) save_autoON = 1;
+            //            else               save_autoON = 0;
+            //            if (cmdstate == 4) save_singlecalON = 1;
+            //            else               save_singlecalON = 0;
+            //            puresignal.SetPSControl(txachannel, 1, 0, 0, 0);
+            //        }
+            //        break;
+            //    case 1: // set new value
+            //        aastate = 2;
+            //        if ((console.SetupForm.ATTOnTX + deltadB) > 0)
+            //            console.SetupForm.ATTOnTX += deltadB;
+            //        else
+            //            console.SetupForm.ATTOnTX = 0;
+            //        break;
+            //    case 2: // restore operation
+            //        aastate = 0;
+            //        puresignal.SetPSControl(txachannel, 0, save_singlecalON, save_autoON, 0);
+            //        break;
+            //}
         }
 
         private void PSpeak_TextChanged(object sender, EventArgs e)
@@ -886,7 +926,7 @@ namespace Thetis
         private static int[] oldInfo = new int[16];
         public static void getinfo(int txachannel)
         {
-            //make copy of old, used in HasInfoChanged MW0LGE
+            //make copy of old, used in HasInfoChanged & CalibrationAttemptsChanged MW0LGE
             fixed (void* dest = &oldInfo[0])
             fixed (void* src = &Info[0])
                 Win32.memcpy(dest, src, 16 * sizeof(int));
@@ -901,7 +941,7 @@ namespace Thetis
                 bool bChange = false;
                 for (int n = 0; n < 16; n++)
                 {
-                    if (puresignal.Info[n] != oldInfo[n])
+                    if (Info[n] != oldInfo[n])
                     {
                         bChange = true;
                         break;
@@ -923,16 +963,27 @@ namespace Thetis
             get { return Info[4] > 90; }
             set { }
         }
+        public static bool NeedToRecalibrate(int nCurrentATTonTX) {
+             return (Info[4] > 181 || (Info[4] <= 128 && nCurrentATTonTX > 0));            
+        }
+        public static bool IsFeedbackLevelOK {
+            get { return Info[4] <= 256; }
+            set { }
+        }
+        public static int FeedbackLevel {
+            get { return Info[4]; }
+            set { }
+        }
         public static Color FeedbackColourLevel {
             get {
-                if (puresignal.Info[4] > 181) return Color.Blue;
-                else if (puresignal.Info[4] > 128) return Color.Lime;
-                else if (puresignal.Info[4] > 90) return Color.Yellow;
+                if (Info[4] > 181) return Color.Blue;
+                else if (Info[4] > 128) return Color.Lime;
+                else if (Info[4] > 90) return Color.Yellow;
                 else return Color.Red;
             }
             set { }
         }
-        // info[15] is engine state
+        // info[15] is engine state (from calcc.c)
         public enum EngineState
         {
             LRESET = 0,

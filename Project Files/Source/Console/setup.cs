@@ -1398,6 +1398,7 @@ namespace Thetis
             chkVAC2LatencyOutManual_CheckedChanged(this, e);
             chkVAC2LatencyPAInManual_CheckedChanged(this, e);
             chkVAC2LatencyPAOutManual_CheckedChanged(this, e);
+            chkBypassVACPlayingRecording_CheckedChanged(this, e);//MW0LGE
 
             // Calibration Tab
             udTXDisplayCalOffset_ValueChanged(this, e);
@@ -1438,11 +1439,25 @@ namespace Thetis
             chkANAN8000DLEDisplayVoltsAmps_CheckedChanged(this, e);
             udDisplayWaterfallUpdatePeriod_ValueChanged(this, e);
             udRX2DisplayWaterfallUpdatePeriod_ValueChanged(this, e);
-            udDisplayWaterfallAvgTime_ValueChanged(this, e);
-            udRX2DisplayWaterfallAvgTime_ValueChanged(this, e);
+            //udDisplayWaterfallAvgTime_ValueChanged(this, e);
+            //udRX2DisplayWaterfallAvgTime_ValueChanged(this, e);
             comboTXLabelAlign_SelectedIndexChanged(this, e);
+            //MW0LGE
             ChkWaterfallUseRX1SpectrumMinMax_CheckedChanged(this, e); //MW0LGE
-            ChkWaterfallUseRX2SpectrumMinMax_CheckedChanged(this, e); //MW0LGE
+            ChkWaterfallUseRX2SpectrumMinMax_CheckedChanged(this, e); 
+            udPeakBlobs_ValueChanged(this, e);
+            chkPeakBlobInsideFilterOnly_CheckedChanged(this, e);
+            chkPeakBlobsEnabled_CheckedChanged(this, e);
+            chkAccurateFrameTiming_CheckedChanged(this, e);
+            clrbtnSignalHistoryColour_Changed(this, e);
+            chkSignalHistory_CheckedChanged(this, e);
+            chkVSyncDX_CheckedChanged(this, e);            
+            chkBlobPeakHold_CheckedChanged(this, e);
+            udSignalHistoryDuration_ValueChanged(this, e);
+            udBlobPeakHoldMS_ValueChanged(this, e);
+            chkPeakHoldFade_CheckedChanged(this, e);
+            //MW0LGE end
+
             // DSP Tab
             udLMSANF_ValueChanged(this, e);
             udLMSNR_ValueChanged(this, e);
@@ -8507,12 +8522,17 @@ namespace Thetis
         private void udDisplayFPS_ValueChanged(object sender, System.EventArgs e)
         {
             console.DisplayFPS = (int)udDisplayFPS.Value;
+
+            if(console.CurrentDisplayEngine == DisplayEngine.DIRECT_X) Display.ResetDX2DModeDescription();
+
             //MW0LGE movedto console
             //console.specRX.GetSpecRX(0).FrameRate = (int)udDisplayFPS.Value;
             //console.specRX.GetSpecRX(1).FrameRate = (int)udDisplayFPS.Value;
             //console.specRX.GetSpecRX(cmaster.inid(1, 0)).FrameRate = (int)udDisplayFPS.Value;
 
             udDisplayAVGTime_ValueChanged(this, EventArgs.Empty);
+
+            setWaterFallCalculatedDelayText();
         }
 
         private void udDisplayGridMax_ValueChanged(object sender, System.EventArgs e)
@@ -9177,9 +9197,11 @@ namespace Thetis
             {
                 case "GDI+":
                     console.CurrentDisplayEngine = DisplayEngine.GDI_PLUS;
+                    chkVSyncDX.Enabled = false;
                     break;
                 case "DirectX":
                     console.CurrentDisplayEngine = DisplayEngine.DIRECT_X;
+                    chkVSyncDX.Enabled = true;
                     break;
             }
         }
@@ -13253,9 +13275,16 @@ namespace Thetis
             //Display.WaterfallAvgBlocks = buffersToAvg;
         }
 
+        private void setWaterFallCalculatedDelayText()
+        {
+            lblRX1WaterFallCalulatedDelayMS.Text = ((1000f / console.DisplayFPS) * Display.WaterfallUpdatePeriod).ToString("f2") + " (ms)";
+            lblRX2WaterFallCalulatedDelayMS.Text = ((1000f / console.DisplayFPS) * Display.RX2WaterfallUpdatePeriod).ToString("f2") + " (ms)";
+        }
+
         private void udDisplayWaterfallUpdatePeriod_ValueChanged(object sender, System.EventArgs e)
         {
             Display.WaterfallUpdatePeriod = (int)udDisplayWaterfallUpdatePeriod.Value;
+            setWaterFallCalculatedDelayText();
         }
 
         private void udRX2DisplayWaterfallAvgTime_ValueChanged(object sender, System.EventArgs e)
@@ -13269,6 +13298,7 @@ namespace Thetis
         private void udRX2DisplayWaterfallUpdatePeriod_ValueChanged(object sender, System.EventArgs e)
         {
             Display.RX2WaterfallUpdatePeriod = (int)udRX2DisplayWaterfallUpdatePeriod.Value;
+            setWaterFallCalculatedDelayText();
         }
 
         private void chkSnapClickTune_CheckedChanged(object sender, System.EventArgs e)
@@ -20102,6 +20132,96 @@ namespace Thetis
         private void clrbtnStatusBarText_Changed(object sender, EventArgs e)
         {
             console.StatusBarTextColour = clrbtnStatusBarText.Color;
+        }
+
+        private void chkAccurateFrameTiming_CheckedChanged(object sender, EventArgs e)
+        {
+            console.UseAccurateFramingTiming = chkAccurateFrameTiming.Checked;
+        }
+
+        private void chkPeakBlobsEnabled_CheckedChanged(object sender, EventArgs e)
+        {
+            bool bEnabled = chkPeakBlobsEnabled.Checked;
+            udPeakBlobs.Enabled = bEnabled;
+            chkPeakBlobInsideFilterOnly.Enabled = bEnabled;
+            lblBlobMS.Enabled = bEnabled;
+            chkBlobPeakHold.Enabled = bEnabled;
+            udBlobPeakHoldMS.Enabled = bEnabled && chkBlobPeakHold.Checked;
+            chkPeakHoldFade.Enabled = bEnabled && chkBlobPeakHold.Checked;
+            Display.ShowPeakBlobs = bEnabled;
+        }
+
+        private void udPeakBlobs_ValueChanged(object sender, EventArgs e)
+        {
+            Display.NumberOfPeakBlobs = (int)udPeakBlobs.Value;
+        }
+
+        private void chkPeakBlobInsideFilterOnly_CheckedChanged(object sender, EventArgs e)
+        {
+            Display.ShowPeakBlobsInsideFilterOnly = chkPeakBlobInsideFilterOnly.Checked;
+        }
+
+        private void chkSignalHistory_CheckedChanged(object sender, EventArgs e)
+        {
+            console.UseSignalHistory = chkSignalHistory.Checked;
+            udSignalHistoryDuration.Enabled = chkSignalHistory.Checked;
+            lblSignalHistoryDurationMS.Enabled = chkSignalHistory.Checked;
+        }
+
+        private void clrbtnSignalHistoryColour_Changed(object sender, EventArgs e)
+        {
+            console.SignalHistoryColour = Color.FromArgb(tbSignalHistoryAlpha.Value, clrbtnSignalHistoryColour.Color);
+        }
+
+        private void tbSignalHistoryAlpha_Scroll(object sender, EventArgs e)
+        {
+            clrbtnSignalHistoryColour_Changed(this, EventArgs.Empty);
+            toolTip1.SetToolTip(tbSignalHistoryAlpha, tbSignalHistoryAlpha.Value.ToString());
+        }
+
+        private void chkVSyncDX_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chkVSyncDX.Checked)
+            {
+                Display.VerticalBlanks = 1;
+            }
+            else
+            {
+                Display.VerticalBlanks = 0;
+            }
+        }
+
+        private void chkBlobPeakHold_CheckedChanged(object sender, EventArgs e)
+        {
+            chkPeakHoldFade.Enabled = chkBlobPeakHold.Checked && chkBlobPeakHold.Enabled;
+            udBlobPeakHoldMS.Enabled = chkBlobPeakHold.Checked && chkBlobPeakHold.Enabled;
+
+            Display.BlobPeakHold = chkBlobPeakHold.Checked;
+        }
+
+        private void udBlobPeakHoldMS_ValueChanged(object sender, EventArgs e)
+        {
+            Display.BlobPeakHoldMS = (double)udBlobPeakHoldMS.Value;
+        }
+
+        private void chkPeakHoldFade_CheckedChanged(object sender, EventArgs e)
+        {
+            Display.BlobPeakHoldFade = chkPeakHoldFade.Checked;
+        }
+
+        private void udSignalHistoryDuration_ValueChanged(object sender, EventArgs e)
+        {
+            console.SignalHistoryDuration = (int)udSignalHistoryDuration.Value;
+        }
+
+        private void udSpaceMoxDelay_ValueChanged(object sender, EventArgs e)
+        {
+            console.SpaceMoxDelay = (int)udSpaceMoxDelay.Value;
+        }
+
+        private void chkBypassVACPlayingRecording_CheckedChanged(object sender, EventArgs e)
+        {
+            console.BypassVACWhenPlayingRecording = chkBypassVACPlayingRecording.Checked;
         }
         //--
     }

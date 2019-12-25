@@ -185,7 +185,7 @@ int getOOO() { // OOO == Out Of Order packet
 }
 
 PORT
-int getSeqInDelta(int rx, int deltas[], char* dateTimeStamp, int nInit) {
+int getSeqInDelta(int nInit, int rx, int deltas[], char* dateTimeStamp, size_t *received_seqnum, size_t *last_seqnum) {
 	int nRet = 0;
 
 	EnterCriticalSection(&prn->seqErrors);
@@ -195,6 +195,9 @@ int getSeqInDelta(int rx, int deltas[], char* dateTimeStamp, int nInit) {
 	if (prn->rx[rx].snapshot != NULL) {
 		memcpy(deltas, prn->rx[rx].snapshot->rx_in_seq_snapshot, sizeof(int) * MAX_IN_SEQ_LOG);
 		memcpy(dateTimeStamp, prn->rx[rx].snapshot->dateTimeStamp, sizeof(char) * 24);
+
+		*received_seqnum = prn->rx[rx].snapshot->received_seqnum;
+		*last_seqnum = prn->rx[rx].snapshot->last_seqnum;
 
 		prn->rx[rx].snapshot = prn->rx[rx].snapshot->next;
 
