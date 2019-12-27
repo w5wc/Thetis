@@ -9674,26 +9674,35 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
   <data name="toolStripStatusLabel1.Size" type="System.Drawing.Size, System.Drawing">
     <value>14, 15</value>
   </data>
-  <data name="toolStripStatusLabel_CPUperc.AutoSize" type="System.Boolean, mscorlib">
+  <data name="toolStripDropDownButton_CPU.AutoSize" type="System.Boolean, mscorlib">
     <value>False</value>
   </data>
-  <data name="toolStripStatusLabel_CPUperc.Font" type="System.Drawing.Font, System.Drawing">
+  <data name="systemToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>138, 22</value>
+  </data>
+  <data name="systemToolStripMenuItem.Text" xml:space="preserve">
+    <value>System</value>
+  </data>
+  <data name="thetisOnlyToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>138, 22</value>
+  </data>
+  <data name="thetisOnlyToolStripMenuItem.Text" xml:space="preserve">
+    <value>Thetis Only</value>
+  </data>
+  <data name="toolStripDropDownButton_CPU.Font" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft Sans Serif, 8.25pt, style=Bold</value>
   </data>
-  <data name="toolStripStatusLabel_CPUperc.ImageAlign" type="System.Drawing.ContentAlignment, System.Drawing">
-    <value>MiddleLeft</value>
-  </data>
-  <data name="toolStripStatusLabel_CPUperc.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
+  <data name="toolStripDropDownButton_CPU.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
     <value>None</value>
   </data>
-  <data name="toolStripStatusLabel_CPUperc.Size" type="System.Drawing.Size, System.Drawing">
-    <value>60, 15</value>
+  <data name="toolStripDropDownButton_CPU.ImageTransparentColor" type="System.Drawing.Color, System.Drawing">
+    <value>Magenta</value>
   </data>
-  <data name="toolStripStatusLabel_CPUperc.Text" xml:space="preserve">
+  <data name="toolStripDropDownButton_CPU.Size" type="System.Drawing.Size, System.Drawing">
+    <value>68, 18</value>
+  </data>
+  <data name="toolStripDropDownButton_CPU.Text" xml:space="preserve">
     <value>100%</value>
-  </data>
-  <data name="toolStripStatusLabel_CPUperc.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
-    <value>MiddleLeft</value>
   </data>
   <data name="toolStripStatusLabel_Volts.AutoSize" type="System.Boolean, mscorlib">
     <value>False</value>
@@ -9741,7 +9750,7 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
     <value>False</value>
   </data>
   <data name="toolStripStatusLabel_Fill.Size" type="System.Drawing.Size, System.Drawing">
-    <value>417, 15</value>
+    <value>409, 15</value>
   </data>
   <data name="toolStripStatusLabel_UTCTime.AutoSize" type="System.Boolean, mscorlib">
     <value>False</value>
@@ -14859,7 +14868,7 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
     <value>Off</value>
   </data>
   <data name="lblModeBigLabel.Location" type="System.Drawing.Point, System.Drawing">
-    <value>13, 21</value>
+    <value>13, 22</value>
   </data>
   <data name="lblModeBigLabel.Size" type="System.Drawing.Size, System.Drawing">
     <value>71, 24</value>
@@ -18108,11 +18117,23 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
   <data name="&gt;&gt;toolStripStatusLabel1.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;toolStripStatusLabel_CPUperc.Name" xml:space="preserve">
-    <value>toolStripStatusLabel_CPUperc</value>
+  <data name="&gt;&gt;toolStripDropDownButton_CPU.Name" xml:space="preserve">
+    <value>toolStripDropDownButton_CPU</value>
   </data>
-  <data name="&gt;&gt;toolStripStatusLabel_CPUperc.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="&gt;&gt;toolStripDropDownButton_CPU.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripDropDownButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;systemToolStripMenuItem.Name" xml:space="preserve">
+    <value>systemToolStripMenuItem</value>
+  </data>
+  <data name="&gt;&gt;systemToolStripMenuItem.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;thetisOnlyToolStripMenuItem.Name" xml:space="preserve">
+    <value>thetisOnlyToolStripMenuItem</value>
+  </data>
+  <data name="&gt;&gt;thetisOnlyToolStripMenuItem.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;toolStripStatusLabel_Volts.Name" xml:space="preserve">
     <value>toolStripStatusLabel_Volts</value>
