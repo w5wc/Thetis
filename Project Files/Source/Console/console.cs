@@ -3,7 +3,7 @@
 //=================================================================
 // Thetis is a C# implementation of a Software Defined Radio.
 // Copyright (C) 2004-2009  FlexRadio Systems 
-// Copyright (C) 2010-2019  Doug Wigley
+// Copyright (C) 2010-2020  Doug Wigley
 // Credit is given to Sizenko Alexander of Style-7 (http://www.styleseven.com/) for the Digital-7 font.
 //
 // This program is free software; you can redistribute it and/or
@@ -60032,7 +60032,10 @@ namespace Thetis
             if (chkQSK.Checked)
             {
                 // turn it on
+                if (!Alex.trx_ant_not_same) // only if using separate recieve antenna connector
                 QSKEnabled = true;
+                else
+                    chkQSK.Checked = false;
             } else
             {
                 // turn it off
@@ -60040,6 +60043,10 @@ namespace Thetis
             }
         }
 
+        public void DisableQSK()
+        {
+            chkQSK.Checked = false;
+        }
 
        #region Andromeda Button Bar functions
 
