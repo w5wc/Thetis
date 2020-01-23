@@ -1508,10 +1508,12 @@ namespace Thetis
 
                 if ((console.Callsign != console.LastCall) || (console.RX1DSPMode != BandL))  // check if we need to create a new wave file or use the old one.
                 {
-                    Thread t = new Thread(new ThreadStart(CreateWaterfallID));
-                    t.Name = "Create Waterfall ID wave file Thread";
-                    t.IsBackground = true;
-                    t.Priority = ThreadPriority.Normal;
+                    Thread t = new Thread(new ThreadStart(CreateWaterfallID))
+                    {
+                        Name = "Create Waterfall ID wave file Thread",
+                        IsBackground = true,
+                        Priority = ThreadPriority.Normal
+                    };
                     t.Start();
                 } // console.Callsign != console.LastCall) || (console.RX1DSPMode != BandL))
                 else
@@ -2401,11 +2403,13 @@ namespace Thetis
 
 			filename = file;
 
-			Thread t = new Thread(new ThreadStart(ProcessRecordBuffers));
-			t.Name = "Wave File Write Thread";
-			t.IsBackground = true;
-			t.Priority = ThreadPriority.Normal;
-			t.Start();
+            Thread t = new Thread(new ThreadStart(ProcessRecordBuffers))
+            {
+                Name = "Wave File Write Thread",
+                IsBackground = true,
+                Priority = ThreadPriority.Normal
+            };
+            t.Start();
 		}
 
 		private void ProcessRecordBuffers()
@@ -2858,10 +2862,12 @@ namespace Thetis
 			playback = true;
 			reader = binread;
 
-			Thread t = new Thread(new ThreadStart(ProcessBuffers));
-			t.Name = "Wave File Read Thread";
-			t.IsBackground = true;
-			t.Priority = ThreadPriority.Normal;
+            Thread t = new Thread(new ThreadStart(ProcessBuffers))
+            {
+                Name = "Wave File Read Thread",
+                IsBackground = true,
+                Priority = ThreadPriority.Normal
+            };
             total_samps_written = 0;
             total_samps_read    = 0;
             do
@@ -3060,10 +3066,12 @@ namespace Thetis
             total_samps_read += size;                           // sum the total samples read from the ring(s)
             if (total_samps_read >= total_samps_written)        // check to see if we're done with playback
             {
-                Thread t = new Thread(new ThreadStart(NextPlayback));
-                t.Name = "Wave File Next Playback";
-                t.IsBackground = true;
-                t.Priority = ThreadPriority.Normal;
+                Thread t = new Thread(new ThreadStart(NextPlayback))
+                {
+                    Name = "Wave File Next Playback",
+                    IsBackground = true,
+                    Priority = ThreadPriority.Normal
+                };
                 t.Start();
             }
 		}

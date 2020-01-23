@@ -297,7 +297,6 @@ namespace Thetis
                 else trx_ant = RxAnt[idx];
 				if (RxAnt[idx] != TxAnt[idx])
 				{
-					Console.getConsole().DisableQSK(); // W2PA change so that qsk can not be used when tx/rx antennas are different
 					trx_ant_not_same = true;
 				}
 				else trx_ant_not_same = false;

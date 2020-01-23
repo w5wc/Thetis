@@ -1,6 +1,6 @@
 /*
  * network.c
- * Copyright (C) 2015-2018 Doug Wigley (W5WC)
+ * Copyright (C) 2015-2020 Doug Wigley (W5WC)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -1061,7 +1061,7 @@ void CmdGeneral() { // port 1024
 	// Bits - 10MHz ref source
 	packetbuf[57] = 0x00;
 	// Bits - PA, Apollo, Mercury, Clock source
-	packetbuf[58] = 0x01;
+	packetbuf[58] = (!prn->tx[0].pa) & 0x01;
 	// Bits - Alex(n) enable, 1 = enable, 0 = disable
 	packetbuf[59] = prbpfilter->enable | prbpfilter2->enable;
 	// sendto port 1024
@@ -1074,7 +1074,7 @@ void CmdHighPriority() { // port 1027
 	char packetbuf[BUFLEN];
 	memset(packetbuf, 0, sizeof(packetbuf)); // fill the frame with 0x00
 
-	// High Priority Comand & Control packet
+	// High Priority Command & Control packet
 	// Byte 0-3 Sequence #
 	// Byte 4 Run, PTT(n)
 	// bit [0] - Run 1 = true, 0 = false
@@ -1173,9 +1173,9 @@ void CmdHighPriority() { // port 1027
 	packetbuf[345] = prn->tx[0].drive_level;
 
 	// Enable transverter T/R relay 8   Mute Audio Amp bit 1 from J16 pin 9 IO4---DLE
-    packetbuf[1400] = xvtr_enable | ((!(prn->user_io & 0x01)) << 1);
+    packetbuf[1400] = xvtr_enable | ((!(prn->user_io & 0x01)) << 1 | atu_tune << 2); 
 
-	// Open Collector Ouputs
+	// Open Collector Outputs
 	packetbuf[1401] = (prn->oc_output << 1) & 0xfe;
 
 	// User Outputs DB9 pins 1-4

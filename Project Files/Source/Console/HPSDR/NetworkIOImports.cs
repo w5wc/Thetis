@@ -318,6 +318,9 @@ namespace Thetis
         [DllImport("ChannelMaster.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern int GetADC_cntrl2();
 
+        [DllImport("ChannelMaster.dll", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void ATU_Tune(int tune);
+
 
     }
 }

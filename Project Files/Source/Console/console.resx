@@ -1435,10 +1435,10 @@
     <value>panelModeSpecificCW</value>
   </data>
   <data name="&gt;&gt;ptbCWSpeed.ZOrder" xml:space="preserve">
-    <value>3</value>
+    <value>2</value>
   </data>
   <data name="udCWPitch.Location" type="System.Drawing.Point, System.Drawing">
-    <value>265, 138</value>
+    <value>265, 143</value>
   </data>
   <data name="udCWPitch.Size" type="System.Drawing.Size, System.Drawing">
     <value>48, 20</value>
@@ -1459,10 +1459,10 @@
     <value>panelModeSpecificCW</value>
   </data>
   <data name="&gt;&gt;udCWPitch.ZOrder" xml:space="preserve">
-    <value>4</value>
+    <value>3</value>
   </data>
   <data name="udCWBreakInDelay.Location" type="System.Drawing.Point, System.Drawing">
-    <value>163, 16</value>
+    <value>156, 20</value>
   </data>
   <data name="udCWBreakInDelay.Size" type="System.Drawing.Size, System.Drawing">
     <value>48, 20</value>
@@ -1486,43 +1486,7 @@
     <value>grpSemiBreakIn</value>
   </data>
   <data name="&gt;&gt;udCWBreakInDelay.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="chkCWBreakInEnabled.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Microsoft Sans Serif, 8.25pt</value>
-  </data>
-  <data name="chkCWBreakInEnabled.Image" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="chkCWBreakInEnabled.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>Off</value>
-  </data>
-  <data name="chkCWBreakInEnabled.Location" type="System.Drawing.Point, System.Drawing">
-    <value>11, 18</value>
-  </data>
-  <data name="chkCWBreakInEnabled.Size" type="System.Drawing.Size, System.Drawing">
-    <value>96, 16</value>
-  </data>
-  <data name="chkCWBreakInEnabled.TabIndex" type="System.Int32, mscorlib">
-    <value>36</value>
-  </data>
-  <data name="chkCWBreakInEnabled.Text" xml:space="preserve">
-    <value>Semi Break-In</value>
-  </data>
-  <data name="chkCWBreakInEnabled.ToolTip" xml:space="preserve">
-    <value>Enables Semi Break In operation.</value>
-  </data>
-  <data name="&gt;&gt;chkCWBreakInEnabled.Name" xml:space="preserve">
-    <value>chkCWBreakInEnabled</value>
-  </data>
-  <data name="&gt;&gt;chkCWBreakInEnabled.Type" xml:space="preserve">
-    <value>System.Windows.Forms.CheckBoxTS, Thetis, Version=2.6.9.0, Culture=neutral, PublicKeyToken=null</value>
-  </data>
-  <data name="&gt;&gt;chkCWBreakInEnabled.Parent" xml:space="preserve">
-    <value>grpSemiBreakIn</value>
-  </data>
-  <data name="&gt;&gt;chkCWBreakInEnabled.ZOrder" xml:space="preserve">
-    <value>2</value>
+    <value>1</value>
   </data>
   <data name="chkShowTXCWFreq.Image" type="System.Resources.ResXNullRef, System.Windows.Forms">
     <value />
@@ -1555,7 +1519,7 @@
     <value>panelModeSpecificCW</value>
   </data>
   <data name="&gt;&gt;chkShowTXCWFreq.ZOrder" xml:space="preserve">
-    <value>8</value>
+    <value>7</value>
   </data>
   <data name="chkCWIambic.Font" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft Sans Serif, 8.25pt</value>
@@ -1591,7 +1555,7 @@
     <value>panelModeSpecificCW</value>
   </data>
   <data name="&gt;&gt;chkCWIambic.ZOrder" xml:space="preserve">
-    <value>9</value>
+    <value>8</value>
   </data>
   <data name="udRX2FilterHigh.Enabled" type="System.Boolean, mscorlib">
     <value>False</value>
@@ -4663,7 +4627,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;chkSquelch.ZOrder" xml:space="preserve">
-    <value>32</value>
+    <value>31</value>
   </data>
   <data name="btnMemoryQuickRestore.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
     <value>Flat</value>
@@ -6557,7 +6521,7 @@ CTRL + Right Click on any Band Button to add Band Stack.</value>
     <value>panelModeSpecificCW</value>
   </data>
   <data name="&gt;&gt;chkCWFWKeyer.ZOrder" xml:space="preserve">
-    <value>11</value>
+    <value>10</value>
   </data>
   <data name="chkShowCWZero.Font" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft Sans Serif, 8.25pt</value>
@@ -6593,7 +6557,7 @@ CTRL + Right Click on any Band Button to add Band Stack.</value>
     <value>panelModeSpecificCW</value>
   </data>
   <data name="&gt;&gt;chkShowCWZero.ZOrder" xml:space="preserve">
-    <value>2</value>
+    <value>1</value>
   </data>
   <data name="radFMDeviation5kHz.Appearance" type="System.Windows.Forms.Appearance, System.Windows.Forms">
     <value>Button</value>
@@ -7340,7 +7304,7 @@ CTRL + Right Click on any Band Button to add Band Stack.</value>
     <value>panelModeSpecificCW</value>
   </data>
   <data name="&gt;&gt;chkCWSidetone.ZOrder" xml:space="preserve">
-    <value>10</value>
+    <value>9</value>
   </data>
   <data name="udRX1StepAttData.Location" type="System.Drawing.Point, System.Drawing">
     <value>56, 249</value>
@@ -8515,22 +8479,22 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
     <value>Off</value>
   </data>
   <data name="chkQSK.Location" type="System.Drawing.Point, System.Drawing">
-    <value>87, 83</value>
+    <value>25, 19</value>
   </data>
   <data name="chkQSK.Size" type="System.Drawing.Size, System.Drawing">
-    <value>23, 50</value>
+    <value>50, 23</value>
   </data>
   <data name="chkQSK.TabIndex" type="System.Int32, mscorlib">
     <value>122</value>
   </data>
   <data name="chkQSK.Text" xml:space="preserve">
-    <value>QSK</value>
+    <value>Semi</value>
   </data>
   <data name="chkQSK.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
     <value>MiddleCenter</value>
   </data>
   <data name="chkQSK.ToolTip" xml:space="preserve">
-    <value>Enables QSK</value>
+    <value>Enables Semi, QSK, or Manual Break-In mode.</value>
   </data>
   <data name="&gt;&gt;chkQSK.Name" xml:space="preserve">
     <value>chkQSK</value>
@@ -8539,7 +8503,7 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
     <value>System.Windows.Forms.CheckBoxTS, Thetis, Version=2.6.9.0, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;chkQSK.Parent" xml:space="preserve">
-    <value>panelModeSpecificCW</value>
+    <value>grpSemiBreakIn</value>
   </data>
   <data name="&gt;&gt;chkQSK.ZOrder" xml:space="preserve">
     <value>0</value>
@@ -8593,7 +8557,7 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
     <value>$this</value>
   </data>
   <data name="&gt;&gt;picSquelch.ZOrder" xml:space="preserve">
-    <value>29</value>
+    <value>28</value>
   </data>
   <metadata name="timer_clock.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 54</value>
@@ -9750,7 +9714,25 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
     <value>False</value>
   </data>
   <data name="toolStripStatusLabel_Fill.Size" type="System.Drawing.Size, System.Drawing">
-    <value>409, 15</value>
+    <value>347, 15</value>
+  </data>
+  <data name="toolStripStatusLabel_timer.AutoSize" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="toolStripStatusLabel_timer.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 8.25pt, style=Bold</value>
+  </data>
+  <data name="toolStripStatusLabel_timer.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
+    <value>None</value>
+  </data>
+  <data name="toolStripStatusLabel_timer.Size" type="System.Drawing.Size, System.Drawing">
+    <value>62, 15</value>
+  </data>
+  <data name="toolStripStatusLabel_timer.Text" xml:space="preserve">
+    <value>00:00</value>
+  </data>
+  <data name="toolStripStatusLabel_timer.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleRight</value>
   </data>
   <data name="toolStripStatusLabel_UTCTime.AutoSize" type="System.Boolean, mscorlib">
     <value>False</value>
@@ -11001,7 +10983,7 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
     <value>$this</value>
   </data>
   <data name="&gt;&gt;panelButtonBar.ZOrder" xml:space="preserve">
-    <value>45</value>
+    <value>41</value>
   </data>
   <data name="panelVFOLabels.AutoScrollMargin" type="System.Drawing.Size, System.Drawing">
     <value>0, 0</value>
@@ -11301,7 +11283,7 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
     <value>$this</value>
   </data>
   <data name="&gt;&gt;panelVFOLabels.ZOrder" xml:space="preserve">
-    <value>48</value>
+    <value>45</value>
   </data>
   <data name="panelVFOALabels.AutoScrollMargin" type="System.Drawing.Size, System.Drawing">
     <value>0, 0</value>
@@ -11607,7 +11589,7 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
     <value>$this</value>
   </data>
   <data name="&gt;&gt;panelVFOALabels.ZOrder" xml:space="preserve">
-    <value>49</value>
+    <value>44</value>
   </data>
   <data name="panelVFOBLabels.AutoScrollMargin" type="System.Drawing.Size, System.Drawing">
     <value>0, 0</value>
@@ -11913,7 +11895,7 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
     <value>$this</value>
   </data>
   <data name="&gt;&gt;panelVFOBLabels.ZOrder" xml:space="preserve">
-    <value>46</value>
+    <value>42</value>
   </data>
   <data name="panelRX2Power.AutoScrollMargin" type="System.Drawing.Size, System.Drawing">
     <value>0, 0</value>
@@ -12006,7 +11988,7 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
     <value>$this</value>
   </data>
   <data name="&gt;&gt;panelRX2Power.ZOrder" xml:space="preserve">
-    <value>36</value>
+    <value>35</value>
   </data>
   <data name="chkRX2.Appearance" type="System.Windows.Forms.Appearance, System.Windows.Forms">
     <value>Button</value>
@@ -12147,7 +12129,7 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
     <value>$this</value>
   </data>
   <data name="&gt;&gt;lblRF2.ZOrder" xml:space="preserve">
-    <value>37</value>
+    <value>36</value>
   </data>
   <data name="panelPower.AutoScrollMargin" type="System.Drawing.Size, System.Drawing">
     <value>0, 0</value>
@@ -12174,7 +12156,7 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
     <value>$this</value>
   </data>
   <data name="&gt;&gt;panelPower.ZOrder" xml:space="preserve">
-    <value>33</value>
+    <value>32</value>
   </data>
   <data name="panelModeSpecificCW.AutoScrollMargin" type="System.Drawing.Size, System.Drawing">
     <value>0, 0</value>
@@ -12294,7 +12276,7 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
     <value>panelModeSpecificCW</value>
   </data>
   <data name="&gt;&gt;grpCWAPF.ZOrder" xml:space="preserve">
-    <value>1</value>
+    <value>0</value>
   </data>
   <data name="lblCWSpeed.Image" type="System.Resources.ResXNullRef, System.Windows.Forms">
     <value />
@@ -12324,7 +12306,7 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
     <value>panelModeSpecificCW</value>
   </data>
   <data name="&gt;&gt;lblCWSpeed.ZOrder" xml:space="preserve">
-    <value>5</value>
+    <value>4</value>
   </data>
   <data name="lblCWBreakInDelay.Image" type="System.Resources.ResXNullRef, System.Windows.Forms">
     <value />
@@ -12333,7 +12315,7 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
     <value>Off</value>
   </data>
   <data name="lblCWBreakInDelay.Location" type="System.Drawing.Point, System.Drawing">
-    <value>105, 18</value>
+    <value>91, 22</value>
   </data>
   <data name="lblCWBreakInDelay.Size" type="System.Drawing.Size, System.Drawing">
     <value>64, 16</value>
@@ -12354,13 +12336,13 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
     <value>grpSemiBreakIn</value>
   </data>
   <data name="&gt;&gt;lblCWBreakInDelay.ZOrder" xml:space="preserve">
-    <value>1</value>
+    <value>2</value>
   </data>
   <data name="grpSemiBreakIn.Location" type="System.Drawing.Point, System.Drawing">
     <value>117, 89</value>
   </data>
   <data name="grpSemiBreakIn.Size" type="System.Drawing.Size, System.Drawing">
-    <value>218, 44</value>
+    <value>218, 48</value>
   </data>
   <data name="grpSemiBreakIn.TabIndex" type="System.Int32, mscorlib">
     <value>77</value>
@@ -12378,7 +12360,7 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
     <value>panelModeSpecificCW</value>
   </data>
   <data name="&gt;&gt;grpSemiBreakIn.ZOrder" xml:space="preserve">
-    <value>6</value>
+    <value>5</value>
   </data>
   <data name="lblCWPitchFreq.Image" type="System.Resources.ResXNullRef, System.Windows.Forms">
     <value />
@@ -12387,7 +12369,7 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
     <value>Off</value>
   </data>
   <data name="lblCWPitchFreq.Location" type="System.Drawing.Point, System.Drawing">
-    <value>175, 140</value>
+    <value>175, 145</value>
   </data>
   <data name="lblCWPitchFreq.Size" type="System.Drawing.Size, System.Drawing">
     <value>88, 16</value>
@@ -12408,13 +12390,13 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
     <value>panelModeSpecificCW</value>
   </data>
   <data name="&gt;&gt;lblCWPitchFreq.ZOrder" xml:space="preserve">
-    <value>7</value>
+    <value>6</value>
   </data>
   <data name="panelModeSpecificCW.Location" type="System.Drawing.Point, System.Drawing">
     <value>504, 424</value>
   </data>
   <data name="panelModeSpecificCW.Size" type="System.Drawing.Size, System.Drawing">
-    <value>336, 160</value>
+    <value>336, 165</value>
   </data>
   <data name="panelModeSpecificCW.TabIndex" type="System.Int32, mscorlib">
     <value>124</value>
@@ -12429,7 +12411,7 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
     <value>$this</value>
   </data>
   <data name="&gt;&gt;panelModeSpecificCW.ZOrder" xml:space="preserve">
-    <value>27</value>
+    <value>50</value>
   </data>
   <data name="panelRX2Filter.AutoScrollMargin" type="System.Drawing.Size, System.Drawing">
     <value>0, 0</value>
@@ -14118,7 +14100,7 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
     <value>504, 424</value>
   </data>
   <data name="panelModeSpecificPhone.Size" type="System.Drawing.Size, System.Drawing">
-    <value>336, 160</value>
+    <value>336, 165</value>
   </data>
   <data name="panelModeSpecificPhone.TabIndex" type="System.Int32, mscorlib">
     <value>125</value>
@@ -14133,7 +14115,7 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
     <value>$this</value>
   </data>
   <data name="&gt;&gt;panelModeSpecificPhone.ZOrder" xml:space="preserve">
-    <value>41</value>
+    <value>47</value>
   </data>
   <data name="panelModeSpecificDigital.AutoScrollMargin" type="System.Drawing.Size, System.Drawing">
     <value>0, 0</value>
@@ -14349,7 +14331,7 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
     <value>504, 424</value>
   </data>
   <data name="panelModeSpecificDigital.Size" type="System.Drawing.Size, System.Drawing">
-    <value>336, 161</value>
+    <value>336, 165</value>
   </data>
   <data name="panelModeSpecificDigital.TabIndex" type="System.Int32, mscorlib">
     <value>126</value>
@@ -14364,7 +14346,7 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
     <value>$this</value>
   </data>
   <data name="&gt;&gt;panelModeSpecificDigital.ZOrder" xml:space="preserve">
-    <value>43</value>
+    <value>49</value>
   </data>
   <data name="panelDisplay.AutoScrollMargin" type="System.Drawing.Size, System.Drawing">
     <value>0, 0</value>
@@ -14739,7 +14721,7 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
     <value>$this</value>
   </data>
   <data name="&gt;&gt;panelDisplay.ZOrder" xml:space="preserve">
-    <value>31</value>
+    <value>30</value>
   </data>
   <data name="panelMode.AutoScrollMargin" type="System.Drawing.Size, System.Drawing">
     <value>0, 0</value>
@@ -14772,7 +14754,7 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
     <value>$this</value>
   </data>
   <data name="&gt;&gt;panelMode.ZOrder" xml:space="preserve">
-    <value>34</value>
+    <value>33</value>
   </data>
   <data name="panelBandHF.AutoScrollMargin" type="System.Drawing.Size, System.Drawing">
     <value>0, 0</value>
@@ -14802,7 +14784,7 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
     <value>$this</value>
   </data>
   <data name="&gt;&gt;panelBandHF.ZOrder" xml:space="preserve">
-    <value>38</value>
+    <value>37</value>
   </data>
   <data name="txtVFOAFreq.Font" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft Sans Serif, 20.25pt</value>
@@ -15219,7 +15201,7 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
     <value>$this</value>
   </data>
   <data name="&gt;&gt;grpVFOA.ZOrder" xml:space="preserve">
-    <value>28</value>
+    <value>27</value>
   </data>
   <data name="lblRX2ModeBigLabel.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -15624,7 +15606,7 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
     <value>$this</value>
   </data>
   <data name="&gt;&gt;grpVFOB.ZOrder" xml:space="preserve">
-    <value>30</value>
+    <value>29</value>
   </data>
   <data name="btnBandHF.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
     <value>Flat</value>
@@ -16569,7 +16551,7 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
     <value>$this</value>
   </data>
   <data name="&gt;&gt;panelBandVHF.ZOrder" xml:space="preserve">
-    <value>39</value>
+    <value>38</value>
   </data>
   <data name="ptbSquelch.BackgroundImageLayout" type="System.Windows.Forms.ImageLayout, System.Windows.Forms">
     <value>Stretch</value>
@@ -16602,7 +16584,7 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
     <value>$this</value>
   </data>
   <data name="&gt;&gt;ptbSquelch.ZOrder" xml:space="preserve">
-    <value>35</value>
+    <value>34</value>
   </data>
   <data name="panelModeSpecificFM.AutoScrollMargin" type="System.Drawing.Size, System.Drawing">
     <value>0, 0</value>
@@ -16848,7 +16830,7 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
     <value>504, 424</value>
   </data>
   <data name="panelModeSpecificFM.Size" type="System.Drawing.Size, System.Drawing">
-    <value>336, 160</value>
+    <value>336, 165</value>
   </data>
   <data name="panelModeSpecificFM.TabIndex" type="System.Int32, mscorlib">
     <value>135</value>
@@ -16863,7 +16845,7 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
     <value>$this</value>
   </data>
   <data name="&gt;&gt;panelModeSpecificFM.ZOrder" xml:space="preserve">
-    <value>42</value>
+    <value>48</value>
   </data>
   <data name="panelBandGEN.AutoScrollMargin" type="System.Drawing.Size, System.Drawing">
     <value>0, 0</value>
@@ -16926,7 +16908,7 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
     <value>$this</value>
   </data>
   <data name="&gt;&gt;panelBandGEN.ZOrder" xml:space="preserve">
-    <value>40</value>
+    <value>39</value>
   </data>
   <data name="panelMeterLabels.AutoScrollMargin" type="System.Drawing.Size, System.Drawing">
     <value>0, 0</value>
@@ -17028,7 +17010,7 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
     <value>$this</value>
   </data>
   <data name="&gt;&gt;panelMeterLabels.ZOrder" xml:space="preserve">
-    <value>44</value>
+    <value>40</value>
   </data>
   <data name="grpMultimeterMenus.Location" type="System.Drawing.Point, System.Drawing">
     <value>841, 105</value>
@@ -17049,7 +17031,136 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
     <value>$this</value>
   </data>
   <data name="&gt;&gt;grpMultimeterMenus.ZOrder" xml:space="preserve">
-    <value>47</value>
+    <value>43</value>
+  </data>
+  <data name="panelAndromedaMisc.AutoScrollMargin" type="System.Drawing.Size, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="panelAndromedaMisc.AutoScrollMinSize" type="System.Drawing.Size, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="tbAndromedaEncoderSlider.AutoSize" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="tbAndromedaEncoderSlider.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>Off</value>
+  </data>
+  <data name="tbAndromedaEncoderSlider.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 92</value>
+  </data>
+  <data name="tbAndromedaEncoderSlider.Size" type="System.Drawing.Size, System.Drawing">
+    <value>97, 29</value>
+  </data>
+  <data name="tbAndromedaEncoderSlider.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="tbAndromedaEncoderSlider.Visible" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="&gt;&gt;tbAndromedaEncoderSlider.Name" xml:space="preserve">
+    <value>tbAndromedaEncoderSlider</value>
+  </data>
+  <data name="&gt;&gt;tbAndromedaEncoderSlider.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TrackBarTS, Thetis, Version=2.6.9.0, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;tbAndromedaEncoderSlider.Parent" xml:space="preserve">
+    <value>panelAndromedaMisc</value>
+  </data>
+  <data name="&gt;&gt;tbAndromedaEncoderSlider.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="lblAndromedaEncoderSlider.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 9pt</value>
+  </data>
+  <data name="lblAndromedaEncoderSlider.Image" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="lblAndromedaEncoderSlider.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>Off</value>
+  </data>
+  <data name="lblAndromedaEncoderSlider.Location" type="System.Drawing.Point, System.Drawing">
+    <value>2, 70</value>
+  </data>
+  <data name="lblAndromedaEncoderSlider.Size" type="System.Drawing.Size, System.Drawing">
+    <value>94, 14</value>
+  </data>
+  <data name="lblAndromedaEncoderSlider.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="lblAndromedaEncoderSlider.Text" xml:space="preserve">
+    <value>labelTS2</value>
+  </data>
+  <data name="lblAndromedaEncoderSlider.Visible" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="&gt;&gt;lblAndromedaEncoderSlider.Name" xml:space="preserve">
+    <value>lblAndromedaEncoderSlider</value>
+  </data>
+  <data name="&gt;&gt;lblAndromedaEncoderSlider.Type" xml:space="preserve">
+    <value>System.Windows.Forms.LabelTS, Thetis, Version=2.6.9.0, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;lblAndromedaEncoderSlider.Parent" xml:space="preserve">
+    <value>panelAndromedaMisc</value>
+  </data>
+  <data name="&gt;&gt;lblAndromedaEncoderSlider.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="lblATUTuneLabel.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 9pt, style=Bold</value>
+  </data>
+  <data name="lblATUTuneLabel.Image" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="lblATUTuneLabel.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>Off</value>
+  </data>
+  <data name="lblATUTuneLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 6</value>
+  </data>
+  <data name="lblATUTuneLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>83, 21</value>
+  </data>
+  <data name="lblATUTuneLabel.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="lblATUTuneLabel.Text" xml:space="preserve">
+    <value>ATU</value>
+  </data>
+  <data name="lblATUTuneLabel.Visible" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="&gt;&gt;lblATUTuneLabel.Name" xml:space="preserve">
+    <value>lblATUTuneLabel</value>
+  </data>
+  <data name="&gt;&gt;lblATUTuneLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.LabelTS, Thetis, Version=2.6.9.0, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;lblATUTuneLabel.Parent" xml:space="preserve">
+    <value>panelAndromedaMisc</value>
+  </data>
+  <data name="&gt;&gt;lblATUTuneLabel.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="panelAndromedaMisc.Location" type="System.Drawing.Point, System.Drawing">
+    <value>65, 0</value>
+  </data>
+  <data name="panelAndromedaMisc.Size" type="System.Drawing.Size, System.Drawing">
+    <value>97, 121</value>
+  </data>
+  <data name="panelAndromedaMisc.TabIndex" type="System.Int32, mscorlib">
+    <value>71</value>
+  </data>
+  <data name="&gt;&gt;panelAndromedaMisc.Name" xml:space="preserve">
+    <value>panelAndromedaMisc</value>
+  </data>
+  <data name="&gt;&gt;panelAndromedaMisc.Type" xml:space="preserve">
+    <value>System.Windows.Forms.PanelTS, Thetis, Version=2.6.9.0, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;panelAndromedaMisc.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;panelAndromedaMisc.ZOrder" xml:space="preserve">
+    <value>46</value>
   </data>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
@@ -18157,6 +18268,12 @@ Ctrl + Right Click on any Band Button adds to Stack</value>
     <value>toolStripStatusLabel_Fill</value>
   </data>
   <data name="&gt;&gt;toolStripStatusLabel_Fill.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;toolStripStatusLabel_timer.Name" xml:space="preserve">
+    <value>toolStripStatusLabel_timer</value>
+  </data>
+  <data name="&gt;&gt;toolStripStatusLabel_timer.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;toolStripStatusLabel_UTCTime.Name" xml:space="preserve">

@@ -410,6 +410,7 @@ int UserOut1;
 int UserOut2;
 int UserOut3;
 int xvtr_enable;
+int atu_tune; // controls J16 pin 10 on Orion MKII board
 
 //unsigned char AlexManEnable;
 //unsigned char AlexEnabled;

@@ -33,10 +33,10 @@ namespace Thetis
     /// User editor for the Andromeda Front Panel data set.
     /// </summary>
 
-    public class AndromedaEditForm : System.Windows.Forms.Form
+    public class AndromedaEditForm : Form
     {
         #region Variable Declaration
-        private Console console;
+        private readonly Console console;
         private Button BtnClose;
         private TabControl tabControl1;
         private TabPage tabPage1;
@@ -342,24 +342,28 @@ namespace Thetis
                 EncoderDataGridView.DataSource = UserData.Tables[2];
                 EncoderDataGridView.TopLeftHeaderCell.Value = "Encoder";
                 NumEncoders = UserData.Tables[2].Rows.Count;
-                DataGridViewComboBoxColumn ColumnEncoderAction = new DataGridViewComboBoxColumn();
-                ColumnEncoderAction.DataPropertyName = "Encoder Action";
-                ColumnEncoderAction.HeaderText = "Encoder Action";
-                ColumnEncoderAction.Width = 200;
-                ColumnEncoderAction.DataSource = StringData.Tables["Encoder Combo Strings"];
-                ColumnEncoderAction.ValueMember = "ActionId";
-                ColumnEncoderAction.DisplayMember = "ActionString";
-                ColumnEncoderAction.DisplayStyle = DataGridViewComboBoxDisplayStyle.Nothing;
+                DataGridViewComboBoxColumn ColumnEncoderAction = new DataGridViewComboBoxColumn
+                {
+                    DataPropertyName = "Encoder Action",
+                    HeaderText = "Encoder Action",
+                    Width = 200,
+                    DataSource = StringData.Tables["Encoder Combo Strings"],
+                    ValueMember = "ActionId",
+                    DisplayMember = "ActionString",
+                    DisplayStyle = DataGridViewComboBoxDisplayStyle.Nothing
+                };
                 EncoderDataGridView.Columns.Add(ColumnEncoderAction);
 
-                DataGridViewComboBoxColumn ColumnEncoderRXOverride = new DataGridViewComboBoxColumn();
-                ColumnEncoderRXOverride.DataPropertyName = "Encoder RX Selector";
-                ColumnEncoderRXOverride.HeaderText = "Selected RX";
-                ColumnEncoderRXOverride.Width = 160;
-                ColumnEncoderRXOverride.DataSource = StringData.Tables["Encoder RX Override Strings"];
-                ColumnEncoderRXOverride.ValueMember = "OvrId";
-                ColumnEncoderRXOverride.DisplayMember = "OvrString";
-                ColumnEncoderRXOverride.DisplayStyle = DataGridViewComboBoxDisplayStyle.Nothing;
+                DataGridViewComboBoxColumn ColumnEncoderRXOverride = new DataGridViewComboBoxColumn
+                {
+                    DataPropertyName = "Encoder RX Selector",
+                    HeaderText = "Selected RX",
+                    Width = 160,
+                    DataSource = StringData.Tables["Encoder RX Override Strings"],
+                    ValueMember = "OvrId",
+                    DisplayMember = "OvrString",
+                    DisplayStyle = DataGridViewComboBoxDisplayStyle.Nothing
+                };
                 EncoderDataGridView.Columns.Add(ColumnEncoderRXOverride);
                 DisplayRowNumbers(EncoderDataGridView);
 
@@ -369,24 +373,28 @@ namespace Thetis
                 ButtonDataGridView.DataSource = UserData.Tables[1];
                 ButtonDataGridView.TopLeftHeaderCell.Value = "Button";
                 NumPushbuttons = UserData.Tables[1].Rows.Count;
-                DataGridViewComboBoxColumn ColumnButtonAction = new DataGridViewComboBoxColumn();
-                ColumnButtonAction.DataPropertyName = "Pushbutton Action";
-                ColumnButtonAction.HeaderText = "Pushbutton Action";
-                ColumnButtonAction.Width = 240;
-                ColumnButtonAction.DataSource = StringData.Tables["Pushbutton Combo Strings"];
-                ColumnButtonAction.ValueMember = "ActionId";
-                ColumnButtonAction.DisplayMember = "ActionString";
-                ColumnButtonAction.DisplayStyle = DataGridViewComboBoxDisplayStyle.Nothing;
+                DataGridViewComboBoxColumn ColumnButtonAction = new DataGridViewComboBoxColumn
+                {
+                    DataPropertyName = "Pushbutton Action",
+                    HeaderText = "Pushbutton Action",
+                    Width = 240,
+                    DataSource = StringData.Tables["Pushbutton Combo Strings"],
+                    ValueMember = "ActionId",
+                    DisplayMember = "ActionString",
+                    DisplayStyle = DataGridViewComboBoxDisplayStyle.Nothing
+                };
                 ButtonDataGridView.Columns.Add(ColumnButtonAction);
 
-                DataGridViewComboBoxColumn ColumnButtonRXOverride = new DataGridViewComboBoxColumn();
-                ColumnButtonRXOverride.DataPropertyName = "Pushbutton RX Selector";
-                ColumnButtonRXOverride.HeaderText = "Selected RX";
-                ColumnButtonRXOverride.Width = 160;
-                ColumnButtonRXOverride.DataSource = StringData.Tables["Pushbutton RX Override Strings"];           // reused the same table
-                ColumnButtonRXOverride.ValueMember = "OvrId";
-                ColumnButtonRXOverride.DisplayMember = "OvrString";
-                ColumnButtonRXOverride.DisplayStyle = DataGridViewComboBoxDisplayStyle.Nothing;
+                DataGridViewComboBoxColumn ColumnButtonRXOverride = new DataGridViewComboBoxColumn
+                {
+                    DataPropertyName = "Pushbutton RX Selector",
+                    HeaderText = "Selected RX",
+                    Width = 160,
+                    DataSource = StringData.Tables["Pushbutton RX Override Strings"],           // reused the same table
+                    ValueMember = "OvrId",
+                    DisplayMember = "OvrString",
+                    DisplayStyle = DataGridViewComboBoxDisplayStyle.Nothing
+                };
                 ButtonDataGridView.Columns.Add(ColumnButtonRXOverride);
                 DisplayRowNumbers(ButtonDataGridView);
 
@@ -394,24 +402,28 @@ namespace Thetis
                 IndicatorDataGridView.AutoGenerateColumns = false;
                 IndicatorDataGridView.DataSource = UserData.Tables[0];
                 IndicatorDataGridView.TopLeftHeaderCell.Value = "Indicator";
-                DataGridViewComboBoxColumn ColumnIndicatorAction = new DataGridViewComboBoxColumn();
-                ColumnIndicatorAction.DataPropertyName = "Indicator Action";
-                ColumnIndicatorAction.HeaderText = "Indicators shows:";
-                ColumnIndicatorAction.Width = 200;
-                ColumnIndicatorAction.DataSource = StringData.Tables["Indicator Combo Strings"];
-                ColumnIndicatorAction.ValueMember = "ActionId";
-                ColumnIndicatorAction.DisplayMember = "ActionString";
-                ColumnIndicatorAction.DisplayStyle = DataGridViewComboBoxDisplayStyle.Nothing;
+                DataGridViewComboBoxColumn ColumnIndicatorAction = new DataGridViewComboBoxColumn
+                {
+                    DataPropertyName = "Indicator Action",
+                    HeaderText = "Indicators shows:",
+                    Width = 200,
+                    DataSource = StringData.Tables["Indicator Combo Strings"],
+                    ValueMember = "ActionId",
+                    DisplayMember = "ActionString",
+                    DisplayStyle = DataGridViewComboBoxDisplayStyle.Nothing
+                };
                 IndicatorDataGridView.Columns.Add(ColumnIndicatorAction);
 
-                DataGridViewComboBoxColumn ColumnIndicatorRXOverride = new DataGridViewComboBoxColumn();
-                ColumnIndicatorRXOverride.DataPropertyName = "Indicator RX Selector";
-                ColumnIndicatorRXOverride.HeaderText = "Selected RX";
-                ColumnIndicatorRXOverride.Width = 200;
-                ColumnIndicatorRXOverride.DataSource = StringData.Tables["Indicator RX Override Strings"];
-                ColumnIndicatorRXOverride.ValueMember = "OvrId";
-                ColumnIndicatorRXOverride.DisplayMember = "OvrString";
-                ColumnIndicatorRXOverride.DisplayStyle = DataGridViewComboBoxDisplayStyle.Nothing;
+                DataGridViewComboBoxColumn ColumnIndicatorRXOverride = new DataGridViewComboBoxColumn
+                {
+                    DataPropertyName = "Indicator RX Selector",
+                    HeaderText = "Selected RX",
+                    Width = 200,
+                    DataSource = StringData.Tables["Indicator RX Override Strings"],
+                    ValueMember = "OvrId",
+                    DisplayMember = "OvrString",
+                    DisplayStyle = DataGridViewComboBoxDisplayStyle.Nothing
+                };
                 IndicatorDataGridView.Columns.Add(ColumnIndicatorRXOverride);
                 DisplayRowNumbers(IndicatorDataGridView);
 
@@ -420,36 +432,44 @@ namespace Thetis
                 MenuDataGridView.DataSource = UserData.Tables[4];
                 NumMenuItems = UserData.Tables[4].Rows.Count;
                 MenuDataGridView.TopLeftHeaderCell.Value = "Menu";
-                DataGridViewComboBoxColumn ColumnMenuAction = new DataGridViewComboBoxColumn();
-                ColumnMenuAction.DataPropertyName = "Menu Action";
-                ColumnMenuAction.HeaderText = "Menu button action";
-                ColumnMenuAction.Width = 250;
-                ColumnMenuAction.DataSource = StringData.Tables["Pushbutton Combo Strings"];
-                ColumnMenuAction.ValueMember = "ActionId";
-                ColumnMenuAction.DisplayMember = "ActionString";
-                ColumnMenuAction.DisplayStyle = DataGridViewComboBoxDisplayStyle.Nothing;
+                DataGridViewComboBoxColumn ColumnMenuAction = new DataGridViewComboBoxColumn
+                {
+                    DataPropertyName = "Menu Action",
+                    HeaderText = "Menu button action",
+                    Width = 250,
+                    DataSource = StringData.Tables["Pushbutton Combo Strings"],
+                    ValueMember = "ActionId",
+                    DisplayMember = "ActionString",
+                    DisplayStyle = DataGridViewComboBoxDisplayStyle.Nothing
+                };
                 MenuDataGridView.Columns.Add(ColumnMenuAction);
 
-                DataGridViewTextBoxColumn ColumnMenuText = new DataGridViewTextBoxColumn();
-                ColumnMenuText.DataPropertyName = "Menu Text";
-                ColumnMenuText.HeaderText = "Button Text:";
-                ColumnMenuText.Width = 220;
+                DataGridViewTextBoxColumn ColumnMenuText = new DataGridViewTextBoxColumn
+                {
+                    DataPropertyName = "Menu Text",
+                    HeaderText = "Button Text:",
+                    Width = 220
+                };
                 MenuDataGridView.Columns.Add(ColumnMenuText);
 
-                DataGridViewComboBoxColumn ColumnMenuRXOverride = new DataGridViewComboBoxColumn();
-                ColumnMenuRXOverride.DataPropertyName = "Menu RX Selector";
-                ColumnMenuRXOverride.HeaderText = "Selected RX";
-                ColumnMenuRXOverride.Width = 120;
-                ColumnMenuRXOverride.DataSource = StringData.Tables["Encoder RX Override Strings"];           // reused the same table
-                ColumnMenuRXOverride.ValueMember = "OvrId";
-                ColumnMenuRXOverride.DisplayMember = "OvrString";
-                ColumnMenuRXOverride.DisplayStyle = DataGridViewComboBoxDisplayStyle.Nothing;
+                DataGridViewComboBoxColumn ColumnMenuRXOverride = new DataGridViewComboBoxColumn
+                {
+                    DataPropertyName = "Menu RX Selector",
+                    HeaderText = "Selected RX",
+                    Width = 120,
+                    DataSource = StringData.Tables["Encoder RX Override Strings"],           // reused the same table
+                    ValueMember = "OvrId",
+                    DisplayMember = "OvrString",
+                    DisplayStyle = DataGridViewComboBoxDisplayStyle.Nothing
+                };
                 MenuDataGridView.Columns.Add(ColumnMenuRXOverride);
 
-                DataGridViewTextBoxColumn ColumnMenuLink = new DataGridViewTextBoxColumn();
-                ColumnMenuLink.DataPropertyName = "Menu Number";
-                ColumnMenuLink.HeaderText = "Link to Menu:";
-                ColumnMenuLink.Width = 80;
+                DataGridViewTextBoxColumn ColumnMenuLink = new DataGridViewTextBoxColumn
+                {
+                    DataPropertyName = "Menu Number",
+                    HeaderText = "Link to Menu:",
+                    Width = 80
+                };
                 MenuDataGridView.Columns.Add(ColumnMenuLink);
                 DisplayMenuNumbers(MenuDataGridView);
             }

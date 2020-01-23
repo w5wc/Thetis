@@ -1460,14 +1460,15 @@ namespace Thetis
                 //    Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
                 //   Thread.CurrentThread.CurrentUICulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
 
-                Thread t = new Thread(new ThreadStart(SWLSPOTTER));
+                Thread t = new Thread(new ThreadStart(SWLSPOTTER))
+                {
+                    CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US"),
+                    CurrentUICulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US"),
 
-                t.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
-                t.CurrentUICulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
-
-                t.Name = "SWL Spotter Thread";
-                t.IsBackground = true;
-                t.Priority = ThreadPriority.Normal;
+                    Name = "SWL Spotter Thread",
+                    IsBackground = true,
+                    Priority = ThreadPriority.Normal
+                };
                 t.Start();
 
                 //  while (t.IsAlive)
@@ -2218,18 +2219,17 @@ namespace Thetis
 
                 Debug.WriteLine("DX SPOTTER ON start THREAD");
 
-                Thread t = new Thread(new ThreadStart(SPOTTER));
-
-                t.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
-                t.CurrentUICulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
-
-
+                Thread t = new Thread(new ThreadStart(SPOTTER))
+                {
+                    CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US"),
+                    CurrentUICulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US"),
+                    Name = "Spotter Thread",
+                    IsBackground = true,
+                    Priority = ThreadPriority.Normal // normal
+                };
                 SP_Active = 1;
-                t.Name = "Spotter Thread";
-                t.IsBackground = true;
-                t.Priority = ThreadPriority.Normal; // normal
                 t.Start();
-
+ 
                 textBox1.Text = "Clicked to Open DX Spider \r\n";
 
             }
@@ -4863,17 +4863,15 @@ namespace Thetis
                 }
 
 
-                Thread t = new Thread(new ThreadStart(TrackSun));  // turn on track map (sun, grayline, voacap, or beacon)
-
-                t.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
-                t.CurrentUICulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
-
-
+                Thread t = new Thread(new ThreadStart(TrackSun))
+                {
+                    CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US"),
+                    CurrentUICulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US"),
+                    Name = "Track Thread",
+                    IsBackground = true,
+                    Priority = ThreadPriority.Normal
+                };  // turn on track map (sun, grayline, voacap, or beacon)
                 SP5_Active = 1; // turn on track map (sun, grayline, voacap, or beacon)
-
-                t.Name = "Track Thread";
-                t.IsBackground = true;
-                t.Priority = ThreadPriority.Normal;
                 t.Start();
 
                 textBox1.Text = "Clicked to Turn on GrayLine Sun Tracker\r\n";
@@ -7125,18 +7123,17 @@ namespace Thetis
 
                     }
 
-                    Thread t = new Thread(new ThreadStart(TrackSun)); // turn on track map (sun, grayline, voacap, or beacon)
-
-                    t.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
-                    t.CurrentUICulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
-
-
+                    Thread t = new Thread(new ThreadStart(TrackSun))
+                    {
+                        CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US"),
+                        CurrentUICulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US"),
+                        Name = "Track Thread",
+                        IsBackground = true,
+                        Priority = ThreadPriority.Normal
+                    }; // turn on track map (sun, grayline, voacap, or beacon)
                     SP5_Active = 1; // turn on track map (sun, grayline, voacap, or beacon)
-                    t.Name = "Track Thread";
-                    t.IsBackground = true;
-                    t.Priority = ThreadPriority.Normal;
                     t.Start();
-
+ 
                     textBox1.Text = "Clicked to Turn on GrayLine Sun Tracker\r\n";
 
                     Debug.WriteLine(">>>>>>>>BEACON:  mapping turned on");
@@ -7278,15 +7275,15 @@ namespace Thetis
                 //-----------------------------------------------------
                 // THREAD START UP FOR CHECKING TIME SLOT
 
-                Thread t = new Thread(new ThreadStart(BeaconSlot)); // show beacons (turn on tracking map)
-
-                t.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
-                t.CurrentUICulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
-
+                Thread t = new Thread(new ThreadStart(BeaconSlot))
+                {
+                    CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US"),
+                    CurrentUICulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US"),
+                    Name = "Beacon slot tracking",
+                    IsBackground = true,
+                    Priority = ThreadPriority.Normal
+                }; // show beacons (turn on tracking map)
                 SP5_Active = 1; // turn on track map (sun, grayline, voacap, or beacon)
-                t.Name = "Beacon slot tracking";
-                t.IsBackground = true;
-                t.Priority = ThreadPriority.Normal;
                 t.Start();
 
                 textBox1.Text = "Clicked on Beacon Tracking\r\n";
@@ -8232,19 +8229,17 @@ namespace Thetis
                 if (WTime == false)
                 {
 
-                    textBox1.Text = "Will Attempt to read"; 
+                    textBox1.Text = "Will Attempt to read";
 
-                    Thread t = new Thread(new ThreadStart(WWVTime));
-
-                    t.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
-                    t.CurrentUICulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
-
+                    Thread t = new Thread(new ThreadStart(WWVTime))
+                    {
+                        CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US"),
+                        CurrentUICulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US"),
+                        Name = "WWV Time Sync",
+                        IsBackground = true,
+                        Priority = ThreadPriority.AboveNormal
+                    };
                     WTime = true;   // enabled (let display know to get a Floor dbm
-
-                   
-                    t.Name = "WWV Time Sync";
-                    t.IsBackground = true;
-                    t.Priority = ThreadPriority.AboveNormal;
                     t.Start();
 
                     textBox1.Text += " Radio Station WWV !\r\n";
@@ -8262,18 +8257,16 @@ namespace Thetis
             }
             else
             {
-              
-                Thread t = new Thread(new ThreadStart(SetInternetTime));  // get internet NIST time
 
-                t.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
-                t.CurrentUICulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
-
-                WTime = true;   // enabled (let display know to get a Floor dbm
-
-               
-                t.Name = "NIST Time Sync";
-                t.IsBackground = true;
-                t.Priority = ThreadPriority.Normal;
+                Thread t = new Thread(new ThreadStart(SetInternetTime))
+                {
+                    CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US"),
+                    CurrentUICulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US"),
+                    Name = "NIST Time Sync",
+                    IsBackground = true,
+                    Priority = ThreadPriority.Normal
+                };  // get internet NIST time
+                WTime = true;   // enabled (let display know to get a Floor dbm              
                 t.Start();
 
             }
@@ -9427,17 +9420,15 @@ VOACHECK_TOP:
 
                 VOARUN = true;                     // dont allow this to trigger until its finished
 
-                Thread t = new Thread(new ThreadStart(VOACAP));
-
-                t.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
-                t.CurrentUICulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
-
-                t.Name = "VOACAP Thread";
-                t.IsBackground = true;
-                t.Priority = ThreadPriority.Normal;
-                t.Start();
-
-            
+                Thread t = new Thread(new ThreadStart(VOACAP))
+                {
+                    CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US"),
+                    CurrentUICulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US"),
+                    Name = "VOACAP Thread",
+                    IsBackground = true,
+                    Priority = ThreadPriority.Normal
+                };
+                t.Start();      
             }
 
 

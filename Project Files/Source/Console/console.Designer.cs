@@ -125,7 +125,6 @@
         private System.Windows.Forms.GroupBoxTS grpDIGSampleRate;
         private System.Windows.Forms.GroupBoxTS grpVACStereo;
         private System.Windows.Forms.CheckBoxTS chkVACStereo;
-        private System.Windows.Forms.CheckBoxTS chkCWDisableMonitor;
         private System.Windows.Forms.CheckBoxTS chkCWIambic;
         private System.Windows.Forms.LabelTS lblCWPitchFreq;
         public System.Windows.Forms.NumericUpDownTS udCWPitch;
@@ -138,7 +137,6 @@
         private System.Windows.Forms.CheckBoxTS chkPanSwap;
         private System.Windows.Forms.GroupBoxTS grpSemiBreakIn;
         private System.Windows.Forms.LabelTS lblCWBreakInDelay;
-        private System.Windows.Forms.CheckBoxTS chkCWBreakInEnabled;
         private System.Windows.Forms.NumericUpDownTS udCWBreakInDelay;
         private System.Windows.Forms.CheckBoxTS chkVAC1;
         private System.Windows.Forms.ComboBoxTS comboDigTXProfile;
@@ -559,7 +557,6 @@
             this.ptbCWSpeed = new Thetis.PrettyTrackBar();
             this.udCWPitch = new System.Windows.Forms.NumericUpDownTS();
             this.udCWBreakInDelay = new System.Windows.Forms.NumericUpDownTS();
-            this.chkCWBreakInEnabled = new System.Windows.Forms.CheckBoxTS();
             this.chkShowTXCWFreq = new System.Windows.Forms.CheckBoxTS();
             this.chkCWIambic = new System.Windows.Forms.CheckBoxTS();
             this.udRX2FilterHigh = new System.Windows.Forms.NumericUpDownTS();
@@ -906,6 +903,7 @@
             this.toolStripStatusLabel_Amps = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel_SeqWarning = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel_Fill = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabel_timer = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel_UTCTime = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel_Date = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel_LocalTime = new System.Windows.Forms.ToolStripStatusLabel();
@@ -1126,6 +1124,10 @@
             this.lblTXMeter = new System.Windows.Forms.LabelTS();
             this.lblRXMeter = new System.Windows.Forms.LabelTS();
             this.grpMultimeterMenus = new System.Windows.Forms.GroupBoxTS();
+            this.panelAndromedaMisc = new System.Windows.Forms.PanelTS();
+            this.tbAndromedaEncoderSlider = new System.Windows.Forms.TrackBarTS();
+            this.lblAndromedaEncoderSlider = new System.Windows.Forms.LabelTS();
+            this.lblATUTuneLabel = new System.Windows.Forms.LabelTS();
             ((System.ComponentModel.ISupportInitialize)(this.ptbFilterShift)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ptbFilterWidth)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.udFilterHigh)).BeginInit();
@@ -1221,6 +1223,8 @@
             this.panelBandGEN.SuspendLayout();
             this.panelMeterLabels.SuspendLayout();
             this.grpMultimeterMenus.SuspendLayout();
+            this.panelAndromedaMisc.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.tbAndromedaEncoderSlider)).BeginInit();
             this.SuspendLayout();
             // 
             // timer_cpu_meter
@@ -1385,6 +1389,7 @@
             this.chkRX2NB2.Name = "chkRX2NB2";
             this.toolTip1.SetToolTip(this.chkRX2NB2, resources.GetString("chkRX2NB2.ToolTip"));
             this.chkRX2NB2.CheckedChanged += new System.EventHandler(this.chkRX2NB2_CheckedChanged);
+            this.chkRX2NB2.MouseDown += new System.Windows.Forms.MouseEventHandler(this.chkRX2NB2_MouseDown);
             // 
             // chkRX2NR
             // 
@@ -1395,6 +1400,7 @@
             this.chkRX2NR.ThreeState = true;
             this.toolTip1.SetToolTip(this.chkRX2NR, resources.GetString("chkRX2NR.ToolTip"));
             this.chkRX2NR.CheckStateChanged += new System.EventHandler(this.chkRX2NR_CheckStateChanged);
+            this.chkRX2NR.MouseDown += new System.Windows.Forms.MouseEventHandler(this.chkRX2NR_MouseDown);
             // 
             // chkRX2NB
             // 
@@ -1405,6 +1411,7 @@
             this.chkRX2NB.ThreeState = true;
             this.toolTip1.SetToolTip(this.chkRX2NB, resources.GetString("chkRX2NB.ToolTip"));
             this.chkRX2NB.CheckStateChanged += new System.EventHandler(this.chkRX2NB_CheckStateChanged);
+            this.chkRX2NB.MouseDown += new System.Windows.Forms.MouseEventHandler(this.chkRX2NB_MouseDown);
             // 
             // lblRX2AGC
             // 
@@ -1677,16 +1684,6 @@
             this.udCWBreakInDelay.ValueChanged += new System.EventHandler(this.udCWBreakInDelay_ValueChanged);
             this.udCWBreakInDelay.LostFocus += new System.EventHandler(this.udCWBreakInDelay_LostFocus);
             // 
-            // chkCWBreakInEnabled
-            // 
-            this.chkCWBreakInEnabled.Checked = true;
-            this.chkCWBreakInEnabled.CheckState = System.Windows.Forms.CheckState.Checked;
-            resources.ApplyResources(this.chkCWBreakInEnabled, "chkCWBreakInEnabled");
-            this.chkCWBreakInEnabled.ForeColor = System.Drawing.Color.White;
-            this.chkCWBreakInEnabled.Name = "chkCWBreakInEnabled";
-            this.toolTip1.SetToolTip(this.chkCWBreakInEnabled, resources.GetString("chkCWBreakInEnabled.ToolTip"));
-            this.chkCWBreakInEnabled.CheckedChanged += new System.EventHandler(this.chkCWBreakInEnabled_CheckedChanged);
-            // 
             // chkShowTXCWFreq
             // 
             this.chkShowTXCWFreq.ForeColor = System.Drawing.Color.White;
@@ -1956,6 +1953,7 @@
             this.chkNR.ThreeState = true;
             this.toolTip1.SetToolTip(this.chkNR, resources.GetString("chkNR.ToolTip"));
             this.chkNR.CheckStateChanged += new System.EventHandler(this.chkNR_CheckStateChanged);
+            this.chkNR.MouseDown += new System.Windows.Forms.MouseEventHandler(this.chkNR_MouseDown);
             // 
             // chkDSPNB2
             // 
@@ -1965,6 +1963,7 @@
             this.chkDSPNB2.Name = "chkDSPNB2";
             this.toolTip1.SetToolTip(this.chkDSPNB2, resources.GetString("chkDSPNB2.ToolTip"));
             this.chkDSPNB2.CheckedChanged += new System.EventHandler(this.chkDSPNB2_CheckedChanged);
+            this.chkDSPNB2.MouseDown += new System.Windows.Forms.MouseEventHandler(this.chkDSPNB2_MouseDown);
             // 
             // chkBIN
             // 
@@ -1984,6 +1983,7 @@
             this.chkNB.ThreeState = true;
             this.toolTip1.SetToolTip(this.chkNB, resources.GetString("chkNB.ToolTip"));
             this.chkNB.CheckStateChanged += new System.EventHandler(this.chkNB_CheckStateChanged);
+            this.chkNB.MouseDown += new System.Windows.Forms.MouseEventHandler(this.chkNB_MouseDown);
             // 
             // chkANF
             // 
@@ -2161,6 +2161,7 @@
             this.comboAGC.Name = "comboAGC";
             this.toolTip1.SetToolTip(this.comboAGC, resources.GetString("comboAGC.ToolTip"));
             this.comboAGC.SelectedIndexChanged += new System.EventHandler(this.comboAGC_SelectedIndexChanged);
+            this.comboAGC.MouseDown += new System.Windows.Forms.MouseEventHandler(this.comboAGC_MouseDown);
             // 
             // lblAGC
             // 
@@ -2186,6 +2187,7 @@
             resources.ApplyResources(this.lblRF, "lblRF");
             this.lblRF.Name = "lblRF";
             this.toolTip1.SetToolTip(this.lblRF, resources.GetString("lblRF.ToolTip"));
+            this.lblRF.MouseDown += new System.Windows.Forms.MouseEventHandler(this.lblRF_MouseDown);
             // 
             // chkShowTXFilter
             // 
@@ -2226,6 +2228,7 @@
             this.comboTXProfile.Name = "comboTXProfile";
             this.toolTip1.SetToolTip(this.comboTXProfile, resources.GetString("comboTXProfile.ToolTip"));
             this.comboTXProfile.SelectedIndexChanged += new System.EventHandler(this.comboTXProfile_SelectedIndexChanged);
+            this.comboTXProfile.MouseDown += new System.Windows.Forms.MouseEventHandler(this.comboTXProfile_MouseDown);
             // 
             // chkRXEQ
             // 
@@ -2244,6 +2247,7 @@
             this.chkCPDR.Name = "chkCPDR";
             this.toolTip1.SetToolTip(this.chkCPDR, resources.GetString("chkCPDR.ToolTip"));
             this.chkCPDR.CheckedChanged += new System.EventHandler(this.chkCPDR_CheckedChanged);
+            this.chkCPDR.MouseDown += new System.Windows.Forms.MouseEventHandler(this.chkCPDR_MouseDown);
             // 
             // chkVAC1
             // 
@@ -2253,6 +2257,7 @@
             this.chkVAC1.Name = "chkVAC1";
             this.toolTip1.SetToolTip(this.chkVAC1, resources.GetString("chkVAC1.ToolTip"));
             this.chkVAC1.CheckedChanged += new System.EventHandler(this.chkVAC1_CheckedChanged);
+            this.chkVAC1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.chkVAC1_MouseDown);
             // 
             // chkVOX
             // 
@@ -2262,6 +2267,7 @@
             this.chkVOX.Name = "chkVOX";
             this.toolTip1.SetToolTip(this.chkVOX, resources.GetString("chkVOX.ToolTip"));
             this.chkVOX.CheckedChanged += new System.EventHandler(this.chkVOX_CheckedChanged);
+            this.chkVOX.MouseDown += new System.Windows.Forms.MouseEventHandler(this.chkVOX_MouseDown);
             // 
             // chkNoiseGate
             // 
@@ -2271,6 +2277,7 @@
             this.chkNoiseGate.Name = "chkNoiseGate";
             this.toolTip1.SetToolTip(this.chkNoiseGate, resources.GetString("chkNoiseGate.ToolTip"));
             this.chkNoiseGate.CheckedChanged += new System.EventHandler(this.chkNoiseGate_CheckedChanged);
+            this.chkNoiseGate.MouseDown += new System.Windows.Forms.MouseEventHandler(this.chkNoiseGate_MouseDown);
             // 
             // comboDigTXProfile
             // 
@@ -2332,6 +2339,7 @@
             this.radModeAM.Name = "radModeAM";
             this.toolTip1.SetToolTip(this.radModeAM, resources.GetString("radModeAM.ToolTip"));
             this.radModeAM.CheckedChanged += new System.EventHandler(this.radModeButton_CheckedChanged);
+            this.radModeAM.MouseDown += new System.Windows.Forms.MouseEventHandler(this.radModeAM_MouseDown);
             // 
             // radModeLSB
             // 
@@ -2350,6 +2358,7 @@
             this.radModeSAM.Name = "radModeSAM";
             this.toolTip1.SetToolTip(this.radModeSAM, resources.GetString("radModeSAM.ToolTip"));
             this.radModeSAM.CheckedChanged += new System.EventHandler(this.radModeButton_CheckedChanged);
+            this.radModeSAM.MouseDown += new System.Windows.Forms.MouseEventHandler(this.radModeSAM_MouseDown);
             // 
             // radModeCWL
             // 
@@ -2359,6 +2368,7 @@
             this.radModeCWL.Name = "radModeCWL";
             this.toolTip1.SetToolTip(this.radModeCWL, resources.GetString("radModeCWL.ToolTip"));
             this.radModeCWL.CheckedChanged += new System.EventHandler(this.radModeButton_CheckedChanged);
+            this.radModeCWL.MouseDown += new System.Windows.Forms.MouseEventHandler(this.radModeCWL_MouseDown);
             // 
             // radModeDSB
             // 
@@ -2388,6 +2398,7 @@
             this.radModeCWU.Name = "radModeCWU";
             this.toolTip1.SetToolTip(this.radModeCWU, resources.GetString("radModeCWU.ToolTip"));
             this.radModeCWU.CheckedChanged += new System.EventHandler(this.radModeButton_CheckedChanged);
+            this.radModeCWU.MouseDown += new System.Windows.Forms.MouseEventHandler(this.radModeCWU_MouseDown);
             // 
             // radModeFMN
             // 
@@ -2397,6 +2408,7 @@
             this.radModeFMN.Name = "radModeFMN";
             this.toolTip1.SetToolTip(this.radModeFMN, resources.GetString("radModeFMN.ToolTip"));
             this.radModeFMN.CheckedChanged += new System.EventHandler(this.radModeButton_CheckedChanged);
+            this.radModeFMN.MouseDown += new System.Windows.Forms.MouseEventHandler(this.radModeFMN_MouseDown);
             // 
             // radModeDIGU
             // 
@@ -3075,6 +3087,7 @@
             this.chkMicMute.Name = "chkMicMute";
             this.toolTip1.SetToolTip(this.chkMicMute, resources.GetString("chkMicMute.ToolTip"));
             this.chkMicMute.CheckedChanged += new System.EventHandler(this.chkMicMute_CheckedChanged);
+            this.chkMicMute.MouseDown += new System.Windows.Forms.MouseEventHandler(this.chkMicMute_MouseDown);
             // 
             // chkMUT
             // 
@@ -3274,6 +3287,7 @@
             this.chkTNF.Name = "chkTNF";
             this.toolTip1.SetToolTip(this.chkTNF, resources.GetString("chkTNF.ToolTip"));
             this.chkTNF.CheckedChanged += new System.EventHandler(this.chkTNF_CheckedChanged);
+            this.chkTNF.MouseDown += new System.Windows.Forms.MouseEventHandler(this.chkTNF_MouseDown);
             // 
             // btnTNFAdd
             // 
@@ -3322,6 +3336,7 @@
             this.chkVAC2.Name = "chkVAC2";
             this.toolTip1.SetToolTip(this.chkVAC2, resources.GetString("chkVAC2.ToolTip"));
             this.chkVAC2.CheckedChanged += new System.EventHandler(this.chkVAC2_CheckedChanged);
+            this.chkVAC2.MouseDown += new System.Windows.Forms.MouseEventHandler(this.chkVAC2_MouseDown);
             // 
             // chkCWSidetone
             // 
@@ -3410,6 +3425,7 @@
             this.chkCWAPFEnabled.Name = "chkCWAPFEnabled";
             this.toolTip1.SetToolTip(this.chkCWAPFEnabled, resources.GetString("chkCWAPFEnabled.ToolTip"));
             this.chkCWAPFEnabled.CheckedChanged += new System.EventHandler(this.chkCWAPFEnabled_CheckedChanged);
+            this.chkCWAPFEnabled.MouseDown += new System.Windows.Forms.MouseEventHandler(this.chkCWAPFEnabled_MouseDown);
             // 
             // ptbCWAPFGain
             // 
@@ -3734,11 +3750,14 @@
             // chkQSK
             // 
             resources.ApplyResources(this.chkQSK, "chkQSK");
+            this.chkQSK.Checked = true;
+            this.chkQSK.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkQSK.FlatAppearance.BorderSize = 0;
             this.chkQSK.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.chkQSK.Name = "chkQSK";
+            this.chkQSK.ThreeState = true;
             this.toolTip1.SetToolTip(this.chkQSK, resources.GetString("chkQSK.ToolTip"));
-            this.chkQSK.CheckedChanged += new System.EventHandler(this.chkQSK_CheckedChanged);
+            this.chkQSK.CheckStateChanged += new System.EventHandler(this.chkQSK_CheckStateChanged);
             // 
             // comboAMTXProfile
             // 
@@ -3762,6 +3781,7 @@
             // timer_clock
             // 
             this.timer_clock.Enabled = true;
+            this.timer_clock.Interval = 1000;
             this.timer_clock.Tick += new System.EventHandler(this.timer_clock_Tick);
             // 
             // contextMenuStripFilterRX1
@@ -4725,6 +4745,7 @@
             this.toolStripStatusLabel_Amps,
             this.toolStripStatusLabel_SeqWarning,
             this.toolStripStatusLabel_Fill,
+            this.toolStripStatusLabel_timer,
             this.toolStripStatusLabel_UTCTime,
             this.toolStripStatusLabel_Date,
             this.toolStripStatusLabel_LocalTime});
@@ -4963,6 +4984,15 @@
             this.toolStripStatusLabel_Fill.Name = "toolStripStatusLabel_Fill";
             resources.ApplyResources(this.toolStripStatusLabel_Fill, "toolStripStatusLabel_Fill");
             this.toolStripStatusLabel_Fill.Spring = true;
+            // 
+            // toolStripStatusLabel_timer
+            // 
+            resources.ApplyResources(this.toolStripStatusLabel_timer, "toolStripStatusLabel_timer");
+            this.toolStripStatusLabel_timer.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.toolStripStatusLabel_timer.Image = global::Thetis.Properties.Resources.timer_on;
+            this.toolStripStatusLabel_timer.Name = "toolStripStatusLabel_timer";
+            this.toolStripStatusLabel_timer.Click += new System.EventHandler(this.toolStripStatusLabel_timer_Click);
+            this.toolStripStatusLabel_timer.MouseUp += new System.Windows.Forms.MouseEventHandler(this.toolStripStatusLabel_timer_MouseUp);
             // 
             // toolStripStatusLabel_UTCTime
             // 
@@ -5577,7 +5607,6 @@
             // 
             resources.ApplyResources(this.panelModeSpecificCW, "panelModeSpecificCW");
             this.panelModeSpecificCW.BackColor = System.Drawing.Color.Transparent;
-            this.panelModeSpecificCW.Controls.Add(this.chkQSK);
             this.panelModeSpecificCW.Controls.Add(this.grpCWAPF);
             this.panelModeSpecificCW.Controls.Add(this.chkShowCWZero);
             this.panelModeSpecificCW.Controls.Add(this.ptbCWSpeed);
@@ -5629,9 +5658,9 @@
             // 
             // grpSemiBreakIn
             // 
+            this.grpSemiBreakIn.Controls.Add(this.chkQSK);
             this.grpSemiBreakIn.Controls.Add(this.udCWBreakInDelay);
             this.grpSemiBreakIn.Controls.Add(this.lblCWBreakInDelay);
-            this.grpSemiBreakIn.Controls.Add(this.chkCWBreakInEnabled);
             this.grpSemiBreakIn.ForeColor = System.Drawing.Color.White;
             resources.ApplyResources(this.grpSemiBreakIn, "grpSemiBreakIn");
             this.grpSemiBreakIn.Name = "grpSemiBreakIn";
@@ -7062,6 +7091,37 @@
             this.grpMultimeterMenus.Name = "grpMultimeterMenus";
             this.grpMultimeterMenus.TabStop = false;
             // 
+            // panelAndromedaMisc
+            // 
+            resources.ApplyResources(this.panelAndromedaMisc, "panelAndromedaMisc");
+            this.panelAndromedaMisc.BackColor = System.Drawing.Color.Transparent;
+            this.panelAndromedaMisc.Controls.Add(this.tbAndromedaEncoderSlider);
+            this.panelAndromedaMisc.Controls.Add(this.lblAndromedaEncoderSlider);
+            this.panelAndromedaMisc.Controls.Add(this.lblATUTuneLabel);
+            this.panelAndromedaMisc.Name = "panelAndromedaMisc";
+            // 
+            // tbAndromedaEncoderSlider
+            // 
+            resources.ApplyResources(this.tbAndromedaEncoderSlider, "tbAndromedaEncoderSlider");
+            this.tbAndromedaEncoderSlider.BackColor = System.Drawing.Color.Black;
+            this.tbAndromedaEncoderSlider.Maximum = 100;
+            this.tbAndromedaEncoderSlider.Name = "tbAndromedaEncoderSlider";
+            this.tbAndromedaEncoderSlider.TickFrequency = 10;
+            this.tbAndromedaEncoderSlider.Value = 50;
+            // 
+            // lblAndromedaEncoderSlider
+            // 
+            resources.ApplyResources(this.lblAndromedaEncoderSlider, "lblAndromedaEncoderSlider");
+            this.lblAndromedaEncoderSlider.ForeColor = System.Drawing.Color.White;
+            this.lblAndromedaEncoderSlider.Name = "lblAndromedaEncoderSlider";
+            // 
+            // lblATUTuneLabel
+            // 
+            this.lblATUTuneLabel.BackColor = System.Drawing.Color.Transparent;
+            resources.ApplyResources(this.lblATUTuneLabel, "lblATUTuneLabel");
+            this.lblATUTuneLabel.ForeColor = System.Drawing.Color.White;
+            this.lblATUTuneLabel.Name = "lblATUTuneLabel";
+            // 
             // Console
             // 
             resources.ApplyResources(this, "$this");
@@ -7091,7 +7151,6 @@
             this.Controls.Add(this.grpRX2Meter);
             this.Controls.Add(this.grpDisplaySplit);
             this.Controls.Add(this.grpVFOBetween);
-            this.Controls.Add(this.panelModeSpecificCW);
             this.Controls.Add(this.grpVFOA);
             this.Controls.Add(this.picSquelch);
             this.Controls.Add(this.grpVFOB);
@@ -7105,15 +7164,17 @@
             this.Controls.Add(this.panelBandHF);
             this.Controls.Add(this.panelBandVHF);
             this.Controls.Add(this.panelBandGEN);
-            this.Controls.Add(this.panelModeSpecificPhone);
-            this.Controls.Add(this.panelModeSpecificFM);
-            this.Controls.Add(this.panelModeSpecificDigital);
             this.Controls.Add(this.panelMeterLabels);
             this.Controls.Add(this.panelButtonBar);
             this.Controls.Add(this.panelVFOBLabels);
             this.Controls.Add(this.grpMultimeterMenus);
-            this.Controls.Add(this.panelVFOLabels);
             this.Controls.Add(this.panelVFOALabels);
+            this.Controls.Add(this.panelVFOLabels);
+            this.Controls.Add(this.panelAndromedaMisc);
+            this.Controls.Add(this.panelModeSpecificPhone);
+            this.Controls.Add(this.panelModeSpecificFM);
+            this.Controls.Add(this.panelModeSpecificDigital);
+            this.Controls.Add(this.panelModeSpecificCW);
             this.KeyPreview = true;
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "Console";
@@ -7230,6 +7291,8 @@
             this.panelBandGEN.ResumeLayout(false);
             this.panelMeterLabels.ResumeLayout(false);
             this.grpMultimeterMenus.ResumeLayout(false);
+            this.panelAndromedaMisc.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.tbAndromedaEncoderSlider)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -7338,5 +7401,10 @@
         private ToolStripDropDownButton toolStripDropDownButton_CPU;
         private ToolStripMenuItem systemToolStripMenuItem;
         private ToolStripMenuItem thetisOnlyToolStripMenuItem;
+        private PanelTS panelAndromedaMisc;
+        private LabelTS lblATUTuneLabel;
+        private LabelTS lblAndromedaEncoderSlider;
+        private TrackBarTS tbAndromedaEncoderSlider;
+        private ToolStripStatusLabel toolStripStatusLabel_timer;
     }
 }

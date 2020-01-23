@@ -487,12 +487,12 @@ namespace Thetis
 
                 // see console routine  if (rx1_band != old_band || initializing) for setting low and high settings
 
-                Thread t = new Thread(new ThreadStart(SCANNER));
-
-          
-                t.Name = "Scanner Thread";
-                t.IsBackground = true;
-                t.Priority = ThreadPriority.Normal;
+                Thread t = new Thread(new ThreadStart(SCANNER))
+                {
+                    Name = "Scanner Thread",
+                    IsBackground = true,
+                    Priority = ThreadPriority.Normal
+                };
                 t.Start();
 
                 Trace.WriteLine("good    ");

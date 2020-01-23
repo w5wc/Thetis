@@ -168,10 +168,12 @@ namespace Thetis
             {
                 m_nTimeOut = nTimeOut;
 
-                m_objRunThread = new Thread(new ThreadStart(dumpcapGO));
-                m_objRunThread.Name = "Dumpcap start Thread";
-                m_objRunThread.Priority = ThreadPriority.AboveNormal;
-                m_objRunThread.IsBackground = true;
+                m_objRunThread = new Thread(new ThreadStart(dumpcapGO))
+                {
+                    Name = "Dumpcap start Thread",
+                    Priority = ThreadPriority.AboveNormal,
+                    IsBackground = true
+                };
                 m_objRunThread.Start();
             }
         }

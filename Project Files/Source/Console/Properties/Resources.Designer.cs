@@ -143,6 +143,16 @@ namespace Thetis.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap play {
+            get {
+                object obj = ResourceManager.GetObject("play", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap s_meter_collins3 {
             get {
                 object obj = ResourceManager.GetObject("s_meter_collins3", resourceCulture);
@@ -482,6 +492,26 @@ namespace Thetis.Properties {
         internal static string template {
             get {
                 return ResourceManager.GetString("template", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap timer {
+            get {
+                object obj = ResourceManager.GetObject("timer", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap timer_on {
+            get {
+                object obj = ResourceManager.GetObject("timer_on", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         

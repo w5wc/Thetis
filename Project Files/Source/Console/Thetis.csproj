@@ -261,6 +261,7 @@
     <Compile Include="BandButtonsPopup.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="BasicAudio.cs" />
     <Compile Include="Channel.cs" />
     <Compile Include="cmaster.cs" />
     <Compile Include="displaysettingsform.cs">
@@ -543,6 +544,9 @@
     <Compile Include="xvtr.cs">
       <SubType>Form</SubType>
     </Compile>
+    <None Include="Resources\play.png" />
+    <None Include="Resources\timer_on.png" />
+    <None Include="Resources\timer.png" />
     <None Include="Resources\screen4.png" />
     <None Include="Resources\screen3.png" />
     <None Include="Resources\screen2.png" />

@@ -1462,7 +1462,7 @@ namespace Thetis
             set { phase_num_pts = value; }
         }
 
-        private static bool click_tune_filter = true;
+        private static bool click_tune_filter = false;
         public static bool ClickTuneFilter {
             get { return click_tune_filter; }
             set { click_tune_filter = value; }
@@ -1961,7 +1961,14 @@ namespace Thetis
                 }
 
                 // HIGH swr display warning
-                if (high_swr) e.Graphics.DrawString("High SWR", font14, Brushes.Red, 245, 20);
+                if (high_swr)
+                {
+                    e.Graphics.DrawString("High SWR", font14, Brushes.Red, 245, 20);
+                    using (Pen p = new Pen(Color.Red, 6f))
+                    {
+                        e.Graphics.DrawRectangle(p, 3, 3, displayTargetWidth - 6, displayTargetHeight - 6);
+                    }
+                }
 
                 //MW0LGE framrate issue, this will be true if less than desired frame rate achevied, set in RunDisplay thread of console.cs
                 if (m_bFramRateIssue) e.Graphics.FillRectangle(new SolidBrush(Color.Red), 0, 0, 8, 8);
@@ -6798,7 +6805,11 @@ namespace Thetis
                     }
 
                     // HIGH swr display warning
-                    if (high_swr) drawStringDX2D("High SWR", fontDX2d_font14, m_bDX2_Red, 245, 20);
+                    if (high_swr)
+                    {
+                        drawStringDX2D("High SWR", fontDX2d_font14, m_bDX2_Red, 245, 20);
+                        d2dRenderTarget.DrawRectangle(new RectangleF(3, 3, displayTargetWidth - 6, displayTargetHeight - 6), m_bDX2_Red, 6f);
+                    }
 
                     if (m_bFramRateIssue) d2dRenderTarget.FillRectangle(new RectangleF(0, 0, 8, 8), m_bDX2_Red);
 

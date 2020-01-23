@@ -519,7 +519,9 @@ void SetAlexHPFBits(int bits) {
 PORT
 void DisablePA(int bit) {
 	if (prn->tx[0].pa != bit) {
-		prn->tx[0].pa = bit;
+		prn->tx[0].pa = bit;		
+		if (listenSock != INVALID_SOCKET)
+			CmdGeneral();
 	}
 	return;
 }
@@ -1238,6 +1240,17 @@ void SetXVTREnable(int enable)
 	if (xvtr_enable != enable)
 	{
 		xvtr_enable = enable;
+		if (listenSock != INVALID_SOCKET)
+			CmdHighPriority();
+	}
+}
+
+PORT
+void ATU_Tune(int tune)
+{
+	if (atu_tune != tune)
+	{
+		atu_tune = tune;
 		if (listenSock != INVALID_SOCKET)
 			CmdHighPriority();
 	}
