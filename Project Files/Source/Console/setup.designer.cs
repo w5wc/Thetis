@@ -36578,7 +36578,7 @@
             this.udANAN7000DPAGain6.Size = new System.Drawing.Size(48, 20);
             this.udANAN7000DPAGain6.TabIndex = 86;
             this.udANAN7000DPAGain6.Value = new decimal(new int[] {
-            466,
+            440,
             0,
             0,
             65536});
@@ -36640,7 +36640,7 @@
             this.udANAN7000DPAGain10.Size = new System.Drawing.Size(48, 20);
             this.udANAN7000DPAGain10.TabIndex = 18;
             this.udANAN7000DPAGain10.Value = new decimal(new int[] {
-            503,
+            465,
             0,
             0,
             65536});
@@ -36680,7 +36680,7 @@
             this.udANAN7000DPAGain12.Size = new System.Drawing.Size(48, 20);
             this.udANAN7000DPAGain12.TabIndex = 16;
             this.udANAN7000DPAGain12.Value = new decimal(new int[] {
-            517,
+            479,
             0,
             0,
             65536});
@@ -36720,7 +36720,7 @@
             this.udANAN7000DPAGain15.Size = new System.Drawing.Size(48, 20);
             this.udANAN7000DPAGain15.TabIndex = 14;
             this.udANAN7000DPAGain15.Value = new decimal(new int[] {
-            527,
+            470,
             0,
             0,
             65536});
@@ -36760,7 +36760,7 @@
             this.udANAN7000DPAGain17.Size = new System.Drawing.Size(48, 20);
             this.udANAN7000DPAGain17.TabIndex = 12;
             this.udANAN7000DPAGain17.Value = new decimal(new int[] {
-            530,
+            505,
             0,
             0,
             65536});
@@ -36800,7 +36800,7 @@
             this.udANAN7000DPAGain20.Size = new System.Drawing.Size(48, 20);
             this.udANAN7000DPAGain20.TabIndex = 10;
             this.udANAN7000DPAGain20.Value = new decimal(new int[] {
-            536,
+            509,
             0,
             0,
             65536});
@@ -36840,7 +36840,7 @@
             this.udANAN7000DPAGain30.Size = new System.Drawing.Size(48, 20);
             this.udANAN7000DPAGain30.TabIndex = 8;
             this.udANAN7000DPAGain30.Value = new decimal(new int[] {
-            542,
+            509,
             0,
             0,
             65536});
@@ -36880,7 +36880,7 @@
             this.udANAN7000DPAGain40.Size = new System.Drawing.Size(48, 20);
             this.udANAN7000DPAGain40.TabIndex = 6;
             this.udANAN7000DPAGain40.Value = new decimal(new int[] {
-            540,
+            508,
             0,
             0,
             65536});
@@ -36920,7 +36920,7 @@
             this.udANAN7000DPAGain60.Size = new System.Drawing.Size(48, 20);
             this.udANAN7000DPAGain60.TabIndex = 4;
             this.udANAN7000DPAGain60.Value = new decimal(new int[] {
-            539,
+            508,
             0,
             0,
             65536});
@@ -36960,7 +36960,7 @@
             this.udANAN7000DPAGain80.Size = new System.Drawing.Size(48, 20);
             this.udANAN7000DPAGain80.TabIndex = 2;
             this.udANAN7000DPAGain80.Value = new decimal(new int[] {
-            533,
+            505,
             0,
             0,
             65536});
@@ -37000,7 +37000,7 @@
             this.udANAN7000DPAGain160.Size = new System.Drawing.Size(48, 20);
             this.udANAN7000DPAGain160.TabIndex = 0;
             this.udANAN7000DPAGain160.Value = new decimal(new int[] {
-            513,
+            479,
             0,
             0,
             65536});

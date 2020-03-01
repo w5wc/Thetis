@@ -10888,17 +10888,17 @@ namespace Thetis
 
             if (radGenModelANAN7000D.Checked)
             {
-                ANAN7000DPAGain160 = 51.3f;
-                ANAN7000DPAGain80 = 53.3f;
-                ANAN7000DPAGain60 = 53.9f;
-                ANAN7000DPAGain40 = 54.0f;
-                ANAN7000DPAGain30 = 54.2f;
-                ANAN7000DPAGain20 = 53.6f;
-                ANAN7000DPAGain17 = 53.0f;
-                ANAN7000DPAGain15 = 52.7f;
-                ANAN7000DPAGain12 = 51.7f;
-                ANAN7000DPAGain10 = 50.3f;
-                ANAN7000DPAGain6 = 46.6f;
+                ANAN7000DPAGain160 = 47.9f;
+                ANAN7000DPAGain80 = 50.5f;
+                ANAN7000DPAGain60 = 50.8f;
+                ANAN7000DPAGain40 = 50.8f;
+                ANAN7000DPAGain30 = 50.9f;
+                ANAN7000DPAGain20 = 50.9f;
+                ANAN7000DPAGain17 = 50.5f;
+                ANAN7000DPAGain15 = 47.0f;
+                ANAN7000DPAGain12 = 47.9f;
+                ANAN7000DPAGain10 = 46.5f;
+                ANAN7000DPAGain6 = 44.6f;
 
                 udANAN7000DPAGainVHF0.Value = 63.1M;
                 udANAN7000DPAGainVHF1.Value = 63.1M;

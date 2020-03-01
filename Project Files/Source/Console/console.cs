@@ -1590,8 +1590,8 @@ namespace Thetis
                     case HPSDRModel.ORIONMKII:
                     case HPSDRModel.ANAN7000D:
                     case HPSDRModel.ANAN8000D:
-                        rx1_meter_cal_offset = 3.00f;
-                        rx2_meter_cal_offset = 3.00f;
+                        rx1_meter_cal_offset = 4.841644f;
+                        rx2_meter_cal_offset = 4.841644f;
                         break;
                     default:
                         rx1_meter_cal_offset = -2.44f;
@@ -1607,7 +1607,7 @@ namespace Thetis
                     case HPSDRModel.ORIONMKII:
                     case HPSDRModel.ANAN7000D:
                     case HPSDRModel.ANAN8000D:
-                        RX1DisplayCalOffset = 3.36f;
+                        RX1DisplayCalOffset = 5.259f;
                         break;
                     default:
                         RX1DisplayCalOffset = -2.1f;
@@ -1998,8 +1998,8 @@ namespace Thetis
                     case HPSDRModel.ANAN7000D:
                     case HPSDRModel.ANAN8000D:
                     case HPSDRModel.ORIONMKII:
-                        rx_meter_cal_offset_by_radio[i] = 0.9449f;
-                        rx_display_cal_offset_by_radio[i] = 0.9468f;
+                        rx_meter_cal_offset_by_radio[i] = 4.841644f;
+                        rx_display_cal_offset_by_radio[i] = 5.259f;
                         break;
                     default:
                         rx_meter_cal_offset_by_radio[i] = 0.98f;
@@ -24466,6 +24466,8 @@ namespace Thetis
                 {
                     rx1_meter_cal_offset = rx_meter_cal_offset_by_radio[(int)current_hpsdr_model];
                     RX1DisplayCalOffset = rx_display_cal_offset_by_radio[(int)current_hpsdr_model];
+                    rx2_meter_cal_offset = rx_meter_cal_offset_by_radio[(int)current_hpsdr_model];
+                    RX2DisplayCalOffset = rx_display_cal_offset_by_radio[(int)current_hpsdr_model];
                 }
 
                 if (SetupForm != null && saved_hpsdr_model != current_hpsdr_model)
@@ -28245,7 +28247,10 @@ namespace Thetis
         public bool PSA
         {
             get { return chkFWCATUBypass.Checked; }
-            set { chkFWCATUBypass.Checked = value; }
+            set 
+            { 
+                chkFWCATUBypass.Checked = value;               
+            }
         }
 
         public bool MOX
@@ -40256,21 +40261,18 @@ namespace Thetis
                     }
                     else
                     {
-                        // tx_step_attenuator_by_band[(int)rx1_band] = SetupForm.ATTOnTX;
+                        if (!chkFWCATUBypass.Checked ||
+                            (radio.GetDSPTX(0).CurrentDSPMode == DSPMode.CWL ||
+                             radio.GetDSPTX(0).CurrentDSPMode == DSPMode.CWU)) SetupForm.ATTOnTX = 31; // reset when PS is OFF or in CW mode
                         SetupForm.HermesAttenuatorData = tx_step_attenuator_by_band[(int)rx1_band];
-                        NetworkIO.SetTxAttenData(tx_step_attenuator_by_band[(int)rx1_band]);
+                        NetworkIO.SetTxAttenData(tx_step_attenuator_by_band[(int)rx1_band]); 
                         SetupForm.HermesEnableAttenuator = true;
                         comboRX2Preamp.Enabled = false;
-                        udRX2StepAttData.Enabled = false;
-
-                        //if (current_hpsdr_model == HPSDRModel.ANAN100D || current_hpsdr_model == HPSDRModel.ANAN200D)
-                        //{
-                        //    RX2ATT = SetupForm.ATTOnTX;
-                        //    RX2StepAttPresent = true;
-                        //}
+                        udRX2StepAttData.Enabled = false;                       
                     }
                 }
                 else NetworkIO.SetTxAttenData(0);
+
                 UpdateAAudioMixerStates();
                 UpdateDDCs(rx2_enabled);
                 UpdateRXADCCtrl();
@@ -58717,7 +58719,6 @@ namespace Thetis
         {
             psform.AutoCalEnabled = chkFWCATUBypass.Checked;
             AndromedaIndicatorCheck(EIndicatorActions.eINPuresignalEnabled, false, chkFWCATUBypass.Checked);
-
         }
 
         public bool PureSignalEnabled
