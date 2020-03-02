@@ -205,6 +205,7 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="SharpDX">
       <HintPath>..\..\lib\SharpDX\SharpDX.dll</HintPath>
     </Reference>
@@ -268,6 +269,7 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Dumpcap.cs" />
+    <Compile Include="enums.cs" />
     <Compile Include="FilterButtonsPopup.cs">
       <SubType>Form</SubType>
     </Compile>

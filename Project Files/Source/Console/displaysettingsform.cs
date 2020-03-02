@@ -54,6 +54,10 @@ namespace Thetis
         private LabelTS labelTS4;
         private ComboBoxTS comboTXMeter;
         private LabelTS labelTS5;
+        private CheckBoxTS chkRX1Avg;
+        private CheckBoxTS chkRX1Peak;
+        private CheckBoxTS chkRX2Avg;
+        private CheckBoxTS chkRX2Peak;
         private System.ComponentModel.IContainer components = null;
         
         #endregion
@@ -102,6 +106,10 @@ namespace Thetis
             this.labelTS1 = new System.Windows.Forms.LabelTS();
             this.comboRX1Meter = new System.Windows.Forms.ComboBoxTS();
             this.btnClose = new System.Windows.Forms.ButtonTS();
+            this.chkRX1Avg = new System.Windows.Forms.CheckBoxTS();
+            this.chkRX1Peak = new System.Windows.Forms.CheckBoxTS();
+            this.chkRX2Avg = new System.Windows.Forms.CheckBoxTS();
+            this.chkRX2Peak = new System.Windows.Forms.CheckBoxTS();
             this.SuspendLayout();
             // 
             // labelTS5
@@ -207,7 +215,7 @@ namespace Thetis
             // btnClose
             // 
             this.btnClose.Image = null;
-            this.btnClose.Location = new System.Drawing.Point(326, 97);
+            this.btnClose.Location = new System.Drawing.Point(326, 153);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(109, 41);
             this.btnClose.TabIndex = 0;
@@ -215,12 +223,72 @@ namespace Thetis
             this.btnClose.UseVisualStyleBackColor = true;
             this.btnClose.Click += new System.EventHandler(this.BtnClose_Click);
             // 
+            // chkRX1Avg
+            // 
+            this.chkRX1Avg.Appearance = System.Windows.Forms.Appearance.Button;
+            this.chkRX1Avg.CheckAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.chkRX1Avg.Image = null;
+            this.chkRX1Avg.Location = new System.Drawing.Point(19, 153);
+            this.chkRX1Avg.Name = "chkRX1Avg";
+            this.chkRX1Avg.Size = new System.Drawing.Size(50, 41);
+            this.chkRX1Avg.TabIndex = 11;
+            this.chkRX1Avg.Text = "Avg";
+            this.chkRX1Avg.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.chkRX1Avg.UseVisualStyleBackColor = true;
+            this.chkRX1Avg.CheckedChanged += new System.EventHandler(this.ChkRX1Avg_CheckedChanged);
+            // 
+            // chkRX1Peak
+            // 
+            this.chkRX1Peak.Appearance = System.Windows.Forms.Appearance.Button;
+            this.chkRX1Peak.CheckAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.chkRX1Peak.Image = null;
+            this.chkRX1Peak.Location = new System.Drawing.Point(90, 153);
+            this.chkRX1Peak.Name = "chkRX1Peak";
+            this.chkRX1Peak.Size = new System.Drawing.Size(50, 41);
+            this.chkRX1Peak.TabIndex = 12;
+            this.chkRX1Peak.Text = "Peak";
+            this.chkRX1Peak.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.chkRX1Peak.UseVisualStyleBackColor = true;
+            this.chkRX1Peak.CheckedChanged += new System.EventHandler(this.ChkRX1Peak_CheckedChanged);
+            // 
+            // chkRX2Avg
+            // 
+            this.chkRX2Avg.Appearance = System.Windows.Forms.Appearance.Button;
+            this.chkRX2Avg.CheckAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.chkRX2Avg.Image = null;
+            this.chkRX2Avg.Location = new System.Drawing.Point(174, 153);
+            this.chkRX2Avg.Name = "chkRX2Avg";
+            this.chkRX2Avg.Size = new System.Drawing.Size(50, 41);
+            this.chkRX2Avg.TabIndex = 13;
+            this.chkRX2Avg.Text = "Avg";
+            this.chkRX2Avg.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.chkRX2Avg.UseVisualStyleBackColor = true;
+            this.chkRX2Avg.CheckedChanged += new System.EventHandler(this.ChkRX2Avg_CheckedChanged);
+            // 
+            // chkRX2Peak
+            // 
+            this.chkRX2Peak.Appearance = System.Windows.Forms.Appearance.Button;
+            this.chkRX2Peak.CheckAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.chkRX2Peak.Image = null;
+            this.chkRX2Peak.Location = new System.Drawing.Point(245, 153);
+            this.chkRX2Peak.Name = "chkRX2Peak";
+            this.chkRX2Peak.Size = new System.Drawing.Size(50, 41);
+            this.chkRX2Peak.TabIndex = 14;
+            this.chkRX2Peak.Text = "Peak";
+            this.chkRX2Peak.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.chkRX2Peak.UseVisualStyleBackColor = true;
+            this.chkRX2Peak.CheckedChanged += new System.EventHandler(this.ChkRX2Peak_CheckedChanged);
+            // 
             // DisplaySettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(80)))), ((int)(((byte)(80)))));
-            this.ClientSize = new System.Drawing.Size(454, 157);
+            this.ClientSize = new System.Drawing.Size(454, 204);
+            this.Controls.Add(this.chkRX2Peak);
+            this.Controls.Add(this.chkRX2Avg);
+            this.Controls.Add(this.chkRX1Peak);
+            this.Controls.Add(this.chkRX1Avg);
             this.Controls.Add(this.labelTS5);
             this.Controls.Add(this.comboTXMeter);
             this.Controls.Add(this.labelTS4);
@@ -272,6 +340,26 @@ namespace Thetis
             comboTXMeter.Items.AddRange(console.MeterTXModeItems.Cast<Object>().ToArray());
             comboTXMeter.Text = console.CurrentMeterTXModeText;
 
+            if (console.CATDisplayAvg == 1)              // for some reason it's a numerical, not bool, property
+                chkRX1Avg.Checked = true;
+            else
+                chkRX1Avg.Checked = false;
+
+            if (console.CATRX2DisplayAvg == 1)
+                chkRX2Avg.Checked = true;
+            else
+                chkRX2Avg.Checked = false;
+
+            if (console.CATDispPeak == "1")              // for some reason it's a string, not bool, property
+                chkRX1Peak.Checked = true;
+            else
+                chkRX1Peak.Checked = false;
+
+            if (console.CATRX2DispPeak == "1")              // for some reason it's a string, not bool, property
+                chkRX2Peak.Checked = true;
+            else
+                chkRX2Peak.Checked = false;
+
         }
         #endregion
 
@@ -321,6 +409,38 @@ namespace Thetis
         private void ComboRX2Display_SelectedIndexChanged(object sender, EventArgs e)
         {
             console.DisplayRX2ModeText = comboRX2Display.Text;
+        }
+
+        private void ChkRX1Avg_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chkRX1Avg.Checked)
+                console.CATDisplayAvg = 1;
+            else
+                console.CATDisplayAvg = 0;
+        }
+
+        private void ChkRX2Avg_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chkRX2Avg.Checked)
+                console.CATRX2DisplayAvg = 1;
+            else
+                console.CATRX2DisplayAvg = 0;
+        }
+
+        private void ChkRX1Peak_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chkRX1Peak.Checked)
+                console.CATDispPeak = "1";
+            else
+                console.CATDispPeak = "0";
+        }
+
+        private void ChkRX2Peak_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chkRX2Peak.Checked)
+                console.CATRX2DispPeak = "1";
+            else
+                console.CATRX2DispPeak = "0";
         }
     }
 }

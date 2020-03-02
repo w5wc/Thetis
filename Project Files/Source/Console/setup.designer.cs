@@ -230,20 +230,9 @@
             this.chkExtended = new System.Windows.Forms.CheckBoxTS();
             this.comboFRSRegion = new System.Windows.Forms.ComboBoxTS();
             this.grpGeneralModel = new System.Windows.Forms.GroupBoxTS();
-            this.radGenModelANAN7000D = new System.Windows.Forms.RadioButtonTS();
-            this.radGenModelORIONMKII = new System.Windows.Forms.RadioButtonTS();
-            this.radGenModelANAN8000D = new System.Windows.Forms.RadioButtonTS();
-            this.radGenModelANAN10E = new System.Windows.Forms.RadioButtonTS();
-            this.radGenModelANAN100B = new System.Windows.Forms.RadioButtonTS();
-            this.radGenModelANAN200D = new System.Windows.Forms.RadioButtonTS();
-            this.radGenModelANAN100D = new System.Windows.Forms.RadioButtonTS();
-            this.radGenModelANAN100 = new System.Windows.Forms.RadioButtonTS();
-            this.radGenModelANAN10 = new System.Windows.Forms.RadioButtonTS();
-            this.radGenModelHermes = new System.Windows.Forms.RadioButtonTS();
-            this.radGenModelHPSDR = new System.Windows.Forms.RadioButtonTS();
+            this.comboRadioModel = new System.Windows.Forms.ComboBoxTS();
             this.chkGeneralRXOnly = new System.Windows.Forms.CheckBoxTS();
             this.grpMetisAddr = new System.Windows.Forms.GroupBoxTS();
-            this.lblAndromedaVersion = new System.Windows.Forms.LabelTS();
             this.lblMetisBoardID = new System.Windows.Forms.LabelTS();
             this.labelTS88 = new System.Windows.Forms.LabelTS();
             this.lblMetisCodeVersion = new System.Windows.Forms.LabelTS();
@@ -3345,6 +3334,8 @@
             this.panelTS4 = new System.Windows.Forms.PanelTS();
             this.radioButtonTS5 = new System.Windows.Forms.RadioButtonTS();
             this.radioButtonTS6 = new System.Windows.Forms.RadioButtonTS();
+            this.lblAndromedaVersion = new System.Windows.Forms.LabelTS();
+            this.labelTS528 = new System.Windows.Forms.LabelTS();
             tpAlexAntCtrl = new System.Windows.Forms.TabPage();
             numericUpDownTS3 = new System.Windows.Forms.NumericUpDownTS();
             numericUpDownTS4 = new System.Windows.Forms.NumericUpDownTS();
@@ -7334,150 +7325,35 @@
             // 
             // grpGeneralModel
             // 
-            this.grpGeneralModel.Controls.Add(this.radGenModelANAN7000D);
-            this.grpGeneralModel.Controls.Add(this.radGenModelORIONMKII);
-            this.grpGeneralModel.Controls.Add(this.radGenModelANAN8000D);
-            this.grpGeneralModel.Controls.Add(this.radGenModelANAN10E);
-            this.grpGeneralModel.Controls.Add(this.radGenModelANAN100B);
-            this.grpGeneralModel.Controls.Add(this.radGenModelANAN200D);
-            this.grpGeneralModel.Controls.Add(this.radGenModelANAN100D);
-            this.grpGeneralModel.Controls.Add(this.radGenModelANAN100);
-            this.grpGeneralModel.Controls.Add(this.radGenModelANAN10);
-            this.grpGeneralModel.Controls.Add(this.radGenModelHermes);
-            this.grpGeneralModel.Controls.Add(this.radGenModelHPSDR);
+            this.grpGeneralModel.Controls.Add(this.comboRadioModel);
             this.grpGeneralModel.Location = new System.Drawing.Point(8, 8);
             this.grpGeneralModel.Name = "grpGeneralModel";
-            this.grpGeneralModel.Size = new System.Drawing.Size(144, 222);
+            this.grpGeneralModel.Size = new System.Drawing.Size(144, 92);
             this.grpGeneralModel.TabIndex = 25;
             this.grpGeneralModel.TabStop = false;
             this.grpGeneralModel.Text = "Radio Model";
             // 
-            // radGenModelANAN7000D
+            // comboRadioModel
             // 
-            this.radGenModelANAN7000D.Checked = true;
-            this.radGenModelANAN7000D.Image = null;
-            this.radGenModelANAN7000D.Location = new System.Drawing.Point(10, 166);
-            this.radGenModelANAN7000D.Name = "radGenModelANAN7000D";
-            this.radGenModelANAN7000D.Size = new System.Drawing.Size(110, 24);
-            this.radGenModelANAN7000D.TabIndex = 15;
-            this.radGenModelANAN7000D.TabStop = true;
-            this.radGenModelANAN7000D.Text = "ANAN-7000DLE";
-            this.toolTip1.SetToolTip(this.radGenModelANAN7000D, "ANAN-7000DLE");
-            this.radGenModelANAN7000D.UseVisualStyleBackColor = true;
-            this.radGenModelANAN7000D.CheckedChanged += new System.EventHandler(this.radGenModelANAN7000D_CheckedChanged);
-            // 
-            // radGenModelORIONMKII
-            // 
-            this.radGenModelORIONMKII.Image = null;
-            this.radGenModelORIONMKII.Location = new System.Drawing.Point(92, 140);
-            this.radGenModelORIONMKII.Name = "radGenModelORIONMKII";
-            this.radGenModelORIONMKII.Size = new System.Drawing.Size(48, 24);
-            this.radGenModelORIONMKII.TabIndex = 13;
-            this.radGenModelORIONMKII.Text = "MkII";
-            this.toolTip1.SetToolTip(this.radGenModelORIONMKII, "Orion MKII");
-            this.radGenModelORIONMKII.UseVisualStyleBackColor = true;
-            this.radGenModelORIONMKII.Visible = false;
-            this.radGenModelORIONMKII.CheckedChanged += new System.EventHandler(this.radGenModelORIONMKII_CheckedChanged);
-            // 
-            // radGenModelANAN8000D
-            // 
-            this.radGenModelANAN8000D.Image = null;
-            this.radGenModelANAN8000D.Location = new System.Drawing.Point(10, 190);
-            this.radGenModelANAN8000D.Name = "radGenModelANAN8000D";
-            this.radGenModelANAN8000D.Size = new System.Drawing.Size(110, 24);
-            this.radGenModelANAN8000D.TabIndex = 12;
-            this.radGenModelANAN8000D.Text = "ANAN-8000DLE";
-            this.toolTip1.SetToolTip(this.radGenModelANAN8000D, "ANAN-8000DLE");
-            this.radGenModelANAN8000D.UseVisualStyleBackColor = true;
-            this.radGenModelANAN8000D.CheckedChanged += new System.EventHandler(this.radGenModelANAN8000D_CheckedChanged);
-            // 
-            // radGenModelANAN10E
-            // 
-            this.radGenModelANAN10E.Image = null;
-            this.radGenModelANAN10E.Location = new System.Drawing.Point(92, 68);
-            this.radGenModelANAN10E.Name = "radGenModelANAN10E";
-            this.radGenModelANAN10E.Size = new System.Drawing.Size(44, 24);
-            this.radGenModelANAN10E.TabIndex = 11;
-            this.radGenModelANAN10E.Text = "10E";
-            this.radGenModelANAN10E.UseVisualStyleBackColor = true;
-            this.radGenModelANAN10E.CheckedChanged += new System.EventHandler(this.radGenModelANAN10E_CheckedChanged);
-            // 
-            // radGenModelANAN100B
-            // 
-            this.radGenModelANAN100B.Image = null;
-            this.radGenModelANAN100B.Location = new System.Drawing.Point(92, 92);
-            this.radGenModelANAN100B.Name = "radGenModelANAN100B";
-            this.radGenModelANAN100B.Size = new System.Drawing.Size(50, 24);
-            this.radGenModelANAN100B.TabIndex = 10;
-            this.radGenModelANAN100B.Text = "100B";
-            this.radGenModelANAN100B.UseVisualStyleBackColor = true;
-            this.radGenModelANAN100B.CheckedChanged += new System.EventHandler(this.radGenModelANAN100B_CheckedChanged);
-            // 
-            // radGenModelANAN200D
-            // 
-            this.radGenModelANAN200D.Image = null;
-            this.radGenModelANAN200D.Location = new System.Drawing.Point(10, 140);
-            this.radGenModelANAN200D.Name = "radGenModelANAN200D";
-            this.radGenModelANAN200D.Size = new System.Drawing.Size(88, 24);
-            this.radGenModelANAN200D.TabIndex = 9;
-            this.radGenModelANAN200D.Text = "ANAN-200D";
-            this.radGenModelANAN200D.UseVisualStyleBackColor = true;
-            this.radGenModelANAN200D.CheckedChanged += new System.EventHandler(this.radGenModelANAN200D_CheckedChanged);
-            // 
-            // radGenModelANAN100D
-            // 
-            this.radGenModelANAN100D.Image = null;
-            this.radGenModelANAN100D.Location = new System.Drawing.Point(10, 116);
-            this.radGenModelANAN100D.Name = "radGenModelANAN100D";
-            this.radGenModelANAN100D.Size = new System.Drawing.Size(88, 24);
-            this.radGenModelANAN100D.TabIndex = 8;
-            this.radGenModelANAN100D.Text = "ANAN-100D";
-            this.radGenModelANAN100D.UseVisualStyleBackColor = true;
-            this.radGenModelANAN100D.CheckedChanged += new System.EventHandler(this.radGenModelANAN100D_CheckedChanged);
-            // 
-            // radGenModelANAN100
-            // 
-            this.radGenModelANAN100.Image = null;
-            this.radGenModelANAN100.Location = new System.Drawing.Point(10, 92);
-            this.radGenModelANAN100.Name = "radGenModelANAN100";
-            this.radGenModelANAN100.Size = new System.Drawing.Size(88, 24);
-            this.radGenModelANAN100.TabIndex = 7;
-            this.radGenModelANAN100.Text = "ANAN-100";
-            this.radGenModelANAN100.UseVisualStyleBackColor = true;
-            this.radGenModelANAN100.CheckedChanged += new System.EventHandler(this.radGenModelANAN100_CheckedChanged);
-            // 
-            // radGenModelANAN10
-            // 
-            this.radGenModelANAN10.Image = null;
-            this.radGenModelANAN10.Location = new System.Drawing.Point(10, 68);
-            this.radGenModelANAN10.Name = "radGenModelANAN10";
-            this.radGenModelANAN10.Size = new System.Drawing.Size(70, 24);
-            this.radGenModelANAN10.TabIndex = 6;
-            this.radGenModelANAN10.Text = "ANAN-10";
-            this.radGenModelANAN10.UseVisualStyleBackColor = true;
-            this.radGenModelANAN10.CheckedChanged += new System.EventHandler(this.radGenModelANAN10_CheckedChanged);
-            // 
-            // radGenModelHermes
-            // 
-            this.radGenModelHermes.Image = null;
-            this.radGenModelHermes.Location = new System.Drawing.Point(10, 44);
-            this.radGenModelHermes.Name = "radGenModelHermes";
-            this.radGenModelHermes.Size = new System.Drawing.Size(88, 24);
-            this.radGenModelHermes.TabIndex = 5;
-            this.radGenModelHermes.Text = "HERMES";
-            this.radGenModelHermes.UseVisualStyleBackColor = true;
-            this.radGenModelHermes.CheckedChanged += new System.EventHandler(this.radGenModelHermes_CheckedChanged);
-            // 
-            // radGenModelHPSDR
-            // 
-            this.radGenModelHPSDR.Image = null;
-            this.radGenModelHPSDR.Location = new System.Drawing.Point(10, 20);
-            this.radGenModelHPSDR.Name = "radGenModelHPSDR";
-            this.radGenModelHPSDR.Size = new System.Drawing.Size(88, 24);
-            this.radGenModelHPSDR.TabIndex = 4;
-            this.radGenModelHPSDR.Text = "HPSDR";
-            this.radGenModelHPSDR.UseVisualStyleBackColor = true;
-            this.radGenModelHPSDR.CheckedChanged += new System.EventHandler(this.radGenModelHPSDR_CheckedChanged);
+            this.comboRadioModel.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboRadioModel.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.comboRadioModel.FormattingEnabled = true;
+            this.comboRadioModel.Items.AddRange(new object[] {
+            "HPSDR",
+            "HERMES",
+            "ANAN-10",
+            "ANAN-10E",
+            "ANAN-100",
+            "ANAN-100B",
+            "ANAN-100D",
+            "ANAN-200D",
+            "ANAN-7000DLE",
+            "ANAN-8000DLE"});
+            this.comboRadioModel.Location = new System.Drawing.Point(2, 25);
+            this.comboRadioModel.Name = "comboRadioModel";
+            this.comboRadioModel.Size = new System.Drawing.Size(136, 23);
+            this.comboRadioModel.TabIndex = 36;
+            this.comboRadioModel.SelectedIndexChanged += new System.EventHandler(this.comboRadioModel_SelectedIndexChanged);
             // 
             // chkGeneralRXOnly
             // 
@@ -7493,7 +7369,6 @@
             // 
             // grpMetisAddr
             // 
-            this.grpMetisAddr.Controls.Add(this.lblAndromedaVersion);
             this.grpMetisAddr.Controls.Add(this.lblMetisBoardID);
             this.grpMetisAddr.Controls.Add(this.labelTS88);
             this.grpMetisAddr.Controls.Add(this.lblMetisCodeVersion);
@@ -7509,14 +7384,6 @@
             this.grpMetisAddr.TabStop = false;
             this.grpMetisAddr.Text = "Metis  Address";
             this.grpMetisAddr.Visible = false;
-            // 
-            // lblAndromedaVersion
-            // 
-            this.lblAndromedaVersion.Image = null;
-            this.lblAndromedaVersion.Location = new System.Drawing.Point(11, 52);
-            this.lblAndromedaVersion.Name = "lblAndromedaVersion";
-            this.lblAndromedaVersion.Size = new System.Drawing.Size(221, 16);
-            this.lblAndromedaVersion.TabIndex = 8;
             // 
             // lblMetisBoardID
             // 
@@ -28820,6 +28687,7 @@
         "eing driven by a third party program.");
             this.comboKeyerConnSecondary.ValueMember = "None";
             this.comboKeyerConnSecondary.SelectedIndexChanged += new System.EventHandler(this.comboKeyerConnSecondary_SelectedIndexChanged);
+            this.comboKeyerConnSecondary.MouseClick += new System.Windows.Forms.MouseEventHandler(this.comboKeyerConnSecondary_MouseClick);
             // 
             // lblKeyerConnSecondary
             // 
@@ -53123,13 +52991,15 @@
             // 
             // grpAndr
             // 
+            this.grpAndr.Controls.Add(this.labelTS528);
+            this.grpAndr.Controls.Add(this.lblAndromedaVersion);
             this.grpAndr.Controls.Add(this.buttonAndromeda);
             this.grpAndr.Controls.Add(this.comboAndromedaCATPort);
             this.grpAndr.Controls.Add(this.labelTSPort);
             this.grpAndr.Controls.Add(this.chkEnableAndromeda);
             this.grpAndr.Location = new System.Drawing.Point(6, 6);
             this.grpAndr.Name = "grpAndr";
-            this.grpAndr.Size = new System.Drawing.Size(117, 99);
+            this.grpAndr.Size = new System.Drawing.Size(240, 171);
             this.grpAndr.TabIndex = 106;
             this.grpAndr.TabStop = false;
             this.grpAndr.Text = "Andromeda";
@@ -55294,6 +55164,24 @@
             this.radioButtonTS6.Text = "Auto";
             this.radioButtonTS6.UseVisualStyleBackColor = true;
             // 
+            // lblAndromedaVersion
+            // 
+            this.lblAndromedaVersion.Image = null;
+            this.lblAndromedaVersion.Location = new System.Drawing.Point(6, 152);
+            this.lblAndromedaVersion.Name = "lblAndromedaVersion";
+            this.lblAndromedaVersion.Size = new System.Drawing.Size(221, 16);
+            this.lblAndromedaVersion.TabIndex = 99;
+            // 
+            // labelTS528
+            // 
+            this.labelTS528.AutoSize = true;
+            this.labelTS528.Image = null;
+            this.labelTS528.Location = new System.Drawing.Point(6, 129);
+            this.labelTS528.Name = "labelTS528";
+            this.labelTS528.Size = new System.Drawing.Size(87, 13);
+            this.labelTS528.TabIndex = 118;
+            this.labelTS528.Text = "Firmware Version";
+            // 
             // Setup
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -56371,6 +56259,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.udHttpPort)).EndInit();
             this.tpAndromeda.ResumeLayout(false);
             this.grpAndr.ResumeLayout(false);
+            this.grpAndr.PerformLayout();
             this.tpTests.ResumeLayout(false);
             this.grpBoxTS1.ResumeLayout(false);
             this.grpSigGenTransmit.ResumeLayout(false);
@@ -56868,8 +56757,6 @@
         private CheckBoxTS chkWheelTuneVFOB;
         private ButtonTS btnExportDB;
         private SaveFileDialog saveFileDialog1;
-        private RadioButtonTS radGenModelHermes;
-        private RadioButtonTS radGenModelHPSDR;
         private CheckBoxTS chkAlexPresent;
         private CheckBoxTS chkExcaliburPresent;
         private CheckBoxTS chkPennyPresent;
@@ -57868,9 +57755,6 @@
         private System.Windows.Forms.GroupBoxTS grpHermesStepAttenuator;
         private System.Windows.Forms.CheckBoxTS chkHermesStepAttenuator;
         private System.Windows.Forms.NumericUpDownTS udHermesStepAttenuatorData;
-        private System.Windows.Forms.RadioButtonTS radGenModelANAN100D;
-        private System.Windows.Forms.RadioButtonTS radGenModelANAN100;
-        private System.Windows.Forms.RadioButtonTS radGenModelANAN10;
         private System.Windows.Forms.PanelTS panelAlexTXAntControl;
         private System.Windows.Forms.LabelTS labelTS104;
         private System.Windows.Forms.LabelTS labelTS105;
@@ -58357,7 +58241,6 @@
         private System.Windows.Forms.TextBoxTS txtCAT2;
         private System.Windows.Forms.CheckBoxTS chkRX2StepAtt;
         private System.Windows.Forms.CheckBoxTS chkTXTunePower;
-        private System.Windows.Forms.RadioButtonTS radGenModelANAN200D;
         private System.Windows.Forms.GroupBoxTS grpGeneralHardwareORION;
         private System.Windows.Forms.PanelTS panelOrionPTT;
         private System.Windows.Forms.RadioButtonTS radOrionPTTOn;
@@ -58728,7 +58611,6 @@
         private System.Windows.Forms.NumericUpDownTS udDSPEERpwmMax;
         private System.Windows.Forms.LabelTS labelTS329;
         private System.Windows.Forms.LabelTS labelTS328;
-        private System.Windows.Forms.RadioButtonTS radGenModelANAN100B;
         private System.Windows.Forms.GroupBoxTS grpANAN100BPAGainByBand;
         private System.Windows.Forms.LabelTS labelTS330;
         private System.Windows.Forms.CheckBoxTS checkBoxTS8;
@@ -58782,7 +58664,6 @@
         private System.Windows.Forms.NumericUpDownTS udANAN100BPAGain80;
         private System.Windows.Forms.LabelTS labelTS354;
         private System.Windows.Forms.NumericUpDownTS udANAN100BPAGain160;
-        private System.Windows.Forms.RadioButtonTS radGenModelANAN10E;
         private System.Windows.Forms.CheckBoxTS chkRX1BlankDisplayOnVFOBTX;
         private System.Windows.Forms.GroupBoxTS grpDSPSpeechProcessor;
         private System.Windows.Forms.CheckBoxTS chkDSPCESSB;
@@ -58844,7 +58725,6 @@
         private System.Windows.Forms.CheckBoxTS chkAudioLatencyManual2_Out;
         private System.Windows.Forms.NumericUpDownTS udAudioLatency2_Out;
         private System.Windows.Forms.CheckBoxTS chkNetworkWDT;
-        private System.Windows.Forms.RadioButtonTS radGenModelANAN8000D;
         private System.Windows.Forms.LabelTS labelTS364;
         private System.Windows.Forms.LabelTS labelTS365;
         private System.Windows.Forms.CheckBoxTS chkAudioLatencyPAOutManual;
@@ -58920,7 +58800,6 @@
         private System.Windows.Forms.LabelTS labelTS390;
         private System.Windows.Forms.ComboBoxTS comboKBPTTTx;
         private System.Windows.Forms.ComboBoxTS comboKBPTTRx;
-        private System.Windows.Forms.RadioButtonTS radGenModelORIONMKII;
         private System.Windows.Forms.GroupBoxTS grpDSPFilterType;
         private System.Windows.Forms.GroupBoxTS grpDSPFiltTypeFM;
         private System.Windows.Forms.ComboBoxTS comboDSPFMTXFiltType;
@@ -59308,7 +59187,6 @@
         private LabelTS lblVAC2ovfl;
         private LabelTS lblVAC2underflows;
         private LabelTS lblVAC2overflows;
-        private RadioButtonTS radGenModelANAN7000D;
         private CheckBoxTS chkBlockTxAnt3;
         private CheckBoxTS chkBlockTxAnt2;
         private LabelTS labelTS257;
@@ -59786,5 +59664,8 @@
         private TabControl tcOptions;
         private TabPage tpOptions1;
         private TabPage tpOptions2;
+        private ComboBoxTS comboRadioModel;
+        private LabelTS labelTS528;
+
     }
 }

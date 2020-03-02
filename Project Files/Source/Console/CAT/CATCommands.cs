@@ -1542,7 +1542,7 @@ namespace Thetis
 		//Sets or reads the BCI Rejection button status
 		public string ZZBR(string s)
 		{
-			if(console.CurrentModel == Model.HPSDR)
+			if(console.CurrentHPSDRModel == HPSDRModel.HPSDR)
 			{
 				int sx = 0;
 
@@ -5666,9 +5666,16 @@ namespace Thetis
                     else
                         num = WDSP.CalculateRXMeter(2, 0, WDSP.MeterType.SIGNAL_STRENGTH);
 
-                switch (console.CurrentModel)
+                switch (console.CurrentHPSDRModel)
                 {
-                    case Model.HERMES:
+                     case HPSDRModel.HPSDR:
+                        num = num +
+                        console.MultiMeterCalOffset +
+                        Display.RX1PreampOffset +
+                            //console.RX1FilterSizeCalOffset +
+                        console.RX1XVTRGainOffset;
+                        break;
+                    default:
                         if (s == "0")
                         {
                             num = num +
@@ -5686,14 +5693,7 @@ namespace Thetis
                             console.RX2XVTRGainOffset;
                         }
                         break;
-                    case Model.HPSDR:
-                        num = num +
-                        console.MultiMeterCalOffset +
-                        Display.RX1PreampOffset +
-                            //console.RX1FilterSizeCalOffset +
-                        console.RX1XVTRGainOffset;
-                        break;
-                }
+               }
                 num = Math.Max(-140, num);
                 num = Math.Min(-10, num);
                 sm = ((int)num + 140) * 2;

@@ -545,18 +545,19 @@ void storeRXSeqDelta(int rx, unsigned int received_seqnum) {
 	LeaveCriticalSection(&prn->seqErrors);
 }
 
-int ReadUDPFrame(unsigned char *bufp) {
+int ReadUDPFrame(unsigned char* bufp) 
+{
 	unsigned char readbuf[1444];
 	struct sockaddr_in fromaddr;
 	int fromlen;
 	int nrecv, inport;
 	unsigned int seqnum;
-	unsigned char *seqbytep = (unsigned char *)&seqnum;
+	unsigned char* seqbytep = (unsigned char*)&seqnum;
 	fromlen = sizeof(fromaddr);
 
 	EnterCriticalSection(&prn->rcvpkt);
 
-	nrecv = recvfrom(listenSock, readbuf, sizeof(readbuf), 0, (SOCKADDR *)&fromaddr, &fromlen);
+	nrecv = recvfrom(listenSock, readbuf, sizeof(readbuf), 0, (SOCKADDR*)&fromaddr, &fromlen);
 
 	if (nrecv == -1) //SOCKET_ERROR
 	{
@@ -577,274 +578,119 @@ int ReadUDPFrame(unsigned char *bufp) {
 
 	switch (inport = ntohs(fromaddr.sin_port))
 	{
-	case HPCCPort: //1025: // 60 bytes - High Priority C&C data
-		if (nrecv != 60) break; // check for malformed packet
-	
-		if (seqnum != (1 + prn->cc_seq_no) && seqnum != 0)  {
-			prn->cc_seq_err += 1;
-			//PrintTimeHack();
-			printf("- Rx High Priority C&C: seq error this: %d last: %d\n", seqnum, prn->cc_seq_no);
-			fflush(stdout);
-		}
+		case HPCCPort: //1025: // 60 bytes - High Priority C&C data
+			if (nrecv != 60) break; // check for malformed packet
 
-		prn->cc_seq_no = seqnum;
-		memcpy(bufp, readbuf + 4, 56);
-		break;
-	case  RxMicSampPort: //1026: // 132 bytes - 16-bit mic samples (48ksps)
-		if (nrecv != 132) break; // check for malformed packet
+			if (seqnum != (1 + prn->cc_seq_no) && seqnum != 0)
+			{
+				prn->cc_seq_err += 1;
+				//PrintTimeHack();
+				printf("- Rx High Priority C&C: seq error this: %d last: %d\n", seqnum, prn->cc_seq_no);
+				fflush(stdout);
+			}
 
-		//mic_samples_buf++;
-		if (seqnum != (1 + prn->tx[0].mic_in_seq_no) && seqnum != 0)  {
-			prn->tx[0].mic_in_seq_err += 1;
-			//PrintTimeHack();
-			printf("- Mic samples: seq error this: %d last: %d\n", seqnum, prn->tx[0].mic_in_seq_no);
-			fflush(stdout);
-		}
+			prn->cc_seq_no = seqnum;
+			memcpy(bufp, readbuf + 4, 56);
+			break;
 
-		prn->tx[0].mic_in_seq_no = seqnum;
-		memcpy(bufp, readbuf + 4, 128);
-		break;
-	case WB0Port: //1027: // 1028 bytes - 16-bit raw ADC (default values)
-	//case 1028:
-	//case 1029:
-	//case 1030:
-	//case 1031:
-	//case 1032:
-	//case 1033:
-	//case 1034:
-	{
-		if (nrecv != 1028) break; // check for malformed packet
+		case  RxMicSampPort: //1026: // 132 bytes - 16-bit mic samples (48ksps)
+			if (nrecv != 132) break; // check for malformed packet
 
-		int adc_id = inport - prn->wb_base_port;					// adc number
-		int wb_spp = prn->wb_samples_per_packet;				// samples per packet
-		int wb_ppf = prn->wb_packets_per_frame;					// packets per frame
-		int disp_id = prn->wb_base_dispid + adc_id;				// display id
-		double* wb_buff = prn->adc[adc_id].wb_buff;				// data buffer for wideband samples
-		// NOTE:  This code assumes 16-bits per sample ... can add other options as needed.
-		int ii, jj;
-		for (ii = 0, jj = 4; ii < wb_spp; ii++, jj += 2)			// convert the samples to doubles
-			wb_buff[ii] = const_1_div_2147483648_ *
-			//(double)(readbuf[jj + 1] << 24 | 
-			// readbuf[jj + 0] << 16);
-			(double)(readbuf[jj + 0] << 24 |
-			readbuf[jj + 1] << 16);
-		switch (prn->adc[adc_id].wb_state)
+			//mic_samples_buf++;
+			if (seqnum != (1 + prn->tx[0].mic_in_seq_no) && seqnum != 0)
+			{
+				prn->tx[0].mic_in_seq_err += 1;
+				//PrintTimeHack();
+				printf("- Mic samples: seq error this: %d last: %d\n", seqnum, prn->tx[0].mic_in_seq_no);
+				fflush(stdout);
+			}
+
+			prn->tx[0].mic_in_seq_no = seqnum;
+			memcpy(bufp, readbuf + 4, 128);
+			break;
+
+		case WB0Port: //1027: // 1028 bytes - 16-bit raw ADC (default values)
 		{
-		case 0:		// wait for frame to begin
-			prn->adc[adc_id].wb_seqnum = 0;
-			if (seqnum == 0)
+			if (nrecv != 1028) break; // check for malformed packet
+
+			int adc_id = inport - prn->wb_base_port;					// adc number
+			int wb_spp = prn->wb_samples_per_packet;				// samples per packet
+			int wb_ppf = prn->wb_packets_per_frame;					// packets per frame
+			int disp_id = prn->wb_base_dispid + adc_id;				// display id
+			double* wb_buff = prn->adc[adc_id].wb_buff;				// data buffer for wideband samples
+			// NOTE:  This code assumes 16-bits per sample ... can add other options as needed.
+			int ii, jj;
+			for (ii = 0, jj = 4; ii < wb_spp; ii++, jj += 2)			// convert the samples to doubles
+				wb_buff[ii] = const_1_div_2147483648_ *
+				//(double)(readbuf[jj + 1] << 24 | 
+				// readbuf[jj + 0] << 16);
+				(double)(readbuf[jj + 0] << 24 |
+					readbuf[jj + 1] << 16);
+				switch (prn->adc[adc_id].wb_state)
+				{
+					case 0:		// wait for frame to begin
+						prn->adc[adc_id].wb_seqnum = 0;
+						if (seqnum == 0)
+						{
+							prn->adc[adc_id].wb_state = 1;
+							Spectrum(disp_id, 0, 0, wb_buff, wb_buff);
+							prn->adc[adc_id].wb_seqnum++;
+						}
+						break;
+
+					case 1:		// continue within the frame
+						if (seqnum == prn->adc[adc_id].wb_seqnum)			// sequence correct:  send the data
+						{
+							Spectrum(disp_id, 0, 0, wb_buff, wb_buff);
+							if (prn->adc[adc_id].wb_seqnum == wb_ppf - 1)
+								prn->adc[adc_id].wb_state = 0;
+						}
+						else												// sequence error:  pad frame with zeros
+						{
+							memset(wb_buff, 0, wb_spp * sizeof(double));
+							for (jj = prn->adc[adc_id].wb_seqnum; jj < wb_ppf; jj++)
+								Spectrum(disp_id, 0, 0, wb_buff, wb_buff);
+							prn->adc[adc_id].wb_state = 0;
+						}
+						prn->adc[adc_id].wb_seqnum++;
+						break;
+		        }
+
+					break;
+		}
+
+		case 1035:// ddc0
+		case 1036:// ddc1
+		case 1037:// ddc2
+		case 1038:// ddc3
+		case 1039:// ddc4
+		case 1040:// ddc5
+		case 1041:// ddc6
+		{
+			if (nrecv != 1444) break; // check for malformed packet
+
+			int ddc = inport - 1035;
+
+			if (seqnum != 0) storeRXSeqDelta(ddc, seqnum);
+
+			if (seqnum != (1 + prn->rx[ddc].rx_in_seq_no) && seqnum != 0)
 			{
-				prn->adc[adc_id].wb_state = 1;
-				Spectrum(disp_id, 0, 0, wb_buff, wb_buff);
-				prn->adc[adc_id].wb_seqnum++;
+				prn->rx[ddc].rx_in_seq_err += 1;
+				printf("- Rx%d I/Q: seq error this: %d last: %d\n", ddc, seqnum, prn->rx[ddc].rx_in_seq_no);
+				fflush(stdout);
+
+				addSnapShot(ddc, seqnum, prn->rx[ddc].rx_in_seq_no);
 			}
-			break;
-		case 1:		// continue within the frame
-			if (seqnum == prn->adc[adc_id].wb_seqnum)			// sequence correct:  send the data
-			{
-				Spectrum(disp_id, 0, 0, wb_buff, wb_buff);
-				if (prn->adc[adc_id].wb_seqnum == wb_ppf - 1)
-					prn->adc[adc_id].wb_state = 0;
-			}
-			else												// sequence error:  pad frame with zeros
-			{
-				memset(wb_buff, 0, wb_spp * sizeof(double));
-				for (jj = prn->adc[adc_id].wb_seqnum; jj < wb_ppf; jj++)
-					Spectrum(disp_id, 0, 0, wb_buff, wb_buff);
-				prn->adc[adc_id].wb_state = 0;
-			}
-			prn->adc[adc_id].wb_seqnum++;
+
+			prn->rx[ddc].rx_in_seq_no = seqnum;
+			memcpy(bufp, readbuf + 16, 1428);
 			break;
 		}
 
-		//{
-		//	const int buffs_per_block = 8;
-		//	static int wb_in_seq_no;
-		//	static int wbstate;
-		//	static double wbbuff[512];
-		//	int ii, jj;
-		//	for (ii = 0, jj = 4; ii < 512; ii++, jj += 2)			// convert the samples to doubles
-		//		wbbuff[ii] = const_1_div_2147483648_ *
-		//		(double)(readbuf[jj + 1] << 24 |
-		//		readbuf[jj + 0] << 16);
-		//	switch (wbstate)
-		//	{
-		//	case 0:		// wait for block to begin
-		//		wb_in_seq_no = 0;
-		//		if (seqnum == 0)
-		//		{
-		//			wbstate = 1;
-		//			Spectrum(32, 0, 0, wbbuff, wbbuff);
-		//			wb_in_seq_no++;
-		//		}
-		//		break;
-		//case 1:		// continue within the block
-		//	if (seqnum == wb_in_seq_no)		// sequence # is correct:  send the data
-		//	{
-		//		Spectrum(32, 0, 0, wbbuff, wbbuff);
-		//		if (wb_in_seq_no == buffs_per_block - 1)
-		//			wbstate = 0;
-		//	}
-		//		else							// pad the rest of the block with zeros
-		//		{
-		//			memset(wbbuff, 0, 512 * sizeof(double));
-		//			for (jj = wb_in_seq_no; jj < buffs_per_block; jj++)
-		//				Spectrum(32, 0, 0, wbbuff, wbbuff);
-		//			wbstate = 0;
-		//		}
-		//		wb_in_seq_no++;
-		//		break;
-		//	}
+		default:
+			printf("Rcvd data on Port %d\n", nrecv);
+			break;
 
-		break;
-	}
-	case 1035:// ddc0
-	case 1036:// ddc1
-	case 1037:// ddc2
-	case 1038:// ddc3
-	case 1039:// ddc4
-	case 1040:// ddc5
-	case 1041:// ddc6
-	{
-		if (nrecv != 1444) break; // check for malformed packet
-
-		int ddc = inport - 1035;
-
-		if (seqnum != 0) storeRXSeqDelta(ddc, seqnum);
-
-		if (seqnum != (1 + prn->rx[ddc].rx_in_seq_no) && seqnum != 0)  {
-			prn->rx[ddc].rx_in_seq_err += 1;
-			printf("- Rx%d I/Q: seq error this: %d last: %d\n", ddc, seqnum, prn->rx[ddc].rx_in_seq_no);
-			fflush(stdout);
-
-			addSnapShot(ddc, seqnum, prn->rx[ddc].rx_in_seq_no);
-		}
-
-		prn->rx[ddc].rx_in_seq_no = seqnum;
-		memcpy(bufp, readbuf + 16, 1428);
-		break;
-	}
-	//case 1035: // 1444 bytes - 24-bit DDC0 I/Q data
-	//	if (nrecv != 1444) break; // check for malformed packet
-
-	//	if (seqnum != 0) storeRXSeqDelta(0, (int)seqnum - (1 + prn->rx[0].rx_in_seq_no));
-
-	//	//rx_samples_buf++;
-	//	if (seqnum != (1 + prn->rx[0].rx_in_seq_no) && seqnum != 0)  {
-	//		prn->rx[0].rx_in_seq_err += 1;
-	//		//PrintTimeHack();
-	//		printf("- Rx0 I/Q: seq error this: %d last: %d\n", seqnum, prn->rx[0].rx_in_seq_no);
-	//		fflush(stdout);
-
-	//		addSnapShot(0);
-	//	}
-
-	//	prn->rx[0].rx_in_seq_no = seqnum;
-	//	memcpy(bufp, readbuf + 16, 1428);
-	//	break;
-	//case 1036: // 1444 bytes - 24-bit DDC1 I/Q data
-	//	if (nrecv != 1444) break; // check for malformed packet
-
-	//	if(seqnum != 0) storeRXSeqDelta(1, (int)seqnum - (1 + prn->rx[1].rx_in_seq_no));
-
-	//	if (seqnum != (1 + prn->rx[1].rx_in_seq_no) && seqnum != 0)  {
-	//		prn->rx[1].rx_in_seq_err += 1;
-	//		//PrintTimeHack();
-	//		printf("- Rx1 I/Q: seq error this: %d last: %d\n", seqnum, prn->rx[1].rx_in_seq_no);
-	//		fflush(stdout);
-
-	//		addSnapShot(1);
-	//	}
-
-	//	prn->rx[1].rx_in_seq_no = seqnum;
-	//	memcpy(bufp, readbuf + 16, 1428);
-	//	break;
-	//case 1037: // 1444 bytes - 24-bit DDC2 I/Q data
-	//	if (nrecv != 1444) break; // check for malformed packet
-
-	//	if (seqnum != 0) storeRXSeqDelta(2, (int)seqnum - (1 + prn->rx[2].rx_in_seq_no));
-
-	//	//rx_samples_buf++;
-	//	if (seqnum != (1 + prn->rx[2].rx_in_seq_no) && seqnum != 0)  {
-	//		prn->rx[2].rx_in_seq_err += 1;
-	//		//PrintTimeHack();
-	//		printf("- Rx2 I/Q: seq error this: %d last: %d\n", seqnum, prn->rx[2].rx_in_seq_no);
-	//		fflush(stdout);
-
-	//		addSnapShot(2);
-	//	}
-
-	//	prn->rx[2].rx_in_seq_no = seqnum;
-	//	memcpy(bufp, readbuf + 16, 1428);
-	//	break;
-	//case 1038: // 1444 bytes - 24-bit DDC3 I/Q data
-	//	if (nrecv != 1444) break; // check for malformed packet
-
-	//	if (seqnum != 0) storeRXSeqDelta(3, (int)seqnum - (1 + prn->rx[3].rx_in_seq_no));
-
-	//	if (seqnum != (1 + prn->rx[3].rx_in_seq_no) && seqnum != 0)  {
-	//		prn->rx[3].rx_in_seq_err += 1;
-	//		//PrintTimeHack();
-	//		printf("- Rx3 I/Q: seq error this: %d last: %d\n", seqnum, prn->rx[3].rx_in_seq_no);
-	//		fflush(stdout);
-
-	//		addSnapShot(3);
-	//	}
-
-	//	prn->rx[3].rx_in_seq_no = seqnum;
-	//	memcpy(bufp, readbuf + 16, 1428);
-	//	break;
-	//case 1039: // 1444 bytes - 24-bit DDC4 I/Q data
-	//	if (nrecv != 1444) break; // check for malformed packet
-
-	//	if (seqnum != 0) storeRXSeqDelta(4, (int)seqnum - (1 + prn->rx[4].rx_in_seq_no));
-
-	//	if (seqnum != (1 + prn->rx[4].rx_in_seq_no) && seqnum != 0)  {
-	//		prn->rx[4].rx_in_seq_err += 1;
-	//		//PrintTimeHack();
-	//		printf("- Rx4 I/Q: seq error this: %d last: %d\n", seqnum, prn->rx[4].rx_in_seq_no);
-	//		fflush(stdout);
-
-	//		addSnapShot(4);
-	//	}
-
-	//	prn->rx[4].rx_in_seq_no = seqnum;
-	//	memcpy(bufp, readbuf + 16, 1428);
-	//	break;
-	//case 1040: // 1444 bytes - 24-bit DDC5 I/Q data
-	//	if (nrecv != 1444) break; // check for malformed packet
-
-	//	if (seqnum != 0) storeRXSeqDelta(5, (int)seqnum - (1 + prn->rx[5].rx_in_seq_no));
-
-	//	if (seqnum != (1 + prn->rx[5].rx_in_seq_no) && seqnum != 0)  {
-	//		prn->rx[5].rx_in_seq_err += 1;
-	//		//PrintTimeHack();
-	//		printf("- Rx5 I/Q: seq error this: %d last: %d\n", seqnum, prn->rx[5].rx_in_seq_no);
-	//		fflush(stdout);
-
-	//		addSnapShot(5);
-	//	}
-
-	//	prn->rx[5].rx_in_seq_no = seqnum;
-	//	memcpy(bufp, readbuf + 16, 1428);
-	//	break;
-	//case 1041: // 1444 bytes - 24-bit DDC6 I/Q data
-	//	if (nrecv != 1444) break; // check for malformed packet
-
-	//	if (seqnum != 0) storeRXSeqDelta(6, (int)seqnum - (1 + prn->rx[6].rx_in_seq_no));
-
-	//	if (seqnum != (1 + prn->rx[6].rx_in_seq_no) && seqnum != 0)  {
-	//		prn->rx[6].rx_in_seq_err += 1;
-	//		//PrintTimeHack();
-	//		printf("- Rx6 I/Q: seq error this: %d last: %d\n", seqnum, prn->rx[6].rx_in_seq_no);
-	//		fflush(stdout);
-
-	//		addSnapShot(6);
-	//	}
-
-	//	prn->rx[6].rx_in_seq_no = seqnum;
-	//	memcpy(bufp, readbuf + 16, 1428);
-	//	break;
 	}
 
 	LeaveCriticalSection(&prn->rcvpkt);
