@@ -630,8 +630,8 @@ namespace Thetis
             set
             {
 
-                quickmp3SR = waveOptionsForm.comboSampleRate.Text; // save SR value before reducing
-                waveOptionsForm.comboSampleRate.Text = "48000"; // reduce file size
+              //  quickmp3SR = waveOptionsForm.comboSampleRate.Text; // save SR value before reducing
+              //  waveOptionsForm.comboSampleRate.Text = "48000"; // reduce file size
             }
         } // RECPLAY2
 
@@ -647,7 +647,7 @@ namespace Thetis
                 waveOptionsForm.radRXPreProcessed.Checked = waveOptionsForm.temp_record;
                 waveOptionsForm.radTXPreProcessed.Checked = waveOptionsForm.temp_record;
 
-                waveOptionsForm.comboSampleRate.Text = quickmp3SR; // restore file size SR
+               // waveOptionsForm.comboSampleRate.Text = quickmp3SR; // restore file size SR
 
             }
         } // RECPLAY3
@@ -1188,23 +1188,23 @@ namespace Thetis
 		{
             string file_name; // = console.AppDataPath + "\\SDRQuickAudio.wav";
 
-            if (chkQuickAudioFolder.Checked == true) // ke9ns add to allow subfolder with different names to play
-            {
-                System.IO.Directory.CreateDirectory(console.AppDataPath + "QuickAudio"); // ke9ns create sub directory
-
-                if (QPFile != null)
-                {
-                    file_name = QPFile; // ke9ns check file name passed from console play button
-                }
-                else
-                {
-                    file_name = console.AppDataPath + "QuickAudio" + "\\SDRQuickAudio" + QAC.ToString() + ".wav";
-                }
-            }
-            else
-            {
+//             if (chkQuickAudioFolder.Checked == true) // ke9ns add to allow subfolder with different names to play
+//             {
+//                 System.IO.Directory.CreateDirectory(console.AppDataPath + "QuickAudio"); // ke9ns create sub directory
+// 
+//                 if (QPFile != null)
+//                 {
+//                     file_name = QPFile; // ke9ns check file name passed from console play button
+//                 }
+//                 else
+//                 {
+//                     file_name = console.AppDataPath + "QuickAudio" + "\\SDRQuickAudio" + QAC.ToString() + ".wav";
+//                 }
+//             }
+//             else
+//             {
                 file_name = console.AppDataPath + "SDRQuickAudio.wav";
-            }
+ //           }
 
 			if(chkQuickPlay.Checked)
 			{				
@@ -1263,21 +1263,21 @@ namespace Thetis
 			console.WavePlayback = chkQuickPlay.Checked;			
 		}
 
-        public static string quickmp3SR; // ke9ns add
+      //  public static string quickmp3SR; // ke9ns add
 
-        public static string quickmp3; // ke9ns add
+       // public static string quickmp3; // ke9ns add
         //============================================================================================
         private void chkQuickRec_CheckedChanged(object sender, System.EventArgs e)
         {
             if (chkQuickRec.Checked)
             {
-                temp_record = Audio.RecordRXPreProcessed;
-                quickmp3SR = waveOptionsForm.comboSampleRate.Text;
+//                 temp_record = Audio.RecordRXPreProcessed;
+//                 quickmp3SR = waveOptionsForm.comboSampleRate.Text;
+// 
+//                 if (chkBoxMP3.Checked == true)
+//                     waveOptionsForm.comboSampleRate.Text = "48000"; // reduce file size
 
-                if (chkBoxMP3.Checked == true)
-                    waveOptionsForm.comboSampleRate.Text = "48000"; // reduce file size
-
-                Audio.RecordRXPreProcessed = false;                            //ke9ns add  set this FALSE temporarily
+               // Audio.RecordRXPreProcessed = false;                            //ke9ns add  set this FALSE temporarily
 
                 chkQuickRec.BackColor = console.ButtonSelectedColor;
 
@@ -1285,31 +1285,31 @@ namespace Thetis
 
                 string file_name;
 
-                if (chkQuickAudioFolder.Checked == true)
-                {
-                    QAC++;
-                    System.IO.Directory.CreateDirectory(console.AppDataPath + "QuickAudio"); // ke9ns add create sub directory
-                    System.IO.Directory.CreateDirectory(console.AppDataPath + "QuickAudioMP3"); // ke9ns add create sub directory
-
-                    file_name = console.AppDataPath + "QuickAudio" + "\\SDRQuickAudio" + QAC.ToString() + ".wav";
-
-                    quickmp3 = console.AppDataPath + "QuickAudioMP3" + "\\SDRQuickAudio" + QAC.ToString() + ".mp3"; // ke9ns add mp3
-
-                    //   Debug.WriteLine("qac" + QAC);
-
-                }
-                else
-                {
-
-                    file_name = console.AppDataPath + "SDRQuickAudio.wav";
-
-                    quickmp3 = console.AppDataPath + "SDRQuickAudio.mp3"; // ke9ns add mp3
-
-                }
+//                 if (chkQuickAudioFolder.Checked == true)
+//                 {
+//                     QAC++;
+//                     System.IO.Directory.CreateDirectory(console.AppDataPath + "QuickAudio"); // ke9ns add create sub directory
+//                     System.IO.Directory.CreateDirectory(console.AppDataPath + "QuickAudioMP3"); // ke9ns add create sub directory
+// 
+//                     file_name = console.AppDataPath + "QuickAudio" + "\\SDRQuickAudio" + QAC.ToString() + ".wav";
+// 
+//                     quickmp3 = console.AppDataPath + "QuickAudioMP3" + "\\SDRQuickAudio" + QAC.ToString() + ".mp3"; // ke9ns add mp3
+// 
+//                     //   Debug.WriteLine("qac" + QAC);
+// 
+//                 }
+//                 else
+//                 {
+// 
+                     file_name = console.AppDataPath + "SDRQuickAudio.wav";
+// 
+//                     quickmp3 = console.AppDataPath + "SDRQuickAudio.mp3"; // ke9ns add mp3
+// 
+//                 }
 
                 WaveThing.wave_file_writer[0] = new WaveFileWriter(0, 2, waveOptionsForm.SampleRate, file_name);
 
-            } //chkQuickRec.checked
+            } 
 
             Audio.WaveRecord = chkQuickRec.Checked;
 
@@ -1326,29 +1326,29 @@ namespace Thetis
                 //    // MessageBox.Show("The file has been written to the following location:\n"+file_name);
                 //}
 
-                Audio.RecordRXPreProcessed = temp_record; //return to original state
-                waveOptionsForm.comboSampleRate.Text = quickmp3SR; // restore file size
+//                 Audio.RecordRXPreProcessed = temp_record; //return to original state
+//                 waveOptionsForm.comboSampleRate.Text = quickmp3SR; // restore file size
 
                 //---------------------------------------------------------
                 // ke9ns add save an MP3 to go along with the WAV file
-                if (chkBoxMP3.Checked == true)
-                {
-
-                    try
-                    {
-                        //using (var reader = new WaveFileReader(file_name)) // closes reader when done using
-                        //using (var writer = new LameMP3FileWriter(quickmp3, reader.WaveFormat, LAMEPreset.VBR_90)) // closes writer when done using (90=90% quality variable bit rate)
-                        //{
-                        //    reader.CopyTo(writer);
-                        //}
-                    }
-                    catch (Exception)
-                    {
-
-                    }
-                    Debug.WriteLine("DONE WITH MP3 CREATION" + quickmp3);
-
-                }
+//                 if (chkBoxMP3.Checked == true)
+//                 {
+// 
+//                     try
+//                     {
+//                         //using (var reader = new WaveFileReader(file_name)) // closes reader when done using
+//                         //using (var writer = new LameMP3FileWriter(quickmp3, reader.WaveFormat, LAMEPreset.VBR_90)) // closes writer when done using (90=90% quality variable bit rate)
+//                         //{
+//                         //    reader.CopyTo(writer);
+//                         //}
+//                     }
+//                     catch (Exception)
+//                     {
+// 
+//                     }
+//                     Debug.WriteLine("DONE WITH MP3 CREATION" + quickmp3);
+// 
+//                 }
 
             } //   if (!chkQuickRec.Checked)
 

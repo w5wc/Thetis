@@ -10,39 +10,6 @@
         Title,
     }
 
-    public enum FWCATUMode
-    {
-        FIRST = -1,
-        Bypass,
-        SemiAutomatic,
-        Automatic,
-        LAST,
-    }
-
-    public enum AntMode
-    {
-        Simple = 0,
-        Expert,
-    }
-
-    public enum Window
-    {
-        FIRST = -1,
-        RECTANGULAR,
-        HANNING,
-        WELCH,
-        PARZEN,
-        BARTLETT,
-        HAMMING,
-        BLACKMAN2,
-        BLACKMAN3,
-        BLACKMAN4,
-        EXPONENTIAL,
-        RIEMANN,
-        BLKHARRIS,
-        LAST,
-    }
-
     public enum FWCAnt
     {
         NC = 0,
@@ -53,13 +20,6 @@
         RX2IN,
         RX1TAP,
         SIG_GEN,
-    }
-
-    public enum RenderType
-    {
-        HARDWARE = 0,
-        SOFTWARE,
-        NONE,
     }
 
     public enum ColorSheme
@@ -134,50 +94,6 @@
         LAST
     }
 
-    public enum BPFBand
-    {
-        NONE = -1,
-        B160,
-        B60,
-        B20,
-        B40,
-        B10,
-        B6,
-    }
-
-    public enum RFELPFBand
-    {
-        NONE = -1,
-        AUX,
-        B6,
-        B60,
-        B20,
-        B30,
-        B40,
-        B1210,
-        B80,
-        B1715,
-        B160,
-    }
-
-    public enum PAFBand
-    {
-        NONE = 0,
-        B1210,
-        B1715,
-        B3020,
-        B6040,
-        B80,
-        B160,
-    }
-
-    public enum XVTRTRMode
-    {
-        NEGATIVE = 0,	// DEMI144-28FRS
-        POSITIVE,		// 25W DEMI
-        NONE,			// For Elecraft or similar XVTR
-    }
-
     public enum DisplayMode
     {
         FIRST = -1,
@@ -249,14 +165,6 @@
         RTS,
     }
 
-    //public enum DateTimeMode
-    //{
-    //    OFF = 0,
-    //    LOCAL,
-    //    UTC,
-    //    LAST,
-    //}
-
     public enum FRSRegion
     {
         FIRST = -1,
@@ -301,24 +209,6 @@
         SA_MINUS10,
         SA_MINUS30,
         // STEP_ATTEN,
-        LAST,
-    }
-
-    public enum StatusPin
-    {
-        PIN_12 = 0x08,		//S3
-        Dash = 0x10,		//S4
-        Dot = 0x20,		//S5
-        PA_DATA = 0x40,		//S6
-        PIN_11 = 0x80,		//S7\
-    }
-
-    public enum ATUTuneMode
-    {
-        FIRST = -1,
-        BYPASS,
-        MEMORY,
-        FULL,
         LAST,
     }
 
@@ -494,6 +384,14 @@
         Manual,
         Semi,
         QSK
+    }
+
+    public enum RadioProtocol
+    {
+        USB = 0,  // Protocol USB (P1)
+        ETH,      // Protocol ETH (P2)
+        Auto,
+        None
     }
 
     #endregion
