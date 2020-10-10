@@ -13713,13 +13713,13 @@ namespace Thetis
             {
                 Alex.getAlex().setTxAnt(band, (byte)ant);
                 pi_TxAnt = ant;                                 // Path_Illustrator support
-            //  console.SetAriesTXAntenna(ant, band); // temporaily disable needs more work
+                console.SetAriesTXAntenna(ant, band); // temporaily disable needs more work
             }
             else
             {
                 Alex.getAlex().setRxAnt(band, (byte)ant);
                 pi_RxAnt = ant;                                 // Path_Illustrator support
-            // console.SetAriesRXAntenna(ant, band); // temporaily disable needs more work
+                console.SetAriesRXAntenna(ant, band); // temporaily disable needs more work
             }
 
             console.AlexAntCtrlEnabled = true; // need side effect of prop set to push data down to C code 
@@ -13752,12 +13752,27 @@ namespace Thetis
         }
 
         // set TX antenna to new antenna 1-3
+        // only select antennas 2 or 3 if not blocked by "do not TX" check boxes
         public void SetTXAntenna(int Antenna, Band band)
         {
             int idx = (int)band - (int)Band.B160M;
             int Btn;
+            bool TXAllowed = true;
+
+            if (Antenna == 2)
+            {
+                if (chkBlockTxAnt2.Checked)
+                    TXAllowed = false;
+            }
+            else if (Antenna == 3)
+            {
+                if (chkBlockTxAnt3.Checked)
+                    TXAllowed = false;
+            }
 
             RadioButtonTS[] buttons = AlexTxAntButtons[idx];
+            if(TXAllowed)
+            {
             for(Btn=0; Btn<3; Btn++)
             {
                 if (Btn == Antenna - 1)
@@ -13765,6 +13780,7 @@ namespace Thetis
                 else
                     buttons[Btn].Checked = false;
             }
+        }
         }
 
         private void btnHPSDRFreqCalReset_Click(object sender, System.EventArgs e)
